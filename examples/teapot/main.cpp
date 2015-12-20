@@ -5,11 +5,15 @@ int main(int argc, char* argv[])
 {
     bool running = true;
     
-    pkzo::Window window(800, 600, false);
-    
-    pkzo::on_quit([&] () {
-        running = false;    
+    pkzo::on_quit([&]() {
+        running = false;
     });
+
+    pkzo::Window window(800, 600);
+    window.on_draw([&] () {
+        // openGL stuff
+    });    
+    
 
     while (running)        
     {

@@ -10,6 +10,13 @@
 
 namespace pkzo
 {
+    /**
+     * Initialized third party components.
+     *
+     * You don't need to call this function, it will be called for you.
+     **/
+    PKZO_EXPORT
+    void init();
     
     /**
      * Get the version linked library.

@@ -14,4 +14,9 @@
 #define PKZO_EXPORT  
 #endif
 
+// disable silly warnings
+#ifndef _MSVC
+#pragma warning(disable: 4251)
+#endif
+
 #endif
