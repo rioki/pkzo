@@ -1,5 +1,5 @@
 
-#include "pkzo.h"
+#include "functions.h"
 #include "Window.h"
 
 #include <SDL.h>

@@ -180,10 +180,18 @@ copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Comman
   <ItemGroup>
     <ClInclude Include="..\include\pkzo.h" />
     <ClInclude Include="..\include\pkzo\defines.h" />
+    <ClInclude Include="..\include\pkzo\functions.h" />
+    <ClInclude Include="..\include\pkzo\Shader.h" />
     <ClInclude Include="..\include\pkzo\Window.h" />
+    <ClInclude Include="compose.h" />
+    <ClInclude Include="fs.h" />
+    <ClInclude Include="strex.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="fs.cpp" />
     <ClCompile Include="functions.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="strex.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
