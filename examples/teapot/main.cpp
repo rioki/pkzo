@@ -10,6 +10,7 @@ int main(int argc, char* argv[])
     });
 
     pkzo::Window window(800, 600);
+    window.set_title("pkzo - Teapot Demo");
     window.on_draw([&] () {
         // openGL stuff
     });    

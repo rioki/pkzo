@@ -69,6 +69,17 @@ namespace pkzo
         }
     }
 
+    void Window::set_title(const std::string& value)
+    {
+        SDL_SetWindowTitle(window, value.c_str());
+    }
+
+    std::string Window::get_title() const
+    {
+        const char* title = SDL_GetWindowTitle(window);
+        return title != nullptr ? std::string(title) : std::string();
+    }
+
     void Window::on_draw(std::function<void()> cb)
     {
         draw_cb = cb;

@@ -3,6 +3,7 @@
 #define _PKZO_WINDOW_H_
 
 #include <functional>
+#include <string>
 
 #include "defines.h"
 
@@ -45,6 +46,10 @@ namespace pkzo
         ~Window();
 
         const Window& operator = (const Window&) = delete;
+
+        void set_title(const std::string& value);
+
+        std::string get_title() const;
 
         /**
          * Redraw Event Handler
