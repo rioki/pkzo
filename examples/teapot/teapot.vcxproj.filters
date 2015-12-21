@@ -19,4 +19,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="PhongFragment.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="PhongVertex.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

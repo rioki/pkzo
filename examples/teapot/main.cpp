@@ -9,6 +9,22 @@ int main(int argc, char* argv[])
         running = false;
     });
 
+    pkzo::Mesh mesh;
+    mesh.set_vertex_count(3);    
+
+    mesh.set_vertex(0, 0.0, 0.0, 0.0);
+    mesh.set_color(0, 1.0, 0.0, 0.0, 1.0);
+
+    mesh.set_vertex(1, 0.0, 1.0, 0.0);
+    mesh.set_color(1, 0.0, 1.0, 0.0, 1.0);
+
+    mesh.set_vertex(2, 1.0, 0.0, 0.0);
+    mesh.set_color(2, 0.0, 0.0, 1.0, 1.0);
+
+    mesh.set_face_count(1);
+    mesh.set_face(0, 0, 1, 2);
+
+
     pkzo::Shader shader;
     shader.load("PhongVertex.glsl", "PhongFragment.glsl");
 
@@ -26,8 +42,9 @@ int main(int argc, char* argv[])
     window.on_draw([&] () {
         shader.bind();
         shader.set_uniform_matrix("uProjection", projection, 16);
-        shader.set_uniform_matrix("uModelView", modelview, 16);
+        shader.set_uniform_matrix("uModelView",  modelview,  16);
 
+        mesh.draw(shader);
     });    
     
 

@@ -188,13 +188,13 @@ namespace pkzo
             switch (size)
             {
                 case 4:
-                    glUniformMatrix2fv(location, 1, GL_FALSE, values);
+                    glUniformMatrix2fv(location, 1, glt, values);
                     break;
                 case 9:
-                    glUniformMatrix3fv(location, 1, GL_FALSE, values);
+                    glUniformMatrix3fv(location, 1, glt, values);
                     break;
                 case 16:
-                    glUniformMatrix4fv(location, 1, GL_FALSE, values);
+                    glUniformMatrix4fv(location, 1, glt, values);
                     break;
                 default:
                     throw std::logic_error("Invalid matrix size.");
