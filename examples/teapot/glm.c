@@ -127,6 +127,63 @@ void glmPerspective(float* m, float fovy, float aspect, float near, float far)
     glmFrustum(m, -xmax, xmax, -ymax, ymax, near, far);
 }
 
+void normalize(float* v)
+{
+    float l = sqrtf(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
+    v[0] *= 1.0f / l;
+    v[1] *= 1.0f / l;
+    v[2] *= 1.0f / l;
+}
+
+void cross(float* r, float* a, float* b)
+{
+    r[0] = (a[1] * b[2]) - (a[2] * b[1]);
+    r[1] = (a[2] * b[0]) - (a[0] * b[2]);
+    r[2] = (a[0] * b[1]) - (a[1] * b[0]);
+}
+
+void glmLookAt(float* matrix, float eyex, float eyey, float eyez, float centerx, float centery, float centerz, float upx, float upy, float upz)
+{
+    float forward[3], side[3], up[3];
+    float matrix2[16];
+    
+    up[0] = upx;
+    up[1] = upy;
+    up[2] = upz;
+    normalize(up);
+
+    forward[0] = centerx - eyex;
+    forward[1] = centery - eyey;
+    forward[2] = centerz - eyez;    
+    normalize(forward);
+
+    cross(side, forward, up);
+    normalize(side);
+
+    cross(up, side, forward);
+    
+    matrix2[0] = side[0];
+    matrix2[4] = side[1];
+    matrix2[8] = side[2];
+    matrix2[12] = 0.0;
+    
+    matrix2[1] = up[0];
+    matrix2[5] = up[1];
+    matrix2[9] = up[2];
+    matrix2[13] = 0.0;
+    
+    matrix2[2] = -forward[0];
+    matrix2[6] = -forward[1];
+    matrix2[10] = -forward[2];
+    matrix2[14] = 0.0;
+    
+    matrix2[3] = matrix2[7] = matrix2[11] = 0.0;
+    matrix2[15] = 1.0;
+    
+    glmMultMatrix(matrix, matrix2);
+    glmTranslate(matrix, -eyex, -eyey, -eyez);
+}
+
 void glmTranslate(float* m, float x, float y, float z)
 {
     m[12] = m[0] * x + m[4] * y + m[8] * z + m[12];
