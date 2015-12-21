@@ -1,5 +1,8 @@
 
+
 #include <pkzo.h>
+
+#include "glm.h"
 
 int main(int argc, char* argv[])
 {
@@ -27,15 +30,14 @@ int main(int argc, char* argv[])
 
     pkzo::Shader shader;
     shader.load("PhongVertex.glsl", "PhongFragment.glsl");
+  
+    float projection[16];
+    float modelview[16];
 
-    float projection[16] = {1, 0, 0, 0,
-                            0, 1, 0, 0,
-                            0, 0, 1, 0,
-                            0, 0, 0, 1};
-    float modelview[16] = {1, 0, 0, 0,
-                           0, 1, 0, 0,
-                           0, 0, 1, 0,
-                           0, 0, 0, 1};
+    glmPerspective(projection, 45.0f, 800.0f/600.0f, 0.1f, 100.0f);
+
+    glmLoadIdentity(modelview);
+    glmTranslate(modelview, 0, 0, -2);
 
     pkzo::Window window(800, 600);
     window.set_title("pkzo - Teapot Demo");
