@@ -23,6 +23,8 @@ namespace pkzo
 
         const Mesh& operator = (const Mesh&) = delete;
 
+        void create_plane(float width, float height);
+
         void set_vertex_count(size_t value);
 
         size_t get_vertex_count() const;

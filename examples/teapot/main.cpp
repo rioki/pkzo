@@ -13,7 +13,8 @@ int main(int argc, char* argv[])
     });
 
     pkzo::Mesh mesh;
-    mesh.set_vertex_count(3);    
+    mesh.create_plane(10, 10);
+    /*mesh.set_vertex_count(3);    
 
     mesh.set_vertex(0, 0.0, 0.0, 0.0);
     mesh.set_color(0, 1.0, 0.0, 0.0, 1.0);
@@ -25,7 +26,7 @@ int main(int argc, char* argv[])
     mesh.set_color(2, 0.0, 0.0, 1.0, 1.0);
 
     mesh.set_face_count(1);
-    mesh.set_face(0, 0, 1, 2);
+    mesh.set_face(0, 0, 1, 2);*/
 
 
     pkzo::Shader shader;
@@ -43,7 +44,7 @@ int main(int argc, char* argv[])
     window.on_draw([&] () {
         a += 1.0;
         glmLoadIdentity(modelview);
-        glmLookAt(modelview, 2, 2, 2, 0, 0, 0, 0, 0, 1);
+        glmLookAt(modelview, 10, 10, 10, 0, 0, 0, 0, 0, 1);
         glmRotate(modelview, a, 1, 0.5, 0);
 
         shader.bind();
