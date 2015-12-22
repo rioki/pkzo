@@ -4,6 +4,7 @@
 #include <GL/glew.h>
 
 #include "Shader.h"
+#include "PlyParser.h"
 
 namespace pkzo
 {
@@ -32,6 +33,12 @@ namespace pkzo
         texcoords.resize(value * 2);
         tangents.resize(value * 3);
         colors.resize(value * 4);
+    }
+
+    void Mesh::load(const std::string& file)
+    {
+        PlyParser parser(*this);
+        parser.parse(file);
     }
 
     void Mesh::create_plane(float width, float height)
@@ -162,6 +169,13 @@ namespace pkzo
         faces[ba + 0] = a;
         faces[ba + 1] = b;
         faces[ba + 2] = c;
+    }
+
+    void Mesh::add_face(unsigned int a, unsigned int b, unsigned int c)
+    {
+        faces.push_back(a);
+        faces.push_back(b);
+        faces.push_back(c);
     }
 
     std::tuple<unsigned int, unsigned int, unsigned int> Mesh::get_face(size_t i) const

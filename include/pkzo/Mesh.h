@@ -23,6 +23,8 @@ namespace pkzo
 
         const Mesh& operator = (const Mesh&) = delete;
 
+        void load(const std::string& file);
+
         void create_plane(float width, float height);
 
         void set_vertex_count(size_t value);
@@ -54,6 +56,8 @@ namespace pkzo
         size_t get_face_count() const;
 
         void set_face(size_t i, unsigned int a, unsigned int b, unsigned int c);
+
+        void add_face(unsigned int a, unsigned int b, unsigned int c);
 
         std::tuple<unsigned int, unsigned int, unsigned int> get_face(size_t i) const;
 
