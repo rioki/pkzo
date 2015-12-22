@@ -21,12 +21,15 @@ namespace pkzo
     class PKZO_EXPORT Window
     {
     public:
+        /**
+         * Window Creation Flags
+         **/
         enum Flags
         {
-            NO_FLAGS = 0,
-            FULLSCREEN = 0x01,
-            BORDERLESS = 0x02,
-            RESIZABLE = 0x04
+            NO_FLAGS   = 0,    //!< No flags
+            FULLSCREEN = 0x01, //!< Fullscreen
+            BORDERLESS = 0x02, //!< Borderless
+            RESIZABLE  = 0x04  //!< Resizable
         };
 
         /**
@@ -43,21 +46,47 @@ namespace pkzo
         
         Window(const Window&) = delete;    
 
+        /**
+         * Close a Window
+         **/
         ~Window();
 
         const Window& operator = (const Window&) = delete;
 
+        /**
+         * Set the Window's Title Caption
+         *
+         * @param value the window title caption
+         **/
         void set_title(const std::string& value);
 
+        /**
+         * Get the Window's Title Caption
+         *
+         * @return the window title caption
+         **/
         std::string get_title() const;
 
         /**
          * Redraw Event Handler
+         * 
+         * This function installs the drawing callback used by Window::draw().
+         *
+         * @param cb the callback
          **/
         void on_draw(std::function<void()> cb);
 
         /**
-         * Redraw the window.
+         * Redraw the Window.
+         *
+         * This function will make the OpenGL graphic context valid and call the 
+         * draw callback. Within the callback a valid graphic context exists and
+         * it is safe to call OpenGL functions. 
+         *
+         * @note pkzo uses GLEW to access OpenGL functions, it is safe to use
+         * GLEW wrapped function without calling glewInit(). 
+         *
+         * @see Window::on_draw
          **/
         void draw();
 

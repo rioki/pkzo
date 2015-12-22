@@ -2,6 +2,9 @@
 #ifndef _PKZO_DEFINES_H_
 #define _PKZO_DEFINES_H_
 
+/**
+ * Current Version of pkzo
+ **/
 #define PZKO_VERSION "0.1.0"
 
 #ifdef _WIN32
