@@ -37,7 +37,7 @@ namespace pkzo
             throw std::runtime_error(SDL_GetError());
         }
 
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 
         glcontext = SDL_GL_CreateContext(window);

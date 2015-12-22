@@ -40,6 +40,9 @@ namespace pkzo
 
         int get_uniform_location(const std::string& name) const;
 
+        void set_uniform(const std::string& name, int value);
+        void set_uniform(const std::string& name, float value);
+
         void set_uniform(const std::string& name, int* values, int size);
         void set_uniform(const std::string& name, float* values, int size);
 

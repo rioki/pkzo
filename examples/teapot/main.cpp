@@ -14,23 +14,12 @@ int main(int argc, char* argv[])
 
     pkzo::Mesh mesh;
     mesh.create_plane(10, 10);
-    /*mesh.set_vertex_count(3);    
-
-    mesh.set_vertex(0, 0.0, 0.0, 0.0);
-    mesh.set_color(0, 1.0, 0.0, 0.0, 1.0);
-
-    mesh.set_vertex(1, 0.0, 1.0, 0.0);
-    mesh.set_color(1, 0.0, 1.0, 0.0, 1.0);
-
-    mesh.set_vertex(2, 1.0, 0.0, 0.0);
-    mesh.set_color(2, 0.0, 0.0, 1.0, 1.0);
-
-    mesh.set_face_count(1);
-    mesh.set_face(0, 0, 1, 2);*/
-
 
     pkzo::Shader shader;
     shader.load("PhongVertex.glsl", "PhongFragment.glsl");
+
+    pkzo::Texture steel_plate;
+    steel_plate.load("SteelPlate_Diffuse.png");
   
     float projection[16];
     float modelview[16];
@@ -50,6 +39,9 @@ int main(int argc, char* argv[])
         shader.bind();
         shader.set_uniform_matrix("uProjection", projection, 16);
         shader.set_uniform_matrix("uModelView",  modelview,  16);
+
+        steel_plate.bind(0);
+        shader.set_uniform("uTexture", 0);
 
         mesh.draw(shader);
     });    
