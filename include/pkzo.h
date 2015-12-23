@@ -7,5 +7,7 @@
 #include "pkzo/Shader.h"
 #include "pkzo/Mesh.h"
 #include "pkzo/Texture.h"
+#include "pkzo/Keyboard.h"
+#include "pkzo/Mouse.h"
 
 #endif

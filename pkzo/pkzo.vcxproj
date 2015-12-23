@@ -185,7 +185,10 @@ copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Comman
     <ClInclude Include="..\include\pkzo.h" />
     <ClInclude Include="..\include\pkzo\defines.h" />
     <ClInclude Include="..\include\pkzo\functions.h" />
+    <ClInclude Include="..\include\pkzo\Key.h" />
+    <ClInclude Include="..\include\pkzo\Keyboard.h" />
     <ClInclude Include="..\include\pkzo\Mesh.h" />
+    <ClInclude Include="..\include\pkzo\Mouse.h" />
     <ClInclude Include="..\include\pkzo\Shader.h" />
     <ClInclude Include="..\include\pkzo\Texture.h" />
     <ClInclude Include="..\include\pkzo\Window.h" />
@@ -197,7 +200,10 @@ copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Comman
   <ItemGroup>
     <ClCompile Include="fs.cpp" />
     <ClCompile Include="functions.cpp" />
+    <ClCompile Include="Key.cpp" />
+    <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="PlyParser.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="strex.cpp" />

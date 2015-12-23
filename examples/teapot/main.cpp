@@ -8,19 +8,36 @@
 int main(int argc, char* argv[])
 {
     bool  running = true;
-    float a       = 0.0f;
+    float ax      = 0.0f;
+    float ay      = 0.0f;
     float projection[16];
     float modelview[16];
 
     pkzo::Window window(800, 600);
     window.set_title("pkzo - Teapot Demo");
+
+    pkzo::Keyboard keyboard;
+    keyboard.on_key_press([&] (pkzo::Key key) {
+        if (key == pkzo::KEY_ESCAPE)
+        {
+            running = false;
+        }
+    });
+
+    pkzo::Mouse mouse;
+    mouse.on_move([&] (unsigned int x, unsigned int y, int dx, int dy) {
+        if (mouse.is_pressed(1))        
+        {
+            ax += static_cast<float>(dx);
+            ay += static_cast<float>(dy);
+        }
+    });
     
     pkzo::on_quit([&]() {
         running = false;
     });
 
     pkzo::Mesh mesh;
-    //mesh.create_plane(10, 10);
     mesh.load("Teapot.ply");
 
     pkzo::Shader shader;
@@ -36,10 +53,10 @@ int main(int argc, char* argv[])
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
         
-        a += 1.0;
         glmLoadIdentity(modelview);
         glmLookAt(modelview, 5, 5, 5, 0, 0, 0, 0, 0, 1);
-        glmRotate(modelview, a, 1, 0.5, 0);
+        glmRotate(modelview, ax, 0, 1, 0);
+        glmRotate(modelview, ay, 1, 0, 0);        
 
         shader.bind();
         shader.set_uniform_matrix("uProjection", projection, 16);

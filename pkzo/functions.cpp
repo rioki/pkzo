@@ -3,6 +3,9 @@
 
 #include <SDL.h>
 
+#include "Keyboard.h"
+#include "Mouse.h"
+
 namespace pkzo
 {
     bool is_init = false;
@@ -47,6 +50,23 @@ namespace pkzo
                     quit_cb();
                 }
                 break;
+            case SDL_KEYDOWN:
+                case SDL_KEYUP:
+                case SDL_TEXTINPUT:
+                case SDL_TEXTEDITING:
+                    for (Keyboard* keyboard : Keyboard::instances)
+                    {
+                        keyboard->handle_event(event);
+                    }
+                    break;
+                case SDL_MOUSEBUTTONDOWN:
+                case SDL_MOUSEBUTTONUP:
+                case SDL_MOUSEMOTION:
+                    for (Mouse* mouse : Mouse::instances)
+                    {
+                        mouse->handle_event(event);
+                    }
+                    break;
             default:
                 // stfu
                 break;

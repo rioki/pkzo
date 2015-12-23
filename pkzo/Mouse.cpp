@@ -1,0 +1,100 @@
+
+#include "Mouse.h"
+
+#include <SDL.h>
+
+namespace pkzo
+{        
+    std::vector<Mouse*> Mouse::instances;
+
+    Mouse::Mouse() 
+    {
+        instances.push_back(this);
+    }
+    
+    Mouse::~Mouse() 
+    {
+        auto i = std::find(instances.begin(), instances.end(), this);
+        if (i != instances.end())
+        {
+            instances.erase(i);
+        }
+        else
+        {
+            // Yes this will basically run into terminate, 
+            // but that is why there are terminate handlers...
+            throw std::logic_error("Mouse not in instances.");
+        }
+    }
+
+    bool Mouse::is_pressed(unsigned int button) const
+    {
+        return SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(button);
+    }
+
+    std::tuple<unsigned int, unsigned int> Mouse::get_cursor() const
+    {
+        int x, y;
+        SDL_GetMouseState(&x, &y);
+        return std::make_tuple(static_cast<unsigned int>(x), static_cast<unsigned int>(y));
+    }
+
+    void Mouse::on_button_press(std::function<void (unsigned int, unsigned int, unsigned int)> cb)
+    {
+        button_press_cb = cb;
+    }
+    
+    void Mouse::on_button_release(std::function<void (unsigned int, unsigned int, unsigned int)> cb)
+    {
+        button_release_cb = cb;
+    }
+    
+    void Mouse::on_move(std::function<void (unsigned int, unsigned int, int, int)> cb)
+    {
+        move_cb = cb;
+    }
+    
+    void Mouse::show_cursor()
+    {
+        SDL_ShowCursor(1);
+        SDL_SetRelativeMouseMode(SDL_FALSE);
+    }
+        
+    void Mouse::hide_cursor()
+    {
+        SDL_ShowCursor(0);
+        SDL_SetRelativeMouseMode(SDL_TRUE);
+    }
+    
+    bool Mouse::is_cursor_visible() const
+    {
+        return SDL_ShowCursor(-1) == 1;
+    }
+        
+    void Mouse::handle_event(SDL_Event& event)
+    {
+        switch (event.type)
+        {
+            case SDL_MOUSEBUTTONDOWN:
+                if (button_press_cb)
+                {
+                    button_press_cb(event.button.button, event.button.x, event.button.y);
+                }
+                break;
+            case SDL_MOUSEBUTTONUP:
+                if (button_release_cb)
+                {
+                    button_release_cb(event.button.button, event.button.x, event.button.y);
+                }
+                break;
+            case SDL_MOUSEMOTION:
+                if (move_cb)
+                {
+                    move_cb(event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel);
+                }
+                break;
+            default:
+                throw std::logic_error("NOT WITH ME!");
+        }
+    }
+}
