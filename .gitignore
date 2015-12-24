@@ -1,6 +1,7 @@
 .vs
 x86
 x64
+apidoc
 *.opensdf
 *.sdf
 *.user

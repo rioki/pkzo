@@ -10,6 +10,9 @@
 
 namespace pkzo
 {
+    /**
+     * Key
+     **/
     enum Key
     {
         KEY_UNKNOWN            = 0,
@@ -254,7 +257,14 @@ namespace pkzo
         KEY_APP2               = 284
     };    
 
+    /**
+     * Print Key to Stream
+     **/
 	PKZO_EXPORT std::ostream& operator << (std::ostream& os, Key key);
+    
+    /**
+     * Read Key from Stream
+     **/
 	PKZO_EXPORT std::istream& operator >> (std::istream& is, Key& key);
 }
 
