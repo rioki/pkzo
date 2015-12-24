@@ -20,12 +20,19 @@ Open Issues
 -----------
 
 I will extent the library as required for my projects or on request. The 
-following things I sill have lying around and can quickly integrate.
+following things I still have lying around and can quickly integrate.
 
 * loading meshes from OBJ and STL 
 * loading TTF fonts and rendering them to 2D texture
 * computing normals
 * computing tangents
+
+Portability
+-----------
+
+The code itself should compile on any system that supports C++11 and libSDL.
+I just can't be bothered to maintain multiple build definitions and 
+all portable build definitions are either high maintenance or moronic. 
 
 License
 -------
@@ -55,7 +62,7 @@ license:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
     
-The example code (examples/**/*.(cpp|h|glsl) is provided as is under public 
+The example code (examples/**/*.(cpp|h|glsl) is provided by me as is under public 
 domain, unless otherwise noted in the file.
 
 The Utah Teapot (examples/teapot/Teapot.ply) was create by Martin Newell in 1975
