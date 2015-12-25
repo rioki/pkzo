@@ -32,7 +32,9 @@ Portability
 
 The code itself should compile on any system that supports C++11 and libSDL.
 I just can't be bothered to maintain multiple build definitions and 
-all portable build definitions are either high maintenance or moronic. 
+all portable build definitions are either high maintenance or moronic.
+
+(Before you suggest CMake, it's one of the moronic ones.)
 
 License
 -------
