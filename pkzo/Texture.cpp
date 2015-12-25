@@ -63,6 +63,47 @@ namespace pkzo
         }
     }
 
+    void Texture::create(unsigned int w, unsigned int h, ColorType color_type, const unsigned char* data)
+    {
+        if (color_type == NOCOLOR)
+        {
+            throw std::invalid_argument("Texture::create: color_type == NOCOLOR");
+        }
+        if (data == NULL)
+        {
+            throw std::invalid_argument("Texture::create: data == NULL");
+        }
+
+        init();
+
+        if (surface != nullptr)
+        {
+            release();
+            SDL_FreeSurface(surface);
+            surface = nullptr;
+        }
+
+        int bpp   = color_type == RGB ? 3 : 4;
+        int depth = color_type == RGB ? 24 : 32;
+        int pitch = w * bpp;
+        #if SDL_BYTEORDER == SDL_BIG_ENDIAN
+        int rmask = 0xff000000;
+        int gmask = 0x00ff0000;
+        int bmask = 0x0000ff00;
+        int amask = 0x000000ff;
+        #else
+        int rmask = 0x000000ff;
+        int gmask = 0x0000ff00;
+        int bmask = 0x00ff0000;
+        int amask = 0xff000000;
+        #endif
+
+        void* cdata = malloc(w*h*bpp);
+        memcpy(cdata, data, w*h*bpp);
+
+        surface = SDL_CreateRGBSurfaceFrom(cdata, w, h, depth, pitch, rmask, gmask, bmask, amask);
+    }
+
     unsigned int Texture::get_width() const
     {
         if (surface)
@@ -81,6 +122,38 @@ namespace pkzo
         if (surface)
         {
             return surface->h;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    ColorType Texture::get_color_type() const
+    {
+        if (surface)
+        {
+            switch (surface->format->BytesPerPixel)
+            {
+            case 3:
+                return RGB;
+            case 4:
+                return RGBA;
+            default:
+                throw std::logic_error("Unknown pixel format.");
+            }
+        }
+        else
+        {
+            return NOCOLOR;
+        }
+    }
+
+    const unsigned char* Texture::get_data() const
+    {
+        if (surface)
+        {
+            return reinterpret_cast<const unsigned char*>(surface->pixels);
         }
         else
         {

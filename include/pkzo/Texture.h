@@ -33,6 +33,13 @@ struct SDL_Surface;
 
 namespace pkzo
 {
+    enum ColorType
+    {
+        NOCOLOR,
+        RGB,
+        RGBA
+    };
+
     /**
      * Texture
      **/    
@@ -63,6 +70,8 @@ namespace pkzo
          **/
         void load(const std::string& file);
 
+        void create(unsigned int w, unsigned int h, ColorType color_type, const unsigned char* data);
+
         /**
          * Get the Image Width
          *
@@ -76,6 +85,10 @@ namespace pkzo
          * @returns the image height in pixels
          **/
         unsigned int get_height() const;
+
+        ColorType get_color_type() const;
+
+        const unsigned char* get_data() const;
 
         /**
          * Bind the Texture
