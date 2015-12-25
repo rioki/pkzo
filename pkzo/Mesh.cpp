@@ -304,7 +304,7 @@ namespace pkzo
         if (color_location != -1)
         {
             glBindBuffer(GL_ARRAY_BUFFER, buffers[COLOR_BUFFER]);
-            glVertexAttribPointer(color_location, 3, GL_FLOAT, GL_FALSE, 0, 0);
+            glVertexAttribPointer(color_location, 4, GL_FLOAT, GL_FALSE, 0, 0);
             glEnableVertexAttribArray(color_location);
         }
 
