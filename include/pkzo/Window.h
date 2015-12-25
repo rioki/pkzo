@@ -76,6 +76,10 @@ namespace pkzo
 
         const Window& operator = (const Window&) = delete;
 
+        unsigned int get_width() const;
+
+        unsigned int get_height() const;
+
         /**
          * Set the Window's Title Caption
          *

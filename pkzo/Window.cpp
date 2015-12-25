@@ -92,6 +92,20 @@ namespace pkzo
         }
     }
 
+    unsigned int Window::get_width() const
+    {
+        int w;
+        SDL_GetWindowSize(window, &w, nullptr);
+        return w;
+    }
+
+    unsigned int Window::get_height() const
+    {
+        int h;
+        SDL_GetWindowSize(window, nullptr, &h);
+        return h;
+    }
+
     void Window::set_title(const std::string& value)
     {
         SDL_SetWindowTitle(window, value.c_str());
