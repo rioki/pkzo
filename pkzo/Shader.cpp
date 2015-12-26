@@ -170,6 +170,60 @@ namespace pkzo
         }        
     }
 
+    void Shader::set_uniform(const std::string& name, int x, int y)
+    {
+        int location = glGetUniformLocation(program_id, name.c_str());
+        if (location != -1)
+        {
+            glUniform2i(location, x, y);
+        }
+    }
+    
+    void Shader::set_uniform(const std::string& name, float x, float y)
+    {
+        int location = glGetUniformLocation(program_id, name.c_str());
+        if (location != -1)
+        {
+            glUniform2f(location, x, y);
+        }
+    }
+
+    void Shader::set_uniform(const std::string& name, int x, int y, int z)
+    {
+        int location = glGetUniformLocation(program_id, name.c_str());
+        if (location != -1)
+        {
+            glUniform3i(location, x, y, z);
+        }
+    }
+
+    void Shader::set_uniform(const std::string& name, float x, float y, float z)
+    {
+        int location = glGetUniformLocation(program_id, name.c_str());
+        if (location != -1)
+        {
+            glUniform3f(location, x, y, z);
+        }
+    }
+
+    void Shader::set_uniform(const std::string& name, int x, int y, int z, int m)
+    {
+        int location = glGetUniformLocation(program_id, name.c_str());
+        if (location != -1)
+        {
+            glUniform4i(location, x, y, z, m);
+        }
+    }
+    
+    void Shader::set_uniform(const std::string& name, float x, float y, float z, float m)
+    {
+        int location = glGetUniformLocation(program_id, name.c_str());
+        if (location != -1)
+        {
+            glUniform4f(location, x, y, z, m);
+        }
+    }
+
     void Shader::set_uniform(const std::string& name, int* values, int size)
     {
         int location = glGetUniformLocation(program_id, name.c_str());

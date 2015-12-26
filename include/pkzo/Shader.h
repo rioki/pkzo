@@ -145,6 +145,12 @@ namespace pkzo
          **/
         void set_uniform(const std::string& name, int value);
         void set_uniform(const std::string& name, float value);
+        void set_uniform(const std::string& name, int x, int y);
+        void set_uniform(const std::string& name, float x, float y);
+        void set_uniform(const std::string& name, int x, int y, int z);
+        void set_uniform(const std::string& name, float x, float y, float z);
+        void set_uniform(const std::string& name, int x, int y, int z, int m);
+        void set_uniform(const std::string& name, float x, float y, float z, float m);
         /** @} **/
 
 
