@@ -95,14 +95,14 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\SDL2_ttf\include;$(SolutionDir)ext\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PKZO_BUILD;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)ext\SDL2\lib\$(PlatformTarget);$(SolutionDir)ext\SDL2_image\lib\$(PlatformTarget);$(SolutionDir)ext\glew\lib\Release\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;opengl32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)ext\SDL2\lib\$(PlatformTarget);$(SolutionDir)ext\SDL2_image\lib\$(PlatformTarget);$(SolutionDir)ext\SDL2_ttf\lib\$(PlatformTarget);$(SolutionDir)ext\glew\lib\Release\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;SDL2_ttf.lib;opengl32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy $(SolutionDir)ext\SDL2\lib\$(PlatformTarget)\SDL2.dll $(OutDir)
@@ -116,14 +116,14 @@ copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Comman
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\SDL2_ttf\include;$(SolutionDir)ext\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PKZO_BUILD;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)ext\SDL2\lib\$(PlatformTarget);$(SolutionDir)ext\SDL2_image\lib\$(PlatformTarget);$(SolutionDir)ext\glew\lib\Release\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;opengl32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)ext\SDL2\lib\$(PlatformTarget);$(SolutionDir)ext\SDL2_image\lib\$(PlatformTarget);$(SolutionDir)ext\SDL2_ttf\lib\$(PlatformTarget);$(SolutionDir)ext\glew\lib\Release\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;SDL2_ttf.lib;opengl32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy $(SolutionDir)ext\SDL2\lib\$(PlatformTarget)\SDL2.dll $(OutDir)
@@ -139,7 +139,7 @@ copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Comman
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\SDL2_ttf\include;$(SolutionDir)ext\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PKZO_BUILD;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -147,8 +147,8 @@ copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Comman
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)ext\SDL2\lib\$(PlatformTarget);$(SolutionDir)ext\SDL2_image\lib\$(PlatformTarget);$(SolutionDir)ext\glew\lib\Release\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;opengl32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)ext\SDL2\lib\$(PlatformTarget);$(SolutionDir)ext\SDL2_image\lib\$(PlatformTarget);$(SolutionDir)ext\SDL2_ttf\lib\$(PlatformTarget);$(SolutionDir)ext\glew\lib\Release\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;SDL2_ttf.lib;opengl32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy $(SolutionDir)ext\SDL2\lib\$(PlatformTarget)\SDL2.dll $(OutDir)
@@ -164,7 +164,7 @@ copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Comman
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\SDL2_ttf\include;$(SolutionDir)ext\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PKZO_BUILD;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -172,8 +172,8 @@ copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Comman
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)ext\SDL2\lib\$(PlatformTarget);$(SolutionDir)ext\SDL2_image\lib\$(PlatformTarget);$(SolutionDir)ext\glew\lib\Release\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;opengl32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)ext\SDL2\lib\$(PlatformTarget);$(SolutionDir)ext\SDL2_image\lib\$(PlatformTarget);$(SolutionDir)ext\SDL2_ttf\lib\$(PlatformTarget);$(SolutionDir)ext\glew\lib\Release\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;SDL2_ttf.lib;opengl32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy $(SolutionDir)ext\SDL2\lib\$(PlatformTarget)\SDL2.dll $(OutDir)
@@ -184,6 +184,7 @@ copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Comman
   <ItemGroup>
     <ClInclude Include="..\include\pkzo.h" />
     <ClInclude Include="..\include\pkzo\defines.h" />
+    <ClInclude Include="..\include\pkzo\Font.h" />
     <ClInclude Include="..\include\pkzo\functions.h" />
     <ClInclude Include="..\include\pkzo\Key.h" />
     <ClInclude Include="..\include\pkzo\Keyboard.h" />
@@ -198,6 +199,7 @@ copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Comman
     <ClInclude Include="strex.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Font.cpp" />
     <ClCompile Include="fs.cpp" />
     <ClCompile Include="functions.cpp" />
     <ClCompile Include="Key.cpp" />

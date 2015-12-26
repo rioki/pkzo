@@ -25,6 +25,7 @@
 #include "pkzo.h"
 
 #include <SDL.h>
+#include <SDL_ttf.h>
 
 #include "Keyboard.h"
 #include "Mouse.h"
@@ -36,6 +37,7 @@ namespace pkzo
 
     void cleanup()
     {
+        TTF_Quit();
         SDL_Quit();
     }
 
@@ -47,6 +49,12 @@ namespace pkzo
             if (r != 0)
             {
                 throw std::runtime_error(SDL_GetError());
+            }
+
+            r = TTF_Init();
+            if (r != 0)
+            {
+                throw std::runtime_error(TTF_GetError());
             }
 
             std::atexit(cleanup);

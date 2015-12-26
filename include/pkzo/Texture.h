@@ -54,12 +54,16 @@ namespace pkzo
         
         Texture(const Texture&) = delete;    
 
+        Texture(Texture&& other);
+
         /**
          * Destroy Texture
          **/
         ~Texture();
 
         const Texture& operator = (const Texture&) = delete;
+
+        const Texture& operator = (Texture&& other);
 
         /**
          * Load a Texture from File
@@ -118,6 +122,10 @@ namespace pkzo
     private:
         SDL_Surface* surface;
         mutable unsigned int glid;
+
+        void set_surface(SDL_Surface* value);
+
+    friend class Font;
     };
 }
 

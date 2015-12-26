@@ -27,6 +27,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <GL/glew.h>
+#include <algorithm>
 
 #include "functions.h"
 
@@ -34,6 +35,13 @@ namespace pkzo
 {
     Texture::Texture()
     : surface(nullptr), glid(0) {}
+
+    Texture::Texture(Texture&& other)
+    : surface(nullptr), glid(0)
+    {
+        std::swap(surface, other.surface);
+        std::swap(glid, other.glid);
+    }
 
     Texture::~Texture()
     {
@@ -43,6 +51,14 @@ namespace pkzo
             SDL_FreeSurface(surface);
             surface = nullptr;
         }
+    }
+
+    const Texture& Texture::operator = (Texture&& other)
+    {
+        std::swap(surface, other.surface);
+        std::swap(glid, other.glid);
+
+        return *this;
     }
 
     void Texture::load(const std::string& file)
@@ -211,5 +227,16 @@ namespace pkzo
             glDeleteTextures(1, &glid);
             glid = 0;
         }
+    }
+
+    void Texture::set_surface(SDL_Surface* value)
+    {
+        if (surface != nullptr)
+        {
+            release();
+            SDL_FreeSurface(surface);
+        }
+
+        surface = value;
     }
 }
