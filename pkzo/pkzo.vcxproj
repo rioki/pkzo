@@ -107,6 +107,7 @@
     <PostBuildEvent>
       <Command>copy $(SolutionDir)ext\SDL2\lib\$(PlatformTarget)\SDL2.dll $(OutDir)
 copy $(SolutionDir)ext\SDL2_image\lib\$(PlatformTarget)\*.dll $(OutDir)
+copy $(SolutionDir)ext\SDL2_ttf\lib\$(PlatformTarget)\*.dll $(OutDir)
 copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -128,6 +129,7 @@ copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Comman
     <PostBuildEvent>
       <Command>copy $(SolutionDir)ext\SDL2\lib\$(PlatformTarget)\SDL2.dll $(OutDir)
 copy $(SolutionDir)ext\SDL2_image\lib\$(PlatformTarget)\*.dll $(OutDir)
+copy $(SolutionDir)ext\SDL2_ttf\lib\$(PlatformTarget)\*.dll $(OutDir)
 copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -153,6 +155,7 @@ copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Comman
     <PostBuildEvent>
       <Command>copy $(SolutionDir)ext\SDL2\lib\$(PlatformTarget)\SDL2.dll $(OutDir)
 copy $(SolutionDir)ext\SDL2_image\lib\$(PlatformTarget)\*.dll $(OutDir)
+copy $(SolutionDir)ext\SDL2_ttf\lib\$(PlatformTarget)\*.dll $(OutDir)
 copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -178,6 +181,7 @@ copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Comman
     <PostBuildEvent>
       <Command>copy $(SolutionDir)ext\SDL2\lib\$(PlatformTarget)\SDL2.dll $(OutDir)
 copy $(SolutionDir)ext\SDL2_image\lib\$(PlatformTarget)\*.dll $(OutDir)
+copy $(SolutionDir)ext\SDL2_ttf\lib\$(PlatformTarget)\*.dll $(OutDir)
 copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

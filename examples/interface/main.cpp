@@ -26,6 +26,12 @@ int main(int argc, char* argv[])
     screen.set_background_color(0.75, 0.2, 0.5, 1.0);
     screen.set_background_texture(load_texture("../teapot/SteelPlate_Diffuse.png"));
 
+    pkzoui::Image image;
+    image.set_texture(load_texture("../teapot/SteelPlate_Diffuse.png"));
+    image.set_position(150, 150);
+    image.set_size(150, 150);
+    screen.add_widget(image);
+
     window.on_draw([&] () {
         screen.draw(screen_renderer);
     });

@@ -47,7 +47,7 @@ namespace pkzoui
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }   
 
-    void ScreenRenderer::draw_rect(unsigned int x, unsigned int y, unsigned int w, unsigned int h, float* color, pkzo::Texture* texture)
+    void ScreenRenderer::draw_rect(unsigned int x, unsigned int y, unsigned int w, unsigned int h, const float* color, const pkzo::Texture* texture)
     {
         gltLoadIdentity(modelViewMatrix);
         gltTranslate(modelViewMatrix, (float)x, (float)y, 0.0f);

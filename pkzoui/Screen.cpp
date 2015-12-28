@@ -2,6 +2,7 @@
 #include "Screen.h"
 
 #include "ScreenRenderer.h"
+#include "Widget.h"
 
 namespace pkzoui
 {
@@ -39,10 +40,33 @@ namespace pkzoui
         return background_texture;
     }
 
-    void Screen::draw(ScreenRenderer& renderer)
+    void Screen::add_widget(Widget& widget)
+    {
+        widgets.push_back(&widget);
+    }
+
+    void Screen::remove_widget(Widget& widget)
+    {
+        auto i = std::find(widgets.begin(), widgets.end(), &widget);
+        if (i != widgets.end())
+        {
+            widgets.erase(i);
+        }
+        else
+        {
+            throw std::logic_error("widget not in screen");
+        }
+    }
+
+    void Screen::draw(ScreenRenderer& renderer) const
     {
         renderer.start(width, height);
 
         renderer.draw_rect(0, 0, width, height, background_color, background_texture.get());
+
+        for (const Widget* widget : widgets)
+        {
+            widget->draw(renderer);
+        }
     }
 }

@@ -23,7 +23,7 @@ namespace pkzoui
 
         void start(unsigned int w, unsigned int h);
 
-        void draw_rect(unsigned int x, unsigned int y, unsigned int w, unsigned int h, float* color, pkzo::Texture* texture);
+        void draw_rect(unsigned int x, unsigned int y, unsigned int w, unsigned int h, const float* color, const pkzo::Texture* texture);
 
     private:
         pkzo::Shader shader;

@@ -224,7 +224,7 @@ namespace pkzo
         }
     }
 
-    void Shader::set_uniform(const std::string& name, int* values, int size)
+    void Shader::set_uniform(const std::string& name, const int* values, int size)
     {
         int location = glGetUniformLocation(program_id, name.c_str());
         if (location != -1)
@@ -249,7 +249,7 @@ namespace pkzo
         }
     }
 
-    void Shader::set_uniform(const std::string& name, float* values, int size)
+    void Shader::set_uniform(const std::string& name, const float* values, int size)
     {
         int location = glGetUniformLocation(program_id, name.c_str());
         if (location != -1)
@@ -274,7 +274,7 @@ namespace pkzo
         }
     }
     
-    void Shader::set_uniform_matrix(const std::string& name, float* values, int size, bool transpose)
+    void Shader::set_uniform_matrix(const std::string& name, const float* values, int size, bool transpose)
     {
         int location = glGetUniformLocation(program_id, name.c_str());
         int glt      = transpose ? GL_TRUE : GL_FALSE;

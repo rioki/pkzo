@@ -5,4 +5,6 @@
 #include "pkzoui/ScreenRenderer.h"
 #include "pkzoui/Screen.h"
 
+#include "pkzoui/Image.h"
+
 #endif

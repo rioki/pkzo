@@ -167,8 +167,8 @@ namespace pkzo
          * @todo support 9 and 16 as glUniformMatrix3fv, glUniformMatrix4fv?
          * @{
          **/
-        void set_uniform(const std::string& name, int* values, int size);
-        void set_uniform(const std::string& name, float* values, int size);
+        void set_uniform(const std::string& name, const int* values, int size);
+        void set_uniform(const std::string& name, const float* values, int size);
         /** @} **/
 
         /**
@@ -182,7 +182,7 @@ namespace pkzo
          * @note The shader must be bound to call this function.
          * @warning This function can only be called with a valid and active OpenGL context.
          **/
-        void set_uniform_matrix(const std::string& name, float* values, int size, bool transpose = false);
+        void set_uniform_matrix(const std::string& name, const float* values, int size, bool transpose = false);
               
         /**
          * Get the Location of a Attibute Variable

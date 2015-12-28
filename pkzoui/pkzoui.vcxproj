@@ -163,13 +163,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\include\pkzoui.h" />
+    <ClInclude Include="..\include\pkzoui\Image.h" />
     <ClInclude Include="..\include\pkzoui\Screen.h" />
     <ClInclude Include="..\include\pkzoui\ScreenRenderer.h" />
+    <ClInclude Include="..\include\pkzoui\Widget.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Image.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="ScreenRenderer.cpp" />
+    <ClCompile Include="Widget.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="pkzoui.rc" />

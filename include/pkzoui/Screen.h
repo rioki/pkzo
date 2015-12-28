@@ -4,6 +4,7 @@
 
 #include <memory>
 #include <tuple>
+#include <list>
 
 #include <pkzo/Texture.h>
 
@@ -11,6 +12,7 @@
 
 namespace pkzoui
 {
+    class Widget;
     class ScreenRenderer;
 
     class PKZOUI_EXPORT Screen
@@ -32,11 +34,17 @@ namespace pkzoui
 
         std::shared_ptr<pkzo::Texture> get_background_texture() const;
 
-        void draw(ScreenRenderer& renderer);
+        void add_widget(Widget& widget);
+
+        void remove_widget(Widget& widget);
+
+        void draw(ScreenRenderer& renderer) const;
 
     private:
         unsigned int width;
         unsigned int height;
+
+        std::list<Widget*> widgets;
 
         float background_color[4];
         std::shared_ptr<pkzo::Texture> background_texture;
