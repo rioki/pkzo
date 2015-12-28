@@ -9,5 +9,6 @@
 #include "pkzoui/Rectangle.h"
 #include "pkzoui/Text.h"
 #include "pkzoui/Button.h"
+#include "pkzoui/CheckBox.h"
 
 #endif

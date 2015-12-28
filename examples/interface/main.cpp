@@ -27,7 +27,9 @@ int main(int argc, char* argv[])
     auto title_font = load_font("../assets/fonts/DejaVuSans.ttf", 32);
     auto text_font  = load_font("../assets/fonts/DejaVuSans.ttf", 18);
 
-    auto button_background = load_texture("../assets/textures/Button.png");
+    auto button_background   = load_texture("../assets/textures/Button.png");
+    auto checkbox_background = load_texture("../assets/textures/CheckBox_Background.png");
+    auto checkbox_mark       = load_texture("../assets/textures/CheckBox_Mark.png");
 
     pkzo::Window window(1280, 768);
     window.set_title("pkzo - Interface Example");
@@ -72,6 +74,34 @@ int main(int argc, char* argv[])
         button_out.set_text("#YOLO");
     });
     screen.add_widget(button);
+
+    pkzoui::Text checkbox_out;
+    checkbox_out.set_text("<-- Check Box");
+    checkbox_out.set_font(text_font);
+    checkbox_out.set_color(pkzoui::Color(0x7C8A99FF));
+    checkbox_out.set_position(800, 175);
+    screen.add_widget(checkbox_out);
+
+    pkzoui::CheckBox checkbox;
+    checkbox.set_caption("Checkbox");
+    checkbox.set_font(text_font);
+    checkbox.set_color(pkzoui::Color(0x7C8A99FF));
+    checkbox.set_background(checkbox_background);
+    checkbox.set_background_color(pkzoui::Color(0x3E454CFF));
+    checkbox.set_mark(checkbox_mark);
+    checkbox.set_mark_color(pkzoui::Color(0x7C8A99FF));
+    checkbox.set_position(640, 170);
+    checkbox.on_toggle([&] () {
+        if (checkbox.is_checked())
+        {
+            checkbox_out.set_text("#YOLO");
+        }
+        else
+        {
+                checkbox_out.set_text("#SWAG");
+        }
+    });
+    screen.add_widget(checkbox);
 
     window.on_draw([&] () {
         screen.draw(screen_renderer);

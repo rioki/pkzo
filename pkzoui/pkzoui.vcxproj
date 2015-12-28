@@ -164,6 +164,7 @@
   <ItemGroup>
     <ClInclude Include="..\include\pkzoui.h" />
     <ClInclude Include="..\include\pkzoui\Button.h" />
+    <ClInclude Include="..\include\pkzoui\CheckBox.h" />
     <ClInclude Include="..\include\pkzoui\Color.h" />
     <ClInclude Include="..\include\pkzoui\Rectangle.h" />
     <ClInclude Include="..\include\pkzoui\Screen.h" />
@@ -174,6 +175,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="CheckBox.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="Screen.cpp" />

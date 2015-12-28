@@ -95,7 +95,7 @@ namespace pkzoui
 
     void Button::handle_mouse_up(unsigned int button, unsigned int bx, unsigned int by)
     {
-        if (bx > x && by > y && bx < x + width && by < y + width)
+        if (button == 1 && bx > x && by > y && bx < x + width && by < y + width)
         {
             if (click_cb)
             {
