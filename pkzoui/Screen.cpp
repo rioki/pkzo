@@ -14,6 +14,22 @@ namespace pkzoui
 
     Screen::~Screen() {}
 
+    void Screen::set_size(unsigned int _width, unsigned int _height)
+    {
+        width  = _width;
+        height = _height;
+    }
+
+    unsigned int Screen::get_width() const
+    {
+        return width;
+    }
+
+    unsigned int Screen::get_height() const
+    {
+        return height;
+    }
+
     void Screen::set_background_color(const Color& value)
     {
         background_color = value;

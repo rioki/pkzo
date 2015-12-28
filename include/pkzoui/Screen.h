@@ -27,6 +27,12 @@ namespace pkzoui
 
         const Screen& operator = (const Screen&) = delete;
 
+        void set_size(unsigned int width, unsigned int height);
+
+        unsigned int get_width() const;
+
+        unsigned int get_height() const;
+
         void set_background_color(const Color& value);
 
         const Color& get_background_color() const;
