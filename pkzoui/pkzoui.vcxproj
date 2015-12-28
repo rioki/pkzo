@@ -166,6 +166,7 @@
     <ClInclude Include="..\include\pkzoui\Image.h" />
     <ClInclude Include="..\include\pkzoui\Screen.h" />
     <ClInclude Include="..\include\pkzoui\ScreenRenderer.h" />
+    <ClInclude Include="..\include\pkzoui\Text.h" />
     <ClInclude Include="..\include\pkzoui\Widget.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
@@ -173,6 +174,7 @@
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="ScreenRenderer.cpp" />
+    <ClCompile Include="Text.cpp" />
     <ClCompile Include="Widget.cpp" />
   </ItemGroup>
   <ItemGroup>

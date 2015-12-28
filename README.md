@@ -1,5 +1,5 @@
-pkzo or 'a Libary with Low Level OpenGL Objects'
-================================================
+pkzo
+====
 
 About
 -----
@@ -8,13 +8,20 @@ I kept writing the similar objects over and over, so I decided to distill them
 into one consistent library. The libary provides all you need to quickly get up
 to speed with OpenGL. 
 
-pkzo provides the following primitives:
+pkzo provides the following features:
 
 * a window with OpenGL 4.0 rendering context
 * a mouse and keyboard abstraction
 * a GLSL shader handler
 * a triangle mesh class, that load PLY files
 * a texture class, that loads JPEG, PNG, TIFF and WebP images
+* loading TTF fonts and rendering them to 2D texture
+
+pkzoui provides the following features:
+
+* 2D rendering infrastructure
+* rendering simple rectangle
+* rendering text.
 
 Open Issues
 -----------
@@ -23,7 +30,6 @@ I will extent the library as required for my projects or on request. The
 following things I still have lying around and can quickly integrate.
 
 * loading meshes from OBJ and STL 
-* loading TTF fonts and rendering them to 2D texture
 * computing normals
 * computing tangents
 
@@ -69,6 +75,10 @@ domain, unless otherwise noted in the file.
 
 The Utah Teapot (examples/teapot/Teapot.ply) was create by Martin Newell in 1975
 and made public by him.
+
+The DejaVu fonts are copyright Bitstream. DejaVu changes are in public 
+domain. Glyphs imported from Arev fonts are copyright Tavmjong Bah. 
+See examples/assets/fonts/DejaVu-LICENSE.txt for details.
 
 The textures (examples/**/*.png) where created by me 
 (Copyright 2014 Sean Farrell) and are licensed under 
