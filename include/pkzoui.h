@@ -6,7 +6,7 @@
 #include "pkzoui/Screen.h"
 
 #include "pkzoui/Widget.h"
-#include "pkzoui/Image.h"
+#include "pkzoui/Rectangle.h"
 #include "pkzoui/Text.h"
 
 #endif

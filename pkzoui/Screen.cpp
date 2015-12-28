@@ -9,25 +9,19 @@ namespace pkzoui
     Screen::Screen(unsigned int w, unsigned int h)
     : width(w), height(h) 
     {
-        background_color[0] = 1.0f;
-        background_color[1] = 1.0f;
-        background_color[2] = 1.0f;
-        background_color[3] = 1.0f;
+
     }
 
     Screen::~Screen() {}
 
-    void Screen::set_background_color(float r, float g, float b, float a)
+    void Screen::set_background_color(const Color& value)
     {
-        background_color[0] = a;
-        background_color[1] = g;
-        background_color[2] = b;
-        background_color[3] = a;
+        background_color = value;
     }
 
-    std::tuple<float, float, float, float> Screen::get_background_color() const
+    const Color& Screen::get_background_color() const
     {
-        return std::make_tuple(background_color[0], background_color[1], background_color[2], background_color[3]);
+        return background_color;
     }
 
     void Screen::set_background_texture(std::shared_ptr<pkzo::Texture> value)

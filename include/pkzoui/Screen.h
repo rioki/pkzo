@@ -9,6 +9,7 @@
 #include <pkzo/Texture.h>
 
 #include "defines.h"
+#include "Color.h"
 
 namespace pkzoui
 {
@@ -26,9 +27,9 @@ namespace pkzoui
 
         const Screen& operator = (const Screen&) = delete;
 
-        void set_background_color(float r, float g, float b, float a);
+        void set_background_color(const Color& value);
 
-        std::tuple<float, float, float, float> get_background_color() const;
+        const Color& get_background_color() const;
 
         void set_background_texture(std::shared_ptr<pkzo::Texture> value);
 
@@ -46,7 +47,7 @@ namespace pkzoui
 
         std::list<Widget*> widgets;
 
-        float background_color[4];
+        Color                          background_color;
         std::shared_ptr<pkzo::Texture> background_texture;
     };
 }

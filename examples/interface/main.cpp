@@ -24,26 +24,29 @@ int main(int argc, char* argv[])
         running = false;
     });
 
+    auto title_font = load_font("../assets/fonts/DejaVuSans.ttf", 32);
+    auto text_font  = load_font("../assets/fonts/DejaVuSans.ttf", 18);
+
     pkzo::Window window(1280, 768);
-    window.set_title("pkzo - Interface Test");
+    window.set_title("pkzo - Interface Example");
 
     pkzoui::ScreenRenderer screen_renderer;
     
     pkzoui::Screen screen(1280, 768);
-    screen.set_background_color(0.75f, 0.2f, 0.5f, 1.0f);
-    screen.set_background_texture(load_texture("../teapot/SteelPlate_Diffuse.png"));
+    screen.set_background_color(pkzoui::Color(0x131619FF));
 
-    pkzoui::Image image;
-    image.set_texture(load_texture("../teapot/SteelPlate_Diffuse.png"));
-    image.set_position(150, 150);
-    image.set_size(150, 150);
-    screen.add_widget(image);
-
-    pkzoui::Text text;
-    text.set_font(load_font("../assets/fonts/DejaVuSans.ttf", 24));
-    text.set_text("Hello World!");
-    text.set_position(250, 250);
-    screen.add_widget(text);
+    pkzoui::Text title;
+    title.set_text("Interface Example");    
+    title.set_font(title_font);
+    title.set_position(50, 50);
+    title.set_color(pkzoui::Color(0x7C8A99FF));
+    screen.add_widget(title);
+    
+    pkzoui::Rectangle left_pannel;
+    left_pannel.set_color(pkzoui::Color(0x292E33FF));
+    left_pannel.set_position(50, 150);
+    left_pannel.set_size(1180, 568);
+    screen.add_widget(left_pannel);
 
     window.on_draw([&] () {
         screen.draw(screen_renderer);

@@ -6,20 +6,14 @@
 namespace pkzoui
 {
     Text::Text()
-    : dirty(true) 
-    {
-        color[0] = 1.0f;
-        color[1] = 1.0f;
-        color[2] = 1.0f;
-        color[3] = 1.0f;
-    }
+    : dirty(true) {}
 
     Text::~Text() {}
 
     void Text::set_font(std::shared_ptr<pkzo::Font> value)
     {
         font  = value;
-        dirty = false;
+        dirty = true;
 
         if (font)
         {
@@ -48,17 +42,14 @@ namespace pkzoui
         return text;
     }
 
-    void Text::set_color(float r, float g, float b, float a)
+    void Text::set_color(const Color& value)
     {
-        color[0] = a;
-        color[1] = g;
-        color[2] = b;
-        color[3] = a;
+        color = value;
     }
 
-    std::tuple<float, float, float, float> Text::get_color() const
+    const Color& Text::get_color() const
     {
-        return std::make_tuple(color[0], color[1], color[2], color[3]);
+        return color;
     }
 
     void Text::draw(ScreenRenderer& renderer) const
@@ -66,6 +57,7 @@ namespace pkzoui
         if (dirty)
         {
             texture = font->render(text);
+            dirty = false;
         }
 
         renderer.draw_rect(x, y, width, height, color, &texture);

@@ -10,6 +10,8 @@
 #include <pkzo/Font.h>
 #include <pkzo/Texture.h>
 
+#include "Color.h"
+
 namespace pkzoui
 {
     class PKZOUI_EXPORT Text : public Widget
@@ -28,16 +30,16 @@ namespace pkzoui
 
         const std::string& get_text() const;
 
-        void set_color(float r, float g, float b, float a);
+        void set_color(const Color& value);
 
-        std::tuple<float, float, float, float> get_color() const;
+        const Color& get_color() const;
 
         void draw(ScreenRenderer& renderer) const override;
 
     private:
         std::shared_ptr<pkzo::Font> font;
         std::string                 text;
-        float                       color[4];
+        Color                       color;
 
         mutable bool          dirty;
         mutable pkzo::Texture texture;
