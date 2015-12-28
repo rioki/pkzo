@@ -25,14 +25,16 @@
 #include "functions.h"
 #include "Window.h"
 
+#include <set>
 #include <SDL.h>
 #include <gl/GLEW.h>
+
 
 namespace pkzo
 {
     std::vector<std::tuple<unsigned int, unsigned int>>  Window::get_valid_sizes()
     {    
-        std::vector<std::tuple<unsigned int, unsigned int>>  result;
+        std::set<std::tuple<unsigned int, unsigned int>> result;
         
         init();
 
@@ -50,10 +52,11 @@ namespace pkzo
             {
                 throw std::logic_error(SDL_GetError());
             }
-            result.push_back(std::make_tuple((unsigned int)mode.w, (unsigned int)mode.h));
+            result.insert(std::make_tuple((unsigned int)mode.w, (unsigned int)mode.h));
         }
         
-        return result;
+        // invert order 
+        return std::vector<std::tuple<unsigned int, unsigned int>>(result.begin(), result.end());
     }
     
     Window::Window(unsigned int width, unsigned int height, Flags flags)
