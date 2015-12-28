@@ -40,6 +40,8 @@ namespace pkzoui
         return height;
     }
 
+    void Widget::handle_mouse_move(unsigned int x, unsigned int y, int dx, int dy) {}
+
     void Widget::handle_mouse_down(unsigned int button, unsigned int x, unsigned int y) {}
 
     void Widget::handle_mouse_up(unsigned int button, unsigned int x, unsigned int y) {}

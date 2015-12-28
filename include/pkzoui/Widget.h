@@ -33,6 +33,8 @@ namespace pkzoui
 
         virtual void draw(ScreenRenderer& renderer) const = 0;
 
+        virtual void handle_mouse_move(unsigned int x, unsigned int y, int dx, int dy);
+
         virtual void handle_mouse_down(unsigned int button, unsigned int x, unsigned int y);
 
         virtual void handle_mouse_up(unsigned int button, unsigned int x, unsigned int y);

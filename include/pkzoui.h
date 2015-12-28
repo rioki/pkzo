@@ -10,5 +10,6 @@
 #include "pkzoui/Text.h"
 #include "pkzoui/Button.h"
 #include "pkzoui/CheckBox.h"
+#include "pkzoui/Slider.h"
 
 #endif

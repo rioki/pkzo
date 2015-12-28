@@ -1,4 +1,5 @@
 
+#include <sstream>
 #include <pkzo.h>
 #include <pkzoui.h>
 
@@ -30,6 +31,8 @@ int main(int argc, char* argv[])
     auto button_background   = load_texture("../assets/textures/Button.png");
     auto checkbox_background = load_texture("../assets/textures/CheckBox_Background.png");
     auto checkbox_mark       = load_texture("../assets/textures/CheckBox_Mark.png");
+    auto slider_background   = load_texture("../assets/textures/Slider_Background.png");
+    auto slider_nob          = load_texture("../assets/textures/Slider_Nob.png");
 
     pkzo::Window window(1280, 768);
     window.set_title("pkzo - Interface Example");
@@ -103,8 +106,39 @@ int main(int argc, char* argv[])
     });
     screen.add_widget(checkbox);
 
+    pkzoui::Text slider_out;
+    slider_out.set_text("30 %");
+    slider_out.set_font(text_font);
+    slider_out.set_color(pkzoui::Color(0x7C8A99FF));
+    slider_out.set_position(350, 275);
+    screen.add_widget(slider_out);
+
+    pkzoui::Slider slider;
+    slider.set_background(slider_background);
+    slider.set_background_color(pkzoui::Color(0x3E454CFF));
+    slider.set_nob(slider_nob);
+    slider.set_nob_color(pkzoui::Color(0x7C8A99FF));
+    slider.set_increments(11);
+    slider.set_value(3);
+    slider.set_position(60, 270);
+    slider.on_change([&] () {
+        std::stringstream buff;
+        buff << slider.get_value() * 10 << "%";
+        slider_out.set_text(buff.str());
+    });
+    screen.add_widget(slider);
+
+
     window.on_draw([&] () {
         screen.draw(screen_renderer);
+    });
+
+    mouse.on_move([&] (unsigned int x, unsigned int y, int dx, int dy) {
+        screen.handle_mouse_move(x, y, dx, dy);
+    });
+
+    mouse.on_button_press([&] (unsigned int btn, unsigned int x, unsigned int y) {
+        screen.handle_mouse_down(btn, x, y);
     });
 
     mouse.on_button_release([&] (unsigned int btn, unsigned int x, unsigned int y) {

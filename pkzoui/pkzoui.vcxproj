@@ -169,6 +169,7 @@
     <ClInclude Include="..\include\pkzoui\Rectangle.h" />
     <ClInclude Include="..\include\pkzoui\Screen.h" />
     <ClInclude Include="..\include\pkzoui\ScreenRenderer.h" />
+    <ClInclude Include="..\include\pkzoui\Slider.h" />
     <ClInclude Include="..\include\pkzoui\Text.h" />
     <ClInclude Include="..\include\pkzoui\Widget.h" />
     <ClInclude Include="resource.h" />
@@ -180,6 +181,7 @@
     <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="ScreenRenderer.cpp" />
+    <ClCompile Include="Slider.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Widget.cpp" />
   </ItemGroup>

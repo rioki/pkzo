@@ -80,6 +80,14 @@ namespace pkzoui
         }
     }
 
+    void Screen::handle_mouse_move(unsigned int x, unsigned int y, int dx, int dy)
+    {
+        for (Widget* widget : widgets)
+        {
+            widget->handle_mouse_move(x, y, dx, dy);
+        }
+    }
+    
     void Screen::handle_mouse_down(unsigned int button, unsigned int x, unsigned int y)
     {
         for (Widget* widget : widgets)
