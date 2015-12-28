@@ -106,7 +106,7 @@ namespace pkzoui
 
     void Slider::handle_mouse_down(unsigned int button, unsigned int bx, unsigned int by)
     {
-        if (button == 1 && bx > x && by > y && bx < x + width && by < y + width)
+        if (button == 1 && bx > x && by > y && bx < x + width && by < y + height)
         {
             active = true;
 
