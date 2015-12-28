@@ -30,6 +30,32 @@
 
 namespace pkzo
 {
+    std::vector<std::tuple<unsigned int, unsigned int>>  Window::get_valid_sizes()
+    {    
+        std::vector<std::tuple<unsigned int, unsigned int>>  result;
+        
+        init();
+
+        int modes = SDL_GetNumDisplayModes(0);
+        if (modes == -1)
+        {
+            throw std::logic_error(SDL_GetError());
+        }
+        
+        for (int i = 0; i < modes; i++)
+        {
+            SDL_DisplayMode mode;
+            int r = SDL_GetDisplayMode(0, i, &mode);
+            if (r != 0)
+            {
+                throw std::logic_error(SDL_GetError());
+            }
+            result.push_back(std::make_tuple((unsigned int)mode.w, (unsigned int)mode.h));
+        }
+        
+        return result;
+    }
+    
     Window::Window(unsigned int width, unsigned int height, Flags flags)
     : window(nullptr), glcontext(nullptr)
     {

@@ -27,6 +27,8 @@
 
 #include <functional>
 #include <string>
+#include <vector>
+#include <tuple>
 
 #include "defines.h"
 
@@ -54,6 +56,8 @@ namespace pkzo
             BORDERLESS = 0x02, //!< Borderless
             RESIZABLE  = 0x04  //!< Resizable
         };
+
+        static std::vector<std::tuple<unsigned int, unsigned int>> Window::get_valid_sizes();
 
         /**
         * Create a new Window
