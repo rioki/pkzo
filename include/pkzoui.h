@@ -8,5 +8,6 @@
 #include "pkzoui/Widget.h"
 #include "pkzoui/Rectangle.h"
 #include "pkzoui/Text.h"
+#include "pkzoui/Button.h"
 
 #endif

@@ -39,7 +39,11 @@ namespace pkzoui
 
         void remove_widget(Widget& widget);
 
-        void draw(ScreenRenderer& renderer) const;
+        virtual void draw(ScreenRenderer& renderer) const;
+
+        virtual void handle_mouse_down(unsigned int button, unsigned int x, unsigned int y);
+
+        virtual void handle_mouse_up(unsigned int button, unsigned int x, unsigned int y);
 
     private:
         unsigned int width;

@@ -63,4 +63,20 @@ namespace pkzoui
             widget->draw(renderer);
         }
     }
+
+    void Screen::handle_mouse_down(unsigned int button, unsigned int x, unsigned int y)
+    {
+        for (Widget* widget : widgets)
+        {
+            widget->handle_mouse_down(button, x, y);
+        }
+    }
+
+    void Screen::handle_mouse_up(unsigned int button, unsigned int x, unsigned int y)
+    {
+        for (Widget* widget : widgets)
+        {
+            widget->handle_mouse_up(button, x, y);
+        }
+    }
 }
