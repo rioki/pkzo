@@ -3,7 +3,7 @@
 
 #include "ScreenRenderer.h"
 
-namespace pkzoui
+namespace pkzo
 {
     Slider::Slider()
     : value(0), increments(100), active(false) {}

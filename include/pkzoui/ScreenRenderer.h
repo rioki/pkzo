@@ -8,7 +8,7 @@
 
 #include "defines.h"
 
-namespace pkzoui
+namespace pkzo
 {
     class PKZOUI_EXPORT ScreenRenderer
     {

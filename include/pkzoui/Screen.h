@@ -2,16 +2,16 @@
 #ifndef _PKZOUI_SCREEN_H_
 #define _PKZOUI_SCREEN_H_
 
+#include "defines.h"
+
 #include <memory>
 #include <tuple>
 #include <list>
 
 #include <pkzo/Texture.h>
+#include <pkzo/Color.h>
 
-#include "defines.h"
-#include "Color.h"
-
-namespace pkzoui
+namespace pkzo
 {
     class Widget;
     class ScreenRenderer;

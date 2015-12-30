@@ -28,6 +28,9 @@
 
 #include "Shader.h"
 #include "PlyParser.h"
+#include "Vector2.h"
+#include "Vector3.h"
+#include "Vector4.h"
 
 namespace pkzo
 {
@@ -114,10 +117,18 @@ namespace pkzo
         vertices[b + 2] = z;
     }
 
-    std::tuple<float, float, float> Mesh::get_vertex(size_t i) const
+    void Mesh::set_vertex(size_t i, const Vector3& v)
     {
         size_t b = i * 3;
-        return std::make_tuple(vertices[b + 0], vertices[b + 1], vertices[b + 2]);
+        vertices[b + 0] = v[0];
+        vertices[b + 1] = v[1];
+        vertices[b + 2] = v[2];
+    }
+
+    Vector3 Mesh::get_vertex(size_t i) const
+    {
+        size_t b = i * 3;
+        return Vector3(vertices[b + 0], vertices[b + 1], vertices[b + 2]);
     }
 
     void Mesh::set_normal(size_t i, float x, float y, float z)
@@ -128,10 +139,18 @@ namespace pkzo
         normals[b + 2] = z;
     }
 
-    std::tuple<float, float, float> Mesh::get_normal(size_t i) const
+    void Mesh::set_normal(size_t i, const Vector3& v)
     {
         size_t b = i * 3;
-        return std::make_tuple(normals[b + 0], normals[b + 1], normals[b + 2]);
+        normals[b + 0] = v[0];
+        normals[b + 1] = v[1];
+        normals[b + 2] = v[2];
+    }
+
+    Vector3 Mesh::get_normal(size_t i) const
+    {
+        size_t b = i * 3;
+        return Vector3(normals[b + 0], normals[b + 1], normals[b + 2]);
     }
 
     void Mesh::set_texcoord(size_t i, float u, float v)
@@ -141,10 +160,17 @@ namespace pkzo
         texcoords[b + 1] = v;
     }
 
-    std::tuple<float, float> Mesh::get_texcoord(size_t i) const
+    void Mesh::set_texcoord(size_t i, const Vector2& v)
     {
         size_t b = i * 2;
-        return std::make_tuple(texcoords[b + 0], texcoords[b + 1]);
+        texcoords[b + 0] = v[0];
+        texcoords[b + 1] = v[1];
+    }
+
+    Vector2 Mesh::get_texcoord(size_t i) const
+    {
+        size_t b = i * 2;
+        return Vector2(texcoords[b + 0], texcoords[b + 1]);
     }
 
     void Mesh::set_tangent(size_t i, float x, float y, float z)
@@ -155,10 +181,18 @@ namespace pkzo
         tangents[b + 2] = z;
     }
 
-    std::tuple<float, float, float> Mesh::get_tangent(size_t i) const
+    void Mesh::set_tangent(size_t i, const Vector3& v)
     {
         size_t b = i * 3;
-        return std::make_tuple(tangents[b + 0], tangents[b + 1], tangents[b + 2]);
+        tangents[b + 0] = v[0];
+        tangents[b + 1] = v[1];
+        tangents[b + 2] = v[2];
+    }
+
+    Vector3 Mesh::get_tangent(size_t i) const
+    {
+        size_t b = i * 3;
+        return Vector3(tangents[b + 0], tangents[b + 1], tangents[b + 2]);
     }
 
     void Mesh::set_color(size_t i, float r, float g, float b, float a)
@@ -170,10 +204,19 @@ namespace pkzo
         colors[ba + 3] = a;
     }
 
-    std::tuple<float, float, float, float> Mesh::get_color(size_t i) const
+    void Mesh::set_color(size_t i, const Vector4& v)
+    {
+        size_t ba = i * 4;
+        colors[ba + 0] = v[0];
+        colors[ba + 1] = v[1];
+        colors[ba + 2] = v[2];
+        colors[ba + 3] = v[3];
+    }
+
+    Vector4 Mesh::get_color(size_t i) const
     {
         size_t b = i * 4;
-        return std::make_tuple(colors[b + 0], colors[b + 1], colors[b + 2], colors[b + 3]);
+        return Vector4(colors[b + 0], colors[b + 1], colors[b + 2], colors[b + 3]);
     }
 
     void Mesh::set_face_count(size_t value)

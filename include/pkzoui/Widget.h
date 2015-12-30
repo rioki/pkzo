@@ -4,7 +4,7 @@
 
 #include "defines.h"
 
-namespace pkzoui
+namespace pkzo
 {
     class ScreenRenderer;
 

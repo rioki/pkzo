@@ -33,6 +33,9 @@
 namespace pkzo
 {
     class Shader;
+    class Vector2;
+    class Vector3;
+    class Vector4;
 
     /**
      * Triangle Mesh
@@ -105,6 +108,7 @@ namespace pkzo
          * @param z the z value of the vertex
          **/
         void set_vertex(size_t i, float x, float y, float z);
+        void set_vertex(size_t i, const Vector3& v);
 
         /**
          * Get a Vertex
@@ -113,7 +117,7 @@ namespace pkzo
          *
          * @returns a tuple containing the x, y and z component of the vertex
          **/
-        std::tuple<float, float, float> get_vertex(size_t i) const;
+        Vector3 get_vertex(size_t i) const;
 
         /**
          * Set a Normal
@@ -124,6 +128,7 @@ namespace pkzo
          * @param z the z value of the normal
          **/
         void set_normal(size_t i, float x, float y, float z);
+        void set_normal(size_t i, const Vector3& v);
 
         /**
          * Get a Normal
@@ -132,7 +137,7 @@ namespace pkzo
          *
          * @returns a tuple containing the x, y and z component of the normal
          **/
-        std::tuple<float, float, float> get_normal(size_t i) const;
+        Vector3 get_normal(size_t i) const;
 
         /**
          * Set a Texture Coordinate
@@ -142,6 +147,7 @@ namespace pkzo
          * @param v the v value of the texture coordinate
          **/
         void set_texcoord(size_t i, float u, float v);
+        void set_texcoord(size_t i, const Vector2& v);
 
         /**
          * Get a Texture Coordinate
@@ -150,7 +156,7 @@ namespace pkzo
          *
          * @returns a tuple containing the u and v component of the texture coordinate
          **/
-        std::tuple<float, float> get_texcoord(size_t i) const;
+        Vector2 get_texcoord(size_t i) const;
 
         /**
          * Set a Tangent
@@ -161,6 +167,7 @@ namespace pkzo
          * @param z the z value of the tangent
          **/
         void set_tangent(size_t i, float x, float y, float z);
+        void set_tangent(size_t i, const Vector3& v);
 
         /**
          * Get a Tangent
@@ -169,7 +176,7 @@ namespace pkzo
          *
          * @returns a tuple containing the x, y and z component of the tangent
          **/
-        std::tuple<float, float, float> get_tangent(size_t i) const;
+        Vector3 get_tangent(size_t i) const;
 
         /**
          * Set a Vertex Color
@@ -181,6 +188,7 @@ namespace pkzo
          * @param a the alpha value of the vertex color
          **/
         void set_color(size_t i, float r, float g, float b, float a);
+        void set_color(size_t i, const Vector4& c);
 
         /**
          * Get a Vertex Color
@@ -189,7 +197,7 @@ namespace pkzo
          *
          * @returns a tuple containing the r, g, b and a component of the vertex color
          **/
-        std::tuple<float, float, float, float> get_color(size_t i) const;
+        Vector4 get_color(size_t i) const;
 
         /**
          * Set the Number of Triangles
@@ -275,7 +283,7 @@ namespace pkzo
         std::vector<float> normals;   // v3f
         std::vector<float> texcoords; // v2f
         std::vector<float> tangents;  // v3f
-        std::vector<float> colors;     // v4f
+        std::vector<float> colors;    // v4f
 
         std::vector<unsigned int> faces;       // v3i
 

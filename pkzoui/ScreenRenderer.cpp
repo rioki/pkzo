@@ -12,7 +12,7 @@
 #include "glt.h"
 #include <GL/glew.h>
 
-namespace pkzoui
+namespace pkzo
 {
     ScreenRenderer::ScreenRenderer()
     {

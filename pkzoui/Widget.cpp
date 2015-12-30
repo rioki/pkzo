@@ -1,7 +1,7 @@
 
 #include "Widget.h"
 
-namespace pkzoui
+namespace pkzo
 {
     Widget::Widget()
     : x(0), y(0), width(15), height(15) {}

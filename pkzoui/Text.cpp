@@ -3,7 +3,7 @@
 
 #include "ScreenRenderer.h"
 
-namespace pkzoui
+namespace pkzo
 {
     Text::Text()
     : dirty(true) {}

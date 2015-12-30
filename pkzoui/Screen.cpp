@@ -4,7 +4,7 @@
 #include "ScreenRenderer.h"
 #include "Widget.h"
 
-namespace pkzoui
+namespace pkzo
 {
     Screen::Screen(unsigned int w, unsigned int h)
     : width(w), height(h) 

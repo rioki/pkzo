@@ -3,7 +3,7 @@
 
 #include "ScreenRenderer.h"
 
-namespace pkzoui 
+namespace pkzo 
 {
     Button::Button() 
     : caption_dirty(true) {}

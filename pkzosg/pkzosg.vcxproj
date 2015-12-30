@@ -21,10 +21,28 @@
   <ItemGroup>
     <ClInclude Include="..\include\pkzosg.h" />
     <ClInclude Include="..\include\pkzosg\defines.h" />
+    <ClInclude Include="..\include\pkzosg\DirectionalLight.h" />
+    <ClInclude Include="..\include\pkzosg\Geometry.h" />
+    <ClInclude Include="..\include\pkzosg\Light.h" />
     <ClInclude Include="..\include\pkzosg\Scene.h" />
+    <ClInclude Include="..\include\pkzosg\SceneNode.h" />
+    <ClInclude Include="..\include\pkzosg\SceneRenderer.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DirectionalLight.cpp" />
+    <ClCompile Include="Geometry.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneNode.cpp" />
+    <ClCompile Include="SceneRenderer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DiffuseFragment.glsl" />
+    <None Include="DiffuseVertex.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="pkzosg.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{5350AC6A-1868-499A-9F94-2F820C459A88}</ProjectGuid>

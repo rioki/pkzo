@@ -1,9 +1,10 @@
 
 #include "Color.h"
 
+#include <cassert>
 #include <cstring>
 
-namespace pkzoui
+namespace pkzo
 {        
     Color::Color()
     {
@@ -15,10 +16,10 @@ namespace pkzoui
 
     Color::Color(unsigned long hex)
     {
-        unsigned char r = (0xFF000000 & hex) >> 24;
-        unsigned char g = (0x00FF0000 & hex) >> 16;
-        unsigned char b = (0x0000FF00 & hex) >> 8;
-        unsigned char a = (0x000000FF & hex);  
+        unsigned long r = (0xFF000000 & hex) >> 24;
+        unsigned long g = (0x00FF0000 & hex) >> 16;
+        unsigned long b = (0x0000FF00 & hex) >> 8;
+        unsigned long a = (0x000000FF & hex);  
 
         values[0] = static_cast<float>(r) / 256.0f;
         values[1] = static_cast<float>(g) / 256.0f;
@@ -55,24 +56,16 @@ namespace pkzoui
         return *this;
     }
 
-    float Color::r() const
+    float& Color::operator [] (unsigned int i)
     {
-        return values[0];
+        assert(i < 4);
+        return values[i];
     }
 
-    float Color::g() const
+    float Color::operator [] (unsigned int i) const
     {
-        return values[1];
-    }
-
-    float Color::b() const
-    {
-        return values[2];
-    }
-
-    float Color::a() const
-    {
-        return values[3];
+        assert(i < 4);
+        return values[i];
     }
 
     Color::operator const float* () const

@@ -26,6 +26,11 @@
 #define _PKZO_H_
 
 #include "pkzo/functions.h"
+#include "pkzo/Vector2.h"
+#include "pkzo/Vector3.h"
+#include "pkzo/Vector4.h"
+#include "pkzo/Color.h"
+
 #include "pkzo/Window.h"
 #include "pkzo/Keyboard.h"
 #include "pkzo/Mouse.h"

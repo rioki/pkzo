@@ -3,7 +3,7 @@
 
 #include "ScreenRenderer.h"
 
-namespace pkzoui
+namespace pkzo
 {        
     Rectangle::Rectangle() {}
 

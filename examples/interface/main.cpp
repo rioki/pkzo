@@ -39,38 +39,38 @@ int main(int argc, char* argv[])
 
     pkzo::Mouse mouse;
 
-    pkzoui::ScreenRenderer screen_renderer;
+    pkzo::ScreenRenderer screen_renderer;
     
-    pkzoui::Screen screen(1280, 768);
-    screen.set_background_color(pkzoui::Color(0x131619FF));
+    pkzo::Screen screen(1280, 768);
+    screen.set_background_color(pkzo::Color(0x131619FF));
 
-    pkzoui::Text title;
+    pkzo::Text title;
     title.set_text("Interface Example");    
     title.set_font(title_font);
     title.set_position(50, 50);
-    title.set_color(pkzoui::Color(0x7C8A99FF));
+    title.set_color(pkzo::Color(0x7C8A99FF));
     screen.add_widget(title);
     
     // TODO make this a real panel
-    pkzoui::Rectangle panel;
-    panel.set_color(pkzoui::Color(0x292E33FF));
+    pkzo::Rectangle panel;
+    panel.set_color(pkzo::Color(0x292E33FF));
     panel.set_position(50, 150);
     panel.set_size(1180, 568);
     screen.add_widget(panel);
 
-    pkzoui::Text button_out;
+    pkzo::Text button_out;
     button_out.set_text("<-- Press the Button");
     button_out.set_font(text_font);
-    button_out.set_color(pkzoui::Color(0x7C8A99FF));
+    button_out.set_color(pkzo::Color(0x7C8A99FF));
     button_out.set_position(250, 175);
     screen.add_widget(button_out);
     
-    pkzoui::Button button;
+    pkzo::Button button;
     button.set_caption("Press Me");
     button.set_font(text_font);
-    button.set_color(pkzoui::Color(0x7C8A99FF));
+    button.set_color(pkzo::Color(0x7C8A99FF));
     button.set_background(button_background);
-    button.set_background_color(pkzoui::Color(0x3E454CFF));
+    button.set_background_color(pkzo::Color(0x3E454CFF));
     button.set_position(60, 160);
     button.set_size(170, 50);
     button.on_click([&] () {
@@ -78,21 +78,21 @@ int main(int argc, char* argv[])
     });
     screen.add_widget(button);
 
-    pkzoui::Text checkbox_out;
+    pkzo::Text checkbox_out;
     checkbox_out.set_text("<-- Check Box");
     checkbox_out.set_font(text_font);
-    checkbox_out.set_color(pkzoui::Color(0x7C8A99FF));
+    checkbox_out.set_color(pkzo::Color(0x7C8A99FF));
     checkbox_out.set_position(800, 175);
     screen.add_widget(checkbox_out);
 
-    pkzoui::CheckBox checkbox;
+    pkzo::CheckBox checkbox;
     checkbox.set_caption("Checkbox");
     checkbox.set_font(text_font);
-    checkbox.set_color(pkzoui::Color(0x7C8A99FF));
+    checkbox.set_color(pkzo::Color(0x7C8A99FF));
     checkbox.set_background(checkbox_background);
-    checkbox.set_background_color(pkzoui::Color(0x3E454CFF));
+    checkbox.set_background_color(pkzo::Color(0x3E454CFF));
     checkbox.set_mark(checkbox_mark);
-    checkbox.set_mark_color(pkzoui::Color(0x7C8A99FF));
+    checkbox.set_mark_color(pkzo::Color(0x7C8A99FF));
     checkbox.set_position(640, 170);
     checkbox.on_toggle([&] () {
         if (checkbox.is_checked())
@@ -106,18 +106,18 @@ int main(int argc, char* argv[])
     });
     screen.add_widget(checkbox);
 
-    pkzoui::Text slider_out;
+    pkzo::Text slider_out;
     slider_out.set_text("30 %");
     slider_out.set_font(text_font);
-    slider_out.set_color(pkzoui::Color(0x7C8A99FF));
+    slider_out.set_color(pkzo::Color(0x7C8A99FF));
     slider_out.set_position(350, 275);
     screen.add_widget(slider_out);
 
-    pkzoui::Slider slider;
+    pkzo::Slider slider;
     slider.set_background(slider_background);
-    slider.set_background_color(pkzoui::Color(0x3E454CFF));
+    slider.set_background_color(pkzo::Color(0x3E454CFF));
     slider.set_nob(slider_nob);
-    slider.set_nob_color(pkzoui::Color(0x7C8A99FF));
+    slider.set_nob_color(pkzo::Color(0x7C8A99FF));
     slider.set_increments(11);
     slider.set_value(3);
     slider.set_position(60, 270);

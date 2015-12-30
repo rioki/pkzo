@@ -4,9 +4,9 @@
 
 #include "defines.h"
 
-namespace pkzoui
+namespace pkzo
 {
-    class PKZOUI_EXPORT Color
+    class PKZO_EXPORT Color
     {
     public:
         
@@ -24,13 +24,9 @@ namespace pkzoui
         
         const Color& operator = (const Color& other);
 
-        float r() const;
+        float& operator [] (unsigned int i);
 
-        float g() const;
-
-        float b() const;
-
-        float a() const;
+        float operator [] (unsigned int i) const;
 
         operator const float* () const;
         

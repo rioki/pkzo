@@ -4,7 +4,7 @@
 
 #include "ScreenRenderer.h"
 
-namespace pkzoui 
+namespace pkzo 
 {
     CheckBox::CheckBox() 
     : checked(false), caption_dirty(true) {}

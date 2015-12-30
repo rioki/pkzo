@@ -10,10 +10,9 @@
 
 #include <pkzo/Font.h>
 #include <pkzo/Texture.h>
+#include <pkzo/Color.h>
 
-#include "Color.h"
-
-namespace pkzoui
+namespace pkzo
 {
     class PKZOUI_EXPORT CheckBox : public Widget
     {

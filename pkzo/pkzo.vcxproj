@@ -187,15 +187,21 @@ copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Comman
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\include\pkzo.h" />
+    <ClInclude Include="..\include\pkzo\Color.h" />
     <ClInclude Include="..\include\pkzo\defines.h" />
     <ClInclude Include="..\include\pkzo\Font.h" />
     <ClInclude Include="..\include\pkzo\functions.h" />
     <ClInclude Include="..\include\pkzo\Key.h" />
     <ClInclude Include="..\include\pkzo\Keyboard.h" />
+    <ClInclude Include="..\include\pkzo\Matrix4.h" />
     <ClInclude Include="..\include\pkzo\Mesh.h" />
     <ClInclude Include="..\include\pkzo\Mouse.h" />
+    <ClInclude Include="..\include\pkzo\Quaternion.h" />
     <ClInclude Include="..\include\pkzo\Shader.h" />
     <ClInclude Include="..\include\pkzo\Texture.h" />
+    <ClInclude Include="..\include\pkzo\Vector2.h" />
+    <ClInclude Include="..\include\pkzo\Vector3.h" />
+    <ClInclude Include="..\include\pkzo\Vector4.h" />
     <ClInclude Include="..\include\pkzo\Window.h" />
     <ClInclude Include="compose.h" />
     <ClInclude Include="fs.h" />
@@ -203,17 +209,23 @@ copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Comman
     <ClInclude Include="strex.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Color.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="fs.cpp" />
     <ClCompile Include="functions.cpp" />
     <ClCompile Include="Key.cpp" />
     <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="Matrix4.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="PlyParser.cpp" />
+    <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="strex.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Vector2.cpp" />
+    <ClCompile Include="Vector3.cpp" />
+    <ClCompile Include="Vector4.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
