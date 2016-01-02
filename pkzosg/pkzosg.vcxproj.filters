@@ -42,6 +42,12 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\pkzosg\Material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\pkzosg\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scene.cpp">
@@ -62,12 +68,18 @@
     <ClCompile Include="SceneRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="DiffuseFragment.glsl">
+    <None Include="PhongFragment.glsl">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="DiffuseVertex.glsl">
+    <None Include="PhongVertex.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

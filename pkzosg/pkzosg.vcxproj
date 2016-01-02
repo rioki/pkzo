@@ -20,26 +20,30 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\pkzosg.h" />
+    <ClInclude Include="..\include\pkzosg\Camera.h" />
     <ClInclude Include="..\include\pkzosg\defines.h" />
     <ClInclude Include="..\include\pkzosg\DirectionalLight.h" />
     <ClInclude Include="..\include\pkzosg\Geometry.h" />
     <ClInclude Include="..\include\pkzosg\Light.h" />
+    <ClInclude Include="..\include\pkzosg\Material.h" />
     <ClInclude Include="..\include\pkzosg\Scene.h" />
     <ClInclude Include="..\include\pkzosg\SceneNode.h" />
     <ClInclude Include="..\include\pkzosg\SceneRenderer.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="Light.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="SceneRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="DiffuseFragment.glsl" />
-    <None Include="DiffuseVertex.glsl" />
+    <None Include="PhongFragment.glsl" />
+    <None Include="PhongVertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="pkzosg.rc" />

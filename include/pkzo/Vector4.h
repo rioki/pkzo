@@ -36,6 +36,9 @@ namespace pkzo
     };
 
     PKZO_EXPORT
+    Vector4 operator - (const Vector4& v);
+
+    PKZO_EXPORT
     Vector4 operator + (const Vector4& a, const Vector4& b);
 
     PKZO_EXPORT

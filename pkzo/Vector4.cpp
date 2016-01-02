@@ -76,6 +76,11 @@ namespace pkzo
         return data;
     }
     
+    Vector4 operator - (const Vector4& v)
+    {
+        return Vector4(-v[0], -v[1], -v[2], -v[3]);
+    }
+
     Vector4 operator + (const Vector4& a, const Vector4& b)
     {
         Vector4 t = a;

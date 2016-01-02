@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
     });
 
     pkzo::Mesh mesh;
-    mesh.load("Teapot.ply");
+    mesh.load("../assets/meshes/Teapot.ply");
 
     pkzo::Shader shader;
     shader.load("PhongVertex.glsl", "PhongFragment.glsl");

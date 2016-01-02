@@ -6,6 +6,7 @@
 
 #include <memory>
 #include <list>
+#include <tuple>
 #include <pkzo/Vector3.h>
 #include <pkzo/Matrix4.h>
 #include <pkzo/Color.h>
@@ -28,11 +29,13 @@ namespace pkzo
 
         const SceneRenderer& operator = (const SceneRenderer&) = delete;
 
-        void set_projection(Matrix4 value);
+        std::tuple<int, int, int, int> get_viewport() const;
 
-        void set_view(Matrix4 value);
+        void set_projection(const Matrix4& value);
 
-        void queue_directional_light(const Vector3& diraction, const Color& color);
+        void set_view(const Matrix4& value);
+
+        void queue_directional_light(const Vector3& direction, const Color& color);
 
         void queue_geometry(Matrix4 transform, std::shared_ptr<Mesh> mesh , std::shared_ptr<Material> material);
 
@@ -50,25 +53,25 @@ namespace pkzo
         struct LightInfo
         {
             LightType type;
-            Vector3 direction;
-            Vector3 position;
+            Vector3   direction;
+            Vector3   position;
             float     angle;
-            Vector3 color;
+            Color     color;
         };
 
         struct GeometryInfo
         {
-            Matrix4                 transform;
+            Matrix4                   transform;
             std::shared_ptr<Mesh>     mesh;
             std::shared_ptr<Material> material;
         };
 
-        Matrix4               projection;
-        Matrix4               view;
+        Matrix4                 projection;
+        Matrix4                 view;
         std::list<LightInfo>    lights;
         std::list<GeometryInfo> geometries;
 
-        Shader                  diffuse_shader;
+        Shader                  phong_shader;
     };
 };
 
