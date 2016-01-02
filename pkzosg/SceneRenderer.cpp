@@ -16,18 +16,22 @@
 
 namespace pkzo
 {
+    std::string LoadTextResource(HMODULE hModule, LPCTSTR lpName, LPCTSTR lpType)
+    {
+        HRSRC   hPhongVertex  = FindResource(hModule, lpName, lpType);
+        HGLOBAL hgPhongVertex = LoadResource(hModule, hPhongVertex);
+        DWORD   nSize         = SizeofResource(hModule, hPhongVertex);
+        const char* psCode = (const char*)LockResource(hgPhongVertex);        
+        return std::string(psCode, nSize);
+    }
+    
     SceneRenderer::SceneRenderer() 
     {
         #ifdef _MSC_VER
         HMODULE hModule = GetModuleHandle(_T("pkzosg.dll"));
 
-        HRSRC hPhongVertex = FindResource(hModule, MAKEINTRESOURCE(IDR_GLSL_PHONG_VERTEX), _T("GLSL"));
-        HGLOBAL hgPhongVertex = LoadResource(hModule, hPhongVertex);
-        const char* phong_vertex = (const char*)LockResource(hgPhongVertex);
-
-        HRSRC hPhongFragment = FindResource(hModule, MAKEINTRESOURCE(IDR_GLSL_PHONG_FRAGMENT), _T("GLSL"));
-        HGLOBAL hgPhongFragment = LoadResource(hModule, hPhongFragment);
-        const char* phong_fragment = (const char*)LockResource(hgPhongFragment);
+        std::string phong_vertex   = LoadTextResource(hModule, MAKEINTRESOURCE(IDR_GLSL_PHONG_VERTEX), _T("GLSL"));
+        std::string phong_fragment = LoadTextResource(hModule, MAKEINTRESOURCE(IDR_GLSL_PHONG_FRAGMENT), _T("GLSL"));
         #else
         // TODO
         #endif

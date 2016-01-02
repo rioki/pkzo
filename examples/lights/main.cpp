@@ -9,10 +9,18 @@ std::shared_ptr<pkzo::Mesh> load_mesh(const std::string& file)
     return mesh;
 }
 
+std::shared_ptr<pkzo::Texture> load_texture(const std::string& file)
+{
+    std::shared_ptr<pkzo::Texture> texture(new pkzo::Texture);
+    texture->load(file);
+    return texture;
+}
+
 std::shared_ptr<pkzo::Material> load_material(const std::string& file)
 {
     std::shared_ptr<pkzo::Material> material(new pkzo::Material);
     material->set_color(pkzo::Color(0xFFF0F0FF));
+    material->set_texture(load_texture("../assets/textures/Marble.jpg"));
     return material;
 }
 
