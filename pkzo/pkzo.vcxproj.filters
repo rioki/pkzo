@@ -33,9 +33,6 @@
     <ClInclude Include="fs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="compose.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="strex.h">
       <Filter>Header Files</Filter>
     </ClInclude>

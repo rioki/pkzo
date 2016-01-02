@@ -5,6 +5,7 @@
 #include "defines.h"
 
 #include <memory>
+#include <string>
 #include <pkzo/Color.h>
 
 namespace pkzo
@@ -31,6 +32,8 @@ namespace pkzo
         void set_texture(std::shared_ptr<pkzo::Texture> value);
 
         std::shared_ptr<pkzo::Texture> get_texture() const;
+
+        void load(const std::string& file);
 
         void setup(Shader& shader) const;
 

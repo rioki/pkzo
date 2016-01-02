@@ -9,18 +9,10 @@ std::shared_ptr<pkzo::Mesh> load_mesh(const std::string& file)
     return mesh;
 }
 
-std::shared_ptr<pkzo::Texture> load_texture(const std::string& file)
-{
-    std::shared_ptr<pkzo::Texture> texture(new pkzo::Texture);
-    texture->load(file);
-    return texture;
-}
-
 std::shared_ptr<pkzo::Material> load_material(const std::string& file)
 {
     std::shared_ptr<pkzo::Material> material(new pkzo::Material);
-    material->set_color(pkzo::Color(0xFFF0F0FF));
-    material->set_texture(load_texture("../assets/textures/Marble.jpg"));
+    material->load(file);
     return material;
 }
 
@@ -41,7 +33,7 @@ int main(int argc, char* arv[])
 
     pkzo::Geometry teapot;
     teapot.set_mesh(load_mesh("../assets/meshes/Teapot.ply"));
-    teapot.set_material(load_material("../assets/meshes/White.pmd"));
+    teapot.set_material(load_material("../assets/materials/Marble.jmn"));
     scene.add_node(teapot);
 
     pkzo::DirectionalLight light0;

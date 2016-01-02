@@ -95,7 +95,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\SDL2_ttf\include;$(SolutionDir)ext\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\SDL2_ttf\include;$(SolutionDir)ext\glew\include;$(SolutionDir)ext\rex\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PKZO_BUILD;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -108,7 +108,8 @@
       <Command>copy $(SolutionDir)ext\SDL2\lib\$(PlatformTarget)\SDL2.dll $(OutDir)
 copy $(SolutionDir)ext\SDL2_image\lib\$(PlatformTarget)\*.dll $(OutDir)
 copy $(SolutionDir)ext\SDL2_ttf\lib\$(PlatformTarget)\*.dll $(OutDir)
-copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Command>
+copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)
+copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -117,7 +118,7 @@ copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Comman
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\SDL2_ttf\include;$(SolutionDir)ext\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\SDL2_ttf\include;$(SolutionDir)ext\glew\include;$(SolutionDir)ext\rex\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PKZO_BUILD;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -130,7 +131,8 @@ copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Comman
       <Command>copy $(SolutionDir)ext\SDL2\lib\$(PlatformTarget)\SDL2.dll $(OutDir)
 copy $(SolutionDir)ext\SDL2_image\lib\$(PlatformTarget)\*.dll $(OutDir)
 copy $(SolutionDir)ext\SDL2_ttf\lib\$(PlatformTarget)\*.dll $(OutDir)
-copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Command>
+copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)
+copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -141,7 +143,7 @@ copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Comman
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\SDL2_ttf\include;$(SolutionDir)ext\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\SDL2_ttf\include;$(SolutionDir)ext\glew\include;$(SolutionDir)ext\rex\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PKZO_BUILD;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -156,7 +158,8 @@ copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Comman
       <Command>copy $(SolutionDir)ext\SDL2\lib\$(PlatformTarget)\SDL2.dll $(OutDir)
 copy $(SolutionDir)ext\SDL2_image\lib\$(PlatformTarget)\*.dll $(OutDir)
 copy $(SolutionDir)ext\SDL2_ttf\lib\$(PlatformTarget)\*.dll $(OutDir)
-copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Command>
+copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)
+copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -167,7 +170,7 @@ copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Comman
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\SDL2_ttf\include;$(SolutionDir)ext\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\SDL2_ttf\include;$(SolutionDir)ext\glew\include;$(SolutionDir)ext\rex\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PKZO_BUILD;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -182,7 +185,8 @@ copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Comman
       <Command>copy $(SolutionDir)ext\SDL2\lib\$(PlatformTarget)\SDL2.dll $(OutDir)
 copy $(SolutionDir)ext\SDL2_image\lib\$(PlatformTarget)\*.dll $(OutDir)
 copy $(SolutionDir)ext\SDL2_ttf\lib\$(PlatformTarget)\*.dll $(OutDir)
-copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Command>
+copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)
+copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -203,7 +207,6 @@ copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Comman
     <ClInclude Include="..\include\pkzo\Vector3.h" />
     <ClInclude Include="..\include\pkzo\Vector4.h" />
     <ClInclude Include="..\include\pkzo\Window.h" />
-    <ClInclude Include="compose.h" />
     <ClInclude Include="fs.h" />
     <ClInclude Include="PlyParser.h" />
     <ClInclude Include="strex.h" />
