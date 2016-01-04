@@ -121,6 +121,31 @@ namespace pkzo
         }
     }
 
+    void Window::change_video_mode(unsigned int width, unsigned int height, Flags f)
+    {
+        flags = f;
+
+        SDL_SetWindowSize(window, width, height);
+        
+        if (flags & FULLSCREEN == FULLSCREEN)
+        {
+            SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+        }
+        else
+        {
+            SDL_SetWindowFullscreen(window, 0);
+        }
+
+        if (flags & BORDERLESS == BORDERLESS)
+        {
+            SDL_SetWindowBordered(window, SDL_FALSE);
+        }
+        else
+        {
+            SDL_SetWindowBordered(window, SDL_TRUE);
+        }
+    }
+
     unsigned int Window::get_width() const
     {
         int w;

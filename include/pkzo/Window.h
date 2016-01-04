@@ -80,6 +80,8 @@ namespace pkzo
 
         const Window& operator = (const Window&) = delete;
 
+        void change_video_mode(unsigned int width, unsigned int height, Flags flags = NO_FLAGS);
+
         unsigned int get_width() const;
 
         unsigned int get_height() const;
