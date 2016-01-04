@@ -86,8 +86,8 @@ namespace pkzo
         unsigned int nx = static_cast<unsigned int>(static_cast<float>(dw) * (static_cast<float>(value) / static_cast<float>(increments - 1)));
         
         // assume nob.height == background.height
-        renderer.draw_rect(x, y, width, height, background_color, background.get());
-        renderer.draw_rect(x + nx, y, nob->get_width(), nob->get_height(), nob_color, nob.get());
+        renderer.draw_rect(x, y, width, height, background_color.carray(), background.get());
+        renderer.draw_rect(x + nx, y, nob->get_width(), nob->get_height(), nob_color.carray(), nob.get());
     }
 
     void Slider::handle_mouse_move(unsigned int bx, unsigned int by, int dx, int dy) 

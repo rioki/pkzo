@@ -75,7 +75,7 @@ namespace pkzo
 
     void Material::setup(Shader& shader) const
     {
-        shader.set_uniform("uMaterialColor", color, 3);
+        shader.set_uniform("uMaterialColor", color.carray(), 3);
         
         if (texture)
         {

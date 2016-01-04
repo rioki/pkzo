@@ -83,7 +83,7 @@ namespace pkzo
         return data[i];
     }
 
-    Quaternion::operator const float* () const
+    const float* Quaternion::carray() const
     {
         return data;
     }

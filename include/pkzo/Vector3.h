@@ -29,7 +29,7 @@ namespace pkzo
 
         float operator [] (unsigned int i) const;
 
-        operator const float* () const;
+        const float* carray() const;
 
     private:
         float data[3];

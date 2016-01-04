@@ -35,6 +35,6 @@ namespace pkzo
 
     void Rectangle::draw(ScreenRenderer& renderer) const
     {
-        renderer.draw_rect(x, y, width, height, color, texture.get());
+        renderer.draw_rect(x, y, width, height, color.carray(), texture.get());
     }
 }

@@ -79,8 +79,8 @@ namespace pkzo
         unsigned int dx = width  - caption_texture.get_width();
         unsigned int dy = height - caption_texture.get_height();
 
-        renderer.draw_rect(x, y, width, height, background_color, background.get());
-        renderer.draw_rect(x + dx/2, y + dy/2, caption_texture.get_width(), caption_texture.get_height(), color, &caption_texture);
+        renderer.draw_rect(x, y, width, height, background_color.carray(), background.get());
+        renderer.draw_rect(x + dx/2, y + dy/2, caption_texture.get_width(), caption_texture.get_height(), color.carray(), &caption_texture);
     }
 
     void Button::on_click(std::function<void ()> cb)

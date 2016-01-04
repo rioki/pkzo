@@ -68,7 +68,7 @@ namespace pkzo
         return values[i];
     }
 
-    Color::operator const float* () const
+    const float* Color::carray() const
     {
         return values;
     }

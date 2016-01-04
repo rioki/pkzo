@@ -63,7 +63,7 @@ namespace pkzo
         return data[i];
     }
 
-    Vector2::operator const float* () const
+    const float* Vector2::carray() const
     {
         return data;
     }

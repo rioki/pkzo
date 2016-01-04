@@ -59,8 +59,8 @@ namespace pkzo
         return std::vector<std::tuple<unsigned int, unsigned int>>(result.begin(), result.end());
     }
     
-    Window::Window(unsigned int width, unsigned int height, Flags flags)
-    : window(nullptr), glcontext(nullptr)
+    Window::Window(unsigned int width, unsigned int height, Flags f)
+    : window(nullptr), glcontext(nullptr), flags(f)
     {
         init();    
 
@@ -133,6 +133,21 @@ namespace pkzo
         int h;
         SDL_GetWindowSize(window, nullptr, &h);
         return h;
+    }
+
+    bool Window::is_fullscreen() const
+    {
+        return flags && FULLSCREEN == FULLSCREEN;
+    }
+
+    bool Window::is_borderless() const
+    {
+        return flags && BORDERLESS == BORDERLESS;
+    }
+
+    bool Window::is_resizable() const
+    {
+        return flags && RESIZABLE == RESIZABLE;
     }
 
     void Window::set_title(const std::string& value)

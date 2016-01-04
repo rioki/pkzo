@@ -72,7 +72,7 @@ namespace pkzo
     {
         renderer.start(width, height);
 
-        renderer.draw_rect(0, 0, width, height, background_color, background_texture.get());
+        renderer.draw_rect(0, 0, width, height, background_color.carray(), background_texture.get());
 
         for (const Widget* widget : widgets)
         {

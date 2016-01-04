@@ -85,22 +85,22 @@ namespace pkzo
 
         phong_shader.bind();
 
-        phong_shader.set_uniform_matrix("uProjectionMatrix", projection, 16);
-        phong_shader.set_uniform_matrix("uViewMatrix",       view,       16);
+        phong_shader.set_uniform_matrix("uProjectionMatrix", projection.carray(), 16);
+        phong_shader.set_uniform_matrix("uViewMatrix",       view.carray(),       16);
 
         for (LightInfo& light : lights)
         {
             phong_shader.set_uniform("uLightType",      light.type);
-            phong_shader.set_uniform("uLightDirection", light.direction, 3);
-            phong_shader.set_uniform("uLightPosition",  light.position,  3);
+            phong_shader.set_uniform("uLightDirection", light.direction.carray(), 3);
+            phong_shader.set_uniform("uLightPosition",  light.position.carray(),  3);
             phong_shader.set_uniform("uLightAngle",     light.angle);
-            phong_shader.set_uniform("uLightColor",     light.color,     3);
+            phong_shader.set_uniform("uLightColor",     light.color.carray(),     3);
 
             for (GeometryInfo& geom : geometries)
             {
                 Matrix4 mv = view * geom.transform;
                
-                phong_shader.set_uniform_matrix("uModelViewMatrix", mv, 16);
+                phong_shader.set_uniform_matrix("uModelViewMatrix", mv.carray(), 16);
                 
                 geom.material->setup(phong_shader);
                 geom.mesh->draw(phong_shader);

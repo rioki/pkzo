@@ -113,7 +113,7 @@ namespace pkzo
         return data[i];
     }
 
-    Matrix4::operator const float* () const
+    const float* Matrix4::carray() const
     {
         return data;
     }

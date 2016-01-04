@@ -60,6 +60,6 @@ namespace pkzo
             dirty = false;
         }
 
-        renderer.draw_rect(x, y, width, height, color, &texture);
+        renderer.draw_rect(x, y, width, height, color.carray(), &texture);
     }
 }

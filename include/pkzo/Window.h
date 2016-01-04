@@ -84,6 +84,12 @@ namespace pkzo
 
         unsigned int get_height() const;
 
+        bool is_fullscreen() const;
+
+        bool is_borderless() const;
+
+        bool is_resizable() const;
+
         /**
          * Set the Window's Title Caption
          *
@@ -124,6 +130,7 @@ namespace pkzo
     private:
         SDL_Window*   window;
         SDL_GLContext glcontext;
+        Flags         flags;
 
         std::function<void ()> draw_cb;
     };

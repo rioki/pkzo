@@ -98,12 +98,12 @@ namespace pkzo
         unsigned int dmy = height - mark->get_height();
         unsigned int dcy = height - caption_texture.get_height();
 
-        renderer.draw_rect(x, y + dby / 2, background->get_width(), background->get_height(), background_color, background.get());
+        renderer.draw_rect(x, y + dby / 2, background->get_width(), background->get_height(), background_color.carray(), background.get());
         if (checked)
         {
-            renderer.draw_rect(x, y + dmy / 2, mark->get_width(), mark->get_height(), mark_color, mark.get());    
+            renderer.draw_rect(x, y + dmy / 2, mark->get_width(), mark->get_height(), mark_color.carray(), mark.get());    
         }
-        renderer.draw_rect(x + background->get_width(), y + dcy / 2, caption_texture.get_width(), caption_texture.get_height(), color, &caption_texture);
+        renderer.draw_rect(x + background->get_width(), y + dcy / 2, caption_texture.get_width(), caption_texture.get_height(), color.carray(), &caption_texture);
     }
 
     void CheckBox::set_checked(bool value)
