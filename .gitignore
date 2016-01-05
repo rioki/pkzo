@@ -1,6 +1,10 @@
 .vs
-x86
-x64
+/x86
+/x64
+/*/x86
+/*/x64
+/examples/*/x86
+/examples/*/x64
 apidoc
 *.opensdf
 *.sdf
