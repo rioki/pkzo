@@ -69,12 +69,12 @@ namespace pkzo
         lights.push_back(info);
     }
 
-    void SceneRenderer::queue_geometry(Matrix4 transform, std::shared_ptr<Mesh> mesh , std::shared_ptr<Material> material)
+    void SceneRenderer::queue_geometry(Matrix4 transform, Mesh& mesh , Material& material)
     {
         GeometryInfo info;
         info.transform = transform;
-        info.mesh      = mesh;
-        info.material  = material;
+        info.mesh      = &mesh;
+        info.material  = &material;
 
         geometries.push_back(info);
     }

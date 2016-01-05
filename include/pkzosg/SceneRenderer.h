@@ -4,7 +4,6 @@
 
 #include "defines.h"
 
-#include <memory>
 #include <list>
 #include <tuple>
 #include <pkzo/Vector3.h>
@@ -37,7 +36,7 @@ namespace pkzo
 
         void queue_directional_light(const Vector3& direction, const Color& color);
 
-        void queue_geometry(Matrix4 transform, std::shared_ptr<Mesh> mesh , std::shared_ptr<Material> material);
+        void queue_geometry(Matrix4 transform, Mesh& mesh , Material& material);
 
         void render();
 
@@ -61,9 +60,9 @@ namespace pkzo
 
         struct GeometryInfo
         {
-            Matrix4                   transform;
-            std::shared_ptr<Mesh>     mesh;
-            std::shared_ptr<Material> material;
+            Matrix4   transform;
+            Mesh*     mesh;
+            Material* material;
         };
 
         Matrix4                 projection;
