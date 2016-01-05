@@ -6,3 +6,4 @@ apidoc
 *.sdf
 *.user
 *.opendb
+/pkzo-*/
