@@ -4,11 +4,32 @@
 #include <cassert>
 #include <cstring>
 #include <cmath>
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 #include "Vector3.h"
 
 namespace pkzo
 {
+    float radians(float degrees) 
+    {
+        return degrees * ((float)M_PI / 180.0f);
+    }
+
+    Quaternion Quaternion::axis_angle(float angle, const Vector3& axis)
+    {
+        Vector3 an  = normalize(axis);
+        float sin_a = std::sin(radians(angle/2.0f));
+        float cos_a = std::cos(radians(angle/2.0f));
+           
+        float x = an[0] * sin_a;
+        float y = an[1] * sin_a;
+        float z = an[2] * sin_a;
+        float  w = cos_a;
+          
+        return Quaternion(x, y, z, w);
+    }
+
     Quaternion::Quaternion()
     {
         std::memset(data, 0, 4 * sizeof(float));  

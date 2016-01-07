@@ -11,6 +11,8 @@ namespace pkzo
     class PKZO_EXPORT Quaternion
     {
     public:
+        static Quaternion axis_angle(float angle, const Vector3& axis);
+
         Quaternion();
 
         Quaternion(float x, float y, float z, float w);
