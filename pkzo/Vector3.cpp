@@ -113,12 +113,12 @@ namespace pkzo
                        (a[0] * b[1]) - (a[1] * b[0]));
     }
     
-    float length(Vector3& v)
+    float length(const Vector3& v)
     {
         return std::sqrt(dot(v, v));
     }
     
-    Vector3 normalize(Vector3& v)
+    Vector3 normalize(const Vector3& v)
     {
         return v * (1 / length(v));
     }

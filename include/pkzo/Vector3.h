@@ -57,10 +57,10 @@ namespace pkzo
     Vector3 cross(const Vector3& a, const Vector3& b);
 
     PKZO_EXPORT
-    float length(Vector3& v);
+    float length(const Vector3& v);
 
     PKZO_EXPORT
-    Vector3 normalize(Vector3& v);
+    Vector3 normalize(const Vector3& v);
 }
 
 #endif

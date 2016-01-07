@@ -54,10 +54,10 @@ namespace pkzo
     float dot(const Vector4& a, const Vector4& b);
 
     PKZO_EXPORT
-    float length(Vector4& v);
+    float length(const Vector4& v);
 
     PKZO_EXPORT
-    Vector4 normalize(Vector4& v);
+    Vector4 normalize(const Vector4& v);
 }
 
 #endif
