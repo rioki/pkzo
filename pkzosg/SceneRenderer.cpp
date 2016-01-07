@@ -69,7 +69,7 @@ namespace pkzo
         lights.push_back(info);
     }
 
-    void SceneRenderer::queue_geometry(Matrix4 transform, Mesh& mesh , Material& material)
+    void SceneRenderer::queue_geometry(Matrix4 transform, const Mesh& mesh , const Material& material)
     {
         GeometryInfo info;
         info.transform = transform;

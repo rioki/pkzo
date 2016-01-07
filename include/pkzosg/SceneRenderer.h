@@ -36,7 +36,7 @@ namespace pkzo
 
         void queue_directional_light(const Vector3& direction, const Color& color);
 
-        void queue_geometry(Matrix4 transform, Mesh& mesh , Material& material);
+        void queue_geometry(Matrix4 transform, const Mesh& mesh , const Material& material);
 
         void render();
 
@@ -60,9 +60,9 @@ namespace pkzo
 
         struct GeometryInfo
         {
-            Matrix4   transform;
-            Mesh*     mesh;
-            Material* material;
+            Matrix4         transform;
+            const Mesh*     mesh;
+            const Material* material;
         };
 
         Matrix4                 projection;
