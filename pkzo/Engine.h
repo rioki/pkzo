@@ -72,6 +72,8 @@ namespace pkzo
         Window*   window;
         Mouse*    mouse;
         Keyboard* keyboard;
+
+        void route_events();
     };
 }
 

@@ -2,7 +2,7 @@
 #include "Config.h"
 
 #include <fstream>
-#include <compose.h>
+#include "compose.h"
 
 #include "ConfigParser.h"
 

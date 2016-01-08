@@ -103,15 +103,13 @@ namespace pkzo
         bool is_cursor_visible() const;
         
     private:        
-        static std::vector<Mouse*> instances;
-        
         std::function<void (unsigned int, unsigned int, unsigned int)> button_press_cb;        
         std::function<void (unsigned int, unsigned int, unsigned int)> button_release_cb;        
         std::function<void (unsigned int, unsigned int, int, int)> move_cb;
         
         void handle_event(SDL_Event& event);
-        
-		friend PKZO_EXPORT void route_events();
+        		
+        friend class Engine;
     };
 }
 

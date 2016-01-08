@@ -22,7 +22,6 @@
 // SOFTWARE.
 // 
 
-#include "functions.h"
 #include "Window.h"
 
 #include <set>
@@ -34,15 +33,11 @@ namespace pkzo
 {
     unsigned int Window::get_display_count()
     {
-        init();
-
         return SDL_GetNumVideoDisplays();
     }
 
     std::tuple<unsigned int, unsigned int> Window::get_display_resolution(unsigned int i)
     {
-        init();
-        
         SDL_DisplayMode mode;
         SDL_GetCurrentDisplayMode(0, &mode);
 
@@ -77,8 +72,6 @@ namespace pkzo
     Window::Window(unsigned int width, unsigned int height, Flags f)
     : window(nullptr), glcontext(nullptr), flags(f)
     {
-        init();    
-
         unsigned int sdl_flags = SDL_WINDOW_OPENGL;
 
         if (width == 0 && height == 0 && flags & FULLSCREEN)

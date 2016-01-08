@@ -1,7 +1,7 @@
 
 #include "ConfigParser.h"
 
-#include <compose.h>
+#include "compose.h"
 
 namespace pkzo
 {

@@ -30,35 +30,9 @@
 
 namespace pkzo
 {    
-    std::vector<Keyboard*> Keyboard::instances;
-
-    Keyboard::Keyboard() 
-    {    
-        if (instances.size() == 0)
-        {
-            SDL_StartTextInput();    
-        }
-        instances.push_back(this);
-    }
+    Keyboard::Keyboard() {}
     
-    Keyboard::~Keyboard() 
-    {
-        if (instances.size() == 0)
-        {
-            SDL_StopTextInput();
-        }
-        auto i = std::find(instances.begin(), instances.end(), this);
-        if (i != instances.end())
-        {
-            instances.erase(i);
-        }
-        else
-        {
-            // Yes this will basically run into terminate, 
-            // but that is why there are terminate handlers...
-            throw std::logic_error("Keyboard not in instances.");
-        }
-    }
+    Keyboard::~Keyboard() {}
     
     bool Keyboard::is_pressed(Key key) const
     {

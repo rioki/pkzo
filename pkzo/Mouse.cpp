@@ -28,27 +28,9 @@
 
 namespace pkzo
 {        
-    std::vector<Mouse*> Mouse::instances;
-
-    Mouse::Mouse() 
-    {
-        instances.push_back(this);
-    }
+    Mouse::Mouse() {}
     
-    Mouse::~Mouse() 
-    {
-        auto i = std::find(instances.begin(), instances.end(), this);
-        if (i != instances.end())
-        {
-            instances.erase(i);
-        }
-        else
-        {
-            // Yes this will basically run into terminate, 
-            // but that is why there are terminate handlers...
-            throw std::logic_error("Mouse not in instances.");
-        }
-    }
+    Mouse::~Mouse() {}
 
     bool Mouse::is_pressed(unsigned int button) const
     {

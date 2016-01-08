@@ -80,15 +80,13 @@ namespace pkzo
         void on_text(std::function<void (std::string)> cb);
         
     private:
-        static std::vector<Keyboard*> instances;
-        
         std::function<void (Key)> key_press_cb;
         std::function<void (Key)> key_release_cb;
         std::function<void (std::string)> text_cb;        
         
         void handle_event(SDL_Event& event);
         
-		friend PKZO_EXPORT void route_events();
+		friend class Engine;
     };
 }
 

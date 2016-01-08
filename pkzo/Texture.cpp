@@ -29,8 +29,6 @@
 #include <GL/glew.h>
 #include <algorithm>
 
-#include "functions.h"
-
 namespace pkzo
 {
     Texture::Texture()
@@ -63,8 +61,6 @@ namespace pkzo
 
     void Texture::load(const std::string& file)
     {
-        init();
-
         if (surface != nullptr)
         {
             release();
@@ -89,8 +85,6 @@ namespace pkzo
         {
             throw std::invalid_argument("Texture::create: data == NULL");
         }
-
-        init();
 
         if (surface != nullptr)
         {

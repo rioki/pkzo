@@ -3,10 +3,11 @@
 
 #include <cassert>
 #include <shlobj.h>
+#include <SDL.h>
+#include <SDL_ttf.h>
 
 #include "path.h"
 #include "fs.h"
-#include "functions.h"
 #include "Config.h"
 #include "Window.h"
 #include "Mouse.h"
@@ -17,6 +18,17 @@ namespace pkzo
     Engine::Engine(const std::string& i)
     : id(i), running(false), config(nullptr), window(nullptr), mouse(nullptr), keyboard(nullptr) 
     {           
+        int r = SDL_Init(SDL_INIT_VIDEO);
+        if (r != 0)
+        {
+            throw std::runtime_error(SDL_GetError());
+        }
+        r = TTF_Init();
+        if (r != 0)
+        {
+            throw std::runtime_error(TTF_GetError());
+        }
+        
         config = new Config;
         
         std::string config_file = path::join(get_config_folder(), "Config.cfg"); 
@@ -29,10 +41,6 @@ namespace pkzo
         {
             config->load(config_file);
         }
-
-        pkzo::on_quit([this] () {
-            on_quit();
-        });
 
         unsigned int dw, dh;
         std::tie(dw, dh) = Window::get_display_resolution();
@@ -70,6 +78,9 @@ namespace pkzo
         delete window;
         delete mouse;
         delete keyboard;
+
+        TTF_Quit();
+        SDL_Quit();
     }
 
     const std::string& Engine::get_id() const
@@ -186,4 +197,34 @@ namespace pkzo
     }
 
     void Engine::on_key_release(Key key) {}
+
+    void Engine::route_events()
+    {
+        SDL_Event event;
+        while (SDL_PollEvent(&event))
+        {
+            switch (event.type)
+            {
+            case SDL_QUIT:
+                on_quit();
+                break;
+            case SDL_KEYDOWN:
+                case SDL_KEYUP:
+                case SDL_TEXTINPUT:
+                case SDL_TEXTEDITING:
+                    assert(keyboard != nullptr);
+                    keyboard->handle_event(event);
+                    break;
+                case SDL_MOUSEBUTTONDOWN:
+                case SDL_MOUSEBUTTONUP:
+                case SDL_MOUSEMOTION:
+                    assert(mouse != nullptr);
+                    mouse->handle_event(event);
+                    break;
+            default:
+                // stfu
+                break;
+            }
+        }
+    }
 }

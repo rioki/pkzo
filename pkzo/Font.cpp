@@ -3,7 +3,6 @@
 
 #include <SDL_ttf.h>
 
-#include "functions.h"
 #include "strex.h"
 
 namespace pkzo
@@ -21,8 +20,6 @@ namespace pkzo
    
     void Font::load(const std::string& file, unsigned int size)
     {
-        init();
-
         if (font != nullptr)
         {
             TTF_CloseFont(font);
