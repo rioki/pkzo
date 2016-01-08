@@ -12,6 +12,7 @@
 #include "Window.h"
 #include "Mouse.h"
 #include "Keyboard.h"
+#include "Joystick.h"
 
 namespace pkzo
 {
@@ -71,6 +72,13 @@ namespace pkzo
         keyboard->on_key_release([this] (Key key) {
             on_key_release(key);
         });
+
+        int numj = SDL_NumJoysticks();
+        joysticks.resize(numj);
+        for (unsigned int i = 0; i < numj; i++)
+        {
+            joysticks[i] = new Joystick(i);
+        }
     }
 
     Engine::~Engine() 
@@ -157,6 +165,25 @@ namespace pkzo
         return *keyboard;
     }
 
+    unsigned int Engine::get_joystick_count() const
+    {
+        return joysticks.size();
+    }
+
+    Joystick& Engine::get_joystick(unsigned int i)
+    {            
+        assert(i < joysticks.size());
+        assert(joysticks[i] != nullptr);
+        return *joysticks[i];
+    }
+
+    const Joystick& Engine::get_joystick(unsigned int i) const
+    {
+        assert(i < joysticks.size());
+        assert(joysticks[i] != nullptr);
+        return *joysticks[i];
+    }
+
     bool Engine::is_running() const 
     {
         return running;
@@ -205,10 +232,10 @@ namespace pkzo
         {
             switch (event.type)
             {
-            case SDL_QUIT:
-                on_quit();
-                break;
-            case SDL_KEYDOWN:
+                case SDL_QUIT:
+                    on_quit();
+                    break;
+                case SDL_KEYDOWN:
                 case SDL_KEYUP:
                 case SDL_TEXTINPUT:
                 case SDL_TEXTEDITING:
@@ -221,6 +248,18 @@ namespace pkzo
                     assert(mouse != nullptr);
                     mouse->handle_event(event);
                     break;
+                case SDL_JOYAXISMOTION:
+                case SDL_JOYBALLMOTION:   
+                case SDL_JOYHATMOTION:
+                case SDL_JOYBUTTONDOWN:
+                case SDL_JOYBUTTONUP:
+                {
+                    for (Joystick* joystick : joysticks)
+                    {
+                        joystick->handle_event(event);
+                    }
+                    break;
+                }
             default:
                 // stfu
                 break;

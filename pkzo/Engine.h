@@ -3,6 +3,7 @@
 #define _PKZO_ENGINE_H_
 
 #include <string>
+#include <vector>
 
 #include "defines.h"
 #include "Key.h"
@@ -13,6 +14,7 @@ namespace pkzo
     class Window;
     class Mouse;
     class Keyboard;
+    class Joystick;
 
     class PKZO_EXPORT Engine
     {
@@ -44,6 +46,12 @@ namespace pkzo
 
         const Keyboard& get_keyboard() const;
 
+        unsigned int get_joystick_count() const;
+
+        Joystick& get_joystick(unsigned int i);
+
+        const Joystick& get_joystick(unsigned int i) const;
+
         bool is_running() const;
 
         void run();
@@ -72,6 +80,7 @@ namespace pkzo
         Window*   window;
         Mouse*    mouse;
         Keyboard* keyboard;
+        std::vector<Joystick*> joysticks;
 
         void route_events();
     };
