@@ -192,7 +192,9 @@ copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutD
   <ItemGroup>
     <ClInclude Include="..\include\pkzo.h" />
     <ClInclude Include="..\include\pkzo\Color.h" />
+    <ClInclude Include="..\include\pkzo\Config.h" />
     <ClInclude Include="..\include\pkzo\defines.h" />
+    <ClInclude Include="..\include\pkzo\Engine.h" />
     <ClInclude Include="..\include\pkzo\Font.h" />
     <ClInclude Include="..\include\pkzo\functions.h" />
     <ClInclude Include="..\include\pkzo\Key.h" />
@@ -207,12 +209,17 @@ copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutD
     <ClInclude Include="..\include\pkzo\Vector3.h" />
     <ClInclude Include="..\include\pkzo\Vector4.h" />
     <ClInclude Include="..\include\pkzo\Window.h" />
+    <ClInclude Include="ConfigParser.h" />
     <ClInclude Include="fs.h" />
     <ClInclude Include="PlyParser.h" />
     <ClInclude Include="strex.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\ext\rex\src\path.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="Config.cpp" />
+    <ClCompile Include="ConfigParser.cpp" />
+    <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="fs.cpp" />
     <ClCompile Include="functions.cpp" />

@@ -57,7 +57,11 @@ namespace pkzo
             RESIZABLE  = 0x04  //!< Resizable
         };
 
-        static std::vector<std::tuple<unsigned int, unsigned int>> Window::get_valid_sizes();
+        static unsigned int get_display_count();
+
+        static std::tuple<unsigned int, unsigned int> get_display_resolution(unsigned int i = 0);
+
+        static std::vector<std::tuple<unsigned int, unsigned int>> get_valid_sizes();
 
         /**
         * Create a new Window
@@ -70,6 +74,8 @@ namespace pkzo
         * in the native resolution.
         **/
         Window(unsigned int width, unsigned int height, Flags flags = NO_FLAGS);
+
+        Window(unsigned int width, unsigned int height, bool fullscreen);
         
         Window(const Window&) = delete;    
 

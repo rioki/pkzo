@@ -39,4 +39,6 @@
 #include "pkzo/Texture.h"
 #include "pkzo/Font.h"
 
+#include "pkzo/Engine.h"
+
 #endif

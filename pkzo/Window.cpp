@@ -32,11 +32,26 @@
 
 namespace pkzo
 {
+    unsigned int Window::get_display_count()
+    {
+        init();
+
+        return SDL_GetNumVideoDisplays();
+    }
+
+    std::tuple<unsigned int, unsigned int> Window::get_display_resolution(unsigned int i)
+    {
+        init();
+        
+        SDL_DisplayMode mode;
+        SDL_GetCurrentDisplayMode(0, &mode);
+
+        return std::tuple<unsigned int, unsigned int>(mode.w, mode.h);
+    }
+
     std::vector<std::tuple<unsigned int, unsigned int>>  Window::get_valid_sizes()
     {    
         std::set<std::tuple<unsigned int, unsigned int>> result;
-        
-        init();
 
         int modes = SDL_GetNumDisplayModes(0);
         if (modes == -1)
@@ -105,6 +120,9 @@ namespace pkzo
             throw std::runtime_error((const char*)glewGetErrorString(err));
         }
     }
+
+    Window::Window(unsigned int width, unsigned int height, bool fullscreen)
+    : Window(width, height, fullscreen ? FULLSCREEN : NO_FLAGS) {}
 
     Window::~Window() 
     {
