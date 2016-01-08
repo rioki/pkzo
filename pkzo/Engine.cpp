@@ -16,11 +16,16 @@ namespace pkzo
 {
     Engine::Engine(const std::string& i)
     : id(i), running(false), config(nullptr), window(nullptr), mouse(nullptr), keyboard(nullptr) 
-    {        
-        std::string config_file = path::join(get_config_folder(), "Config.cfg");
-
+    {           
         config = new Config;
-        if (fs::exists(config_file))
+        
+        std::string config_file = path::join(get_config_folder(), "Config.cfg"); 
+        // load from CWD for debug purposes
+        if (fs::exists("Config.cfg"))
+        {
+            config->load("Config.cfg");
+        }
+        else if (fs::exists(config_file))
         {
             config->load(config_file);
         }
@@ -28,7 +33,6 @@ namespace pkzo
         pkzo::on_quit([this] () {
             on_quit();
         });
-
 
         unsigned int dw, dh;
         std::tie(dw, dh) = Window::get_display_resolution();
