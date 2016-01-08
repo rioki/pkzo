@@ -21,9 +21,15 @@
     <ClCompile Include="HelloEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HelloScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HelloEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HelloScreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -95,14 +95,14 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\SDL2_ttf\include;$(SolutionDir)ext\glew\include;$(SolutionDir)ext\rex\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\SDL2_ttf\include;$(SolutionDir)ext\glew\include;$(SolutionDir)glt;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PKZO_BUILD;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)ext\SDL2\lib\$(PlatformTarget);$(SolutionDir)ext\SDL2_image\lib\$(PlatformTarget);$(SolutionDir)ext\SDL2_ttf\lib\$(PlatformTarget);$(SolutionDir)ext\glew\lib\Release\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;SDL2_ttf.lib;opengl32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)ext\SDL2\lib\$(PlatformTarget);$(SolutionDir)ext\SDL2_image\lib\$(PlatformTarget);$(SolutionDir)ext\SDL2_ttf\lib\$(PlatformTarget);$(SolutionDir)ext\glew\lib\Release\$(Platform);$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;SDL2_ttf.lib;opengl32.lib;glew32.lib;glt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy $(SolutionDir)ext\SDL2\lib\$(PlatformTarget)\SDL2.dll $(OutDir)
@@ -118,14 +118,14 @@ copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutD
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\SDL2_ttf\include;$(SolutionDir)ext\glew\include;$(SolutionDir)ext\rex\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\SDL2_ttf\include;$(SolutionDir)ext\glew\include;$(SolutionDir)glt;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PKZO_BUILD;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)ext\SDL2\lib\$(PlatformTarget);$(SolutionDir)ext\SDL2_image\lib\$(PlatformTarget);$(SolutionDir)ext\SDL2_ttf\lib\$(PlatformTarget);$(SolutionDir)ext\glew\lib\Release\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;SDL2_ttf.lib;opengl32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)ext\SDL2\lib\$(PlatformTarget);$(SolutionDir)ext\SDL2_image\lib\$(PlatformTarget);$(SolutionDir)ext\SDL2_ttf\lib\$(PlatformTarget);$(SolutionDir)ext\glew\lib\Release\$(Platform);$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;SDL2_ttf.lib;opengl32.lib;glew32.lib;glt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy $(SolutionDir)ext\SDL2\lib\$(PlatformTarget)\SDL2.dll $(OutDir)
@@ -143,7 +143,7 @@ copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutD
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\SDL2_ttf\include;$(SolutionDir)ext\glew\include;$(SolutionDir)ext\rex\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\SDL2_ttf\include;$(SolutionDir)ext\glew\include;$(SolutionDir)glt;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PKZO_BUILD;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -151,8 +151,8 @@ copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutD
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)ext\SDL2\lib\$(PlatformTarget);$(SolutionDir)ext\SDL2_image\lib\$(PlatformTarget);$(SolutionDir)ext\SDL2_ttf\lib\$(PlatformTarget);$(SolutionDir)ext\glew\lib\Release\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;SDL2_ttf.lib;opengl32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)ext\SDL2\lib\$(PlatformTarget);$(SolutionDir)ext\SDL2_image\lib\$(PlatformTarget);$(SolutionDir)ext\SDL2_ttf\lib\$(PlatformTarget);$(SolutionDir)ext\glew\lib\Release\$(Platform);$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;SDL2_ttf.lib;opengl32.lib;glew32.lib;glt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy $(SolutionDir)ext\SDL2\lib\$(PlatformTarget)\SDL2.dll $(OutDir)
@@ -170,7 +170,7 @@ copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutD
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\SDL2_ttf\include;$(SolutionDir)ext\glew\include;$(SolutionDir)ext\rex\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\SDL2_ttf\include;$(SolutionDir)ext\glew\include;$(SolutionDir)glt;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PKZO_BUILD;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -178,8 +178,8 @@ copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutD
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)ext\SDL2\lib\$(PlatformTarget);$(SolutionDir)ext\SDL2_image\lib\$(PlatformTarget);$(SolutionDir)ext\SDL2_ttf\lib\$(PlatformTarget);$(SolutionDir)ext\glew\lib\Release\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;SDL2_ttf.lib;opengl32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)ext\SDL2\lib\$(PlatformTarget);$(SolutionDir)ext\SDL2_image\lib\$(PlatformTarget);$(SolutionDir)ext\SDL2_ttf\lib\$(PlatformTarget);$(SolutionDir)ext\glew\lib\Release\$(Platform);$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;SDL2_ttf.lib;opengl32.lib;glew32.lib;glt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy $(SolutionDir)ext\SDL2\lib\$(PlatformTarget)\SDL2.dll $(OutDir)
@@ -190,6 +190,8 @@ copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutD
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="CheckBox.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="ConfigParser.cpp" />
@@ -199,21 +201,29 @@ copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutD
     <ClCompile Include="Joystick.cpp" />
     <ClCompile Include="Key.cpp" />
     <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="Library.cpp" />
     <ClCompile Include="Matrix4.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="path.cpp" />
     <ClCompile Include="PlyParser.cpp" />
     <ClCompile Include="Quaternion.cpp" />
+    <ClCompile Include="Screen.cpp" />
+    <ClCompile Include="ScreenRenderer.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Slider.cpp" />
     <ClCompile Include="strex.cpp" />
+    <ClCompile Include="Text.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="Vector4.cpp" />
+    <ClCompile Include="Widget.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Button.h" />
+    <ClInclude Include="CheckBox.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="compose.h" />
     <ClInclude Include="Config.h" />
@@ -225,19 +235,33 @@ copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutD
     <ClInclude Include="Joystick.h" />
     <ClInclude Include="Key.h" />
     <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="Library.h" />
     <ClInclude Include="Matrix4.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="path.h" />
     <ClInclude Include="PlyParser.h" />
     <ClInclude Include="Quaternion.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Screen.h" />
+    <ClInclude Include="ScreenRenderer.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Slider.h" />
     <ClInclude Include="strex.h" />
+    <ClInclude Include="Text.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="Vector4.h" />
+    <ClInclude Include="Widget.h" />
     <ClInclude Include="Window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="InterfaceFragment.glsl" />
+    <None Include="InterfaceVertex.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="pkzo.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

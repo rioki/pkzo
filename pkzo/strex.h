@@ -66,7 +66,7 @@ namespace strex
 
     std::vector<std::string> explode(const std::string& str, const std::string& delimiter);
 
-    std::string slug(const std::string& str);    
+    std::string slugify(const std::string& str);    
 
 #ifdef _WIN32
     std::wstring widen(const char* value);

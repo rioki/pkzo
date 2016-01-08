@@ -8,16 +8,21 @@
 
 #include "path.h"
 #include "fs.h"
+#include "strex.h"
 #include "Config.h"
+#include "Library.h"
 #include "Window.h"
 #include "Mouse.h"
 #include "Keyboard.h"
 #include "Joystick.h"
+#include "Screen.h"
+#include "ScreenRenderer.h"
 
 namespace pkzo
 {
     Engine::Engine(const std::string& i)
-    : id(i), running(false), config(nullptr), window(nullptr), mouse(nullptr), keyboard(nullptr) 
+    : id(i), running(false), config(nullptr), window(nullptr), mouse(nullptr), keyboard(nullptr),
+      screen_renderer(nullptr), screen(nullptr), next_screen(nullptr)
     {           
         int r = SDL_Init(SDL_INIT_VIDEO);
         if (r != 0)
@@ -43,6 +48,8 @@ namespace pkzo
             config->load(config_file);
         }
 
+        library = new Library;
+
         unsigned int dw, dh;
         std::tie(dw, dh) = Window::get_display_resolution();
         
@@ -53,6 +60,11 @@ namespace pkzo
 
         window = new Window(w, h, fs);
         window->set_title(id);
+        window->on_draw([this] () {
+            on_draw();
+        });
+
+        screen_renderer = new ScreenRenderer;
 
         mouse = new Mouse;
         mouse->on_button_press([this] (unsigned int button, unsigned int x, unsigned int y) {
@@ -96,37 +108,35 @@ namespace pkzo
         return id;
     }
 
-    // move to strex
-    std::string slugify(const std::string& str)
-    {
-        std::string result;
-
-        for (char c : str)
-        {
-            if (isalnum(c))
-            {
-                result.push_back(c);
-            }
-            else
-            {
-                result.push_back('-');
-            }
-        }
-
-        return result;
-    }
-
     std::string Engine::get_id_slug() const
     {
-        return slugify(id);
+        return strex::slugify(id);
     }
 
     std::string Engine::get_config_folder() const
     {
-        char path[MAX_PATH];
-        HRESULT r = SHGetFolderPathA(NULL, CSIDL_APPDATA, NULL, 0, path);
+        wchar_t path[MAX_PATH];
+        HRESULT r = SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, 0, path);
         
-        return path::join(path, get_id_slug());
+        return path::join(strex::narrow(path), get_id_slug());
+    }
+
+    Config& Engine::get_config()
+    {
+        assert(config != nullptr);
+        return *config;
+    }
+
+    const Config& Engine::get_config() const
+    {
+        assert(config != nullptr);
+        return *config;
+    }
+
+    Library& Engine::get_library()
+    {
+        assert(library != nullptr);
+        return *library;
     }
 
     Window& Engine::get_window()
@@ -184,6 +194,29 @@ namespace pkzo
         return *joysticks[i];
     }
 
+    bool Engine::has_screen()
+    {
+        return screen != nullptr;
+    }
+
+    Screen& Engine::get_screen()
+    {
+        assert(screen != nullptr);
+        return *screen;
+    }
+
+    const Screen& Engine::get_screen() const
+    {
+        assert(screen != nullptr);
+        return *screen;
+    }
+
+    void Engine::switch_screen(Screen* ns)
+    {
+        assert(next_screen == nullptr);
+        next_screen = ns;
+    }
+
     bool Engine::is_running() const 
     {
         return running;
@@ -194,6 +227,13 @@ namespace pkzo
         running = true;
         while (running)
         {
+            if (next_screen)
+            {
+                delete screen;
+                screen = next_screen;
+                next_screen = nullptr;
+            }
+
             route_events();
             window->draw();
         }
@@ -203,6 +243,14 @@ namespace pkzo
     {
         running = false;
     }    
+
+    void Engine::on_draw()
+    {
+        if (screen) 
+        {
+            screen->draw(*screen_renderer);
+        }
+    }
 
     void Engine::on_quit()
     {

@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pkzo", "pkzo\pkzo.vcxproj", "{9EA68EF2-8F92-4D7F-8095-E0FB956327DE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AB2B620B-3682-4B33-A6C8-1E1191C18B07} = {AB2B620B-3682-4B33-A6C8-1E1191C18B07}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{80C9A2AB-36A2-44CB-BC12-779764ABBEB1}"
 EndProject

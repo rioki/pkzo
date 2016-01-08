@@ -163,10 +163,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="HelloEngine.cpp" />
+    <ClCompile Include="HelloScreen.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HelloEngine.h" />
+    <ClInclude Include="HelloScreen.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

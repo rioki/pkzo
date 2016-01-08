@@ -11,10 +11,13 @@
 namespace pkzo
 {
     class Config;
+    class Library;
     class Window;
     class Mouse;
     class Keyboard;
     class Joystick;
+    class Screen;
+    class ScreenRenderer;
 
     class PKZO_EXPORT Engine
     {
@@ -34,6 +37,12 @@ namespace pkzo
 
         std::string get_config_folder() const;
 
+        Config& get_config();
+
+        const Config& get_config() const;
+
+        Library& get_library();
+
         Window& get_window();
 
         const Window& get_window() const;
@@ -52,6 +61,14 @@ namespace pkzo
 
         const Joystick& get_joystick(unsigned int i) const;
 
+        bool has_screen();
+
+        Screen& get_screen();
+
+        const Screen& get_screen() const;
+
+        void switch_screen(Screen* screen);
+
         bool is_running() const;
 
         void run();
@@ -60,6 +77,8 @@ namespace pkzo
 
     protected:
         
+        virtual void on_draw();
+
         virtual void on_quit();
 
         virtual void on_mouse_press(unsigned int button, unsigned int x, unsigned int y);
@@ -77,10 +96,16 @@ namespace pkzo
         bool        running;
 
         Config*   config;
+        Library*  library;
+
         Window*   window;
         Mouse*    mouse;
         Keyboard* keyboard;
         std::vector<Joystick*> joysticks;
+
+        ScreenRenderer* screen_renderer;
+        Screen*         screen;
+        Screen*         next_screen;
 
         void route_events();
     };

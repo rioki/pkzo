@@ -64,7 +64,7 @@ namespace strex
     std::regex multiple_spaces("\\s+");
     std::regex spaces("\\s");
 
-    std::string slug(const std::string& str)
+    std::string slugify(const std::string& str)
     {
         std::string t1 = std::regex_replace(str, invalid_chars, "");
         std::string t2 = std::regex_replace(t1, multiple_spaces, " ");
