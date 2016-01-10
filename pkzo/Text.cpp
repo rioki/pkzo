@@ -1,6 +1,9 @@
 
 #include "Text.h"
 
+#include <algorithm>
+
+#include "strex.h"
 #include "ScreenRenderer.h"
 
 namespace pkzo
@@ -17,7 +20,7 @@ namespace pkzo
 
         if (font)
         {
-            std::tie(width, height) = font->estimate(text);
+            estimate();
         }
     }
 
@@ -33,7 +36,7 @@ namespace pkzo
 
         if (font)
         {
-            std::tie(width, height) = font->estimate(text);
+            estimate();
         }
     }
 
@@ -56,10 +59,40 @@ namespace pkzo
     {
         if (dirty)
         {
-            texture = font->render(text);
+            auto lines = strex::explode(text, "\n");
+            textures.resize(lines.size());
+            for (unsigned int i = 0; i < lines.size(); i++)
+            {
+                textures[i] = font->render(lines[i]);
+            }
             dirty = false;
         }
 
-        renderer.draw_rect(x, y, width, height, color.carray(), &texture);
+        
+        // TODO aligment
+        unsigned int y2 = y;
+        for (auto& texture : textures)
+        {
+            renderer.draw_rect(x, y2, texture.get_width(), texture.get_height(), color.carray(), &texture);
+            y2 += texture.get_height();
+        }
+    }
+
+    void Text::estimate()
+    {
+        auto lines = strex::explode(text, "\n");
+        unsigned int wa = 0;
+        unsigned int ha = 0;
+        for (auto& line : lines)
+        {
+            unsigned int w, h;
+            std::tie(w, h) = font->estimate(line);
+            wa = std::max(wa, w);
+
+            ha += h;
+        }
+
+        width  = wa;
+        height = ha;
     }
 }

@@ -7,6 +7,7 @@
 #include <memory>
 #include <string>
 #include <tuple>
+#include <vector>
 #include "Font.h"
 #include "Texture.h"
 #include "Color.h"
@@ -40,8 +41,10 @@ namespace pkzo
         std::string                 text;
         Color                       color;
 
-        mutable bool          dirty;
-        mutable pkzo::Texture texture;
+        mutable bool                       dirty;
+        mutable std::vector<pkzo::Texture> textures;
+
+        void estimate();
     };
 }
 
