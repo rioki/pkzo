@@ -4,11 +4,11 @@
 
 #include "SceneNode.h"
 
-#include <pkzo/Color.h>
+#include "Color.h"
 
 namespace pkzo
 {
-    class PKZOSG_EXPORT Light : public SceneNode
+    class PKZO_EXPORT Light : public SceneNode
     {
     public:
         

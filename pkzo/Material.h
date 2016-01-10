@@ -6,14 +6,14 @@
 
 #include <memory>
 #include <string>
-#include <pkzo/Color.h>
+#include "Color.h"
 
 namespace pkzo
 {
     class Shader;
     class Texture;
 
-    class PKZOSG_EXPORT Material
+    class PKZO_EXPORT Material
     {
     public:
         

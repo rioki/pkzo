@@ -24,12 +24,18 @@
     <ClCompile Include="TeapotScreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TeapotScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TeapotEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TeapotScreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TeapotScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

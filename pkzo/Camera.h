@@ -6,7 +6,7 @@
 
 namespace pkzo
 {
-    class PKZOSG_EXPORT Camera : public SceneNode
+    class PKZO_EXPORT Camera : public SceneNode
     {
     public:
 

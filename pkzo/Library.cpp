@@ -4,7 +4,7 @@
 #include "Texture.h"
 #include "Font.h"
 #include "Mesh.h"
-//#include "Material.h"
+#include "Material.h"
 
 namespace pkzo
 {
@@ -61,7 +61,7 @@ namespace pkzo
         }
     }
 
-    /*std::shared_ptr<Material> Library::load_material(const std::string& file)
+    std::shared_ptr<Material> Library::load_material(const std::string& file)
     {
         auto i = materials.find(file);
         if (i != materials.end())
@@ -75,5 +75,5 @@ namespace pkzo
             materials[file] = material;
             return material;
         }
-    }*/
+    }
 }

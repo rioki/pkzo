@@ -4,14 +4,14 @@
 
 #include "defines.h"
 
-#include <pkzo/Vector3.h>
-#include <pkzo/Quaternion.h>
+#include "Vector3.h"
+#include "Quaternion.h"
 
 namespace pkzo
 {
     class SceneRenderer;
 
-    class PKZOSG_EXPORT SceneNode
+    class PKZO_EXPORT SceneNode
     {
     public:
         

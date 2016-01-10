@@ -11,7 +11,7 @@ namespace pkzo
     class SceneRenderer;
     class SceneNode;
 
-    class PKZOSG_EXPORT Scene
+    class PKZO_EXPORT Scene
     {
     public:
         

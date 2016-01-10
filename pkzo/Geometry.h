@@ -11,7 +11,7 @@ namespace pkzo
     class Mesh;
     class Material;
 
-    class PKZOSG_EXPORT Geometry : public SceneNode
+    class PKZO_EXPORT Geometry : public SceneNode
     {
     public:
         

@@ -164,10 +164,12 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TeapotEngine.cpp" />
+    <ClCompile Include="TeapotScene.cpp" />
     <ClCompile Include="TeapotScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TeapotEngine.h" />
+    <ClInclude Include="TeapotScene.h" />
     <ClInclude Include="TeapotScreen.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

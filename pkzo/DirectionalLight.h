@@ -6,7 +6,7 @@
 
 namespace pkzo
 {
-    class PKZOSG_EXPORT DirectionalLight : public Light
+    class PKZO_EXPORT DirectionalLight : public Light
     {
     public:
         

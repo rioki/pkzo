@@ -17,12 +17,15 @@
 #include "Joystick.h"
 #include "Screen.h"
 #include "ScreenRenderer.h"
+#include "Scene.h"
+#include "SceneRenderer.h"
 
 namespace pkzo
 {
     Engine::Engine(const std::string& i)
     : id(i), running(false), config(nullptr), window(nullptr), mouse(nullptr), keyboard(nullptr),
-      screen_renderer(nullptr), screen(nullptr), next_screen(nullptr)
+      screen_renderer(nullptr), screen(nullptr), next_screen(nullptr),
+      scene_renderer(nullptr), scene(nullptr), next_scene(nullptr)
     {           
         int r = SDL_Init(SDL_INIT_VIDEO);
         if (r != 0)
@@ -65,6 +68,7 @@ namespace pkzo
         });
 
         screen_renderer = new ScreenRenderer;
+        scene_renderer  = new SceneRenderer;
 
         mouse = new Mouse;
         mouse->on_button_press([this] (unsigned int button, unsigned int x, unsigned int y) {
@@ -194,7 +198,7 @@ namespace pkzo
         return *joysticks[i];
     }
 
-    bool Engine::has_screen()
+    bool Engine::has_screen() const
     {
         return screen != nullptr;
     }
@@ -217,6 +221,29 @@ namespace pkzo
         next_screen = ns;
     }
 
+    bool Engine::has_scene() const
+    {
+        return scene != nullptr;
+    }
+
+    Scene& Engine::get_scene()
+    {
+        assert(scene != nullptr);
+        return *scene;
+    }
+
+    const Scene& Engine::get_scene() const
+    {
+        assert(scene != nullptr);
+        return *scene;
+    }
+
+    void Engine::switch_scene(Scene* ns)
+    {
+        assert(next_scene == nullptr);
+        next_scene = ns;
+    }
+
     bool Engine::is_running() const 
     {
         return running;
@@ -224,6 +251,8 @@ namespace pkzo
 
     void Engine::run() 
     {
+        last_frame = std::clock();
+
         running = true;
         while (running)
         {
@@ -234,7 +263,25 @@ namespace pkzo
                 next_screen = nullptr;
             }
 
+            if (next_scene)
+            {
+                delete scene;
+                scene = next_scene;
+                next_scene = nullptr;
+            }
+
             route_events();
+
+            clock_t now = std::clock();;
+            float t  = (float)now / (float)CLOCKS_PER_SEC;
+            float dt = (float)(now - last_frame) / (float)CLOCKS_PER_SEC;
+
+            if (scene)
+            {
+                scene->update(t, dt);
+            }
+
+
             window->draw();
         }
     }
@@ -246,6 +293,11 @@ namespace pkzo
 
     void Engine::on_draw()
     {
+        if (scene)
+        {
+            scene->render(*scene_renderer);
+        }
+
         if (screen) 
         {
             screen->draw(*screen_renderer);

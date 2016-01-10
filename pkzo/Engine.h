@@ -4,6 +4,7 @@
 
 #include <string>
 #include <vector>
+#include <ctime>
 
 #include "defines.h"
 #include "Key.h"
@@ -18,6 +19,8 @@ namespace pkzo
     class Joystick;
     class Screen;
     class ScreenRenderer;
+    class Scene;
+    class SceneRenderer;
 
     class PKZO_EXPORT Engine
     {
@@ -61,13 +64,21 @@ namespace pkzo
 
         const Joystick& get_joystick(unsigned int i) const;
 
-        bool has_screen();
+        bool has_screen() const;
 
         Screen& get_screen();
 
         const Screen& get_screen() const;
 
         void switch_screen(Screen* screen);
+
+        bool has_scene() const;
+
+        Scene& get_scene();
+
+        const Scene& get_scene() const;
+
+        void switch_scene(Scene* scene);
 
         bool is_running() const;
 
@@ -103,9 +114,15 @@ namespace pkzo
         Keyboard* keyboard;
         std::vector<Joystick*> joysticks;
 
+        clock_t         last_frame;
+
         ScreenRenderer* screen_renderer;
         Screen*         screen;
         Screen*         next_screen;
+
+        SceneRenderer*  scene_renderer;
+        Scene*          scene;
+        Scene*          next_scene;
 
         void route_events();
     };

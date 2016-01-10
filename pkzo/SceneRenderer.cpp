@@ -1,7 +1,7 @@
 
 #include "SceneRenderer.h"
 
-#include <pkzo/Mesh.h>
+#include "Mesh.h"
 #include "Material.h"
 
 #ifdef _MSC_VER
@@ -28,7 +28,7 @@ namespace pkzo
     SceneRenderer::SceneRenderer() 
     {
         #ifdef _MSC_VER
-        HMODULE hModule = GetModuleHandle(_T("pkzosg.dll"));
+        HMODULE hModule = GetModuleHandle(_T("pkzo.dll"));
 
         std::string phong_vertex   = LoadTextResource(hModule, MAKEINTRESOURCE(IDR_GLSL_PHONG_VERTEX), _T("GLSL"));
         std::string phong_fragment = LoadTextResource(hModule, MAKEINTRESOURCE(IDR_GLSL_PHONG_FRAGMENT), _T("GLSL"));

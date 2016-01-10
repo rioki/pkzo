@@ -6,8 +6,8 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-#include <pkzo/Matrix4.h>
-#include <pkzo/Vector3.h>
+#include "Matrix4.h"
+#include "Vector3.h"
 
 namespace pkzo
 {

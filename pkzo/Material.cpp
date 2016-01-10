@@ -3,8 +3,8 @@
 
 #include <fstream>
 #include <rjson.h>
-#include <pkzo/Shader.h>
-#include <pkzo/Texture.h>
+#include "Shader.h"
+#include "Texture.h"
 
 #include "compose.h"
 #include "path.h"

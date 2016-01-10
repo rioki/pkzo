@@ -6,17 +6,17 @@
 
 #include <list>
 #include <tuple>
-#include <pkzo/Vector3.h>
-#include <pkzo/Matrix4.h>
-#include <pkzo/Color.h>
-#include <pkzo/Shader.h>
+#include "Vector3.h"
+#include "Matrix4.h"
+#include "Color.h"
+#include "Shader.h"
 
 namespace pkzo
 {
     class Mesh;
     class Material;
     
-    class PKZOSG_EXPORT SceneRenderer
+    class PKZO_EXPORT SceneRenderer
     {
     public:
         

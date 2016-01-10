@@ -138,7 +138,7 @@ namespace pkzo
 
         SDL_SetWindowSize(window, width, height);
         
-        if (flags & FULLSCREEN == FULLSCREEN)
+        if ((flags & FULLSCREEN) == FULLSCREEN)
         {
             SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
         }
@@ -147,7 +147,7 @@ namespace pkzo
             SDL_SetWindowFullscreen(window, 0);
         }
 
-        if (flags & BORDERLESS == BORDERLESS)
+        if ((flags & BORDERLESS) == BORDERLESS)
         {
             SDL_SetWindowBordered(window, SDL_FALSE);
         }
@@ -173,17 +173,17 @@ namespace pkzo
 
     bool Window::is_fullscreen() const
     {
-        return flags && FULLSCREEN == FULLSCREEN;
+        return (flags & FULLSCREEN) == FULLSCREEN;
     }
 
     bool Window::is_borderless() const
     {
-        return flags && BORDERLESS == BORDERLESS;
+        return (flags & BORDERLESS) == BORDERLESS;
     }
 
     bool Window::is_resizable() const
     {
-        return flags && RESIZABLE == RESIZABLE;
+        return (flags & RESIZABLE) == RESIZABLE;
     }
 
     void Window::set_title(const std::string& value)
