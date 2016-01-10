@@ -10,6 +10,7 @@
 
 #include "Texture.h"
 #include "Color.h"
+#include "Vector2.h"
 
 namespace pkzo
 {
@@ -19,7 +20,7 @@ namespace pkzo
     class PKZO_EXPORT Screen
     {
     public:
-        Screen(unsigned int width, unsigned int height);
+        Screen(const Vector2& size);
 
         Screen(const Screen&) = delete;
 
@@ -27,11 +28,9 @@ namespace pkzo
 
         const Screen& operator = (const Screen&) = delete;
 
-        void set_size(unsigned int width, unsigned int height);
+        void set_size(const Vector2& value);
 
-        unsigned int get_width() const;
-
-        unsigned int get_height() const;
+        const Vector2& get_size() const;
 
         void set_background_color(const Color& value);
 
@@ -54,8 +53,7 @@ namespace pkzo
         virtual void handle_mouse_up(unsigned int button, unsigned int x, unsigned int y);
 
     private:
-        unsigned int width;
-        unsigned int height;
+        Vector2 size;
 
         std::list<Widget*> widgets;
 

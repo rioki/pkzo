@@ -4,41 +4,31 @@
 namespace pkzo
 {
     Widget::Widget()
-    : x(0), y(0), width(15), height(15) {}
+    : position(0, 0), size(15, 15) {}
 
     Widget::~Widget() {}
 
-    void Widget::set_position(unsigned int _x, unsigned int _y)
+    void Widget::set_position(const Vector2& value)
     {
-        x = _x;
-        y = _y;
+        position = value;
     }
 
-    unsigned int Widget::get_x() const
+    const Vector2& Widget::get_position() const
     {
-        return x;
+        return position;
     }
 
-    unsigned int Widget::get_y() const
+    void Widget::set_size(const Vector2& value)
     {
-        return y;
+        size = value;
     }
 
-    void Widget::set_size(unsigned int _width, unsigned int _height)
+    const Vector2& Widget::get_size() const
     {
-        width  = _width;
-        height = _height;
+        return size;
     }
 
-    unsigned int Widget::get_width() const
-    {
-        return width;
-    }
-
-    unsigned int Widget::get_height() const
-    {
-        return height;
-    }
+    void Widget::draw(ScreenRenderer& renderer) const {}
 
     void Widget::handle_mouse_move(unsigned int x, unsigned int y, int dx, int dy) {}
 

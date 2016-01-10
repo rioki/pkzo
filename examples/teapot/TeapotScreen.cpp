@@ -3,7 +3,7 @@
 namespace teapot
 {
     TeapotScreen::TeapotScreen(const pkzo::Vector2& size, pkzo::Library& library)
-    : Screen(size[0], size[1])
+    : Screen(size)
     {
         auto caption_font = library.load_font("../assets/fonts/DejaVuSans.ttf", 32);
         auto text_font    = library.load_font("../assets/fonts/DejaVuSans.ttf", 18);
@@ -22,8 +22,8 @@ namespace teapot
                              "teapot by eye. Then he went back to the lab and edited bézier\n"
                              "control points on a Tektronix storage tube, again by hand.\n");
         
-        explanation.set_position(size[0] - 10 - explanation.get_width(), size[1] - 10 - explanation.get_height());
-        caption.set_position(explanation.get_x(), explanation.get_y() - 10 - caption.get_height());
+        explanation.set_position(size - pkzo::Vector2(10, 10) - explanation.get_size());
+        caption.set_position(pkzo::Vector2(explanation.get_position()[0], explanation.get_position()[1] - 10 - caption.get_size()[1]));
 
         add_widget(explanation);
         add_widget(caption);

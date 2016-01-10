@@ -35,8 +35,7 @@ namespace pkzo
         background = value;
         if (background)
         {
-            width  = background->get_width();
-            height = background->get_height();
+            size = Vector2((float)background->get_width(), (float)background->get_height());
         }
     }
 
@@ -83,19 +82,19 @@ namespace pkzo
     void Slider::draw(ScreenRenderer & renderer) const
     {
         unsigned int dw = background->get_width() - nob->get_width(); 
-        unsigned int nx = static_cast<unsigned int>(static_cast<float>(dw) * (static_cast<float>(value) / static_cast<float>(increments - 1)));
+        float nx = static_cast<float>(dw) * (static_cast<float>(value) / static_cast<float>(increments - 1));
         
         // assume nob.height == background.height
-        renderer.draw_rect(x, y, width, height, background_color.carray(), background.get());
-        renderer.draw_rect(x + nx, y, nob->get_width(), nob->get_height(), nob_color.carray(), nob.get());
+        renderer.draw_rect(position, size, background_color, *background);
+        renderer.draw_rect(position + Vector2(nx, 0), Vector2((float)nob->get_width(), (float)nob->get_height()), nob_color, *nob);
     }
 
     void Slider::handle_mouse_move(unsigned int bx, unsigned int by, int dx, int dy) 
     {
-        if (active && bx > x && bx < x + width)
+        if (active && bx > position[0] && bx < position[0] + size[0])
         {
-            unsigned int dw = bx - x;
-            value = static_cast<unsigned int>(static_cast<float>(dw) / static_cast<float>(width)* increments);
+            unsigned int dw = bx - position[0];
+            value = static_cast<unsigned int>(static_cast<float>(dw) / static_cast<float>(size[0])* increments);
 
             if (change_cb)
             {
@@ -106,12 +105,13 @@ namespace pkzo
 
     void Slider::handle_mouse_down(unsigned int button, unsigned int bx, unsigned int by)
     {
-        if (button == 1 && bx > x && by > y && bx < x + width && by < y + height)
+        if (button == 1 && bx > position[0] && by > position[1] && 
+            bx < position[0] + size[0] && by < position[1] + size[1])
         {
             active = true;
 
-            unsigned int dw = bx - x;
-            value = static_cast<unsigned int>(static_cast<float>(dw) / static_cast<float>(width)* increments);
+            unsigned int dw = bx - position[0];
+            value = static_cast<unsigned int>(static_cast<float>(dw) / static_cast<float>(size[0])* increments);
 
             if (change_cb)
             {

@@ -4,6 +4,8 @@
 
 #include "defines.h"
 
+#include "Vector2.h"
+
 namespace pkzo
 {
     class ScreenRenderer;
@@ -19,19 +21,15 @@ namespace pkzo
 
         const Widget& operator = (const Widget&) = delete;
 
-        void set_position(unsigned int x, unsigned int y);
+        void set_position(const Vector2& value);
 
-        unsigned int get_x() const;
+        const Vector2& get_position() const;
 
-        unsigned int get_y() const;
+        void set_size(const Vector2& value);
 
-        void set_size(unsigned int width, unsigned int height);
+        const Vector2& get_size() const;
 
-        unsigned int get_width() const;
-
-        unsigned int get_height() const;
-
-        virtual void draw(ScreenRenderer& renderer) const = 0;
+        virtual void draw(ScreenRenderer& renderer) const;
 
         virtual void handle_mouse_move(unsigned int x, unsigned int y, int dx, int dy);
 
@@ -40,10 +38,8 @@ namespace pkzo
         virtual void handle_mouse_up(unsigned int button, unsigned int x, unsigned int y);
 
     protected:
-        unsigned int x;
-        unsigned int y;
-        unsigned int width;
-        unsigned int height;
+        Vector2 position;
+        Vector2 size;
     };
 }
 

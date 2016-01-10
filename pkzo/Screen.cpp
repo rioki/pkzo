@@ -6,28 +6,19 @@
 
 namespace pkzo
 {
-    Screen::Screen(unsigned int w, unsigned int h)
-    : width(w), height(h) 
-    {
-
-    }
+    Screen::Screen(const Vector2& s)
+    : size(s), background_color(0x0000000) {}
 
     Screen::~Screen() {}
 
-    void Screen::set_size(unsigned int _width, unsigned int _height)
+    void Screen::set_size(const Vector2& value)
     {
-        width  = _width;
-        height = _height;
+        size = value;
     }
 
-    unsigned int Screen::get_width() const
+    const Vector2& Screen::get_size() const
     {
-        return width;
-    }
-
-    unsigned int Screen::get_height() const
-    {
-        return height;
+        return size;
     }
 
     void Screen::set_background_color(const Color& value)
@@ -70,9 +61,16 @@ namespace pkzo
 
     void Screen::draw(ScreenRenderer& renderer) const
     {
-        renderer.start(width, height);
+        renderer.start(size);
 
-        renderer.draw_rect(0, 0, width, height, background_color.carray(), background_texture.get());
+        if (background_texture)
+        {
+            renderer.draw_rect(Vector2(0, 0), size, background_color, *background_texture);
+        }
+        else
+        {
+            renderer.draw_rect(Vector2(0, 0), size, background_color);
+        }
 
         for (const Widget* widget : widgets)
         {

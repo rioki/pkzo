@@ -70,29 +70,27 @@ namespace pkzo
 
         
         // TODO aligment
-        unsigned int y2 = y;
+        Vector2 p2 = position;
         for (auto& texture : textures)
         {
-            renderer.draw_rect(x, y2, texture.get_width(), texture.get_height(), color.carray(), &texture);
-            y2 += texture.get_height();
+            renderer.draw_rect(p2, Vector2((float)texture.get_width(), (float)texture.get_height()), color, texture);
+            p2[1] += texture.get_height();
         }
     }
 
     void Text::estimate()
     {
         auto lines = strex::explode(text, "\n");
-        unsigned int wa = 0;
-        unsigned int ha = 0;
+        Vector2 result(0, 0);
         for (auto& line : lines)
         {
             unsigned int w, h;
             std::tie(w, h) = font->estimate(line);
-            wa = std::max(wa, w);
+            result[0] = std::max(result[0], (float)w);
 
-            ha += h;
+            result[1] += h;
         }
 
-        width  = wa;
-        height = ha;
+        size = result;        
     }
 }

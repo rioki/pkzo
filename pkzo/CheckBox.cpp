@@ -94,16 +94,16 @@ namespace pkzo
             caption_dirty = false;
         }
         
-        unsigned int dby = height - background->get_height();
-        unsigned int dmy = height - mark->get_height();
-        unsigned int dcy = height - caption_texture.get_height();
+        float dby = (size[1] - background->get_height()) / 2.0f;
+        float dmy = (size[1] - mark->get_height()) / 2.0f;
+        float dcy = (size[1] - caption_texture.get_height()) / 2.0f;
 
-        renderer.draw_rect(x, y + dby / 2, background->get_width(), background->get_height(), background_color.carray(), background.get());
+        renderer.draw_texture(position + Vector2(0, dby), background_color, *background);
         if (checked)
         {
-            renderer.draw_rect(x, y + dmy / 2, mark->get_width(), mark->get_height(), mark_color.carray(), mark.get());    
+            renderer.draw_texture(position + Vector2(0, dmy), mark_color, *mark);    
         }
-        renderer.draw_rect(x + background->get_width(), y + dcy / 2, caption_texture.get_width(), caption_texture.get_height(), color.carray(), &caption_texture);
+        renderer.draw_texture(position + Vector2((float)background->get_width(), dcy), color, caption_texture);
     }
 
     void CheckBox::set_checked(bool value)
@@ -124,7 +124,7 @@ namespace pkzo
 
     void CheckBox::handle_mouse_up(unsigned int button, unsigned int bx, unsigned int by)
     {
-        if (button == 1 && bx > x && by > y && bx < x + width && by < y + width)
+        if (button == 1 && bx > position[0] && by > position[1] && bx < position[0] + size[0] && by < position[1] + size[1])
         {
             checked = !checked;
             if (toggle_cb)
@@ -140,8 +140,8 @@ namespace pkzo
         {
             unsigned int cw, ch;
             std::tie(cw, ch) = font->estimate(caption);
-            width  = background->get_width() + cw;
-            height = std::max(ch, background->get_height());
+            size[0] = (float)background->get_width() + (float)cw;
+            size[1] = (float)std::max(ch, background->get_height());
         }
     }
 }

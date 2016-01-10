@@ -47,8 +47,7 @@ namespace pkzo
         background = value;
         if (background)
         {
-            width  = background->get_width();
-            height = background->get_height();
+            size = Vector2((float)background->get_width(), (float)background->get_height());
         }
     }
 
@@ -76,11 +75,10 @@ namespace pkzo
         }
 
         // assume the caption is smaller than the width
-        unsigned int dx = width  - caption_texture.get_width();
-        unsigned int dy = height - caption_texture.get_height();
+        Vector2 ds = Vector2((float)caption_texture.get_width(), (float)caption_texture.get_height());
 
-        renderer.draw_rect(x, y, width, height, background_color.carray(), background.get());
-        renderer.draw_rect(x + dx/2, y + dy/2, caption_texture.get_width(), caption_texture.get_height(), color.carray(), &caption_texture);
+        renderer.draw_rect(position, size, background_color, *background);
+        renderer.draw_rect(position + ds * 0.5f, Vector2((float)caption_texture.get_width(), (float)caption_texture.get_height()), color, caption_texture);
     }
 
     void Button::on_click(std::function<void ()> cb)
@@ -95,7 +93,7 @@ namespace pkzo
 
     void Button::handle_mouse_up(unsigned int button, unsigned int bx, unsigned int by)
     {
-        if (button == 1 && bx > x && by > y && bx < x + width && by < y + height)
+        if (button == 1 && bx > position[0] && by > position[1] && bx < position[0] + size[0] && by < position[1] + size[1])
         {
             if (click_cb)
             {

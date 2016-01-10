@@ -12,6 +12,10 @@
 #include "glt.h"
 #include <GL/glew.h>
 
+#include "Vector2.h"
+#include "Color.h"
+#include "Texture.h"
+
 namespace pkzo
 {
     ScreenRenderer::ScreenRenderer()
@@ -38,46 +42,72 @@ namespace pkzo
 
     ScreenRenderer::~ScreenRenderer() {}
 
-    void ScreenRenderer::start(unsigned int w, unsigned int h)
+    void ScreenRenderer::start(const Vector2& size)
     {
-        gltOrtho2D(projectionMatrix, 0.0f, (float)w, (float)h, 0.0f);
+        gltOrtho2D(projectionMatrix, 0.0f, size[0], size[1], 0.0f);
 
         glDisable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }   
 
-    void ScreenRenderer::draw_rect(unsigned int x, unsigned int y, unsigned int w, unsigned int h, const float* color, const pkzo::Texture* texture)
+    void ScreenRenderer::draw_texture(const Vector2& pos, const Color& color, const Texture& texture)
     {
+        Vector2 size((float)texture.get_width(), (float)texture.get_height());
+
         gltLoadIdentity(modelViewMatrix);
-        gltTranslate(modelViewMatrix, (float)x, (float)y, 0.0f);
-        gltScale(modelViewMatrix, (float)w, (float)h, 1.0f);
+        gltTranslate(modelViewMatrix, pos[0], pos[1], 0.0f);
+        gltScale(modelViewMatrix, size[0], size[1], 1.0f);
         gltTranslate(modelViewMatrix, 0.5f, 0.5f, 0.0f);
 
         shader.bind();
         shader.set_uniform_matrix("uProjectionMatrix", projectionMatrix, 16);
         shader.set_uniform_matrix("uModelViewMatrix", modelViewMatrix, 16);
 
-        if (color != nullptr)
-        {
-            shader.set_uniform("uColor", color, 4);
-        }
-        else
-        {
-            shader.set_uniform("uColor", 1.0f, 1.0f, 1.0f, 1.0f);
-        }
+        shader.set_uniform("uColor", color[0], color[1], color[2], color[3]);
+        
+        texture.bind(0);
+        shader.set_uniform("uTexture", 0);
+        shader.set_uniform("uHasTexture", 1);
+        
+        mesh.draw(shader);
+    }
 
-        if (texture != nullptr)
-        {
-            texture->bind(0);
-            shader.set_uniform("uTexture", 0);
-            shader.set_uniform("uHasTexture", 1);
-        }
-        else
-        {
-            shader.set_uniform("uHasTexture", 0);
-        }
+    void ScreenRenderer::draw_rect(const Vector2& pos, const Vector2& size, const Color& color)
+    {
+        gltLoadIdentity(modelViewMatrix);
+        gltTranslate(modelViewMatrix, pos[0], pos[1], 0.0f);
+        gltScale(modelViewMatrix, size[0], size[1], 1.0f);
+        gltTranslate(modelViewMatrix, 0.5f, 0.5f, 0.0f);
 
+        shader.bind();
+        shader.set_uniform_matrix("uProjectionMatrix", projectionMatrix, 16);
+        shader.set_uniform_matrix("uModelViewMatrix", modelViewMatrix, 16);
+
+        shader.set_uniform("uColor", color[0], color[1], color[2], color[3]);
+        
+        shader.set_uniform("uHasTexture", 0);
+        
+        mesh.draw(shader);
+    }
+
+    void ScreenRenderer::draw_rect(const Vector2& pos, const Vector2& size, const Color& color, const Texture& texture)
+    {
+        gltLoadIdentity(modelViewMatrix);
+        gltTranslate(modelViewMatrix, pos[0], pos[1], 0.0f);
+        gltScale(modelViewMatrix, size[0], size[1], 1.0f);
+        gltTranslate(modelViewMatrix, 0.5f, 0.5f, 0.0f);
+
+        shader.bind();
+        shader.set_uniform_matrix("uProjectionMatrix", projectionMatrix, 16);
+        shader.set_uniform_matrix("uModelViewMatrix", modelViewMatrix, 16);
+
+        shader.set_uniform("uColor", color[0], color[1], color[2], color[3]);
+        
+        texture.bind(0);
+        shader.set_uniform("uTexture", 0);
+        shader.set_uniform("uHasTexture", 1);
+        
         mesh.draw(shader);
     }
 }

@@ -5,10 +5,14 @@
 #include "defines.h"
 #include "Shader.h"
 #include "Mesh.h"
-#include "Texture.h"
+
 
 namespace pkzo
 {
+    class Vector2;
+    class Color;
+    class Texture;
+
     class PKZO_EXPORT ScreenRenderer
     {
     public:
@@ -20,9 +24,14 @@ namespace pkzo
 
         const ScreenRenderer& operator = (const ScreenRenderer&) = delete;
 
-        void start(unsigned int w, unsigned int h);
+        void start(const Vector2& size);
 
-        void draw_rect(unsigned int x, unsigned int y, unsigned int w, unsigned int h, const float* color, const pkzo::Texture* texture);
+        void draw_texture(const Vector2& pos, const Color& color, const Texture& texture);
+
+        void draw_rect(const Vector2& pos, const Vector2& size, const Color& color);
+
+        void draw_rect(const Vector2& pos, const Vector2& size, const Color& color, const Texture& texture);
+        
 
     private:
         pkzo::Shader shader;
