@@ -86,7 +86,7 @@ namespace pkzo
 
         phong_shader.bind();
 
-        Matrix3 normal(view);
+        Matrix3 normal(view); // properly transform(inverse(view));
 
         phong_shader.set_uniform_matrix("uProjectionMatrix", projection.carray(), 16);
         phong_shader.set_uniform_matrix("uViewMatrix",       view.carray(),       16);
