@@ -10,17 +10,24 @@
 namespace teapot
 {
     CameraController::CameraController(TeapotEngine& e) 
-    : engine(e), distance(10), alpha(0), beta(0)
+    : engine(e), distance(10), alpha(0), beta(45)
     {
         pkzo::Mouse& mouse = engine.get_mouse();
 
         mouse.on(pkzo::Mouse::MOVE, [this] (unsigned int x, unsigned int y, int dx, int dy) {
-            alpha += dx;
-            beta  += dy;
-            update();
+            
+            pkzo::Mouse& mouse = engine.get_mouse();
+            if (mouse.is_pressed(1))
+            {
+                alpha -= dx;
+                beta  -= dy;
+                update();
+            }
         });
 
-        update();
+        engine.on(pkzo::Engine::CHANGE_SCENE, [this] () {
+            update();
+        });        
     }
 
     CameraController::~CameraController() {}

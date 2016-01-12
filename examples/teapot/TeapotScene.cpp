@@ -11,8 +11,7 @@ namespace teapot
 
         light0.set_color(pkzo::Color(0xFFFFFFFF));
         add_node(light0);
-
-        camera.set_position(pkzo::Vector3(0, 0, 10));
+        
         add_node(camera);
     }
 

@@ -263,6 +263,7 @@ namespace pkzo
                 delete screen;
                 screen = next_screen;
                 next_screen = nullptr;
+                emit(CHANGE_SCREEN);
             }
 
             if (next_scene)
@@ -270,6 +271,7 @@ namespace pkzo
                 delete scene;
                 scene = next_scene;
                 next_scene = nullptr;
+                emit(CHANGE_SCENE);
             }
 
             route_events();
@@ -277,6 +279,8 @@ namespace pkzo
             clock_t now = std::clock();;
             float t  = (float)now / (float)CLOCKS_PER_SEC;
             float dt = (float)(now - last_frame) / (float)CLOCKS_PER_SEC;
+
+            emit<float, float>(TICK, t, dt);
 
             if (scene)
             {

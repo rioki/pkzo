@@ -8,6 +8,7 @@
 
 #include "defines.h"
 #include "Key.h"
+#include "EventEmitter.h"
 
 namespace pkzo
 {
@@ -22,9 +23,16 @@ namespace pkzo
     class Scene;
     class SceneRenderer;
 
-    class PKZO_EXPORT Engine
+    class PKZO_EXPORT Engine : public EventEmitter
     {
     public:
+
+        enum Events
+        {
+            TICK,
+            CHANGE_SCENE,
+            CHANGE_SCREEN,
+        };
 
         Engine(const std::string& id);
 
