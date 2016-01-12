@@ -2,9 +2,7 @@
 #ifndef _PKZO_JOYSTICK_H_
 #define _PKZO_JOYSTICK_H_
 
-#include <functional>
-
-#include "defines.h"
+#include "EventEmitter.h"
 
 union  SDL_Event;
 struct _SDL_Joystick;
@@ -25,9 +23,18 @@ namespace pkzo
         HAT_LEFTDOWN  = (0x08|0x04)
     };
 
-	class PKZO_EXPORT Joystick
+	class PKZO_EXPORT Joystick : public EventEmitter
     {
     public:
+        
+        enum Events
+        {
+            AXIS_MOVE,
+            BUTTON_PRESS,
+            BUTTON_RELEASE,
+            HAT_MOVE,
+            BALL_MOVE
+        };
             
         std::string get_name() const;
         
@@ -43,26 +50,10 @@ namespace pkzo
         
         bool get_button_state(unsigned int i) const;
         
-        HatPosition get_hat_position(unsigned int i) const;        
-        
-        void on_axis_move(std::function<void (unsigned int, float)> cb);
-        
-        void on_button_press(std::function<void (unsigned int)> cb);
-        
-        void on_button_release(std::function<void (unsigned int)> cb);
-        
-        void on_hat_move(std::function<void (unsigned int, HatPosition)> cb);
-        
-        void on_ball_move(std::function<void (unsigned int, int, int)> cb);
+        HatPosition get_hat_position(unsigned int i) const;
         
     private:
-        SDL_Joystick* handle;
-    
-        std::function<void (unsigned int, float)>       axis_move_cb;        
-        std::function<void (unsigned int)>              button_press_cb;        
-        std::function<void (unsigned int)>              button_release_cb;
-        std::function<void (unsigned int, HatPosition)> hat_move_cb;
-        std::function<void (unsigned int, int, int)>    ball_move_cb;
+        SDL_Joystick* handle;        
         
         Joystick(unsigned int id);        
         ~Joystick();

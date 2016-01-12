@@ -70,28 +70,30 @@ namespace pkzo
         screen_renderer = new ScreenRenderer;
         scene_renderer  = new SceneRenderer;
 
+        // REVIEW: The event routing, should be engine -> screen -> mouse/keyboard/joystick
+
         mouse = new Mouse;
-        mouse->on_button_press([this] (unsigned int button, unsigned int x, unsigned int y) {
+        mouse->on(Mouse::BUTTON_PRESS, [this] (unsigned int button, unsigned int x, unsigned int y) {
             on_mouse_press(button, x, y);
         });
-        mouse->on_button_release([this] (unsigned int button, unsigned int x, unsigned int y) {
+        mouse->on(Mouse::BUTTON_RELEASE, [this] (unsigned int button, unsigned int x, unsigned int y) {
             on_mouse_release(button, x, y);
         });
-        mouse->on_move([this] (unsigned int x, unsigned int y, int dx, int dy) {
+        mouse->on(Mouse::MOVE, [this] (unsigned int x, unsigned int y, int dx, int dy) {
             on_mouse_move(x, y, dx, dy);
         });
 
         keyboard = new Keyboard;
-        keyboard->on_key_press([this] (Key key) {
+        keyboard->on(Keyboard::KEY_PRESS, [this] (Key key) {
             on_key_press(key);
         });
-        keyboard->on_key_release([this] (Key key) {
+        keyboard->on(Keyboard::KEY_RELEASE, [this] (Key key) {
             on_key_release(key);
         });
 
         int numj = SDL_NumJoysticks();
         joysticks.resize(numj);
-        for (unsigned int i = 0; i < numj; i++)
+        for (int i = 0; i < numj; i++)
         {
             joysticks[i] = new Joystick(i);
         }
@@ -181,7 +183,7 @@ namespace pkzo
 
     unsigned int Engine::get_joystick_count() const
     {
-        return joysticks.size();
+        return (unsigned int)joysticks.size();
     }
 
     Joystick& Engine::get_joystick(unsigned int i)

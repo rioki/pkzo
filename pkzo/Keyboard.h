@@ -25,10 +25,7 @@
 #ifndef _PKZO_KEYBOARD_H_
 #define _PKZO_KEYBOARD_H_
 
-#include <vector>
-#include <functional>
-
-#include "defines.h"
+#include "EventEmitter.h"
 #include "Key.h"
 
 union SDL_Event;
@@ -38,9 +35,16 @@ namespace pkzo
     /**
      * Keyboard
      **/
-	class PKZO_EXPORT Keyboard
+	class PKZO_EXPORT Keyboard : public EventEmitter
     {
     public:
+        enum Events
+        {
+            KEY_PRESS,
+            KEY_RELEASE,
+            TEXT
+        };
+
         /**
          * Construct a Keyboard
          **/
@@ -63,27 +67,8 @@ namespace pkzo
          * @returns true if the given key is currently pressed
          **/
         bool is_pressed(Key key) const;
-    
-        /**
-         * Install key press event handler.
-         **/
-        void on_key_press(std::function<void (Key)> cb);
         
-        /**
-         * Install key release event handler.
-         **/
-        void on_key_release(std::function<void (Key)> cb);
-        
-        /**
-         * Install text event handler.
-         **/
-        void on_text(std::function<void (std::string)> cb);
-        
-    private:
-        std::function<void (Key)> key_press_cb;
-        std::function<void (Key)> key_release_cb;
-        std::function<void (std::string)> text_cb;        
-        
+    private:        
         void handle_event(SDL_Event& event);
         
 		friend class Engine;

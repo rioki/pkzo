@@ -40,42 +40,18 @@ namespace pkzo
         return state[key] == 1;
     }
 
-    void Keyboard::on_key_press(std::function<void (Key)> cb)
-    {
-        key_press_cb = cb;
-    }
-    
-    void Keyboard::on_key_release(std::function<void (Key)> cb)
-    {
-        key_release_cb = cb;
-    }
-    
-    void Keyboard::on_text(std::function<void (std::string)> cb)
-    {
-        text_cb = cb;
-    }
-
     void Keyboard::handle_event(SDL_Event& event)
     {
         switch (event.type)
         {
             case SDL_KEYDOWN:
-                if (key_press_cb)
-                {
-                    key_press_cb(static_cast<Key>(event.key.keysym.scancode));
-                }
+                emit<Key>(KEY_PRESS, static_cast<Key>(event.key.keysym.scancode));
                 break;
             case SDL_KEYUP:
-                if (key_release_cb)
-                {
-                    key_release_cb(static_cast<Key>(event.key.keysym.scancode));
-                }
+                emit<Key>(KEY_RELEASE, static_cast<Key>(event.key.keysym.scancode));
                 break;
             case SDL_TEXTINPUT:
-                if (text_cb)
-                {
-                    text_cb(event.text.text);
-                }
+                emit<std::string>(TEXT, static_cast<std::string>(event.text.text));
                 break;
             case SDL_TEXTEDITING:
                 // handled by window

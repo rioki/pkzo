@@ -73,31 +73,6 @@ namespace pkzo
     {
         Uint8 v = SDL_JoystickGetHat(handle, i);
         return static_cast<HatPosition>(v);
-    }
-    
-    void Joystick::on_axis_move(std::function<void (unsigned int, float)> cb) 
-    {
-        axis_move_cb = cb;
-    }
-    
-    void Joystick::on_button_press(std::function<void (unsigned int)> cb) 
-    {
-        button_press_cb = cb;
-    }
-    
-    void Joystick::on_button_release(std::function<void (unsigned int)> cb) 
-    {
-        button_release_cb = cb;
-    }
-    
-    void Joystick::on_hat_move(std::function<void (unsigned int, HatPosition)> cb) 
-    {
-        hat_move_cb = cb;
-    }
-    
-    void Joystick::on_ball_move(std::function<void (unsigned int, int, int)> cb) 
-    {
-        ball_move_cb = cb;
     }    
     
     Joystick::Joystick(unsigned int id) 
@@ -122,37 +97,35 @@ namespace pkzo
         switch (event.type)
         {
             case SDL_JOYAXISMOTION:
-                if (me == event.jaxis.which && axis_move_cb)
+                if (me == event.jaxis.which)
                 {
-                    axis_move_cb(event.jaxis.axis, static_cast<float>(event.jaxis.value) / 32767.0f);
+                    emit<unsigned int, float>(AXIS_MOVE, event.jaxis.axis, static_cast<float>(event.jaxis.value) / 32767.0f);
                 }
                 break;
-            case SDL_JOYBALLMOTION:
-                if (me == event.jball.which && ball_move_cb)
+            case SDL_JOYBALLMOTION:                
+                if (me == event.jball.which)
                 {
-                    ball_move_cb(event.jball.ball, event.jball.xrel, event.jball.yrel);
+                    emit<unsigned int, int, int>(BALL_MOVE, event.jball.ball, event.jball.xrel, event.jball.yrel);
                 }
                 break;
-            case SDL_JOYHATMOTION:            
-                if (me == event.jhat.which && hat_move_cb)
+            case SDL_JOYHATMOTION:      
+                if (me == event.jhat.which)
                 {
-                    hat_move_cb(event.jhat.hat, static_cast<HatPosition>(event.jhat.value));
-                }
+                    emit<unsigned int, HatPosition>(HAT_MOVE, event.jhat.hat, static_cast<HatPosition>(event.jhat.value));
+                }      
                 break;
             case SDL_JOYBUTTONDOWN:
-                if (me == event.jbutton.which && button_press_cb)
+                if (me == event.jbutton.which)
                 {
-                    button_press_cb(event.jbutton.button);
-                }
-                break;
+                    emit<unsigned int>(BUTTON_PRESS, event.jbutton.button);
+                }      
+                break;                
             case SDL_JOYBUTTONUP:
-            {
-                if (me == event.jbutton.which && button_release_cb)
+                if (me == event.jbutton.which)
                 {
-                    button_release_cb(event.jbutton.button);
-                }
+                    emit<unsigned int>(BUTTON_RELEASE, event.jbutton.button);
+                }      
                 break;
-            }
             default:
                 throw std::logic_error("Joystick does not handle this type of event.");
         }

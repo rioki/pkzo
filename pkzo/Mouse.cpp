@@ -34,7 +34,7 @@ namespace pkzo
 
     bool Mouse::is_pressed(unsigned int button) const
     {
-        return SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(button);
+        return (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(button)) == SDL_BUTTON(button);
     }
 
     std::tuple<unsigned int, unsigned int> Mouse::get_cursor() const
@@ -42,21 +42,6 @@ namespace pkzo
         int x, y;
         SDL_GetMouseState(&x, &y);
         return std::make_tuple(static_cast<unsigned int>(x), static_cast<unsigned int>(y));
-    }
-
-    void Mouse::on_button_press(std::function<void (unsigned int, unsigned int, unsigned int)> cb)
-    {
-        button_press_cb = cb;
-    }
-    
-    void Mouse::on_button_release(std::function<void (unsigned int, unsigned int, unsigned int)> cb)
-    {
-        button_release_cb = cb;
-    }
-    
-    void Mouse::on_move(std::function<void (unsigned int, unsigned int, int, int)> cb)
-    {
-        move_cb = cb;
     }
     
     void Mouse::show_cursor()
@@ -81,22 +66,13 @@ namespace pkzo
         switch (event.type)
         {
             case SDL_MOUSEBUTTONDOWN:
-                if (button_press_cb)
-                {
-                    button_press_cb(event.button.button, event.button.x, event.button.y);
-                }
+                emit<unsigned int, unsigned int, unsigned int>(BUTTON_PRESS, event.button.button, event.button.x, event.button.y);
                 break;
             case SDL_MOUSEBUTTONUP:
-                if (button_release_cb)
-                {
-                    button_release_cb(event.button.button, event.button.x, event.button.y);
-                }
+                emit<unsigned int, unsigned int, unsigned int>(BUTTON_RELEASE, event.button.button, event.button.x, event.button.y);
                 break;
             case SDL_MOUSEMOTION:
-                if (move_cb)
-                {
-                    move_cb(event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel);
-                }
+                emit<unsigned int, unsigned int, int, int>(MOVE, event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel);
                 break;
             default:
                 throw std::logic_error("NOT WITH ME!");
