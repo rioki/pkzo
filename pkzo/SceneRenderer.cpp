@@ -1,9 +1,6 @@
 
 #include "SceneRenderer.h"
 
-#include "Mesh.h"
-#include "Material.h"
-
 #ifdef _MSC_VER
 #include <windows.h>
 #include <tchar.h>
@@ -13,6 +10,10 @@
 #endif
 
 #include <GL/glew.h>
+
+#include "Matrix3.h"
+#include "Mesh.h"
+#include "Material.h"
 
 namespace pkzo
 {
@@ -85,13 +86,18 @@ namespace pkzo
 
         phong_shader.bind();
 
+        Matrix3 normal(view);
+
         phong_shader.set_uniform_matrix("uProjectionMatrix", projection.carray(), 16);
         phong_shader.set_uniform_matrix("uViewMatrix",       view.carray(),       16);
+        phong_shader.set_uniform_matrix("uNormalMatrix",     normal.carray(),      9);
 
         for (LightInfo& light : lights)
         {
+            Vector3 ldir = transform(normal, light.direction);
+
             phong_shader.set_uniform("uLightType",      light.type);
-            phong_shader.set_uniform("uLightDirection", light.direction.carray(), 3);
+            phong_shader.set_uniform("uLightDirection", ldir.carray(), 3);
             phong_shader.set_uniform("uLightPosition",  light.position.carray(),  3);
             phong_shader.set_uniform("uLightAngle",     light.angle);
             phong_shader.set_uniform("uLightColor",     light.color.carray(),     3);
