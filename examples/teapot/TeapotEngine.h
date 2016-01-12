@@ -6,11 +6,17 @@
 
 namespace teapot
 {
+    class CameraController;
+
     class TeapotEngine : public pkzo::Engine
     {
     public:
         TeapotEngine();
+
         ~TeapotEngine();
+
+    private:
+        CameraController* controller;
     };
 }
 

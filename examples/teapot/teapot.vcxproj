@@ -162,12 +162,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TeapotEngine.cpp" />
     <ClCompile Include="TeapotScene.cpp" />
     <ClCompile Include="TeapotScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CameraController.h" />
     <ClInclude Include="TeapotEngine.h" />
     <ClInclude Include="TeapotScene.h" />
     <ClInclude Include="TeapotScreen.h" />
