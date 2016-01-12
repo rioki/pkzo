@@ -5,6 +5,7 @@
 #include "defines.h"
 
 #include <list>
+#include <vector>
 
 namespace pkzo
 {
@@ -27,6 +28,12 @@ namespace pkzo
 
         void remove_node(SceneNode& node);
 
+        template <typename Type>
+        std::vector<Type*> get_nodes();
+
+        template <typename Type>
+        std::vector<const Type*> get_nodes() const;
+
         virtual void update(float t, float dt);
 
         virtual void render(SceneRenderer& renderer) const;
@@ -35,6 +42,40 @@ namespace pkzo
         // TODO spacial organisation structure
         std::list<SceneNode*> nodes;
     };
+
+    template <typename Type>
+    std::vector<Type*> Scene::get_nodes()
+    {
+        std::vector<Type*> result;    
+
+        for (SceneNode* node : nodes)
+        {
+            Type* tnode = dynamic_cast<Type*>(node);
+            if (tnode != nullptr)
+            {
+                result.push_back(tnode);
+            }
+        }
+
+        return result;
+    }
+
+    template <typename Type>
+    std::vector<const Type*> Scene::get_nodes() const
+    {
+        std::vector<const Type*> result;    
+
+        for (SceneNode* node : nodes)
+        {
+            Type* tnode = dynamic_cast<const Type*>(node);
+            if (tnode != nullptr)
+            {
+                result.push_back(tnode);
+            }
+        }
+
+        return result;
+    }
 }
 
 #endif
