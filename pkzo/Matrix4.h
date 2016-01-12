@@ -57,6 +57,9 @@ namespace pkzo
     Vector4 operator * (const Matrix4& m, const Vector4& v);
 
     PKZO_EXPORT
+    Matrix4 transpose(const Matrix4& m);
+
+    PKZO_EXPORT
     Vector3 transform(const Matrix4& m, const Vector3& v);
 }
 

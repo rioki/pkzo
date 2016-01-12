@@ -145,10 +145,22 @@ namespace pkzo
 
         for (unsigned int i = 0; i < 4; i++) {            
             for (unsigned int j = 0; j < 4; j++) {
-                r[j] += m[i*4 + j] * v[j]; 
+                r[j] += m[j*4 + i] * v[j]; 
             }
         }
 
+        return r;
+    }
+
+    PKZO_EXPORT
+    Matrix4 transpose(const Matrix4& m)
+    {
+        Matrix4 r;
+        for (unsigned int i = 0; i < 4; i++) {            
+            for (unsigned int j = 0; j < 4; j++) {
+                r[j*4 + i] = m[i*4 + j]; 
+            }
+        }
         return r;
     }
 
