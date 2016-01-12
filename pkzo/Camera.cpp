@@ -73,16 +73,20 @@ namespace pkzo
         Vector3    vy = transform(o, Vector3(0, 1, 0));
         Vector3    vz = transform(o, Vector3(0, 0, 1));
 
-        Matrix4 view(vx[0], vx[1], vx[2], 0.0f,
-                     vy[0], vy[1], vy[2], 0.0f,
-                     vz[0], vz[1], vz[2], 0.0f,
-                     0.0f, 0.0f, 0.0f, 1.0f);
+        Vector3 pc = -get_world_position();
 
-        Vector3 pc = transform(view, -get_world_position());
-        view[12] = pc[0];
-        view[13] = pc[1];
-        view[14] = pc[2];
+        Matrix4 mp(1.0f, 0.0f, 0.0f, pc[0],
+                   0.0f, 1.0f, 0.0f, pc[1], 
+                   0.0f, 0.0f, 1.0f, pc[2],
+                   0.0f, 0.0f, 0.0f,  1.0f);
+
+        Matrix4 mo(vx[0], vx[1], vx[2], 0.0f,
+                   vy[0], vy[1], vy[2], 0.0f,
+                   vz[0], vz[1], vz[2], 0.0f,
+                    0.0f,  0.0f,  0.0f, 1.0f);
         
+        Matrix4 view = mp * mo;
+
         renderer.set_projection(projection);
         renderer.set_view(view);
     }
