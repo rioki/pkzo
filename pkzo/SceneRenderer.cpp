@@ -60,6 +60,15 @@ namespace pkzo
         view = value;
     }
 
+    void SceneRenderer::queue_ambient_light(const Color& color)
+    {
+        LightInfo info;
+        info.type      = AMBIENT_LIGHT;
+        info.color     = color;
+
+        lights.push_back(info);
+    }
+
     void SceneRenderer::queue_directional_light(const Vector3& direction, const Color& color)
     {
         LightInfo info;
@@ -83,14 +92,17 @@ namespace pkzo
     void SceneRenderer::render()
     {
         glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LEQUAL);
+        
+        glDisable(GL_BLEND);
+        glBlendFunc(GL_ONE, GL_ONE);
 
         phong_shader.bind();
 
         Matrix3 view3(view); 
 
         phong_shader.set_uniform_matrix("uProjectionMatrix", projection.carray(), 16);
-        phong_shader.set_uniform_matrix("uViewMatrix",       view.carray(),       16);
-        //phong_shader.set_uniform_matrix("uNormalMatrix",     normal.carray(),      9);
+        phong_shader.set_uniform_matrix("uViewMatrix",       view.carray(),       16);        
 
         for (LightInfo& light : lights)
         {
@@ -106,7 +118,7 @@ namespace pkzo
             for (GeometryInfo& geom : geometries)
             {
                 Matrix4 model_view = view * geom.transform;
-                Matrix3 normal(view); // properly transform(inverse(view));
+                Matrix3 normal(model_view); // properly transform(inverse(view));
                
                 phong_shader.set_uniform_matrix("uModelViewMatrix", model_view.carray(), 16);
                 phong_shader.set_uniform_matrix("uNormalMatrix",    normal.carray(),      9);
@@ -114,6 +126,9 @@ namespace pkzo
                 geom.material->setup(phong_shader);
                 geom.mesh->draw(phong_shader);
             }
+
+            // enable blending after the first pass.
+            glEnable(GL_BLEND);
         }
 
         lights.clear();

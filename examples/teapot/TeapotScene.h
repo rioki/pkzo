@@ -4,6 +4,7 @@
 
 #include <pkzo/Scene.h>
 #include <pkzo/Geometry.h>
+#include <pkzo/AmbientLight.h>
 #include <pkzo/DirectionalLight.h>
 #include <pkzo/Camera.h>
 #include <pkzo/Library.h>
@@ -20,7 +21,8 @@ namespace teapot
 
     private:
         pkzo::Geometry         teapot;
-        pkzo::DirectionalLight light0;
+        pkzo::AmbientLight     light0;
+        pkzo::DirectionalLight light1;
         pkzo::Camera           camera;
     };
 

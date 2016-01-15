@@ -9,8 +9,11 @@ namespace teapot
         teapot.set_material(library.load_material("../assets/materials/White.jmn"));
         add_node(teapot);
 
-        light0.set_color(pkzo::Color(0xFFFFFFFF));
+        light0.set_color(pkzo::Color(0.1f, 0.1f, 0.1f));
         add_node(light0);
+
+        light1.set_color(pkzo::Color(0xFFFFFFFF));
+        add_node(light1);
         
         add_node(camera);
     }

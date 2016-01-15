@@ -7,6 +7,8 @@
 #include <list>
 #include <vector>
 
+#include "Color.h"
+
 namespace pkzo
 {
     class SceneRenderer;

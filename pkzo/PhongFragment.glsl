@@ -4,6 +4,11 @@ uniform vec3      uMaterialColor;
 uniform bool      uMaterialHasTexture;
 uniform sampler2D uMaterialTexture;
 
+#define AMBIENT_LIGHT 0
+#define DIFFUSE_LIGHT 1
+#define POINT_LIGHT   2
+#define SPOT_LIGHT    3
+
 uniform int       uLightType;
 uniform vec3      uLightDirection; // transform by view / normal matrix?
 uniform vec3      uLightPosition;  // transform by view matrix
@@ -24,16 +29,23 @@ void main()
 	{
 		materialColor *= texture(uMaterialTexture, vTexCoord).rgb;
 	}
+	
+	if (uLightType == AMBIENT_LIGHT)
+	{
+		result = materialColor * uLightColor;
+	}
+	else
+	{
+		float atten     = 1.0f;
+		vec3  direction = uLightDirection;
+		vec3  normal    = normalize(vNormal);
 
-	float atten     = 1.0f;
-	vec3  direction = uLightDirection;
-	vec3  normal    = normalize(vNormal);
-
-	float nDotL = dot(direction, normal);
-	if (nDotL > 0.00001)
-    {
-        result += nDotL * materialColor * uLightColor * atten;       
-    }
+		float nDotL = dot(direction, normal);
+		if (nDotL > 0.00001)
+		{
+			result += nDotL * materialColor * uLightColor * atten;       
+		}
+	}
 
     gl_FragColor = vec4(result, 1.0);
 }

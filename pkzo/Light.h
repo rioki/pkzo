@@ -20,7 +20,7 @@ namespace pkzo
 
         const Color& get_color() const;
 
-    private:
+    protected:
         Color color;
     };
 }

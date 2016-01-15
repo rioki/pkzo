@@ -34,6 +34,8 @@ namespace pkzo
 
         void set_view(const Matrix4& value);
 
+        void queue_ambient_light(const Color& color);
+
         void queue_directional_light(const Vector3& direction, const Color& color);
 
         void queue_geometry(Matrix4 transform, const Mesh& mesh , const Material& material);
@@ -44,6 +46,7 @@ namespace pkzo
         
         enum LightType 
         {
+            AMBIENT_LIGHT,
             DIRECTIONAL_LIGHT,
             POINT_LIGHT,
             SPOT_LIGHT
