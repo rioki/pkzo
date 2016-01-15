@@ -10,7 +10,7 @@
 namespace teapot
 {
     CameraController::CameraController(TeapotEngine& e) 
-    : engine(e), distance(10), alpha(0), beta(45)
+    : engine(e), distance(10), alpha(180), beta(45)
     {
         pkzo::Mouse& mouse = engine.get_mouse();
 

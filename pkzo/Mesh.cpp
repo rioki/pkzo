@@ -67,6 +67,41 @@ namespace pkzo
         parser.parse(file);
     }
 
+    void Mesh::create_screen_plane()
+    {
+        set_vertex_count(4);
+
+        set_vertex(0, -1.0f, -1.0f, 0.0f);
+        set_vertex(1, -1.0f,  1.0f, 0.0f);
+        set_vertex(2,  1.0f,  1.0f, 0.0f);
+        set_vertex(3,  1.0f, -1.0f, 0.0f);
+
+        set_normal(0, 0.0f, 0.0f, 1.0f);
+        set_normal(1, 0.0f, 0.0f, 1.0f);
+        set_normal(2, 0.0f, 0.0f, 1.0f);
+        set_normal(3, 0.0f, 0.0f, 1.0f);
+
+        set_texcoord(0, 0.0f, 0.0f);
+        set_texcoord(1, 0.0f, 1.0f);
+        set_texcoord(2, 1.0f, 1.0f);
+        set_texcoord(3, 1.0f, 0.0f);
+
+        set_tangent(0, 1.0f, 0.0f, 0.0f);
+        set_tangent(1, 1.0f, 0.0f, 0.0f);
+        set_tangent(2, 1.0f, 0.0f, 0.0f);
+        set_tangent(3, 1.0f, 0.0f, 0.0f);
+
+        set_color(0, 1.0f, 1.0f, 1.0f, 1.0f);
+        set_color(1, 1.0f, 1.0f, 1.0f, 1.0f);
+        set_color(2, 1.0f, 1.0f, 1.0f, 1.0f);
+        set_color(3, 1.0f, 1.0f, 1.0f, 1.0f);
+
+        set_face_count(2);
+        set_face(0, 0, 2, 1);
+        set_face(1, 0, 3, 2);
+    }
+
+
     void Mesh::create_plane(float width, float height)
     {
         float w2 = width / 2.0f;

@@ -18,6 +18,8 @@
 
 namespace pkzo
 {
+    std::string LoadTextResource(HMODULE hModule, LPCTSTR lpName, LPCTSTR lpType);
+
     ScreenRenderer::ScreenRenderer()
     {
         mesh.create_plane(1.0f, 1.0f);
@@ -25,13 +27,8 @@ namespace pkzo
         #ifdef _MSC_VER
         HMODULE hModule = GetModuleHandle(_T("pkzo.dll"));
 
-        HRSRC hInterfaceVertex = FindResource(hModule, MAKEINTRESOURCE(IDR_GLSL_INTERFACE_VERTEX), _T("GLSL"));
-        HGLOBAL hgInterfaceVertex = LoadResource(hModule, hInterfaceVertex);
-        const char* interface_vertex = (const char*)LockResource(hgInterfaceVertex);
-
-        HRSRC hInterfaceFragment = FindResource(hModule, MAKEINTRESOURCE(IDR_GLSL_INTERFACE_FRAGMENT), _T("GLSL"));
-        HGLOBAL hgInterfaceFragment = LoadResource(hModule, hInterfaceFragment);
-        const char* interface_fragment = (const char*)LockResource(hgInterfaceFragment);
+        std::string interface_vertex   = LoadTextResource(hModule, MAKEINTRESOURCE(IDR_GLSL_INTERFACE_VERTEX), _T("GLSL"));
+        std::string interface_fragment = LoadTextResource(hModule, MAKEINTRESOURCE(IDR_GLSL_INTERFACE_FRAGMENT), _T("GLSL"));
         #else
         // TODO
         #endif

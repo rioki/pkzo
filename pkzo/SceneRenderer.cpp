@@ -14,6 +14,7 @@
 #include "Matrix3.h"
 #include "Mesh.h"
 #include "Material.h"
+#include "CubeMap.h"
 
 namespace pkzo
 {
@@ -27,18 +28,26 @@ namespace pkzo
     }
     
     SceneRenderer::SceneRenderer() 
+    : background(nullptr)
     {
         #ifdef _MSC_VER
         HMODULE hModule = GetModuleHandle(_T("pkzo.dll"));
 
         std::string phong_vertex   = LoadTextResource(hModule, MAKEINTRESOURCE(IDR_GLSL_PHONG_VERTEX), _T("GLSL"));
         std::string phong_fragment = LoadTextResource(hModule, MAKEINTRESOURCE(IDR_GLSL_PHONG_FRAGMENT), _T("GLSL"));
+        std::string skybox_vertex   = LoadTextResource(hModule, MAKEINTRESOURCE(IDR_GLSL_SKYBOX_VERTEX), _T("GLSL"));
+        std::string skybox_fragment = LoadTextResource(hModule, MAKEINTRESOURCE(IDR_GLSL_SKYBOX_FRAGMENT), _T("GLSL"));
         #else
         // TODO
         #endif
 
+        skybox_shader.set_vertex_code(skybox_vertex);
+        skybox_shader.set_fragment_code(skybox_fragment);
+
         phong_shader.set_vertex_code(phong_vertex);
         phong_shader.set_fragment_code(phong_fragment);
+
+        screen_mesh.create_screen_plane();
     }
 
     SceneRenderer::~SceneRenderer() {}
@@ -58,6 +67,11 @@ namespace pkzo
     void SceneRenderer::set_view(const Matrix4& value)
     {
         view = value;
+    }
+
+    void SceneRenderer::set_background(const CubeMap& value)
+    {
+        background = &value;
     }
 
     void SceneRenderer::queue_ambient_light(const Color& color)
@@ -90,6 +104,34 @@ namespace pkzo
     }
 
     void SceneRenderer::render()
+    {
+        render_background();
+        render_geometry();
+
+        background = nullptr;
+        lights.clear();
+        geometries.clear();
+    }
+
+    void SceneRenderer::render_background()
+    {
+        if (background != nullptr)
+        {
+            glDisable(GL_DEPTH_TEST);
+
+            skybox_shader.bind();
+
+            skybox_shader.set_uniform_matrix("uProjectionMatrix", projection.carray(), 16);
+            skybox_shader.set_uniform_matrix("uViewMatrix",       view.carray(),       16);
+
+            background->bind(0);
+            skybox_shader.set_uniform("uCubeMap", 0);
+
+            screen_mesh.draw(skybox_shader);
+        }
+    }
+
+    void SceneRenderer::render_geometry()
     {
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
@@ -130,8 +172,5 @@ namespace pkzo
             // enable blending after the first pass.
             glEnable(GL_BLEND);
         }
-
-        lights.clear();
-        geometries.clear();
     }
 }

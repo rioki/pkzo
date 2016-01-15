@@ -197,6 +197,7 @@ copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutD
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="ConfigParser.cpp" />
+    <ClCompile Include="CubeMap.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="EventEmitter.cpp" />
@@ -222,6 +223,7 @@ copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutD
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="ScreenRenderer.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="Slider.cpp" />
     <ClCompile Include="strex.cpp" />
     <ClCompile Include="Text.cpp" />
@@ -241,6 +243,7 @@ copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutD
     <ClInclude Include="compose.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="ConfigParser.h" />
+    <ClInclude Include="CubeMap.h" />
     <ClInclude Include="defines.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="Engine.h" />
@@ -268,6 +271,7 @@ copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutD
     <ClInclude Include="Screen.h" />
     <ClInclude Include="ScreenRenderer.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="SkyBox.h" />
     <ClInclude Include="Slider.h" />
     <ClInclude Include="strex.h" />
     <ClInclude Include="Text.h" />
@@ -283,6 +287,8 @@ copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutD
     <None Include="InterfaceVertex.glsl" />
     <None Include="PhongFragment.glsl" />
     <None Include="PhongVertex.glsl" />
+    <None Include="SkyBoxFragment.glsl" />
+    <None Include="SkyBoxVertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="pkzo.rc" />

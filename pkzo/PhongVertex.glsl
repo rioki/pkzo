@@ -12,8 +12,8 @@ out vec3 vNormal;
 out vec2 vTexCoord;
 
 void main()
-{	
-	vNormal     = uNormalMatrix * aNormal;
-	vTexCoord   = aTexCoord;
+{  
+    vNormal     = uNormalMatrix * aNormal;
+    vTexCoord   = aTexCoord;
     gl_Position = uProjectionMatrix * uModelViewMatrix * vec4(aVertex, 1.0);
 }

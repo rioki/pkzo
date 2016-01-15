@@ -138,6 +138,12 @@
     <ClCompile Include="AmbientLight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CubeMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.h">
@@ -272,6 +278,12 @@
     <ClInclude Include="AmbientLight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CubeMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="InterfaceFragment.glsl">
@@ -284,6 +296,12 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="PhongVertex.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="SkyBoxFragment.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="SkyBoxVertex.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

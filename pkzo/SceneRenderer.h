@@ -10,11 +10,13 @@
 #include "Matrix4.h"
 #include "Color.h"
 #include "Shader.h"
+#include "Mesh.h"
 
 namespace pkzo
 {
     class Mesh;
     class Material;
+    class CubeMap;
     
     class PKZO_EXPORT SceneRenderer
     {
@@ -33,6 +35,8 @@ namespace pkzo
         void set_projection(const Matrix4& value);
 
         void set_view(const Matrix4& value);
+
+        void set_background(const CubeMap& cubemap);
 
         void queue_ambient_light(const Color& color);
 
@@ -70,10 +74,17 @@ namespace pkzo
 
         Matrix4                 projection;
         Matrix4                 view;
+        const CubeMap*          background;
         std::list<LightInfo>    lights;
         std::list<GeometryInfo> geometries;
 
+        Shader                  skybox_shader;
         Shader                  phong_shader;
+
+        Mesh                    screen_mesh;
+
+        void render_background();
+        void render_geometry();
     };
 };
 

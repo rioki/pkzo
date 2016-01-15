@@ -11,6 +11,7 @@
 namespace pkzo
 {
     class Texture;
+    class CubeMap;
     class Font;
     class Mesh;
     class Material;
@@ -24,6 +25,8 @@ namespace pkzo
 
         std::shared_ptr<Texture> load_texture(const std::string& file);
 
+        std::shared_ptr<CubeMap> load_cubemap(const std::string& file);
+
         std::shared_ptr<Font> load_font(const std::string& file, unsigned int size);
 
         std::shared_ptr<Mesh> load_mesh(const std::string& file);
@@ -34,6 +37,7 @@ namespace pkzo
         typedef std::tuple<std::string, unsigned int> FontId;
         
         std::map<std::string, std::shared_ptr<Texture>>  textures;
+        std::map<std::string, std::shared_ptr<CubeMap>>  cubemaps;
         std::map<FontId, std::shared_ptr<Font>>          fonts;
         std::map<std::string, std::shared_ptr<Mesh>>     meshes;
         std::map<std::string, std::shared_ptr<Material>> materials;

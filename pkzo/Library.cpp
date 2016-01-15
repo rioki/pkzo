@@ -2,6 +2,7 @@
 #include "Library.h"
 
 #include "Texture.h"
+#include "CubeMap.h"
 #include "Font.h"
 #include "Mesh.h"
 #include "Material.h"
@@ -25,6 +26,22 @@ namespace pkzo
             texture->load(file);
             textures[file] = texture;
             return texture;
+        }
+    }
+
+    std::shared_ptr<CubeMap> Library::load_cubemap(const std::string& file)
+    {
+        auto i = cubemaps.find(file);
+        if (i != cubemaps.end())
+        {
+            return i->second;
+        }
+        else
+        {
+            std::shared_ptr<CubeMap> cubemap(new CubeMap);
+            cubemap->load(file);
+            cubemaps[file] = cubemap;
+            return cubemap;
         }
     }
 

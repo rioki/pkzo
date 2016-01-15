@@ -10,4 +10,5 @@ apidoc
 *.sdf
 *.user
 *.opendb
+*.apps
 /pkzo-*/

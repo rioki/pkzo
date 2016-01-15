@@ -83,6 +83,8 @@ namespace pkzo
          **/
         void create_plane(float width, float height);
 
+        void create_screen_plane();
+
         /**
          * Set the Vertex Count
          * 
