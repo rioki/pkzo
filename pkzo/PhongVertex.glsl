@@ -1,8 +1,8 @@
 #version 400
 
 uniform mat4 uProjectionMatrix;
-uniform mat4 uViewMatrix;
 uniform mat4 uModelViewMatrix;
+uniform mat3 uNormalMatrix;
 
 in vec3 aVertex;
 in vec3 aNormal;
@@ -13,10 +13,7 @@ out vec2 vTexCoord;
 
 void main()
 {	
-	// TODO uniform
-	mat3 normalMatrix = mat3(uViewMatrix);
-
-	vNormal     = normalMatrix * aNormal;
+	vNormal     = uNormalMatrix * aNormal;
 	vTexCoord   = aTexCoord;
     gl_Position = uProjectionMatrix * uModelViewMatrix * vec4(aVertex, 1.0);
 }

@@ -34,7 +34,7 @@ namespace pkzo
         data[1] = v1;
         data[2] = v2;
         data[3] = v3;
-        data[3] = v3;
+        data[4] = v3;
         data[5] = v5;
         data[6] = v6;
         data[7] = v7;
@@ -47,7 +47,7 @@ namespace pkzo
         data[1] = m4[1];
         data[2] = m4[2];
         data[3] = m4[4];
-        data[3] = m4[5];
+        data[4] = m4[5];
         data[5] = m4[6];
         data[6] = m4[8];
         data[7] = m4[9];
