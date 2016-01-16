@@ -70,27 +70,9 @@ namespace pkzo
         screen_renderer = new ScreenRenderer;
         scene_renderer  = new SceneRenderer;
 
-        // REVIEW: The event routing, should be engine -> screen -> mouse/keyboard/joystick
-
-        mouse = new Mouse;
-        mouse->on(Mouse::BUTTON_PRESS, [this] (unsigned int button, unsigned int x, unsigned int y) {
-            on_mouse_press(button, x, y);
-        });
-        mouse->on(Mouse::BUTTON_RELEASE, [this] (unsigned int button, unsigned int x, unsigned int y) {
-            on_mouse_release(button, x, y);
-        });
-        mouse->on(Mouse::MOVE, [this] (unsigned int x, unsigned int y, int dx, int dy) {
-            on_mouse_move(x, y, dx, dy);
-        });
-
+        mouse    = new Mouse;       
         keyboard = new Keyboard;
-        keyboard->on(Keyboard::KEY_PRESS, [this] (Key key) {
-            on_key_press(key);
-        });
-        keyboard->on(Keyboard::KEY_RELEASE, [this] (Key key) {
-            on_key_release(key);
-        });
-
+        
         int numj = SDL_NumJoysticks();
         joysticks.resize(numj);
         for (int i = 0; i < numj; i++)
@@ -101,9 +83,32 @@ namespace pkzo
 
     Engine::~Engine() 
     {
+        delete screen;
+        screen = nullptr;
+
+        delete scene;
+        scene = nullptr;
+
+        delete screen_renderer;
+        screen_renderer = nullptr;
+
+        delete scene_renderer;
+        scene_renderer = nullptr;
+        
         delete window;
+        window = nullptr;
+
         delete mouse;
+        window = nullptr;
+
         delete keyboard;
+        keyboard = nullptr;
+
+        for (auto js : joysticks)
+        {
+            delete js;
+        }
+        joysticks.clear();
 
         TTF_Quit();
         SDL_Quit();
@@ -315,60 +320,80 @@ namespace pkzo
         stop();
     }
 
-    void Engine::on_mouse_press(unsigned int button, unsigned int x, unsigned int y) {}
-
-    void Engine::on_mouse_release(unsigned int button, unsigned int x, unsigned int y) {}
-
-    void Engine::on_mouse_move(unsigned int x, unsigned int y, int dx, int dy) {}
-
-    void Engine::on_key_press(Key key)
+    bool Engine::handle_event(SDL_Event& event)
     {
-        if (key == KEY_ESCAPE)
+        if (screen)
         {
-            stop();
+            switch (event.type)
+            {
+                /*case SDL_KEYDOWN:
+                    break;
+                case SDL_KEYUP:
+                case SDL_TEXTINPUT:
+                case SDL_TEXTEDITING:
+                    
+                    break;*/
+                // TODO scaling
+                case SDL_MOUSEBUTTONDOWN:
+                    screen->handle_mouse_down(event.button.button, event.button.x, event.button.y);
+                    break;
+                case SDL_MOUSEBUTTONUP:
+                    screen->handle_mouse_up(event.button.button, event.button.x, event.button.y);
+                    break;
+                case SDL_MOUSEMOTION:
+                    screen->handle_mouse_move(event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel);
+                    break;
+            default:
+                // stfu
+                break;
+            }
         }
+        return false;
     }
-
-    void Engine::on_key_release(Key key) {}
 
     void Engine::route_events()
     {
         SDL_Event event;
         while (SDL_PollEvent(&event))
         {
-            switch (event.type)
+            bool done = handle_event(event);
+            
+            if (!done)
             {
-                case SDL_QUIT:
-                    on_quit();
-                    break;
-                case SDL_KEYDOWN:
-                case SDL_KEYUP:
-                case SDL_TEXTINPUT:
-                case SDL_TEXTEDITING:
-                    assert(keyboard != nullptr);
-                    keyboard->handle_event(event);
-                    break;
-                case SDL_MOUSEBUTTONDOWN:
-                case SDL_MOUSEBUTTONUP:
-                case SDL_MOUSEMOTION:
-                    assert(mouse != nullptr);
-                    mouse->handle_event(event);
-                    break;
-                case SDL_JOYAXISMOTION:
-                case SDL_JOYBALLMOTION:   
-                case SDL_JOYHATMOTION:
-                case SDL_JOYBUTTONDOWN:
-                case SDL_JOYBUTTONUP:
+                switch (event.type)
                 {
-                    for (Joystick* joystick : joysticks)
+                    case SDL_QUIT:
+                        on_quit();
+                        break;
+                    case SDL_KEYDOWN:
+                    case SDL_KEYUP:
+                    case SDL_TEXTINPUT:
+                    case SDL_TEXTEDITING:
+                        assert(keyboard != nullptr);
+                        keyboard->handle_event(event);
+                        break;
+                    case SDL_MOUSEBUTTONDOWN:
+                    case SDL_MOUSEBUTTONUP:
+                    case SDL_MOUSEMOTION:
+                        assert(mouse != nullptr);
+                        mouse->handle_event(event);
+                        break;
+                    case SDL_JOYAXISMOTION:
+                    case SDL_JOYBALLMOTION:   
+                    case SDL_JOYHATMOTION:
+                    case SDL_JOYBUTTONDOWN:
+                    case SDL_JOYBUTTONUP:
                     {
-                        joystick->handle_event(event);
+                        for (Joystick* joystick : joysticks)
+                        {
+                            joystick->handle_event(event);
+                        }
+                        break;
                     }
+                default:
+                    // stfu
                     break;
                 }
-            default:
-                // stfu
-                break;
             }
         }
     }

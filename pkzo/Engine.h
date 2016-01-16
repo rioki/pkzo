@@ -10,6 +10,8 @@
 #include "Key.h"
 #include "EventEmitter.h"
 
+union SDL_Event;
+
 namespace pkzo
 {
     class Config;
@@ -100,16 +102,6 @@ namespace pkzo
 
         virtual void on_quit();
 
-        virtual void on_mouse_press(unsigned int button, unsigned int x, unsigned int y);
-
-        virtual void on_mouse_release(unsigned int button, unsigned int x, unsigned int y);
-
-        virtual void on_mouse_move(unsigned int x, unsigned int y, int dx, int dy);
-
-        virtual void on_key_press(Key key);
-
-        virtual void on_key_release(Key key);
-
     private:
         std::string id;
         bool        running;
@@ -132,6 +124,7 @@ namespace pkzo
         Scene*          scene;
         Scene*          next_scene;
 
+        bool handle_event(SDL_Event& event);
         void route_events();
     };
 }
