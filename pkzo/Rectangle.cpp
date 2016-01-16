@@ -24,7 +24,7 @@ namespace pkzo
         texture = value;
         if (texture)
         {
-            set_size(texture->get_width(), texture->get_height());
+            set_size(Vector2(texture->get_width(), texture->get_height()));
         }
     }
 
@@ -35,6 +35,13 @@ namespace pkzo
 
     void Rectangle::draw(ScreenRenderer& renderer) const
     {
-        renderer.draw_rect(x, y, width, height, color.carray(), texture.get());
+        if (texture)
+        {
+            renderer.draw_rect(position, size, color, *texture);
+        }
+        else
+        {
+            renderer.draw_rect(position, size, color);
+        }
     }
 }

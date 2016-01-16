@@ -5,12 +5,13 @@
 #include "Widget.h"
 
 #include <memory>
-#include <pkzo/Texture.h>
-#include <pkzo/Color.h>
+
+#include "Texture.h"
+#include "Color.h"
 
 namespace pkzo
 {
-    class PKZOUI_EXPORT Rectangle : public Widget
+    class PKZO_EXPORT Rectangle : public Widget
     {
     public:
 
