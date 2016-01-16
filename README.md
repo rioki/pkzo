@@ -80,7 +80,8 @@ The DejaVu fonts are copyright Bitstream. DejaVu changes are in public
 domain. Glyphs imported from Arev fonts are copyright Tavmjong Bah. 
 See examples/assets/fonts/DejaVu-LICENSE.txt for details.
 
-The sky textures (examples/assets/textures/Morning_*.jpg) are from 
+The sky textures (examples/assets/textures/Morning_*.jpg and 
+examples/assets/textures/CloudyAfternoon_*.jpg and) are from 
 "Fully Immersive 360° Sky Backgrounds" package by Johannes Schloerb. 
 Redistribution is limited to the pkzo examples. But you can get your
 own license under http://www.turbosquid.com/FullPreview/Index.cfm/ID/240748.

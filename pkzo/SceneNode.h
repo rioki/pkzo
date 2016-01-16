@@ -43,6 +43,8 @@ namespace pkzo
         SceneNode* parent;
         Vector3  position;
         Quaternion  orientation;
+
+    friend class SceneNodeGroup;
     };
 }
 

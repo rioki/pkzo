@@ -220,6 +220,7 @@ copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutD
     <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneNode.cpp" />
+    <ClCompile Include="SceneNodeGroup.cpp" />
     <ClCompile Include="SceneRenderer.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="ScreenRenderer.cpp" />
@@ -269,6 +270,7 @@ copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutD
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneNode.h" />
+    <ClInclude Include="SceneNodeGroup.h" />
     <ClInclude Include="SceneRenderer.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="ScreenRenderer.h" />

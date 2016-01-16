@@ -159,7 +159,7 @@ namespace pkzo
 
             for (GeometryInfo& geom : geometries)
             {
-                Matrix4 model_view = view * geom.transform;
+                Matrix4 model_view = geom.transform * view;
                 Matrix3 normal(model_view); // properly transform(inverse(view));
                
                 phong_shader.set_uniform_matrix("uModelViewMatrix", model_view.carray(), 16);
