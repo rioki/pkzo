@@ -46,11 +46,11 @@ namespace pkzo
 
         virtual void draw(ScreenRenderer& renderer) const;
 
-        virtual void handle_mouse_move(unsigned int x, unsigned int y, int dx, int dy);
+        virtual void handle_mouse_move(Vector2 pos, Vector2 mov);
 
-        virtual void handle_mouse_down(unsigned int button, unsigned int x, unsigned int y);
+        virtual void handle_mouse_down(unsigned int button, Vector2 pos);
 
-        virtual void handle_mouse_up(unsigned int button, unsigned int x, unsigned int y);
+        virtual void handle_mouse_up(unsigned int button, Vector2 pos);
 
     private:
         Vector2 size;

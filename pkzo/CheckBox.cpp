@@ -122,9 +122,9 @@ namespace pkzo
     }
 
 
-    void CheckBox::handle_mouse_up(unsigned int button, unsigned int bx, unsigned int by)
+    void CheckBox::handle_mouse_up(unsigned int button, Vector2 pos)
     {
-        if (button == 1 && bx > position[0] && by > position[1] && bx < position[0] + size[0] && by < position[1] + size[1])
+        if (button == 1 && pos[0] > position[0] && pos[1] > position[1] && pos[0] < position[0] + size[0] && pos[1] < position[1] + size[1])
         {
             checked = !checked;
             if (toggle_cb)

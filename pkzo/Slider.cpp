@@ -89,12 +89,12 @@ namespace pkzo
         renderer.draw_rect(position + Vector2(nx, 0), Vector2((float)nob->get_width(), (float)nob->get_height()), nob_color, *nob);
     }
 
-    void Slider::handle_mouse_move(unsigned int bx, unsigned int by, int dx, int dy) 
+    void Slider::handle_mouse_move(Vector2 pos, Vector2 mov) 
     {
-        if (active && bx > position[0] && bx < position[0] + size[0])
+        if (active && pos[0] > position[0] && pos[0] < position[0] + size[0])
         {
-            unsigned int dw = bx - position[0];
-            value = static_cast<unsigned int>(static_cast<float>(dw) / static_cast<float>(size[0])* increments);
+            float dw = pos[0] - position[0];
+            value = static_cast<unsigned int>((dw / size[0]) * increments);
 
             if (change_cb)
             {
@@ -103,15 +103,15 @@ namespace pkzo
         }
     }
 
-    void Slider::handle_mouse_down(unsigned int button, unsigned int bx, unsigned int by)
+    void Slider::handle_mouse_down(unsigned int button, Vector2 pos)
     {
-        if (button == 1 && bx > position[0] && by > position[1] && 
-            bx < position[0] + size[0] && by < position[1] + size[1])
+        if (button == 1 && pos[0] > position[0] && pos[1] > position[1] && 
+            pos[0] < position[0] + size[0] && pos[1] < position[1] + size[1])
         {
             active = true;
 
-            unsigned int dw = bx - position[0];
-            value = static_cast<unsigned int>(static_cast<float>(dw) / static_cast<float>(size[0])* increments);
+            float dw = pos[0] - position[0];
+            value = static_cast<unsigned int>((dw / size[0]) * increments);
 
             if (change_cb)
             {
@@ -120,7 +120,7 @@ namespace pkzo
         }
     }
 
-    void Slider::handle_mouse_up(unsigned int button, unsigned int bx, unsigned int by)
+    void Slider::handle_mouse_up(unsigned int button, Vector2 pos)
     {
         if (button == 1)
         {

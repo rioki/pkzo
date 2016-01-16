@@ -51,7 +51,7 @@ namespace pkzo
 
         void draw(ScreenRenderer & renderer) const override;
 
-        void handle_mouse_up(unsigned int button, unsigned int x, unsigned int y) override;
+        void handle_mouse_up(unsigned int button, Vector2 pos) override;
 
         void set_checked(bool value);
 

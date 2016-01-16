@@ -49,11 +49,11 @@ namespace pkzo
 
         void draw(ScreenRenderer & renderer) const override;
 
-        void handle_mouse_move(unsigned int x, unsigned int y, int dx, int dy) override;
-
-        void handle_mouse_down(unsigned int button, unsigned int x, unsigned int y) override;
-
-        void handle_mouse_up(unsigned int button, unsigned int x, unsigned int y) override;
+        void handle_mouse_move(Vector2 pos, Vector2 mov) override;
+        
+        void handle_mouse_down(unsigned int button, Vector2 pos) override;
+        
+        void handle_mouse_up(unsigned int button, Vector2 pos) override;
 
     private:
         unsigned int value;

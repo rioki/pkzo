@@ -86,14 +86,9 @@ namespace pkzo
         click_cb = cb;
     }
 
-    void Button::handle_mouse_down(unsigned int button, unsigned int x, unsigned int y)
+    void Button::handle_mouse_up(unsigned int button, Vector2 pos)
     {
-
-    }
-
-    void Button::handle_mouse_up(unsigned int button, unsigned int bx, unsigned int by)
-    {
-        if (button == 1 && bx > position[0] && by > position[1] && bx < position[0] + size[0] && by < position[1] + size[1])
+        if (button == 1 && pos[0] > position[0] && pos[1] > position[1] && pos[0] < position[0] + size[0] && pos[1] < position[1] + size[1])
         {
             if (click_cb)
             {

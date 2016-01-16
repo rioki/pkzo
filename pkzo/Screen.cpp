@@ -78,27 +78,27 @@ namespace pkzo
         }
     }
 
-    void Screen::handle_mouse_move(unsigned int x, unsigned int y, int dx, int dy)
+    void Screen::handle_mouse_move(Vector2 pos, Vector2 mov)
     {
         for (Widget* widget : widgets)
         {
-            widget->handle_mouse_move(x, y, dx, dy);
+            widget->handle_mouse_move(pos, mov);
         }
     }
     
-    void Screen::handle_mouse_down(unsigned int button, unsigned int x, unsigned int y)
+    void Screen::handle_mouse_down(unsigned int button, Vector2 pos)
     {
         for (Widget* widget : widgets)
         {
-            widget->handle_mouse_down(button, x, y);
+            widget->handle_mouse_down(button, pos);
         }
     }
 
-    void Screen::handle_mouse_up(unsigned int button, unsigned int x, unsigned int y)
+    void Screen::handle_mouse_up(unsigned int button, Vector2 pos)
     {
         for (Widget* widget : widgets)
         {
-            widget->handle_mouse_up(button, x, y);
+            widget->handle_mouse_up(button, pos);
         }
     }
 }

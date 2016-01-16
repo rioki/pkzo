@@ -320,34 +320,49 @@ namespace pkzo
         stop();
     }
 
+        
+    Vector2 scale(Vector2 value, Vector2 src, Vector2 target)
+    {
+        float fx = target[0] / src[0];
+        float fy = target[1] / src[1];
+        
+        return Vector2(value[0] * fx, value[1] * fy);
+    }
+
+
     bool Engine::handle_event(SDL_Event& event)
     {
         if (screen)
         {
+            Vector2 wsize(window->get_width(), window->get_height());
+
             switch (event.type)
             {
-                /*case SDL_KEYDOWN:
-                    break;
-                case SDL_KEYUP:
-                case SDL_TEXTINPUT:
-                case SDL_TEXTEDITING:
-                    
-                    break;*/
-                // TODO scaling
                 case SDL_MOUSEBUTTONDOWN:
-                    screen->handle_mouse_down(event.button.button, event.button.x, event.button.y);
+                {
+                    Vector2 pos = scale(Vector2(event.button.x, event.button.y), wsize, screen->get_size());
+                    screen->handle_mouse_down(event.button.button, pos);
                     break;
+                }
                 case SDL_MOUSEBUTTONUP:
-                    screen->handle_mouse_up(event.button.button, event.button.x, event.button.y);
+                {
+                    Vector2 pos = scale(Vector2(event.button.x, event.button.y), wsize, screen->get_size());
+                    screen->handle_mouse_up(event.button.button, pos);
                     break;
+                }
                 case SDL_MOUSEMOTION:
-                    screen->handle_mouse_move(event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel);
+                {
+                    Vector2 pos = scale(Vector2(event.motion.x, event.motion.y), wsize, screen->get_size());
+                    Vector2 mov = scale(Vector2(event.motion.xrel, event.motion.yrel), wsize, screen->get_size());
+                    screen->handle_mouse_move(pos, mov);
                     break;
+                }
             default:
                 // stfu
                 break;
             }
         }
+        // TOOD actually implement a check if the event was consumed
         return false;
     }
 

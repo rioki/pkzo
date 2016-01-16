@@ -45,9 +45,7 @@ namespace pkzo
 
         void on_click(std::function<void ()> cb);
 
-        void handle_mouse_down(unsigned int button, unsigned int x, unsigned int y) override;
-
-        void handle_mouse_up(unsigned int button, unsigned int x, unsigned int y) override;
+        void handle_mouse_up(unsigned int button, Vector2 pos) override;
 
     private:
         std::string                    caption;

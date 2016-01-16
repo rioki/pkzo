@@ -30,9 +30,9 @@ namespace pkzo
 
     void Widget::draw(ScreenRenderer& renderer) const {}
 
-    void Widget::handle_mouse_move(unsigned int x, unsigned int y, int dx, int dy) {}
+    void Widget::handle_mouse_move(Vector2 pos, Vector2 mov) {}
 
-    void Widget::handle_mouse_down(unsigned int button, unsigned int x, unsigned int y) {}
+    void Widget::handle_mouse_down(unsigned int button, Vector2 pos) {}
 
-    void Widget::handle_mouse_up(unsigned int button, unsigned int x, unsigned int y) {}
+    void Widget::handle_mouse_up(unsigned int button, Vector2 pos) {}
 }
