@@ -1,8 +1,6 @@
 
 #include "Pawn.h"
 
-#include <iostream>
-
 #include <pkzo/Mouse.h>
 #include <pkzo/Keyboard.h>
 
@@ -79,7 +77,5 @@ namespace atrium
 
         set_orientation(o);
         set_position(p);
-
-        std::cout << "t: " << t << " dt: " << dt << std::endl;
     }
 }

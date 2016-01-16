@@ -18,7 +18,7 @@ namespace atrium
         add_node(sun_light);
 
         sky.set_cubemap(lib.load_cubemap("../assets/textures/CloudyAfternoon.jcm"));
-        //add_node(sky);
+        add_node(sky);
 
         auto colum_mesh   = lib.load_mesh("../assets/meshes/Column.ply");
         auto ground2_mesh = lib.load_mesh("../assets/meshes/Ground2.ply");
