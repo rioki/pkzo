@@ -284,6 +284,7 @@ namespace pkzo
             clock_t now = std::clock();;
             float t  = (float)now / (float)CLOCKS_PER_SEC;
             float dt = (float)(now - last_frame) / (float)CLOCKS_PER_SEC;
+            last_frame = now;
 
             emit<float, float>(TICK, t, dt);
 

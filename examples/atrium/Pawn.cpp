@@ -1,6 +1,8 @@
 
 #include "Pawn.h"
 
+#include <iostream>
+
 #include <pkzo/Mouse.h>
 #include <pkzo/Keyboard.h>
 
@@ -10,7 +12,7 @@ using pkzo::Quaternion;
 namespace atrium
 {
     Pawn::Pawn(pkzo::Engine& e) 
-    : engine(e), speed(0.05), invmouse(false), pitch(0), yaw(0)
+    : engine(e), speed(2.0), invmouse(false), pitch(0), yaw(0)
     {
         // TMP 
         set_position(pkzo::Vector3(-5.0f, 0, 2));
@@ -77,5 +79,7 @@ namespace atrium
 
         set_orientation(o);
         set_position(p);
+
+        std::cout << "t: " << t << " dt: " << dt << std::endl;
     }
 }
