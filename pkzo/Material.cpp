@@ -11,7 +11,8 @@
 
 namespace pkzo
 {
-    Material::Material() {}
+    Material::Material()
+    : roughness(0.5) {}
     
     Material::~Material() {}
 
@@ -23,6 +24,16 @@ namespace pkzo
     const Color& Material::get_color() const
     {
         return color;
+    }
+
+    void Material::set_roughness(float value)
+    {
+        roughness = value;
+    }
+
+    float Material::get_roughness() const
+    {
+        return roughness;
     }
 
     void Material::set_texture(std::shared_ptr<pkzo::Texture> value)
@@ -64,6 +75,11 @@ namespace pkzo
             }
         }
         
+        if (rmaterial.count("roughness"))
+        {
+            roughness = rmaterial["roughness"];
+        }
+
         if (rmaterial.count("texture"))
         {
             std::string texture_file = path::join(dir, rmaterial["texture"]);
@@ -76,6 +92,7 @@ namespace pkzo
     void Material::setup(Shader& shader) const
     {
         shader.set_uniform("uMaterialColor", color.carray(), 3);
+        shader.set_uniform("uMaterialRoughness", roughness);
         
         if (texture)
         {

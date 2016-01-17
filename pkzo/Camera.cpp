@@ -89,5 +89,6 @@ namespace pkzo
 
         renderer.set_projection(projection);
         renderer.set_view(view);
+        renderer.camera_position = -pc;
     }
 }

@@ -12,7 +12,7 @@ namespace teapot
         light0.set_color(pkzo::Color(0x644320FF));
         add_node(light0);
 
-        light1.set_color(pkzo::Color(0xFFFFF5FF));
+        light1.set_color(pkzo::Color(0xCFCFC5FF));
         light1.set_orientation(pkzo::Quaternion::axis_angle(-135, pkzo::Vector3(0, 0, 1)) * 
                                pkzo::Quaternion::axis_angle(45, pkzo::Vector3(1, 0, 0)));
         add_node(light1);

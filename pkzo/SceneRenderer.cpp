@@ -169,6 +169,7 @@ namespace pkzo
 
         phong_shader.set_uniform_matrix("uProjectionMatrix", projection.carray(), 16);
         phong_shader.set_uniform_matrix("uViewMatrix",       view.carray(),       16);        
+        phong_shader.set_uniform("uCameraPosition", camera_position[0], camera_position[1], camera_position[2]);
 
         for (LightInfo& light : lights)
         {

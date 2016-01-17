@@ -1,4 +1,5 @@
 {
   "color": [1, 1, 1, 1],
-  "texture": "../textures/YellowConcrete.jpg"
+  "texture": "../textures/YellowConcrete.jpg",
+  "roughness": 0.9
 }

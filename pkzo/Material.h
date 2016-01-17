@@ -29,6 +29,10 @@ namespace pkzo
 
         const Color& get_color() const;
 
+        void set_roughness(float value);
+
+        float get_roughness() const;
+
         void set_texture(std::shared_ptr<pkzo::Texture> value);
 
         std::shared_ptr<pkzo::Texture> get_texture() const;
@@ -39,6 +43,7 @@ namespace pkzo
 
     private:
         Color                          color;
+        float                          roughness;
         std::shared_ptr<pkzo::Texture> texture;
     };
 };

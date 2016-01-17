@@ -77,6 +77,7 @@ namespace pkzo
             const Material* material;
         };
 
+        Vector3                 camera_position;
         Matrix4                 projection;
         Matrix4                 view;
         const CubeMap*          background;
@@ -90,6 +91,9 @@ namespace pkzo
 
         void render_background();
         void render_geometry();
+
+        // TMP
+    friend class Camera;
     };
 };
 
