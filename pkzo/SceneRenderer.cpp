@@ -93,6 +93,17 @@ namespace pkzo
         lights.push_back(info);
     }
 
+    void SceneRenderer::queue_point_light(const Vector3& position, const Color& color, float range)
+    {
+        LightInfo info;
+        info.type      = POINT_LIGHT;
+        info.position  = position;
+        info.range     = range;
+        info.color     = color;
+
+        lights.push_back(info);
+    }
+
     void SceneRenderer::queue_geometry(Matrix4 transform, const Mesh& mesh , const Material& material)
     {
         GeometryInfo info;
@@ -148,22 +159,19 @@ namespace pkzo
 
         for (LightInfo& light : lights)
         {
-            Vector3 ldir = transform(view3, light.direction);
-            Vector3 lpos = transform(view, light.direction);
-
             phong_shader.set_uniform("uLightType",      light.type);
-            phong_shader.set_uniform("uLightDirection", ldir.carray(), 3);
-            phong_shader.set_uniform("uLightPosition",  lpos.carray(),  3);
+            phong_shader.set_uniform("uLightDirection", light.direction.carray(), 3);
+            phong_shader.set_uniform("uLightPosition",  light.position.carray(),  3);
+            phong_shader.set_uniform("uLightRange",     light.range);
             phong_shader.set_uniform("uLightAngle",     light.angle);
             phong_shader.set_uniform("uLightColor",     light.color.carray(),     3);
 
             for (GeometryInfo& geom : geometries)
             {
                 Matrix4 model_view = geom.transform * view;
-                Matrix3 normal(model_view); // properly transform(inverse(view));
-               
-                phong_shader.set_uniform_matrix("uModelViewMatrix", model_view.carray(), 16);
-                phong_shader.set_uniform_matrix("uNormalMatrix",    normal.carray(),      9);
+                
+                phong_shader.set_uniform_matrix("uModelMatrix",     geom.transform.carray(), 16);
+                phong_shader.set_uniform_matrix("uModelViewMatrix", model_view.carray(), 16);                
                 
                 geom.material->setup(phong_shader);
                 geom.mesh->draw(phong_shader);

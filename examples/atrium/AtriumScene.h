@@ -19,9 +19,10 @@ namespace atrium
 
     private:
         pkzo::AmbientLight           ambient_light;
-        pkzo::DirectionalLight       sun_light;
+        pkzo::DirectionalLight       sun_light;        
         pkzo::SkyBox                 sky;
         std::vector<pkzo::Geometry*> static_objets;
+        std::vector<pkzo::Light*>    lights;
     };
 }
 

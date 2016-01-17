@@ -42,6 +42,8 @@ namespace pkzo
 
         void queue_directional_light(const Vector3& direction, const Color& color);
 
+        void queue_point_light(const Vector3& position, const Color& color, float range);
+
         void queue_geometry(Matrix4 transform, const Mesh& mesh , const Material& material);
 
         void render();
@@ -61,6 +63,7 @@ namespace pkzo
             LightType type;
             Vector3   direction;
             Vector3   position;
+            float     range;
             float     angle;
             Color     color;
         };

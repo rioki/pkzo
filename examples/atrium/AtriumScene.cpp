@@ -1,6 +1,8 @@
 
 #include "AtriumScene.h"
 
+#include <pkzo/PointLight.h>
+
 using pkzo::Color;
 using pkzo::Vector3;
 using pkzo::Quaternion;
@@ -13,7 +15,7 @@ namespace atrium
         add_node(ambient_light);
 
         sun_light.set_color(Color(0.5f, 0.5f, 0.5f));
-        sun_light.set_orientation(pkzo::Quaternion::axis_angle(-135, pkzo::Vector3(0, 0, 1)) * 
+        sun_light.set_orientation(pkzo::Quaternion::axis_angle(90.0f, pkzo::Vector3(0, 0, 1)) * 
                                   pkzo::Quaternion::axis_angle(20, pkzo::Vector3(1, 0, 0)));
         add_node(sun_light);
 
@@ -222,6 +224,16 @@ namespace atrium
             add_node(*wall);
             static_objets.push_back(wall);
         }
+
+        for (unsigned int i = 0; i < 3; i++)
+        {
+            pkzo::PointLight* light = new pkzo::PointLight;
+            light->set_position(Vector3(-4.0f + (float)i * 4.0f, -3.3f, 2.0f));
+            light->set_color(Color(0xFFCC7EFF));
+            light->set_range(4.0f);
+            add_node(*light);
+            lights.push_back(light);
+        }
     }
 
     AtriumScene::~AtriumScene()
@@ -231,5 +243,11 @@ namespace atrium
             delete obj;
         }
         static_objets.clear();
+
+        for (auto light : lights)
+        {
+            delete light;
+        }
+        lights.clear();
     }
 }
