@@ -2,6 +2,7 @@
 #include "AtriumScene.h"
 
 #include <pkzo/PointLight.h>
+#include <pkzo/SpotLight.h>
 
 using pkzo::Color;
 using pkzo::Vector3;
@@ -233,6 +234,14 @@ namespace atrium
             light->set_range(4.0f);
             add_node(*light);
             lights.push_back(light);
+
+            pkzo::SpotLight* slight = new pkzo::SpotLight;
+            slight->set_position(Vector3(-4.0f + (float)i * 4.0f, 3.3f, 2.0f));
+            slight->set_color(Color(0xFFCC7EFF));
+            slight->set_range(4.0f);
+            slight->set_angle(25.0f);
+            add_node(*slight);
+            lights.push_back(slight);
         }
     }
 

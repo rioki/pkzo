@@ -12,7 +12,7 @@ uniform int       uLightType;
 uniform vec3      uLightDirection;
 uniform vec3      uLightPosition;
 uniform float     uLightRange;
-uniform float     uLightAngle;
+uniform float     uLightCutoff;
 uniform vec3      uLightColor;
 
 in  vec3 vPosition;
@@ -58,7 +58,7 @@ void main()
             atten = 1.0 - (dist / uLightRange);
         }
 
-        /*if (uLightType == SPOT_LIGHT) 
+        if (uLightType == SPOT_LIGHT) 
         {
             lightDirection = uLightPosition - vPosition;
             float dist = length(lightDirection);
@@ -66,14 +66,18 @@ void main()
             {
                 discard;
             }
+
             lightDirection = normalize(lightDirection);
-            atten = 1.0 - (dist / uLightRange);    
-        
-            if (dot(lightDirection, -uLightDirection) < uLightCutoff) 
+            atten = 1.0 - (dist / uLightRange);
+
+            //atten = dot(lightDirection, uLightDirection) < uLightCutoff;
+            
+            if (dot(lightDirection, uLightDirection) < uLightCutoff) 
             {
+                atten = 1.0;
                 discard;
-            }  
-        }*/
+            }
+        }
     
         vec3  normal = normalize(vNormal);
         float nDotL  = dot(lightDirection, normal);

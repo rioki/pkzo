@@ -44,6 +44,8 @@ namespace pkzo
 
         void queue_point_light(const Vector3& position, const Color& color, float range);
 
+        void queue_spot_light(const Vector3& position, const Vector3& direction, const Color& color, float range, float angle);
+
         void queue_geometry(Matrix4 transform, const Mesh& mesh , const Material& material);
 
         void render();

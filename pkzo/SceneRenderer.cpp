@@ -104,6 +104,19 @@ namespace pkzo
         lights.push_back(info);
     }
 
+    void SceneRenderer::queue_spot_light(const Vector3& position, const Vector3& direction, const Color& color, float range, float angle)
+    {
+        LightInfo info;
+        info.type      = SPOT_LIGHT;
+        info.position  = position;
+        info.direction = direction;
+        info.color     = color;
+        info.range     = range;
+        info.angle     = angle;        
+
+        lights.push_back(info);
+    }
+
     void SceneRenderer::queue_geometry(Matrix4 transform, const Mesh& mesh , const Material& material)
     {
         GeometryInfo info;
@@ -163,7 +176,7 @@ namespace pkzo
             phong_shader.set_uniform("uLightDirection", light.direction.carray(), 3);
             phong_shader.set_uniform("uLightPosition",  light.position.carray(),  3);
             phong_shader.set_uniform("uLightRange",     light.range);
-            phong_shader.set_uniform("uLightAngle",     light.angle);
+            phong_shader.set_uniform("uLightCutoff",    1.0f - light.angle / 90.0f);
             phong_shader.set_uniform("uLightColor",     light.color.carray(),     3);
 
             for (GeometryInfo& geom : geometries)
