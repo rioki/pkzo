@@ -54,7 +54,7 @@ namespace pkzo
 
     void Mesh::set_vertex_count(size_t value)
     {
-        vertices.resize(value * 3);
+        vertices.resize(value * 4);
         normals.resize(value * 3);
         texcoords.resize(value * 2);
         tangents.resize(value * 3);
@@ -154,10 +154,11 @@ namespace pkzo
 
     void Mesh::set_vertex(size_t i, const Vector3& v)
     {
-        size_t b = i * 3;
+        size_t b = i * 4;
         vertices[b + 0] = v[0];
         vertices[b + 1] = v[1];
         vertices[b + 2] = v[2];
+        vertices[b + 3] = 0.0f;
     }
 
     Vector3 Mesh::get_vertex(size_t i) const
@@ -300,25 +301,34 @@ namespace pkzo
         size_t fcount = get_face_count();
 
         glBindBuffer(GL_ARRAY_BUFFER, buffers[VERTEX_BUFFER]);
-        glBufferData(GL_ARRAY_BUFFER, vcount * 3 * sizeof(float), &vertices[0], GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vcount * 4 * sizeof(float), &vertices[0], GL_STATIC_DRAW);
+        glVertexAttribPointer(VERTEX_BUFFER, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(VERTEX_BUFFER);
 
         glBindBuffer(GL_ARRAY_BUFFER, buffers[NORMAL_BUFFER]);
         glBufferData(GL_ARRAY_BUFFER, vcount * 3 * sizeof(float), &normals[0], GL_STATIC_DRAW);
+        glVertexAttribPointer(NORMAL_BUFFER, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(NORMAL_BUFFER);
 
         glBindBuffer(GL_ARRAY_BUFFER, buffers[TEXCOORD_BUFFER]);
         glBufferData(GL_ARRAY_BUFFER, vcount * 2 * sizeof(float), &texcoords[0], GL_STATIC_DRAW);
+        glVertexAttribPointer(TEXCOORD_BUFFER, 2, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(TEXCOORD_BUFFER);
 
         glBindBuffer(GL_ARRAY_BUFFER, buffers[TANGENT_BUFFER]);
         glBufferData(GL_ARRAY_BUFFER, vcount * 3 * sizeof(float), &tangents[0], GL_STATIC_DRAW);
+        glVertexAttribPointer(TANGENT_BUFFER, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(TANGENT_BUFFER);
 
         glBindBuffer(GL_ARRAY_BUFFER, buffers[COLOR_BUFFER]);
         glBufferData(GL_ARRAY_BUFFER, vcount * 4 * sizeof(float), &colors[0], GL_STATIC_DRAW);
+        glVertexAttribPointer(COLOR_BUFFER, 4, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(COLOR_BUFFER);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[INDEX_BUFFER]);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, fcount * 3 * sizeof(unsigned int), &faces[0], GL_STATIC_DRAW);
-
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
         glBindVertexArray(0);
@@ -341,79 +351,11 @@ namespace pkzo
             const_cast<Mesh*>(this)->upload();
         }
 
-        shader.bind(); // this is probably redundant
-
-        int vertex_location   = shader.get_attribute_location("aVertex");
-        int normal_location   = shader.get_attribute_location("aNormal");
-        int texcoord_location = shader.get_attribute_location("aTexCoord");
-        int tangent_location  = shader.get_attribute_location("aTangent");
-        int color_location    = shader.get_attribute_location("aColor");
-
         glBindVertexArray(vao);
-
-        if (vertex_location != -1)
-        {
-            glBindBuffer(GL_ARRAY_BUFFER, buffers[VERTEX_BUFFER]);
-            glVertexAttribPointer(vertex_location, 3, GL_FLOAT, GL_FALSE, 0, 0);
-            glEnableVertexAttribArray(vertex_location);
-        }
-
-        if (normal_location != -1)
-        {
-            glBindBuffer(GL_ARRAY_BUFFER, buffers[NORMAL_BUFFER]);
-            glVertexAttribPointer(normal_location, 3, GL_FLOAT, GL_FALSE, 0, 0);
-            glEnableVertexAttribArray(normal_location);
-        }
-
-        if (texcoord_location != -1)
-        {
-            glBindBuffer(GL_ARRAY_BUFFER, buffers[TEXCOORD_BUFFER]);
-            glVertexAttribPointer(texcoord_location, 2, GL_FLOAT, GL_FALSE, 0, 0);
-            glEnableVertexAttribArray(texcoord_location);
-        }
-
-        if (tangent_location != -1)
-        {
-            glBindBuffer(GL_ARRAY_BUFFER, buffers[TANGENT_BUFFER]);
-            glVertexAttribPointer(tangent_location, 3, GL_FLOAT, GL_FALSE, 0, 0);
-            glEnableVertexAttribArray(tangent_location);
-        }
-
-        if (color_location != -1)
-        {
-            glBindBuffer(GL_ARRAY_BUFFER, buffers[COLOR_BUFFER]);
-            glVertexAttribPointer(color_location, 4, GL_FLOAT, GL_FALSE, 0, 0);
-            glEnableVertexAttribArray(color_location);
-        }
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[INDEX_BUFFER]);
         glDrawElements(GL_TRIANGLES, faces.size() * 3, GL_UNSIGNED_INT, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-        if (vertex_location != -1)
-        {
-            glDisableVertexAttribArray(vertex_location);
-        }
-
-        if (normal_location != -1)
-        {
-            glDisableVertexAttribArray(normal_location);
-        }
-
-        if (texcoord_location != -1)
-        {
-            glDisableVertexAttribArray(texcoord_location);
-        }
-
-        if (texcoord_location != -1)
-        {
-            glDisableVertexAttribArray(tangent_location);
-        }
-
-        if (color_location != -1)
-        {
-            glDisableVertexAttribArray(color_location);
-        }
 
         glBindVertexArray(0);
     }
