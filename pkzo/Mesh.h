@@ -85,6 +85,8 @@ namespace pkzo
 
         void create_screen_plane();
 
+        void create_box(const Vector3& size);
+
         /**
          * Set the Vertex Count
          * 
@@ -281,7 +283,7 @@ namespace pkzo
         void draw(Shader& shader) const;
 
     private:
-        std::vector<float> vertices;  // v3f
+        std::vector<float> vertices;  // v4f
         std::vector<float> normals;   // v3f
         std::vector<float> texcoords; // v2f
         std::vector<float> tangents;  // v3f

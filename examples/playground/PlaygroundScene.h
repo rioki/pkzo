@@ -4,6 +4,9 @@
 
 #include <pkzo/Scene.h>
 #include <pkzo/SkyBox.h>
+#include <pkzo/AmbientLight.h>
+#include <pkzo/DirectionalLight.h>
+#include <pkzo/BoxGeometry.h>
 
 namespace pg
 {
@@ -18,7 +21,10 @@ namespace pg
         ~PlaygroundScene();
 
     private:
-        pkzo::SkyBox sky;
+        pkzo::SkyBox           sky;
+        pkzo::AmbientLight     ambient_light;
+        pkzo::DirectionalLight sun_light;                
+        pkzo::BoxGeometry      box;
     };
 }
 

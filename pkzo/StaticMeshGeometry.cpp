@@ -18,23 +18,4 @@ namespace pkzo
     {
         return mesh;
     }
-
-    void StaticMeshGeometry::enqueue(SceneRenderer & renderer) const
-    {        
-        if (mesh && material)
-        {        
-            Quaternion o = get_world_orientation();
-            Vector3    x = transform(o, Vector3(1, 0, 0));  
-            Vector3    y = transform(o, Vector3(0, 1, 0));  
-            Vector3    z = transform(o, Vector3(0, 0, 1));  
-            Vector3    p = get_world_position();
-
-            Matrix4 t(x[0], y[0], z[0], p[0],
-                      x[1], y[1], z[1], p[1],
-                      x[2], y[2], z[2], p[2],
-                      0.0f, 0.0f, 0.0f, 1.0f);
-
-            renderer.queue_geometry(t, *mesh, *material);
-        }
-    }
 }

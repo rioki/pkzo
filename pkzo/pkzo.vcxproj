@@ -191,6 +191,7 @@ copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutD
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AmbientLight.cpp" />
+    <ClCompile Include="BoxGeometry.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CheckBox.cpp" />
@@ -241,6 +242,7 @@ copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutD
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AmbientLight.h" />
+    <ClInclude Include="BoxGeometry.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CheckBox.h" />

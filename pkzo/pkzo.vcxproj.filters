@@ -144,9 +144,6 @@
     <ClCompile Include="SkyBox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Rectangle.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="SceneNodeGroup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -157,6 +154,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StaticMeshGeometry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rectangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BoxGeometry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -312,6 +315,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StaticMeshGeometry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BoxGeometry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -15,12 +15,7 @@ namespace pkzo
 
         void set_mesh(std::shared_ptr<Mesh> value);
 
-        std::shared_ptr<Mesh> get_mesh() const;
-
-        void enqueue(SceneRenderer & renderer) const override;
-
-    private:
-        std::shared_ptr<Mesh> mesh;
+        std::shared_ptr<Mesh> get_mesh() const;        
     };
 }
 
