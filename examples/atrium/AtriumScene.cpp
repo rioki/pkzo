@@ -3,6 +3,7 @@
 
 #include <pkzo/PointLight.h>
 #include <pkzo/SpotLight.h>
+#include <pkzo/StaticMeshGeometry.h>
 
 using pkzo::Color;
 using pkzo::Vector3;
@@ -35,28 +36,28 @@ namespace atrium
         // columns
         for (unsigned int i = 0; i < 6; i++)
         {
-            pkzo::Geometry* column = new pkzo::Geometry;
+            pkzo::StaticMeshGeometry* column = new pkzo::StaticMeshGeometry;
             column->set_mesh(colum_mesh);
             column->set_material(gray_granite);
             column->set_position(Vector3(-5.0f + (float)i * 2.0f, -2.3f, 0.0f));
             add_node(*column);
             static_objets.push_back(column);
 
-            column = new pkzo::Geometry;
+            column = new pkzo::StaticMeshGeometry;
             column->set_mesh(colum_mesh);
             column->set_material(gray_granite);
             column->set_position(Vector3(-5.0f + (float)i * 2.0f, 2.3f, 0.0f));
             add_node(*column);
             static_objets.push_back(column);
 
-            column = new pkzo::Geometry;
+            column = new pkzo::StaticMeshGeometry;
             column->set_mesh(colum_mesh);
             column->set_material(gray_granite);
             column->set_position(Vector3(-5.0f + (float)i * 2.0f, -2.3f, 3.2f));
             add_node(*column);
             static_objets.push_back(column);
 
-            column = new pkzo::Geometry;
+            column = new pkzo::StaticMeshGeometry;
             column->set_mesh(colum_mesh);
             column->set_material(gray_granite);
             column->set_position(Vector3(-5.0f + (float)i * 2.0f, 2.3f, 3.2f));
@@ -67,28 +68,28 @@ namespace atrium
         // floor
         for (unsigned int i = 0; i < 8; i++)
         {
-            pkzo::Geometry* ground = new pkzo::Geometry;
+            pkzo::StaticMeshGeometry* ground = new pkzo::StaticMeshGeometry;
             ground->set_mesh(ground2_mesh);
             ground->set_material(yello_concrete);
             ground->set_position(Vector3(-7.0f + (float)i * 2.0f, 3.0f, -0.2f));
             add_node(*ground);
             static_objets.push_back(ground);
 
-            ground = new pkzo::Geometry;
+            ground = new pkzo::StaticMeshGeometry;
             ground->set_mesh(ground2_mesh);
             ground->set_material(yello_concrete);
             ground->set_position(Vector3(-7.0f + (float)i * 2.0f, 1.0f, -0.2f));
             add_node(*ground);
             static_objets.push_back(ground);
 
-            ground = new pkzo::Geometry;
+            ground = new pkzo::StaticMeshGeometry;
             ground->set_mesh(ground2_mesh);
             ground->set_material(yello_concrete);
             ground->set_position(Vector3(-7.0f + (float)i * 2.0f, -1.0f, -0.2f));
             add_node(*ground);
             static_objets.push_back(ground);
 
-            ground = new pkzo::Geometry;
+            ground = new pkzo::StaticMeshGeometry;
             ground->set_mesh(ground2_mesh);
             ground->set_material(yello_concrete);
             ground->set_position(Vector3(-7.0f + (float)i * 2.0f, -3.0f, -0.2f));
@@ -99,7 +100,7 @@ namespace atrium
         // cieling
         for (unsigned int i = 0; i < 8; i++)
         {
-            pkzo::Geometry* ground = new pkzo::Geometry;
+            pkzo::StaticMeshGeometry* ground = new pkzo::StaticMeshGeometry;
             ground->set_mesh(ground2_mesh);
             ground->set_material(yello_concrete);
             ground->set_position(Vector3(-7.0f + (float)i * 2.0f, 3.0f, 3.0f));
@@ -108,14 +109,14 @@ namespace atrium
 
             if (i == 0 || i == 7)
             {
-                ground = new pkzo::Geometry;
+                ground = new pkzo::StaticMeshGeometry;
                 ground->set_mesh(ground2_mesh);
                 ground->set_material(yello_concrete);
                 ground->set_position(Vector3(-7.0f + (float)i * 2.0f, 1.0f, 3.0f));
                 add_node(*ground);
                 static_objets.push_back(ground);
 
-                ground = new pkzo::Geometry;
+                ground = new pkzo::StaticMeshGeometry;
                 ground->set_mesh(ground2_mesh);
                 ground->set_material(yello_concrete);
                 ground->set_position(Vector3(-7.0f + (float)i * 2.0f, -1.0f, 3.0f));
@@ -123,14 +124,14 @@ namespace atrium
                 static_objets.push_back(ground);
             }
 
-            ground = new pkzo::Geometry;
+            ground = new pkzo::StaticMeshGeometry;
             ground->set_mesh(ground2_mesh);
             ground->set_material(yello_concrete);
             ground->set_position(Vector3(-7.0f + (float)i * 2.0f, -3.0f, 3.0f));
             add_node(*ground);
             static_objets.push_back(ground);
 
-            ground = new pkzo::Geometry;
+            ground = new pkzo::StaticMeshGeometry;
             ground->set_mesh(ground2_mesh);
             ground->set_material(yello_concrete);
             ground->set_position(Vector3(-7.0f + (float)i * 2.0f, 3.0f, 6.2f));
@@ -139,14 +140,14 @@ namespace atrium
 
             if (i == 0 || i == 7)
             {
-                ground = new pkzo::Geometry;
+                ground = new pkzo::StaticMeshGeometry;
                 ground->set_mesh(ground2_mesh);
                 ground->set_material(yello_concrete);
                 ground->set_position(Vector3(-7.0f + (float)i * 2.0f, 1.0f, 6.2f));
                 add_node(*ground);
                 static_objets.push_back(ground);
 
-                ground = new pkzo::Geometry;
+                ground = new pkzo::StaticMeshGeometry;
                 ground->set_mesh(ground2_mesh);
                 ground->set_material(yello_concrete);
                 ground->set_position(Vector3(-7.0f + (float)i * 2.0f, -1.0f, 6.2f));
@@ -154,7 +155,7 @@ namespace atrium
                 static_objets.push_back(ground);
             }
 
-            ground = new pkzo::Geometry;
+            ground = new pkzo::StaticMeshGeometry;
             ground->set_mesh(ground2_mesh);
             ground->set_material(yello_concrete);
             ground->set_position(Vector3(-7.0f + (float)i * 2.0f, -3.0f, 6.2f));
@@ -165,7 +166,7 @@ namespace atrium
         // walls x
         for (unsigned int i = 0; i < 8; i++)
         {
-            pkzo::Geometry* wall = new pkzo::Geometry;
+            pkzo::StaticMeshGeometry* wall = new pkzo::StaticMeshGeometry;
             wall->set_mesh(wall2_mesh);
             wall->set_material(white_bricks);
             wall->set_position(Vector3(-7.0f + (float)i * 2.0f, 4.1f, 0.0f));
@@ -173,7 +174,7 @@ namespace atrium
             add_node(*wall);
             static_objets.push_back(wall);
 
-            wall = new pkzo::Geometry;
+            wall = new pkzo::StaticMeshGeometry;
             wall->set_mesh(wall2_mesh);
             wall->set_material(white_bricks);
             wall->set_position(Vector3(-7.0f + (float)i * 2.0f, -4.1f, 0.0f));
@@ -181,7 +182,7 @@ namespace atrium
             add_node(*wall);
             static_objets.push_back(wall);
 
-            wall = new pkzo::Geometry;
+            wall = new pkzo::StaticMeshGeometry;
             wall->set_mesh(wall2_mesh);
             wall->set_material(white_bricks);
             wall->set_position(Vector3(-7.0f + (float)i * 2.0f, 4.1f, 3.2f));
@@ -189,7 +190,7 @@ namespace atrium
             add_node(*wall);
             static_objets.push_back(wall);
 
-            wall = new pkzo::Geometry;
+            wall = new pkzo::StaticMeshGeometry;
             wall->set_mesh(wall2_mesh);
             wall->set_material(white_bricks);
             wall->set_position(Vector3(-7.0f + (float)i * 2.0f, -4.1f, 3.2f));
@@ -200,28 +201,28 @@ namespace atrium
 
         for (unsigned int i = 0; i < 4; i++)
         {
-            pkzo::Geometry* wall = new pkzo::Geometry;
+            pkzo::StaticMeshGeometry* wall = new pkzo::StaticMeshGeometry;
             wall->set_mesh(wall2_mesh);
             wall->set_material(white_bricks);
             wall->set_position(Vector3(8.1f, -3.0f + (float)i * 2.0f, 0.0f));
             add_node(*wall);
             static_objets.push_back(wall);
 
-            wall = new pkzo::Geometry;
+            wall = new pkzo::StaticMeshGeometry;
             wall->set_mesh(wall2_mesh);
             wall->set_material(white_bricks);
             wall->set_position(Vector3(-8.1f, -3.0f + (float)i * 2.0f, 0.0f));
             add_node(*wall);
             static_objets.push_back(wall);
 
-            wall = new pkzo::Geometry;
+            wall = new pkzo::StaticMeshGeometry;
             wall->set_mesh(wall2_mesh);
             wall->set_material(white_bricks);
             wall->set_position(Vector3(8.1f, -3.0f + (float)i * 2.0f, 3.2f));
             add_node(*wall);
             static_objets.push_back(wall);
 
-            wall = new pkzo::Geometry;
+            wall = new pkzo::StaticMeshGeometry;
             wall->set_mesh(wall2_mesh);
             wall->set_material(white_bricks);
             wall->set_position(Vector3(-8.1f, -3.0f + (float)i * 2.0f, 3.2f));

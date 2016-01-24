@@ -19,18 +19,11 @@ namespace pkzo
 
         ~Geometry();
 
-        void set_mesh(std::shared_ptr<Mesh> value);
-
-        std::shared_ptr<Mesh> get_mesh() const;
-
         void set_material(std::shared_ptr<Material> value);
 
         std::shared_ptr<Material> get_material() const;
-
-        void enqueue(SceneRenderer & renderer) const override;
-
-    private:
-        std::shared_ptr<Mesh>     mesh;
+        
+    protected:        
         std::shared_ptr<Material> material;
     };
 }

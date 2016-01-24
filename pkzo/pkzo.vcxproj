@@ -229,6 +229,7 @@ copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutD
     <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="Slider.cpp" />
     <ClCompile Include="SpotLight.cpp" />
+    <ClCompile Include="StaticMeshGeometry.cpp" />
     <ClCompile Include="strex.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -281,6 +282,7 @@ copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutD
     <ClInclude Include="SkyBox.h" />
     <ClInclude Include="Slider.h" />
     <ClInclude Include="SpotLight.h" />
+    <ClInclude Include="StaticMeshGeometry.h" />
     <ClInclude Include="strex.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Texture.h" />

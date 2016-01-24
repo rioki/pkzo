@@ -156,6 +156,9 @@
     <ClCompile Include="SpotLight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="StaticMeshGeometry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.h">
@@ -306,6 +309,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SpotLight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticMeshGeometry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -7,7 +7,7 @@
 #include <pkzo/SkyBox.h>
 #include <pkzo/AmbientLight.h>
 #include <pkzo/DirectionalLight.h>
-#include <pkzo/Geometry.h>
+#include <pkzo/StaticMeshGeometry.h>
 #include <pkzo/Library.h>
 
 namespace teapot
@@ -21,11 +21,11 @@ namespace teapot
         ~TeapotScene();
 
     private:
-        pkzo::SkyBox           sky;        
-        pkzo::AmbientLight     light0;
-        pkzo::DirectionalLight light1;
-        pkzo::Geometry         teapot;        
-        pkzo::Camera           camera;
+        pkzo::SkyBox             sky;        
+        pkzo::AmbientLight       light0;
+        pkzo::DirectionalLight   light1;
+        pkzo::StaticMeshGeometry teapot;        
+        pkzo::Camera             camera;
     };
 
 }
