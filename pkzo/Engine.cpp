@@ -19,13 +19,14 @@
 #include "ScreenRenderer.h"
 #include "Scene.h"
 #include "SceneRenderer.h"
+#include "PhysicsKernel.h"
 
 namespace pkzo
 {
     Engine::Engine(const std::string& i)
     : id(i), running(false), config(nullptr), window(nullptr), mouse(nullptr), keyboard(nullptr),
       screen_renderer(nullptr), screen(nullptr), next_screen(nullptr),
-      scene_renderer(nullptr), scene(nullptr), next_scene(nullptr)
+      scene_renderer(nullptr), scene(nullptr), next_scene(nullptr), physics_kernel(nullptr)
     {           
         int r = SDL_Init(SDL_INIT_VIDEO);
         if (r != 0)
@@ -79,10 +80,14 @@ namespace pkzo
         {
             joysticks[i] = new Joystick(i);
         }
+
+        physics_kernel = new PhysicsKernel(*this);
     }
 
     Engine::~Engine() 
     {
+        delete physics_kernel;
+
         delete screen;
         screen = nullptr;
 
@@ -287,6 +292,8 @@ namespace pkzo
             last_frame = now;
 
             emit<float, float>(TICK, t, dt);
+
+            physics_kernel->update(t, dt);
 
             if (scene)
             {

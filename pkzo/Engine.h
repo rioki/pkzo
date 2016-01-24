@@ -24,6 +24,7 @@ namespace pkzo
     class ScreenRenderer;
     class Scene;
     class SceneRenderer;
+    class PhysicsKernel;
 
     class PKZO_EXPORT Engine : public EventEmitter
     {
@@ -123,6 +124,8 @@ namespace pkzo
         SceneRenderer*  scene_renderer;
         Scene*          scene;
         Scene*          next_scene;
+
+        PhysicsKernel*  physics_kernel;                        
 
         bool handle_event(SDL_Event& event);
         void route_events();
