@@ -3,8 +3,6 @@
 
 #include <SDL_ttf.h>
 
-#include "strex.h"
-
 namespace pkzo
 {
     Font::Font()
@@ -32,12 +30,12 @@ namespace pkzo
         }
     }
 
-    std::tuple<unsigned int, unsigned int> Font::estimate(const std::string& text) const
+    rgm::ivec2 Font::estimate(const std::string& text) const
     {
         int w, h;
         TTF_SizeUTF8(font, text.c_str(), &w, &h);
 
-        return std::make_tuple((unsigned int)w, (unsigned int)h);
+        return rgm::ivec2(w, h);
     }
 
     Texture Font::render(const std::string& text) const

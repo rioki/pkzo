@@ -95,7 +95,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\SDL2_ttf\include;$(SolutionDir)ext\glew\include;$(SolutionDir)glt;$(SolutionDir)ext\rjson\include;$(SolutionDir)ext\ode\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\SDL2_ttf\include;$(SolutionDir)ext\glew\include;$(SolutionDir)ext\rgm\include;$(SolutionDir)ext\rjson\include;$(SolutionDir)ext\ode\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PKZO_BUILD;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -119,7 +119,7 @@ copy $(SolutionDir)ext\ode\$(PlatformTarget)\$(Configuration)\ode.dll $(OutDir)<
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\SDL2_ttf\include;$(SolutionDir)ext\glew\include;$(SolutionDir)glt;$(SolutionDir)ext\rjson\include;$(SolutionDir)ext\ode\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\SDL2_ttf\include;$(SolutionDir)ext\glew\include;$(SolutionDir)ext\rgm\include;$(SolutionDir)ext\rjson\include;$(SolutionDir)ext\ode\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PKZO_BUILD;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -145,7 +145,7 @@ copy $(SolutionDir)ext\ode\$(PlatformTarget)\$(Configuration)\ode.dll $(OutDir)<
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\SDL2_ttf\include;$(SolutionDir)ext\glew\include;$(SolutionDir)glt;$(SolutionDir)ext\rjson\include;$(SolutionDir)ext\bullet3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\SDL2_ttf\include;$(SolutionDir)ext\glew\include;$(SolutionDir)ext\rgm\include;$(SolutionDir)ext\rjson\include;$(SolutionDir)ext\bullet3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PKZO_BUILD;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -173,7 +173,7 @@ copy $(SolutionDir)ext\ode\$(PlatformTarget)\$(Configuration)\ode.dll $(OutDir)<
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\SDL2_ttf\include;$(SolutionDir)ext\glew\include;$(SolutionDir)glt;$(SolutionDir)ext\rjson\include;$(SolutionDir)ext\bullet3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\pkzo;$(SolutionDir)ext\SDL2\include;$(SolutionDir)ext\SDL2_image\include;$(SolutionDir)ext\SDL2_ttf\include;$(SolutionDir)ext\glew\include;$(SolutionDir)ext\rgm\include;$(SolutionDir)ext\rjson\include;$(SolutionDir)ext\bullet3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PKZO_BUILD;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -194,122 +194,32 @@ copy $(SolutionDir)ext\ode\$(PlatformTarget)\$(Configuration)\ode.dll $(OutDir)<
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AmbientLight.cpp" />
-    <ClCompile Include="BoxGeometry.cpp" />
-    <ClCompile Include="Button.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="CheckBox.cpp" />
-    <ClCompile Include="Color.cpp" />
-    <ClCompile Include="Config.cpp" />
-    <ClCompile Include="ConfigParser.cpp" />
-    <ClCompile Include="CubeMap.cpp" />
-    <ClCompile Include="DirectionalLight.cpp" />
-    <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="EventEmitter.cpp" />
     <ClCompile Include="Font.cpp" />
-    <ClCompile Include="fs.cpp" />
-    <ClCompile Include="Geometry.cpp" />
-    <ClCompile Include="Joystick.cpp" />
     <ClCompile Include="Key.cpp" />
     <ClCompile Include="Keyboard.cpp" />
-    <ClCompile Include="Library.cpp" />
-    <ClCompile Include="Light.cpp" />
-    <ClCompile Include="Material.cpp" />
-    <ClCompile Include="Matrix3.cpp" />
-    <ClCompile Include="Matrix4.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Mouse.cpp" />
-    <ClCompile Include="path.cpp" />
-    <ClCompile Include="PhysicsKernel.cpp" />
+    <ClCompile Include="pkzo.cpp" />
     <ClCompile Include="PlyParser.cpp" />
-    <ClCompile Include="PointLight.cpp" />
-    <ClCompile Include="Quaternion.cpp" />
-    <ClCompile Include="Rectangle.cpp" />
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="SceneNode.cpp" />
-    <ClCompile Include="SceneNodeGroup.cpp" />
-    <ClCompile Include="SceneRenderer.cpp" />
-    <ClCompile Include="Screen.cpp" />
-    <ClCompile Include="ScreenRenderer.cpp" />
+    <ClCompile Include="SdlSentry.cpp" />
     <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="SkyBox.cpp" />
-    <ClCompile Include="Slider.cpp" />
-    <ClCompile Include="SpotLight.cpp" />
-    <ClCompile Include="StaticMeshGeometry.cpp" />
-    <ClCompile Include="strex.cpp" />
-    <ClCompile Include="Text.cpp" />
     <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="Vector2.cpp" />
-    <ClCompile Include="Vector3.cpp" />
-    <ClCompile Include="Vector4.cpp" />
-    <ClCompile Include="Widget.cpp" />
+    <ClCompile Include="TTFSentry.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AmbientLight.h" />
-    <ClInclude Include="BoxGeometry.h" />
-    <ClInclude Include="Button.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="CheckBox.h" />
-    <ClInclude Include="Color.h" />
-    <ClInclude Include="compose.h" />
-    <ClInclude Include="Config.h" />
-    <ClInclude Include="ConfigParser.h" />
-    <ClInclude Include="CubeMap.h" />
     <ClInclude Include="defines.h" />
-    <ClInclude Include="DirectionalLight.h" />
-    <ClInclude Include="Engine.h" />
-    <ClInclude Include="EventEmitter.h" />
     <ClInclude Include="Font.h" />
-    <ClInclude Include="fs.h" />
-    <ClInclude Include="Geometry.h" />
-    <ClInclude Include="Joystick.h" />
     <ClInclude Include="Key.h" />
     <ClInclude Include="Keyboard.h" />
-    <ClInclude Include="Library.h" />
-    <ClInclude Include="Light.h" />
-    <ClInclude Include="Material.h" />
-    <ClInclude Include="Matrix3.h" />
-    <ClInclude Include="Matrix4.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Mouse.h" />
-    <ClInclude Include="path.h" />
-    <ClInclude Include="PhysicsKernel.h" />
-    <ClInclude Include="PlyParser.h" />
-    <ClInclude Include="PointLight.h" />
-    <ClInclude Include="Quaternion.h" />
-    <ClInclude Include="Rectangle.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="SceneNode.h" />
-    <ClInclude Include="SceneNodeGroup.h" />
-    <ClInclude Include="SceneRenderer.h" />
-    <ClInclude Include="Screen.h" />
-    <ClInclude Include="ScreenRenderer.h" />
+    <ClInclude Include="pkzo.h" />
+    <ClInclude Include="SdlSentry.h" />
     <ClInclude Include="Shader.h" />
-    <ClInclude Include="SkyBox.h" />
-    <ClInclude Include="Slider.h" />
-    <ClInclude Include="SpotLight.h" />
-    <ClInclude Include="StaticMeshGeometry.h" />
-    <ClInclude Include="strex.h" />
-    <ClInclude Include="Text.h" />
     <ClInclude Include="Texture.h" />
-    <ClInclude Include="Vector2.h" />
-    <ClInclude Include="Vector3.h" />
-    <ClInclude Include="Vector4.h" />
-    <ClInclude Include="Widget.h" />
+    <ClInclude Include="TTFSentry.h" />
     <ClInclude Include="Window.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="InterfaceFragment.glsl" />
-    <None Include="InterfaceVertex.glsl" />
-    <None Include="PhongFragment.glsl" />
-    <None Include="PhongVertex.glsl" />
-    <None Include="SkyBoxFragment.glsl" />
-    <None Include="SkyBoxVertex.glsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="pkzo.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

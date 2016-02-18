@@ -1,201 +1,81 @@
-//
-// pkzo
-// 
-// Copyright 2015 Sean Farrell
-// 
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-// 
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-// 
+/*
+  pkzo
+
+  Copyright (c) 2014-2016 Sean Farrell
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+*/
 
 #ifndef _PKZO_SHADER_H_
 #define _PKZO_SHADER_H_
 
 #include <string>
+#include <rgm/rgm.h>
 
 #include "defines.h"
 
 namespace pkzo
 {
-    /**
-     * GLSL Shader Program
-     **/
+    using namespace rgm;
+
     class PKZO_EXPORT Shader
     {
     public:
-        
-        /**
-         * Create a GLSL Shader Program
-         **/
+
         Shader();
 
         Shader(const Shader&) = delete;
 
-        /**
-         * Destroy a GLSL Shader Program
-         **/
         ~Shader();
 
         const Shader& operator = (const Shader&) = delete;
 
-        /**
-         * Set the Vertex Shader Code
-         *
-         * @param value the GLSL code of the vertex shader
-         **/
         void set_vertex_code(const std::string& value);
 
-        /**
-         * Get the Vertex Shader Code
-         *
-         * @return the GLSL code of the vertex shader
-         **/
         const std::string& get_vertex_code() const;
 
-        /**
-         * Set the Fragment Shader Code
-         *
-         * @param value the GLSL code of the fragment shader
-         **/
         void set_fragment_code(const std::string& value);
 
-        /**
-         * Get the Fragment Shader Code
-         *
-         * @return the GLSL code of the fragment shader
-         **/
         const std::string& get_fragment_code() const;
 
-        /**
-         * Load Vertex and Fragment Shaders from File
-         *
-         * @param vertex_file   the file containing the vertex shader
-         * @param fragment_file the file containing the fragment shader
-         **/
         void load(const std::string& vertex_file, const std::string& fragment_file);
 
-        /**
-         * Compile and Link the GLSL Program
-         *
-         * This function will compile and link the GLSL program. 
-         *
-         * @throws std::runtime_error If a compilation or link error is encountered,
-         * a std::runtime_error is thrown.
-         *
-         * @warning This function can only be called with a valid and active OpenGL context.
-         **/
         void compile();
 
-        /**
-         * Releases the Program from Video Memory
-         *
-         * @warning This function can only be called with a valid and active OpenGL context.
-         **/
         void release();
 
-        /**
-         * Activate the GLSL Program
-         *
-         * @warning This function can only be called with a valid and active OpenGL context.
-         **/
         void bind();
 
-        /**
-         * Deactivate the GLSL Program
-         *
-         * @warning This function can only be called with a valid and active OpenGL context.
-         **/
         void unbind();
 
-        /**
-         * Get the Location of a Uniform Variable
-         *
-         * @name the name of the uniform
-         *
-         * @returns the location of the uniform variable
-         *
-         * @note The shader must be bound to call this function.
-         * @warning This function can only be called with a valid and active OpenGL context.
-         **/
-        int get_uniform_location(const std::string& name) const;
-
-        /**
-         * Set the Value of a Uniform Variable
-         *
-         * @param name  the name of the variable
-         * @param value the value of the variable
-         *
-         * @note The shader must be bound to call this function.
-         * @warning This function can only be called with a valid and active OpenGL context.
-         * @{
-         **/
         void set_uniform(const std::string& name, int value);
         void set_uniform(const std::string& name, float value);
-        void set_uniform(const std::string& name, int x, int y);
-        void set_uniform(const std::string& name, float x, float y);
-        void set_uniform(const std::string& name, int x, int y, int z);
-        void set_uniform(const std::string& name, float x, float y, float z);
-        void set_uniform(const std::string& name, int x, int y, int z, int m);
-        void set_uniform(const std::string& name, float x, float y, float z, float m);
-        /** @} **/
-
-
-        /**
-         * Set the Value of a Uniform Variable
-         * 
-         * @param name   the name of the variable
-         * @param values an array of values
-         * @param size   the number of values in the values array
-         *
-         * @note The shader must be bound to call this function.
-         * @warning This function can only be called with a valid and active OpenGL context.
-         *
-         * @todo support 9 and 16 as glUniformMatrix3fv, glUniformMatrix4fv?
-         * @{
-         **/
-        void set_uniform(const std::string& name, const int* values, int size);
-        void set_uniform(const std::string& name, const float* values, int size);
-        /** @} **/
-
-        /**
-         * Set the Value of a Uniform Matrix Variable
-         * 
-         * @param name      the name of the variable
-         * @param values    an array of values
-         * @param size      the number of values in the values array
-         * @param transpose transpose the matrix
-         *
-         * @note The shader must be bound to call this function.
-         * @warning This function can only be called with a valid and active OpenGL context.
-         **/
-        void set_uniform_matrix(const std::string& name, const float* values, int size, bool transpose = false);
-              
-        /**
-         * Get the Location of a Attibute Variable
-         *
-         * @name the name of the attribute
-         *
-         * @returns the location of the attribute variable
-         *
-         * @note The shader must be bound to call this function.
-         * @warning This function can only be called with a valid and active OpenGL context.
-         **/        
-        int get_attribute_location(const std::string& name) const;
-
+        void set_uniform(const std::string& name, vec2 value);
+        void set_uniform(const std::string& name, ivec2 value);
+        void set_uniform(const std::string& name, vec3 value);
+        void set_uniform(const std::string& name, ivec3 value);
+        void set_uniform(const std::string& name, vec4 value);
+        void set_uniform(const std::string& name, ivec4 value);
+        void set_uniform(const std::string& name, mat2 value);
+        void set_uniform(const std::string& name, mat3 value);
+        void set_uniform(const std::string& name, mat4 value);        
+        
     private:
         std::string vertex_code;
         std::string fragment_code;

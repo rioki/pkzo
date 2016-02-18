@@ -1,32 +1,12 @@
-//
-// pkzo
-// 
-// Copyright 2015 Sean Farrell
-// 
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-// 
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-// 
 
 #include "PlyParser.h"
 
 #include <iterator> 
-#include "Mesh.h"
+#include <sstream>
 #include <map>
+
+#include "Mesh.h"
+
 
 namespace std
 {
@@ -48,8 +28,6 @@ namespace std
     }
 }
 
-#include "compose.h"
-
 namespace pkzo
 {
     PlyParser::PlyParser(Mesh& m)
@@ -63,7 +41,9 @@ namespace pkzo
         input.open(file);
         if (! input.good())
         {
-            throw std::runtime_error(compose("Failed to open '%0' for reading.", file));
+            std::stringstream buff;
+            buff << "Failed to open " << file << " for reading.";
+            throw std::runtime_error(buff.str());    
         }
 
         parse_header();
@@ -119,8 +99,13 @@ namespace pkzo
             case EOF:
                 return END_OF_FILE;
             default:
+            {
                 value.push_back(c);
-                throw std::runtime_error(compose("Unexpected character %0!", value));
+
+                std::stringstream buff;
+                buff << "Unexpected character " << value << ".";
+                throw std::runtime_error(buff.str());  
+            }
         }
     }
 
@@ -233,7 +218,9 @@ namespace pkzo
         TokenType token = get_next_token(value);
         if (token != IDENTIFIER || value != keyword)
         {
-            throw std::runtime_error(compose("%0(%1): Expected '%2' but got '%3'.", file, line, keyword, value));
+            std::stringstream buff;
+            buff << file << "(" << line << "): Expected " << keyword << " but got " << value << ".";
+            throw std::runtime_error(buff.str());
         }
     }
 
@@ -244,9 +231,11 @@ namespace pkzo
         auto i =  std::find(keywords.begin(), keywords.end(), value);
         if (token != IDENTIFIER || i == keywords.end())
         {
-            throw std::runtime_error(compose("%0(%1): Expected %2 but got '%3'.", file, line, keywords, value));
+            std::stringstream buff;
+            buff << file << "(" << line << "): Expected " << keywords << " but got " << value << ".";
+            throw std::runtime_error(buff.str());
         }
-        return std::distance(keywords.begin(), i);
+        return static_cast<unsigned int>(std::distance(keywords.begin(), i));
     }
 
     std::string PlyParser::parse_identifier()
@@ -255,7 +244,9 @@ namespace pkzo
         TokenType token = get_next_token(value);
         if (token != IDENTIFIER)
         {
-            throw std::runtime_error(compose("%0(%1): Expected identifier but got '%2'.", file, line, value));
+            std::stringstream buff;
+            buff << file << "(" << line << "): Expected identifier but got " << value << ".";
+            throw std::runtime_error(buff.str());
         }
         return value;
     }
@@ -272,7 +263,9 @@ namespace pkzo
         }
         else
         {
-            throw std::runtime_error(compose("%0(%1): Expected number but got '%2'.", file, line, value));
+            std::stringstream buff;
+            buff << file << "(" << line << "): Expected number but got " << value << ".";
+            throw std::runtime_error(buff.str());
         }
     }
 
@@ -288,7 +281,9 @@ namespace pkzo
         }
         else
         {
-            throw std::runtime_error(compose("%0(%1): Expected integer but got '%2'.", file, line, value));
+            std::stringstream buff;
+            buff << file << "(" << line << "): Expected integer but got " << value << ".";
+            throw std::runtime_error(buff.str());
         }
     }
 
@@ -416,7 +411,9 @@ namespace pkzo
 
         if (elements.empty())
         {
-            throw std::runtime_error(compose("%0(%1): Property before element.", file, line));
+            std::stringstream buff;
+            buff << file << "(" << line << "): Property before element.";
+            throw std::runtime_error(buff.str());
         }
 
         std::get<2>(elements.back()).push_back(name);
@@ -455,26 +452,26 @@ namespace pkzo
             values[properties[i]] = (float)parse_float();
         }
 
-        mesh.set_vertex(elem, values["x"], values["y"], values["z"]);
-        mesh.set_normal(elem, values["nx"], values["ny"], values["nz"]);
-        mesh.set_texcoord(elem, values["s"], 1 - values["t"]);
-        mesh.set_color(elem, 1.0, 1.0, 1.0, 1.0);
+        mesh.set_vertex(elem, vec3(values["x"], values["y"], values["z"]));
+        mesh.set_normal(elem, vec3(values["nx"], values["ny"], values["nz"]));
+        mesh.set_texcoord(elem, vec2(values["s"], 1 - values["t"]));
+        mesh.set_color(elem, vec4(1.0, 1.0, 1.0, 1.0));
     }
 
     void PlyParser::parse_face()
     {
         unsigned int count = parse_integer();;
 
-        std::vector<unsigned int> indpkzos(count, 0);
-        for (unsigned int i = 0; i < indpkzos.size(); i++)
+        std::vector<unsigned int> indglows(count, 0);
+        for (unsigned int i = 0; i < indglows.size(); i++)
         {
-            indpkzos[i] = parse_integer();
+            indglows[i] = parse_integer();
         }
 
         // we build fans, when n != 3
-        for (unsigned int i = 2; i < indpkzos.size(); i++)
+        for (unsigned int i = 2; i < indglows.size(); i++)
         {
-            mesh.add_face(indpkzos[0], indpkzos[i - 1], indpkzos[i]);
+            mesh.add_face(indglows[0], indglows[i - 1], indglows[i]);
         }
     }
 }

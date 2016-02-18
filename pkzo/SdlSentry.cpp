@@ -22,49 +22,34 @@
   SOFTWARE.
 */
 
-#ifndef _PKZO_KEYBOARD_H_
-#define _PKZO_KEYBOARD_H_
+#include "SDLSentry.h"
 
-#include <vector>
-#include <functional>
-
-#include "defines.h"
-#include "Key.h"
-
-union SDL_Event;
+#include <stdexcept>
+#include <SDL.h>
 
 namespace pkzo
 {
-	class PKZO_EXPORT Keyboard
+    std::atomic<size_t> SDLSentry::use_count(0);
+
+    SDLSentry::SDLSentry()
     {
-    public:
-        Keyboard(); 
-        
-        Keyboard(const Keyboard&) = delete;
+        size_t c = use_count.fetch_add(1);
+        if (c == 0)
+        {
+            int r = SDL_Init(SDL_INIT_VIDEO|SDL_INIT_EVENTS);
+            if (r < 0)
+            {
+                throw std::runtime_error(SDL_GetError());
+            }
+        }
+    }
 
-        ~Keyboard();    
-
-        const Keyboard& operator = (const Keyboard&) = delete;
-    
-        bool is_pressed(Key key) const;
-    
-        void on_key_press(std::function<void (Key)> cb);
-        
-        void on_key_release(std::function<void (Key)> cb);
-        
-        void on_text(std::function<void (std::string)> cb);
-        
-    private:
-        static std::vector<Keyboard*> instances;
-        
-        std::function<void (Key)> key_press_cb;
-        std::function<void (Key)> key_release_cb;
-        std::function<void (std::string)> text_cb;
-                
-        void handle_event(SDL_Event& event);
-        
-		friend PKZO_EXPORT void route_events();
-    };
+    SDLSentry::~SDLSentry()
+    {
+        size_t c = use_count.fetch_sub(1);
+        if (c == 1)
+        {
+            SDL_Quit();
+        }
+    }
 }
-
-#endif

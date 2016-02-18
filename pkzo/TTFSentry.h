@@ -22,48 +22,29 @@
   SOFTWARE.
 */
 
-#ifndef _PKZO_KEYBOARD_H_
-#define _PKZO_KEYBOARD_H_
+#ifndef _PKZO_TTF_SENTRY_H_
+#define _PKZO_TTF_SENTRY_H_
 
-#include <vector>
-#include <functional>
+#include <atomic>
 
-#include "defines.h"
-#include "Key.h"
-
-union SDL_Event;
+#include "SDLSentry.h"
 
 namespace pkzo
 {
-	class PKZO_EXPORT Keyboard
+    class TTFSentry : public SDLSentry
     {
     public:
-        Keyboard(); 
         
-        Keyboard(const Keyboard&) = delete;
+        TTFSentry();
 
-        ~Keyboard();    
+        TTFSentry(const TTFSentry&) = delete;
 
-        const Keyboard& operator = (const Keyboard&) = delete;
-    
-        bool is_pressed(Key key) const;
-    
-        void on_key_press(std::function<void (Key)> cb);
-        
-        void on_key_release(std::function<void (Key)> cb);
-        
-        void on_text(std::function<void (std::string)> cb);
-        
+        ~TTFSentry();
+
+        const TTFSentry& operator = (const TTFSentry&) = delete;  
+
     private:
-        static std::vector<Keyboard*> instances;
-        
-        std::function<void (Key)> key_press_cb;
-        std::function<void (Key)> key_release_cb;
-        std::function<void (std::string)> text_cb;
-                
-        void handle_event(SDL_Event& event);
-        
-		friend PKZO_EXPORT void route_events();
+        static std::atomic<size_t> use_count;
     };
 }
 
