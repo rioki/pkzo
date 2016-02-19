@@ -22,23 +22,40 @@
   SOFTWARE.
 */
 
-#ifndef _PKZO_DEFINES_H_
-#define _PKZO_DEFINES_H_
+#include "Widget.h"
 
-/**
- * Current Version of pkzo
- **/
-#define PZKO_VERSION "0.1.0"
+namespace pkzo
+{
+    Widget::Widget()
+    : position(0, 0), size(15, 15) {}
 
-#ifdef _WIN32
-#define PKZO_EXPORT __declspec(dllexport)
-#else
-#define PKZO_EXPORT  
-#endif
+    Widget::~Widget() {}
 
-// disable silly warnings
-#ifndef _MSVC
-#pragma warning(disable: 4251)
-#endif
+    void Widget::set_position(const ivec2& value)
+    {
+        position = value;
+    }
 
-#endif
+    const ivec2& Widget::get_position() const
+    {
+        return position;
+    }
+
+    void Widget::set_size(const ivec2& value)
+    {
+        size = value;
+    }
+
+    const ivec2& Widget::get_size() const
+    {
+        return size;
+    }
+
+    void Widget::draw(Canvas& canvas) const {}
+
+    void Widget::handle_mouse_move(ivec2 pos, ivec2 mov) {}
+
+    void Widget::handle_mouse_down(unsigned int button, ivec2 pos) {}
+
+    void Widget::handle_mouse_up(unsigned int button, ivec2 pos) {}
+}

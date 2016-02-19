@@ -22,23 +22,48 @@
   SOFTWARE.
 */
 
-#ifndef _PKZO_DEFINES_H_
-#define _PKZO_DEFINES_H_
+#ifndef _PKZO2D_CANVAS_H_
+#define _PKZO2D_CANVAS_H_
 
-/**
- * Current Version of pkzo
- **/
-#define PZKO_VERSION "0.1.0"
+#include <rgm/rgm.h>
 
-#ifdef _WIN32
-#define PKZO_EXPORT __declspec(dllexport)
-#else
-#define PKZO_EXPORT  
-#endif
+#include <pkzo/defines.h>
+#include <pkzo/Shader.h>
+#include <pkzo/Mesh.h>
+#include <pkzo/Texture.h>
 
-// disable silly warnings
-#ifndef _MSVC
-#pragma warning(disable: 4251)
-#endif
+namespace pkzo
+{
+    using namespace rgm;
+
+    class PKZO_EXPORT Canvas
+    {
+    public:
+        Canvas(ivec2 size);
+
+        Canvas(const Canvas&) = delete;
+
+        ~Canvas();
+
+        const Canvas& operator = (const Canvas&) = delete;
+        
+        void set_size(ivec2 value); 
+
+        ivec2 get_size() const;
+
+        void draw_rectangle(ivec2 pos, ivec2 size, vec4 color);
+
+        void draw_rectangle(ivec2 pos, ivec2 size, vec4 color, Texture& texture);
+
+    private:
+        ivec2 size;
+
+        mat4   projection_matrix;
+        mat4   model_view_matrix;
+        Shader shader;
+        Mesh   rect;
+    };
+
+}
 
 #endif

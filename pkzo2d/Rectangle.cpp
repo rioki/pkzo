@@ -22,23 +22,49 @@
   SOFTWARE.
 */
 
-#ifndef _PKZO_DEFINES_H_
-#define _PKZO_DEFINES_H_
+#include "Rectangle.h"
 
-/**
- * Current Version of pkzo
- **/
-#define PZKO_VERSION "0.1.0"
+#include "Canvas.h"
 
-#ifdef _WIN32
-#define PKZO_EXPORT __declspec(dllexport)
-#else
-#define PKZO_EXPORT  
-#endif
+namespace pkzo
+{        
+    Rectangle::Rectangle() {}
 
-// disable silly warnings
-#ifndef _MSVC
-#pragma warning(disable: 4251)
-#endif
+    Rectangle::~Rectangle() {}
 
-#endif
+    void Rectangle::set_color(const vec4& value)
+    {
+        color = value;
+    }
+
+    const vec4& Rectangle::get_color() const
+    {
+        return color;
+    }
+
+    void Rectangle::set_texture(std::shared_ptr<Texture> value)
+    {
+        texture = value;
+        if (texture)
+        {
+            set_size(texture->get_size());
+        }
+    }
+
+    std::shared_ptr<Texture> Rectangle::get_texture() const
+    {
+        return texture;
+    }
+
+    void Rectangle::draw(Canvas& canvas) const
+    {
+        if (texture)
+        {
+            canvas.draw_rectangle(position, size, color, *texture);
+        }
+        else
+        {
+            canvas.draw_rectangle(position, size, color);
+        }
+    }
+}

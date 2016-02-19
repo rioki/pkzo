@@ -22,23 +22,21 @@
   SOFTWARE.
 */
 
-#ifndef _PKZO_DEFINES_H_
-#define _PKZO_DEFINES_H_
+#version 400
 
-/**
- * Current Version of pkzo
- **/
-#define PZKO_VERSION "0.1.0"
+uniform mat4 uProjectionMatrix;
+uniform mat4 uModelViewMatrix;
 
-#ifdef _WIN32
-#define PKZO_EXPORT __declspec(dllexport)
-#else
-#define PKZO_EXPORT  
-#endif
+layout(location = 0) in vec4 aVertex;
+layout(location = 1) in vec3 aNormal;
+layout(location = 2) in vec2 aTexCoord;
+layout(location = 3) in vec2 aTangent;
+layout(location = 4) in vec3 aColor;
 
-// disable silly warnings
-#ifndef _MSVC
-#pragma warning(disable: 4251)
-#endif
+out vec2 vTexCoord;
 
-#endif
+void main()
+{	
+	vTexCoord   = aTexCoord;
+    gl_Position = uProjectionMatrix * uModelViewMatrix * aVertex;
+}

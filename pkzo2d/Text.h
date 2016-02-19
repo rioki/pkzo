@@ -22,23 +22,54 @@
   SOFTWARE.
 */
 
-#ifndef _PKZO_DEFINES_H_
-#define _PKZO_DEFINES_H_
+#ifndef _PKZO_TEXT_H_
+#define _PKZO_TEXT_H_
 
-/**
- * Current Version of pkzo
- **/
-#define PZKO_VERSION "0.1.0"
+#include <memory>
+#include <string>
+#include <tuple>
+#include <vector>
 
-#ifdef _WIN32
-#define PKZO_EXPORT __declspec(dllexport)
-#else
-#define PKZO_EXPORT  
+#include "Widget.h"
+
+namespace pkzo
+{
+    class Font;
+    class Texture;
+
+    class PKZO_EXPORT Text : public Widget
+    {
+    public:
+        
+        Text();
+
+        ~Text();
+
+        void set_font(std::shared_ptr<Font> value);
+
+        std::shared_ptr<Font> get_font() const;
+
+        void set_text(const std::string& value);
+
+        const std::string& get_text() const;
+
+        void set_color(const vec4& value);
+
+        const vec4& get_color() const;
+
+        void draw(Canvas& canvas) const override;
+
+    private:
+        std::shared_ptr<Font> font;
+        std::string           text;
+        vec4                  color;
+
+        mutable bool                 dirty;
+        mutable std::vector<Texture> textures;
+
+        void estimate();
+    };
+}
+
 #endif
 
-// disable silly warnings
-#ifndef _MSVC
-#pragma warning(disable: 4251)
-#endif
-
-#endif

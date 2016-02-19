@@ -22,23 +22,24 @@
   SOFTWARE.
 */
 
-#ifndef _PKZO_DEFINES_H_
-#define _PKZO_DEFINES_H_
+#version 400
 
-/**
- * Current Version of pkzo
- **/
-#define PZKO_VERSION "0.1.0"
+uniform bool      uHasTexture;
+uniform sampler2D uTexture;
+uniform vec4      uColor;
 
-#ifdef _WIN32
-#define PKZO_EXPORT __declspec(dllexport)
-#else
-#define PKZO_EXPORT  
-#endif
+in vec2 vTexCoord;
 
-// disable silly warnings
-#ifndef _MSVC
-#pragma warning(disable: 4251)
-#endif
+out vec4 gl_FragColor;
 
-#endif
+void main()
+{	    
+    if (uHasTexture)
+    {
+        gl_FragColor = texture(uTexture, vTexCoord) * uColor;	
+    }
+    else
+    {
+        gl_FragColor = uColor;
+    }
+}

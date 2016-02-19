@@ -22,23 +22,51 @@
   SOFTWARE.
 */
 
-#ifndef _PKZO_DEFINES_H_
-#define _PKZO_DEFINES_H_
+#ifndef _PKZO_WIDGET_H_
+#define _PKZO_WIDGET_H_
 
-/**
- * Current Version of pkzo
- **/
-#define PZKO_VERSION "0.1.0"
+#include <pkzo/defines.h>
 
-#ifdef _WIN32
-#define PKZO_EXPORT __declspec(dllexport)
-#else
-#define PKZO_EXPORT  
-#endif
+#include <rgm/rgm.h>
 
-// disable silly warnings
-#ifndef _MSVC
-#pragma warning(disable: 4251)
-#endif
+namespace pkzo
+{
+    using namespace rgm;    
+
+    class Canvas;
+
+    class PKZO_EXPORT Widget
+    {
+    public:
+
+        Widget();
+
+        Widget(const Widget&) = delete;
+
+        virtual ~Widget();
+
+        const Widget& operator = (const Widget&) = delete;
+
+        void set_position(const ivec2& value);
+
+        const ivec2& get_position() const;
+
+        void set_size(const ivec2& value);
+
+        const ivec2& get_size() const;
+
+        virtual void draw(Canvas& canvas) const;
+
+        virtual void handle_mouse_move(ivec2 pos, ivec2 mov);
+
+        virtual void handle_mouse_down(unsigned int button, ivec2 pos);
+
+        virtual void handle_mouse_up(unsigned int button, ivec2 pos);
+
+    protected:
+        ivec2 position;
+        ivec2 size;
+    };
+}
 
 #endif

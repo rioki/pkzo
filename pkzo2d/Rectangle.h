@@ -22,23 +22,39 @@
   SOFTWARE.
 */
 
-#ifndef _PKZO_DEFINES_H_
-#define _PKZO_DEFINES_H_
+#ifndef _PKZO_RECTANGLE_H_
+#define _PKZO_RECTANGLE_H_
 
-/**
- * Current Version of pkzo
- **/
-#define PZKO_VERSION "0.1.0"
+#include <memory>
 
-#ifdef _WIN32
-#define PKZO_EXPORT __declspec(dllexport)
-#else
-#define PKZO_EXPORT  
-#endif
+#include "Widget.h"
 
-// disable silly warnings
-#ifndef _MSVC
-#pragma warning(disable: 4251)
-#endif
+namespace pkzo
+{
+    class Texture;
+
+    class PKZO_EXPORT Rectangle : public Widget
+    {
+    public:
+
+        Rectangle();
+
+        ~Rectangle();
+
+        void set_color(const vec4& value);
+
+        const vec4& get_color() const;
+
+        void set_texture(std::shared_ptr<Texture> value);
+
+        std::shared_ptr<Texture> get_texture() const;
+
+        void draw(Canvas& canvas) const override;        
+
+    private:
+        vec4                     color;
+        std::shared_ptr<Texture> texture;
+    };
+}
 
 #endif
