@@ -119,7 +119,6 @@ namespace pkzo
             }
             dirty = false;
         }
-
         
         // TODO aligment
         ivec2 p2 = position;

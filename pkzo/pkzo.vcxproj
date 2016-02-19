@@ -110,7 +110,7 @@ copy $(SolutionDir)ext\SDL2_image\lib\$(PlatformTarget)\*.dll $(OutDir)
 copy $(SolutionDir)ext\SDL2_ttf\lib\$(PlatformTarget)\*.dll $(OutDir)
 copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)
 copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutDir)
-copy $(SolutionDir)ext\ode\$(PlatformTarget)\$(Configuration)\ode.dll $(OutDir)</Command>
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -134,7 +134,7 @@ copy $(SolutionDir)ext\SDL2_image\lib\$(PlatformTarget)\*.dll $(OutDir)
 copy $(SolutionDir)ext\SDL2_ttf\lib\$(PlatformTarget)\*.dll $(OutDir)
 copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)
 copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutDir)
-copy $(SolutionDir)ext\ode\$(PlatformTarget)\$(Configuration)\ode.dll $(OutDir)</Command>
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -162,7 +162,7 @@ copy $(SolutionDir)ext\SDL2_image\lib\$(PlatformTarget)\*.dll $(OutDir)
 copy $(SolutionDir)ext\SDL2_ttf\lib\$(PlatformTarget)\*.dll $(OutDir)
 copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)
 copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutDir)
-copy $(SolutionDir)ext\ode\$(PlatformTarget)\$(Configuration)\ode.dll $(OutDir)</Command>
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -190,7 +190,7 @@ copy $(SolutionDir)ext\SDL2_image\lib\$(PlatformTarget)\*.dll $(OutDir)
 copy $(SolutionDir)ext\SDL2_ttf\lib\$(PlatformTarget)\*.dll $(OutDir)
 copy $(SolutionDir)ext\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)
 copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutDir)
-copy $(SolutionDir)ext\ode\$(PlatformTarget)\$(Configuration)\ode.dll $(OutDir)</Command>
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
