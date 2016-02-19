@@ -34,6 +34,7 @@
 #include "Texture.h"
 #include "Shader.h"
 #include "Font.h"
+#include "Mesh.h"
 
 namespace pkzo
 {

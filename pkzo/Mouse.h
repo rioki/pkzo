@@ -58,6 +58,11 @@ namespace pkzo
         
         bool is_cursor_visible() const;    
 
+        /**
+         * Check if a mouse button is pressed.
+         **/
+        bool is_pressed(unsigned int button) const;
+
     private:
         static std::vector<Mouse*> instances;
 

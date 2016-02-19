@@ -76,6 +76,11 @@ namespace pkzo
         return SDL_ShowCursor(-1) == 1;
     }
         
+    bool Mouse::is_pressed(unsigned int button) const
+    {
+        return (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(button)) == SDL_BUTTON(button);
+    }
+
     void Mouse::handle_event(SDL_Event& event)
     {
         switch (event.type)

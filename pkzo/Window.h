@@ -62,6 +62,11 @@ namespace pkzo
 
         ivec2 get_size() const;
 
+        /**
+         * Get the window's aspect ratio.
+         **/
+        float get_aspect() const;
+
         Mode get_mode() const;
 
         void on_draw(std::function<void ()> cb);

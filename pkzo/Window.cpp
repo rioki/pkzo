@@ -78,6 +78,13 @@ namespace pkzo
         return ivec2(w, h);
     }
 
+    float Window::get_aspect() const
+    {
+        int w, h;
+        SDL_GetWindowSize(window, &w, &h);
+        return (float)w / (float)h;
+    }
+
     Window::Mode Window::get_mode() const
     {
         return mode;
