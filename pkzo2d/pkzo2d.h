@@ -22,42 +22,14 @@
   SOFTWARE.
 */
 
-#include <pkzo/pkzo.h>
-#include <pkzo2d/pkzo2d.h>
+#ifndef _PKZO2D_H_
+#define _PKZO2D_H_
 
-#include "TestScreen.h"
+#include "Canvas.h"
 
-int main(int argc, char* argv[])
-{    
-    bool  running = true;
-        
-    pkzo::Window window(rgm::ivec2(1280, 768));  
-    pkzo::Canvas canvas(window.get_size());
-    ui::TestScreen screen(window.get_size());
+#include "Screen.h"
+#include "Widget.h"
+#include "Rectangle.h"
+#include "Text.h"
 
-    window.on_draw([&] () {                     
-        screen.draw(canvas);
-    });
-    window.on_close([&] () {                    
-        running = false;
-    });
-
-    pkzo::Keyboard keyboard;                    
-    keyboard.on_key_press([&] (pkzo::Key key) { 
-        if (key == pkzo::KEY_ESCAPE)            
-        {                                       
-            running = false;                    
-        }
-    });    
-
-    pkzo::Mouse mouse;
-    mouse.on_move([&] (rgm::ivec2 mov, rgm::ivec2 pos) {
-    });
-
-    while (running)                             
-    {
-        pkzo::route_events();                   
-        
-        window.draw();                          
-    }
-}
+#endif

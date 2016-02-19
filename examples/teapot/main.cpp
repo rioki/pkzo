@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
     pkzo::Shader shader;
     shader.load("../assets/shaders/PhongVertex.glsl", "../assets/shaders/PhongFragment.glsl");
 
-    pkzo::Window window(rgm::ivec2(800, 600));  
+    pkzo::Window window(rgm::ivec2(1280, 768));  
     window.on_draw([&] () {                     
         
         glEnable(GL_DEPTH_TEST);

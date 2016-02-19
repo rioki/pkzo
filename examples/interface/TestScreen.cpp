@@ -2,43 +2,69 @@
 #include "TestScreen.h"
 
 #include <sstream>
-#include <pkzo/Library.h>
-
-using pkzo::Vector2;
-using pkzo::Color;
+#include <pkzo/pkzo.h>
 
 namespace ui
 {
-    TestScreen::TestScreen(pkzo::Engine& engine)
-    : Screen(pkzo::Vector2(1280, 768))
+    std::shared_ptr<pkzo::Font> load_font(const std::string& file, unsigned int size)
     {
-        pkzo::Library& lib = engine.get_library();
+        std::shared_ptr<pkzo::Font> font(new pkzo::Font);
+        font->load(file, size);
+        return font;
+    }
 
-        auto title_font = lib.load_font("../assets/fonts/DejaVuSans.ttf", 32);
-        auto text_font  = lib.load_font("../assets/fonts/DejaVuSans.ttf", 18);
+    std::shared_ptr<pkzo::Texture> load_texture(const std::string& file)
+    {
+        std::shared_ptr<pkzo::Texture> texture(new pkzo::Texture);
+        texture->load(file);
+        return texture;
+    }
 
-        auto button_background   = lib.load_texture("../assets/textures/Button.png");
-        auto checkbox_background = lib.load_texture("../assets/textures/CheckBox_Background.png");
-        auto checkbox_mark       = lib.load_texture("../assets/textures/CheckBox_Mark.png");
-        auto slider_background   = lib.load_texture("../assets/textures/Slider_Background.png");
-        auto slider_nob          = lib.load_texture("../assets/textures/Slider_Nob.png");
+    rgm::vec4 color(unsigned long hex)
+    {
+        unsigned long r = (0xFF000000 & hex) >> 24;
+        unsigned long g = (0x00FF0000 & hex) >> 16;
+        unsigned long b = (0x0000FF00 & hex) >> 8;
+        unsigned long a = (0x000000FF & hex);  
 
-        set_background_color(Color(0x131619FF));
+        rgm::vec4 values;
+
+        values[0] = static_cast<float>(r) / 255.0f;
+        values[1] = static_cast<float>(g) / 255.0f;
+        values[2] = static_cast<float>(b) / 255.0f;
+        values[3] = static_cast<float>(a) / 255.0f;
+
+        return values;
+    }
+
+    TestScreen::TestScreen(rgm::ivec2 size)
+    : Screen(size)
+    {
+        auto title_font = load_font("../assets/fonts/DejaVuSans.ttf", 32);
+        auto text_font  = load_font("../assets/fonts/DejaVuSans.ttf", 18);
+
+        auto button_background   = load_texture("../assets/textures/Button.png");
+        auto checkbox_background = load_texture("../assets/textures/CheckBox_Background.png");
+        auto checkbox_mark       = load_texture("../assets/textures/CheckBox_Mark.png");
+        auto slider_background   = load_texture("../assets/textures/Slider_Background.png");
+        auto slider_nob          = load_texture("../assets/textures/Slider_Nob.png");
+
+        set_background_color(color(0x131619FF));
 
         title.set_text("Interface Example");    
         title.set_font(title_font);
-        title.set_position(Vector2(50, 50));
-        title.set_color(Color(0x7C8A99FF));
+        title.set_position(rgm::ivec2(50, 50));
+        title.set_color(color(0x7C8A99FF));
         add_widget(title);
 
         
-        panel.set_color(Color(0x292E33FF));
-        panel.set_position(Vector2(50, 150));
-        panel.set_size(Vector2(1180, 568));
+        panel.set_color(color(0x292E33FF));
+        panel.set_position(rgm::ivec2(50, 150));
+        panel.set_size(rgm::ivec2(1180, 568));
         add_widget(panel);
 
 
-        button.set_caption("Press Me");
+        /*button.set_caption("Press Me");
         button.set_font(text_font);
         button.set_color(Color(0x7C8A99FF));
         button.set_background(button_background);
@@ -102,7 +128,7 @@ namespace ui
         slider_out.set_font(text_font);
         slider_out.set_color(Color(0x7C8A99FF));
         slider_out.set_position(Vector2(350, 275));
-        add_widget(slider_out);
+        add_widget(slider_out);*/
     }
 
     TestScreen::~TestScreen()

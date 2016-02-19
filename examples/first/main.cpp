@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
 {    
     bool running = true;                        // flag used to control the main loop
 
-    pkzo::Window window(rgm::ivec2(800, 600));  // open a window for rendering
+    pkzo::Window window(rgm::ivec2(1280, 768));  // open a window for rendering
     window.on_draw([&] () {                     // when the window is drawn, this callback is called
         // all rendering code goes here
     });

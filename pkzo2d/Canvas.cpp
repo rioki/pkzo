@@ -95,7 +95,7 @@ namespace pkzo
         shader.set_uniform("uProjectionMatrix", projection_matrix);
         shader.set_uniform("uModelViewMatrix", model_view_matrix);
 
-        shader.set_uniform("uvec4", color);
+        shader.set_uniform("uColor", color);
         
         shader.set_uniform("uHasTexture", 0);
         
@@ -117,7 +117,7 @@ namespace pkzo
         shader.set_uniform("uProjectionMatrix", projection_matrix);
         shader.set_uniform("uModelViewMatrix", model_view_matrix);
 
-        shader.set_uniform("uvec4", color);
+        shader.set_uniform("uColor", color);
         
         texture.bind(0);
         shader.set_uniform("uTexture", 0);
