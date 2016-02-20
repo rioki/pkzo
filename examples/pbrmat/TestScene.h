@@ -22,32 +22,37 @@
   SOFTWARE.
 */
 
-#include "TestScene.h"
+#ifndef _TEST_SCENE_H_
+#define _TEST_SCENE_H_
+
+#include <pkzo/pkzo.h>
+#include <pkzo3d/pkzo3d.h>
 
 namespace pm
 {
-    TestScene::TestScene()
+    class TestScene : public pkzo::Scene
     {
-        mesh.reset(new pkzo::Mesh);
-        mesh->create_box(rgm::vec3(1));
+    public:
+        
+        TestScene();
 
-        material.reset(new pkzo::Material);
-        material->set_albedo(rgm::vec3(1, 0, 0));
+        ~TestScene();
 
-        camera.set_position(rgm::vec3(0, 0, 10));
-        add_entity(camera);
+        pkzo::Camera& get_camera();
 
-        add_entity(light0);
+        void rotate_camera(rgm::ivec2 mov);
 
-        subject.set_mesh(mesh);
-        subject.set_material(material);
-        add_entity(subject);
-    }
+    private:
+        std::shared_ptr<pkzo::Mesh>     mesh;
+        std::shared_ptr<pkzo::Material> material;
 
-    TestScene::~TestScene() {}
+        pkzo::Camera           camera;
+        pkzo::DirectionalLight light0;
+        pkzo::Geometry         subject;
+        pkzo::SkyBox           sky;
 
-    pkzo::Camera& TestScene::get_camera()
-    {
-        return camera;
-    }
+        rgm::vec3 cam_pos;
+    };
 }
+
+#endif

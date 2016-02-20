@@ -22,17 +22,48 @@
   SOFTWARE.
 */
 
-#ifndef _PKZO3D_H_
-#define _PKZO3D_H_
+#ifndef _PKZO_CUBE_MAP_H_
+#define _PKZO_CUBE_MAP_H_
 
-#include "SceneRenderer.h"
-#include "Scene.h"
-#include "Entity.h"
-#include "Camera.h"
-#include "DirectionalLight.h"
-#include "Geometry.h"
-#include "SkyBox.h"
-#include "Material.h"
+#include "defines.h"
+
+#include "Texture.h"
+
+namespace pkzo
+{
+
+    class PKZO_EXPORT CubeMap
+    {
+    public:
+        
+        CubeMap();
+
+        CubeMap(const CubeMap&) = delete;
+
+        ~CubeMap();
+
+        const CubeMap& operator = (const CubeMap&) = delete;
+        
+        void load(const std::string& xp, const std::string& xn, 
+                  const std::string& yp, const std::string& yn,
+                  const std::string& zp, const std::string& zn);
+
+        void bind(unsigned int slot) const;
+
+        void upload() const;
+
+        void release() const;
+
+    private:
+        mutable unsigned int glid;
+        Texture xpos;
+        Texture xneg;
+        Texture ypos;
+        Texture yneg;
+        Texture zpos;
+        Texture zneg;
+
+    };
+}
 
 #endif
-

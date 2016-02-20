@@ -54,6 +54,9 @@
     <ClInclude Include="SpotLight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SkyBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scene.cpp">
@@ -89,6 +92,9 @@
     <ClCompile Include="SpotLight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SkyBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="pkzo3d.rc">
@@ -100,6 +106,12 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="PhongVertex.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="SkyBoxFragment.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="SkyBoxVertex.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

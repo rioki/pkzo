@@ -20,6 +20,11 @@ namespace pm
         // keyboard
 
         mouse.on_move([&] (rgm::ivec2 mov, rgm::ivec2 pos) {
+            if (mouse.is_pressed(2))
+            {
+                scene.rotate_camera(mov);
+            }
+
             screen.handle_mouse_move(mov, pos);
         });
         mouse.on_button_press([&] (unsigned int button, rgm::ivec2 pos) {

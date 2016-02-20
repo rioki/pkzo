@@ -49,19 +49,27 @@ namespace pkzo
     }
 
     SceneRenderer::SceneRenderer()
+    : sky_box(nullptr)
     {
         #ifdef _MSC_VER
         HMODULE hModule = GetModuleHandle(_T("pkzo3d.dll"));
 
         std::string phong_vertex   = LoadTextResource(hModule, MAKEINTRESOURCE(IDR_GLSL_PHONG_VERTEX), _T("GLSL"));
         std::string phong_fragment = LoadTextResource(hModule, MAKEINTRESOURCE(IDR_GLSL_PHONG_FRAGMENT), _T("GLSL"));
+
+        std::string skybox_vertex   = LoadTextResource(hModule, MAKEINTRESOURCE(IDR_GLSL_SKYBOX_VERTEX), _T("GLSL"));
+        std::string skybox_fragment = LoadTextResource(hModule, MAKEINTRESOURCE(IDR_GLSL_SKYBOX_FRAGMENT), _T("GLSL"));
         #else
         // TODO
         #endif
 
         phong_shader.set_vertex_code(phong_vertex);
         phong_shader.set_fragment_code(phong_fragment);
-        
+
+        skybox_shader.set_vertex_code(skybox_vertex);
+        skybox_shader.set_fragment_code(skybox_fragment);
+
+        screen_rect.create_screen_plane();        
     }
 
     SceneRenderer::~SceneRenderer() {}
@@ -70,6 +78,11 @@ namespace pkzo
     {
         projection_matrix = projection;
         view_matrix       = view;
+    }
+
+    void SceneRenderer::set_sky_box(CubeMap & value)
+    {
+        sky_box = &value;
     }
 
     void SceneRenderer::queue_ambient_light(const vec3& color)
@@ -127,6 +140,34 @@ namespace pkzo
 
     void SceneRenderer::render()
     {
+        draw_sky_box();
+        draw_lit_objects();
+
+        sky_box = nullptr;
+        lights.clear();
+        geometries.clear();
+    }
+
+    void SceneRenderer::draw_sky_box()
+    {
+        if (sky_box != nullptr)
+        {
+            glDisable(GL_DEPTH_TEST);
+
+            skybox_shader.bind();
+
+            skybox_shader.set_uniform("uProjectionMatrix", projection_matrix);
+            skybox_shader.set_uniform("uViewMatrix",       view_matrix);
+
+            sky_box->bind(0);
+            skybox_shader.set_uniform("uCubeMap", 0);
+
+            screen_rect.draw();
+        }
+    }
+
+    void SceneRenderer::draw_lit_objects()
+    {
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
         
@@ -159,8 +200,5 @@ namespace pkzo
             // enable blending after the first pass.
             glEnable(GL_BLEND);
         }
-
-        lights.clear();
-        geometries.clear();
-    }
+    } 
 }

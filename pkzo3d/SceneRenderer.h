@@ -31,12 +31,13 @@
 
 #include <pkzo/defines.h>
 #include <pkzo/Shader.h>
+#include <pkzo/CubeMap.h>
+#include <pkzo/Mesh.h>
 
 namespace pkzo
 {
     using namespace rgm;
-
-    class Mesh;
+    
     class Material;
 
     class PKZO_EXPORT SceneRenderer
@@ -51,6 +52,8 @@ namespace pkzo
         const SceneRenderer& operator = (const SceneRenderer&) = delete;
 
         void orient_camera(const mat4& projection, const mat4& view);
+
+        void set_sky_box(CubeMap& value);
 
         void queue_ambient_light(const vec3& color);
 
@@ -92,11 +95,18 @@ namespace pkzo
 
         mat4                    projection_matrix;
         mat4                    view_matrix;
+        CubeMap*                sky_box;
         std::list<LightInfo>    lights;
         std::list<GeometryInfo> geometries;
 
         // TMP phong for test purposes
         Shader phong_shader;
+        Shader skybox_shader;
+
+        Mesh   screen_rect;
+
+        void draw_sky_box();
+        void draw_lit_objects();
     };
 }
 

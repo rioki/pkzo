@@ -22,32 +22,31 @@
   SOFTWARE.
 */
 
-#ifndef _TEST_SCENE_H_
-#define _TEST_SCENE_H_
+#include "SkyBox.h"
 
-#include <pkzo/pkzo.h>
-#include <pkzo3d/pkzo3d.h>
+#include "SceneRenderer.h"
 
-namespace pm
+namespace pkzo
 {
-    class TestScene : public pkzo::Scene
+    SkyBox::SkyBox() {}
+
+    SkyBox::~SkyBox() {}
+
+    void SkyBox::set_cubemap(std::shared_ptr<CubeMap> value)
     {
-    public:
-        
-        TestScene();
+        cubemap = value;
+    }
 
-        ~TestScene();
+    std::shared_ptr<CubeMap> SkyBox::get_cubemap() const
+    {
+        return cubemap;
+    }
 
-        pkzo::Camera& get_camera();
-
-    private:
-        std::shared_ptr<pkzo::Mesh>     mesh;
-        std::shared_ptr<pkzo::Material> material;
-
-        pkzo::Camera           camera;
-        pkzo::DirectionalLight light0;
-        pkzo::Geometry         subject;
-    };
+    void SkyBox::enqueue(SceneRenderer& renderer, const Camera& camera) const
+    {
+        if (cubemap)
+        {
+            renderer.set_sky_box(*cubemap);
+        }
+    }
 }
-
-#endif

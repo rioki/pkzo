@@ -22,17 +22,33 @@
   SOFTWARE.
 */
 
-#ifndef _PKZO3D_H_
-#define _PKZO3D_H_
+#ifndef _PKZO_SKY_BOX_H_
+#define _PKZO_SKY_BOX_H_
 
-#include "SceneRenderer.h"
-#include "Scene.h"
 #include "Entity.h"
-#include "Camera.h"
-#include "DirectionalLight.h"
-#include "Geometry.h"
-#include "SkyBox.h"
-#include "Material.h"
+
+#include <memory>
+
+namespace pkzo
+{
+    class CubeMap;
+
+    class PKZO_EXPORT SkyBox : public Entity
+    {
+    public:
+        SkyBox();
+
+        ~SkyBox();
+
+        void set_cubemap(std::shared_ptr<CubeMap> value);
+
+        std::shared_ptr<CubeMap> get_cubemap() const;
+
+        void enqueue(SceneRenderer& renderer, const Camera& camera) const override;
+
+    private:
+        std::shared_ptr<CubeMap> cubemap;
+    };
+}
 
 #endif
-

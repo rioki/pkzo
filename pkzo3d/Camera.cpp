@@ -63,6 +63,7 @@ namespace pkzo
     mat4 Camera::get_view_matrix() const
     {
         quat o  = get_world_orientation();
+
         vec3 vx = transform(o, vec3(1, 0, 0));
         vec3 vy = transform(o, vec3(0, 1, 0));
         vec3 vz = transform(o, vec3(0, 0, 1));
@@ -79,7 +80,7 @@ namespace pkzo
                 vz[0], vz[1], vz[2], 0.0f,
                  0.0f,  0.0f,  0.0f, 1.0f);
         
-        return mp * mo;
+       return mp * mo;
     }
 
     void Camera::enqueue(SceneRenderer& queue, const Camera& camera) const

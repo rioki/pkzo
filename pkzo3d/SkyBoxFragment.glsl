@@ -22,17 +22,16 @@
   SOFTWARE.
 */
 
-#ifndef _PKZO3D_H_
-#define _PKZO3D_H_
+#version 400
 
-#include "SceneRenderer.h"
-#include "Scene.h"
-#include "Entity.h"
-#include "Camera.h"
-#include "DirectionalLight.h"
-#include "Geometry.h"
-#include "SkyBox.h"
-#include "Material.h"
+uniform samplerCube uCubeMap;
 
-#endif
+in vec3 vTexCoord;
 
+out vec4 oFragColor;
+
+void main()
+{
+    oFragColor = texture(uCubeMap, vTexCoord);
+    //oFragColor = vec4(vTexCoord, 1);
+}
