@@ -34,13 +34,11 @@ layout(location = 2) in vec2 aTexCoord;
 layout(location = 3) in vec2 aTangent;
 layout(location = 4) in vec3 aColor;
 
-out vec3 vNormal;
+out vec3 vEnvDir;
 
 void main()
 {   
-    mat3 normalMatrix = mat3(uViewMatrix);
-    //vNormal = normalMatrix * aNormal;
-    vNormal = aNormal;
+    vEnvDir = normalize(aNormal.xyz);
 
     gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * aVertex;
 }

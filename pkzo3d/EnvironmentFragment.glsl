@@ -31,7 +31,7 @@ uniform sampler2D uMaterialTexture;
 
 uniform samplerCube uEnvMap;
 
-in vec3 vNormal;
+in vec3 vEnvDir;
 
 out vec4 oFragColor;
 
@@ -39,9 +39,7 @@ void main()
 {
     vec3 result = vec3(0);
 
-    result += texture(uEnvMap, vNormal).rgb * uMaterialAlbedo; 
-    //result += 
-    //result += uMaterialAlbedo;
+    result += texture(uEnvMap, vEnvDir).rgb * uMaterialAlbedo; 
     
     oFragColor = vec4(result, 1.0);
 }
