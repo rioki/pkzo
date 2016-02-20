@@ -71,9 +71,9 @@ namespace pkzo
 
         virtual void handle_mouse_move(ivec2 pos, ivec2 mov);
 
-        virtual void handle_mouse_down(unsigned int button, ivec2 pos);
+        virtual void handle_mouse_press(unsigned int button, ivec2 pos);
 
-        virtual void handle_mouse_up(unsigned int button, ivec2 pos);
+        virtual void handle_mouse_release(unsigned int button, ivec2 pos);
 
     private:
         ivec2 size;

@@ -55,13 +55,13 @@ namespace pkzo
 
         const ivec2& get_size() const;
 
-        virtual void draw(Canvas& canvas) const;
+        virtual void draw(Canvas& canvas, ivec2 offset) const;
 
         virtual void handle_mouse_move(ivec2 pos, ivec2 mov);
 
-        virtual void handle_mouse_down(unsigned int button, ivec2 pos);
+        virtual void handle_mouse_press(unsigned int button, ivec2 pos);
 
-        virtual void handle_mouse_up(unsigned int button, ivec2 pos);
+        virtual void handle_mouse_release(unsigned int button, ivec2 pos);
 
     protected:
         ivec2 position;

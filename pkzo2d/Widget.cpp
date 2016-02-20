@@ -51,11 +51,11 @@ namespace pkzo
         return size;
     }
 
-    void Widget::draw(Canvas& canvas) const {}
+    void Widget::draw(Canvas& canvas, ivec2 offset) const {}
 
     void Widget::handle_mouse_move(ivec2 pos, ivec2 mov) {}
 
-    void Widget::handle_mouse_down(unsigned int button, ivec2 pos) {}
+    void Widget::handle_mouse_press(unsigned int button, ivec2 pos) {}
 
-    void Widget::handle_mouse_up(unsigned int button, ivec2 pos) {}
+    void Widget::handle_mouse_release(unsigned int button, ivec2 pos) {}
 }

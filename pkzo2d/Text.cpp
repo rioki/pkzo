@@ -107,7 +107,7 @@ namespace pkzo
         return color;
     }
 
-    void Text::draw(Canvas& canvas) const
+    void Text::draw(Canvas& canvas, ivec2 offset) const
     {
         if (dirty)
         {
@@ -121,7 +121,7 @@ namespace pkzo
         }
         
         // TODO aligment
-        ivec2 p2 = position;
+        ivec2 p2 = position + offset;
         for (auto& texture : textures)
         {
             canvas.draw_rectangle(p2, texture.get_size(), color, texture);

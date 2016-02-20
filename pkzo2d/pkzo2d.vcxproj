@@ -163,19 +163,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Canvas.h" />
+    <ClInclude Include="HitArea.h" />
     <ClInclude Include="pkzo2d.h" />
     <ClInclude Include="Rectangle.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Widget.h" />
+    <ClInclude Include="WidgetGroup.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Canvas.cpp" />
+    <ClCompile Include="HitArea.cpp" />
     <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Widget.cpp" />
+    <ClCompile Include="WidgetGroup.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="pkzo2d.rc" />

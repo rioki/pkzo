@@ -22,49 +22,61 @@
   SOFTWARE.
 */
 
-#include "Rectangle.h"
-
-#include "Canvas.h"
+#include "WidgetGroup.h"
 
 namespace pkzo
-{        
-    Rectangle::Rectangle() {}
+{
+    WidgetGroup::WidgetGroup() {}
 
-    Rectangle::~Rectangle() {}
+    WidgetGroup::~WidgetGroup() {}
 
-    void Rectangle::set_color(const vec4& value)
+    void WidgetGroup::add_widget(Widget& widget) 
     {
-        color = value;
+        widgets.push_back(&widget);
     }
 
-    const vec4& Rectangle::get_color() const
+    void WidgetGroup::remove_widget(Widget& widget) 
     {
-        return color;
-    }
-
-    void Rectangle::set_texture(std::shared_ptr<Texture> value)
-    {
-        texture = value;
-        if (texture)
+        auto i = std::find(widgets.begin(), widgets.end(), &widget);
+        if (i != widgets.end())
         {
-            set_size(texture->get_size());
-        }
-    }
-
-    std::shared_ptr<Texture> Rectangle::get_texture() const
-    {
-        return texture;
-    }
-
-    void Rectangle::draw(Canvas& canvas, ivec2 offset) const
-    {
-        if (texture)
-        {
-            canvas.draw_rectangle(position + offset, size, color, *texture);
+            widgets.erase(i);
         }
         else
         {
-            canvas.draw_rectangle(position + offset, size, color);
+            throw std::logic_error("widget not in group");
         }
     }
+
+    void WidgetGroup::draw(Canvas& canvas, ivec2 offset) const 
+    {
+        for (const Widget* widget : widgets)
+        {
+            widget->draw(canvas, position + offset);
+        }
+    }
+
+    void WidgetGroup::handle_mouse_move(ivec2 pos, ivec2 mov) 
+    {
+        for (Widget* widget : widgets)
+        {
+            widget->handle_mouse_move(pos - position, mov);
+        }
+    }
+
+    void WidgetGroup::handle_mouse_press(unsigned int button, ivec2 pos) 
+    {
+        for (Widget* widget : widgets)
+        {
+            widget->handle_mouse_press(button, pos - position);
+        }
+    }
+
+    void WidgetGroup::handle_mouse_release(unsigned int button, ivec2 pos) 
+    {
+        for (Widget* widget : widgets)
+        {
+            widget->handle_mouse_release(button, pos - position);
+        }
+    }    
 }

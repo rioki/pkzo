@@ -64,13 +64,13 @@ namespace ui
         add_widget(panel);
 
 
-        /*button.set_caption("Press Me");
-        button.set_font(text_font);
-        button.set_color(Color(0x7C8A99FF));
-        button.set_background(button_background);
-        button.set_background_color(Color(0x3E454CFF));
-        button.set_position(Vector2(60, 160));
-        button.set_size(Vector2(170, 50));
+        button.set_label("Press Me");
+        button.set_label_font(text_font);
+        button.set_label_color(color(0x7C8A99FF));
+        button.set_background_texture(button_background);
+        button.set_background_color(color(0x3E454CFF));
+        button.set_position(rgm::ivec2(60, 160));
+        button.set_size(rgm::ivec2(170, 50));
         button.on_click([&] () {
             button_out.set_text("#YOLO");
         });
@@ -78,12 +78,12 @@ namespace ui
 
         button_out.set_text("<-- Press the Button");
         button_out.set_font(text_font);
-        button_out.set_color(Color(0x7C8A99FF));
-        button_out.set_position(Vector2(250, 175));
+        button_out.set_color(color(0x7C8A99FF));
+        button_out.set_position(rgm::ivec2(250, 175));
         add_widget(button_out);
 
 
-        checkbox.set_caption("Checkbox");
+        /*checkbox.set_caption("Checkbox");
         checkbox.set_font(text_font);
         checkbox.set_color(Color(0x7C8A99FF));
         checkbox.set_background(checkbox_background);

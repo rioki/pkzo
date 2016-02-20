@@ -22,54 +22,52 @@
   SOFTWARE.
 */
 
-#ifndef _PKZO_TEXT_H_
-#define _PKZO_TEXT_H_
+#ifndef _PKZOUI_BUTTON_H_
+#define _PKZOUI_BUTTON_H_
 
-#include <memory>
-#include <string>
-#include <tuple>
-#include <vector>
-
-#include "Widget.h"
+#include <pkzo2d/WidgetGroup.h>
+#include <pkzo2d/Text.h>
+#include <pkzo2d/Rectangle.h>
+#include <pkzo2d/HitArea.h>
 
 namespace pkzo
 {
-    class Font;
-    class Texture;
-
-    class PKZO_EXPORT Text : public Widget
+    class PKZO_EXPORT Button : public pkzo::WidgetGroup
     {
     public:
-        
-        Text();
+        Button();
 
-        ~Text();
+        ~Button();
 
-        void set_font(std::shared_ptr<Font> value);
+        void set_label(const std::string& value);
 
-        std::shared_ptr<Font> get_font() const;
+        const std::string& get_label() const;
 
-        void set_text(const std::string& value);
+        void set_label_color(const vec4& value);
 
-        const std::string& get_text() const;
+        const vec4& get_label_color() const;
 
-        void set_color(const vec4& value);
+        void set_label_font(std::shared_ptr<Font> value);
 
-        const vec4& get_color() const;
+        std::shared_ptr<Font> get_label_font() const;
+
+        void set_background_color(const vec4& value);
+
+        const vec4& get_background_color() const;
+
+        void set_background_texture(std::shared_ptr<Texture> value);
+
+        std::shared_ptr<Texture> get_background_texture() const;
+
+        void on_click(std::function<void ()> cb);
 
         void draw(Canvas& canvas, ivec2 offset) const override;
 
     private:
-        std::shared_ptr<Font> font;
-        std::string           text;
-        vec4                  color;
-
-        mutable bool                 dirty;
-        mutable std::vector<Texture> textures;
-
-        void estimate();
-    };
+        Text      label;
+        Rectangle background;
+        HitArea   hitarea;
+    };    
 }
 
 #endif
-

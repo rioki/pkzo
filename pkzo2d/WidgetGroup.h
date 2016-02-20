@@ -22,54 +22,38 @@
   SOFTWARE.
 */
 
-#ifndef _PKZO_TEXT_H_
-#define _PKZO_TEXT_H_
-
-#include <memory>
-#include <string>
-#include <tuple>
-#include <vector>
+#ifndef _PKZO2D_WIDGET_GROUP_H_
+#define _PKZO2D_WIDGET_GROUP_H_
 
 #include "Widget.h"
 
+#include <list>
+
 namespace pkzo
 {
-    class Font;
-    class Texture;
-
-    class PKZO_EXPORT Text : public Widget
+    class PKZO_EXPORT WidgetGroup : public Widget
     {
     public:
         
-        Text();
+        WidgetGroup();
 
-        ~Text();
+        ~WidgetGroup();
 
-        void set_font(std::shared_ptr<Font> value);
+        void add_widget(Widget& widget);
 
-        std::shared_ptr<Font> get_font() const;
-
-        void set_text(const std::string& value);
-
-        const std::string& get_text() const;
-
-        void set_color(const vec4& value);
-
-        const vec4& get_color() const;
+        void remove_widget(Widget& widget);
 
         void draw(Canvas& canvas, ivec2 offset) const override;
 
+        void handle_mouse_move(ivec2 pos, ivec2 mov) override;
+
+        void handle_mouse_press(unsigned int button, ivec2 pos) override;
+
+        void handle_mouse_release(unsigned int button, ivec2 pos) override;
+
     private:
-        std::shared_ptr<Font> font;
-        std::string           text;
-        vec4                  color;
-
-        mutable bool                 dirty;
-        mutable std::vector<Texture> textures;
-
-        void estimate();
+        std::list<Widget*> widgets;
     };
 }
 
 #endif
-

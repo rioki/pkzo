@@ -22,54 +22,43 @@
   SOFTWARE.
 */
 
-#ifndef _PKZO_TEXT_H_
-#define _PKZO_TEXT_H_
-
-#include <memory>
-#include <string>
-#include <tuple>
-#include <vector>
+#ifndef _PKZO2D_HIT_AREA_H_
+#define _PKZO2D_HIT_AREA_H_
 
 #include "Widget.h"
 
+#include <functional>
+
 namespace pkzo
 {
-    class Font;
-    class Texture;
-
-    class PKZO_EXPORT Text : public Widget
+    class PKZO_EXPORT HitArea : public Widget
     {
     public:
         
-        Text();
+        HitArea();
 
-        ~Text();
+        ~HitArea();
 
-        void set_font(std::shared_ptr<Font> value);
+        void on_enter(std::function<void ()> cb);
 
-        std::shared_ptr<Font> get_font() const;
+        void on_leave(std::function<void ()> cb);
 
-        void set_text(const std::string& value);
+        void on_click(std::function<void ()> cb);
 
-        const std::string& get_text() const;
+        void handle_mouse_move(ivec2 pos, ivec2 mov) override;
 
-        void set_color(const vec4& value);
+        void handle_mouse_press(unsigned int button, ivec2 pos) override;
 
-        const vec4& get_color() const;
-
-        void draw(Canvas& canvas, ivec2 offset) const override;
+        void handle_mouse_release(unsigned int button, ivec2 pos) override;
 
     private:
-        std::shared_ptr<Font> font;
-        std::string           text;
-        vec4                  color;
+        std::function<void ()> enter_cb;
+        std::function<void ()> leave_cb;
+        std::function<void ()> click_cb;
 
-        mutable bool                 dirty;
-        mutable std::vector<Texture> textures;
-
-        void estimate();
+        bool inside;
+        bool click_inside;
     };
 }
 
 #endif
-

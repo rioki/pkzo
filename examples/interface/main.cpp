@@ -52,6 +52,13 @@ int main(int argc, char* argv[])
 
     pkzo::Mouse mouse;
     mouse.on_move([&] (rgm::ivec2 mov, rgm::ivec2 pos) {
+        screen.handle_mouse_move(mov, pos);
+    });
+    mouse.on_button_press([&] (unsigned int button, rgm::ivec2 pos) {
+        screen.handle_mouse_press(button, pos);
+    });
+    mouse.on_button_release([&] (unsigned int button, rgm::ivec2 pos) {
+        screen.handle_mouse_release(button, pos);
     });
 
     while (running)                             

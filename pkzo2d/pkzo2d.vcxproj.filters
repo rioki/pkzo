@@ -36,6 +36,12 @@
     <ClInclude Include="pkzo2d.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WidgetGroup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HitArea.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Canvas.cpp">
@@ -51,6 +57,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Text.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WidgetGroup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HitArea.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

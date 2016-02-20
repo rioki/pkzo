@@ -3,7 +3,7 @@
 #define _TEST_SCREEN_H_
 
 #include <pkzo2d/pkzo2d.h>
-//#include <pkzoui/pkzoui.h>
+#include <pkzoui/pkzoui.h>
 
 namespace ui
 {
@@ -17,7 +17,7 @@ namespace ui
     private:
         pkzo::Text      title;
         pkzo::Rectangle panel;
-        //pkzo::Button    button;
+        pkzo::Button    button;
         pkzo::Text      button_out;
         //pkzo::CheckBox  checkbox;
         pkzo::Text      checkbox_out;

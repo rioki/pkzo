@@ -76,7 +76,7 @@ namespace pkzo
 
         for (const Widget* widget : widgets)
         {
-            widget->draw(canvas);
+            widget->draw(canvas, ivec2(0, 0));
         }
     }
 
@@ -88,19 +88,19 @@ namespace pkzo
         }
     }
     
-    void Screen::handle_mouse_down(unsigned int button, ivec2 pos)
+    void Screen::handle_mouse_press(unsigned int button, ivec2 pos)
     {
         for (Widget* widget : widgets)
         {
-            widget->handle_mouse_down(button, pos);
+            widget->handle_mouse_press(button, pos);
         }
     }
 
-    void Screen::handle_mouse_up(unsigned int button, ivec2 pos)
+    void Screen::handle_mouse_release(unsigned int button, ivec2 pos)
     {
         for (Widget* widget : widgets)
         {
-            widget->handle_mouse_up(button, pos);
+            widget->handle_mouse_release(button, pos);
         }
     }
 }

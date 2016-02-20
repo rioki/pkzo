@@ -49,7 +49,7 @@ namespace pkzo
 
         std::shared_ptr<Texture> get_texture() const;
 
-        void draw(Canvas& canvas) const override;        
+        void draw(Canvas& canvas, ivec2 offset) const override;        
 
     private:
         vec4                     color;
