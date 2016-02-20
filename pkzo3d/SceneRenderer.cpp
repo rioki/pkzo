@@ -59,6 +59,9 @@ namespace pkzo
 
         std::string skybox_vertex   = LoadTextResource(hModule, MAKEINTRESOURCE(IDR_GLSL_SKYBOX_VERTEX), _T("GLSL"));
         std::string skybox_fragment = LoadTextResource(hModule, MAKEINTRESOURCE(IDR_GLSL_SKYBOX_FRAGMENT), _T("GLSL"));
+        
+        std::string env_vertex   = LoadTextResource(hModule, MAKEINTRESOURCE(IDR_GLSL_ENVIRONMENT_VERTEX), _T("GLSL"));
+        std::string env_fragment = LoadTextResource(hModule, MAKEINTRESOURCE(IDR_GLSL_ENVIRONMENT_FRAGMENT), _T("GLSL"));
         #else
         // TODO
         #endif
@@ -68,6 +71,9 @@ namespace pkzo
 
         skybox_shader.set_vertex_code(skybox_vertex);
         skybox_shader.set_fragment_code(skybox_fragment);
+
+        env_shader.set_vertex_code(env_vertex);
+        env_shader.set_fragment_code(env_fragment);
 
         screen_rect.create_screen_plane();        
     }
@@ -141,7 +147,8 @@ namespace pkzo
     void SceneRenderer::render()
     {
         draw_sky_box();
-        draw_lit_objects();
+        draw_environment_pass();
+        //draw_lit_objects();
 
         sky_box = nullptr;
         lights.clear();
@@ -163,6 +170,38 @@ namespace pkzo
             skybox_shader.set_uniform("uCubeMap", 0);
 
             screen_rect.draw();
+        }
+    }
+
+    void SceneRenderer::draw_environment_pass()
+    {
+        if (sky_box != nullptr)
+        {
+            glEnable(GL_DEPTH_TEST);
+            glDepthFunc(GL_LEQUAL);
+        
+            glDisable(GL_BLEND);
+            glBlendFunc(GL_ONE, GL_ONE);
+
+            env_shader.bind();
+
+            env_shader.set_uniform("uProjectionMatrix", projection_matrix);
+            env_shader.set_uniform("uViewMatrix",       view_matrix);  
+            
+            sky_box->bind(0); // TODO coordinate with Material
+            env_shader.set_uniform("uEnvMap",           0);        
+
+            for (GeometryInfo& geom : geometries)
+            {
+                env_shader.set_uniform("uModelMatrix", geom.transform);
+                
+                geom.material->setup(env_shader);
+
+                geom.mesh->draw();
+            }
+
+            // enable blending after the first pass.
+            glEnable(GL_BLEND);
         }
     }
 

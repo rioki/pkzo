@@ -27,9 +27,10 @@
 namespace pm
 {
     TestScene::TestScene()
-    : cam_pos(0, 0, 10)
+    : cam_pos(0, 90, 10)
     {
         camera.set_position(rgm::vec3(0, 0, 10));
+        rotate_camera(rgm::ivec2(0, 0));
         add_entity(camera);
 
         
@@ -37,10 +38,11 @@ namespace pm
 
         
         mesh.reset(new pkzo::Mesh);
-        mesh->create_box(rgm::vec3(1));
+        //mesh->create_box(rgm::vec3(1));
+        mesh->load("../assets/meshes/Teapot.ply");
 
         material.reset(new pkzo::Material);
-        material->set_albedo(rgm::vec3(1, 0, 0));
+        material->set_albedo(rgm::vec3(1, 0.765557, 0.336057));
 
         subject.set_mesh(mesh);
         subject.set_material(material);
@@ -67,8 +69,9 @@ namespace pm
         cam_pos[0] += (float)mov[0];
         cam_pos[1] += (float)mov[1];
 
-        rgm::quat co = rgm::axis_angle(rgm::vec3(1, 0, 0), cam_pos[1]) * 
-                       rgm::axis_angle(rgm::vec3(0, 0, 1), cam_pos[0]);
+        rgm::quat co = rgm::axis_angle(rgm::vec3(0, 0, 1), cam_pos[0]) *
+                        rgm::axis_angle(rgm::vec3(1, 0, 0), cam_pos[1]) 
+                       ;
         
         rgm::vec3 cp = rgm::transform(co, rgm::vec3(0, 0, cam_pos[2]));
 

@@ -102,10 +102,12 @@ namespace pkzo
         // TMP phong for test purposes
         Shader phong_shader;
         Shader skybox_shader;
+        Shader env_shader;
 
         Mesh   screen_rect;
 
         void draw_sky_box();
+        void draw_environment_pass();
         void draw_lit_objects();
     };
 }

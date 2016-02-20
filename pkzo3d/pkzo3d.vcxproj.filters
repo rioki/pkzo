@@ -114,5 +114,11 @@
     <None Include="SkyBoxVertex.glsl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="EnvironmentVertex.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="EnvironmentFragment.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
