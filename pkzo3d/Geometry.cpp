@@ -22,39 +22,53 @@
   SOFTWARE.
 */
 
-#ifndef _MATERIAL_EDITOR_H_
-#define _MATERIAL_EDITOR_H_
+#include "Geometry.h"
 
-#include <pkzo/pkzo.h>
-#include <pkzo2d/pkzo2d.h>
-#include <pkzo3d/pkzo3d.h>
+#include "SceneRenderer.h"
 
-#include "TestScene.h"
-
-namespace pm
+namespace pkzo
 {
-    class MaterialEditor
+    Geometry::Geometry()
     {
-    public:
-        MaterialEditor();
+    }
 
-        ~MaterialEditor();
 
-        void run();
+    Geometry::~Geometry()
+    {
+    }
 
-    private:
-        bool           running;
+    void Geometry::set_mesh(std::shared_ptr<Mesh> value)
+    {
+        mesh = value;
+    }
 
-        pkzo::Window   window;
-        pkzo::Keyboard keyboard;
-        pkzo::Mouse    mouse;
+    std::shared_ptr<Mesh> Geometry::get_mesh() const
+    {
+        return mesh;
+    }
 
-        pkzo::Canvas   canvas;
-        pkzo::Screen   screen; // this will be a subtype
+    void Geometry::set_material(std::shared_ptr<Material> value)
+    {
+        material = value;
+    }
 
-        pkzo::SceneRenderer scene_renderer;
-        TestScene           scene;
-    };
+    std::shared_ptr<Material> Geometry::get_material() const
+    {
+        return material;
+    }
+
+    void Geometry::enqueue(SceneRenderer& queue, const Camera& camera) const
+    {
+        if (mesh && material)
+        {
+            vec3 s = get_world_position();
+            quat o = get_world_orientation();
+
+            mat4 t(1);
+            t = translate(t, s);
+            t = rotate(t, o);
+
+            queue.queue_geometry(t, *mesh, *material);
+        }
+    }
 }
-
-#endif

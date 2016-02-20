@@ -22,39 +22,19 @@
   SOFTWARE.
 */
 
-#ifndef _MATERIAL_EDITOR_H_
-#define _MATERIAL_EDITOR_H_
+#include "DirectionalLight.h"
 
-#include <pkzo/pkzo.h>
-#include <pkzo2d/pkzo2d.h>
-#include <pkzo3d/pkzo3d.h>
+#include "SceneRenderer.h"
 
-#include "TestScene.h"
-
-namespace pm
+namespace pkzo
 {
-    class MaterialEditor
+    DirectionalLight::DirectionalLight() {}
+
+    DirectionalLight::~DirectionalLight() {}
+
+    void DirectionalLight::enqueue(SceneRenderer& queue, const Camera& camera) const
     {
-    public:
-        MaterialEditor();
-
-        ~MaterialEditor();
-
-        void run();
-
-    private:
-        bool           running;
-
-        pkzo::Window   window;
-        pkzo::Keyboard keyboard;
-        pkzo::Mouse    mouse;
-
-        pkzo::Canvas   canvas;
-        pkzo::Screen   screen; // this will be a subtype
-
-        pkzo::SceneRenderer scene_renderer;
-        TestScene           scene;
-    };
+        vec3 d = transform(get_world_orientation(), vec3(0, 0, 1));
+        queue.queue_directional_light(d, color);
+    }
 }
-
-#endif

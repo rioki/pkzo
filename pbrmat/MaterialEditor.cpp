@@ -10,7 +10,8 @@ namespace pm
             running = false;
         });
         window.on_draw([this] () {
-            screen.draw(canvas);
+            scene.draw(scene_renderer, window.get_aspect(), scene.get_camera());
+            //screen.draw(canvas);
         });
         window.on_resize([this] (rgm::ivec2 size) {
             screen.set_size(size);

@@ -22,39 +22,42 @@
   SOFTWARE.
 */
 
-#ifndef _MATERIAL_EDITOR_H_
-#define _MATERIAL_EDITOR_H_
+#include "SpotLight.h"
 
-#include <pkzo/pkzo.h>
-#include <pkzo2d/pkzo2d.h>
-#include <pkzo3d/pkzo3d.h>
+#include "SceneRenderer.h"
 
-#include "TestScene.h"
-
-namespace pm
+namespace pkzo
 {
-    class MaterialEditor
+    SpotLight::SpotLight() 
+    : range(10), angle(25) {}
+
+    SpotLight::~SpotLight() {}
+
+    void SpotLight::set_range(float value)
     {
-    public:
-        MaterialEditor();
+        range = value;
+    }
 
-        ~MaterialEditor();
+    float SpotLight::get_range() const
+    {
+        return range;
+    }
 
-        void run();
+    void SpotLight::set_angle(float value)
+    {
+        angle = value;
+    }
 
-    private:
-        bool           running;
+    float SpotLight::get_angle() const
+    {
+        return angle;
+    }
 
-        pkzo::Window   window;
-        pkzo::Keyboard keyboard;
-        pkzo::Mouse    mouse;
+    void SpotLight::enqueue(SceneRenderer& renderer, const Camera& camera) const
+    {
+        quat o   = get_world_orientation();
+        vec3 dir = transform(o, vec3(0, 0, 1));
 
-        pkzo::Canvas   canvas;
-        pkzo::Screen   screen; // this will be a subtype
-
-        pkzo::SceneRenderer scene_renderer;
-        TestScene           scene;
-    };
+        renderer.queue_spot_light(get_world_position(), dir, get_color(), range, angle);
+    }
 }
-
-#endif

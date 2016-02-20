@@ -22,38 +22,38 @@
   SOFTWARE.
 */
 
-#ifndef _MATERIAL_EDITOR_H_
-#define _MATERIAL_EDITOR_H_
+#ifndef _PKZO_CAMERA_H_
+#define _PKZO_CAMERA_H_
 
-#include <pkzo/pkzo.h>
-#include <pkzo2d/pkzo2d.h>
-#include <pkzo3d/pkzo3d.h>
+#include "Entity.h"
 
-#include "TestScene.h"
-
-namespace pm
+namespace pkzo
 {
-    class MaterialEditor
+    class PKZO_EXPORT Camera : public Entity
     {
     public:
-        MaterialEditor();
+        
+        Camera();
 
-        ~MaterialEditor();
+        ~Camera();
 
-        void run();
+        void set_fov(float value);
 
+        float get_fov() const;
+
+        void set_distance(float value);
+
+        float get_distance() const;
+
+        mat4 get_projection_matrix(float aspect) const;
+
+        mat4 get_view_matrix() const;
+
+        void enqueue(SceneRenderer& queue, const Camera& camera) const override;
+    
     private:
-        bool           running;
-
-        pkzo::Window   window;
-        pkzo::Keyboard keyboard;
-        pkzo::Mouse    mouse;
-
-        pkzo::Canvas   canvas;
-        pkzo::Screen   screen; // this will be a subtype
-
-        pkzo::SceneRenderer scene_renderer;
-        TestScene           scene;
+        float fov;
+        float distance;
     };
 }
 

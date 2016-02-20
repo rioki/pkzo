@@ -22,39 +22,32 @@
   SOFTWARE.
 */
 
-#ifndef _MATERIAL_EDITOR_H_
-#define _MATERIAL_EDITOR_H_
-
-#include <pkzo/pkzo.h>
-#include <pkzo2d/pkzo2d.h>
-#include <pkzo3d/pkzo3d.h>
-
 #include "TestScene.h"
 
 namespace pm
 {
-    class MaterialEditor
+    TestScene::TestScene()
     {
-    public:
-        MaterialEditor();
+        mesh.reset(new pkzo::Mesh);
+        mesh->create_box(rgm::vec3(1));
 
-        ~MaterialEditor();
+        material.reset(new pkzo::Material);
+        material->set_albedo(rgm::vec3(1, 0, 0));
 
-        void run();
+        camera.set_position(rgm::vec3(0, 0, 10));
+        add_entity(camera);
 
-    private:
-        bool           running;
+        add_entity(light0);
 
-        pkzo::Window   window;
-        pkzo::Keyboard keyboard;
-        pkzo::Mouse    mouse;
+        subject.set_mesh(mesh);
+        subject.set_material(material);
+        add_entity(subject);
+    }
 
-        pkzo::Canvas   canvas;
-        pkzo::Screen   screen; // this will be a subtype
+    TestScene::~TestScene() {}
 
-        pkzo::SceneRenderer scene_renderer;
-        TestScene           scene;
-    };
+    pkzo::Camera& TestScene::get_camera()
+    {
+        return camera;
+    }
 }
-
-#endif

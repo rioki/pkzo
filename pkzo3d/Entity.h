@@ -22,38 +22,49 @@
   SOFTWARE.
 */
 
-#ifndef _MATERIAL_EDITOR_H_
-#define _MATERIAL_EDITOR_H_
+#ifndef _PKZO_ENTITY_H_
+#define _PKZO_ENTITY_H_
 
-#include <pkzo/pkzo.h>
-#include <pkzo2d/pkzo2d.h>
-#include <pkzo3d/pkzo3d.h>
+#include <rgm/rgm.h>
+#include <pkzo/defines.h>
 
-#include "TestScene.h"
-
-namespace pm
+namespace pkzo
 {
-    class MaterialEditor
+    using namespace rgm;
+
+    class Camera;
+    class SceneRenderer;
+
+    class PKZO_EXPORT Entity
     {
     public:
-        MaterialEditor();
+        
+        Entity();
 
-        ~MaterialEditor();
+        Entity(const Entity&) = delete;
 
-        void run();
+        virtual ~Entity();
 
-    private:
-        bool           running;
+        const Entity& operator = (const Entity&) = delete;
 
-        pkzo::Window   window;
-        pkzo::Keyboard keyboard;
-        pkzo::Mouse    mouse;
+        void set_position(const vec3& value);
 
-        pkzo::Canvas   canvas;
-        pkzo::Screen   screen; // this will be a subtype
+        const vec3& get_position() const;
 
-        pkzo::SceneRenderer scene_renderer;
-        TestScene           scene;
+        vec3 get_world_position() const;
+
+        void set_orientation(const quat& value);
+
+        const quat& get_orientation() const;
+
+        quat get_world_orientation() const;
+
+        virtual void enqueue(SceneRenderer& queue, const Camera& camera) const = 0;
+
+    protected:
+        Entity* parent;
+        vec3    position;
+        quat    orientation;
     };
 }
 

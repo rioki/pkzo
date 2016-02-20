@@ -22,39 +22,16 @@
   SOFTWARE.
 */
 
-#ifndef _MATERIAL_EDITOR_H_
-#define _MATERIAL_EDITOR_H_
+#ifndef _PKZO3D_H_
+#define _PKZO3D_H_
 
-#include <pkzo/pkzo.h>
-#include <pkzo2d/pkzo2d.h>
-#include <pkzo3d/pkzo3d.h>
-
-#include "TestScene.h"
-
-namespace pm
-{
-    class MaterialEditor
-    {
-    public:
-        MaterialEditor();
-
-        ~MaterialEditor();
-
-        void run();
-
-    private:
-        bool           running;
-
-        pkzo::Window   window;
-        pkzo::Keyboard keyboard;
-        pkzo::Mouse    mouse;
-
-        pkzo::Canvas   canvas;
-        pkzo::Screen   screen; // this will be a subtype
-
-        pkzo::SceneRenderer scene_renderer;
-        TestScene           scene;
-    };
-}
+#include "SceneRenderer.h"
+#include "Scene.h"
+#include "Entity.h"
+#include "Camera.h"
+#include "DirectionalLight.h"
+#include "Geometry.h"
+#include "Material.h"
 
 #endif
+

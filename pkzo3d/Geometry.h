@@ -22,39 +22,40 @@
   SOFTWARE.
 */
 
-#ifndef _MATERIAL_EDITOR_H_
-#define _MATERIAL_EDITOR_H_
+#ifndef _PKZO_GEOMETRY_H_
+#define _PKZO_GEOMETRY_H_
 
-#include <pkzo/pkzo.h>
-#include <pkzo2d/pkzo2d.h>
-#include <pkzo3d/pkzo3d.h>
+#include <memory>
 
-#include "TestScene.h"
+#include "Entity.h"
 
-namespace pm
+namespace pkzo
 {
-    class MaterialEditor
+    class Mesh;
+    class Material;
+
+    class PKZO_EXPORT Geometry : public Entity
     {
     public:
-        MaterialEditor();
+        Geometry();
 
-        ~MaterialEditor();
+        ~Geometry();
 
-        void run();
+        void set_mesh(std::shared_ptr<Mesh> value);
+
+        std::shared_ptr<Mesh> get_mesh() const;
+
+        void set_material(std::shared_ptr<Material> value);
+
+        std::shared_ptr<Material> get_material() const;
+
+        void enqueue(SceneRenderer& queue, const Camera& camera) const override;
 
     private:
-        bool           running;
-
-        pkzo::Window   window;
-        pkzo::Keyboard keyboard;
-        pkzo::Mouse    mouse;
-
-        pkzo::Canvas   canvas;
-        pkzo::Screen   screen; // this will be a subtype
-
-        pkzo::SceneRenderer scene_renderer;
-        TestScene           scene;
+        std::shared_ptr<Mesh>     mesh;
+        std::shared_ptr<Material> material;
     };
 }
 
 #endif
+

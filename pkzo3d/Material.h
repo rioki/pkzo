@@ -22,38 +22,33 @@
   SOFTWARE.
 */
 
-#ifndef _MATERIAL_EDITOR_H_
-#define _MATERIAL_EDITOR_H_
+#ifndef _PKZO_MATERIAL_H_
+#define _PKZO_MATERIAL_H_
 
-#include <pkzo/pkzo.h>
-#include <pkzo2d/pkzo2d.h>
-#include <pkzo3d/pkzo3d.h>
+#include <rgm/rgm.h>
+#include <pkzo/defines.h>
 
-#include "TestScene.h"
-
-namespace pm
+namespace pkzo
 {
-    class MaterialEditor
+    using namespace rgm;
+
+    class Shader;
+
+    class PKZO_EXPORT Material
     {
     public:
-        MaterialEditor();
+        Material();
 
-        ~MaterialEditor();
+        ~Material();
 
-        void run();
+        void set_albedo(const vec3& value);
+
+        const vec3& get_albedo() const;
+
+        void setup(Shader& shader) const;
 
     private:
-        bool           running;
-
-        pkzo::Window   window;
-        pkzo::Keyboard keyboard;
-        pkzo::Mouse    mouse;
-
-        pkzo::Canvas   canvas;
-        pkzo::Screen   screen; // this will be a subtype
-
-        pkzo::SceneRenderer scene_renderer;
-        TestScene           scene;
+        vec3 albedo;
     };
 }
 

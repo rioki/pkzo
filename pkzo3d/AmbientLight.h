@@ -22,38 +22,26 @@
   SOFTWARE.
 */
 
-#ifndef _MATERIAL_EDITOR_H_
-#define _MATERIAL_EDITOR_H_
 
-#include <pkzo/pkzo.h>
-#include <pkzo2d/pkzo2d.h>
-#include <pkzo3d/pkzo3d.h>
 
-#include "TestScene.h"
+#ifndef _PKZO_AMBIENT_LIGHT_H_
+#define _PKZO_AMBIENT_LIGHT_H_
 
-namespace pm
+#include "Light.h"
+
+namespace pkzo
 {
-    class MaterialEditor
+    class PKZO_EXPORT AmbientLight : public Light
     {
     public:
-        MaterialEditor();
+        AmbientLight();
 
-        ~MaterialEditor();
+        ~AmbientLight();
 
-        void run();
+        void enqueue(SceneRenderer& queue, const Camera& camera) const override;
 
     private:
-        bool           running;
-
-        pkzo::Window   window;
-        pkzo::Keyboard keyboard;
-        pkzo::Mouse    mouse;
-
-        pkzo::Canvas   canvas;
-        pkzo::Screen   screen; // this will be a subtype
-
-        pkzo::SceneRenderer scene_renderer;
-        TestScene           scene;
+        
     };
 }
 

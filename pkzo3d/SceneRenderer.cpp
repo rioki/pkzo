@@ -1,0 +1,166 @@
+/*
+  pkzo
+
+  Copyright (c) 2014-2016 Sean Farrell
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+*/
+
+#include "SceneRenderer.h"
+
+#ifdef _MSC_VER
+#include <windows.h>
+#include <tchar.h>
+#include "resource.h"
+#else
+// TODO ezrc
+#endif
+
+#include <GL/glew.h>
+#include <pkzo/Mesh.h>
+
+#include "Material.h"
+
+namespace pkzo
+{
+    std::string LoadTextResource(HMODULE hModule, LPCTSTR lpName, LPCTSTR lpType)
+    {
+        HRSRC   hPhongVertex  = FindResource(hModule, lpName, lpType);
+        HGLOBAL hgPhongVertex = LoadResource(hModule, hPhongVertex);
+        DWORD   nSize         = SizeofResource(hModule, hPhongVertex);
+        const char* psCode = (const char*)LockResource(hgPhongVertex);        
+        return std::string(psCode, nSize);
+    }
+
+    SceneRenderer::SceneRenderer()
+    {
+        #ifdef _MSC_VER
+        HMODULE hModule = GetModuleHandle(_T("pkzo3d.dll"));
+
+        std::string phong_vertex   = LoadTextResource(hModule, MAKEINTRESOURCE(IDR_GLSL_PHONG_VERTEX), _T("GLSL"));
+        std::string phong_fragment = LoadTextResource(hModule, MAKEINTRESOURCE(IDR_GLSL_PHONG_FRAGMENT), _T("GLSL"));
+        #else
+        // TODO
+        #endif
+
+        phong_shader.set_vertex_code(phong_vertex);
+        phong_shader.set_fragment_code(phong_fragment);
+        
+    }
+
+    SceneRenderer::~SceneRenderer() {}
+
+    void SceneRenderer::orient_camera(const mat4& projection, const mat4& view)
+    {
+        projection_matrix = projection;
+        view_matrix       = view;
+    }
+
+    void SceneRenderer::queue_ambient_light(const vec3& color)
+    {
+        LightInfo info;
+        info.type      = AMBIENT_LIGHT;
+        info.color     = color;
+
+        lights.push_back(info);
+    }
+
+    void SceneRenderer::queue_directional_light(const vec3& direction, const vec3& color)
+    {
+        LightInfo info;
+        info.type      = DIRECTIONAL_LIGHT;
+        info.direction = direction;
+        info.color     = color;
+
+        lights.push_back(info);
+    }
+
+    void SceneRenderer::queue_point_light(const vec3& position, const vec3& color, float range)
+    {
+        LightInfo info;
+        info.type      = POINT_LIGHT;
+        info.position  = position;
+        info.range     = range;
+        info.color     = color;
+
+        lights.push_back(info);
+    }
+
+    void SceneRenderer::queue_spot_light(const vec3& position, const vec3& direction, const vec3& color, float range, float angle)
+    {
+        LightInfo info;
+        info.type      = SPOT_LIGHT;
+        info.position  = position;
+        info.direction = direction;
+        info.color     = color;
+        info.range     = range;
+        info.angle     = angle;        
+
+        lights.push_back(info);
+    }
+
+    void SceneRenderer::queue_geometry(mat4 transform, const Mesh& mesh, Material& material)
+    {
+        GeometryInfo info;
+        info.transform = transform;
+        info.mesh      = &mesh;
+        info.material  = &material;
+
+        geometries.push_back(info);
+    }
+
+    void SceneRenderer::render()
+    {
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LEQUAL);
+        
+        glDisable(GL_BLEND);
+        glBlendFunc(GL_ONE, GL_ONE);
+
+        phong_shader.bind();
+
+        phong_shader.set_uniform("uProjectionMatrix", projection_matrix);
+        phong_shader.set_uniform("uViewMatrix",       view_matrix);        
+
+        for (LightInfo& light : lights)
+        {
+            phong_shader.set_uniform("uLightType",      light.type);
+            phong_shader.set_uniform("uLightDirection", light.direction);
+            phong_shader.set_uniform("uLightPosition",  light.position);
+            phong_shader.set_uniform("uLightRange",     light.range);
+            phong_shader.set_uniform("uLightCutoff",    1.0f - light.angle / 90.0f);
+            phong_shader.set_uniform("uLightColor",     light.color);
+
+            for (GeometryInfo& geom : geometries)
+            {
+                phong_shader.set_uniform("uModelMatrix",     geom.transform);
+                
+                geom.material->setup(phong_shader);
+
+                geom.mesh->draw();
+            }
+
+            // enable blending after the first pass.
+            glEnable(GL_BLEND);
+        }
+
+        lights.clear();
+        geometries.clear();
+    }
+}

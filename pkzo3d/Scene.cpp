@@ -22,39 +22,48 @@
   SOFTWARE.
 */
 
-#ifndef _MATERIAL_EDITOR_H_
-#define _MATERIAL_EDITOR_H_
+#include "Scene.h"
 
-#include <pkzo/pkzo.h>
-#include <pkzo2d/pkzo2d.h>
-#include <pkzo3d/pkzo3d.h>
+#include <algorithm>
 
-#include "TestScene.h"
+#include "SceneRenderer.h"
+#include "Camera.h"
 
-namespace pm
+namespace pkzo
 {
-    class MaterialEditor
+    Scene::Scene() {}
+
+    Scene::~Scene() {}
+
+    void Scene::add_entity(Entity& entity)
     {
-    public:
-        MaterialEditor();
+        entities.push_back(&entity);
+    }
 
-        ~MaterialEditor();
+    void Scene::remove_entity(Entity& entity)
+    {
+        auto i = std::find(entities.begin(), entities.end(), &entity);
+        if (i != entities.end())
+        {
+            entities.erase(i);
+        }
+        else
+        {
+            throw std::logic_error("entity no in scene");
+        }
+    }
 
-        void run();
+    void Scene::draw(SceneRenderer& renderer, float aspect, const Camera& camera)
+    {
+        mat4 proj = camera.get_projection_matrix(aspect);
+        mat4 view = camera.get_view_matrix();
+        renderer.orient_camera(proj, view);
 
-    private:
-        bool           running;
+        for (Entity* entity : entities)
+        {
+            entity->enqueue(renderer, camera);
+        }
 
-        pkzo::Window   window;
-        pkzo::Keyboard keyboard;
-        pkzo::Mouse    mouse;
-
-        pkzo::Canvas   canvas;
-        pkzo::Screen   screen; // this will be a subtype
-
-        pkzo::SceneRenderer scene_renderer;
-        TestScene           scene;
-    };
+        renderer.render();
+    }
 }
-
-#endif

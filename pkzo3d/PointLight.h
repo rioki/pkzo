@@ -22,38 +22,29 @@
   SOFTWARE.
 */
 
-#ifndef _MATERIAL_EDITOR_H_
-#define _MATERIAL_EDITOR_H_
+#ifndef _PKZO_POINT_LIGHT_H_
+#define _PKZO_POINT_LIGHT_H_
 
-#include <pkzo/pkzo.h>
-#include <pkzo2d/pkzo2d.h>
-#include <pkzo3d/pkzo3d.h>
+#include "Light.h"
 
-#include "TestScene.h"
-
-namespace pm
+namespace pkzo
 {
-    class MaterialEditor
+    class PKZO_EXPORT PointLight : public Light
     {
     public:
-        MaterialEditor();
+        
+        PointLight();
 
-        ~MaterialEditor();
+        ~PointLight();
 
-        void run();
+        void set_range(float value);
+
+        float get_range() const;
+
+        void enqueue(SceneRenderer& renderer, const Camera& camera) const override;
 
     private:
-        bool           running;
-
-        pkzo::Window   window;
-        pkzo::Keyboard keyboard;
-        pkzo::Mouse    mouse;
-
-        pkzo::Canvas   canvas;
-        pkzo::Screen   screen; // this will be a subtype
-
-        pkzo::SceneRenderer scene_renderer;
-        TestScene           scene;
+        float range;
     };
 }
 

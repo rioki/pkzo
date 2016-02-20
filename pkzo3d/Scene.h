@@ -22,38 +22,40 @@
   SOFTWARE.
 */
 
-#ifndef _MATERIAL_EDITOR_H_
-#define _MATERIAL_EDITOR_H_
+#ifndef _PKZO_SCENE_H_
+#define _PKZO_SCENE_H_
 
-#include <pkzo/pkzo.h>
-#include <pkzo2d/pkzo2d.h>
-#include <pkzo3d/pkzo3d.h>
+#include <list>
 
-#include "TestScene.h"
+#include <pkzo/defines.h>
 
-namespace pm
+namespace pkzo
 {
-    class MaterialEditor
+    class Entity;
+    class Camera;
+    class SceneRenderer;
+
+    class PKZO_EXPORT Scene
     {
     public:
-        MaterialEditor();
 
-        ~MaterialEditor();
+        Scene();
 
-        void run();
+        Scene(const Scene&) = delete;
+
+        virtual ~Scene();
+
+        const Scene& operator = (const Scene&) = delete;
+
+        void add_entity(Entity& entity);
+
+        void remove_entity(Entity& entity);
+
+        void draw(SceneRenderer& renderer, float aspect, const Camera& camera);
 
     private:
-        bool           running;
-
-        pkzo::Window   window;
-        pkzo::Keyboard keyboard;
-        pkzo::Mouse    mouse;
-
-        pkzo::Canvas   canvas;
-        pkzo::Screen   screen; // this will be a subtype
-
-        pkzo::SceneRenderer scene_renderer;
-        TestScene           scene;
+        std::list<Entity*> entities;
+        
     };
 }
 

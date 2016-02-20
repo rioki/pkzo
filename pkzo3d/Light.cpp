@@ -22,39 +22,22 @@
   SOFTWARE.
 */
 
-#ifndef _MATERIAL_EDITOR_H_
-#define _MATERIAL_EDITOR_H_
+#include "Light.h"
 
-#include <pkzo/pkzo.h>
-#include <pkzo2d/pkzo2d.h>
-#include <pkzo3d/pkzo3d.h>
-
-#include "TestScene.h"
-
-namespace pm
+namespace pkzo
 {
-    class MaterialEditor
+    Light::Light()
+    : color(1)  {}
+
+    Light::~Light() {}
+
+    void Light::set_color(const vec3& value)
     {
-    public:
-        MaterialEditor();
+        color = value;
+    }
 
-        ~MaterialEditor();
-
-        void run();
-
-    private:
-        bool           running;
-
-        pkzo::Window   window;
-        pkzo::Keyboard keyboard;
-        pkzo::Mouse    mouse;
-
-        pkzo::Canvas   canvas;
-        pkzo::Screen   screen; // this will be a subtype
-
-        pkzo::SceneRenderer scene_renderer;
-        TestScene           scene;
-    };
+    const vec3 Light::get_color() const
+    {
+        return color;
+    }
 }
-
-#endif
