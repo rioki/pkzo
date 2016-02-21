@@ -22,32 +22,29 @@
   SOFTWARE.
 */
 
-#ifndef _EDITOR_SCREEN_H_
-#define _EDITOR_SCREEN_H_
+#ifndef _PKZO_VIEWPORT_H_
+#define _PKZO_VIEWPORT_H_
 
-#include <pkzo2d/pkzo2d.h>
-#include <pkzoui/pkzoui.h>
+#include <functional>
 
-namespace pm
+#include "Widget.h"
+
+namespace pkzo
 {
-    class EditorScreen : public pkzo::Screen
+    class PKZO_EXPORT Viewport : public Widget
     {
     public:
         
-        EditorScreen(rgm::ivec2 size);
+        Viewport();
 
-        ~EditorScreen();
+        ~Viewport();
 
-        void resize(rgm::ivec2 size);
+        void on_draw(std::function<void ()> cb);
 
-        void on_viewport_draw(std::function<void ()> cb);
-
-        float get_viewport_aspect() const;
+        virtual void draw(Canvas& canvas, ivec2 offset) const;
 
     private:
-        pkzo::Ribbon    ribbon;
-        pkzo::Rectangle prop_pannel;
-        pkzo::Viewport  viewport;
+        std::function<void ()> draw_cb; 
     };
 }
 

@@ -9,12 +9,15 @@ namespace pm
         window.on_close([this] () {
             running = false;
         });
-        window.on_draw([this] () {
-            scene.draw(scene_renderer, window.get_aspect(), scene.get_camera());
+        window.on_draw([this] () {            
             screen.draw(canvas);
         });
         window.on_resize([this] (rgm::ivec2 size) {
             screen.resize(size);
+        });
+
+        screen.on_viewport_draw([this] () {
+            scene.draw(scene_renderer, screen.get_viewport_aspect(), scene.get_camera());
         });
 
         // keyboard

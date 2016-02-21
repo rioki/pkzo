@@ -22,33 +22,38 @@
   SOFTWARE.
 */
 
-#ifndef _EDITOR_SCREEN_H_
-#define _EDITOR_SCREEN_H_
+#include "Viewport.h"
 
-#include <pkzo2d/pkzo2d.h>
-#include <pkzoui/pkzoui.h>
+#include <GL/glew.h>
 
-namespace pm
+namespace pkzo
 {
-    class EditorScreen : public pkzo::Screen
+    Viewport::Viewport() {}
+
+    Viewport::~Viewport() {}
+
+    void Viewport::on_draw(std::function<void ()> cb)
     {
-    public:
-        
-        EditorScreen(rgm::ivec2 size);
+        draw_cb = cb;
+    }
 
-        ~EditorScreen();
+    void Viewport::draw(Canvas& canvas, ivec2 offset) const
+    {
+        if (draw_cb)
+        {
+            int vp[4];
+            glGetIntegerv(GL_VIEWPORT, vp);
 
-        void resize(rgm::ivec2 size);
+            GLint x = position[0];
+            GLint y = vp[3] - size[1] - position[1];
+            GLsizei w = size[0];
+            GLsizei h = size[1];
 
-        void on_viewport_draw(std::function<void ()> cb);
+            glViewport(x, y, w, h);
 
-        float get_viewport_aspect() const;
+            draw_cb();
 
-    private:
-        pkzo::Ribbon    ribbon;
-        pkzo::Rectangle prop_pannel;
-        pkzo::Viewport  viewport;
-    };
+            glViewport(vp[0], vp[1], vp[2], vp[3]);
+        }
+    }
 }
-
-#endif

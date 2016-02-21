@@ -31,5 +31,6 @@
 #include "Widget.h"
 #include "Rectangle.h"
 #include "Text.h"
+#include "Viewport.h"
 
 #endif

@@ -63,17 +63,40 @@ namespace pm
 
         add_widget(ribbon);
 
+        prop_pannel.set_color(color(0x1e1e1eff));
+        add_widget(prop_pannel);
+
+        add_widget(viewport);
+
         resize(size);
     }
 
-    EditorScreen::~EditorScreen()
-    {
-    }
+    EditorScreen::~EditorScreen() {}
 
     void EditorScreen::resize(rgm::ivec2 size)
     {
         set_size(size);
 
         ribbon.set_width(size[0]);
+        rgm::ivec2 rs = ribbon.get_size();
+
+        rgm::ivec2 pps(250, size[1] - rs[1]);
+        prop_pannel.set_size(pps);
+        prop_pannel.set_position(rgm::ivec2(size[0] - pps[0], rs[1]));
+
+        rgm::ivec2 vs(size[0] - 250, size[1] - rs[1]);
+        viewport.set_size(vs);
+        viewport.set_position(rgm::ivec2(0, rs[1]));
+    }
+
+    void EditorScreen::on_viewport_draw(std::function<void ()> cb)
+    {
+        viewport.on_draw(cb);
+    }
+
+    float EditorScreen::get_viewport_aspect() const
+    {
+        rgm::ivec2 vs = viewport.get_size();
+        return (float)vs[0] / (float)vs[1];
     }
 }

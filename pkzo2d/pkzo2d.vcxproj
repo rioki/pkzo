@@ -169,6 +169,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="Text.h" />
+    <ClInclude Include="Viewport.h" />
     <ClInclude Include="Widget.h" />
     <ClInclude Include="WidgetGroup.h" />
   </ItemGroup>
@@ -178,6 +179,7 @@
     <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="Text.cpp" />
+    <ClCompile Include="Viewport.cpp" />
     <ClCompile Include="Widget.cpp" />
     <ClCompile Include="WidgetGroup.cpp" />
   </ItemGroup>
