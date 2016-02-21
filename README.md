@@ -90,6 +90,10 @@ The other textures (examples/assets/textures/*) where created by me
 (Copyright 2014 Sean Farrell) and are licensed under 
 [Creative Commons Attribution 3.0 License](http://creativecommons.org/licenses/by/3.0).
 
+The icons (examples/assets/icons/*) are from [Icons8](https://icons8.com) and
+are shared under the Terms of the 
+[Creative Commons Attribution-NoDerivs 3.0 Unported](https://creativecommons.org/licenses/by-nd/3.0).
+
 
 
 
