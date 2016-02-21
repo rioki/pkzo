@@ -43,19 +43,19 @@ namespace pm
         ribbon.set_font(load_font("../assets/fonts/DejaVuSans.ttf", 12));
         ribbon.set_text_color(color(0xc7c7c7FF));
 
-        ribbon.add_icon(load_texture("../assets/icons/file-24.png"), "New", [this] () {
+        ribbon.add_icon(load_texture("../assets/icons/File-24.png"), "New", [this] () {
         
         });
-        ribbon.add_icon(load_texture("../assets/icons/folder-3-24.png"), "Open", [this] () {
+        ribbon.add_icon(load_texture("../assets/icons/Open Folder-24.png"), "Open", [this] () {
         
         });
-        ribbon.add_icon(load_texture("../assets/icons/save-24.png"), "Save", [this] () {
+        ribbon.add_icon(load_texture("../assets/icons/Save-24.png"), "Save", [this] () {
         
         });
-        ribbon.add_icon(load_texture("../assets/icons/square-24.png"), "Box", [this] () {
+        ribbon.add_icon(load_texture("../assets/icons/Orthogonal View-24.png"), "Box", [this] () {
         
         });
-        ribbon.add_icon(load_texture("../assets/icons/circle-24.png"), "Sphere", [this] () {
+        ribbon.add_icon(load_texture("../assets/icons/Beach Ball-24.png"), "Sphere", [this] () {
         
         });
         ribbon.add_icon(load_texture("../assets/icons/Teapot-24.png"), "Teapot", [this] () {

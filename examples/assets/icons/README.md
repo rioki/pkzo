@@ -1,13 +1,8 @@
-Icons from IconDB
+Icons from Icons8
 =================
 
-All icons in this folder are from [IconDB](http://www.iconsdb.com/). 
+All icons in this folder are from [Icons8](https://icons8.com) and
+are shared under the Terms of the 
+[Creative Commons Attribution-NoDerivs 3.0 Unported](https://creativecommons.org/licenses/by-nd/3.0).
 
-Copyright 2011 - 2016 iconsDB.com
-
-You can copy, modify, use, distribute this icon, even for commercial purposes, 
-all without asking permission with no attribution required, but always 
-appreciated.
-
-You may not sell, make it available for download or distribute this icon in any 
-size, type, form on any other icon site.
+See LISENCE.txt for details.
