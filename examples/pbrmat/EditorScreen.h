@@ -22,52 +22,25 @@
   SOFTWARE.
 */
 
-#ifndef _PKZOUI_BUTTON_H_
-#define _PKZOUI_BUTTON_H_
+#ifndef _EDITOR_SCREEN_H_
+#define _EDITOR_SCREEN_H_
 
-#include <pkzo2d/WidgetGroup.h>
-#include <pkzo2d/Text.h>
-#include <pkzo2d/Rectangle.h>
-#include <pkzo2d/HitArea.h>
+#include <pkzo2d/pkzo2d.h>
+#include <pkzoui/pkzoui.h>
 
-namespace pkzo
+namespace pm
 {
-    class PKZO_EXPORT Button : public WidgetGroup
+    class EditorScreen : public pkzo::Screen
     {
     public:
-        Button();
+        
+        EditorScreen(rgm::ivec2 size);
 
-        ~Button();
-
-        void set_label(const std::string& value);
-
-        const std::string& get_label() const;
-
-        void set_label_color(const vec4& value);
-
-        const vec4& get_label_color() const;
-
-        void set_label_font(std::shared_ptr<Font> value);
-
-        std::shared_ptr<Font> get_label_font() const;
-
-        void set_background_color(const vec4& value);
-
-        const vec4& get_background_color() const;
-
-        void set_background_texture(std::shared_ptr<Texture> value);
-
-        std::shared_ptr<Texture> get_background_texture() const;
-
-        void on_click(std::function<void ()> cb);
-
-        void draw(Canvas& canvas, ivec2 offset) const override;
+        ~EditorScreen();
 
     private:
-        Text      label;
-        Rectangle background;
-        HitArea   hitarea;
-    };    
+        pkzo::Ribbon ribbon;
+    };
 }
 
 #endif

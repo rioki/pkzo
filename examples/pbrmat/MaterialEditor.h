@@ -30,6 +30,7 @@
 #include <pkzo3d/pkzo3d.h>
 
 #include "TestScene.h"
+#include "EditorScreen.h"
 
 namespace pm
 {
@@ -50,7 +51,7 @@ namespace pm
         pkzo::Mouse    mouse;
 
         pkzo::Canvas   canvas;
-        pkzo::Screen   screen; // this will be a subtype
+        EditorScreen   screen;
 
         pkzo::SceneRenderer scene_renderer;
         TestScene           scene;

@@ -164,9 +164,11 @@
   <ItemGroup>
     <ClInclude Include="Button.h" />
     <ClInclude Include="pkzoui.h" />
+    <ClInclude Include="Ribbon.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Ribbon.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

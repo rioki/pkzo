@@ -162,11 +162,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="EditorScreen.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MaterialEditor.cpp" />
     <ClCompile Include="TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EditorScreen.h" />
     <ClInclude Include="MaterialEditor.h" />
     <ClInclude Include="TestScene.h" />
   </ItemGroup>

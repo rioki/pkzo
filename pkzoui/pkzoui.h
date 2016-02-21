@@ -27,4 +27,6 @@
 
 #include "Button.h"
 
+#include "Ribbon.h"
+
 #endif
