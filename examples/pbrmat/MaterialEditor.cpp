@@ -14,7 +14,7 @@ namespace pm
             screen.draw(canvas);
         });
         window.on_resize([this] (rgm::ivec2 size) {
-            screen.set_size(size);
+            screen.resize(size);
         });
 
         // keyboard

@@ -38,7 +38,6 @@ namespace pm
     EditorScreen::EditorScreen(rgm::ivec2 size)
     : Screen(size)
     {
-        ribbon.set_width(size[0]);
         ribbon.set_background_color(color(0x2d2d30ff));
         ribbon.set_font(load_font("../assets/fonts/DejaVuSans.ttf", 12));
         ribbon.set_text_color(color(0xc7c7c7FF));
@@ -62,11 +61,19 @@ namespace pm
         
         });
 
-
         add_widget(ribbon);
+
+        resize(size);
     }
 
     EditorScreen::~EditorScreen()
     {
+    }
+
+    void EditorScreen::resize(rgm::ivec2 size)
+    {
+        set_size(size);
+
+        ribbon.set_width(size[0]);
     }
 }

@@ -38,6 +38,8 @@ namespace pm
 
         ~EditorScreen();
 
+        void resize(rgm::ivec2 size);
+
     private:
         pkzo::Ribbon ribbon;
     };
