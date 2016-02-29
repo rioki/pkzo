@@ -26,25 +26,31 @@
 
 namespace pm
 {
+    std::shared_ptr<pkzo::Mesh> load_mesh(const std::string& file)
+    {
+        std::shared_ptr<pkzo::Mesh> mesh(new pkzo::Mesh);
+        mesh->load(file);
+        return mesh;
+    }
+
     TestScene::TestScene()
     : cam_pos(0, 90, 10)
     {
-        camera.set_position(rgm::vec3(0, 0, 10));
+        meshes.push_back(load_mesh("../assets/meshes/Box.ply"));
+        meshes.push_back(load_mesh("../assets/meshes/Sphere.ply"));
+        meshes.push_back(load_mesh("../assets/meshes/Teapot.ply"));
+        
+        camera.set_position(rgm::vec3(0, 0, 5));
         rotate_camera(rgm::ivec2(0, 0));
         add_entity(camera);
 
         
         add_entity(light0);
-
         
-        mesh.reset(new pkzo::Mesh);
-        //mesh->create_box(rgm::vec3(1));
-        mesh->load("../assets/meshes/Teapot.ply");
-
         material.reset(new pkzo::Material);
         material->set_albedo(rgm::vec3(1, 0.765557, 0.336057));
 
-        subject.set_mesh(mesh);
+        subject.set_mesh(meshes[0]);
         subject.set_material(material);
         add_entity(subject);
 
@@ -62,6 +68,12 @@ namespace pm
     pkzo::Camera& TestScene::get_camera()
     {
         return camera;
+    }
+
+    void TestScene::change_mesh(MeshId id)
+    {
+        assert(id < meshes.size());
+        subject.set_mesh(meshes[id]);
     }
 
     void TestScene::rotate_camera(rgm::ivec2 mov)

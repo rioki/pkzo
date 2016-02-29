@@ -4,7 +4,7 @@ namespace pm
 {
     MaterialEditor::MaterialEditor()
     : running(false), window(rgm::ivec2(800, 600), pkzo::Window::RESIZABLE), 
-      canvas(window.get_size()), screen(window.get_size())
+      canvas(window.get_size()), screen(window.get_size(), *this)
     {
         window.on_close([this] () {
             running = false;
@@ -39,6 +39,11 @@ namespace pm
     }
 
     MaterialEditor::~MaterialEditor() {}
+
+    void MaterialEditor::change_mesh(MeshId id)
+    {
+        scene.change_mesh(id);
+    }
 
     void MaterialEditor::run()
     {

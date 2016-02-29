@@ -30,11 +30,13 @@
 
 namespace pm
 {
+    class MaterialEditor;
+
     class EditorScreen : public pkzo::Screen
     {
     public:
         
-        EditorScreen(rgm::ivec2 size);
+        EditorScreen(rgm::ivec2 size, MaterialEditor& editor);
 
         ~EditorScreen();
 
@@ -45,6 +47,8 @@ namespace pm
         float get_viewport_aspect() const;
 
     private:
+        MaterialEditor& editor;
+
         pkzo::Ribbon    ribbon;
         pkzo::Rectangle prop_pannel;
         pkzo::Viewport  viewport;

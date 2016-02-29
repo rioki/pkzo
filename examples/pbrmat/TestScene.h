@@ -25,11 +25,19 @@
 #ifndef _TEST_SCENE_H_
 #define _TEST_SCENE_H_
 
+#include <vector>
 #include <pkzo/pkzo.h>
 #include <pkzo3d/pkzo3d.h>
 
 namespace pm
 {
+    enum MeshId
+    {
+        BOX_MESH,
+        SPHERE_MESH,
+        TEAPOT_MESH
+    };
+
     class TestScene : public pkzo::Scene
     {
     public:
@@ -39,6 +47,8 @@ namespace pm
         ~TestScene();
 
         pkzo::Camera& get_camera();
+
+        void change_mesh(MeshId id);
 
         void rotate_camera(rgm::ivec2 mov);
 
@@ -50,6 +60,8 @@ namespace pm
         pkzo::DirectionalLight light0;
         pkzo::Geometry         subject;
         pkzo::SkyBox           sky;
+
+        std::vector<std::shared_ptr<pkzo::Mesh>> meshes;
 
         rgm::vec3 cam_pos;
     };

@@ -1,6 +1,7 @@
 #include "EditorScreen.h"
 
 #include <pkzo/pkzo.h>
+#include "MaterialEditor.h"
 
 namespace pm
 {
@@ -35,8 +36,8 @@ namespace pm
         return texture;
     }
 
-    EditorScreen::EditorScreen(rgm::ivec2 size)
-    : Screen(size)
+    EditorScreen::EditorScreen(rgm::ivec2 size, MaterialEditor& e)
+    : Screen(size), editor(e)
     {
         ribbon.set_background_color(color(0x2d2d30ff));
         ribbon.set_font(load_font("../assets/fonts/DejaVuSans.ttf", 12));
@@ -52,13 +53,13 @@ namespace pm
         
         });
         ribbon.add_icon(load_texture("../assets/icons/Orthogonal View-24.png"), "Box", [this] () {
-        
+            editor.change_mesh(BOX_MESH);
         });
         ribbon.add_icon(load_texture("../assets/icons/Beach Ball-24.png"), "Sphere", [this] () {
-        
+            editor.change_mesh(SPHERE_MESH);
         });
         ribbon.add_icon(load_texture("../assets/icons/Teapot-24.png"), "Teapot", [this] () {
-        
+            editor.change_mesh(TEAPOT_MESH);
         });
 
         add_widget(ribbon);

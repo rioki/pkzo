@@ -41,6 +41,8 @@ namespace pm
 
         ~MaterialEditor();
 
+        void change_mesh(MeshId id);
+
         void run();
 
     private:
