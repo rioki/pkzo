@@ -68,19 +68,19 @@ int main(int argc, char* argv[])
     auto shpere = pkzo::load_mesh("../assets/meshes/Sphere.ply");
     auto white  = pkzo::load_material("../assets/materials/White.jmn");
 
-    pkzo::Geometry sphere0;
+    pkzo::MeshGeometry sphere0;
     sphere0.set_material(white);
     sphere0.set_mesh(shpere);
     sphere0.set_position(rgm::vec3(-5, 0, 1));
     scene.add_entity(sphere0);
 
-    pkzo::Geometry sphere1;
+    pkzo::MeshGeometry sphere1;
     sphere1.set_material(white);
     sphere1.set_mesh(shpere);
     sphere1.set_position(rgm::vec3(0, 0, 1));
     scene.add_entity(sphere1);
 
-    pkzo::Geometry sphere2;
+    pkzo::MeshGeometry sphere2;
     sphere2.set_material(white);
     sphere2.set_mesh(shpere);
     sphere2.set_position(rgm::vec3(5, 0, 1));

@@ -59,7 +59,7 @@ namespace pm
         pkzo::Camera           camera;        
         pkzo::DirectionalLight light0;
         pkzo::PointLight       light1;
-        pkzo::Geometry         subject;
+        pkzo::MeshGeometry     subject;
         pkzo::SkyBox           sky;
 
         std::vector<std::shared_ptr<pkzo::Mesh>> meshes;

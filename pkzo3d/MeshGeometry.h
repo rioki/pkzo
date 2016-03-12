@@ -22,43 +22,27 @@
   SOFTWARE.
 */
 
-#include "Geometry.h"
+#ifndef _PKZO_MESH_GEOMETRY_H_
+#define _PKZO_MESH_GEOMETRY_H_
 
-#include "SceneRenderer.h"
+#include "Geometry.h"
 
 namespace pkzo
 {
-    Geometry::Geometry()
+    class PKZO_EXPORT MeshGeometry : public Geometry
     {
-    }
+    public:
+        
+        MeshGeometry();
+
+        ~MeshGeometry();
+
+        void set_mesh(std::shared_ptr<Mesh> value);
+
+        std::shared_ptr<Mesh> get_mesh() const;
 
 
-    Geometry::~Geometry()
-    {
-    }
-
-    void Geometry::set_material(std::shared_ptr<Material> value)
-    {
-        material = value;
-    }
-
-    std::shared_ptr<Material> Geometry::get_material() const
-    {
-        return material;
-    }
-
-    void Geometry::enqueue(SceneRenderer& queue, const Camera& camera) const
-    {
-        if (mesh && material)
-        {
-            vec3 s = get_world_position();
-            quat o = get_world_orientation();
-
-            mat4 t(1);
-            t = translate(t, s);
-            t = rotate(t, o);
-
-            queue.queue_geometry(t, *mesh, *material);
-        }
-    }
+    };
 }
+
+#endif

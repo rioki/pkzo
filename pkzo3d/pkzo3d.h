@@ -33,6 +33,7 @@
 #include "PointLight.h"
 #include "SpotLight.h"
 #include "Geometry.h"
+#include "MeshGeometry.h"
 #include "SkyBox.h"
 #include "Material.h"
 
