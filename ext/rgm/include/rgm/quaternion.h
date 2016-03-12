@@ -50,14 +50,14 @@ namespace rgm
 
     template <typename T>
     quaterion<T> operator * (const quaterion<T>& a, const quaterion<T>& b)
-    {
-        T          wa = a[3];
+    {        
         vector3<T> va = vector3<T>(a);
-        T          wb = b[3];
+        T          wa = a[3];        
         vector3<T> vb = vector3<T>(b);
-
-        T          w = wa * wb - dot(va, vb);
-        vector3<T> v = wa * vb + wb * va + cross(va, vb);
+        T          wb = b[3];
+        
+        vector3<T> v = (va * wb) + (vb * wa) + cross(va, vb);
+        T          w = (wa * wb) - dot(va, vb);
 
         return quaterion<T>(v, w);
     }

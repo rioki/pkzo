@@ -102,4 +102,13 @@ namespace pkzo
             glid = 0;
         }
     }
+
+    std::shared_ptr<CubeMap> load_cubemap(const std::string& xp, const std::string& xn, 
+                                          const std::string& yp, const std::string& yn,
+                                          const std::string& zp, const std::string& zn)
+    {
+        std::shared_ptr<CubeMap> cubemap(new CubeMap);
+        cubemap->load(xp, xn, yp, yn, zp, zn);
+        return cubemap;
+    }
 }

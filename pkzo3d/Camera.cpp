@@ -63,6 +63,7 @@ namespace pkzo
     mat4 Camera::get_view_matrix() const
     {
         quat o  = get_world_orientation();
+        //o = inverse(o);
 
         vec3 vx = normalize(transform(o, vec3(1, 0, 0)));
         vec3 vy = normalize(transform(o, vec3(0, 1, 0)));

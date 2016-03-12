@@ -193,14 +193,6 @@ namespace rgm
     template <typename T>
     quaterion<T> axis_angle(const vector<T, 3>& axis, T angle)
     {
-        /*vector<T, 3> axis_n    = normalize(axis);
-        T            angle_rad = angle * PI / 180.0;
-
-        T            wr = std::cos(angle_rad / static_cast<T>(2.0));
-        vector<T, 3> vr = axis_n * std::sin(angle_rad / static_cast<T>(2.0));
-
-        return quaterion<T>(vr, wr);*/
-
         vector<T, 3> an    = normalize(axis);
 
         T sin_a = std::sin(radians(angle/(T)2.0));
