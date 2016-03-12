@@ -197,6 +197,8 @@
   <ItemGroup>
     <None Include="EnvironmentFragment.glsl" />
     <None Include="EnvironmentVertex.glsl" />
+    <None Include="LightFragment.glsl" />
+    <None Include="LightVertex.glsl" />
     <None Include="PhongFragment.glsl" />
     <None Include="PhongVertex.glsl" />
     <None Include="SkyBoxFragment.glsl" />

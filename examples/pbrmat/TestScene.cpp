@@ -44,8 +44,13 @@ namespace pm
         rotate_camera(rgm::ivec2(0, 0));
         add_entity(camera);
 
-        
+        light0.set_orientation(rgm::axis_angle(rgm::vec3(0.1, 0.2, 0), 45.0f));
         add_entity(light0);
+
+        light1.set_position(rgm::vec3(10, 10, 10));
+        //add_entity(light1);
+        
+        
         
         material.reset(new pkzo::Material);
         material->set_albedo(rgm::vec3(1, 0.765557, 0.336057));
@@ -88,6 +93,6 @@ namespace pm
         rgm::vec3 cp = rgm::transform(co, rgm::vec3(0, 0, cam_pos[2]));
 
         camera.set_orientation(co);
-        //camera.set_position(cp);         
+        camera.set_position(cp);         
     }
 }

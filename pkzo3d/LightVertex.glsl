@@ -22,50 +22,38 @@
   SOFTWARE.
 */
 
-#ifndef _TEST_SCENE_H_
-#define _TEST_SCENE_H_
+#version 400
 
-#include <vector>
-#include <pkzo/pkzo.h>
-#include <pkzo3d/pkzo3d.h>
+uniform mat4 uProjectionMatrix;
+uniform mat4 uViewMatrix;
+uniform mat4 uModelMatrix;
+uniform mat4 uModelViewMatrix;
+uniform mat3 uNormalMatrix;
 
-namespace pm
-{
-    enum MeshId
-    {
-        BOX_MESH,
-        SPHERE_MESH,
-        TEAPOT_MESH
-    };
+uniform vec3 uLightDirection;
+uniform vec3 uLightPosition;
 
-    class TestScene : public pkzo::Scene
-    {
-    public:
-        
-        TestScene();
+layout(location = 0) in vec4 aVertex;
+layout(location = 1) in vec3 aNormal;
+layout(location = 2) in vec2 aTexCoord;
+layout(location = 3) in vec2 aTangent;
+layout(location = 4) in vec3 aColor;
 
-        ~TestScene();
+out vec3 vPosition;
+out vec3 vNormal;
+out vec3 vLightDirection;
+out vec3 vLightPosition;
+out vec2 vTexCoord;
 
-        pkzo::Camera& get_camera();
+void main()
+{   
+    vec4 pos  = uModelViewMatrix * aVertex;
 
-        void change_mesh(MeshId id);
+    vPosition       = pos.xyz;
+    vNormal         = uNormalMatrix * aNormal;
+    vLightDirection = mat3(uViewMatrix) * uLightDirection;
+    vLightPosition  = (uViewMatrix * vec4(uLightPosition, 1.0)).xyz;
+    vTexCoord       = aTexCoord;
 
-        void rotate_camera(rgm::ivec2 mov);
-
-    private:
-        std::shared_ptr<pkzo::Mesh>     mesh;
-        std::shared_ptr<pkzo::Material> material;
-
-        pkzo::Camera           camera;        
-        pkzo::DirectionalLight light0;
-        pkzo::PointLight       light1;
-        pkzo::Geometry         subject;
-        pkzo::SkyBox           sky;
-
-        std::vector<std::shared_ptr<pkzo::Mesh>> meshes;
-
-        rgm::vec3 cam_pos;
-    };
+    gl_Position = uProjectionMatrix * pos;
 }
-
-#endif

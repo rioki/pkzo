@@ -62,6 +62,9 @@ namespace pkzo
         
         std::string env_vertex   = LoadTextResource(hModule, MAKEINTRESOURCE(IDR_GLSL_ENVIRONMENT_VERTEX), _T("GLSL"));
         std::string env_fragment = LoadTextResource(hModule, MAKEINTRESOURCE(IDR_GLSL_ENVIRONMENT_FRAGMENT), _T("GLSL"));
+
+        std::string light_vertex   = LoadTextResource(hModule, MAKEINTRESOURCE(IDR_GLSL_LIGHT_VERTEX), _T("GLSL"));
+        std::string light_fragment = LoadTextResource(hModule, MAKEINTRESOURCE(IDR_GLSL_LIGHT_FRAGMENT), _T("GLSL"));
         #else
         // TODO
         #endif
@@ -74,6 +77,9 @@ namespace pkzo
 
         env_shader.set_vertex_code(env_vertex);
         env_shader.set_fragment_code(env_fragment);
+
+        light_shader.set_vertex_code(light_vertex);
+        light_shader.set_fragment_code(light_fragment);
 
         screen_rect.create_screen_plane();        
     }
@@ -147,8 +153,8 @@ namespace pkzo
     void SceneRenderer::render()
     {
         draw_sky_box();
-        draw_environment_pass();
-        //draw_lit_objects();
+        //draw_environment_pass();
+        draw_lit_objects();
 
         sky_box = nullptr;
         lights.clear();
@@ -213,25 +219,32 @@ namespace pkzo
         glDisable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE);
 
-        phong_shader.bind();
+        light_shader.bind();
 
-        phong_shader.set_uniform("uProjectionMatrix", projection_matrix);
-        phong_shader.set_uniform("uViewMatrix",       view_matrix);        
+        light_shader.set_uniform("uProjectionMatrix", projection_matrix);
+        light_shader.set_uniform("uViewMatrix",       view_matrix);        
 
         for (LightInfo& light : lights)
         {
-            phong_shader.set_uniform("uLightType",      light.type);
-            phong_shader.set_uniform("uLightDirection", light.direction);
-            phong_shader.set_uniform("uLightPosition",  light.position);
-            phong_shader.set_uniform("uLightRange",     light.range);
-            phong_shader.set_uniform("uLightCutoff",    1.0f - light.angle / 90.0f);
-            phong_shader.set_uniform("uLightColor",     light.color);
+            light_shader.set_uniform("uLightType",      light.type);
+            light_shader.set_uniform("uLightDirection", light.direction);
+            light_shader.set_uniform("uLightPosition",  light.position);
+            light_shader.set_uniform("uLightRange",     light.range);
+            light_shader.set_uniform("uLightCutoff",    1.0f - light.angle / 90.0f);
+            light_shader.set_uniform("uLightColor",     light.color);
 
             for (GeometryInfo& geom : geometries)
             {
-                phong_shader.set_uniform("uModelMatrix",     geom.transform);
+                mat4 model_view_matrix = view_matrix * geom.transform;
+                //mat3 normal_matrix     = mat3(trans(inv(model_view_matrix)));                
+                // this an OK, since the rotational part is orthogonal
+                mat3 normal_matrix     = mat3(model_view_matrix);                
                 
-                geom.material->setup(phong_shader);
+                light_shader.set_uniform("uModelMatrix",     geom.transform);
+                light_shader.set_uniform("uModelViewMatrix", model_view_matrix);
+                light_shader.set_uniform("uNormalMatrix",    normal_matrix);
+
+                geom.material->setup(light_shader);
 
                 geom.mesh->draw();
             }

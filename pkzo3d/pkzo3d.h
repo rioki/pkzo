@@ -30,6 +30,8 @@
 #include "Entity.h"
 #include "Camera.h"
 #include "DirectionalLight.h"
+#include "PointLight.h"
+#include "SpotLight.h"
 #include "Geometry.h"
 #include "SkyBox.h"
 #include "Material.h"

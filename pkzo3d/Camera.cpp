@@ -64,9 +64,9 @@ namespace pkzo
     {
         quat o  = get_world_orientation();
 
-        vec3 vx = transform(o, vec3(1, 0, 0));
-        vec3 vy = transform(o, vec3(0, 1, 0));
-        vec3 vz = transform(o, vec3(0, 0, 1));
+        vec3 vx = normalize(transform(o, vec3(1, 0, 0)));
+        vec3 vy = normalize(transform(o, vec3(0, 1, 0)));
+        vec3 vz = normalize(transform(o, vec3(0, 0, 1)));
 
         vec3 pc = -get_world_position();
 
@@ -80,7 +80,7 @@ namespace pkzo
                 vz[0], vz[1], vz[2], 0.0f,
                  0.0f,  0.0f,  0.0f, 1.0f);
         
-       return mp * mo;
+       return mo * mp;
     }
 
     void Camera::enqueue(SceneRenderer& queue, const Camera& camera) const

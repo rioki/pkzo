@@ -120,5 +120,11 @@
     <None Include="EnvironmentFragment.glsl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="LightFragment.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="LightVertex.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

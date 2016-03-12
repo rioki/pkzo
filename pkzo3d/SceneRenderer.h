@@ -103,6 +103,7 @@ namespace pkzo
         Shader phong_shader;
         Shader skybox_shader;
         Shader env_shader;
+        Shader light_shader;
 
         Mesh   screen_rect;
 
