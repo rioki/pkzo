@@ -22,54 +22,32 @@
   SOFTWARE.
 */
 
-#ifndef _PKZO_ENTITY_H_
-#define _PKZO_ENTITY_H_
+#include "BoxGeometry.h"
 
-#include <rgm/rgm.h>
-#include <pkzo/defines.h>
+#include "SceneRenderer.h"
 
 namespace pkzo
 {
-    using namespace rgm;
+    BoxGeometry::BoxGeometry()
+    : size(1, 1, 1) {}
 
-    class Camera;
-    class SceneRenderer;
+    BoxGeometry::~BoxGeometry() {}
 
-    class PKZO_EXPORT Entity
+    void BoxGeometry::set_size(vec3 value)
     {
-    public:
-        
-        Entity();
+        size = value;
+    }
 
-        Entity(const Entity&) = delete;
+    vec3 BoxGeometry::get_size() const
+    {
+        return size;
+    }
 
-        virtual ~Entity();
-
-        const Entity& operator = (const Entity&) = delete;
-
-        void set_position(const vec3& value);
-
-        const vec3& get_position() const;
-
-        vec3 get_world_position() const;
-
-        void set_orientation(const quat& value);
-
-        const quat& get_orientation() const;
-
-        quat get_world_orientation() const;
-
-        mat4 get_transform() const;
-
-        mat4 get_world_transform() const;
-
-        virtual void enqueue(SceneRenderer& queue, const Camera& camera) const = 0;
-
-    protected:
-        Entity* parent;
-        vec3    position;
-        quat    orientation;
-    };
+    void BoxGeometry::enqueue(SceneRenderer& queue, const Camera& camera) const
+    {
+        if (material)
+        {
+            queue.queue_box(get_world_transform(), size, *material);
+        }
+    }
 }
-
-#endif

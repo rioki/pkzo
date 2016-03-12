@@ -24,6 +24,8 @@
 
 #include "MeshGeometry.h"
 
+#include "SceneRenderer.h"
+
 namespace pkzo
 {
     MeshGeometry::MeshGeometry() {}
@@ -38,5 +40,13 @@ namespace pkzo
     std::shared_ptr<Mesh> MeshGeometry::get_mesh() const
     {
         return mesh;
+    }
+
+    void MeshGeometry::enqueue(SceneRenderer& queue, const Camera& camera) const
+    {
+        if (mesh && material)
+        {
+            queue.queue_geometry(get_world_transform(), *mesh, *material);
+        }
     }
 }

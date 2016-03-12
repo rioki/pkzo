@@ -28,14 +28,9 @@
 
 namespace pkzo
 {
-    Geometry::Geometry()
-    {
-    }
+    Geometry::Geometry() {}
 
-
-    Geometry::~Geometry()
-    {
-    }
+    Geometry::~Geometry() {}
 
     void Geometry::set_material(std::shared_ptr<Material> value)
     {
@@ -45,20 +40,5 @@ namespace pkzo
     std::shared_ptr<Material> Geometry::get_material() const
     {
         return material;
-    }
-
-    void Geometry::enqueue(SceneRenderer& queue, const Camera& camera) const
-    {
-        if (mesh && material)
-        {
-            vec3 s = get_world_position();
-            quat o = get_world_orientation();
-
-            mat4 t(1);
-            t = translate(t, s);
-            t = rotate(t, o);
-
-            queue.queue_geometry(t, *mesh, *material);
-        }
     }
 }

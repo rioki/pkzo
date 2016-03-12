@@ -60,18 +60,20 @@ int main(int argc, char* argv[])
     bool running = true;
     float pitch   = 90.0;
     float yaw     = 0.0;
+    float lx      = 0.0;
 
     pkzo::SceneRenderer renderer;
 
     pkzo::Scene scene;
     
-    auto shpere = pkzo::load_mesh("../assets/meshes/Sphere.ply");
+    auto shpere = pkzo::load_mesh("../assets/meshes/Teapot.ply");
     auto white  = pkzo::load_material("../assets/materials/White.jmn");
 
     pkzo::MeshGeometry sphere0;
     sphere0.set_material(white);
     sphere0.set_mesh(shpere);
     sphere0.set_position(rgm::vec3(-5, 0, 1));
+    sphere0.set_orientation(rgm::axis_angle<float>(rgm::vec3(0, 0, 1), 90.0));
     scene.add_entity(sphere0);
 
     pkzo::MeshGeometry sphere1;
@@ -84,17 +86,21 @@ int main(int argc, char* argv[])
     sphere2.set_material(white);
     sphere2.set_mesh(shpere);
     sphere2.set_position(rgm::vec3(5, 0, 1));
+    sphere2.set_orientation(rgm::axis_angle<float>(rgm::vec3(0, 1, 0), 90.0));
     scene.add_entity(sphere2);
+
+    pkzo::BoxGeometry ground;
+    ground.set_material(white);
+    ground.set_size(rgm::vec3(100, 100, 0.1));
+    scene.add_entity(ground);
 
     pkzo::DirectionalLight light0;
     scene.add_entity(light0);
 
     pkzo::SkyBox sky;
-    std::shared_ptr<pkzo::CubeMap> cubemap(new pkzo::CubeMap);
-    cubemap->load("../assets/textures/Morning_XPos.jpg", "../assets/textures/Morning_XNeg.jpg",
-                    "../assets/textures/Morning_YPos.jpg", "../assets/textures/Morning_YNeg.jpg",
-                    "../assets/textures/Morning_ZPos.jpg", "../assets/textures/Morning_ZNeg.jpg");
-    sky.set_cubemap(cubemap);
+    sky.set_cubemap(pkzo::load_cubemap("../assets/textures/Morning_XPos.jpg", "../assets/textures/Morning_XNeg.jpg",
+                                       "../assets/textures/Morning_YPos.jpg", "../assets/textures/Morning_YNeg.jpg",
+                                       "../assets/textures/Morning_ZPos.jpg", "../assets/textures/Morning_ZNeg.jpg"));
     scene.add_entity(sky);
 
     pkzo::Camera camera;
@@ -153,6 +159,9 @@ int main(int argc, char* argv[])
             auto p = move_r(camera.get_position(), camera.get_orientation(), 0.1);
             camera.set_position(p);
         }
+
+        //lx += 1.0;
+        //light0.set_orientation(rgm::axis_angle<float>(rgm::vec3(1, 0, 0), lx));
 
         window.draw();                         
     }

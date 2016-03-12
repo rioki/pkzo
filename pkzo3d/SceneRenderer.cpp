@@ -81,7 +81,8 @@ namespace pkzo
         light_shader.set_vertex_code(light_vertex);
         light_shader.set_fragment_code(light_fragment);
 
-        screen_rect.create_screen_plane();        
+        screen_rect.create_screen_plane();     
+        box_mesh.create_box(vec3(1, 1, 1));   
     }
 
     SceneRenderer::~SceneRenderer() {}
@@ -138,6 +139,18 @@ namespace pkzo
         info.angle     = angle;        
 
         lights.push_back(info);
+    }
+
+    void SceneRenderer::queue_box(mat4 transform, const vec3& size, Material& material)
+    {
+        transform = scale(transform, size);
+
+        GeometryInfo info;
+        info.transform = transform;
+        info.mesh      = &box_mesh;
+        info.material  = &material;
+
+        geometries.push_back(info);
     }
 
     void SceneRenderer::queue_geometry(mat4 transform, const Mesh& mesh, Material& material)
@@ -235,14 +248,7 @@ namespace pkzo
 
             for (GeometryInfo& geom : geometries)
             {
-                mat4 model_view_matrix = view_matrix * geom.transform;
-                //mat3 normal_matrix     = mat3(trans(inv(model_view_matrix)));                
-                // this an OK, since the rotational part is orthogonal
-                mat3 normal_matrix     = mat3(model_view_matrix);                
-                
-                light_shader.set_uniform("uModelMatrix",     geom.transform);
-                light_shader.set_uniform("uModelViewMatrix", model_view_matrix);
-                light_shader.set_uniform("uNormalMatrix",    normal_matrix);
+                light_shader.set_uniform("uModelMatrix", geom.transform);                
 
                 geom.material->setup(light_shader);
 

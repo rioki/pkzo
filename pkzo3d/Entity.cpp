@@ -53,4 +53,28 @@ namespace pkzo
             return orientation;
         }
     }
+
+    mat4 Entity::get_transform() const
+    {
+        vec3 s = get_position();
+        quat o = get_orientation();
+
+        mat4 t(1);
+        t = translate(t, s);
+        t = rotate(t, o);
+
+        return t;
+    }
+
+    mat4 Entity::get_world_transform() const
+    {
+        vec3 s = get_world_position();
+        quat o = get_world_orientation();
+
+        mat4 t(1);
+        t = translate(t, s);
+        t = rotate(t, o);
+
+        return t;
+    }
 }

@@ -27,8 +27,6 @@
 uniform mat4 uProjectionMatrix;
 uniform mat4 uViewMatrix;
 uniform mat4 uModelMatrix;
-uniform mat4 uModelViewMatrix;
-uniform mat3 uNormalMatrix;
 
 uniform vec3 uLightDirection;
 uniform vec3 uLightPosition;
@@ -47,12 +45,16 @@ out vec2 vTexCoord;
 
 void main()
 {   
-    vec4 pos  = uModelViewMatrix * aVertex;
+    vec4 pos  = uViewMatrix * uModelMatrix * aVertex;
 
+    mat3 v3 = mat3(uViewMatrix);
+    mat3 m3 = mat3(uModelMatrix);
+    
     vPosition       = pos.xyz;
-    vNormal         = uNormalMatrix * aNormal;
-    vLightDirection = mat3(uViewMatrix) * uLightDirection;
-    vLightPosition  = (uViewMatrix * vec4(uLightPosition, 1.0)).xyz;
+    vNormal         = v3 * m3 * aNormal;
+    vLightDirection = v3 * uLightDirection;
+    vLightDirection = uLightDirection;
+    vLightPosition  = (uViewMatrix * uModelMatrix * vec4(uLightPosition, 1.0)).xyz;
     vTexCoord       = aTexCoord;
 
     gl_Position = uProjectionMatrix * pos;

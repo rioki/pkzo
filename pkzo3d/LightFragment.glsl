@@ -64,7 +64,6 @@ void main()
     {
         case DIFFUSE_LIGHT:
             L = normalize(vLightDirection);
-            //L = normalize(uLightDirection);
             break;
         case POINT_LIGHT:
             L = normalize(vLightPosition - vPosition);
@@ -77,5 +76,5 @@ void main()
     float diffuse = lambert(L, N);
     vec4 dc = vec4(uMaterialAlbedo * uLightColor * diffuse, 1.0);
 
-    gl_FragColor = vec4(L, 0) * 0.5; 
+    gl_FragColor = dc; 
 }

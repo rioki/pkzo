@@ -63,6 +63,8 @@ namespace pkzo
 
         void queue_spot_light(const vec3& position, const vec3& direction, const vec3& color, float range, float angle);
 
+        void queue_box(mat4 transform, const vec3& size, Material& material);
+
         void queue_geometry(mat4 transform, const Mesh& mesh, Material& material);
 
         void render();
@@ -106,6 +108,7 @@ namespace pkzo
         Shader light_shader;
 
         Mesh   screen_rect;
+        Mesh   box_mesh;
 
         void draw_sky_box();
         void draw_environment_pass();

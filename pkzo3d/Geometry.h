@@ -45,10 +45,7 @@ namespace pkzo
 
         std::shared_ptr<Material> get_material() const;
 
-        void enqueue(SceneRenderer& queue, const Camera& camera) const override;
-
-    protected:
-        std::shared_ptr<Mesh>     mesh;
+    protected:        
         std::shared_ptr<Material> material;
     };
 }

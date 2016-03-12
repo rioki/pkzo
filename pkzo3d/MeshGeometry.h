@@ -41,7 +41,10 @@ namespace pkzo
 
         std::shared_ptr<Mesh> get_mesh() const;
 
+        void enqueue(SceneRenderer& queue, const Camera& camera) const override;
 
+    private:
+        std::shared_ptr<Mesh> mesh;
     };
 }
 
