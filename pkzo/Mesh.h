@@ -27,6 +27,7 @@
 
 #include <tuple>
 #include <vector>
+#include <memory>
 #include <rgm/rgm.h>
 
 #include "defines.h"
@@ -112,6 +113,11 @@ namespace pkzo
         unsigned int vao;
         unsigned int buffers[6];
     };
+
+    PKZO_EXPORT 
+    std::shared_ptr<Mesh> load_mesh(const std::string& file);
+            
+
 }
 
 #endif

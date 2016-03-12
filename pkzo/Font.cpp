@@ -61,4 +61,12 @@ namespace pkzo
 
         return texture;
     }
+
+    PKZO_EXPORT
+    std::shared_ptr<Font> load_font(const std::string& file, unsigned int size)
+    {
+        std::shared_ptr<Font> font(new Font);
+        font->load(file, size);
+        return font;
+    }
 }

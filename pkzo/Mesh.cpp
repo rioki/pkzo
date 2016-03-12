@@ -416,4 +416,11 @@ namespace pkzo
 
         glBindVertexArray(0);
     }
+    
+    std::shared_ptr<Mesh> load_mesh(const std::string& file)
+    {
+        std::shared_ptr<Mesh> mesh(new Mesh);
+        mesh->load(file);
+        return mesh;
+    }
 }

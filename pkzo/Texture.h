@@ -25,6 +25,7 @@
 #ifndef _PKZO_TEXTURE_H_
 #define _PKZO_TEXTURE_H_
 
+#include <memory>
 #include <string>
 #include <rgm/rgm.h>
 
@@ -133,6 +134,9 @@ namespace pkzo
 
     friend class Font;
     };
+
+    PKZO_EXPORT 
+    std::shared_ptr<Texture> load_texture(const std::string& file);
 }
 
 #endif

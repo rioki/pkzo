@@ -222,4 +222,12 @@ namespace pkzo
 
         surface = value;
     }
+
+    PKZO_EXPORT 
+    std::shared_ptr<Texture> load_texture(const std::string& file)
+    {
+        std::shared_ptr<Texture> texture(new Texture);
+        texture->load(file);
+        return texture;
+    }
 }

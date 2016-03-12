@@ -25,6 +25,8 @@
 #ifndef _PKZO_MATERIAL_H_
 #define _PKZO_MATERIAL_H_
 
+#include <memory>
+#include <string>
 #include <rgm/rgm.h>
 #include <pkzo/defines.h>
 
@@ -37,6 +39,7 @@ namespace pkzo
     class PKZO_EXPORT Material
     {
     public:
+        
         Material();
 
         ~Material();
@@ -45,11 +48,26 @@ namespace pkzo
 
         const vec3& get_albedo() const;
 
+        void set_roughness(float value);
+        
+        float get_roughness() const;
+
+        void set_metalness(float value);
+
+        float get_metalness() const;
+
+        void load(const std::string& file); 
+
         void setup(Shader& shader) const;
 
     private:
-        vec3 albedo;
+        vec3  albedo;
+        float roughness;
+        float metalness;
     };
+
+    PKZO_EXPORT
+    std::shared_ptr<Material> load_material(const std::string& file);
 }
 
 #endif

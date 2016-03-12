@@ -25,6 +25,7 @@
 #ifndef _PKZO_FONT_H_
 #define _PKZO_FONT_H_
 
+#include <memory>
 #include <string>
 #include <rgm/rgm.h>
 
@@ -59,6 +60,9 @@ namespace pkzo
 
         TTF_Font* font; 
     };
+
+    PKZO_EXPORT
+    std::shared_ptr<Font> load_font(const std::string& file, unsigned int size);
 }
 
 #endif
