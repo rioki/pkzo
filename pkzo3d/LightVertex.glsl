@@ -53,8 +53,7 @@ void main()
     vPosition       = pos.xyz;
     vNormal         = v3 * m3 * aNormal;
     vLightDirection = v3 * uLightDirection;
-    vLightDirection = uLightDirection;
-    vLightPosition  = (uViewMatrix * uModelMatrix * vec4(uLightPosition, 1.0)).xyz;
+    vLightPosition  = (uViewMatrix * vec4(uLightPosition, 1.0)).xyz;
     vTexCoord       = aTexCoord;
 
     gl_Position = uProjectionMatrix * pos;
