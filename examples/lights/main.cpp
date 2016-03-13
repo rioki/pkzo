@@ -160,8 +160,8 @@ int main(int argc, char* argv[])
             camera.set_position(p);
         }
 
-        //lx += 0.5;
-        //light0.set_orientation(rgm::axis_angle<float>(rgm::vec3(1, 0, 0), lx));
+        lx += 0.5;
+        light0.set_orientation(rgm::axis_angle<float>(rgm::vec3(1, 0, 0), lx));
 
         window.draw();                         
     }
