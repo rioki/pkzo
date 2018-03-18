@@ -46,10 +46,10 @@ namespace pkzo
         click_cb = cb;
     }
 
-    void HitArea::handle_mouse_move(ivec2 pos, ivec2 mov)     
+    void HitArea::handle_mouse_move(rgm::ivec2 pos, rgm::ivec2 mov)     
     {
-        ivec2 min = position;
-        ivec2 max = position + size;
+       rgm::ivec2 min = position;
+       rgm::ivec2 max = position + size;
 
         if (pos[0] >= min[0] && pos[1] >= min[1] &&
             pos[0] <= max[0] && pos[1] <= max[1])
@@ -76,10 +76,10 @@ namespace pkzo
         }
     }
 
-    void HitArea::handle_mouse_press(unsigned int button, ivec2 pos)
+    void HitArea::handle_mouse_press(unsigned int button, rgm::ivec2 pos)
     {
-        ivec2 min = position;
-        ivec2 max = position + size;
+       rgm::ivec2 min = position;
+       rgm::ivec2 max = position + size;
 
         if (pos[0] >= min[0] && pos[1] >= min[1] &&
             pos[0] <= max[0] && pos[1] <= max[1])
@@ -88,10 +88,10 @@ namespace pkzo
         }
     }
 
-    void HitArea::handle_mouse_release(unsigned int button, ivec2 pos)
+    void HitArea::handle_mouse_release(unsigned int button, rgm::ivec2 pos)
     {
-        ivec2 min = position;
-        ivec2 max = position + size;
+       rgm::ivec2 min = position;
+       rgm::ivec2 max = position + size;
 
         if (pos[0] >= min[0] && pos[1] >= min[1] &&
             pos[0] <= max[0] && pos[1] <= max[1] && 

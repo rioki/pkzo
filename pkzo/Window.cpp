@@ -8,7 +8,7 @@ namespace pkzo
 {
     std::vector<Window*> Window::instances;
 
-    Window::Window(ivec2 size, Mode m)
+    Window::Window(rgm::ivec2 size, Mode m)
     : mode(m)
     {
         instances.push_back(this);
@@ -71,11 +71,11 @@ namespace pkzo
         }
     }
 
-    ivec2 Window::get_size() const
+   rgm::ivec2 Window::get_size() const
     {
         int w, h;
         SDL_GetWindowSize(window, &w, &h);
-        return ivec2(w, h);
+        return rgm::ivec2(w, h);
     }
 
     float Window::get_aspect() const
@@ -95,7 +95,7 @@ namespace pkzo
         draw_cb = cb;
     }
 
-    void Window::on_resize(std::function<void (ivec2)> cb)
+    void Window::on_resize(std::function<void (rgm::ivec2)> cb)
     {
         resize_cb = cb;
     }
@@ -142,7 +142,7 @@ namespace pkzo
                             int height = event.window.data2;
                             if (resize_cb)
                             {
-                                resize_cb(ivec2(width, height));
+                                resize_cb(rgm::ivec2(width, height));
                             }
                             break;
                         }

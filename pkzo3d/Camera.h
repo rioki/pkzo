@@ -45,9 +45,9 @@ namespace pkzo
 
         float get_distance() const;
 
-        mat4 get_projection_matrix(float aspect) const;
+       rgm::mat4 get_projection_matrix(float aspect) const;
 
-        mat4 get_view_matrix() const;
+       rgm::mat4 get_view_matrix() const;
 
         void enqueue(SceneRenderer& queue, const Camera& camera) const override;
     

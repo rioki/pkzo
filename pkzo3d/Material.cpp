@@ -35,12 +35,12 @@ namespace pkzo
 
     Material::~Material() {}
 
-    void Material::set_albedo(const vec3& value)
+    void Material::set_albedo(const rgm::vec3& value)
     {
         albedo = value;
     }
 
-    const vec3& Material::get_albedo() const
+    const rgm::vec3& Material::get_albedo() const
     {
         return albedo;
     }

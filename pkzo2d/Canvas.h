@@ -34,12 +34,12 @@
 
 namespace pkzo
 {
-    using namespace rgm;
+    
 
     class PKZO_EXPORT Canvas
     {
     public:
-        Canvas(ivec2 size);
+        Canvas(rgm::ivec2 size);
 
         Canvas(const Canvas&) = delete;
 
@@ -47,19 +47,19 @@ namespace pkzo
 
         const Canvas& operator = (const Canvas&) = delete;
         
-        void set_size(ivec2 value); 
+        void set_size(rgm::ivec2 value);
 
-        ivec2 get_size() const;
+       rgm::ivec2 get_size() const;
 
-        void draw_rectangle(ivec2 pos, ivec2 size, vec4 color);
+        void draw_rectangle(rgm::ivec2 pos, rgm::ivec2 size, rgm::vec4 color);
 
-        void draw_rectangle(ivec2 pos, ivec2 size, vec4 color, Texture& texture);
+        void draw_rectangle(rgm::ivec2 pos, rgm::ivec2 size, rgm::vec4 color, Texture& texture);
 
     private:
-        ivec2 size;
+       rgm::ivec2 size;
 
-        mat4   projection_matrix;
-        mat4   model_view_matrix;
+       rgm::mat4   projection_matrix;
+       rgm::mat4   model_view_matrix;
         Shader shader;
         Mesh   rect;
     };

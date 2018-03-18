@@ -36,7 +36,7 @@
 
 namespace pkzo
 {
-    using namespace rgm;
+    
     
     class Material;
 
@@ -51,21 +51,21 @@ namespace pkzo
 
         const SceneRenderer& operator = (const SceneRenderer&) = delete;
 
-        void orient_camera(const mat4& projection, const mat4& view);
+        void orient_camera(const rgm::mat4& projection, const rgm::mat4& view);
 
         void set_sky_box(CubeMap& value);
 
-        void queue_ambient_light(const vec3& color);
+        void queue_ambient_light(const rgm::vec3& color);
 
-        void queue_directional_light(const vec3& direction, const vec3& color);
+        void queue_directional_light(const rgm::vec3& direction, const rgm::vec3& color);
 
-        void queue_point_light(const vec3& position, const vec3& color, float range);
+        void queue_point_light(const rgm::vec3& position, const rgm::vec3& color, float range);
 
-        void queue_spot_light(const vec3& position, const vec3& direction, const vec3& color, float range, float angle);
+        void queue_spot_light(const rgm::vec3& position, const rgm::vec3& direction, const rgm::vec3& color, float range, float angle);
 
-        void queue_box(mat4 transform, const vec3& size, Material& material);
+        void queue_box(rgm::mat4 transform, const rgm::vec3& size, Material& material);
 
-        void queue_geometry(mat4 transform, const Mesh& mesh, Material& material);
+        void queue_geometry(rgm::mat4 transform, const Mesh& mesh, Material& material);
 
         void render();
 
@@ -81,22 +81,22 @@ namespace pkzo
         struct LightInfo
         {
             LightType type;
-            vec3      direction;
-            vec3      position;
+            rgm::vec3      direction;
+            rgm::vec3      position;
             float     range;
             float     angle;
-            vec3      color;
+            rgm::vec3      color;
         };
 
         struct GeometryInfo
         {
-            mat4            transform;
+           rgm::mat4            transform;
             const Mesh*     mesh;
             const Material* material;
         };
 
-        mat4                    projection_matrix;
-        mat4                    view_matrix;
+       rgm::mat4                    projection_matrix;
+       rgm::mat4                    view_matrix;
         CubeMap*                sky_box;
         std::list<LightInfo>    lights;
         std::list<GeometryInfo> geometries;

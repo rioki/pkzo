@@ -55,8 +55,8 @@ namespace pkzo
 
     void SpotLight::enqueue(SceneRenderer& renderer, const Camera& camera) const
     {
-        quat o   = get_world_orientation();
-        vec3 dir = transform(o, vec3(0, 0, 1));
+        rgm::quat o   = get_world_orientation();
+        rgm::vec3 dir = transform(o, rgm::vec3(0, 0, 1));
 
         renderer.queue_spot_light(get_world_position(), dir, get_color(), range, angle);
     }

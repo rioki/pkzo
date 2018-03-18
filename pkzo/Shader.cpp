@@ -187,7 +187,7 @@ namespace pkzo
         }        
     }
 
-    void Shader::set_uniform(const std::string& name, vec2 value)
+    void Shader::set_uniform(const std::string& name, rgm::vec2 value)
     {
         int location = glGetUniformLocation(program_id, name.c_str());
         if (location != -1)
@@ -196,7 +196,7 @@ namespace pkzo
         }
     }
     
-    void Shader::set_uniform(const std::string& name, ivec2 value)
+    void Shader::set_uniform(const std::string& name, rgm::ivec2 value)
     {
         int location = glGetUniformLocation(program_id, name.c_str());
         if (location != -1)
@@ -205,7 +205,7 @@ namespace pkzo
         }
     }
 
-    void Shader::set_uniform(const std::string& name, vec3 value)
+    void Shader::set_uniform(const std::string& name, rgm::vec3 value)
     {
         int location = glGetUniformLocation(program_id, name.c_str());
         if (location != -1)
@@ -214,7 +214,7 @@ namespace pkzo
         }
     }
     
-    void Shader::set_uniform(const std::string& name, ivec3 value)
+    void Shader::set_uniform(const std::string& name, rgm::ivec3 value)
     {
         int location = glGetUniformLocation(program_id, name.c_str());
         if (location != -1)
@@ -223,7 +223,7 @@ namespace pkzo
         }
     }
 
-    void Shader::set_uniform(const std::string& name, vec4 value)
+    void Shader::set_uniform(const std::string& name, rgm::vec4 value)
     {
         int location = glGetUniformLocation(program_id, name.c_str());
         if (location != -1)
@@ -232,7 +232,7 @@ namespace pkzo
         }
     }
     
-    void Shader::set_uniform(const std::string& name, ivec4 value)
+    void Shader::set_uniform(const std::string& name, rgm::ivec4 value)
     {
         int location = glGetUniformLocation(program_id, name.c_str());
         if (location != -1)
@@ -241,7 +241,7 @@ namespace pkzo
         }
     }
 
-    void Shader::set_uniform(const std::string& name, mat2 value)
+    void Shader::set_uniform(const std::string& name, rgm::mat2 value)
     {
         int location = glGetUniformLocation(program_id, name.c_str());
         if (location != -1)
@@ -250,7 +250,7 @@ namespace pkzo
         }
     }
 
-    void Shader::set_uniform(const std::string& name, mat3 value)
+    void Shader::set_uniform(const std::string& name, rgm::mat3 value)
     {
         int location = glGetUniformLocation(program_id, name.c_str());
         if (location != -1)
@@ -259,7 +259,7 @@ namespace pkzo
         }
     }
 
-    void Shader::set_uniform(const std::string& name, mat4 value)
+    void Shader::set_uniform(const std::string& name, rgm::mat4 value)
     {
         int location = glGetUniformLocation(program_id, name.c_str());
         if (location != -1)

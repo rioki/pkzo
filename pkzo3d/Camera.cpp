@@ -51,32 +51,32 @@ namespace pkzo
         return distance;
     }
 
-    mat4 Camera::get_projection_matrix(float aspect) const
+   rgm::mat4 Camera::get_projection_matrix(float aspect) const
     {
         //float aspect = (float)w / (float)h;
         float znear  = 0.01;
         float yfov   = (fov / 2.0f) / aspect;
         
-        return perspective(yfov, aspect, znear, distance);
+        return rgm::perspective(yfov, aspect, znear, distance);
     }
 
-    mat4 Camera::get_view_matrix() const
+   rgm::mat4 Camera::get_view_matrix() const
     {
-        quat o  = get_world_orientation();
+       rgm::quat o  = get_world_orientation();
         //o = inverse(o);
 
-        vec3 vx = normalize(transform(o, vec3(1, 0, 0)));
-        vec3 vy = normalize(transform(o, vec3(0, 1, 0)));
-        vec3 vz = normalize(transform(o, vec3(0, 0, 1)));
+       rgm::vec3 vx = rgm::normalize(transform(o, rgm::vec3(1, 0, 0)));
+       rgm::vec3 vy = rgm::normalize(transform(o, rgm::vec3(0, 1, 0)));
+       rgm::vec3 vz = rgm::normalize(transform(o, rgm::vec3(0, 0, 1)));
 
-        vec3 pc = -get_world_position();
+       rgm::vec3 pc = -get_world_position();
 
-        mat4 mp(1.0f, 0.0f, 0.0f, pc[0],
+       rgm::mat4 mp(1.0f, 0.0f, 0.0f, pc[0],
                 0.0f, 1.0f, 0.0f, pc[1], 
                 0.0f, 0.0f, 1.0f, pc[2],
                 0.0f, 0.0f, 0.0f,  1.0f);
 
-        mat4 mo(vx[0], vx[1], vx[2], 0.0f,
+       rgm::mat4 mo(vx[0], vx[1], vx[2], 0.0f,
                 vy[0], vy[1], vy[2], 0.0f,
                 vz[0], vz[1], vz[2], 0.0f,
                  0.0f,  0.0f,  0.0f, 1.0f);

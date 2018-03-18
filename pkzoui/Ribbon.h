@@ -54,13 +54,13 @@ namespace pkzo
 
         std::shared_ptr<Font> get_font() const;
 
-        void set_text_color(const vec4& value);
+        void set_text_color(const rgm::vec4& value);
 
-        const vec4& get_text_color();
+        const rgm::vec4& get_text_color();
 
-        void set_background_color(const vec4& value);
+        void set_background_color(const rgm::vec4& value);
 
-        const vec4& get_background_color() const;
+        const rgm::vec4& get_background_color() const;
 
         void add_icon(std::shared_ptr<Texture> icon, const std::string& caption, std::function<void ()> cb);
 
@@ -82,9 +82,9 @@ namespace pkzo
 
             std::shared_ptr<Font> get_font() const;
 
-            void set_text_color(const vec4& value);
+            void set_text_color(const rgm::vec4& value);
 
-            const vec4& get_text_color();
+            const rgm::vec4& get_text_color();
 
             void on_click(std::function<void ()> cb);
 
@@ -97,7 +97,7 @@ namespace pkzo
         };
 
         std::shared_ptr<Font> font;
-        vec4                  text_color;
+       rgm::vec4                  text_color;
         
         Rectangle background;
 

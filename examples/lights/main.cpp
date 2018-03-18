@@ -28,30 +28,30 @@
 rgm::quat orient(float pitch, float yaw)
 {
     return rgm::axis_angle<float>(rgm::vec3(0, 0, 1), yaw) * 
-           rgm::axis_angle<float>(rgm::vec3(1, 0, 0), pitch);           
+          rgm::axis_angle<float>(rgm::vec3(1, 0, 0), pitch);           
 }
 
 rgm::vec3 move_fwd(const rgm::vec3& pos, const rgm::quat& orient, float dt)
 {
-    rgm::vec3 fwd = rgm::transform(orient, rgm::vec3(0, 0, -1));
+   rgm::vec3 fwd = rgm::transform(orient, rgm::vec3(0, 0, -1));
     return pos + fwd * dt;
 }
 
 rgm::vec3 move_bk(const rgm::vec3& pos, const rgm::quat& orient, float dt)
 {
-    rgm::vec3 fwd = rgm::transform(orient, rgm::vec3(0, 0, 1));
+   rgm::vec3 fwd = rgm::transform(orient, rgm::vec3(0, 0, 1));
     return pos + fwd * dt;
 }
 
 rgm::vec3 move_l(const rgm::vec3& pos, const rgm::quat& orient, float dt)
 {
-    rgm::vec3 fwd = rgm::transform(orient, rgm::vec3(-1, 0, 0));
+   rgm::vec3 fwd = rgm::transform(orient, rgm::vec3(-1, 0, 0));
     return pos + fwd * dt;
 }
 
 rgm::vec3 move_r(const rgm::vec3& pos, const rgm::quat& orient, float dt)
 {
-    rgm::vec3 fwd = rgm::transform(orient, rgm::vec3(1, 0, 0));
+   rgm::vec3 fwd = rgm::transform(orient, rgm::vec3(1, 0, 0));
     return pos + fwd * dt;
 }
 

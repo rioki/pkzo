@@ -48,7 +48,7 @@ namespace pkzo
         }
     }
 
-    void WidgetGroup::draw(Canvas& canvas, ivec2 offset) const 
+    void WidgetGroup::draw(Canvas& canvas, rgm::ivec2 offset) const 
     {
         for (const Widget* widget : widgets)
         {
@@ -56,7 +56,7 @@ namespace pkzo
         }
     }
 
-    void WidgetGroup::handle_mouse_move(ivec2 pos, ivec2 mov) 
+    void WidgetGroup::handle_mouse_move(rgm::ivec2 pos, rgm::ivec2 mov) 
     {
         for (Widget* widget : widgets)
         {
@@ -64,7 +64,7 @@ namespace pkzo
         }
     }
 
-    void WidgetGroup::handle_mouse_press(unsigned int button, ivec2 pos) 
+    void WidgetGroup::handle_mouse_press(unsigned int button, rgm::ivec2 pos) 
     {
         for (Widget* widget : widgets)
         {
@@ -72,7 +72,7 @@ namespace pkzo
         }
     }
 
-    void WidgetGroup::handle_mouse_release(unsigned int button, ivec2 pos) 
+    void WidgetGroup::handle_mouse_release(unsigned int button, rgm::ivec2 pos) 
     {
         for (Widget* widget : widgets)
         {

@@ -53,16 +53,16 @@ namespace pkzo
 
         const std::string& get_text() const;
 
-        void set_color(const vec4& value);
+        void set_color(const rgm::vec4& value);
 
-        const vec4& get_color() const;
+        const rgm::vec4& get_color() const;
 
-        void draw(Canvas& canvas, ivec2 offset) const override;
+        void draw(Canvas& canvas, rgm::ivec2 offset) const override;
 
     private:
         std::shared_ptr<Font> font;
         std::string           text;
-        vec4                  color;
+       rgm::vec4                  color;
 
         mutable bool                 dirty;
         mutable std::vector<Texture> textures;

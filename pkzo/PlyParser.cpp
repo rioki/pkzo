@@ -452,10 +452,10 @@ namespace pkzo
             values[properties[i]] = (float)parse_float();
         }
 
-        mesh.set_vertex(elem, vec3(values["x"], values["y"], values["z"]));
-        mesh.set_normal(elem, vec3(values["nx"], values["ny"], values["nz"]));
-        mesh.set_texcoord(elem, vec2(values["s"], 1 - values["t"]));
-        mesh.set_color(elem, vec4(1.0, 1.0, 1.0, 1.0));
+        mesh.set_vertex(elem, rgm::vec3(values["x"], values["y"], values["z"]));
+        mesh.set_normal(elem, rgm::vec3(values["nx"], values["ny"], values["nz"]));
+        mesh.set_texcoord(elem, rgm::vec2(values["s"], 1 - values["t"]));
+        mesh.set_color(elem, rgm::vec4(1.0, 1.0, 1.0, 1.0));
     }
 
     void PlyParser::parse_face()

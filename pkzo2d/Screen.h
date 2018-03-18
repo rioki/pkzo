@@ -34,7 +34,7 @@
 
 namespace pkzo
 {
-    using namespace rgm;
+    
 
     class Widget;
     class Canvas;
@@ -43,7 +43,7 @@ namespace pkzo
     class PKZO_EXPORT Screen
     {
     public:
-        Screen(const ivec2& size);
+        Screen(const rgm::ivec2& size);
 
         Screen(const Screen&) = delete;
 
@@ -51,13 +51,13 @@ namespace pkzo
 
         const Screen& operator = (const Screen&) = delete;
 
-        void set_size(const ivec2& value);
+        void set_size(const rgm::ivec2& value);
 
-        const ivec2& get_size() const;
+        const rgm::ivec2& get_size() const;
 
-        void set_background_color(const vec4& value);
+        void set_background_color(const rgm::vec4& value);
 
-        const vec4& get_background_color() const;
+        const rgm::vec4& get_background_color() const;
 
         void set_background_texture(std::shared_ptr<Texture> value);
 
@@ -69,18 +69,18 @@ namespace pkzo
 
         virtual void draw(Canvas& canvas) const;
 
-        virtual void handle_mouse_move(ivec2 pos, ivec2 mov);
+        virtual void handle_mouse_move(rgm::ivec2 pos, rgm::ivec2 mov);
 
-        virtual void handle_mouse_press(unsigned int button, ivec2 pos);
+        virtual void handle_mouse_press(unsigned int button, rgm::ivec2 pos);
 
-        virtual void handle_mouse_release(unsigned int button, ivec2 pos);
+        virtual void handle_mouse_release(unsigned int button, rgm::ivec2 pos);
 
     private:
-        ivec2 size;
+       rgm::ivec2 size;
 
         std::list<Widget*> widgets;
 
-        vec4                     background_color;
+       rgm::vec4                     background_color;
         std::shared_ptr<Texture> background_texture;
     };
 }

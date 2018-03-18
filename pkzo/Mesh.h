@@ -34,8 +34,6 @@
 
 namespace pkzo
 {
-    using namespace rgm;
-
     class PKZO_EXPORT Mesh
     {
     public:
@@ -54,31 +52,31 @@ namespace pkzo
 
         void create_screen_plane();
 
-        void create_box(const vec3& size);
+        void create_box(const rgm::vec3& size);
 
         void set_vertex_count(size_t value);
 
         size_t get_vertex_count() const;
 
-        void set_vertex(size_t i, const vec3& v);
+        void set_vertex(size_t i, const rgm::vec3& v);
 
-        vec3 get_vertex(size_t i) const;
+       rgm::vec3 get_vertex(size_t i) const;
 
-        void set_normal(size_t i, const vec3& v);
+        void set_normal(size_t i, const rgm::vec3& v);
 
-        vec3 get_normal(size_t i) const;
+       rgm::vec3 get_normal(size_t i) const;
 
-        void set_texcoord(size_t i, const vec2& v);
+        void set_texcoord(size_t i, const rgm::vec2& v);
 
-        vec2 get_texcoord(size_t i) const;
+       rgm::vec2 get_texcoord(size_t i) const;
 
-        void set_tangent(size_t i, const vec3& v);
+        void set_tangent(size_t i, const rgm::vec3& v);
 
-        vec3 get_tangent(size_t i) const;
+       rgm::vec3 get_tangent(size_t i) const;
 
-        void set_color(size_t i, const vec4& c);
+        void set_color(size_t i, const rgm::vec4& c);
 
-        vec4 get_color(size_t i) const;
+       rgm::vec4 get_color(size_t i) const;
 
         void set_face_count(size_t value);
 

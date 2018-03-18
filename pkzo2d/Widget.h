@@ -31,7 +31,7 @@
 
 namespace pkzo
 {
-    using namespace rgm;    
+        
 
     class Canvas;
 
@@ -47,25 +47,25 @@ namespace pkzo
 
         const Widget& operator = (const Widget&) = delete;
 
-        void set_position(const ivec2& value);
+        void set_position(const rgm::ivec2& value);
 
-        const ivec2& get_position() const;
+        const rgm::ivec2& get_position() const;
 
-        void set_size(const ivec2& value);
+        void set_size(const rgm::ivec2& value);
 
-        const ivec2& get_size() const;
+        const rgm::ivec2& get_size() const;
 
-        virtual void draw(Canvas& canvas, ivec2 offset) const;
+        virtual void draw(Canvas& canvas, rgm::ivec2 offset) const;
 
-        virtual void handle_mouse_move(ivec2 pos, ivec2 mov);
+        virtual void handle_mouse_move(rgm::ivec2 pos, rgm::ivec2 mov);
 
-        virtual void handle_mouse_press(unsigned int button, ivec2 pos);
+        virtual void handle_mouse_press(unsigned int button, rgm::ivec2 pos);
 
-        virtual void handle_mouse_release(unsigned int button, ivec2 pos);
+        virtual void handle_mouse_release(unsigned int button, rgm::ivec2 pos);
 
     protected:
-        ivec2 position;
-        ivec2 size;
+       rgm::ivec2 position;
+       rgm::ivec2 size;
     };
 }
 

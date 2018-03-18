@@ -30,7 +30,7 @@
 
 namespace pkzo
 {
-    using namespace rgm;
+    
 
     class Camera;
     class SceneRenderer;
@@ -47,28 +47,28 @@ namespace pkzo
 
         const Entity& operator = (const Entity&) = delete;
 
-        void set_position(const vec3& value);
+        void set_position(const rgm::vec3& value);
 
-        const vec3& get_position() const;
+        const rgm::vec3& get_position() const;
 
-        vec3 get_world_position() const;
+        rgm::vec3 get_world_position() const;
 
-        void set_orientation(const quat& value);
+        void set_orientation(const rgm::quat& value);
 
-        const quat& get_orientation() const;
+        const rgm::quat& get_orientation() const;
 
-        quat get_world_orientation() const;
+       rgm::quat get_world_orientation() const;
 
-        mat4 get_transform() const;
+       rgm::mat4 get_transform() const;
 
-        mat4 get_world_transform() const;
+       rgm::mat4 get_world_transform() const;
 
         virtual void enqueue(SceneRenderer& queue, const Camera& camera) const = 0;
 
     protected:
-        Entity* parent;
-        vec3    position;
-        quat    orientation;
+        Entity*   parent;
+       rgm::vec3 position;
+       rgm::quat orientation;
     };
 }
 

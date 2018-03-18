@@ -41,7 +41,7 @@ namespace pkzo
 
         void on_draw(std::function<void ()> cb);
 
-        virtual void draw(Canvas& canvas, ivec2 offset) const;
+        virtual void draw(Canvas& canvas, rgm::ivec2 offset) const;
 
     private:
         std::function<void ()> draw_cb; 

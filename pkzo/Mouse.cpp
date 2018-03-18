@@ -88,22 +88,22 @@ namespace pkzo
             case SDL_MOUSEBUTTONDOWN:
                 if (button_press_cb)
                 {
-                    rgm::ivec2 pos(event.button.x, event.button.y);
+                   rgm::ivec2 pos(event.button.x, event.button.y);
                     button_press_cb(event.button.button, pos);
                 }
                 break;
             case SDL_MOUSEBUTTONUP:
                 if (button_release_cb)
                 {
-                    rgm::ivec2 pos(event.button.x, event.button.y);
+                   rgm::ivec2 pos(event.button.x, event.button.y);
                     button_release_cb(event.button.button, pos);
                 }
                 break;
             case SDL_MOUSEMOTION:
                 if (move_cb)
                 {
-                    rgm::ivec2 pos(event.motion.x, event.motion.y);
-                    rgm::ivec2 mov(event.motion.xrel, event.motion.yrel);
+                   rgm::ivec2 pos(event.motion.x, event.motion.y);
+                   rgm::ivec2 mov(event.motion.xrel, event.motion.yrel);
                     move_cb(mov, pos);
                 }
                 break;

@@ -49,16 +49,16 @@ int main(int argc, char* argv[])
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
 
-        rgm::mat4 projection = rgm::perspective(45.0f, window.get_aspect(), 0.1f, 100.0f);
+       rgm::mat4 projection = rgm::perspective(45.0f, window.get_aspect(), 0.1f, 100.0f);
 
-        rgm::mat4 view(1);
+       rgm::mat4 view(1);
         view = rgm::translate(view, rgm::vec3(0, 0, -7));
         view = rgm::rotate(view, rgm::vec3(1, 0, 0), yangle);
         view = rgm::rotate(view, rgm::vec3(0, 0, 1), xangle);        
 
-        rgm::mat4 model(1);
+       rgm::mat4 model(1);
 
-        rgm::mat4 normal(view);
+       rgm::mat4 normal(view);
 
         shader.bind();
         shader.set_uniform("uProjectionMatrix",   projection);
@@ -67,10 +67,10 @@ int main(int argc, char* argv[])
         shader.set_uniform("uNormalMatrix",       normal);
 
         shader.set_uniform("uLightType",          DIFFUSE_LIGHT);
-        shader.set_uniform("uLightDirection",     rgm::vec3(0.5, 0.5, 1));
-        shader.set_uniform("uLightColor",         rgm::vec3(1, 1, 1));
+        shader.set_uniform("uLightDirection",    rgm::vec3(0.5, 0.5, 1));
+        shader.set_uniform("uLightColor",        rgm::vec3(1, 1, 1));
 
-        shader.set_uniform("uMaterialColor",      rgm::vec3(1, 1, 1));
+        shader.set_uniform("uMaterialColor",     rgm::vec3(1, 1, 1));
         shader.set_uniform("uMaterialRoughness",  0.25f);
         shader.set_uniform("uMaterialHasTexture", 0);
 

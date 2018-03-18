@@ -36,12 +36,12 @@ namespace pkzo
 
         ~Light();
 
-        void set_color(const vec3& value);
+        void set_color(const rgm::vec3& value);
 
-        const vec3 get_color() const;
+        const rgm::vec3 get_color() const;
 
     protected:
-        vec3 color;
+        rgm::vec3 color;
     };
 }
 

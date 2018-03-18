@@ -8,27 +8,27 @@
 
 namespace pkzo
 {
-    Screen::Screen(const ivec2& s)
+    Screen::Screen(const rgm::ivec2& s)
     : size(s), background_color(0x0000000) {}
 
     Screen::~Screen() {}
 
-    void Screen::set_size(const ivec2& value)
+    void Screen::set_size(const rgm::ivec2& value)
     {
         size = value;
     }
 
-    const ivec2& Screen::get_size() const
+    const rgm::ivec2& Screen::get_size() const
     {
         return size;
     }
 
-    void Screen::set_background_color(const vec4& value)
+    void Screen::set_background_color(const rgm::vec4& value)
     {
         background_color = value;
     }
 
-    const vec4& Screen::get_background_color() const
+    const rgm::vec4& Screen::get_background_color() const
     {
         return background_color;
     }
@@ -67,20 +67,20 @@ namespace pkzo
 
         if (background_texture)
         {
-            canvas.draw_rectangle(ivec2(0, 0), size, background_color, *background_texture);
+            canvas.draw_rectangle(rgm::ivec2(0, 0), size, background_color, *background_texture);
         }
         else
         {
-            canvas.draw_rectangle(ivec2(0, 0), size, background_color);
+            canvas.draw_rectangle(rgm::ivec2(0, 0), size, background_color);
         }
 
         for (const Widget* widget : widgets)
         {
-            widget->draw(canvas, ivec2(0, 0));
+            widget->draw(canvas, rgm::ivec2(0, 0));
         }
     }
 
-    void Screen::handle_mouse_move(ivec2 pos, ivec2 mov)
+    void Screen::handle_mouse_move(rgm::ivec2 pos, rgm::ivec2 mov)
     {
         for (Widget* widget : widgets)
         {
@@ -88,7 +88,7 @@ namespace pkzo
         }
     }
     
-    void Screen::handle_mouse_press(unsigned int button, ivec2 pos)
+    void Screen::handle_mouse_press(unsigned int button, rgm::ivec2 pos)
     {
         for (Widget* widget : widgets)
         {
@@ -96,7 +96,7 @@ namespace pkzo
         }
     }
 
-    void Screen::handle_mouse_release(unsigned int button, ivec2 pos)
+    void Screen::handle_mouse_release(unsigned int button, rgm::ivec2 pos)
     {
         for (Widget* widget : widgets)
         {

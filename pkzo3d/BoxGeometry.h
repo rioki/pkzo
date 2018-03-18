@@ -37,14 +37,14 @@ namespace pkzo
 
         ~BoxGeometry();
 
-        void set_size(vec3 value);
+        void set_size( rgm::vec3 value);
 
-        vec3 get_size() const;
+        rgm::vec3 get_size() const;
 
         void enqueue(SceneRenderer& queue, const Camera& camera) const override;
 
     private:
-        vec3 size;
+        rgm::vec3 size;
     };
 }
 

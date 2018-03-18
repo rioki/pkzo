@@ -41,18 +41,18 @@ namespace pkzo
 
         ~Rectangle();
 
-        void set_color(const vec4& value);
+        void set_color(const rgm::vec4& value);
 
-        const vec4& get_color() const;
+        const rgm::vec4& get_color() const;
 
         void set_texture(std::shared_ptr<Texture> value);
 
         std::shared_ptr<Texture> get_texture() const;
 
-        void draw(Canvas& canvas, ivec2 offset) const override;        
+        void draw(Canvas& canvas, rgm::ivec2 offset) const override;        
 
     private:
-        vec4                     color;
+       rgm::vec4                     color;
         std::shared_ptr<Texture> texture;
     };
 }

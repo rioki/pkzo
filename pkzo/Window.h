@@ -39,8 +39,7 @@ union SDL_Event;
 
 namespace pkzo
 {
-    using namespace rgm;
-
+    
     class PKZO_EXPORT Window
     {
     public:
@@ -52,7 +51,7 @@ namespace pkzo
             FULLSCREEN
         };
 
-        Window(ivec2 size, Mode mode = STATIC);
+        Window(rgm::ivec2 size, Mode mode = STATIC);
 
         Window(const Window&) = delete;
 
@@ -60,7 +59,7 @@ namespace pkzo
 
         const Window& operator = (const Window&) = delete;
 
-        ivec2 get_size() const;
+       rgm::ivec2 get_size() const;
 
         /**
          * Get the window's aspect ratio.
@@ -71,7 +70,7 @@ namespace pkzo
 
         void on_draw(std::function<void ()> cb);
 
-        void on_resize(std::function<void (ivec2)> cb);
+        void on_resize(std::function<void (rgm::ivec2)> cb);
 
         void on_close(std::function<void ()> cb);
 
@@ -88,7 +87,7 @@ namespace pkzo
         Mode mode;  
 
         std::function<void ()>      draw_cb; 
-        std::function<void (ivec2)> resize_cb;
+        std::function<void (rgm::ivec2)> resize_cb;
         std::function<void ()>      close_cb;
 
         void handle_event(SDL_Event& event);

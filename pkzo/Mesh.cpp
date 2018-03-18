@@ -44,30 +44,30 @@ namespace pkzo
     {
         set_vertex_count(4);
 
-        set_vertex(0, vec3(-1.0f, -1.0f, 0.0f));
-        set_vertex(1, vec3(-1.0f,  1.0f, 0.0f));
-        set_vertex(2, vec3( 1.0f,  1.0f, 0.0f));
-        set_vertex(3, vec3( 1.0f, -1.0f, 0.0f));
+        set_vertex(0, rgm::vec3(-1.0f, -1.0f, 0.0f));
+        set_vertex(1, rgm::vec3(-1.0f,  1.0f, 0.0f));
+        set_vertex(2, rgm::vec3( 1.0f,  1.0f, 0.0f));
+        set_vertex(3, rgm::vec3( 1.0f, -1.0f, 0.0f));
 
-        set_normal(0, vec3(0.0f, 0.0f, 1.0f));
-        set_normal(1, vec3(0.0f, 0.0f, 1.0f));
-        set_normal(2, vec3(0.0f, 0.0f, 1.0f));
-        set_normal(3, vec3(0.0f, 0.0f, 1.0f));
+        set_normal(0, rgm::vec3(0.0f, 0.0f, 1.0f));
+        set_normal(1, rgm::vec3(0.0f, 0.0f, 1.0f));
+        set_normal(2, rgm::vec3(0.0f, 0.0f, 1.0f));
+        set_normal(3, rgm::vec3(0.0f, 0.0f, 1.0f));
 
-        set_texcoord(0, vec2(0.0f, 0.0f));
-        set_texcoord(1, vec2(0.0f, 1.0f));
-        set_texcoord(2, vec2(1.0f, 1.0f));
-        set_texcoord(3, vec2(1.0f, 0.0f));
+        set_texcoord(0, rgm::vec2(0.0f, 0.0f));
+        set_texcoord(1, rgm::vec2(0.0f, 1.0f));
+        set_texcoord(2, rgm::vec2(1.0f, 1.0f));
+        set_texcoord(3, rgm::vec2(1.0f, 0.0f));
 
-        set_tangent(0, vec3(1.0f, 0.0f, 0.0f));
-        set_tangent(1, vec3(1.0f, 0.0f, 0.0f));
-        set_tangent(2, vec3(1.0f, 0.0f, 0.0f));
-        set_tangent(3, vec3(1.0f, 0.0f, 0.0f));
+        set_tangent(0, rgm::vec3(1.0f, 0.0f, 0.0f));
+        set_tangent(1, rgm::vec3(1.0f, 0.0f, 0.0f));
+        set_tangent(2, rgm::vec3(1.0f, 0.0f, 0.0f));
+        set_tangent(3, rgm::vec3(1.0f, 0.0f, 0.0f));
 
-        set_color(0, vec4(1.0f, 1.0f, 1.0f, 1.0f));
-        set_color(1, vec4(1.0f, 1.0f, 1.0f, 1.0f));
-        set_color(2, vec4(1.0f, 1.0f, 1.0f, 1.0f));
-        set_color(3, vec4(1.0f, 1.0f, 1.0f, 1.0f));
+        set_color(0, rgm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+        set_color(1, rgm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+        set_color(2, rgm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+        set_color(3, rgm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
         set_face_count(2);
         set_face(0, 0, 2, 1);
@@ -82,155 +82,155 @@ namespace pkzo
 
         set_vertex_count(4);
 
-        set_vertex(0, vec3(-w2, -h2, 0.0f));
-        set_vertex(1, vec3(-w2,  h2, 0.0f));
-        set_vertex(2, vec3( w2,  h2, 0.0f));
-        set_vertex(3, vec3( w2, -h2, 0.0f));
+        set_vertex(0, rgm::vec3(-w2, -h2, 0.0f));
+        set_vertex(1, rgm::vec3(-w2,  h2, 0.0f));
+        set_vertex(2, rgm::vec3( w2,  h2, 0.0f));
+        set_vertex(3, rgm::vec3( w2, -h2, 0.0f));
 
-        set_normal(0, vec3(0.0f, 0.0f, 1.0f));
-        set_normal(1, vec3(0.0f, 0.0f, 1.0f));
-        set_normal(2, vec3(0.0f, 0.0f, 1.0f));
-        set_normal(3, vec3(0.0f, 0.0f, 1.0f));
+        set_normal(0, rgm::vec3(0.0f, 0.0f, 1.0f));
+        set_normal(1, rgm::vec3(0.0f, 0.0f, 1.0f));
+        set_normal(2, rgm::vec3(0.0f, 0.0f, 1.0f));
+        set_normal(3, rgm::vec3(0.0f, 0.0f, 1.0f));
 
-        set_texcoord(0, vec2(0.0f, 0.0f));
-        set_texcoord(1, vec2(0.0f, 1.0f));
-        set_texcoord(2, vec2(1.0f, 1.0f));
-        set_texcoord(3, vec2(1.0f, 0.0f));
+        set_texcoord(0, rgm::vec2(0.0f, 0.0f));
+        set_texcoord(1, rgm::vec2(0.0f, 1.0f));
+        set_texcoord(2, rgm::vec2(1.0f, 1.0f));
+        set_texcoord(3, rgm::vec2(1.0f, 0.0f));
 
-        set_tangent(0, vec3(1.0f, 0.0f, 0.0f));
-        set_tangent(1, vec3(1.0f, 0.0f, 0.0f));
-        set_tangent(2, vec3(1.0f, 0.0f, 0.0f));
-        set_tangent(3, vec3(1.0f, 0.0f, 0.0f));
+        set_tangent(0, rgm::vec3(1.0f, 0.0f, 0.0f));
+        set_tangent(1, rgm::vec3(1.0f, 0.0f, 0.0f));
+        set_tangent(2, rgm::vec3(1.0f, 0.0f, 0.0f));
+        set_tangent(3, rgm::vec3(1.0f, 0.0f, 0.0f));
 
-        set_color(0, vec4(1.0f, 1.0f, 1.0f, 1.0f));
-        set_color(1, vec4(1.0f, 1.0f, 1.0f, 1.0f));
-        set_color(2, vec4(1.0f, 1.0f, 1.0f, 1.0f));
-        set_color(3, vec4(1.0f, 1.0f, 1.0f, 1.0f));
+        set_color(0, rgm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+        set_color(1, rgm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+        set_color(2, rgm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+        set_color(3, rgm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
         set_face_count(2);
         set_face(0, 0, 2, 1);
         set_face(1, 0, 3, 2);
     }
 
-    void Mesh::create_box(const vec3& size)
+    void Mesh::create_box(const rgm::vec3& size)
     {
-        vec3 hs = size * 0.5f;
+       rgm::vec3 hs = size * 0.5f;
 
         set_vertex_count(24);
         set_face_count(12);
 
         // x pos face
-        set_vertex(0, vec3(hs[0], -hs[1], -hs[2]));
-        set_vertex(1, vec3(hs[0],  hs[1], -hs[2]));
-        set_vertex(2, vec3(hs[0],  hs[1],  hs[2]));
-        set_vertex(3, vec3(hs[0], -hs[1],  hs[2]));
+        set_vertex(0, rgm::vec3(hs[0], -hs[1], -hs[2]));
+        set_vertex(1, rgm::vec3(hs[0],  hs[1], -hs[2]));
+        set_vertex(2, rgm::vec3(hs[0],  hs[1],  hs[2]));
+        set_vertex(3, rgm::vec3(hs[0], -hs[1],  hs[2]));
 
-        set_normal(0, vec3(1, 0, 0));
-        set_normal(1, vec3(1, 0, 0));
-        set_normal(2, vec3(1, 0, 0));
-        set_normal(3, vec3(1, 0, 0));
+        set_normal(0, rgm::vec3(1, 0, 0));
+        set_normal(1, rgm::vec3(1, 0, 0));
+        set_normal(2, rgm::vec3(1, 0, 0));
+        set_normal(3, rgm::vec3(1, 0, 0));
         
-        set_texcoord(0, vec2(0, 1));
-        set_texcoord(1, vec2(1, 1));
-        set_texcoord(2, vec2(1, 0));
-        set_texcoord(3, vec2(0, 0));
+        set_texcoord(0, rgm::vec2(0, 1));
+        set_texcoord(1, rgm::vec2(1, 1));
+        set_texcoord(2, rgm::vec2(1, 0));
+        set_texcoord(3, rgm::vec2(0, 0));
         
         set_face(0, 0, 1, 2);
         set_face(1, 0, 2, 3);
         
         // x neg
-        set_vertex(4, vec3(-hs[0], -hs[1], -hs[2]));
-        set_vertex(5, vec3(-hs[0],  hs[1], -hs[2]));
-        set_vertex(6, vec3(-hs[0],  hs[1],  hs[2]));
-        set_vertex(7, vec3(-hs[0], -hs[1],  hs[2]));
+        set_vertex(4, rgm::vec3(-hs[0], -hs[1], -hs[2]));
+        set_vertex(5, rgm::vec3(-hs[0],  hs[1], -hs[2]));
+        set_vertex(6, rgm::vec3(-hs[0],  hs[1],  hs[2]));
+        set_vertex(7, rgm::vec3(-hs[0], -hs[1],  hs[2]));
 
-        set_normal(4, vec3(-1, 0, 0));
-        set_normal(5, vec3(-1, 0, 0));
-        set_normal(6, vec3(-1, 0, 0));
-        set_normal(7, vec3(-1, 0, 0));
+        set_normal(4, rgm::vec3(-1, 0, 0));
+        set_normal(5, rgm::vec3(-1, 0, 0));
+        set_normal(6, rgm::vec3(-1, 0, 0));
+        set_normal(7, rgm::vec3(-1, 0, 0));
 
 
-        set_texcoord(4, vec2(0, 1));
-        set_texcoord(5, vec2(1, 1));
-        set_texcoord(6, vec2(1, 0));
-        set_texcoord(7, vec2(0, 0));
+        set_texcoord(4, rgm::vec2(0, 1));
+        set_texcoord(5, rgm::vec2(1, 1));
+        set_texcoord(6, rgm::vec2(1, 0));
+        set_texcoord(7, rgm::vec2(0, 0));
         
         set_face(2, 6, 5, 4);
         set_face(3, 7, 4, 6);
                 
         // y pos
-        set_vertex( 8, vec3(-hs[0], hs[1], -hs[2]));
-        set_vertex( 9, vec3( hs[0], hs[1], -hs[2]));
-        set_vertex(10, vec3( hs[0], hs[1],  hs[2]));
-        set_vertex(11, vec3(-hs[0], hs[1],  hs[2]));
+        set_vertex( 8, rgm::vec3(-hs[0], hs[1], -hs[2]));
+        set_vertex( 9, rgm::vec3( hs[0], hs[1], -hs[2]));
+        set_vertex(10, rgm::vec3( hs[0], hs[1],  hs[2]));
+        set_vertex(11, rgm::vec3(-hs[0], hs[1],  hs[2]));
 
-        set_normal( 8, vec3(0, 1, 0));
-        set_normal( 9, vec3(0, 1, 0));
-        set_normal(10, vec3(0, 1, 0));
-        set_normal(11, vec3(0, 1, 0));
+        set_normal( 8, rgm::vec3(0, 1, 0));
+        set_normal( 9, rgm::vec3(0, 1, 0));
+        set_normal(10, rgm::vec3(0, 1, 0));
+        set_normal(11, rgm::vec3(0, 1, 0));
 
 
-        set_texcoord( 8, vec2(0, 1));
-        set_texcoord( 9, vec2(1, 1));
-        set_texcoord(10, vec2(1, 0));
-        set_texcoord(11, vec2(0, 0));
+        set_texcoord( 8, rgm::vec2(0, 1));
+        set_texcoord( 9, rgm::vec2(1, 1));
+        set_texcoord(10, rgm::vec2(1, 0));
+        set_texcoord(11, rgm::vec2(0, 0));
         
         set_face(4, 8, 9, 10);
         set_face(5, 8, 10, 11);
 
         // y neg
-        set_vertex(12, vec3(-hs[0], -hs[1], -hs[2]));
-        set_vertex(13, vec3( hs[0], -hs[1], -hs[2]));
-        set_vertex(14, vec3( hs[0], -hs[1],  hs[2]));
-        set_vertex(15, vec3(-hs[0], -hs[1],  hs[2]));
+        set_vertex(12, rgm::vec3(-hs[0], -hs[1], -hs[2]));
+        set_vertex(13, rgm::vec3( hs[0], -hs[1], -hs[2]));
+        set_vertex(14, rgm::vec3( hs[0], -hs[1],  hs[2]));
+        set_vertex(15, rgm::vec3(-hs[0], -hs[1],  hs[2]));
 
-        set_normal(12, vec3(0, -1, 0));
-        set_normal(13, vec3(0, -1, 0));
-        set_normal(14, vec3(0, -1, 0));
-        set_normal(15, vec3(0, -1, 0));
+        set_normal(12, rgm::vec3(0, -1, 0));
+        set_normal(13, rgm::vec3(0, -1, 0));
+        set_normal(14, rgm::vec3(0, -1, 0));
+        set_normal(15, rgm::vec3(0, -1, 0));
 
-        set_texcoord(12, vec2(0, 1));
-        set_texcoord(13, vec2(1, 1));
-        set_texcoord(14, vec2(1, 0));
-        set_texcoord(15, vec2(0, 0));
+        set_texcoord(12, rgm::vec2(0, 1));
+        set_texcoord(13, rgm::vec2(1, 1));
+        set_texcoord(14, rgm::vec2(1, 0));
+        set_texcoord(15, rgm::vec2(0, 0));
         
         set_face(6, 14, 13, 12);
         set_face(7, 15, 12, 14);
         
         // z pos
-        set_vertex(16, vec3(-hs[0], -hs[1], hs[2]));
-        set_vertex(17, vec3( hs[0], -hs[1], hs[2]));
-        set_vertex(18, vec3( hs[0],  hs[1], hs[2]));
-        set_vertex(19, vec3(-hs[0],  hs[1], hs[2]));
+        set_vertex(16, rgm::vec3(-hs[0], -hs[1], hs[2]));
+        set_vertex(17, rgm::vec3( hs[0], -hs[1], hs[2]));
+        set_vertex(18, rgm::vec3( hs[0],  hs[1], hs[2]));
+        set_vertex(19, rgm::vec3(-hs[0],  hs[1], hs[2]));
 
-        set_normal(16, vec3(0, 0, 1));
-        set_normal(17, vec3(0, 0, 1));
-        set_normal(18, vec3(0, 0, 1));
-        set_normal(19, vec3(0, 0, 1));
+        set_normal(16, rgm::vec3(0, 0, 1));
+        set_normal(17, rgm::vec3(0, 0, 1));
+        set_normal(18, rgm::vec3(0, 0, 1));
+        set_normal(19, rgm::vec3(0, 0, 1));
 
-        set_texcoord(16, vec2(0, 1));
-        set_texcoord(17, vec2(1, 1));
-        set_texcoord(18, vec2(1, 0));
-        set_texcoord(19, vec2(0, 0));
+        set_texcoord(16, rgm::vec2(0, 1));
+        set_texcoord(17, rgm::vec2(1, 1));
+        set_texcoord(18, rgm::vec2(1, 0));
+        set_texcoord(19, rgm::vec2(0, 0));
         
         set_face(8, 16, 17, 18);
         set_face(9, 16, 18, 19);
         
         // z neg
-        set_vertex(20, vec3(-hs[0], -hs[1], -hs[2]));
-        set_vertex(21, vec3( hs[0], -hs[1], -hs[2]));
-        set_vertex(22, vec3( hs[0],  hs[1], -hs[2]));
-        set_vertex(23, vec3(-hs[0],  hs[1], -hs[2]));
+        set_vertex(20, rgm::vec3(-hs[0], -hs[1], -hs[2]));
+        set_vertex(21, rgm::vec3( hs[0], -hs[1], -hs[2]));
+        set_vertex(22, rgm::vec3( hs[0],  hs[1], -hs[2]));
+        set_vertex(23, rgm::vec3(-hs[0],  hs[1], -hs[2]));
 
-        set_normal(20, vec3(0, 0, -1));
-        set_normal(21, vec3(0, 0, -1));
-        set_normal(22, vec3(0, 0, -1));
-        set_normal(23, vec3(0, 0, -1));
+        set_normal(20, rgm::vec3(0, 0, -1));
+        set_normal(21, rgm::vec3(0, 0, -1));
+        set_normal(22, rgm::vec3(0, 0, -1));
+        set_normal(23, rgm::vec3(0, 0, -1));
 
-        set_texcoord(20, vec2(0, 1));
-        set_texcoord(21, vec2(1, 1));
-        set_texcoord(22, vec2(1, 0));
-        set_texcoord(23, vec2(0, 0));
+        set_texcoord(20, rgm::vec2(0, 1));
+        set_texcoord(21, rgm::vec2(1, 1));
+        set_texcoord(22, rgm::vec2(1, 0));
+        set_texcoord(23, rgm::vec2(0, 0));
         
         set_face(10, 22, 21, 20);
         set_face(11, 23, 20, 22);
@@ -241,7 +241,7 @@ namespace pkzo
         return vertices.size() / 3;
     }
 
-    void Mesh::set_vertex(size_t i, const vec3& v)
+    void Mesh::set_vertex(size_t i, const rgm::vec3& v)
     {
         size_t b = i * 4;
         vertices[b + 0] = v[0];
@@ -250,13 +250,13 @@ namespace pkzo
         vertices[b + 3] = 1.0f;
     }
 
-    vec3 Mesh::get_vertex(size_t i) const
+   rgm::vec3 Mesh::get_vertex(size_t i) const
     {
         size_t b = i * 3;
-        return vec3(vertices[b + 0], vertices[b + 1], vertices[b + 2]);
+        return rgm::vec3(vertices[b + 0], vertices[b + 1], vertices[b + 2]);
     }
 
-    void Mesh::set_normal(size_t i, const vec3& v)
+    void Mesh::set_normal(size_t i, const rgm::vec3& v)
     {
         size_t b = i * 3;
         normals[b + 0] = v[0];
@@ -264,26 +264,26 @@ namespace pkzo
         normals[b + 2] = v[2];
     }
 
-    vec3 Mesh::get_normal(size_t i) const
+   rgm::vec3 Mesh::get_normal(size_t i) const
     {
         size_t b = i * 3;
-        return vec3(normals[b + 0], normals[b + 1], normals[b + 2]);
+        return rgm::vec3(normals[b + 0], normals[b + 1], normals[b + 2]);
     }
 
-    void Mesh::set_texcoord(size_t i, const vec2& v)
+    void Mesh::set_texcoord(size_t i, const rgm::vec2& v)
     {
         size_t b = i * 2;
         texcoords[b + 0] = v[0];
         texcoords[b + 1] = v[1];
     }
 
-    vec2 Mesh::get_texcoord(size_t i) const
+   rgm::vec2 Mesh::get_texcoord(size_t i) const
     {
         size_t b = i * 2;
-        return vec2(texcoords[b + 0], texcoords[b + 1]);
+        return rgm::vec2(texcoords[b + 0], texcoords[b + 1]);
     }
 
-    void Mesh::set_tangent(size_t i, const vec3& v)
+    void Mesh::set_tangent(size_t i, const rgm::vec3& v)
     {
         size_t b = i * 3;
         tangents[b + 0] = v[0];
@@ -291,13 +291,13 @@ namespace pkzo
         tangents[b + 2] = v[2];
     }
 
-    vec3 Mesh::get_tangent(size_t i) const
+   rgm::vec3 Mesh::get_tangent(size_t i) const
     {
         size_t b = i * 3;
-        return vec3(tangents[b + 0], tangents[b + 1], tangents[b + 2]);
+        return rgm::vec3(tangents[b + 0], tangents[b + 1], tangents[b + 2]);
     }
 
-    void Mesh::set_color(size_t i, const vec4& v)
+    void Mesh::set_color(size_t i, const rgm::vec4& v)
     {
         size_t ba = i * 4;
         colors[ba + 0] = v[0];
@@ -306,10 +306,10 @@ namespace pkzo
         colors[ba + 3] = v[3];
     }
 
-    vec4 Mesh::get_color(size_t i) const
+   rgm::vec4 Mesh::get_color(size_t i) const
     {
         size_t b = i * 4;
-        return vec4(colors[b + 0], colors[b + 1], colors[b + 2], colors[b + 3]);
+        return rgm::vec4(colors[b + 0], colors[b + 1], colors[b + 2], colors[b + 3]);
     }
 
     void Mesh::set_face_count(size_t value)

@@ -37,7 +37,7 @@ namespace pkzo
         draw_cb = cb;
     }
 
-    void Viewport::draw(Canvas& canvas, ivec2 offset) const
+    void Viewport::draw(Canvas& canvas, rgm::ivec2 offset) const
     {
         if (draw_cb)
         {

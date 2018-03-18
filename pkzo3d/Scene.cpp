@@ -55,8 +55,8 @@ namespace pkzo
 
     void Scene::draw(SceneRenderer& renderer, float aspect, const Camera& camera)
     {
-        mat4 proj = camera.get_projection_matrix(aspect);
-        mat4 view = camera.get_view_matrix();
+        rgm::mat4 proj = camera.get_projection_matrix(aspect);
+        rgm::mat4 view = camera.get_view_matrix();
         renderer.orient_camera(proj, view);
 
         for (Entity* entity : entities)

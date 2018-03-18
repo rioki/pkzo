@@ -82,12 +82,12 @@ namespace pkzo
         light_shader.set_fragment_code(light_fragment);
 
         screen_rect.create_screen_plane();     
-        box_mesh.create_box(vec3(1, 1, 1));   
+        box_mesh.create_box( rgm::vec3(1, 1, 1));   
     }
 
     SceneRenderer::~SceneRenderer() {}
 
-    void SceneRenderer::orient_camera(const mat4& projection, const mat4& view)
+    void SceneRenderer::orient_camera(const rgm::mat4& projection, const rgm::mat4& view)
     {
         projection_matrix = projection;
         view_matrix       = view;
@@ -98,7 +98,7 @@ namespace pkzo
         sky_box = &value;
     }
 
-    void SceneRenderer::queue_ambient_light(const vec3& color)
+    void SceneRenderer::queue_ambient_light(const rgm::vec3& color)
     {
         LightInfo info;
         info.type      = AMBIENT_LIGHT;
@@ -107,7 +107,7 @@ namespace pkzo
         lights.push_back(info);
     }
 
-    void SceneRenderer::queue_directional_light(const vec3& direction, const vec3& color)
+    void SceneRenderer::queue_directional_light(const rgm::vec3& direction, const rgm::vec3& color)
     {
         LightInfo info;
         info.type      = DIRECTIONAL_LIGHT;
@@ -117,7 +117,7 @@ namespace pkzo
         lights.push_back(info);
     }
 
-    void SceneRenderer::queue_point_light(const vec3& position, const vec3& color, float range)
+    void SceneRenderer::queue_point_light(const rgm::vec3& position, const rgm::vec3& color, float range)
     {
         LightInfo info;
         info.type      = POINT_LIGHT;
@@ -128,7 +128,7 @@ namespace pkzo
         lights.push_back(info);
     }
 
-    void SceneRenderer::queue_spot_light(const vec3& position, const vec3& direction, const vec3& color, float range, float angle)
+    void SceneRenderer::queue_spot_light(const rgm::vec3& position, const rgm::vec3& direction, const rgm::vec3& color, float range, float angle)
     {
         LightInfo info;
         info.type      = SPOT_LIGHT;
@@ -141,9 +141,9 @@ namespace pkzo
         lights.push_back(info);
     }
 
-    void SceneRenderer::queue_box(mat4 transform, const vec3& size, Material& material)
+    void SceneRenderer::queue_box(rgm::mat4 transform, const rgm::vec3& size, Material& material)
     {
-        transform = scale(transform, size);
+        transform = rgm::scale(transform, size);
 
         GeometryInfo info;
         info.transform = transform;
@@ -153,7 +153,7 @@ namespace pkzo
         geometries.push_back(info);
     }
 
-    void SceneRenderer::queue_geometry(mat4 transform, const Mesh& mesh, Material& material)
+    void SceneRenderer::queue_geometry(rgm::mat4 transform, const Mesh& mesh, Material& material)
     {
         GeometryInfo info;
         info.transform = transform;

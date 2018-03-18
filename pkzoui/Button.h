@@ -43,17 +43,17 @@ namespace pkzo
 
         const std::string& get_label() const;
 
-        void set_label_color(const vec4& value);
+        void set_label_color(const rgm::vec4& value);
 
-        const vec4& get_label_color() const;
+        const rgm::vec4& get_label_color() const;
 
         void set_label_font(std::shared_ptr<Font> value);
 
         std::shared_ptr<Font> get_label_font() const;
 
-        void set_background_color(const vec4& value);
+        void set_background_color(const rgm::vec4& value);
 
-        const vec4& get_background_color() const;
+        const rgm::vec4& get_background_color() const;
 
         void set_background_texture(std::shared_ptr<Texture> value);
 
@@ -61,7 +61,7 @@ namespace pkzo
 
         void on_click(std::function<void ()> cb);
 
-        void draw(Canvas& canvas, ivec2 offset) const override;
+        void draw(Canvas& canvas, rgm::ivec2 offset) const override;
 
     private:
         Text      label;

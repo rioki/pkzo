@@ -93,7 +93,7 @@ namespace pkzo
          **/
         unsigned int get_height() const;
 
-        rgm::ivec2 get_size() const;
+       rgm::ivec2 get_size() const;
 
         ColorType get_color_type() const;
 

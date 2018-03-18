@@ -34,7 +34,7 @@ namespace pkzo
 
     void DirectionalLight::enqueue(SceneRenderer& queue, const Camera& camera) const
     {
-        vec3 d = transform(get_world_orientation(), vec3(0, 0, 1));
+        rgm::vec3 d = transform(get_world_orientation(), rgm::vec3(0, 0, 1));
         queue.queue_directional_light(d, color);
     }
 }

@@ -45,11 +45,11 @@ namespace pkzo
 
         void on_click(std::function<void ()> cb);
 
-        void handle_mouse_move(ivec2 pos, ivec2 mov) override;
+        void handle_mouse_move(rgm::ivec2 pos, rgm::ivec2 mov) override;
 
-        void handle_mouse_press(unsigned int button, ivec2 pos) override;
+        void handle_mouse_press(unsigned int button, rgm::ivec2 pos) override;
 
-        void handle_mouse_release(unsigned int button, ivec2 pos) override;
+        void handle_mouse_release(unsigned int button, rgm::ivec2 pos) override;
 
     private:
         std::function<void ()> enter_cb;

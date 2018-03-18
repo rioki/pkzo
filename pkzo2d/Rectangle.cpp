@@ -32,12 +32,12 @@ namespace pkzo
 
     Rectangle::~Rectangle() {}
 
-    void Rectangle::set_color(const vec4& value)
+    void Rectangle::set_color(const rgm::vec4& value)
     {
         color = value;
     }
 
-    const vec4& Rectangle::get_color() const
+    const rgm::vec4& Rectangle::get_color() const
     {
         return color;
     }
@@ -56,7 +56,7 @@ namespace pkzo
         return texture;
     }
 
-    void Rectangle::draw(Canvas& canvas, ivec2 offset) const
+    void Rectangle::draw(Canvas& canvas, rgm::ivec2 offset) const
     {
         if (texture)
         {

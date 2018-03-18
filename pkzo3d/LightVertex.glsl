@@ -28,24 +28,24 @@ uniform mat4 uProjectionMatrix;
 uniform mat4 uViewMatrix;
 uniform mat4 uModelMatrix;
 
-uniform vec3 uLightDirection;
-uniform vec3 uLightPosition;
+uniform rgm::vec3 uLightDirection;
+uniform rgm::vec3 uLightPosition;
 
-layout(location = 0) in vec4 aVertex;
-layout(location = 1) in vec3 aNormal;
-layout(location = 2) in vec2 aTexCoord;
-layout(location = 3) in vec2 aTangent;
-layout(location = 4) in vec3 aColor;
+layout(location = 0) in rgm::vec4 aVertex;
+layout(location = 1) in rgm::vec3 aNormal;
+layout(location = 2) in rgm::vec2 aTexCoord;
+layout(location = 3) in rgm::vec2 aTangent;
+layout(location = 4) in rgm::vec3 aColor;
 
-out vec3 vPosition;
-out vec3 vNormal;
-out vec3 vLightDirection;
-out vec3 vLightPosition;
-out vec2 vTexCoord;
+out rgm::vec3 vPosition;
+out rgm::vec3 vNormal;
+out rgm::vec3 vLightDirection;
+out rgm::vec3 vLightPosition;
+out rgm::vec2 vTexCoord;
 
 void main()
 {   
-    vec4 pos  = uViewMatrix * uModelMatrix * aVertex;
+   rgm::vec4 pos  = uViewMatrix * uModelMatrix * aVertex;
 
     mat3 v3 = mat3(uViewMatrix);
     mat3 m3 = mat3(uModelMatrix);
@@ -53,7 +53,7 @@ void main()
     vPosition       = pos.xyz;
     vNormal         = v3 * m3 * aNormal;
     vLightDirection = v3 * uLightDirection;
-    vLightPosition  = (uViewMatrix * vec4(uLightPosition, 1.0)).xyz;
+    vLightPosition  = (uViewMatrix * rgm::vec4(uLightPosition, 1.0)).xyz;
     vTexCoord       = aTexCoord;
 
     gl_Position = uProjectionMatrix * pos;

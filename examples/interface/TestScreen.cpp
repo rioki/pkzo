@@ -20,14 +20,14 @@ namespace ui
         return texture;
     }
 
-    rgm::vec4 color(unsigned long hex)
+   rgm::vec4 color(unsigned long hex)
     {
         unsigned long r = (0xFF000000 & hex) >> 24;
         unsigned long g = (0x00FF0000 & hex) >> 16;
         unsigned long b = (0x0000FF00 & hex) >> 8;
         unsigned long a = (0x000000FF & hex);  
 
-        rgm::vec4 values;
+       rgm::vec4 values;
 
         values[0] = static_cast<float>(r) / 255.0f;
         values[1] = static_cast<float>(g) / 255.0f;

@@ -53,22 +53,22 @@ namespace pkzo
         return font;
     }
 
-    void Ribbon::set_text_color(const vec4& value)
+    void Ribbon::set_text_color(const rgm::vec4& value)
     {
         text_color = value;
     }
 
-    const vec4& Ribbon::get_text_color()
+    const rgm::vec4& Ribbon::get_text_color()
     {
         return text_color;
     }
 
-    void Ribbon::set_background_color(const vec4& value)
+    void Ribbon::set_background_color(const rgm::vec4& value)
     {
         background.set_color(value);
     }
 
-    const vec4& Ribbon::get_background_color() const
+    const rgm::vec4& Ribbon::get_background_color() const
     {
         return background.get_color();
     }
@@ -87,10 +87,10 @@ namespace pkzo
 
         if (!elements.empty())
         {
-            ivec2 pp = elements.back()->get_position();
-            ivec2 sp = elements.back()->get_size();
+           rgm::ivec2 pp = elements.back()->get_position();
+           rgm::ivec2 sp = elements.back()->get_size();
 
-            elem->set_position(ivec2(pp[0] + sp[0], 0));
+            elem->set_position(rgm::ivec2(pp[0] + sp[0], 0));
         }
 
         add_widget(*elem);
@@ -138,14 +138,14 @@ namespace pkzo
         return caption.get_font();
     }
 
-    void Ribbon::Element::set_text_color(const vec4& value)
+    void Ribbon::Element::set_text_color(const rgm::vec4& value)
     {
         icon.set_color(value);
         caption.set_color(value);
         layout();
     }
 
-    const vec4& Ribbon::Element::get_text_color()
+    const rgm::vec4& Ribbon::Element::get_text_color()
     {
         return caption.get_color();
     }
@@ -157,14 +157,14 @@ namespace pkzo
 
     void Ribbon::Element::layout()
     {
-        ivec2 is = icon.get_size();
-        ivec2 cs = caption.get_size();
+       rgm::ivec2 is = icon.get_size();
+       rgm::ivec2 cs = caption.get_size();
 
         size[0] = std::max(is[0], cs[0]) + 20;
         size[1] = is[1] + cs[1] + 15;
 
-        icon.set_position(ivec2((size[0] - is[0]) / 2 + 10, 5));
-        caption.set_position(ivec2((size[0] - cs[0]) / 2 + 10, is[1] + 10));
+        icon.set_position(rgm::ivec2((size[0] - is[0]) / 2 + 10, 5));
+        caption.set_position(rgm::ivec2((size[0] - cs[0]) / 2 + 10, is[1] + 10));
 
         hitarea.set_size(size);
     }

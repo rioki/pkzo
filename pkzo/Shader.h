@@ -32,7 +32,7 @@
 
 namespace pkzo
 {
-    using namespace rgm;
+    
 
     class PKZO_EXPORT Shader
     {
@@ -66,15 +66,15 @@ namespace pkzo
 
         void set_uniform(const std::string& name, int value);
         void set_uniform(const std::string& name, float value);
-        void set_uniform(const std::string& name, vec2 value);
-        void set_uniform(const std::string& name, ivec2 value);
-        void set_uniform(const std::string& name, vec3 value);
-        void set_uniform(const std::string& name, ivec3 value);
-        void set_uniform(const std::string& name, vec4 value);
-        void set_uniform(const std::string& name, ivec4 value);
-        void set_uniform(const std::string& name, mat2 value);
-        void set_uniform(const std::string& name, mat3 value);
-        void set_uniform(const std::string& name, mat4 value);        
+        void set_uniform(const std::string& name, rgm::vec2 value);
+        void set_uniform(const std::string& name, rgm::ivec2 value);
+        void set_uniform(const std::string& name, rgm::vec3 value);
+        void set_uniform(const std::string& name, rgm::ivec3 value);
+        void set_uniform(const std::string& name, rgm::vec4 value);
+        void set_uniform(const std::string& name, rgm::ivec4 value);
+        void set_uniform(const std::string& name, rgm::mat2 value);
+        void set_uniform(const std::string& name, rgm::mat3 value);
+        void set_uniform(const std::string& name, rgm::mat4 value);
         
     private:
         std::string vertex_code;

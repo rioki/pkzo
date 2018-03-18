@@ -47,7 +47,7 @@ namespace pkzo
     }
     #endif
 
-    Canvas::Canvas(ivec2 s)
+    Canvas::Canvas(rgm::ivec2 s)
     : size(s)
     {
         projection_matrix = rgm::ortho<float>(0.0f, size[0], size[1], 0.0f, -1.0f, 1.0f);
@@ -69,27 +69,27 @@ namespace pkzo
 
     Canvas::~Canvas() {}
         
-    void Canvas::set_size(ivec2 value)
+    void Canvas::set_size(rgm::ivec2 value)
     {
         size = value;
         projection_matrix = rgm::ortho<float>(0.0f, size[0], size[1], 0.0f, -1.0f, 1.0f);
     }
 
-    ivec2 Canvas::get_size() const
+   rgm::ivec2 Canvas::get_size() const
     {
         return size;
     }
 
-    void Canvas::draw_rectangle(ivec2 pos, ivec2 size, vec4 color)
+    void Canvas::draw_rectangle(rgm::ivec2 pos, rgm::ivec2 size, rgm::vec4 color)
     {
         glDisable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         model_view_matrix = rgm::mat4(1);
-        model_view_matrix = rgm::translate(model_view_matrix, vec3(pos[0], pos[1], 0.0f));
-        model_view_matrix = rgm::scale(model_view_matrix, vec3(size[0], size[1], 1.0f));
-        model_view_matrix = rgm::translate(model_view_matrix, vec3(0.5f, 0.5f, 0.0f));
+        model_view_matrix = rgm::translate(model_view_matrix, rgm::vec3(pos[0], pos[1], 0.0f));
+        model_view_matrix = rgm::scale(model_view_matrix, rgm::vec3(size[0], size[1], 1.0f));
+        model_view_matrix = rgm::translate(model_view_matrix, rgm::vec3(0.5f, 0.5f, 0.0f));
 
         shader.bind();
         shader.set_uniform("uProjectionMatrix", projection_matrix);
@@ -102,16 +102,16 @@ namespace pkzo
         rect.draw();
     }
 
-    void Canvas::draw_rectangle(ivec2 pos, ivec2 size, vec4 color, Texture& texture)
+    void Canvas::draw_rectangle(rgm::ivec2 pos, rgm::ivec2 size, rgm::vec4 color, Texture& texture)
     {
         glDisable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         model_view_matrix = rgm::mat4(1);
-        model_view_matrix = rgm::translate(model_view_matrix, vec3(pos[0], pos[1], 0.0f));
-        model_view_matrix = rgm::scale(model_view_matrix, vec3(size[0], size[1], 1.0f));
-        model_view_matrix = rgm::translate(model_view_matrix, vec3(0.5f, 0.5f, 0.0f));
+        model_view_matrix = rgm::translate(model_view_matrix, rgm::vec3(pos[0], pos[1], 0.0f));
+        model_view_matrix = rgm::scale(model_view_matrix, rgm::vec3(size[0], size[1], 1.0f));
+        model_view_matrix = rgm::translate(model_view_matrix, rgm::vec3(0.5f, 0.5f, 0.0f));
 
         shader.bind();
         shader.set_uniform("uProjectionMatrix", projection_matrix);

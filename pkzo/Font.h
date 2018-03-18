@@ -51,7 +51,7 @@ namespace pkzo
 
         void load(const std::string& file, unsigned int size);
 
-        rgm::ivec2 estimate(const std::string& text) const;
+       rgm::ivec2 estimate(const std::string& text) const;
 
         Texture render(const std::string& text) const;
 

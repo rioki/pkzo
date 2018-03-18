@@ -24,22 +24,22 @@
 
 #version 400
 
-uniform vec3      uMaterialAlbedo;
+uniform rgm::vec3      uMaterialAlbedo;
 uniform float     uMaterialRoughness;
 uniform bool      uMaterialHasTexture;
 uniform sampler2D uMaterialTexture;
 
 uniform samplerCube uEnvMap;
 
-in vec3 vEnvDir;
+in rgm::vec3 vEnvDir;
 
-out vec4 oFragColor;
+out rgm::vec4 oFragColor;
 
 void main()
 {
-    vec3 result = vec3(0);
+    rgm::vec3 result = rgm::vec3(0);
 
     result += texture(uEnvMap, vEnvDir).rgb * uMaterialAlbedo; 
     
-    oFragColor = vec4(result, 1.0);
+    oFragColor = rgm::vec4(result, 1.0);
 }

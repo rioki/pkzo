@@ -32,7 +32,7 @@
 
 namespace pkzo
 {
-    using namespace rgm;
+    
 
     class Shader;
 
@@ -44,9 +44,9 @@ namespace pkzo
 
         ~Material();
 
-        void set_albedo(const vec3& value);
+        void set_albedo(const rgm::vec3& value);
 
-        const vec3& get_albedo() const;
+        const rgm::vec3& get_albedo() const;
 
         void set_roughness(float value);
         
@@ -61,7 +61,7 @@ namespace pkzo
         void setup(Shader& shader) const;
 
     private:
-        vec3  albedo;
+        rgm::vec3  albedo;
         float roughness;
         float metalness;
     };

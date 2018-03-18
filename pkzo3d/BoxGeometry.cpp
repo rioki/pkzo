@@ -33,12 +33,12 @@ namespace pkzo
 
     BoxGeometry::~BoxGeometry() {}
 
-    void BoxGeometry::set_size(vec3 value)
+    void BoxGeometry::set_size( rgm::vec3 value)
     {
         size = value;
     }
 
-    vec3 BoxGeometry::get_size() const
+    rgm::vec3 BoxGeometry::get_size() const
     {
         return size;
     }

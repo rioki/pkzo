@@ -97,17 +97,17 @@ namespace pkzo
         return text;
     }
 
-    void Text::set_color(const vec4& value)
+    void Text::set_color(const rgm::vec4& value)
     {
         color = value;
     }
 
-    const vec4& Text::get_color() const
+    const rgm::vec4& Text::get_color() const
     {
         return color;
     }
 
-    void Text::draw(Canvas& canvas, ivec2 offset) const
+    void Text::draw(Canvas& canvas, rgm::ivec2 offset) const
     {
         if (dirty)
         {
@@ -121,7 +121,7 @@ namespace pkzo
         }
         
         // TODO aligment
-        ivec2 p2 = position + offset;
+       rgm::ivec2 p2 = position + offset;
         for (auto& texture : textures)
         {
             canvas.draw_rectangle(p2, texture.get_size(), color, texture);
@@ -132,10 +132,10 @@ namespace pkzo
     void Text::estimate()
     {
         auto lines = explode(text, "\n");
-        ivec2 result(0, 0);
+       rgm::ivec2 result(0, 0);
         for (auto& line : lines)
         {
-            rgm::ivec2 es = font->estimate(line);
+           rgm::ivec2 es = font->estimate(line);
             result[0] = std::max<float>(result[0], es[0]);
 
             result[1] += es[1];

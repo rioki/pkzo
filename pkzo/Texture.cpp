@@ -116,7 +116,7 @@ namespace pkzo
         }
     }
 
-    rgm::ivec2 Texture::get_size() const
+   rgm::ivec2 Texture::get_size() const
     {
         if (surface)
         {

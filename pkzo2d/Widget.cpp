@@ -31,31 +31,31 @@ namespace pkzo
 
     Widget::~Widget() {}
 
-    void Widget::set_position(const ivec2& value)
+    void Widget::set_position(const rgm::ivec2& value)
     {
         position = value;
     }
 
-    const ivec2& Widget::get_position() const
+    const rgm::ivec2& Widget::get_position() const
     {
         return position;
     }
 
-    void Widget::set_size(const ivec2& value)
+    void Widget::set_size(const rgm::ivec2& value)
     {
         size = value;
     }
 
-    const ivec2& Widget::get_size() const
+    const rgm::ivec2& Widget::get_size() const
     {
         return size;
     }
 
-    void Widget::draw(Canvas& canvas, ivec2 offset) const {}
+    void Widget::draw(Canvas& canvas, rgm::ivec2 offset) const {}
 
-    void Widget::handle_mouse_move(ivec2 pos, ivec2 mov) {}
+    void Widget::handle_mouse_move(rgm::ivec2 pos, rgm::ivec2 mov) {}
 
-    void Widget::handle_mouse_press(unsigned int button, ivec2 pos) {}
+    void Widget::handle_mouse_press(unsigned int button, rgm::ivec2 pos) {}
 
-    void Widget::handle_mouse_release(unsigned int button, ivec2 pos) {}
+    void Widget::handle_mouse_release(unsigned int button, rgm::ivec2 pos) {}
 }

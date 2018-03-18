@@ -30,7 +30,7 @@ namespace pkzo
         }
     }
 
-    rgm::ivec2 Font::estimate(const std::string& text) const
+   rgm::ivec2 Font::estimate(const std::string& text) const
     {
         int w, h;
         TTF_SizeUTF8(font, text.c_str(), &w, &h);

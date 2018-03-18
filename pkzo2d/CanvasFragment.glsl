@@ -26,11 +26,11 @@
 
 uniform bool      uHasTexture;
 uniform sampler2D uTexture;
-uniform vec4      uColor;
+uniform rgm::vec4      uColor;
 
-in vec2 vTexCoord;
+in rgm::vec2 vTexCoord;
 
-out vec4 gl_FragColor;
+out rgm::vec4 gl_FragColor;
 
 void main()
 {	    

@@ -46,12 +46,12 @@ namespace pkzo
         return label.get_text();
     }
 
-    void Button::set_label_color(const vec4& value)
+    void Button::set_label_color(const rgm::vec4& value)
     {
         label.set_color(value);
     }
 
-    const vec4& Button::get_label_color() const
+    const rgm::vec4& Button::get_label_color() const
     {
         return label.get_color();
     }
@@ -66,12 +66,12 @@ namespace pkzo
         return label.get_font();
     }
 
-    void Button::set_background_color(const vec4& value)
+    void Button::set_background_color(const rgm::vec4& value)
     {
         background.set_color(value);
     }
 
-    const vec4& Button::get_background_color() const
+    const rgm::vec4& Button::get_background_color() const
     {
         return background.get_color();
     }
@@ -91,10 +91,10 @@ namespace pkzo
         hitarea.on_click(cb);
     }
 
-    void Button::draw(Canvas& canvas, ivec2 offset) const 
+    void Button::draw(Canvas& canvas, rgm::ivec2 offset) const 
     {
         // TODO find a better place to do this
-        ivec2 dx = get_size() - label.get_size();
+       rgm::ivec2 dx = get_size() - label.get_size();
         const_cast<Text&>(label).set_position(dx / 2);
         const_cast<HitArea&>(hitarea).set_size(size);
 
