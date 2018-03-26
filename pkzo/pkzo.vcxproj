@@ -195,6 +195,7 @@ copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutD
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CubeMap.cpp" />
+    <ClCompile Include="EventLoop.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Key.cpp" />
     <ClCompile Include="Keyboard.cpp" />
@@ -211,6 +212,7 @@ copy $(SolutionDir)ext\rjson\$(PlatformTarget)\$(Configuration)\rjson.dll $(OutD
   <ItemGroup>
     <ClInclude Include="CubeMap.h" />
     <ClInclude Include="defines.h" />
+    <ClInclude Include="EventLoop.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="Key.h" />
     <ClInclude Include="Keyboard.h" />

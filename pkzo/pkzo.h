@@ -27,6 +27,7 @@
 
 #include "defines.h"
 
+#include "EventLoop.h"
 #include "Window.h"
 #include "Keyboard.h"
 #include "Mouse.h"
