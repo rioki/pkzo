@@ -90,7 +90,7 @@ namespace pkzo
         std::function<void (rgm::ivec2)> resize_cb;
         std::function<void ()>      close_cb;
 
-        void handle_event(SDL_Event& event);
+        bool handle_event(SDL_Event& event);
            
     friend PKZO_EXPORT void route_events();
     friend class EventLoop;

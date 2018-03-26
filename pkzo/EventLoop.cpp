@@ -29,11 +29,11 @@
 namespace pkzo
 {
     EventLoop::EventLoop()
-    : running(false) {}
+        : running(false) {}
 
     EventLoop::~EventLoop() {}
 
-    std::shared_ptr<Window> EventLoop::open_window(unsigned int width, unsigned int height,  bool fullscreen )
+    std::shared_ptr<Window> EventLoop::open_window(unsigned int width, unsigned int height, bool fullscreen)
     {
         if (window)
         {
@@ -98,18 +98,28 @@ namespace pkzo
     void EventLoop::route_events()
     {
         SDL_Event event;
-        while (SDL_PollEvent(&event)) 
+        while (SDL_PollEvent(&event))
         {
-             switch (event.type)
-             {
+            switch (event.type)
+            {
                 case SDL_QUIT:
                 case SDL_WINDOWEVENT:
                 // TODO other window events
+                {
+                    bool handled = false;
                     if (window)
                     {
-                        window->handle_event(event);
+                        handled = window->handle_event(event);
                     }
-                    break;        
+
+                    // Special handling for the case where no close handler
+                    // is installed on the window.
+                    if (!handled && event.type == SDL_QUIT)
+                    {
+                        stop();
+                    }
+                    break;
+                }
                 case SDL_KEYDOWN:
                 case SDL_KEYUP:
                 case SDL_TEXTINPUT:
@@ -130,7 +140,7 @@ namespace pkzo
                 default:
                     /* stfu */
                     break;
-             }
+            }
         }
     }
 }

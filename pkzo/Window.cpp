@@ -1,3 +1,26 @@
+// 
+// pkzo
+// 
+// Copyright 2014-2018 Sean Farrell <sean.farrell@rioki.org>
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+//
 
 #include "Window.h"
 
@@ -121,14 +144,16 @@ namespace pkzo
         SDL_GL_SwapWindow(window);
     }
 
-    void Window::handle_event(SDL_Event& event)
+    bool Window::handle_event(SDL_Event& event)
     {
+        bool handled = false;
         switch (event.type)
         {
             case SDL_QUIT:
                 if (close_cb)
                 {
                     close_cb();
+                    handled = true;
                 }
                 break;
             case SDL_WINDOWEVENT:            
@@ -138,11 +163,12 @@ namespace pkzo
                     {
                         case SDL_WINDOWEVENT_SIZE_CHANGED:  
                         {
-                            int width = event.window.data1;
-                            int height = event.window.data2;
                             if (resize_cb)
                             {
+                                int width = event.window.data1;
+                                int height = event.window.data2;
                                 resize_cb(rgm::ivec2(width, height));
+                                handled = true;
                             }
                             break;
                         }
@@ -156,5 +182,7 @@ namespace pkzo
                 // STFU
                 break;
         } 
+
+        return handled;
     }
 }
