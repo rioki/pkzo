@@ -43,6 +43,8 @@ namespace pkzo
         
         Text();
 
+        Text(rgm::ivec2 position, std::shared_ptr<Font> font, const std::string& text, const rgm::vec4& color);
+
         ~Text();
 
         void set_font(std::shared_ptr<Font> value);

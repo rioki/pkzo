@@ -76,13 +76,31 @@ namespace rgm
             return *this;
         }
 
+        vector<T, N>& operator += (const vector<T, N>& v)
+        {
+            for (unsigned int i = 0; i < N; i++)
+            {
+                data[i] += v.data[i];
+            }
+            return *this;
+        }
+
+        vector<T, N>& operator -= (const vector<T, N>& v)
+        {
+            for (unsigned int i = 0; i < N; i++)
+            {
+                data[i] -= v.data[i];
+            }
+            return *this;
+        }
+
         T& operator [] (unsigned int i)
         {
             assert(i < N);
             return data[i];
         }
 
-        T operator [] (unsigned int i) const
+        const T& operator [] (unsigned int i) const
         {
             assert(i < N);
             return data[i];
@@ -131,6 +149,9 @@ namespace rgm
         template <typename T2>
         explicit vector2(const vector<T2, 2>& v) 
         : vector<T, 2>(v) {} 
+
+    protected:
+        using vector<T, 2>::data;
     };
 
     template <typename T>
@@ -169,7 +190,10 @@ namespace rgm
 
         template <typename T2>
         explicit vector3(const vector<T2, 3>& v) 
-        : vector<T, 2>(v) {}
+        : vector<T, 3>(v) {}
+
+    protected:
+        using vector<T, 3>::data;
     };
 
     template <typename T>
@@ -212,6 +236,9 @@ namespace rgm
         template <typename T2>
         explicit vector4(const vector<T2, 4>& v) 
         : vector<T, 4>(v) {}
+
+    protected:
+        using vector<T, 4>::data;
     };
 
     template <typename T, unsigned int N>
@@ -272,8 +299,8 @@ namespace rgm
         return r;
     }
 
-    template <typename T, unsigned int N>
-    vector<T, N> operator * (const vector<T, N>& v, T s)
+    template <typename T, unsigned int N, typename S>
+    vector<T, N> operator * (const vector<T, N>& v, S s)
     {
         vector<T, N> r;
         for (unsigned int i = 0; i < N; i++)
@@ -283,14 +310,14 @@ namespace rgm
         return r;
     }
 
-    template <typename T, unsigned int N>
-    vector<T, N> operator * (T s, const vector<T, N>& v)
+    template <typename T, unsigned int N, typename S>
+    vector<T, N> operator * (S s, const vector<T, N>& v)
     {
         return v * s;
     }
 
-    template <typename T, unsigned int N>
-    vector<T, N> operator / (const vector<T, N>& v, T s)
+    template <typename T, unsigned int N, typename S>
+    vector<T, N> operator / (const vector<T, N>& v, S s)
     {
         vector<T, N> r;
         for (unsigned int i = 0; i < N; i++)
@@ -397,6 +424,19 @@ namespace rgm
         
         return r;
     }
+
+    template <typename T, unsigned int N>
+    T min(const vector<T, N>& v)
+    {
+        T r = v[0];
+
+        for (unsigned int i = 1; i < N; i++)
+        {                
+            r = std::min(v[i], r);
+        } 
+        
+        return r;
+    }
     
     template <typename T, unsigned int N>
     vector<T, N> max(const vector<T, N>& a, const vector<T, N>& b)
@@ -419,6 +459,19 @@ namespace rgm
         for (unsigned int i = 0; i < N; i++)
         {                
             r[i] = std::max(a[i], b);
+        } 
+        
+        return r;
+    }
+
+    template <typename T, unsigned int N>
+    T max(const vector<T, N>& v)
+    {
+        T r = v[0];
+
+        for (unsigned int i = 1; i < N; i++)
+        {                
+            r = std::max(v[i], r);
         } 
         
         return r;
@@ -544,6 +597,20 @@ namespace rgm
         } 
         
         return r;
+    }
+
+    template <typename T, unsigned int N>
+    bool close(const vector<T, N>& a, const vector<T, N>& b, T eps)
+    {
+        auto c = abs(a - b);
+        for (size_t i = 0; i < N; ++i)
+        {
+            if (c[i] > eps)
+            {
+                 return false;
+            }
+        }
+        return true;
     }
 
     template <typename T, unsigned int N>

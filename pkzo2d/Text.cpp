@@ -63,6 +63,16 @@ namespace pkzo
     Text::Text()
     : dirty(true) {}
 
+    Text::Text(rgm::ivec2 p, std::shared_ptr<Font> f, const std::string& t, const rgm::vec4& c)
+    : dirty(true), font(f), text(t), color(c)
+    {
+        position = p;
+        if (font)
+        {
+            size = font->estimate(text);
+        }
+    }
+
     Text::~Text() {}
 
     void Text::set_font(std::shared_ptr<Font> value)

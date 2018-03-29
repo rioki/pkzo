@@ -26,6 +26,7 @@
 #define _RGM_UTILS_H_
 
 #include <cassert>
+#include <algorithm>
 
 namespace rgm
 {

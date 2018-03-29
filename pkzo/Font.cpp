@@ -7,6 +7,12 @@ namespace pkzo
 {
     Font::Font()
     : font(nullptr) {}
+
+    Font::Font(const std::string& file, unsigned int size)
+    : Font()
+    {
+        load(file, size);
+    }
     
     Font::~Font()
     {

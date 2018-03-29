@@ -43,6 +43,8 @@ namespace pkzo
     public:
         Font();
 
+        Font(const std::string& file, unsigned int size);
+
         Font(const Font&) = delete;
 
         ~Font();

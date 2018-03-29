@@ -63,7 +63,7 @@ namespace rgm
     template <typename T>
     matrix4<T> perspective(T fov, T aspect, T znear, T zfar)
     {
-        T ymax = znear * std::tan(radians(fov));
+        T ymax = znear * std::tan(fov * M_PI / 360.0f);
         T xmax = ymax * aspect;
         return frustum(-xmax, xmax, -ymax, ymax, znear, zfar);
     }
@@ -81,8 +81,8 @@ namespace rgm
     matrix4<T> lookat(vector<T, 3> position, vector<T, 3> target, vector<T, 3> up)
     {
         vector<T, 3> forward = normalize(position - target);
-
-        vector<T, 3> side    = normalize(cross(forward, up));
+        vector<T, 3> upn     = normalize(up);
+        vector<T, 3> side    = normalize(cross(forward, upn));
         // correct up to be perfectly perpendicular
         vector<T, 3> up2     = cross(side, forward);
 
@@ -163,6 +163,7 @@ namespace rgm
                               (T)2.0*(xy - zw), (T)1.0 - (T)2.0*(xx + zz),          (T)2.0*(yz + xw), (T)0.0,
                               (T)2.0*(xz + yw),          (T)2.0*(yz - xw), (T)1.0 - (T)2.0*(xx + yy), (T)0.0,
                                         (T)0.0,                    (T)0.0,                    (T)0.0, (T)1.0);
+        r = transpose(r); // FIXME rewrite the above
         return m * r;
     }
 
@@ -193,6 +194,14 @@ namespace rgm
     template <typename T>
     quaterion<T> axis_angle(const vector<T, 3>& axis, T angle)
     {
+        /*vector<T, 3> axis_n    = normalize(axis);
+        T            angle_rad = angle * PI / 180.0;
+
+        T            wr = std::cos(angle_rad / static_cast<T>(2.0));
+        vector<T, 3> vr = axis_n * std::sin(angle_rad / static_cast<T>(2.0));
+
+        return quaterion<T>(vr, wr);*/
+
         vector<T, 3> an    = normalize(axis);
 
         T sin_a = std::sin(radians(angle/(T)2.0));

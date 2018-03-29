@@ -39,10 +39,10 @@ namespace rgm
     public:
 
         row(T* d)
-            : data(d) {}
+        : data(d) {}
 
         row(const row<T, N>& r)
-            : data(r.data) {}
+        : data(r.data) {}
 
         const row<T, N>& operator = (const vector<T, N>& v)
         {
@@ -86,6 +86,11 @@ namespace rgm
             }
 
             return r;
+        }
+
+        const T* c_array() const
+        {
+            return data;
         }
 
     private:
@@ -170,10 +175,10 @@ namespace rgm
         matrix2() {}
 
         explicit matrix2(T v)
-            : matrix<T, 2>(v) {}
+        : matrix<T, 2>(v) {}
 
         matrix2(T v0, T v2,
-            T v1, T v3)
+                T v1, T v3)
         {
             data[0] = v0;
             data[1] = v1;
@@ -181,8 +186,19 @@ namespace rgm
             data[3] = v3;
         }
 
+        matrix2(const vector<T, 2>& x, const vector<T, 2>& y)
+        {
+            data[0] = x[0];
+            data[1] = x[1];
+            data[2] = y[0];
+            data[3] = y[1];
+        }
+
         matrix2(const matrix<T, 2>& v)
-            : matrix<T, 2>(v) {}
+        : matrix<T, 2>(v) {}
+
+    protected:
+        using matrix<T, 2>::data;
     };
 
     template <typename T>
@@ -193,11 +209,11 @@ namespace rgm
         matrix3() {}
 
         explicit matrix3(T v)
-            : matrix<T, 3>(v) {}
+        : matrix<T, 3>(v) {}
 
         matrix3(T v0, T v3, T v6,
-            T v1, T v4, T v7,
-            T v2, T v5, T v8)
+                T v1, T v4, T v7,
+                T v2, T v5, T v8)
         {
             data[0] = v0;
             data[1] = v1;
@@ -210,8 +226,21 @@ namespace rgm
             data[8] = v8;
         }
 
+        matrix3(const vector<T, 3>& x, const vector<T, 3>& y, const vector<T, 3>& z)
+        {
+            data[0] = x[0];
+            data[1] = x[1];
+            data[2] = x[2];
+            data[3] = y[0];
+            data[4] = y[1];
+            data[5] = y[2];
+            data[6] = z[0];
+            data[7] = z[1];
+            data[8] = z[2];
+        }
+
         matrix3(const matrix<T, 3>& v)
-            : matrix<T, 3>(v) {}
+        : matrix<T, 3>(v) {}
 
         matrix3(const matrix<T, 4>& v)
         {
@@ -226,7 +255,10 @@ namespace rgm
             data[6] = v[2][0];
             data[7] = v[2][1];
             data[8] = v[0][2];
-        }
+        }  
+        
+    protected:
+        using matrix<T, 3>::data;
     };
 
     template <typename T>
@@ -237,23 +269,23 @@ namespace rgm
         matrix4() {}
 
         explicit matrix4(T v)
-            : matrix<T, 4>(v) {}
+        : matrix<T, 4>(v) {}
 
         matrix4(float v0, float v4, float v8, float v12,
                 float v1, float v5, float v9, float v13,
                 float v2, float v6, float v10, float v14,
                 float v3, float v7, float v11, float v15)
         {
-            data[0] = v0;
-            data[1] = v1;
-            data[2] = v2;
-            data[3] = v3;
-            data[4] = v4;
-            data[5] = v5;
-            data[6] = v6;
-            data[7] = v7;
-            data[8] = v8;
-            data[9] = v9;
+            data[0]  = v0;
+            data[1]  = v1;
+            data[2]  = v2;
+            data[3]  = v3;
+            data[4]  = v4;
+            data[5]  = v5;
+            data[6]  = v6;
+            data[7]  = v7;
+            data[8]  = v8;
+            data[9]  = v9;
             data[10] = v10;
             data[11] = v11;
             data[12] = v12;
@@ -262,8 +294,31 @@ namespace rgm
             data[15] = v15;
         }
 
+        matrix4(const vector<T, 4>& x, const vector<T, 4>& y, const vector<T, 4>& z, const vector<T, 4>& p)
+        {
+            data[0]  = x[0];
+            data[1]  = x[1];
+            data[2]  = x[2];
+            data[3]  = x[3];
+            data[4]  = y[0];
+            data[5]  = y[1];
+            data[6]  = y[2];
+            data[7]  = y[3];
+            data[8]  = z[0];
+            data[9]  = z[1];
+            data[10] = z[2];
+            data[11] = z[3];
+            data[12] = p[0];
+            data[13] = p[1];
+            data[14] = p[2];
+            data[15] = p[3];
+        }
+
         matrix4(const matrix<T, 4>& v)
             : matrix<T, 4>(v) {}
+
+    protected:
+        using matrix<T, 4>::data;
     };
 
     template <typename T, unsigned int N>
@@ -311,10 +366,13 @@ namespace rgm
     template <typename T, unsigned int N>
     matrix<T, N> operator + (const matrix<T, N>& a, const matrix<T, N>& b)
     {
-        matrix<T, N> rt(0);
+        matrix<T, N> r;
         for (unsigned int i = 0; i < N; i++)
         {
-            r[i][j] = a[i][j] + b[i][j];
+            for (unsigned int j = 0; j < N; j++)
+            {
+                r[i][j] = a[i][j] + b[i][j];
+            }
         }
         return r;
     }
@@ -322,10 +380,13 @@ namespace rgm
     template <typename T, unsigned int N>
     matrix<T, N> operator - (const matrix<T, N>& a, const matrix<T, N>& b)
     {
-        matrix<T, N> rt(0);
+        matrix<T, N> r;
         for (unsigned int i = 0; i < N; i++)
         {
-            r[i][j] = a[i][j] + b[i][j];
+            for (unsigned int j = 0; j < N; j++)
+            {
+                r[i][j] = a[i][j] - b[i][j];
+            }
         }
         return r;
     }
@@ -481,7 +542,7 @@ namespace rgm
     }
 
     template <typename T, unsigned int N>
-    matrix<T, N> trans(const matrix<T, N>& m)
+    matrix<T, N> transpose(const matrix<T, N>& m)
     {
         matrix<T, N> r((T)0);
 
@@ -508,6 +569,37 @@ namespace rgm
         // WTF?! either the cofct is wrong or the adj 
         //return (1 / det(m)) * adj(m);
         return (1 / det(m)) * cofct(m);
+    }
+
+    template <typename T, unsigned int N>
+    matrix<T, N> abs(const matrix<T, N>& m)
+    {
+        matrix<T, N> result;
+        for (size_t i = 0; i < N; ++i)
+        {
+            for (size_t j = 0; j < N; ++j)
+            {
+                result[i][j] = std::abs(m[i][j]);
+            }
+        }
+        return result;
+    }
+
+    template <typename T, unsigned int N>
+    bool close(const matrix<T, N>& a, const matrix<T, N>& b, T eps)
+    {
+        auto c = abs(a - b);
+        for (size_t i = 0; i < N; ++i)
+        {
+            for (size_t j = 0; j < N; ++j)
+            { 
+                if (c[i][j] > eps)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     template <typename T, unsigned int N>

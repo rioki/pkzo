@@ -46,18 +46,21 @@ namespace rgm
         {
             return vector3<T>(data[0], data[1], data[2]);
         }
+
+    protected:
+        using vector<T, 4>::data;
     };
 
     template <typename T>
     quaterion<T> operator * (const quaterion<T>& a, const quaterion<T>& b)
-    {        
+    {
+        T          wa = a[3];
         vector3<T> va = vector3<T>(a);
-        T          wa = a[3];        
-        vector3<T> vb = vector3<T>(b);
         T          wb = b[3];
-        
-        vector3<T> v = (va * wb) + (vb * wa) + cross(va, vb);
-        T          w = (wa * wb) - dot(va, vb);
+        vector3<T> vb = vector3<T>(b);
+
+        T          w = wa * wb - dot(va, vb);
+        vector3<T> v = wa * vb + wb * va + cross(va, vb);
 
         return quaterion<T>(v, w);
     }
@@ -100,6 +103,17 @@ namespace rgm
         mat[2][2] = 1 - 2 * (xx + yy);
         
         return mat;        
+    }
+
+    template <typename T>
+    quaterion<T> quatfromvectors(vector<T, 3> u, vector<T, 3> v)
+    {
+        vec3 qv = cross(u, v);
+        T    qw = std::sqrt(std::pow(length(u), 2) * std::pow(length(v), 2)) + dot(u, v);
+
+        quaterion<T> q(qv, qw);
+
+        return normalize(q);
     }
 
     typedef quaterion<float>  quat;
