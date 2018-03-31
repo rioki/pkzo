@@ -64,8 +64,6 @@ namespace pkzo
         bool is_pressed(unsigned int button) const;
 
     private:
-        static std::vector<Mouse*> instances;
-
         std::function<void (rgm::ivec2, rgm::ivec2)>   move_cb;
         std::function<void (unsigned int, rgm::ivec2)> button_press_cb;
         std::function<void (unsigned int, rgm::ivec2)> button_release_cb;

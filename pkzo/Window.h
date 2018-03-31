@@ -77,8 +77,6 @@ namespace pkzo
         void draw();
         
     private:
-        static std::vector<Window*> instances;
-
         SDLSentry sdl_sentry;
 
         SDL_Window*   window;

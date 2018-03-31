@@ -54,9 +54,7 @@ namespace pkzo
         
         void on_text(std::function<void (std::string)> cb);
         
-    private:
-        static std::vector<Keyboard*> instances;
-        
+    private:       
         std::function<void (Key)> key_press_cb;
         std::function<void (Key)> key_release_cb;
         std::function<void (std::string)> text_cb;
