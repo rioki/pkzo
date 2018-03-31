@@ -72,7 +72,6 @@ namespace pkzo
 
         void handle_event(SDL_Event& event);
         
-	friend PKZO_EXPORT void route_events();
     friend class EventLoop;
     };
 }

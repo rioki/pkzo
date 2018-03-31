@@ -45,9 +45,6 @@
     <ClCompile Include="SdlSentry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="pkzo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TTFSentry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

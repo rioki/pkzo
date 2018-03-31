@@ -1,26 +1,26 @@
-/*
-  pkzo
-
-  Copyright (c) 2014-2016 Sean Farrell
-
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
-*/
+// 
+// pkzo
+// 
+// Copyright 2014-2018 Sean Farrell <sean.farrell@rioki.org>
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+//
 
 #include <pkzo/pkzo.h>
 #include <pkzo3d/pkzo3d.h>
@@ -57,10 +57,11 @@ rgm::vec3 move_r(const rgm::vec3& pos, const rgm::quat& orient, float dt)
 
 int main(int argc, char* argv[])
 {    
-    bool running = true;
     float pitch   = 90.0;
     float yaw     = 0.0;
     float lx      = 0.0;
+
+    pkzo::EventLoop loop;
 
     pkzo::SceneRenderer renderer;
 
@@ -108,25 +109,25 @@ int main(int argc, char* argv[])
     camera.set_orientation(orient(pitch, yaw));
     scene.add_entity(camera);
 
-    pkzo::Window window(rgm::ivec2(1280, 768));
-    window.on_draw([&] () {                    
-        scene.draw(renderer, window.get_aspect(), camera);
+    auto window = loop.open_window(1280, 768);
+    window->on_draw([&] () {              
+        scene.draw(renderer, window->get_aspect(), camera);
     });
-    window.on_close([&] () {                   
-        running = false;
+    window->on_close([&] () {                   
+        loop.stop();
     });
 
-    pkzo::Keyboard keyboard;                   
-    keyboard.on_key_press([&] (pkzo::Key key) {
+    auto keyboard = loop.get_keyboard();                   
+    keyboard->on_key_press([&] (pkzo::Key key) {
         if (key == pkzo::KEY_ESCAPE)           
         {                                      
-            running = false;                   
+            loop.stop();                  
         }
     });    
 
-    pkzo::Mouse mouse;
-    mouse.on_move([&] (rgm::ivec2& mov, rgm::ivec2& pos) {        
-        if (mouse.is_pressed(1))
+    auto mouse = loop.get_mouse();
+    mouse->on_move([&] (rgm::ivec2& mov, rgm::ivec2& pos) {        
+        if (mouse->is_pressed(1))
         {
             yaw   += mov[0];
             pitch += mov[1];
@@ -135,26 +136,23 @@ int main(int argc, char* argv[])
         }
     });
 
-    while (running)                            
-    {
-        pkzo::route_events();                  
-        
-        if (keyboard.is_pressed(pkzo::KEY_W))
+    loop.on_tick([&] () {
+        if (keyboard->is_pressed(pkzo::KEY_W))
         {
             auto p = move_fwd(camera.get_position(), camera.get_orientation(), 0.1);
             camera.set_position(p);
         }
-        if (keyboard.is_pressed(pkzo::KEY_S))
+        if (keyboard->is_pressed(pkzo::KEY_S))
         {
             auto p = move_bk(camera.get_position(), camera.get_orientation(), 0.1);
             camera.set_position(p);
         }
-        if (keyboard.is_pressed(pkzo::KEY_A))
+        if (keyboard->is_pressed(pkzo::KEY_A))
         {
             auto p = move_l(camera.get_position(), camera.get_orientation(), 0.1);
             camera.set_position(p);
         }
-        if (keyboard.is_pressed(pkzo::KEY_D))
+        if (keyboard->is_pressed(pkzo::KEY_D))
         {
             auto p = move_r(camera.get_position(), camera.get_orientation(), 0.1);
             camera.set_position(p);
@@ -162,7 +160,9 @@ int main(int argc, char* argv[])
 
         lx += 0.5;
         light0.set_orientation(rgm::axis_angle<float>(rgm::vec3(1, 0, 0), lx));
+    });
 
-        window.draw();                         
-    }
+    loop.run();
+
+    return 0;
 }

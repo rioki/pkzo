@@ -62,8 +62,7 @@ namespace pkzo
         std::function<void (std::string)> text_cb;
                 
         void handle_event(SDL_Event& event);
-        
-	friend PKZO_EXPORT void route_events();
+
     friend class EventLoop;
     };
 }

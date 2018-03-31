@@ -84,11 +84,14 @@ namespace pkzo
 
         void stop();
 
+        void on_tick(std::function<void ()> cb);
+
     private:
         bool                      running;
         std::shared_ptr<Window>   window;
         std::shared_ptr<Mouse>    mouse;
         std::shared_ptr<Keyboard> keyboard;
+        std::function<void ()>    tick_cb;
 
         void route_events();
     };

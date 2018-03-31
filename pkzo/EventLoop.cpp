@@ -75,6 +75,12 @@ namespace pkzo
     void EventLoop::tick()
     {
         route_events();
+
+        if (tick_cb)
+        {
+            tick_cb();
+        }
+
         if (window)
         {
             window->draw();
@@ -93,6 +99,11 @@ namespace pkzo
     void EventLoop::stop()
     {
         running = false;
+    }
+
+    void EventLoop::on_tick(std::function<void ()> cb)
+    {
+        tick_cb = cb;
     }
 
     void EventLoop::route_events()

@@ -30,29 +30,9 @@
 
 namespace pkzo
 {    
-    std::vector<Keyboard*> Keyboard::instances;
-
-    Keyboard::Keyboard() 
-    {    
-        if (instances.size() == 0)
-        {
-            SDL_StartTextInput();    
-        }
-        instances.push_back(this);
-    }
+    Keyboard::Keyboard() {}
     
-    Keyboard::~Keyboard() 
-    {
-        if (instances.size() == 0)
-        {
-            SDL_StopTextInput();
-        }
-        auto i = std::find(instances.begin(), instances.end(), this);
-        if (i != instances.end())
-        {
-            instances.erase(i);
-        }
-    }
+    Keyboard::~Keyboard() {}
     
     bool Keyboard::is_pressed(Key key) const
     {

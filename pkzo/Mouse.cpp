@@ -30,19 +30,9 @@
 
 namespace pkzo
 {
-    std::vector<Mouse*> Mouse::instances;
-
-    Mouse::Mouse() 
-    {
-        instances.push_back(this);
-    }
+    Mouse::Mouse() {}
     
-    Mouse::~Mouse() 
-    {
-        auto i = std::find(instances.begin(), instances.end(), this);
-        assert(i != instances.end());
-        instances.erase(i);        
-    }
+    Mouse::~Mouse() {}
 
     void Mouse::on_move(std::function<void (rgm::ivec2, rgm::ivec2)> cb)
     {
