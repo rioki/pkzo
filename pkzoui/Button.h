@@ -25,14 +25,14 @@
 #ifndef _PKZOUI_BUTTON_H_
 #define _PKZOUI_BUTTON_H_
 
-#include <pkzo2d/WidgetGroup.h>
+#include <pkzo2d/ScreenNodeGroup.h>
 #include <pkzo2d/Text.h>
 #include <pkzo2d/Rectangle.h>
 #include <pkzo2d/HitArea.h>
 
 namespace pkzo
 {
-    class PKZO_EXPORT Button : public WidgetGroup
+    class PKZO_EXPORT Button : public ScreenNodeGroup
     {
     public:
         Button();

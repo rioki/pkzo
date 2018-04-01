@@ -94,10 +94,10 @@ namespace pkzo
     void Button::draw(Canvas& canvas, rgm::ivec2 offset) const 
     {
         // TODO find a better place to do this
-       rgm::ivec2 dx = get_size() - label.get_size();
+        rgm::ivec2 dx = get_size() - label.get_size();
         const_cast<Text&>(label).set_position(dx / 2);
         const_cast<HitArea&>(hitarea).set_size(size);
 
-        WidgetGroup::draw(canvas, offset);
+        ScreenNodeGroup::draw(canvas, offset);
     }
 }

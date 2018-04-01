@@ -22,29 +22,37 @@
 // SOFTWARE.
 //
 
-#ifndef _PKZO_VIEWPORT_H_
-#define _PKZO_VIEWPORT_H_
-
-#include <functional>
+#ifndef _PKZO2D_WIDGET_GROUP_H_
+#define _PKZO2D_WIDGET_GROUP_H_
 
 #include "ScreenNode.h"
 
+#include <list>
+
 namespace pkzo
 {
-    class PKZO_EXPORT Viewport : public ScreenNode
+    class PKZO_EXPORT ScreenNodeGroup : public ScreenNode
     {
     public:
         
-        Viewport();
+        ScreenNodeGroup();
 
-        ~Viewport();
+        ~ScreenNodeGroup();
 
-        void on_draw(std::function<void ()> cb);
+        void add_widget(ScreenNode& widget);
 
-        virtual void draw(Canvas& canvas, rgm::ivec2 offset) const;
+        void remove_widget(ScreenNode& widget);
+
+        void draw(Canvas& canvas, rgm::ivec2 offset) const override;
+
+        void handle_mouse_move(rgm::ivec2 pos, rgm::ivec2 mov) override;
+
+        void handle_mouse_press(unsigned int button, rgm::ivec2 pos) override;
+
+        void handle_mouse_release(unsigned int button, rgm::ivec2 pos) override;
 
     private:
-        std::function<void ()> draw_cb; 
+        std::list<ScreenNode*> widgets;
     };
 }
 

@@ -170,8 +170,8 @@
     <ClInclude Include="Screen.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Viewport.h" />
-    <ClInclude Include="Widget.h" />
-    <ClInclude Include="WidgetGroup.h" />
+    <ClInclude Include="ScreenNode.h" />
+    <ClInclude Include="ScreenNodeGroup.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Canvas.cpp" />
@@ -180,8 +180,8 @@
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Viewport.cpp" />
-    <ClCompile Include="Widget.cpp" />
-    <ClCompile Include="WidgetGroup.cpp" />
+    <ClCompile Include="ScreenNode.cpp" />
+    <ClCompile Include="ScreenNodeGroup.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="pkzo2d.rc" />

@@ -22,29 +22,48 @@
 // SOFTWARE.
 //
 
-#ifndef _PKZO_VIEWPORT_H_
-#define _PKZO_VIEWPORT_H_
+#ifndef _PKZO_SCREEN_NODE_H_
+#define _PKZO_SCREEN_NODE_H_
 
-#include <functional>
+#include <pkzo/defines.h>
 
-#include "ScreenNode.h"
+#include <rgm/rgm.h>
 
 namespace pkzo
 {
-    class PKZO_EXPORT Viewport : public ScreenNode
+    class Canvas;
+
+    class PKZO_EXPORT ScreenNode
     {
     public:
-        
-        Viewport();
 
-        ~Viewport();
+        ScreenNode();
 
-        void on_draw(std::function<void ()> cb);
+        ScreenNode(const ScreenNode&) = delete;
+
+        virtual ~ScreenNode();
+
+        const ScreenNode& operator = (const ScreenNode&) = delete;
+
+        void set_position(const rgm::ivec2& value);
+
+        const rgm::ivec2& get_position() const;
+
+        void set_size(const rgm::ivec2& value);
+
+        const rgm::ivec2& get_size() const;
 
         virtual void draw(Canvas& canvas, rgm::ivec2 offset) const;
 
-    private:
-        std::function<void ()> draw_cb; 
+        virtual void handle_mouse_move(rgm::ivec2 pos, rgm::ivec2 mov);
+
+        virtual void handle_mouse_press(unsigned int button, rgm::ivec2 pos);
+
+        virtual void handle_mouse_release(unsigned int button, rgm::ivec2 pos);
+
+    protected:
+       rgm::ivec2 position;
+       rgm::ivec2 size;
     };
 }
 

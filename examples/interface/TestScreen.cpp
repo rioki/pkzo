@@ -78,13 +78,13 @@ namespace ui
         title.set_font(title_font);
         title.set_position(rgm::ivec2(50, 50));
         title.set_color(color(0x7C8A99FF));
-        add_widget(title);
+        add_node(title);
 
         
         panel.set_color(color(0x292E33FF));
         panel.set_position(rgm::ivec2(50, 150));
         panel.set_size(rgm::ivec2(1180, 568));
-        add_widget(panel);
+        add_node(panel);
 
 
         button.set_label("Press Me");
@@ -97,13 +97,13 @@ namespace ui
         button.on_click([&] () {
             button_out.set_text("#YOLO");
         });
-        add_widget(button);
+        add_node(button);
 
         button_out.set_text("<-- Press the Button");
         button_out.set_font(text_font);
         button_out.set_color(color(0x7C8A99FF));
         button_out.set_position(rgm::ivec2(250, 175));
-        add_widget(button_out);
+        add_node(button_out);
 
 
         /*checkbox.set_caption("Checkbox");

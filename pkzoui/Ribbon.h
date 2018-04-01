@@ -30,7 +30,7 @@
 #include <functional>
 #include <vector>
 
-#include <pkzo2d/WidgetGroup.h>
+#include <pkzo2d/ScreenNodeGroup.h>
 #include <pkzo2d/Rectangle.h>
 #include <pkzo2d/Text.h>
 #include <pkzo2d/HitArea.h>
@@ -40,7 +40,7 @@ namespace pkzo
     class Font;
     class Texture;
 
-    class PKZO_EXPORT Ribbon : public WidgetGroup
+    class PKZO_EXPORT Ribbon : public ScreenNodeGroup
     {
     public:
         
@@ -65,7 +65,7 @@ namespace pkzo
         void add_icon(std::shared_ptr<Texture> icon, const std::string& caption, std::function<void ()> cb);
 
     private:
-        class Element : public WidgetGroup
+        class Element : public ScreenNodeGroup
         {
         public:
             Element();
