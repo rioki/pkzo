@@ -38,14 +38,6 @@ namespace ui
         ~TestScreen();
 
     private:
-        pkzo::Text      title;
-        pkzo::Rectangle panel;
-        pkzo::Button    button;
-        pkzo::Text      button_out;
-        //pkzo::CheckBox  checkbox;
-        pkzo::Text      checkbox_out;
-        //pkzo::Slider    slider;
-        pkzo::Text      slider_out;        
     };
 }
 

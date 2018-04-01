@@ -55,6 +55,8 @@ namespace pkzo
          **/
         Texture();
         
+        Texture(const std::string& file);
+        
         Texture(const Texture&) = delete;    
 
         Texture(Texture&& other);
@@ -134,9 +136,6 @@ namespace pkzo
 
     friend class Font;
     };
-
-    PKZO_EXPORT 
-    std::shared_ptr<Texture> load_texture(const std::string& file);
 }
 
 #endif

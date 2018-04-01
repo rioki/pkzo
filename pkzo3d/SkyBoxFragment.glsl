@@ -26,12 +26,12 @@
 
 uniform samplerCube uCubeMap;
 
-in rgm::vec3 vTexCoord;
+in vec3 vTexCoord;
 
-out rgm::vec4 oFragColor;
+out vec4 oFragColor;
 
 void main()
 {
     oFragColor = texture(uCubeMap, vTexCoord);
-    //oFragColor = rgm::vec4(vTexCoord, 1);
+    //oFragColor = vec4(vTexCoord, 1);
 }

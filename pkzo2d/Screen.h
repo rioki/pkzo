@@ -61,9 +61,9 @@ namespace pkzo
 
         std::shared_ptr<Texture> get_background_texture() const;
 
-        void add_node(ScreenNode& node);
+        void add_node(std::shared_ptr<ScreenNode> node);
 
-        void remove_node(ScreenNode& node);
+        void remove_node(std::shared_ptr<ScreenNode> node);
 
         virtual void draw(Canvas& canvas) const;
 
@@ -76,7 +76,7 @@ namespace pkzo
     private:
        rgm::ivec2 size;
 
-        std::list<ScreenNode*> nodes;
+        std::list<std::shared_ptr<ScreenNode>> nodes;
 
         rgm::vec4                background_color;
         std::shared_ptr<Texture> background_texture;

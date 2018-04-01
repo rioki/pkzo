@@ -11,6 +11,12 @@ namespace pkzo
     Texture::Texture()
     : surface(nullptr), glid(0) {}
 
+    Texture::Texture(const std::string& file)
+    : Texture()
+    {
+        load(file);
+    }
+
     Texture::Texture(Texture&& other)
     : surface(nullptr), glid(0)
     {

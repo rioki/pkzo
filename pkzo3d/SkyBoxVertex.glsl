@@ -27,13 +27,13 @@
 uniform mat4 uProjectionMatrix;
 uniform mat4 uViewMatrix;
 
-layout(location = 0) in rgm::vec4 aVertex;
-layout(location = 1) in rgm::vec3 aNormal;
-layout(location = 2) in rgm::vec2 aTexCoord;
-layout(location = 3) in rgm::vec2 aTangent;
-layout(location = 4) in rgm::vec3 aColor;
+layout(location = 0) in vec4 aVertex;
+layout(location = 1) in vec3 aNormal;
+layout(location = 2) in vec2 aTexCoord;
+layout(location = 3) in vec2 aTangent;
+layout(location = 4) in vec3 aColor;
 
-out rgm::vec3 vTexCoord;
+out vec3 vTexCoord;
 
 void main()
 {
@@ -42,7 +42,7 @@ void main()
     r[3][1] = 0.0;
     r[3][2] = 0.0;
     
-   rgm::vec4 v = inverse(r) * inverse(uProjectionMatrix) * aVertex;    
+   vec4 v = inverse(r) * inverse(uProjectionMatrix) * aVertex;    
 
     vTexCoord    = v.xyz;     
     gl_Position  = aVertex;

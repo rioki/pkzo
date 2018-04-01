@@ -29,7 +29,7 @@
 #define POINT_LIGHT   2
 #define SPOT_LIGHT    3
 
-uniform rgm::vec3      uMaterialAlbedo;
+uniform vec3      uMaterialAlbedo;
 uniform float     uMaterialRoughness;
 uniform bool      uMaterialHasTexture;
 uniform sampler2D uMaterialTexture;
@@ -37,28 +37,28 @@ uniform sampler2D uMaterialTexture;
 uniform int       uLightType;
 uniform float     uLightRange;
 uniform float     uLightCutoff;
-uniform rgm::vec3      uLightColor;
+uniform vec3      uLightColor;
 
 // TMP
-uniform rgm::vec3 uLightDirection;
-uniform rgm::vec3 uLightPosition;
+uniform vec3 uLightDirection;
+uniform vec3 uLightPosition;
 
-in rgm::vec3 vPosition;
-in rgm::vec3 vNormal;
-in rgm::vec3 vLightDirection;
-in rgm::vec3 vLightPosition;
-in rgm::vec2 vTexCoord;
+in vec3 vPosition;
+in vec3 vNormal;
+in vec3 vLightDirection;
+in vec3 vLightPosition;
+in vec2 vTexCoord;
 
-out rgm::vec4 oFragColor;
+out vec4 oFragColor;
 
-float lambert( rgm::vec3 l, rgm::vec3 n) {
+float lambert( vec3 l, vec3 n) {
     return max(0.0, dot(l, n));
 }
 
 void main()
 {
-    rgm::vec3 N = normalize(vNormal);
-    rgm::vec3 L;
+    vec3 N = normalize(vNormal);
+    vec3 L;
 
     switch (uLightType)
     {
@@ -74,7 +74,7 @@ void main()
     }
 
     float diffuse = lambert(L, N);
-   rgm::vec4 dc = rgm::vec4(uMaterialAlbedo * uLightColor * diffuse, 1.0);
+   vec4 dc = vec4(uMaterialAlbedo * uLightColor * diffuse, 1.0);
 
     gl_FragColor = dc; 
 }

@@ -66,14 +66,14 @@ namespace pkzo
         return background_texture;
     }
 
-    void Screen::add_node(ScreenNode& node)
+    void Screen::add_node(std::shared_ptr<ScreenNode> node)
     {
-        nodes.push_back(&node);
+        nodes.push_back(node);
     }
 
-    void Screen::remove_node(ScreenNode& node)
+    void Screen::remove_node(std::shared_ptr<ScreenNode> node)
     {
-        auto i = std::find(nodes.begin(), nodes.end(), &node);
+        auto i = std::find(nodes.begin(), nodes.end(), node);
         if (i != nodes.end())
         {
             nodes.erase(i);

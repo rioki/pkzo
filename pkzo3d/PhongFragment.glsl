@@ -29,25 +29,25 @@
 #define POINT_LIGHT   2
 #define SPOT_LIGHT    3
 
-uniform rgm::vec3      uMaterialAlbedo;
+uniform vec3      uMaterialAlbedo;
 uniform float     uMaterialRoughness;
 uniform bool      uMaterialHasTexture;
 uniform sampler2D uMaterialTexture;
 
 uniform int       uLightType;
-uniform rgm::vec3      uLightDirection;
-uniform rgm::vec3      uLightPosition;
+uniform vec3      uLightDirection;
+uniform vec3      uLightPosition;
 uniform float     uLightRange;
 uniform float     uLightCutoff;
-uniform rgm::vec3      uLightColor;
+uniform vec3      uLightColor;
 
-out rgm::vec4 oFragColor;
+out vec4 oFragColor;
 
 void main()
 {
-    rgm::vec3 result = rgm::vec3(0);
+    vec3 result = vec3(0);
 
     result += uMaterialAlbedo;
     
-    oFragColor = rgm::vec4(result, 1.0);
+    oFragColor = vec4(result, 1.0);
 }
