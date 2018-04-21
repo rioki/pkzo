@@ -26,6 +26,7 @@
 #define _PKZO_EVENT_LOOP_H_
 
 #include <memory>
+#include <rgm/rgm.h>
 
 #include "Window.h"
 #include "Mouse.h"
@@ -42,11 +43,11 @@ namespace pkzo
     {
     public:
         
-        EventLoop();
+        EventLoop() = default;
 
         EventLoop(const EventLoop&) = delete; 
 
-        ~EventLoop();
+        ~EventLoop() = default;
 
         EventLoop& operator = (const EventLoop&) = delete;
 
@@ -55,11 +56,10 @@ namespace pkzo
          *
          * This function create a system window with the given size.
          *
-         * @param width the window width
-         * @param height the window height
+         * @param size the window size
          * @param fullscreen flag if the window is fullscreen
          **/
-        std::shared_ptr<Window> open_window(unsigned int width, unsigned int height, bool fullscreen = false);
+        std::shared_ptr<Window> open_window(rgm::uvec2 size, bool fullscreen = false);
 
         /**
          * Get the Root Window
@@ -87,7 +87,7 @@ namespace pkzo
         void on_tick(std::function<void ()> cb);
 
     private:
-        bool                      running;
+        bool                      running = true;
         std::shared_ptr<Window>   window;
         std::shared_ptr<Mouse>    mouse;
         std::shared_ptr<Keyboard> keyboard;

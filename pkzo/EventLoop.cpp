@@ -28,12 +28,7 @@
 
 namespace pkzo
 {
-    EventLoop::EventLoop()
-        : running(false) {}
-
-    EventLoop::~EventLoop() {}
-
-    std::shared_ptr<Window> EventLoop::open_window(unsigned int width, unsigned int height, bool fullscreen)
+    std::shared_ptr<Window> EventLoop::open_window(rgm::uvec2 sizet, bool fullscreen)
     {
         if (window)
         {
@@ -41,7 +36,7 @@ namespace pkzo
         }
 
         Window::Mode wm = fullscreen ? Window::FULLSCREEN : Window::RESIZABLE;
-        window = std::make_shared<Window>(rgm::ivec2(width, height), wm);
+        window = std::make_shared<Window>(rgm::ivec2(sizet), wm);
         return window;
     }
 

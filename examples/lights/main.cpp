@@ -109,7 +109,7 @@ int main(int argc, char* argv[])
     camera.set_orientation(orient(pitch, yaw));
     scene.add_entity(camera);
 
-    auto window = loop.open_window(1280, 768);
+    auto window = loop.open_window(rgm::uvec2(1280, 768));
     window->on_draw([&] () {              
         scene.draw(renderer, window->get_aspect(), camera);
     });

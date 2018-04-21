@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
 {    
     pkzo::EventLoop loop;
         
-    auto window = loop.open_window(800, 600);
+    auto window = loop.open_window(rgm::uvec2(800, 600));
     auto canvas = std::make_shared<pkzo::Canvas>(window->get_size());
 
     ui::TestScreen screen(window->get_size());
