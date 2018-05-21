@@ -1,7 +1,7 @@
 /*
   pkzo
 
-  Copyright (c) 2014-2016 Sean Farrell
+  Copyright (c) 2014-2017 Sean Farrell
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -30,9 +30,29 @@
 
 namespace pkzo
 {    
-    Keyboard::Keyboard() {}
+    std::vector<Keyboard*> Keyboard::instances;
+
+    Keyboard::Keyboard() 
+    {    
+        if (instances.size() == 0)
+        {
+            SDL_StartTextInput();    
+        }
+        instances.push_back(this);
+    }
     
-    Keyboard::~Keyboard() {}
+    Keyboard::~Keyboard() 
+    {
+        if (instances.size() == 0)
+        {
+            SDL_StopTextInput();
+        }
+        auto i = std::find(instances.begin(), instances.end(), this);
+        if (i != instances.end())
+        {
+            instances.erase(i);
+        }
+    }
     
     bool Keyboard::is_pressed(Key key) const
     {

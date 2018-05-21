@@ -1,5 +1,5 @@
 //
-// PLY Parser
+// OBJ Parser
 // 
 // Copyright (c) 2014 Sean Farrell
 // 
@@ -22,58 +22,60 @@
 // SOFTWARE.
 //
 
-#include "PlyParser.h"
+#include "ObjParser.h"
 
-#include <iterator> 
 #include <sstream>
+#include <iterator> 
 #include <map>
 
-namespace std
+namespace
 {
-std::ostream& operator << (std::ostream& os, const std::vector<std::string>& values)
-{
-    for (unsigned int i = 0; i < values.size(); i++)
+    inline
+    std::ostream& operator << (std::ostream& os, const std::vector<std::string>& values)
     {
-        os << values[i];
-        if (i == values.size() - 2)
+        for (unsigned int i = 0; i < values.size(); i++)
         {
-            os << " or ";
+            os << values[i];
+            if (i == values.size() - 2)
+            {
+                os << " or ";
+            }
+            else if (i != values.size() - 1)
+            {
+                os << ", ";
+            }
         }
-        else if (i != values.size() - 1)
-        {
-            os << ", ";
-        }
+        return os;
     }
-    return os;
-}
 }
 
-PlyParser::PlyParser()
-: line(0) {}
 
-PlyParser::~PlyParser() {}
+ObjParser::ObjParser()
+: line(0), token(NO_TOKEN), next_token(NO_TOKEN) {}
 
-const std::vector<rgm::vec3>& PlyParser::get_vertices() const
+ObjParser::~ObjParser() {}
+
+const std::vector<rgm::vec3>& ObjParser::get_vertices() const
 {
     return vertices;
 }
 
-const std::vector<rgm::vec3>& PlyParser::get_normals() const
+const std::vector<rgm::vec3>& ObjParser::get_normals() const
 {
     return normals;
 }
 
-const std::vector<rgm::vec2>& PlyParser::get_texcoords() const
+const std::vector<rgm::vec2>& ObjParser::get_texcoords() const
 {
     return texcoords;
 }
 
-const std::vector<rgm::ivec3>& PlyParser::get_indexes() const
+const std::vector<std::vector<rgm::ivec3>>& ObjParser::get_faces() const
 {
-    return indexes;
+    return faces;
 }
 
-void PlyParser::parse(const std::string& f)
+void ObjParser::parse(const std::string& f)
 {
     file = f;
     input.open(file);
@@ -81,42 +83,64 @@ void PlyParser::parse(const std::string& f)
     {
         std::stringstream buff;
         buff << "Failed to open " << file << " for reading.";
-        throw std::runtime_error(buff.str());    
+        throw std::runtime_error(buff.str());   
     }
 
-    parse_header();
-    parse_body();
+
+    // prime the next_token
+    get_next_token();
+
+    while (next_token != END_OF_FILE)
+    {
+        parse_line();
+    }        
 }
 
-TokenType PlyParser::get_next_token(std::string& value)
+void ObjParser::get_next_token()
 {
     // skip whitepsaces
 
-    TokenType token = lex_token(value);
-    while (token == WHITESPACE || token == NEWLINE)
+    std::string v;
+    TokenType t = lex_token(v);
+    while (t == WHITESPACE || t == NEWLINE || t == COMMENT)
     {
-        if (token == NEWLINE)
+        if (t == NEWLINE)
         {
             line++;
         }
-        value = "";
-        token = lex_token(value);
+        v = "";
+        t = lex_token(v);
     }
                 
-    return token;
+    token = next_token;
+    value = next_value;
+    next_token = t;
+    next_value = v;
 }
 
-TokenType PlyParser::lex_token(std::string& value)
+ObjParser::TokenType ObjParser::lex_token(std::string& value)
 {
     int c = input.get();
     switch (c)
     {
         case ' ': case '\t': case '\v':
             value.push_back(c);
-            return lex_whitespace(value);
+            return lex_whitespace(value);            
         case '\n': case '\r':
             value.push_back(c);
             return lex_newline(value);
+        case '#':
+            value.push_back(c);
+            return lex_comment(value);
+        case '/':
+            value = "/";
+            return SLASH;
+        case '\\':
+            value = "\\";
+            return BSLASH;
+        case '.':
+            value = ".";
+            return DOT;
         case '+': case '-': case '0': case '1': case '2': case '3':
         case '4': case '5': case '6': case '7': case '8': case '9':
             value.push_back(c);
@@ -142,12 +166,12 @@ TokenType PlyParser::lex_token(std::string& value)
 
             std::stringstream buff;
             buff << "Unexpected character " << value << ".";
-            throw std::runtime_error(buff.str());  
+            throw std::runtime_error(buff.str());
         }
     }
 }
 
-TokenType PlyParser::lex_whitespace(std::string& value)
+ObjParser::TokenType ObjParser::lex_whitespace(std::string& value)
 {
     int c = input.get();
     while (true)        
@@ -165,7 +189,7 @@ TokenType PlyParser::lex_whitespace(std::string& value)
     }
 }
 
-TokenType PlyParser::lex_newline(std::string& value)
+ObjParser::TokenType ObjParser::lex_newline(std::string& value)
 {
     int c = input.get();
     switch (c)
@@ -188,7 +212,7 @@ TokenType PlyParser::lex_newline(std::string& value)
     }
 }
 
-TokenType PlyParser::lex_identifier(std::string& value)
+ObjParser::TokenType ObjParser::lex_identifier(std::string& value)
 {
     int c = input.get();
     while (true)        
@@ -218,7 +242,7 @@ TokenType PlyParser::lex_identifier(std::string& value)
     }        
 }
 
-TokenType PlyParser::lex_number(std::string& value)
+ObjParser::TokenType ObjParser::lex_number(std::string& value)
 {
     // NOTE: we don't actually validate if it makes a valid number here
     // NOTE: the e-notation is not implemented, is that actually valid in PLY?
@@ -227,7 +251,7 @@ TokenType PlyParser::lex_number(std::string& value)
     {
         switch (c)
         {                            
-            case '+': case '-': case '.': case 'e': case 'E':
+            case '+': case '-': case '.':
             case '0': case '1': case '2': case '3': case '4': 
             case '5': case '6': case '7': case '8': case '9':
                 value.push_back(c);
@@ -240,20 +264,21 @@ TokenType PlyParser::lex_number(std::string& value)
     }
 }
 
-void PlyParser::lex_discard_line()
+ObjParser::TokenType ObjParser::lex_comment(std::string& value)
 {
     int c = input.get();
     while (c != '\n' && c != '\r' && c != EOF) 
     {
         c = input.get();
+        value.push_back(c);
     }
     input.unget();
+    return COMMENT;
 }
 
-void PlyParser::parse_keyword(const std::string& keyword)
-{
-    std::string value;
-    TokenType token = get_next_token(value);
+void ObjParser::parse_keyword(const std::string& keyword)
+{        
+    get_next_token();
     if (token != IDENTIFIER || value != keyword)
     {
         std::stringstream buff;
@@ -262,10 +287,9 @@ void PlyParser::parse_keyword(const std::string& keyword)
     }
 }
 
-unsigned int PlyParser::parse_keyword(const std::vector<std::string>& keywords)
+unsigned int ObjParser::parse_keyword(const std::vector<std::string>& keywords)
 {
-    std::string value;
-    TokenType token = get_next_token(value);
+    get_next_token();
     auto i =  std::find(keywords.begin(), keywords.end(), value);
     if (token != IDENTIFIER || i == keywords.end())
     {
@@ -273,13 +297,12 @@ unsigned int PlyParser::parse_keyword(const std::vector<std::string>& keywords)
         buff << file << "(" << line << "): Expected " << keywords << " but got " << value << ".";
         throw std::runtime_error(buff.str());
     }
-    return static_cast<unsigned int>(std::distance(keywords.begin(), i));
+    return std::distance(keywords.begin(), i);
 }
 
-std::string PlyParser::parse_identifier()
+std::string ObjParser::parse_identifier()
 {
-    std::string value;
-    TokenType token = get_next_token(value);
+    get_next_token();
     if (token != IDENTIFIER)
     {
         std::stringstream buff;
@@ -289,15 +312,26 @@ std::string PlyParser::parse_identifier()
     return value;
 }
 
-double PlyParser::parse_float()
+std::string ObjParser::parse_identifier_or_number()
 {
-    std::string value;
-    TokenType token = get_next_token(value);
+    get_next_token();
+    if (token != IDENTIFIER && token != NUMBER)
+    {
+        std::stringstream buff;
+        buff << file << "(" << line << "): Expected identifier or number but got " << value << ".";
+        throw std::runtime_error(buff.str());
+    }
+    return value;
+}
+
+float ObjParser::parse_float()
+{
+    get_next_token();
     if (token == NUMBER)
     {
         // TODO use endptr to check if the entiere string was read
         double dv = strtod(&value[0], NULL);
-        return dv;
+        return (float)dv;
     }
     else
     {
@@ -307,10 +341,9 @@ double PlyParser::parse_float()
     }
 }
 
-unsigned long PlyParser::parse_integer()
+unsigned long ObjParser::parse_integer()
 {
-    std::string value;
-    TokenType token = get_next_token(value);
+    get_next_token();
     if (token == NUMBER)
     {
         // TODO use endptr to check if the entiere string was read
@@ -320,181 +353,225 @@ unsigned long PlyParser::parse_integer()
     else
     {
         std::stringstream buff;
-        buff << file << "(" << line << "): Expected integer but got " << value << ".";
+        buff << file << "(" << line << "): Expected number but got " << value << ".";
         throw std::runtime_error(buff.str());
     }
 }
 
-std::vector<std::string> format_keywords = [] () -> std::vector<std::string> {
+std::string ObjParser::parse_filename()
+{
+    // this is not correctly implemented; it could be a fully qualified path with spaces and all that jazz
+    std::string file;
+        
+    while (next_token == IDENTIFIER || 
+            next_token == SLASH || 
+            next_token == BSLASH ||
+            next_token == DOT)
+    {
+        get_next_token();
+        file += value;
+
+        if (value == "mtl")
+        {
+            return file;
+        }
+    }
+
+    return file;
+}
+
+std::vector<std::string> keywords = [] () -> std::vector<std::string> {
     std::vector<std::string> result;
 
-    result.push_back("ascii");
-    result.push_back("binary");
+    result.push_back("v");
+    result.push_back("vt");
+    result.push_back("vn");
+    result.push_back("vp");        
+    result.push_back("f");
+    result.push_back("o");
+    result.push_back("g");
+    result.push_back("s");
+    result.push_back("mtllib");
+    result.push_back("usemtl");
 
     return result;
 }();
 
-enum HeaderKeyword
+enum Keyword
 {
-    COMMENT,
-    ELEMENT,
-    PROPERTY,
-    END_HEADER
+    V,
+    VT,
+    VN,
+    VP,
+    F,
+    O,
+    G,
+    S,
+    MTLLIB,
+    USEMTL
 };
 
-std::vector<std::string> header_keywords = [] () -> std::vector<std::string> {
-    std::vector<std::string> result;
-
-    result.push_back("comment");
-    result.push_back("element");
-    result.push_back("property");
-    result.push_back("end_header");        
-
-    return result;
-}();
-
-enum ElementKeyword
+void ObjParser::parse_line()
 {
-    VERTEX,
-    FACE
-};
-
-std::vector<std::string> element_keywords = [] () -> std::vector<std::string> {
-    std::vector<std::string> result;
-
-    result.push_back("vertex");
-    result.push_back("face");
-        
-    return result;
-}();
-
-void PlyParser::parse_header()
-{
-    parse_keyword("ply");
-
-    parse_keyword("format");                
-    unsigned int format = parse_keyword(format_keywords);
-    if (format != 0)
+    unsigned int keyword = parse_keyword(keywords);
+    switch (keyword)
     {
-        throw std::runtime_error("Only ASCII PLY files are suported.");
+        case V:
+            parse_vertex();
+            break;
+        case VT:
+            parse_texcoord();
+            break;
+        case VN:
+            parse_normal();
+            break;
+        case VP:
+            parse_parmeter();
+            break;
+        case F:
+            parse_face();
+            break;
+        case O:
+            parse_object();
+            break;
+        case G:
+            parse_group();
+            break;
+        case S:
+            parse_smothing();
+            break;
+        case MTLLIB:
+            parse_mtllib();
+            break;
+        case USEMTL:            
+            parse_usemtl();
+            break;
+        default:
+            throw std::logic_error("Unknown line keyword!");
+    }
+}
+
+void ObjParser::parse_vertex() 
+{
+    float x = parse_float();
+    float y = parse_float();
+    float z = parse_float();
+    float w = 0.0f;
+    if (next_token == NUMBER)
+    {
+        w = parse_float();
     }
 
-    double version = parse_float();
-    if (version != 1.0)
+    vertices.push_back(rgm::vec3(x, y, z));
+}
+    
+void ObjParser::parse_texcoord() 
+{
+    float u = parse_float();
+    float v = parse_float();
+    float w = 0.0f;
+    if (next_token == NUMBER)
     {
-        throw std::runtime_error("Only version 1.0 of PLY format is supported.");
+        w = parse_float();
     }
 
-    unsigned int keyword;
-    do
-    {
-        keyword = parse_keyword(header_keywords);
+    texcoords.push_back(rgm::vec2(u, v));
+}
+    
+void ObjParser::parse_normal() 
+{
+    float x = parse_float();
+    float y = parse_float();
+    float z = parse_float();
 
-        switch (keyword)
+    normals.push_back(rgm::vec3(x, y, z));
+}
+
+void ObjParser::parse_parmeter()
+{
+    float u = parse_float();
+    float v = 0.0f;
+    if (next_token == NUMBER)
+    {
+        v = parse_float();
+    }
+    float w = 0.0f;
+    if (next_token == NUMBER)
+    {
+        w = parse_float();
+    }
+    // discard value
+}
+    
+void ObjParser::parse_face() 
+{
+    std::vector<rgm::ivec3> points;
+
+    while (next_token == NUMBER)
+    {
+        rgm::ivec3 p = parse_face_point();
+        points.push_back(p);
+    }
+
+    faces.push_back(points);
+}
+
+rgm::ivec3 ObjParser::parse_face_point()
+{
+    int v = -1;
+    int t = -1;
+    int n = -1;
+
+    v = parse_integer();
+
+    if (next_token == SLASH)
+    {
+        get_next_token();
+    }
+
+    if (next_token == NUMBER)
+    {
+        t = parse_integer();
+    }
+
+    if (next_token == SLASH)
+    {
+        get_next_token();
+
+        if (next_token == NUMBER)
         {
-            case COMMENT:
-                lex_discard_line();
-                break;
-            case ELEMENT:
-                parse_element();
-                break;
-            case PROPERTY:
-                parse_property();
-                break;
-            case END_HEADER:
-                // do nothing
-                break;
-            default:
-                throw std::logic_error("Unknown header keyword!");
-        }
-
-    }
-    while (keyword != END_HEADER);
-}
-
-void PlyParser::parse_element()
-{
-    unsigned int type = parse_keyword(element_keywords);
-    unsigned long count = parse_integer();
-
-    elements.push_back(std::make_tuple(type, count, std::vector<std::string>()));
-}
-
-void PlyParser::parse_property()
-{
-    // NOTE: we don't care about the type
-
-    std::string type = parse_identifier();
-        
-    if (type == "list")
-    {
-        std::string index_type = parse_identifier();
-        std::string value_type = parse_identifier();
-    }
-
-    std::string name = parse_identifier();
-
-    if (elements.empty())
-    {
-        std::stringstream buff;
-        buff << file << "(" << line << "): Property before element.";
-        throw std::runtime_error(buff.str());
-    }
-
-    std::get<2>(elements.back()).push_back(name);
-}
-
-void PlyParser::parse_body()
-{
-    for (const Element& element : elements)
-    {
-        if (std::get<0>(element) == VERTEX)
-        {
-            for (unsigned int i = 0; i < std::get<1>(element); i++)
-            {
-                parse_vertex(i, std::get<2>(element));
-            }
-        }
-        else 
-        {
-            for (unsigned int i = 0; i < std::get<1>(element); i++)
-            {
-                parse_face();
-            }
+            n = parse_integer();
         }
     }
-}    
 
-void PlyParser::parse_vertex(size_t elem, const std::vector<std::string>& properties)
-{
-    std::map<std::string, float> values;
-    values["x"] = values["y"] = values["z"] = 0.0;
-    values["nx"] = values["nx"] = values["nx"] = 0.0;
-    values["s"] = values["t"] = 0.0;
-
-    for (unsigned int i = 0; i < properties.size(); i++)
-    {
-        values[properties[i]] = (float)parse_float();
-    }
-
-    vertices.push_back(rgm::vec3(values["x"], values["y"], values["z"]));
-    normals.push_back(rgm::vec3(values["nx"], values["ny"], values["nz"]));
-    texcoords.push_back(rgm::vec2(values["s"], 1.0f - values["t"]));
+    return rgm::ivec3(v, t, n);
 }
 
-void PlyParser::parse_face()
+void ObjParser::parse_mtllib()
 {
-    unsigned int count = parse_integer();;
-
-    std::vector<unsigned int> indglows(count, 0);
-    for (unsigned int i = 0; i < indglows.size(); i++)
-    {
-        indglows[i] = parse_integer();
-    }
-
-    // we build fans, when n != 3
-    for (unsigned int i = 2; i < indglows.size(); i++)
-    {
-        indexes.push_back(rgm::ivec3(indglows[0], indglows[i - 1], indglows[i]));
-    }
+    std::string file = parse_filename();
 }
+
+void ObjParser::parse_usemtl()
+{
+    std::string id = parse_identifier();
+}
+
+void ObjParser::parse_object()
+{
+    std::string id = parse_identifier();
+}
+
+void ObjParser::parse_group()
+{
+    std::string id = parse_identifier();
+}
+
+void ObjParser::parse_smothing()
+{
+    // s 1
+    // s on
+    // s off
+    std::string id = parse_identifier_or_number();
+}
+

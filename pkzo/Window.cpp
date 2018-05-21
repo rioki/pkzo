@@ -1,37 +1,18 @@
-// 
-// pkzo
-// 
-// Copyright 2014-2018 Sean Farrell <sean.farrell@rioki.org>
-// 
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-//
 
 #include "Window.h"
 
 #include <SDL.h>
-#include <GL/glew.h>
+#include <SDL_opengl.h>
 
 namespace pkzo
 {
-    Window::Window(rgm::ivec2 size, Mode m)
+    std::vector<Window*> Window::instances;
+
+    Window::Window(const rgm::uvec2& size, Mode m, const std::string& title)
     : mode(m)
     {
+        instances.push_back(this);
+        
         unsigned int flags = SDL_WINDOW_OPENGL;
         switch (mode)
         {
@@ -46,7 +27,7 @@ namespace pkzo
                 break;
         }
 
-        window = SDL_CreateWindow("OpenGL Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, size[0], size[1], flags);
+        window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, size[0], size[1], flags);
         if (window == nullptr)
         {
             throw std::runtime_error(SDL_GetError());
@@ -59,13 +40,6 @@ namespace pkzo
         if (glcontext == nullptr)
         {
             throw std::runtime_error(SDL_GetError());
-        }
-
-        glewExperimental = GL_TRUE;
-        GLenum err = glewInit();
-        if (GLEW_OK != err)
-        {
-            throw std::runtime_error((const char*)glewGetErrorString(err));
         }
     }
 
@@ -82,20 +56,19 @@ namespace pkzo
             SDL_DestroyWindow(window);
             window = nullptr;
         }
+
+        auto i = std::find(instances.begin(), instances.end(), this);
+        if (i != instances.end())
+        {
+            instances.erase(i);
+        }
     }
 
-   rgm::ivec2 Window::get_size() const
+    rgm::uvec2 Window::get_size() const
     {
         int w, h;
         SDL_GetWindowSize(window, &w, &h);
-        return rgm::ivec2(w, h);
-    }
-
-    float Window::get_aspect() const
-    {
-        int w, h;
-        SDL_GetWindowSize(window, &w, &h);
-        return (float)w / (float)h;
+        return rgm::uvec2(w, h);
     }
 
     Window::Mode Window::get_mode() const
@@ -103,12 +76,30 @@ namespace pkzo
         return mode;
     }
 
+    void Window::set_title(const std::string& value)
+    {
+        SDL_SetWindowTitle(window, value.c_str());
+    }
+
+    std::string Window::get_title() const
+    {
+        const char* title = SDL_GetWindowTitle(window);
+        if (title != nullptr)
+        {
+            return std::string(title);
+        }
+        else
+        {
+            return std::string();
+        }
+    }
+
     void Window::on_draw(std::function<void ()> cb)
     {
         draw_cb = cb;
     }
 
-    void Window::on_resize(std::function<void (rgm::ivec2)> cb)
+    void Window::on_resize(std::function<void (unsigned int, unsigned int)> cb)
     {
         resize_cb = cb;
     }
@@ -134,16 +125,14 @@ namespace pkzo
         SDL_GL_SwapWindow(window);
     }
 
-    bool Window::handle_event(SDL_Event& event)
+    void Window::handle_event(SDL_Event& event)
     {
-        bool handled = false;
         switch (event.type)
         {
             case SDL_QUIT:
                 if (close_cb)
                 {
                     close_cb();
-                    handled = true;
                 }
                 break;
             case SDL_WINDOWEVENT:            
@@ -153,12 +142,11 @@ namespace pkzo
                     {
                         case SDL_WINDOWEVENT_SIZE_CHANGED:  
                         {
+                            int width = event.window.data1;
+                            int height = event.window.data2;
                             if (resize_cb)
                             {
-                                int width = event.window.data1;
-                                int height = event.window.data2;
-                                resize_cb(rgm::ivec2(width, height));
-                                handled = true;
+                                resize_cb(width, height);
                             }
                             break;
                         }
@@ -172,7 +160,5 @@ namespace pkzo
                 // STFU
                 break;
         } 
-
-        return handled;
     }
 }

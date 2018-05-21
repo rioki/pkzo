@@ -1,7 +1,7 @@
 /*
   pkzo
 
-  Copyright (c) 2014-2016 Sean Farrell
+  Copyright (c) 2014-2017 Sean Farrell
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,8 @@
 
 #include <stdexcept>
 #include <SDL.h>
+#include <SDL_image.h>
+#include <SDL_ttf.h>
 
 namespace pkzo
 {
@@ -41,6 +43,18 @@ namespace pkzo
             {
                 throw std::runtime_error(SDL_GetError());
             }
+
+            r = IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF | IMG_INIT_WEBP);
+            if (r < 0)
+            {
+                throw std::runtime_error(IMG_GetError());
+            }
+
+            r = TTF_Init();
+            if (r < 0)
+            {
+                throw std::runtime_error(TTF_GetError());
+            }
         }
     }
 
@@ -49,6 +63,8 @@ namespace pkzo
         size_t c = use_count.fetch_sub(1);
         if (c == 1)
         {
+            TTF_Quit();
+            IMG_Quit();
             SDL_Quit();
         }
     }

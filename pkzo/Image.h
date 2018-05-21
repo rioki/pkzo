@@ -22,27 +22,65 @@
   SOFTWARE.
 */
 
-#ifndef _PKZO_SDL_SENTRY_H_
-#define _PKZO_SDL_SENTRY_H_
+#ifndef _PKZO_TEXTURE_H_
+#define _PKZO_TEXTURE_H_
 
-#include <atomic>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include <rgm/rgm.h>
+
+#include "defines.h"
+#include "SDLSentry.h"
+
+struct SDL_Surface;
+
+namespace glow
+{
+    class Texture;
+}
 
 namespace pkzo
 {
-    class SDLSentry
+    enum ColorType
+    {
+        NOCOLOR,
+        MONOCHROME,
+        RGB,
+        RGBA
+    };
+
+    class PKZO_EXPORT Image
     {
     public:
+
+        Image(const std::string& file);
+
+        Image(const std::string& file_xpos, const std::string& file_xneg, 
+              const std::string& file_ypos, const std::string& file_yneg,
+              const std::string& file_zpos, const std::string& file_zneg);
+
+        Image(unsigned int w, unsigned int h, ColorType color_type, const unsigned char* data);
+
+        Image(SDL_Surface* surface);
         
-        SDLSentry();
+        Image(const Image&) = delete;
 
-        SDLSentry(const SDLSentry&) = delete;
+        ~Image();
 
-        ~SDLSentry();
+        const Image& operator = (const Image&) = delete;
 
-        const SDLSentry& operator = (const SDLSentry&) = delete;  
+        rgm::uvec2 get_size() const;
+
+        ColorType get_color_type() const;
+
+        const unsigned char* get_data() const;
 
     private:
-        static std::atomic<size_t> use_count;
+        SDLSentry sdl_sentry;
+
+        std::vector<SDL_Surface*>      surfaces;
     };
 }
 

@@ -1,426 +1,370 @@
+//
+// pkzo
+// 
+// Copyright (c) 2014-2017 Sean Farrell
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+//
 
 #include "Mesh.h"
 
-#include <GL/glew.h>
+#include <cassert>
+#include <map>
+
+#include "path.h"
+#include "strex.h"
 
 #include "PlyParser.h"
+#include "ObjParser.h"
 
 namespace pkzo
 {
-    enum BufferId
-    {
-        VERTEX_BUFFER   = 0,
-        NORMAL_BUFFER   = 1,
-        TEXCOORD_BUFFER = 2,
-        TANGENT_BUFFER  = 3,
-        COLOR_BUFFER    = 4,
-        INDEX_BUFFER    = 5
-    };
-    
     Mesh::Mesh()
-    : vao(0) {}
+    : min(0), max(0) {}
 
-    Mesh::~Mesh()
+    Mesh::Mesh(const std::string& file)
+    : Mesh()
     {
-        release();
+        std::string ext = path::ext(file);
+        switch (strex::hash(ext))
+        {
+        case strex::hash("ply"):
+            load_ply(file);
+            break;
+        case strex::hash("obj"):
+            load_obj(file);
+            break;
+        default:
+            throw std::runtime_error("Unknown mesh extention.");
+        }
+
+        if (normals.empty() || normals[0] == rgm::vec3(0))
+        {
+            compute_normals();
+        }
+
+        compute_tangents();
     }
+
+    Mesh::~Mesh() {}
 
     void Mesh::set_vertex_count(size_t value)
     {
-        vertices.resize(value * 4);
-        normals.resize(value * 3);
-        texcoords.resize(value * 2);
-        tangents.resize(value * 3);
-        colors.resize(value * 4);
-    }
-
-    void Mesh::load(const std::string& file)
-    {
-        PlyParser parser(*this);
-        parser.parse(file);
-    }
-
-    void Mesh::create_screen_plane()
-    {
-        set_vertex_count(4);
-
-        set_vertex(0, rgm::vec3(-1.0f, -1.0f, 0.0f));
-        set_vertex(1, rgm::vec3(-1.0f,  1.0f, 0.0f));
-        set_vertex(2, rgm::vec3( 1.0f,  1.0f, 0.0f));
-        set_vertex(3, rgm::vec3( 1.0f, -1.0f, 0.0f));
-
-        set_normal(0, rgm::vec3(0.0f, 0.0f, 1.0f));
-        set_normal(1, rgm::vec3(0.0f, 0.0f, 1.0f));
-        set_normal(2, rgm::vec3(0.0f, 0.0f, 1.0f));
-        set_normal(3, rgm::vec3(0.0f, 0.0f, 1.0f));
-
-        set_texcoord(0, rgm::vec2(0.0f, 0.0f));
-        set_texcoord(1, rgm::vec2(0.0f, 1.0f));
-        set_texcoord(2, rgm::vec2(1.0f, 1.0f));
-        set_texcoord(3, rgm::vec2(1.0f, 0.0f));
-
-        set_tangent(0, rgm::vec3(1.0f, 0.0f, 0.0f));
-        set_tangent(1, rgm::vec3(1.0f, 0.0f, 0.0f));
-        set_tangent(2, rgm::vec3(1.0f, 0.0f, 0.0f));
-        set_tangent(3, rgm::vec3(1.0f, 0.0f, 0.0f));
-
-        set_color(0, rgm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-        set_color(1, rgm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-        set_color(2, rgm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-        set_color(3, rgm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-
-        set_face_count(2);
-        set_face(0, 0, 2, 1);
-        set_face(1, 0, 3, 2);
-    }
-
-
-    void Mesh::create_plane(float width, float height)
-    {
-        float w2 = width / 2.0f;
-        float h2 = height / 2.0f;
-
-        set_vertex_count(4);
-
-        set_vertex(0, rgm::vec3(-w2, -h2, 0.0f));
-        set_vertex(1, rgm::vec3(-w2,  h2, 0.0f));
-        set_vertex(2, rgm::vec3( w2,  h2, 0.0f));
-        set_vertex(3, rgm::vec3( w2, -h2, 0.0f));
-
-        set_normal(0, rgm::vec3(0.0f, 0.0f, 1.0f));
-        set_normal(1, rgm::vec3(0.0f, 0.0f, 1.0f));
-        set_normal(2, rgm::vec3(0.0f, 0.0f, 1.0f));
-        set_normal(3, rgm::vec3(0.0f, 0.0f, 1.0f));
-
-        set_texcoord(0, rgm::vec2(0.0f, 0.0f));
-        set_texcoord(1, rgm::vec2(0.0f, 1.0f));
-        set_texcoord(2, rgm::vec2(1.0f, 1.0f));
-        set_texcoord(3, rgm::vec2(1.0f, 0.0f));
-
-        set_tangent(0, rgm::vec3(1.0f, 0.0f, 0.0f));
-        set_tangent(1, rgm::vec3(1.0f, 0.0f, 0.0f));
-        set_tangent(2, rgm::vec3(1.0f, 0.0f, 0.0f));
-        set_tangent(3, rgm::vec3(1.0f, 0.0f, 0.0f));
-
-        set_color(0, rgm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-        set_color(1, rgm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-        set_color(2, rgm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-        set_color(3, rgm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-
-        set_face_count(2);
-        set_face(0, 0, 2, 1);
-        set_face(1, 0, 3, 2);
-    }
-
-    void Mesh::create_box(const rgm::vec3& size)
-    {
-       rgm::vec3 hs = size * 0.5f;
-
-        set_vertex_count(24);
-        set_face_count(12);
-
-        // x pos face
-        set_vertex(0, rgm::vec3(hs[0], -hs[1], -hs[2]));
-        set_vertex(1, rgm::vec3(hs[0],  hs[1], -hs[2]));
-        set_vertex(2, rgm::vec3(hs[0],  hs[1],  hs[2]));
-        set_vertex(3, rgm::vec3(hs[0], -hs[1],  hs[2]));
-
-        set_normal(0, rgm::vec3(1, 0, 0));
-        set_normal(1, rgm::vec3(1, 0, 0));
-        set_normal(2, rgm::vec3(1, 0, 0));
-        set_normal(3, rgm::vec3(1, 0, 0));
-        
-        set_texcoord(0, rgm::vec2(0, 1));
-        set_texcoord(1, rgm::vec2(1, 1));
-        set_texcoord(2, rgm::vec2(1, 0));
-        set_texcoord(3, rgm::vec2(0, 0));
-        
-        set_face(0, 0, 1, 2);
-        set_face(1, 0, 2, 3);
-        
-        // x neg
-        set_vertex(4, rgm::vec3(-hs[0], -hs[1], -hs[2]));
-        set_vertex(5, rgm::vec3(-hs[0],  hs[1], -hs[2]));
-        set_vertex(6, rgm::vec3(-hs[0],  hs[1],  hs[2]));
-        set_vertex(7, rgm::vec3(-hs[0], -hs[1],  hs[2]));
-
-        set_normal(4, rgm::vec3(-1, 0, 0));
-        set_normal(5, rgm::vec3(-1, 0, 0));
-        set_normal(6, rgm::vec3(-1, 0, 0));
-        set_normal(7, rgm::vec3(-1, 0, 0));
-
-
-        set_texcoord(4, rgm::vec2(0, 1));
-        set_texcoord(5, rgm::vec2(1, 1));
-        set_texcoord(6, rgm::vec2(1, 0));
-        set_texcoord(7, rgm::vec2(0, 0));
-        
-        set_face(2, 6, 5, 4);
-        set_face(3, 7, 4, 6);
-                
-        // y pos
-        set_vertex( 8, rgm::vec3(-hs[0], hs[1], -hs[2]));
-        set_vertex( 9, rgm::vec3( hs[0], hs[1], -hs[2]));
-        set_vertex(10, rgm::vec3( hs[0], hs[1],  hs[2]));
-        set_vertex(11, rgm::vec3(-hs[0], hs[1],  hs[2]));
-
-        set_normal( 8, rgm::vec3(0, 1, 0));
-        set_normal( 9, rgm::vec3(0, 1, 0));
-        set_normal(10, rgm::vec3(0, 1, 0));
-        set_normal(11, rgm::vec3(0, 1, 0));
-
-
-        set_texcoord( 8, rgm::vec2(0, 1));
-        set_texcoord( 9, rgm::vec2(1, 1));
-        set_texcoord(10, rgm::vec2(1, 0));
-        set_texcoord(11, rgm::vec2(0, 0));
-        
-        set_face(4, 8, 9, 10);
-        set_face(5, 8, 10, 11);
-
-        // y neg
-        set_vertex(12, rgm::vec3(-hs[0], -hs[1], -hs[2]));
-        set_vertex(13, rgm::vec3( hs[0], -hs[1], -hs[2]));
-        set_vertex(14, rgm::vec3( hs[0], -hs[1],  hs[2]));
-        set_vertex(15, rgm::vec3(-hs[0], -hs[1],  hs[2]));
-
-        set_normal(12, rgm::vec3(0, -1, 0));
-        set_normal(13, rgm::vec3(0, -1, 0));
-        set_normal(14, rgm::vec3(0, -1, 0));
-        set_normal(15, rgm::vec3(0, -1, 0));
-
-        set_texcoord(12, rgm::vec2(0, 1));
-        set_texcoord(13, rgm::vec2(1, 1));
-        set_texcoord(14, rgm::vec2(1, 0));
-        set_texcoord(15, rgm::vec2(0, 0));
-        
-        set_face(6, 14, 13, 12);
-        set_face(7, 15, 12, 14);
-        
-        // z pos
-        set_vertex(16, rgm::vec3(-hs[0], -hs[1], hs[2]));
-        set_vertex(17, rgm::vec3( hs[0], -hs[1], hs[2]));
-        set_vertex(18, rgm::vec3( hs[0],  hs[1], hs[2]));
-        set_vertex(19, rgm::vec3(-hs[0],  hs[1], hs[2]));
-
-        set_normal(16, rgm::vec3(0, 0, 1));
-        set_normal(17, rgm::vec3(0, 0, 1));
-        set_normal(18, rgm::vec3(0, 0, 1));
-        set_normal(19, rgm::vec3(0, 0, 1));
-
-        set_texcoord(16, rgm::vec2(0, 1));
-        set_texcoord(17, rgm::vec2(1, 1));
-        set_texcoord(18, rgm::vec2(1, 0));
-        set_texcoord(19, rgm::vec2(0, 0));
-        
-        set_face(8, 16, 17, 18);
-        set_face(9, 16, 18, 19);
-        
-        // z neg
-        set_vertex(20, rgm::vec3(-hs[0], -hs[1], -hs[2]));
-        set_vertex(21, rgm::vec3( hs[0], -hs[1], -hs[2]));
-        set_vertex(22, rgm::vec3( hs[0],  hs[1], -hs[2]));
-        set_vertex(23, rgm::vec3(-hs[0],  hs[1], -hs[2]));
-
-        set_normal(20, rgm::vec3(0, 0, -1));
-        set_normal(21, rgm::vec3(0, 0, -1));
-        set_normal(22, rgm::vec3(0, 0, -1));
-        set_normal(23, rgm::vec3(0, 0, -1));
-
-        set_texcoord(20, rgm::vec2(0, 1));
-        set_texcoord(21, rgm::vec2(1, 1));
-        set_texcoord(22, rgm::vec2(1, 0));
-        set_texcoord(23, rgm::vec2(0, 0));
-        
-        set_face(10, 22, 21, 20);
-        set_face(11, 23, 20, 22);
+        vertices.resize(value);
+        normals.resize(value);
+        texcoords.resize(value);
+        tangents.resize(value);
     }
 
     size_t Mesh::get_vertex_count() const
     {
-        return vertices.size() / 3;
+        return vertices.size();
     }
 
     void Mesh::set_vertex(size_t i, const rgm::vec3& v)
-    {
-        size_t b = i * 4;
-        vertices[b + 0] = v[0];
-        vertices[b + 1] = v[1];
-        vertices[b + 2] = v[2];
-        vertices[b + 3] = 1.0f;
+    {  
+        min = rgm::min(min, v);
+        max = rgm::max(max, v);
+        vertices.at(i) = v;        
     }
 
-   rgm::vec3 Mesh::get_vertex(size_t i) const
+    rgm::vec3 Mesh::get_vertex(size_t i) const
     {
-        size_t b = i * 3;
-        return rgm::vec3(vertices[b + 0], vertices[b + 1], vertices[b + 2]);
+        return vertices.at(i);
     }
 
     void Mesh::set_normal(size_t i, const rgm::vec3& v)
     {
-        size_t b = i * 3;
-        normals[b + 0] = v[0];
-        normals[b + 1] = v[1];
-        normals[b + 2] = v[2];
+        normals.at(i) = v;
     }
 
-   rgm::vec3 Mesh::get_normal(size_t i) const
+    rgm::vec3 Mesh::get_normal(size_t i) const
     {
-        size_t b = i * 3;
-        return rgm::vec3(normals[b + 0], normals[b + 1], normals[b + 2]);
+        return normals.at(i);
     }
 
     void Mesh::set_texcoord(size_t i, const rgm::vec2& v)
     {
-        size_t b = i * 2;
-        texcoords[b + 0] = v[0];
-        texcoords[b + 1] = v[1];
+        texcoords.at(i) = v;
     }
 
-   rgm::vec2 Mesh::get_texcoord(size_t i) const
+    rgm::vec2 Mesh::get_texcoord(size_t i) const
     {
-        size_t b = i * 2;
-        return rgm::vec2(texcoords[b + 0], texcoords[b + 1]);
+        return texcoords.at(i);
     }
 
     void Mesh::set_tangent(size_t i, const rgm::vec3& v)
     {
-        size_t b = i * 3;
-        tangents[b + 0] = v[0];
-        tangents[b + 1] = v[1];
-        tangents[b + 2] = v[2];
+        tangents.at(i) = v;
     }
 
-   rgm::vec3 Mesh::get_tangent(size_t i) const
+    rgm::vec3 Mesh::get_tangent(size_t i) const
     {
-        size_t b = i * 3;
-        return rgm::vec3(tangents[b + 0], tangents[b + 1], tangents[b + 2]);
-    }
-
-    void Mesh::set_color(size_t i, const rgm::vec4& v)
-    {
-        size_t ba = i * 4;
-        colors[ba + 0] = v[0];
-        colors[ba + 1] = v[1];
-        colors[ba + 2] = v[2];
-        colors[ba + 3] = v[3];
-    }
-
-   rgm::vec4 Mesh::get_color(size_t i) const
-    {
-        size_t b = i * 4;
-        return rgm::vec4(colors[b + 0], colors[b + 1], colors[b + 2], colors[b + 3]);
+        return tangents.at(i);
     }
 
     void Mesh::set_face_count(size_t value)
     {
-        faces.resize(value * 3);
+        faces.resize(value);
     }
 
     size_t Mesh::get_face_count() const
     {
-        return faces.size() / 3;
+        return faces.size();
     }
 
     void Mesh::set_face(size_t i, unsigned int a, unsigned int b, unsigned int c)
     {
-        size_t ba = i * 3;
-        faces[ba + 0] = a;
-        faces[ba + 1] = b;
-        faces[ba + 2] = c;
+        faces.at(i) = rgm::uvec3(a, b, c);  
     }
 
     void Mesh::add_face(unsigned int a, unsigned int b, unsigned int c)
     {
-        faces.push_back(a);
-        faces.push_back(b);
-        faces.push_back(c);
+        faces.push_back(rgm::uvec3(a, b, c));         
     }
 
-    std::tuple<unsigned int, unsigned int, unsigned int> Mesh::get_face(size_t i) const
+    rgm::uvec3 Mesh::get_face(size_t i) const
     {
-        size_t b = i * 3;
-        return std::make_tuple(faces[b + 0], faces[b + 1], faces[b + 2]);
+        return faces.at(i);
     }
 
-    // void Mesh::compute_normals();
-
-    // void Mesh::compute_tangents();
-
-    void Mesh::upload()
+    void Mesh::compute_normals()
     {
-        glGenVertexArrays(1, &vao);
-        glBindVertexArray(vao);
+        normals.resize(vertices.size(), rgm::vec3(0));
 
-        glGenBuffers(6, buffers);
-
-        size_t vcount = get_vertex_count();
-        size_t fcount = get_face_count();
-
-        glBindBuffer(GL_ARRAY_BUFFER, buffers[VERTEX_BUFFER]);
-        glBufferData(GL_ARRAY_BUFFER, vcount * 4 * sizeof(float), &vertices[0], GL_STATIC_DRAW);
-        glVertexAttribPointer(VERTEX_BUFFER, 4, GL_FLOAT, GL_FALSE, 0, 0);
-        glEnableVertexAttribArray(VERTEX_BUFFER);
-
-        glBindBuffer(GL_ARRAY_BUFFER, buffers[NORMAL_BUFFER]);
-        glBufferData(GL_ARRAY_BUFFER, vcount * 3 * sizeof(float), &normals[0], GL_STATIC_DRAW);
-        glVertexAttribPointer(NORMAL_BUFFER, 3, GL_FLOAT, GL_FALSE, 0, 0);
-        glEnableVertexAttribArray(NORMAL_BUFFER);
-
-        glBindBuffer(GL_ARRAY_BUFFER, buffers[TEXCOORD_BUFFER]);
-        glBufferData(GL_ARRAY_BUFFER, vcount * 2 * sizeof(float), &texcoords[0], GL_STATIC_DRAW);
-        glVertexAttribPointer(TEXCOORD_BUFFER, 2, GL_FLOAT, GL_FALSE, 0, 0);
-        glEnableVertexAttribArray(TEXCOORD_BUFFER);
-
-        glBindBuffer(GL_ARRAY_BUFFER, buffers[TANGENT_BUFFER]);
-        glBufferData(GL_ARRAY_BUFFER, vcount * 3 * sizeof(float), &tangents[0], GL_STATIC_DRAW);
-        glVertexAttribPointer(TANGENT_BUFFER, 3, GL_FLOAT, GL_FALSE, 0, 0);
-        glEnableVertexAttribArray(TANGENT_BUFFER);
-
-        glBindBuffer(GL_ARRAY_BUFFER, buffers[COLOR_BUFFER]);
-        glBufferData(GL_ARRAY_BUFFER, vcount * 4 * sizeof(float), &colors[0], GL_STATIC_DRAW);
-        glVertexAttribPointer(COLOR_BUFFER, 4, GL_FLOAT, GL_FALSE, 0, 0);
-        glEnableVertexAttribArray(COLOR_BUFFER);
-
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[INDEX_BUFFER]);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, fcount * 3 * sizeof(unsigned int), &faces[0], GL_STATIC_DRAW);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-        glBindVertexArray(0);
-    }
-
-    void Mesh::release()
-    {
-        if (vao != 0)
+        for (size_t i = 0; i < faces.size(); i++)
         {
-            glDeleteVertexArrays(1, &vao);
-            glDeleteBuffers(6, buffers);
-            vao = 0;
-        }        
-    }
+            unsigned int ia = faces[i][0];
+            unsigned int ib = faces[i][1];
+            unsigned int ic = faces[i][2];
 
-    void Mesh::draw() const
-    {
-        if (vao == 0)
-        {
-            const_cast<Mesh*>(this)->upload();
+            rgm::vec3 e1 = vertices[ia] - vertices[ib];
+            rgm::vec3 e2 = vertices[ia] - vertices[ic];
+            rgm::vec3 no = rgm::cross(e1, e2);
+
+            normals[ia] += no;
+            normals[ib] += no;
+            normals[ic] += no;
         }
 
-        glBindVertexArray(vao);
+        for (size_t i = 0; i < normals.size(); i++)
+        {
+            normals[i] = rgm::normalize(normals[i]);
+        }
+    }
 
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[INDEX_BUFFER]);
-        glDrawElements(GL_TRIANGLES, faces.size() * 3, GL_UNSIGNED_INT, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    void Mesh::compute_tangents()
+    {
+        std::vector<rgm::vec3> tan1(get_vertex_count(), rgm::vec3(0));
+        std::vector<rgm::vec3> tan2(get_vertex_count(), rgm::vec3(0));
+        
+        for (size_t i = 0; i < faces.size(); i++)
+        {
+            rgm::vec3 v1 = vertices[faces[i][0]];
+            rgm::vec3 v2 = vertices[faces[i][1]];
+            rgm::vec3 v3 = vertices[faces[i][2]];
+            
+            rgm::vec2 w1 = get_texcoord(faces[i][0]);
+            rgm::vec2 w2 = get_texcoord(faces[i][1]);
+            rgm::vec2 w3 = get_texcoord(faces[i][2]);
+            
+            float x1 = v2[0] - v1[0];
+            float x2 = v3[0] - v1[0];
+            float y1 = v2[1] - v1[1];
+            float y2 = v3[1] - v1[1];
+            float z1 = v2[2] - v1[2];
+            float z2 = v3[2] - v1[2];
+            
+            float s1 = w2[0] - w1[0];
+            float s2 = w3[0] - w1[0];
+            float t1 = w2[1] - w1[1];
+            float t2 = w3[1] - w1[1];
+            
+            float r = 1.0F / (s1 * t2 - s2 * t1);
+            rgm::vec3 sdir((t2 * x1 - t1 * x2) * r, (t2 * y1 - t1 * y2) * r, (t2 * z1 - t1 * z2) * r);
+            rgm::vec3 tdir((s1 * x2 - s2 * x1) * r, (s1 * y2 - s2 * y1) * r, (s1 * z2 - s2 * z1) * r);
+            
+            tan1[faces[i][0]] += sdir;
+            tan1[faces[i][1]] += sdir;
+            tan1[faces[i][2]] += sdir;
+            
+            tan2[faces[i][0]] += tdir;
+            tan2[faces[i][1]] += tdir;
+            tan2[faces[i][2]] += tdir;
+        }
 
-        glBindVertexArray(0);
+        tangents.resize(vertices.size());
+        for (size_t i = 0; i < get_vertex_count(); i++)
+        {
+            rgm::vec3& n  = normals[i];
+            rgm::vec3& t1 = tan1[i];
+            rgm::vec3& t2 = tan2[i];
+            
+            rgm::vec3 t = rgm::normalize(t1 - n * rgm::dot(n, t1));
+            if (rgm::dot(rgm::cross(n, t1), t2) < 0.0f) 
+            {
+                tangents[i] = -t;
+            }
+            else
+            {
+                tangents[i] = t;
+            }            
+        }
     }
     
-    std::shared_ptr<Mesh> load_mesh(const std::string& file)
+    std::tuple<rgm::vec3, rgm::vec3> Mesh::get_bounds() const
     {
-        std::shared_ptr<Mesh> mesh(new Mesh);
-        mesh->load(file);
-        return mesh;
+        return std::make_tuple(min, max);
+    }
+
+    std::tuple<rgm::vec3, float> Mesh::get_bounding_sphere() const
+    {
+        auto center = (min + max) / 2.0f;
+        auto radius = rgm::length(max - center);
+        return std::make_tuple(center, radius);
+    }
+
+    const std::vector<rgm::vec3>& Mesh::get_vertices() const
+    {
+        return vertices;
+    }
+
+    const std::vector<rgm::vec3>& Mesh::get_normals() const
+    {
+        return normals;
+    }
+
+    const std::vector<rgm::vec2>& Mesh::get_texcoords() const
+    {
+        return texcoords;
+    }
+
+    const std::vector<rgm::vec3>& Mesh::get_tangents() const
+    {
+        return tangents;
+    }
+
+    const std::vector<rgm::uvec3>& Mesh::get_faces() const
+    {
+        return faces;
+    }
+
+    void Mesh::load_ply(const std::string& file)
+    {
+        PlyParser parser;
+        parser.parse(file);
+
+        vertices  = parser.get_vertices(); 
+        normals   = parser.get_normals();  
+        texcoords = parser.get_texcoords();
+
+        for (rgm::vec3 v : vertices)
+        {
+            min = rgm::min(min, v);
+            max = rgm::max(max, v);
+        }
+
+        auto fs = parser.get_indexes(); 
+        faces.resize(fs.size());
+        for (size_t i = 0; i < fs.size(); i++)
+        {
+            faces[i] = rgm::uvec3(fs[i][0], fs[i][1], fs[i][2]);  
+        } 
+    }
+
+    struct iv3less
+    {
+        bool operator () (const rgm::ivec3& a, const rgm::ivec3& b) const 
+        {
+            if (a[0] == b[0])
+            {
+                if (a[1] == b[1])
+                {
+                    return a[2] < b[2];
+                }
+                else
+                {
+                    return a[1] < b[1];
+                }
+            }
+            else
+            {
+                return a[0] < b[0];
+            }
+        }
+    };
+
+    void Mesh::load_obj(const std::string& file)
+    {
+        ObjParser parser;
+        parser.parse(file);
+
+        auto v = parser.get_vertices(); 
+        auto n = parser.get_normals();  
+        auto t = parser.get_texcoords();
+
+        auto f = parser.get_faces();
+        
+        vertices.clear();
+        normals.clear();
+        texcoords.clear();
+
+        
+        std::map<rgm::ivec3, size_t, iv3less> index_mapping;
+
+        for (auto face : f)
+        {
+            std::vector<size_t> idx;
+
+            for (rgm::ivec3 fv : face)
+            {
+                auto i = index_mapping.find(fv);
+                if (i != index_mapping.end())
+                {
+                    idx.push_back(i->second);
+                }
+                else
+                {
+                    size_t vi = vertices.size();
+
+                    vertices.push_back(v[fv[0] - 1]);
+                    normals.push_back(n[fv[2] - 1]);
+
+                    rgm::vec2 tc = t[fv[1] - 1];
+                    tc[1] = 1 - tc[1];
+                    texcoords.push_back(tc);
+                                        
+                    index_mapping[fv] = vi;
+                    idx.push_back(vi);
+                }
+            }   
+
+            for (unsigned int i = 2; i < idx.size(); i++)
+            {
+                add_face(idx[0], idx[i - 1], idx[i]);
+            }
+        }
+
+        for (rgm::vec3 v : vertices)
+        {
+            min = rgm::min(min, v);
+            max = rgm::max(max, v);
+        }
     }
 }

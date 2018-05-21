@@ -1,7 +1,7 @@
 /*
   pkzo
 
-  Copyright (c) 2014-2016 Sean Farrell
+  Copyright (c) 2014-2017 Sean Farrell
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -30,21 +30,31 @@
 
 namespace pkzo
 {
-    Mouse::Mouse() {}
-    
-    Mouse::~Mouse() {}
+    std::vector<Mouse*> Mouse::instances;
 
-    void Mouse::on_move(std::function<void (rgm::ivec2, rgm::ivec2)> cb)
+    Mouse::Mouse() 
+    {
+        instances.push_back(this);
+    }
+    
+    Mouse::~Mouse() 
+    {
+        auto i = std::find(instances.begin(), instances.end(), this);
+        assert(i != instances.end());
+        instances.erase(i);        
+    }
+
+    void Mouse::on_move(std::function<void (rgm::uvec2, rgm::ivec2)> cb)
     {
         move_cb = cb;
     }
 
-    void Mouse::on_button_press(std::function<void (unsigned int, rgm::ivec2)> cb)
+    void Mouse::on_button_press(std::function<void (unsigned int, rgm::uvec2)> cb)
     {
         button_press_cb = cb;
     }
     
-    void Mouse::on_button_release(std::function<void (unsigned int, rgm::ivec2)> cb)
+    void Mouse::on_button_release(std::function<void (unsigned int, rgm::uvec2)> cb)
     {
         button_release_cb = cb;
     }   
@@ -78,23 +88,19 @@ namespace pkzo
             case SDL_MOUSEBUTTONDOWN:
                 if (button_press_cb)
                 {
-                   rgm::ivec2 pos(event.button.x, event.button.y);
-                    button_press_cb(event.button.button, pos);
+                    button_press_cb(event.button.button, rgm::uvec2(event.button.x, event.button.y));
                 }
                 break;
             case SDL_MOUSEBUTTONUP:
                 if (button_release_cb)
                 {
-                   rgm::ivec2 pos(event.button.x, event.button.y);
-                    button_release_cb(event.button.button, pos);
+                    button_release_cb(event.button.button, rgm::uvec2(event.button.x, event.button.y));
                 }
                 break;
             case SDL_MOUSEMOTION:
                 if (move_cb)
                 {
-                   rgm::ivec2 pos(event.motion.x, event.motion.y);
-                   rgm::ivec2 mov(event.motion.xrel, event.motion.yrel);
-                    move_cb(mov, pos);
+                    move_cb(rgm::uvec2(event.motion.x, event.motion.y), rgm::ivec2(event.motion.xrel, event.motion.yrel));
                 }
                 break;
             default:

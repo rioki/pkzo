@@ -1,14 +1,7 @@
+# Visual Studio Files
 .vs
-/x86
-/x64
-/*/x86
-/*/x64
-/examples/*/x86
-/examples/*/x64
-apidoc
-*.opensdf
-*.sdf
+x86
+x64
 *.user
-*.opendb
-*.apps
-/pkzo-*/
+
+ext/*/

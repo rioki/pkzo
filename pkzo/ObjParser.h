@@ -1,5 +1,5 @@
 //
-// PLY Parser
+// OBJ Parser
 // 
 // Copyright (c) 2014 Sean Farrell
 // 
@@ -22,8 +22,8 @@
 // SOFTWARE.
 //
 
-#ifndef _PLY_PARSER_H_
-#define _PLY_PARSER_H_
+#ifndef _OBJ_PARSER_H_
+#define _OBJ_PARSER_H_
 
 #include <string>
 #include <fstream>
@@ -32,66 +32,81 @@
 
 #include <rgm/rgm.h>
 
-enum TokenType
-{
-    WHITESPACE,
-    NEWLINE,
-    IDENTIFIER,
-    NUMBER, 
-    END_OF_FILE
-};
-
-class PlyParser
+class ObjParser
 {
 public:
-    PlyParser();
 
-    ~PlyParser();
+    ObjParser();
+
+    ~ObjParser();
 
     const std::vector<rgm::vec3>& get_vertices() const;
-    const std::vector<rgm::vec3>& get_normals() const; 
-    const std::vector<rgm::vec2>& get_texcoords() const; 
-    const std::vector<rgm::ivec3>& get_indexes() const;  
+
+    const std::vector<rgm::vec3>& get_normals() const;
+
+    const std::vector<rgm::vec2>& get_texcoords() const;
+
+    const std::vector<std::vector<rgm::ivec3>>& get_faces() const;
 
     void parse(const std::string& file);
 
 private:
-    std::vector<rgm::vec3> vertices;  // v4f
-    std::vector<rgm::vec3> normals;   // v3f
-    std::vector<rgm::vec2> texcoords; // v2f
-    std::vector<rgm::ivec3> indexes;  // trangles
+    enum TokenType
+    {
+        NO_TOKEN,
+        WHITESPACE,
+        NEWLINE,
+        COMMENT,
+        IDENTIFIER,
+        NUMBER, 
+        SLASH,
+        DOT,
+        BSLASH,
+        END_OF_FILE
+    };
 
     std::ifstream input;
     std::string file;
     unsigned int line;
+        
+    TokenType   token;
+    TokenType   next_token;
+    std::string value;
+    std::string next_value;
 
-    // - type: vertex or face
-    // - number of entires
-    // - properties
-    typedef std::tuple<unsigned int, unsigned int, std::vector<std::string>> Element;  
-    std::vector<Element> elements;
+    std::vector<rgm::vec3> vertices;
+    std::vector<rgm::vec3> normals;
+    std::vector<rgm::vec2> texcoords;
+    std::vector<std::vector<rgm::ivec3>> faces;
 
-    TokenType get_next_token(std::string& value);
+    void get_next_token();
     TokenType lex_token(std::string& value);
     TokenType lex_whitespace(std::string& value);
     TokenType lex_newline(std::string& value);
+    TokenType lex_comment(std::string& value);
     TokenType lex_identifier(std::string& value);
     TokenType lex_number(std::string& value);
-    void lex_discard_line();
 
     void parse_keyword(const std::string& keyword);
     unsigned int parse_keyword(const std::vector<std::string>& keywords);
     std::string parse_identifier();
-    double parse_float();
+    std::string parse_identifier_or_number();
+    float parse_float();
     unsigned long parse_integer();
-        
+    std::string parse_filename();
 
-    void parse_header();
-    void parse_element();
-    void parse_property();
-    void parse_body();
-    void parse_vertex(size_t i, const std::vector<std::string>& properties);
+    void parse_line();
+    void parse_vertex();
+    void parse_texcoord();
+    void parse_normal();
+    void parse_parmeter();
     void parse_face();
+    void parse_mtllib();
+    void parse_usemtl();
+    void parse_object();
+    void parse_group();
+    void parse_smothing();
+    rgm::ivec3 parse_face_point();
 };
 
 #endif

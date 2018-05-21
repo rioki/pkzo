@@ -1,7 +1,7 @@
 /*
   pkzo
 
-  Copyright (c) 2014-2016 Sean Farrell
+  Copyright (c) 2014-2017 Sean Farrell
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -27,21 +27,22 @@
 
 #include <memory>
 #include <string>
+
 #include <rgm/rgm.h>
 
 #include "defines.h"
-#include "Texture.h"
-#include "TTFSentry.h"
+#include "SdlSentry.h"
 
 struct _TTF_Font;
 typedef struct _TTF_Font TTF_Font;
 
 namespace pkzo
 {
+    class Image;
+
     class PKZO_EXPORT Font
     {
     public:
-        Font();
 
         Font(const std::string& file, unsigned int size);
 
@@ -51,20 +52,15 @@ namespace pkzo
 
         const Font& operator = (const Font&) = delete;
 
-        void load(const std::string& file, unsigned int size);
+        rgm::uvec2 estimate(const std::string& text) const;
 
-       rgm::ivec2 estimate(const std::string& text) const;
-
-        Texture render(const std::string& text) const;
+        std::shared_ptr<Image> render(const std::string& text) const;
 
     private:
-        TTFSentry ttf_sentry;
+        SDLSentry sdl_sentry;
 
         TTF_Font* font; 
     };
-
-    PKZO_EXPORT
-    std::shared_ptr<Font> load_font(const std::string& file, unsigned int size);
 }
 
 #endif
