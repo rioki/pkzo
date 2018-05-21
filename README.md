@@ -24,7 +24,7 @@ portable build definitions are either high maintenance or moronic.
 
 ## License
 
-    Copyright 2018 Sean Farrell <sean.farrell@rioki.org>
+    Copyright 2014-2018 Sean Farrell <sean.farrell@rioki.org>
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
