@@ -1,4 +1,26 @@
-# Happy Hawaiian Hibiscus
+# pkzo
+
+## About
+
+I kept writing the similar objects over and over, so I decided to distill them 
+into one consistent library. The libary provides all you need to quickly get 
+up to speed with OpenGL.
+
+pkzo provides the following features:
+
+* window with OpenGL 4.0 rendering context
+* mouse and keyboard abstraction
+* triangle mesh class, that load PLY and OBJ files
+* texture class, that loads JPEG, PNG, TIFF and WebP images
+* loading TTF fonts and rendering them to 2D texture
+
+# Portability
+
+The code itself should compile on any system that supports C++11 and libSDL. 
+I just can't be bothered to maintain multiple build definitions and all 
+portable build definitions are either high maintenance or moronic.
+
+(Before you suggest CMake, it's one of the moronic ones.)
 
 ## License
 
@@ -21,5 +43,3 @@
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
-
-
