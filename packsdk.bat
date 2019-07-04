@@ -8,8 +8,8 @@ mkdir pkzo-%VSERION%
 mkdir pkzo-%VSERION%\include
 mkdir pkzo-%VSERION%\include\pkzo
 xcopy /s pkzo\*.h pkzo-%VSERION%\include\pkzo
-mkdir pkzo-%VSERION%\include\rgm
-xcopy /s ext\rgm-0.1.1\include\rgm\*.h pkzo-%VSERION%\include\rgm
+mkdir pkzo-%VSERION%\include\glm
+xcopy /s ext\glm-0.1.1\include\glm\*.h pkzo-%VSERION%\include\glm
 
 mkdir pkzo-%VSERION%\x86\Debug
 copy x86\Debug\*.dll pkzo-%VSERION%\x86\Debug

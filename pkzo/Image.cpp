@@ -1,32 +1,13 @@
-/*
-pkzo
-
-Copyright (c) 2014-2018 Sean Farrell
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
+// pkzo
+// Copyright (c) 2014-2019 Sean Farrell
+// See READNE.md for licensing details.
 
 #include "Image.h"
 
 #include <cassert>
-#include <SDL.h>
-#include <SDL_image.h>
+#include <stdexcept>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <algorithm>
 
 namespace pkzo
@@ -145,10 +126,10 @@ namespace pkzo
         surfaces.clear();
     }
 
-    rgm::uvec2 Image::get_size() const
+    glm::uvec2 Image::get_size() const
     {
         assert(!surfaces.empty());
-        return rgm::uvec2(surfaces[0]->w, surfaces[0]->h);
+        return glm::uvec2(surfaces[0]->w, surfaces[0]->h);
     }
 
     ColorType Image::get_color_type() const

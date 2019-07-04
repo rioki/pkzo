@@ -30,7 +30,7 @@
 #include <vector>
 #include <tuple>
 
-#include <rgm/rgm.h>
+#include <glm/glm.hpp>
 
 class ObjParser
 {
@@ -40,13 +40,13 @@ public:
 
     ~ObjParser();
 
-    const std::vector<rgm::vec3>& get_vertices() const;
+    const std::vector<glm::vec3>& get_vertices() const;
 
-    const std::vector<rgm::vec3>& get_normals() const;
+    const std::vector<glm::vec3>& get_normals() const;
 
-    const std::vector<rgm::vec2>& get_texcoords() const;
+    const std::vector<glm::vec2>& get_texcoords() const;
 
-    const std::vector<std::vector<rgm::ivec3>>& get_faces() const;
+    const std::vector<std::vector<glm::ivec3>>& get_faces() const;
 
     void parse(const std::string& file);
 
@@ -74,10 +74,10 @@ private:
     std::string value;
     std::string next_value;
 
-    std::vector<rgm::vec3> vertices;
-    std::vector<rgm::vec3> normals;
-    std::vector<rgm::vec2> texcoords;
-    std::vector<std::vector<rgm::ivec3>> faces;
+    std::vector<glm::vec3> vertices;
+    std::vector<glm::vec3> normals;
+    std::vector<glm::vec2> texcoords;
+    std::vector<std::vector<glm::ivec3>> faces;
 
     void get_next_token();
     TokenType lex_token(std::string& value);
@@ -106,7 +106,7 @@ private:
     void parse_object();
     void parse_group();
     void parse_smothing();
-    rgm::ivec3 parse_face_point();
+    glm::ivec3 parse_face_point();
 };
 
 #endif

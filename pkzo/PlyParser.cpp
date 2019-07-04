@@ -53,22 +53,22 @@ PlyParser::PlyParser()
 
 PlyParser::~PlyParser() {}
 
-const std::vector<rgm::vec3>& PlyParser::get_vertices() const
+const std::vector<glm::vec3>& PlyParser::get_vertices() const
 {
     return vertices;
 }
 
-const std::vector<rgm::vec3>& PlyParser::get_normals() const
+const std::vector<glm::vec3>& PlyParser::get_normals() const
 {
     return normals;
 }
 
-const std::vector<rgm::vec2>& PlyParser::get_texcoords() const
+const std::vector<glm::vec2>& PlyParser::get_texcoords() const
 {
     return texcoords;
 }
 
-const std::vector<rgm::ivec3>& PlyParser::get_indexes() const
+const std::vector<glm::ivec3>& PlyParser::get_indexes() const
 {
     return indexes;
 }
@@ -477,9 +477,9 @@ void PlyParser::parse_vertex(size_t elem, const std::vector<std::string>& proper
         values[properties[i]] = (float)parse_float();
     }
 
-    vertices.push_back(rgm::vec3(values["x"], values["y"], values["z"]));
-    normals.push_back(rgm::vec3(values["nx"], values["ny"], values["nz"]));
-    texcoords.push_back(rgm::vec2(values["s"], 1.0f - values["t"]));
+    vertices.push_back(glm::vec3(values["x"], values["y"], values["z"]));
+    normals.push_back(glm::vec3(values["nx"], values["ny"], values["nz"]));
+    texcoords.push_back(glm::vec2(values["s"], 1.0f - values["t"]));
 }
 
 void PlyParser::parse_face()
@@ -495,6 +495,6 @@ void PlyParser::parse_face()
     // we build fans, when n != 3
     for (unsigned int i = 2; i < indglows.size(); i++)
     {
-        indexes.push_back(rgm::ivec3(indglows[0], indglows[i - 1], indglows[i]));
+        indexes.push_back(glm::ivec3(indglows[0], indglows[i - 1], indglows[i]));
     }
 }

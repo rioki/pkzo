@@ -1,26 +1,6 @@
-//
 // pkzo
-// 
-// Copyright (c) 2014-2018 Sean Farrell
-// 
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-// 
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-//
+// Copyright (c) 2014-2019 Sean Farrell
+// See READNE.md for licensing details.
 
 #ifndef _PKZO_MESH_H_
 #define _PKZO_MESH_H_
@@ -28,7 +8,8 @@
 #include <memory>
 #include <vector>
 #include <tuple>
-#include <rgm/rgm.h>
+#include <string>
+#include <glm/glm.hpp>
 #include "defines.h"
 
 namespace pkzo
@@ -51,21 +32,21 @@ namespace pkzo
 
         size_t get_vertex_count() const;
 
-        void set_vertex(size_t i, const rgm::vec3& v);
+        void set_vertex(size_t i, const glm::vec3& v);
 
-        rgm::vec3 get_vertex(size_t i) const;
+        glm::vec3 get_vertex(size_t i) const;
 
-        void set_normal(size_t i, const rgm::vec3& v);
+        void set_normal(size_t i, const glm::vec3& v);
 
-        rgm::vec3 get_normal(size_t i) const;
+        glm::vec3 get_normal(size_t i) const;
 
-        void set_texcoord(size_t i, const rgm::vec2& v);
+        void set_texcoord(size_t i, const glm::vec2& v);
 
-        rgm::vec2 get_texcoord(size_t i) const;
+        glm::vec2 get_texcoord(size_t i) const;
 
-        void set_tangent(size_t i, const rgm::vec3& v);
+        void set_tangent(size_t i, const glm::vec3& v);
 
-        rgm::vec3 get_tangent(size_t i) const;
+        glm::vec3 get_tangent(size_t i) const;
 
         void set_face_count(size_t value);
 
@@ -75,36 +56,36 @@ namespace pkzo
 
         void add_face(unsigned int a, unsigned int b, unsigned int c);
 
-        rgm::uvec3 get_face(size_t i) const;
+        glm::uvec3 get_face(size_t i) const;
 
         void compute_normals();
 
         void compute_tangents();
 
-        std::tuple<rgm::vec3, rgm::vec3> get_bounds() const;
+        std::tuple<glm::vec3, glm::vec3> get_bounds() const;
 
-        std::tuple<rgm::vec3, float> get_bounding_sphere() const;
+        std::tuple<glm::vec3, float> get_bounding_sphere() const;
 
-        const std::vector<rgm::vec3>& get_vertices() const;
+        const std::vector<glm::vec3>& get_vertices() const;
 
-        const std::vector<rgm::vec3>& get_normals() const;
+        const std::vector<glm::vec3>& get_normals() const;
 
-        const std::vector<rgm::vec2>& get_texcoords() const;
+        const std::vector<glm::vec2>& get_texcoords() const;
 
-        const std::vector<rgm::vec3>& get_tangents() const;
+        const std::vector<glm::vec3>& get_tangents() const;
 
-        const std::vector<rgm::uvec3>& get_faces() const;
+        const std::vector<glm::uvec3>& get_faces() const;
 
     private:
-        rgm::vec3 min;
-        rgm::vec3 max;
+        glm::vec3 min;
+        glm::vec3 max;
 
-        std::vector<rgm::vec3> vertices;  
-        std::vector<rgm::vec3> normals;   
-        std::vector<rgm::vec2> texcoords; 
-        std::vector<rgm::vec3> tangents; 
+        std::vector<glm::vec3> vertices;  
+        std::vector<glm::vec3> normals;   
+        std::vector<glm::vec2> texcoords; 
+        std::vector<glm::vec3> tangents; 
         
-        std::vector<rgm::uvec3> faces;
+        std::vector<glm::uvec3> faces;
 
         void load_ply(const std::string& file);
         void load_obj(const std::string& file);

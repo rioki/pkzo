@@ -1,7 +1,10 @@
+// pkzo
+// Copyright (c) 2014-2019 Sean Farrell
+// See READNE.md for licensing details.
 
 #include "pkzo.h"
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
 namespace pkzo
 {

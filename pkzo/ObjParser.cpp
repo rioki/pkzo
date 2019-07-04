@@ -55,22 +55,22 @@ ObjParser::ObjParser()
 
 ObjParser::~ObjParser() {}
 
-const std::vector<rgm::vec3>& ObjParser::get_vertices() const
+const std::vector<glm::vec3>& ObjParser::get_vertices() const
 {
     return vertices;
 }
 
-const std::vector<rgm::vec3>& ObjParser::get_normals() const
+const std::vector<glm::vec3>& ObjParser::get_normals() const
 {
     return normals;
 }
 
-const std::vector<rgm::vec2>& ObjParser::get_texcoords() const
+const std::vector<glm::vec2>& ObjParser::get_texcoords() const
 {
     return texcoords;
 }
 
-const std::vector<std::vector<rgm::ivec3>>& ObjParser::get_faces() const
+const std::vector<std::vector<glm::ivec3>>& ObjParser::get_faces() const
 {
     return faces;
 }
@@ -462,7 +462,7 @@ void ObjParser::parse_vertex()
         w = parse_float();
     }
 
-    vertices.push_back(rgm::vec3(x, y, z));
+    vertices.push_back(glm::vec3(x, y, z));
 }
     
 void ObjParser::parse_texcoord() 
@@ -475,7 +475,7 @@ void ObjParser::parse_texcoord()
         w = parse_float();
     }
 
-    texcoords.push_back(rgm::vec2(u, v));
+    texcoords.push_back(glm::vec2(u, v));
 }
     
 void ObjParser::parse_normal() 
@@ -484,7 +484,7 @@ void ObjParser::parse_normal()
     float y = parse_float();
     float z = parse_float();
 
-    normals.push_back(rgm::vec3(x, y, z));
+    normals.push_back(glm::vec3(x, y, z));
 }
 
 void ObjParser::parse_parmeter()
@@ -505,18 +505,18 @@ void ObjParser::parse_parmeter()
     
 void ObjParser::parse_face() 
 {
-    std::vector<rgm::ivec3> points;
+    std::vector<glm::ivec3> points;
 
     while (next_token == NUMBER)
     {
-        rgm::ivec3 p = parse_face_point();
+        glm::ivec3 p = parse_face_point();
         points.push_back(p);
     }
 
     faces.push_back(points);
 }
 
-rgm::ivec3 ObjParser::parse_face_point()
+glm::ivec3 ObjParser::parse_face_point()
 {
     int v = -1;
     int t = -1;
@@ -544,7 +544,7 @@ rgm::ivec3 ObjParser::parse_face_point()
         }
     }
 
-    return rgm::ivec3(v, t, n);
+    return glm::ivec3(v, t, n);
 }
 
 void ObjParser::parse_mtllib()

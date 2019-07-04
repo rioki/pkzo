@@ -30,7 +30,7 @@
 #include <vector>
 #include <tuple>
 
-#include <rgm/rgm.h>
+#include <glm/glm.hpp>
 
 enum TokenType
 {
@@ -48,18 +48,18 @@ public:
 
     ~PlyParser();
 
-    const std::vector<rgm::vec3>& get_vertices() const;
-    const std::vector<rgm::vec3>& get_normals() const; 
-    const std::vector<rgm::vec2>& get_texcoords() const; 
-    const std::vector<rgm::ivec3>& get_indexes() const;  
+    const std::vector<glm::vec3>& get_vertices() const;
+    const std::vector<glm::vec3>& get_normals() const; 
+    const std::vector<glm::vec2>& get_texcoords() const; 
+    const std::vector<glm::ivec3>& get_indexes() const;  
 
     void parse(const std::string& file);
 
 private:
-    std::vector<rgm::vec3> vertices;  // v4f
-    std::vector<rgm::vec3> normals;   // v3f
-    std::vector<rgm::vec2> texcoords; // v2f
-    std::vector<rgm::ivec3> indexes;  // trangles
+    std::vector<glm::vec3> vertices;  // v4f
+    std::vector<glm::vec3> normals;   // v3f
+    std::vector<glm::vec2> texcoords; // v2f
+    std::vector<glm::ivec3> indexes;  // trangles
 
     std::ifstream input;
     std::string file;

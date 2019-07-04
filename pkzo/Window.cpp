@@ -1,14 +1,18 @@
+// pkzo
+// Copyright (c) 2014-2019 Sean Farrell
+// See READNE.md for licensing details.
 
 #include "Window.h"
 
-#include <SDL.h>
-#include <SDL_opengl.h>
+#include <stdexcept>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>
 
 namespace pkzo
 {
     std::vector<Window*> Window::instances;
 
-    Window::Window(const rgm::uvec2& size, Mode m, const std::string& title)
+    Window::Window(const glm::uvec2& size, Mode m, const std::string& title)
     : mode(m)
     {
         instances.push_back(this);
@@ -64,11 +68,11 @@ namespace pkzo
         }
     }
 
-    rgm::uvec2 Window::get_size() const
+    glm::uvec2 Window::get_size() const
     {
         int w, h;
         SDL_GetWindowSize(window, &w, &h);
-        return rgm::uvec2(w, h);
+        return glm::uvec2(w, h);
     }
 
     Window::Mode Window::get_mode() const
