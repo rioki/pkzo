@@ -8,7 +8,7 @@
 #include <memory>
 #include <string>
 #include <vector>
-
+#include <filesystem>
 #include <glm/glm.hpp>
 
 #include "defines.h"
@@ -16,10 +16,7 @@
 
 struct SDL_Surface;
 
-namespace glow
-{
-    class Texture;
-}
+namespace fs = std::filesystem;
 
 namespace pkzo
 {
@@ -35,11 +32,7 @@ namespace pkzo
     {
     public:
 
-        Image(const std::string& file);
-
-        Image(const std::string& file_xpos, const std::string& file_xneg, 
-              const std::string& file_ypos, const std::string& file_yneg,
-              const std::string& file_zpos, const std::string& file_zneg);
+        Image(const fs::path& file);
 
         Image(unsigned int w, unsigned int h, ColorType color_type, const unsigned char* data);
 
@@ -60,7 +53,7 @@ namespace pkzo
     private:
         SDLSentry sdl_sentry;
 
-        std::vector<SDL_Surface*>      surfaces;
+        SDL_Surface* surface = nullptr;
     };
 }
 

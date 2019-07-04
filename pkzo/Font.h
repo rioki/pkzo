@@ -7,7 +7,7 @@
 
 #include <memory>
 #include <string>
-
+#include <filesystem>
 #include <glm/glm.hpp>
 
 #include "defines.h"
@@ -15,6 +15,8 @@
 
 struct _TTF_Font;
 typedef struct _TTF_Font TTF_Font;
+
+namespace fs = std::filesystem;
 
 namespace pkzo
 {
@@ -24,7 +26,7 @@ namespace pkzo
     {
     public:
 
-        Font(const std::string& file, unsigned int size);
+        Font(const fs::path& file, unsigned int size);
 
         Font(const Font&) = delete;
 

@@ -11,9 +11,9 @@
 
 namespace pkzo
 {
-    Font::Font(const std::string& file, unsigned int size)
+    Font::Font(const fs::path& file, unsigned int size)
     {
-        font = TTF_OpenFont(file.c_str(), size);
+        font = TTF_OpenFont(file.string().data(), size);
         if (font == nullptr)
         {
             throw std::runtime_error(TTF_GetError());
@@ -25,14 +25,13 @@ namespace pkzo
         assert(font != nullptr);
         TTF_CloseFont(font);
     }
-  
 
     glm::uvec2 Font::estimate(const std::string& text) const
     {
         assert(font != nullptr);
 
         int w, h;
-        TTF_SizeUTF8(font, text.c_str(), &w, &h);
+        TTF_SizeUTF8(font, text.data(), &w, &h);
 
         return glm::uvec2(w, h);
     }
@@ -54,7 +53,7 @@ namespace pkzo
         }
         else
         {
-            surface = TTF_RenderUTF8_Blended(font, text.c_str(), sdl_color);
+            surface = TTF_RenderUTF8_Blended(font, text.data(), sdl_color);
         }
 
         return std::make_shared<Image>(surface);

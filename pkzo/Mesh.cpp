@@ -8,7 +8,6 @@
 #include <map>
 #include <stdexcept>
 
-#include "path.h"
 #include "strex.h"
 
 #include "PlyParser.h"
@@ -19,11 +18,10 @@ namespace pkzo
     Mesh::Mesh()
     : min(0), max(0) {}
 
-    Mesh::Mesh(const std::string& file)
+    Mesh::Mesh(const fs::path& file)
     : Mesh()
     {
-        std::string ext = path::ext(file);
-        switch (strex::hash(ext))
+        switch (strex::hash(file.extension().string()))
         {
         case strex::hash("ply"):
             load_ply(file);
@@ -246,10 +244,10 @@ namespace pkzo
         return faces;
     }
 
-    void Mesh::load_ply(const std::string& file)
+    void Mesh::load_ply(const fs::path& file)
     {
         PlyParser parser;
-        parser.parse(file);
+        parser.parse(file.string());
 
         vertices  = parser.get_vertices(); 
         normals   = parser.get_normals();  
@@ -291,10 +289,10 @@ namespace pkzo
         }
     };
 
-    void Mesh::load_obj(const std::string& file)
+    void Mesh::load_obj(const fs::path& file)
     {
         ObjParser parser;
-        parser.parse(file);
+        parser.parse(file.string());
 
         auto v = parser.get_vertices(); 
         auto n = parser.get_normals();  

@@ -9,8 +9,11 @@
 #include <vector>
 #include <tuple>
 #include <string>
+#include <filesystem>
 #include <glm/glm.hpp>
 #include "defines.h"
+
+namespace fs = std::filesystem;
 
 namespace pkzo
 {
@@ -20,7 +23,7 @@ namespace pkzo
         
         Mesh();
 
-        Mesh(const std::string& file);
+        Mesh(const fs::path& file);
 
         Mesh(const Mesh&) = delete;
 
@@ -87,8 +90,8 @@ namespace pkzo
         
         std::vector<glm::uvec3> faces;
 
-        void load_ply(const std::string& file);
-        void load_obj(const std::string& file);
+        void load_ply(const fs::path& file);
+        void load_obj(const fs::path& file);
     };
 }
 

@@ -12,61 +12,13 @@
 
 namespace pkzo
 {
-    Image::Image(const std::string& file)
+    Image::Image(const fs::path& file)
     {
-        auto surface = IMG_Load(file.c_str());
+        surface = IMG_Load(file.string().data());
         if (surface == nullptr)
         {
             throw std::runtime_error(IMG_GetError());
         }
-        surfaces.push_back(surface);
-    }
-
-    Image::Image(const std::string& file_xpos, const std::string& file_xneg,
-                 const std::string& file_ypos, const std::string& file_yneg,
-                 const std::string& file_zpos, const std::string& file_zneg)
-    {
-        auto xpos = IMG_Load(file_xpos.c_str());
-        if (xpos == nullptr)
-        {
-            throw std::runtime_error(IMG_GetError());
-        }
-        surfaces.push_back(xpos);
-
-        auto xneg = IMG_Load(file_xneg.c_str());
-        if (xneg == nullptr)
-        {
-            throw std::runtime_error(IMG_GetError());
-        }
-        surfaces.push_back(xneg);
-
-        auto ypos = IMG_Load(file_ypos.c_str());
-        if (ypos == nullptr)
-        {
-            throw std::runtime_error(IMG_GetError());
-        }
-        surfaces.push_back(ypos);
-
-        auto yneg = IMG_Load(file_yneg.c_str());
-        if (yneg == nullptr)
-        {
-            throw std::runtime_error(IMG_GetError());
-        }
-        surfaces.push_back(yneg);
-
-        auto zpos = IMG_Load(file_zpos.c_str());
-        if (zpos == nullptr)
-        {
-            throw std::runtime_error(IMG_GetError());
-        }
-        surfaces.push_back(zpos);
-
-        auto zneg = IMG_Load(file_zneg.c_str());
-        if (zneg == nullptr)
-        {
-            throw std::runtime_error(IMG_GetError());
-        }
-        surfaces.push_back(zneg);
     }
 
     Image::Image(unsigned int w, unsigned int h, ColorType color_type, const unsigned char* data)
@@ -98,44 +50,42 @@ namespace pkzo
         void* cdata = malloc(w*h*bpp); // REVIEW: do we need to free this data?
         memcpy(cdata, data, w*h*bpp);
 
-        auto surface = SDL_CreateRGBSurfaceFrom(cdata, w, h, depth, pitch, rmask, gmask, bmask, amask);
+        surface = SDL_CreateRGBSurfaceFrom(cdata, w, h, depth, pitch, rmask, gmask, bmask, amask);
         if (surface == nullptr)
         {
-            throw std::runtime_error(IMG_GetError());
+            throw std::runtime_error(SDL_GetError());
         }
-        surfaces.push_back(surface);
     }
 
     Image::Image(SDL_Surface* s)
+    : surface(s)
     {
         assert(s != nullptr);
         if (s == nullptr)
         {
-            throw std::runtime_error(IMG_GetError());
+            throw std::invalid_argument("Image::Image surface is null.");
         }
-        surfaces.push_back(s);
     }
 
     Image::~Image()
     {
-        assert(!surfaces.empty());
-        for (auto surface : surfaces)
+        if (surface != nullptr)
         {
             SDL_FreeSurface(surface);
+            surface = nullptr;
         }
-        surfaces.clear();
     }
 
     glm::uvec2 Image::get_size() const
     {
-        assert(!surfaces.empty());
-        return glm::uvec2(surfaces[0]->w, surfaces[0]->h);
+        assert(surface != nullptr);
+        return glm::uvec2(surface->w, surface->h);
     }
 
     ColorType Image::get_color_type() const
     {
-        assert(!surfaces.empty());
-        switch (surfaces[0]->format->BytesPerPixel)
+        assert(surface != nullptr);
+        switch (surface->format->BytesPerPixel)
         {
         case 1:
             return MONOCHROME;
@@ -150,7 +100,7 @@ namespace pkzo
 
     const unsigned char* Image::get_data() const
     {
-        assert(!surfaces.empty());
-        return reinterpret_cast<const unsigned char*>(surfaces[0]->pixels);
+        assert(surface != nullptr);
+        return reinterpret_cast<const unsigned char*>(surface->pixels);
     }
 }
