@@ -12,7 +12,6 @@
 #include <glm/glm.hpp>
 
 #include "defines.h"
-#include "SDLSentry.h"
 
 struct SDL_Surface;
 
@@ -51,8 +50,6 @@ namespace pkzo
         const unsigned char* get_data() const;
 
     private:
-        SDLSentry sdl_sentry;
-
         SDL_Surface* surface = nullptr;
     };
 }

@@ -10,7 +10,6 @@
 #include <glm/glm.hpp>
 
 #include "defines.h"
-#include "SDLSentry.h"
 
 typedef struct SDL_Window SDL_Window;
 typedef void *SDL_GLContext;
@@ -54,10 +53,6 @@ namespace pkzo
         void draw();
         
     private:
-        static std::vector<Window*> instances;
-
-        SDLSentry sdl_sentry;
-
         SDL_Window*   window;
         SDL_GLContext glcontext;  
         
@@ -69,7 +64,7 @@ namespace pkzo
 
         void handle_event(SDL_Event& event);
            
-    friend PKZO_EXPORT void route_events();
+    friend class Engine;
     };
 }
 

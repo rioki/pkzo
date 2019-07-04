@@ -6,19 +6,13 @@
 #define _PKZO_H_
 
 #include "defines.h"
-
+#include "Engine.h"
 #include "Window.h"
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Font.h"
 #include "Image.h"
 #include "Mesh.h"
-
-namespace pkzo
-{
-    PKZO_EXPORT 
-    void route_events();
-}
 
 #endif
 

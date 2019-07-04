@@ -10,13 +10,9 @@
 
 namespace pkzo
 {
-    std::vector<Window*> Window::instances;
-
     Window::Window(const glm::uvec2& size, Mode m, const std::string& title)
     : mode(m)
     {
-        instances.push_back(this);
-        
         unsigned int flags = SDL_WINDOW_OPENGL;
         switch (mode)
         {
@@ -59,12 +55,6 @@ namespace pkzo
         {
             SDL_DestroyWindow(window);
             window = nullptr;
-        }
-
-        auto i = std::find(instances.begin(), instances.end(), this);
-        if (i != instances.end())
-        {
-            instances.erase(i);
         }
     }
 
