@@ -118,6 +118,7 @@ namespace pkzo
              switch (event.type)
              {
                 case SDL_QUIT:
+                    get_window().handle_event(event);
                     stop();
                     break; 
                 case SDL_WINDOWEVENT:

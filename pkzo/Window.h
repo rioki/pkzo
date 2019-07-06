@@ -5,11 +5,10 @@
 #ifndef _PKZO_WINDOW_H_
 #define _PKZO_WINDOW_H_
 
-#include <functional>
-#include <vector>
 #include <glm/glm.hpp>
 
 #include "defines.h"
+#include "EventEmitter.h"
 
 typedef struct SDL_Window SDL_Window;
 typedef void *SDL_GLContext;
@@ -17,7 +16,10 @@ union SDL_Event;
 
 namespace pkzo
 {
-    class PKZO_EXPORT Window
+    /*!
+     * The system window.
+     */
+    class PKZO_EXPORT Window : public EventEmitter
     {
     public:
         
@@ -26,6 +28,16 @@ namespace pkzo
             STATIC,            
             RESIZABLE,
             FULLSCREEN
+        };
+
+        /*!
+         * Events emited by the window.
+         */
+        enum Event
+        {
+            DRAW,   //!< The qindow is being redrawn. void()
+            RESIZE, //!< The qindow is being resized. void(uvec2 size)
+            CLOSE   //!< The window is being closed. void()
         };
 
         Window(const glm::uvec2& size, Mode mode = STATIC, const std::string& title = "PKZO " PZKO_VERSION);
@@ -44,12 +56,6 @@ namespace pkzo
 
         std::string get_title() const;
 
-        void on_draw(std::function<void ()> cb);
-
-        void on_resize(std::function<void (unsigned int, unsigned int)> cb);
-
-        void on_close(std::function<void ()> cb);
-
         void draw();
         
     private:
@@ -57,10 +63,6 @@ namespace pkzo
         SDL_GLContext glcontext;  
         
         Mode mode;  
-
-        std::function<void ()>                           draw_cb; 
-        std::function<void (unsigned int, unsigned int)> resize_cb;
-        std::function<void ()>                           close_cb;
 
         void handle_event(SDL_Event& event);
            

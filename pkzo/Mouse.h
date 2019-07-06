@@ -5,51 +5,61 @@
 #ifndef _PKZO_MOUSE_H_
 #define _PKZO_MOUSE_H_
 
-#include <functional>
-#include <vector>
-#include <glm/glm.hpp>
-
 #include "defines.h"
+#include "EventEmitter.h"
 
 union SDL_Event;
 
 namespace pkzo
 {
-    class PKZO_EXPORT Mouse
+    /*!
+     * The Mouse
+     */
+    class PKZO_EXPORT Mouse : public EventEmitter
     {
     public:
+
+        /*!
+         * Events emited by the keyboard.
+         */
+        enum Event
+        {
+            BUTTON_PRESS,      //!< A button is pressed. void(uint button, uvec2 pos)
+            BUTION_RELEASE,    //!< A button is released. void(uint button, uvec2 pos)
+            MOVE               //!< The mouse is moved void(ivec2 rel, uvec2 pos)
+        };
+
         Mouse();
-
         Mouse(const Mouse&) = delete;
-
         ~Mouse();
-
         const Mouse& operator = (const Mouse&) = delete;
 
-        void on_move(std::function<void (glm::uvec2, glm::ivec2)> cb);
-
-        void on_button_press(std::function<void (unsigned int, glm::uvec2)> cb);
-
-        void on_button_release(std::function<void (unsigned int, glm::uvec2)> cb);
-
+        /*!
+         * Show the cursor.
+         */
         void show_cursor();
     
+        /*!
+         * Hide the cursor.
+         */
         void hide_cursor();
         
+        /*!
+         * Check if the cursor is visible.
+         *
+         * @return true if the cursor is visible
+         */
         bool is_cursor_visible() const;    
 
-        /**
+        /*!
          * Check if a mouse button is pressed.
-         **/
+         *
+         * @param button the button to querry
+         * @return true if the button is pressed
+         */
         bool is_pressed(unsigned int button) const;
 
     private:
-        static std::vector<Mouse*> instances;
-
-        std::function<void (glm::uvec2, glm::ivec2)>   move_cb;
-        std::function<void (unsigned int, glm::uvec2)> button_press_cb;
-        std::function<void (unsigned int, glm::uvec2)> button_release_cb;
-
         void handle_event(SDL_Event& event);
         
 		friend class Engine;

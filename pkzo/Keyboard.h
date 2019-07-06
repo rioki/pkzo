@@ -5,42 +5,45 @@
 #ifndef _PKZO_KEYBOARD_H_
 #define _PKZO_KEYBOARD_H_
 
-#include <vector>
-#include <functional>
-
 #include "defines.h"
+#include "EventEmitter.h"
 #include "Key.h"
 
 union SDL_Event;
 
 namespace pkzo
 {
-	class PKZO_EXPORT Keyboard
+    /*!
+     * Keyboard
+     */
+	class PKZO_EXPORT Keyboard : public EventEmitter
     {
     public:
+        
+        /*!
+         * Events emited by the keyboard.
+         */
+        enum Event
+        {
+            KEY_PRESS,      //!< A key is pressed. void(Key key)
+            KEY_RELEASE,    //!< A key is released. void(Key key)
+            TEXT            //!< The textual represntation of key storkes. void(string_view text)
+        };
+
         Keyboard(); 
-        
         Keyboard(const Keyboard&) = delete;
-
         ~Keyboard();    
-
         const Keyboard& operator = (const Keyboard&) = delete;
-    
+        
+        /*!
+         * Check if a given key is pressed.
+         *
+         * @param key
+         * @return true if the key is pressed
+         */
         bool is_pressed(Key key) const;
-    
-        void on_key_press(std::function<void (Key)> cb);
         
-        void on_key_release(std::function<void (Key)> cb);
-        
-        void on_text(std::function<void (std::string)> cb);
-        
-    private:
-        static std::vector<Keyboard*> instances;
-        
-        std::function<void (Key)> key_press_cb;
-        std::function<void (Key)> key_release_cb;
-        std::function<void (std::string)> text_cb;
-                
+    private:               
         void handle_event(SDL_Event& event);
         
 		friend class Engine;

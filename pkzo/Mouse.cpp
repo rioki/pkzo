@@ -7,37 +7,13 @@
 #include <cassert>
 #include <stdexcept>
 #include <SDL2/SDL.h>
+#include <glm/glm.hpp>
 
 namespace pkzo
 {
-    std::vector<Mouse*> Mouse::instances;
+    Mouse::Mouse() = default;
 
-    Mouse::Mouse() 
-    {
-        instances.push_back(this);
-    }
-    
-    Mouse::~Mouse() 
-    {
-        auto i = std::find(instances.begin(), instances.end(), this);
-        assert(i != instances.end());
-        instances.erase(i);        
-    }
-
-    void Mouse::on_move(std::function<void (glm::uvec2, glm::ivec2)> cb)
-    {
-        move_cb = cb;
-    }
-
-    void Mouse::on_button_press(std::function<void (unsigned int, glm::uvec2)> cb)
-    {
-        button_press_cb = cb;
-    }
-    
-    void Mouse::on_button_release(std::function<void (unsigned int, glm::uvec2)> cb)
-    {
-        button_release_cb = cb;
-    }   
+    Mouse::~Mouse() = default; 
     
     void Mouse::show_cursor()
     {
@@ -66,22 +42,13 @@ namespace pkzo
         switch (event.type)
         {
             case SDL_MOUSEBUTTONDOWN:
-                if (button_press_cb)
-                {
-                    button_press_cb(event.button.button, glm::uvec2(event.button.x, event.button.y));
-                }
+                emit(BUTTON_PRESS, glm::uint{event.button.button}, glm::uvec2{event.button.x, event.button.y});
                 break;
             case SDL_MOUSEBUTTONUP:
-                if (button_release_cb)
-                {
-                    button_release_cb(event.button.button, glm::uvec2(event.button.x, event.button.y));
-                }
+                emit(BUTTON_PRESS, glm::uint{event.button.button}, glm::uvec2{event.button.x, event.button.y});
                 break;
             case SDL_MOUSEMOTION:
-                if (move_cb)
-                {
-                    move_cb(glm::uvec2(event.motion.x, event.motion.y), glm::ivec2(event.motion.xrel, event.motion.yrel));
-                }
+                emit(MOVE, glm::ivec2{event.motion.xrel, event.motion.yrel}, glm::uvec2{event.motion.x, event.motion.y});
                 break;
             default:
                 throw std::logic_error("NOT WITH ME!");

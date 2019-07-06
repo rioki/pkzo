@@ -88,21 +88,6 @@ namespace pkzo
         }
     }
 
-    void Window::on_draw(std::function<void ()> cb)
-    {
-        draw_cb = cb;
-    }
-
-    void Window::on_resize(std::function<void (unsigned int, unsigned int)> cb)
-    {
-        resize_cb = cb;
-    }
-
-    void Window::on_close(std::function<void ()> cb)
-    {
-        close_cb = cb;
-    }
-
     void Window::draw()
     {
         int w, h;
@@ -111,10 +96,7 @@ namespace pkzo
         glViewport(0, 0, w, h);        
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        if (draw_cb)
-        {
-            draw_cb();
-        }
+        emit(Event::DRAW);
 
         SDL_GL_SwapWindow(window);
     }
@@ -124,10 +106,7 @@ namespace pkzo
         switch (event.type)
         {
             case SDL_QUIT:
-                if (close_cb)
-                {
-                    close_cb();
-                }
+                emit(Event::CLOSE);
                 break;
             case SDL_WINDOWEVENT:            
                 if (event.window.windowID == SDL_GetWindowID(window))  
@@ -135,23 +114,14 @@ namespace pkzo
                     switch (event.window.event)  
                     {
                         case SDL_WINDOWEVENT_SIZE_CHANGED:  
-                        {
-                            int width = event.window.data1;
-                            int height = event.window.data2;
-                            if (resize_cb)
-                            {
-                                resize_cb(width, height);
-                            }
+                            emit(Event::RESIZE, glm::uvec2{event.window.data1, event.window.data2});
                             break;
-                        }
                         default:
-                            // STFU
                             break;
                     }
                 }
                 break;   
             default:
-                // STFU
                 break;
         } 
     }
