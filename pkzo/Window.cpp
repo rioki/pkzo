@@ -6,10 +6,53 @@
 
 #include <stdexcept>
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_opengl.h>
+#include <GL/glew.h>
 
 namespace pkzo
 {
+    void clear_gl_errors()
+    {
+        GLenum e;
+        do
+        {
+            e = glGetError();
+        }
+        while (e != GL_NO_ERROR);
+    }
+
+    std::string get_gl_error()
+    {
+        std::string result;
+        
+        GLenum e = glGetError();
+        switch (e)
+        {
+            case GL_NO_ERROR:
+                result = "GL_NO_ERROR";
+                break;
+            case GL_INVALID_ENUM:
+                result = "GL_INVALID_ENUM";
+                break;
+            case GL_INVALID_VALUE:
+                result = "GL_INVALID_VALUE";
+                break;
+            case GL_INVALID_OPERATION:
+                result = "GL_INVALID_OPERATION";
+                break;
+            case GL_INVALID_FRAMEBUFFER_OPERATION:
+                result = "GL_INVALID_FRAMEBUFFER_OPERATION";
+                break;
+            case GL_OUT_OF_MEMORY:
+                result = "GL_OUT_OF_MEMORY";
+                break;
+            default:
+                assert(false && "invalud id");
+                break;
+        }
+
+        return result;
+    }
+
     Window::Window(const glm::uvec2& size, Mode m, const std::string& title)
     : mode(m)
     {
@@ -41,6 +84,13 @@ namespace pkzo
         {
             throw std::runtime_error(SDL_GetError());
         }
+
+        GLenum err = glewInit();
+        if (GLEW_OK != err)
+        {
+            throw std::runtime_error(reinterpret_cast<const char*>(glewGetErrorString(err)));
+        }
+        clear_gl_errors();
     }
 
     Window::~Window()

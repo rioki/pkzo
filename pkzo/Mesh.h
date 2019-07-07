@@ -17,10 +17,12 @@ namespace fs = std::filesystem;
 
 namespace pkzo
 {
+    class Shader;
+
     class PKZO_EXPORT Mesh
     {
     public:
-        
+
         Mesh();
 
         Mesh(const fs::path& file);
@@ -79,22 +81,37 @@ namespace pkzo
 
         const std::vector<glm::uvec3>& get_faces() const;
 
+        void bind(Shader& shader);
+
+        void unbind();
+
+        void draw();
+
     private:
         glm::vec3 min;
         glm::vec3 max;
 
-        std::vector<glm::vec3> vertices;  
-        std::vector<glm::vec3> normals;   
-        std::vector<glm::vec2> texcoords; 
-        std::vector<glm::vec3> tangents; 
-        
+        std::vector<glm::vec3> vertices;
+        std::vector<glm::vec3> normals;
+        std::vector<glm::vec2> texcoords;
+        std::vector<glm::vec3> tangents;
+
         std::vector<glm::uvec3> faces;
+
+        bool      bound = false;
+        glm::uint vao = 0;
+        glm::uint vertex_buffer = 0;
+        glm::uint normal_buffer = 0;
+        glm::uint texcoord_buffer = 0;
+        glm::uint tangent_buffer = 0;
+        glm::uint indexe_buffer = 0;
 
         void load_ply(const fs::path& file);
         void load_obj(const fs::path& file);
+        void upload();
     };
 }
 
 #endif
 
- 
+

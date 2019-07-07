@@ -12,7 +12,7 @@
 
 namespace pkzo
 {
-    Image::Image(const fs::path& file)
+    Texture::Texture(const fs::path& file)
     {
         surface = IMG_Load(file.string().data());
         if (surface == nullptr)
@@ -21,7 +21,7 @@ namespace pkzo
         }
     }
 
-    Image::Image(unsigned int w, unsigned int h, ColorType color_type, const unsigned char* data)
+    Texture::Texture(unsigned int w, unsigned int h, ColorType color_type, const unsigned char* data)
     {
         if (color_type == NOCOLOR)
         {
@@ -57,7 +57,7 @@ namespace pkzo
         }
     }
 
-    Image::Image(SDL_Surface* s)
+    Texture::Texture(SDL_Surface* s)
     : surface(s)
     {
         assert(s != nullptr);
@@ -67,7 +67,7 @@ namespace pkzo
         }
     }
 
-    Image::~Image()
+    Texture::~Texture()
     {
         if (surface != nullptr)
         {
@@ -76,13 +76,13 @@ namespace pkzo
         }
     }
 
-    glm::uvec2 Image::get_size() const
+    glm::uvec2 Texture::get_size() const
     {
         assert(surface != nullptr);
         return glm::uvec2(surface->w, surface->h);
     }
 
-    ColorType Image::get_color_type() const
+    ColorType Texture::get_color_type() const
     {
         assert(surface != nullptr);
         switch (surface->format->BytesPerPixel)
@@ -98,7 +98,7 @@ namespace pkzo
         }
     }
 
-    const unsigned char* Image::get_data() const
+    const unsigned char* Texture::get_data() const
     {
         assert(surface != nullptr);
         return reinterpret_cast<const unsigned char*>(surface->pixels);

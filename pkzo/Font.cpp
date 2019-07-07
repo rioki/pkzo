@@ -36,7 +36,7 @@ namespace pkzo
         return glm::uvec2(w, h);
     }
 
-    std::shared_ptr<Image> Font::render(const std::string& text) const
+    std::shared_ptr<Texture> Font::render(const std::string& text) const
     {
         assert(font != nullptr);
         
@@ -56,6 +56,6 @@ namespace pkzo
             surface = TTF_RenderUTF8_Blended(font, text.data(), sdl_color);
         }
 
-        return std::make_shared<Image>(surface);
+        return std::make_shared<Texture>(surface);
     }
 }

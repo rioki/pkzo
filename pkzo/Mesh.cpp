@@ -7,9 +7,11 @@
 #include <cassert>
 #include <map>
 #include <stdexcept>
+#include <GL/glew.h>
 
-#include "strex.h"
-
+#include "dbg.h"
+#include "stdex.h"
+#include "Shader.h"
 #include "PlyParser.h"
 #include "ObjParser.h"
 
@@ -21,12 +23,12 @@ namespace pkzo
     Mesh::Mesh(const fs::path& file)
     : Mesh()
     {
-        switch (strex::hash(file.extension().string()))
+        switch (stdex::hash(file.extension().string()))
         {
-        case strex::hash("ply"):
+        case stdex::hash("ply"):
             load_ply(file);
             break;
-        case strex::hash("obj"):
+        case stdex::hash("obj"):
             load_obj(file);
             break;
         default:
@@ -57,10 +59,10 @@ namespace pkzo
     }
 
     void Mesh::set_vertex(size_t i, const glm::vec3& v)
-    {  
+    {
         min = glm::min(min, v);
         max = glm::max(max, v);
-        vertices.at(i) = v;        
+        vertices.at(i) = v;
     }
 
     glm::vec3 Mesh::get_vertex(size_t i) const
@@ -110,12 +112,12 @@ namespace pkzo
 
     void Mesh::set_face(size_t i, unsigned int a, unsigned int b, unsigned int c)
     {
-        faces.at(i) = glm::uvec3(a, b, c);  
+        faces.at(i) = glm::uvec3(a, b, c);
     }
 
     void Mesh::add_face(unsigned int a, unsigned int b, unsigned int c)
     {
-        faces.push_back(glm::uvec3(a, b, c));         
+        faces.push_back(glm::uvec3(a, b, c));
     }
 
     glm::uvec3 Mesh::get_face(size_t i) const
@@ -152,37 +154,37 @@ namespace pkzo
     {
         std::vector<glm::vec3> tan1(get_vertex_count(), glm::vec3(0));
         std::vector<glm::vec3> tan2(get_vertex_count(), glm::vec3(0));
-        
+
         for (size_t i = 0; i < faces.size(); i++)
         {
             glm::vec3 v1 = vertices[faces[i][0]];
             glm::vec3 v2 = vertices[faces[i][1]];
             glm::vec3 v3 = vertices[faces[i][2]];
-            
+
             glm::vec2 w1 = get_texcoord(faces[i][0]);
             glm::vec2 w2 = get_texcoord(faces[i][1]);
             glm::vec2 w3 = get_texcoord(faces[i][2]);
-            
+
             float x1 = v2[0] - v1[0];
             float x2 = v3[0] - v1[0];
             float y1 = v2[1] - v1[1];
             float y2 = v3[1] - v1[1];
             float z1 = v2[2] - v1[2];
             float z2 = v3[2] - v1[2];
-            
+
             float s1 = w2[0] - w1[0];
             float s2 = w3[0] - w1[0];
             float t1 = w2[1] - w1[1];
             float t2 = w3[1] - w1[1];
-            
+
             float r = 1.0F / (s1 * t2 - s2 * t1);
             glm::vec3 sdir((t2 * x1 - t1 * x2) * r, (t2 * y1 - t1 * y2) * r, (t2 * z1 - t1 * z2) * r);
             glm::vec3 tdir((s1 * x2 - s2 * x1) * r, (s1 * y2 - s2 * y1) * r, (s1 * z2 - s2 * z1) * r);
-            
+
             tan1[faces[i][0]] += sdir;
             tan1[faces[i][1]] += sdir;
             tan1[faces[i][2]] += sdir;
-            
+
             tan2[faces[i][0]] += tdir;
             tan2[faces[i][1]] += tdir;
             tan2[faces[i][2]] += tdir;
@@ -194,19 +196,19 @@ namespace pkzo
             glm::vec3& n  = normals[i];
             glm::vec3& t1 = tan1[i];
             glm::vec3& t2 = tan2[i];
-            
+
             glm::vec3 t = glm::normalize(t1 - n * glm::dot(n, t1));
-            if (glm::dot(glm::cross(n, t1), t2) < 0.0f) 
+            if (glm::dot(glm::cross(n, t1), t2) < 0.0f)
             {
                 tangents[i] = -t;
             }
             else
             {
                 tangents[i] = t;
-            }            
+            }
         }
     }
-    
+
     std::tuple<glm::vec3, glm::vec3> Mesh::get_bounds() const
     {
         return std::make_tuple(min, max);
@@ -249,8 +251,8 @@ namespace pkzo
         PlyParser parser;
         parser.parse(file.string());
 
-        vertices  = parser.get_vertices(); 
-        normals   = parser.get_normals();  
+        vertices  = parser.get_vertices();
+        normals   = parser.get_normals();
         texcoords = parser.get_texcoords();
 
         for (auto& v : vertices)
@@ -259,17 +261,17 @@ namespace pkzo
             max = glm::max(max, v);
         }
 
-        auto fs = parser.get_indexes(); 
+        auto fs = parser.get_indexes();
         faces.resize(fs.size());
         for (size_t i = 0; i < fs.size(); i++)
         {
-            faces[i] = glm::uvec3(fs[i][0], fs[i][1], fs[i][2]);  
-        } 
+            faces[i] = glm::uvec3(fs[i][0], fs[i][1], fs[i][2]);
+        }
     }
 
     struct iv3less
     {
-        bool operator () (const glm::ivec3& a, const glm::ivec3& b) const 
+        bool operator () (const glm::ivec3& a, const glm::ivec3& b) const
         {
             if (a[0] == b[0])
             {
@@ -294,17 +296,17 @@ namespace pkzo
         ObjParser parser;
         parser.parse(file.string());
 
-        auto v = parser.get_vertices(); 
-        auto n = parser.get_normals();  
+        auto v = parser.get_vertices();
+        auto n = parser.get_normals();
         auto t = parser.get_texcoords();
 
         auto f = parser.get_faces();
-        
+
         vertices.clear();
         normals.clear();
         texcoords.clear();
 
-        
+
         std::map<glm::ivec3, size_t, iv3less> index_mapping;
 
         for (auto face : f)
@@ -328,11 +330,11 @@ namespace pkzo
                     glm::vec2 tc = t[fv[1] - 1];
                     tc[1] = 1 - tc[1];
                     texcoords.push_back(tc);
-                                        
+
                     index_mapping[fv] = vi;
                     idx.push_back(vi);
                 }
-            }   
+            }
 
             for (auto i = 2u; i < idx.size(); i++)
             {
@@ -345,5 +347,77 @@ namespace pkzo
             min = glm::min(min, v);
             max = glm::max(max, v);
         }
+    }
+
+    template <typename vec>
+    void bind_buffer(glm::uint buffer_id, Shader& shader, const std::string_view attribute_id)
+    {
+        auto adr = shader.get_attribute(attribute_id);
+        if (adr != -1)
+        {
+            glBindBuffer(GL_ARRAY_BUFFER, buffer_id);
+            glVertexAttribPointer(adr, vec::length(), GL_FLOAT, GL_FALSE, 0, 0);
+            glEnableVertexAttribArray(adr);
+            PKZO_ASSERT(glGetError() == GL_NO_ERROR);
+        }
+    }
+
+    void Mesh::bind(Shader& shader)
+    {
+        if (vao == 0)
+        {
+            upload();
+        }
+
+        glBindVertexArray(vao);
+        bound = true;
+
+        bind_buffer<glm::vec3>(vertex_buffer,   shader, "pkzo_Vertex");
+        bind_buffer<glm::vec3>(normal_buffer,   shader, "pkzo_Normal");
+        bind_buffer<glm::vec2>(texcoord_buffer, shader, "pkzo_TexCoord");
+        bind_buffer<glm::vec3>(tangent_buffer,  shader, "pkzo_Tangent");
+    }
+
+    void Mesh::unbind()
+    {
+        glBindVertexArray(0);
+        bound = false;
+        PKZO_ASSERT(glGetError() == GL_NO_ERROR);
+    }
+
+    void Mesh::draw()
+    {
+        PKZO_ASSERT(bound);
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexe_buffer);
+        glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(faces.size() * 3), GL_UNSIGNED_INT, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+        PKZO_ASSERT(glGetError() == GL_NO_ERROR);
+    }
+
+    template <typename vec>
+    glm::uint upload_values(GLenum buffer_type, const std::vector<vec>& values)
+    {
+        auto glid = 0u;
+        glGenBuffers(1, &glid);
+        glBindBuffer(buffer_type, glid);
+        glBufferData(buffer_type, values.size() * sizeof(vec), values.data(), GL_STATIC_DRAW);
+        glBindBuffer(buffer_type, 0);
+        PKZO_ASSERT(glGetError() == GL_NO_ERROR);
+
+        return glid;
+    }
+
+    void Mesh::upload()
+    {
+        glGenVertexArrays(1, &vao);
+        PKZO_ASSERT(glGetError() == GL_NO_ERROR);
+
+        vertex_buffer   = upload_values(GL_ARRAY_BUFFER, vertices);
+        normal_buffer   = upload_values(GL_ARRAY_BUFFER, normals);
+        texcoord_buffer = upload_values(GL_ARRAY_BUFFER, texcoords);
+        tangent_buffer  = upload_values(GL_ARRAY_BUFFER, tangents);
+        indexe_buffer   = upload_values(GL_ELEMENT_ARRAY_BUFFER, faces);
     }
 }

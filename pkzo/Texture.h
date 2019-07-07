@@ -19,12 +19,12 @@ namespace fs = std::filesystem;
 
 namespace pkzo
 {
-    enum ColorType
+    enum class ColorType
     {
-        NOCOLOR,
-        MONOCHROME,
+        MONO,
         RGB,
-        RGBA
+        RGBA,
+        DEPTH
     };
 
     class PKZO_EXPORT Texture
@@ -33,10 +33,8 @@ namespace pkzo
 
         Texture(const fs::path& file);
 
-        Texture(unsigned int w, unsigned int h, ColorType color_type, const unsigned char* data);
-
         Texture(SDL_Surface* surface);
-        
+
         Texture(const Texture&) = delete;
 
         ~Texture();
@@ -47,10 +45,16 @@ namespace pkzo
 
         ColorType get_color_type() const;
 
-        const unsigned char* get_data() const;
+        void bind(glm::uint slot);
+
+        void unbind();
 
     private:
         SDL_Surface* surface = nullptr;
+        glm::uint gl_handle = 0;
+        glm::uint slot = 0;
+
+        void upload();
     };
 }
 

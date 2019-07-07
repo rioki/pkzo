@@ -19,6 +19,7 @@
 // disable silly warnings
 #ifndef _MSVC
 #pragma warning(disable: 4251)
+#pragma warning(disable: 4275)
 #endif
 
 #endif

@@ -11,17 +11,19 @@
 #include <string_view>
 
 #include "defines.h"
+#include "stdex.h"
 
 namespace pkzo
 {
     class Window;
     class Mouse;
     class Keyboard;
+    class Screen;
 
     /*!
      * Central object holding all the bits together.
      */
-    class PKZO_EXPORT Engine
+    class PKZO_EXPORT Engine : private stdex::non_copyable
     {
     public:
         /*!
@@ -31,11 +33,8 @@ namespace pkzo
          * @param argc command line argument count
          * @param argv command line values
          */
-        Engine(const std::string_view id, int argc = 0, char* argv[] = nullptr);
-
-        Engine(const Engine&) = delete;
+        Engine(const std::string_view id);
         virtual ~Engine();
-        Engine& operator = (const Engine&) = delete;
 
         /*!
          * The engine id.
@@ -72,6 +71,15 @@ namespace pkzo
         /*! @} */
 
         /*!
+         * The overlay screen.
+         * @{
+         */
+        std::shared_ptr<Screen> get_screen();
+        const std::shared_ptr<Screen> get_screen() const;
+        void set_screen(std::shared_ptr<Screen> screen);
+        /*! @} */
+
+        /*!
          * Main event loop.
          */
         int run();
@@ -90,8 +98,11 @@ namespace pkzo
         std::unique_ptr<Window>   window; 
         std::unique_ptr<Mouse>    mouse; 
         std::unique_ptr<Keyboard> keyboard; 
+        std::shared_ptr<Screen>   screen;
+        std::shared_ptr<Screen>   next_screen;   
 
         void handle_events();
+        void draw();
     };
 
     PKZO_EXPORT

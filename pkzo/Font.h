@@ -19,7 +19,7 @@ namespace fs = std::filesystem;
 
 namespace pkzo
 {
-    class Image;
+    class Texture;
 
     class PKZO_EXPORT Font
     {
@@ -35,7 +35,7 @@ namespace pkzo
 
         glm::uvec2 estimate(const std::string& text) const;
 
-        std::shared_ptr<Image> render(const std::string& text) const;
+        std::shared_ptr<Texture> render(const std::string& text) const;
 
     private:
         TTF_Font* font; 

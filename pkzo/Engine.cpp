@@ -14,10 +14,11 @@
 #include "Window.h"
 #include "Mouse.h"
 #include "Keyboard.h"
+#include "Screen.h"
 
 namespace pkzo
 {
-    Engine::Engine(const std::string_view i, int argc, char* argv[])
+    Engine::Engine(const std::string_view i)
     : id{i} 
     {
         if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
@@ -36,6 +37,10 @@ namespace pkzo
         // TODO load settings
 
         window   = std::make_unique<Window>(glm::uvec2(800, 600), Window::STATIC, id);
+        window->on(Window::DRAW, [this] () {
+            draw();
+        });
+
         mouse    = std::make_unique<Mouse>();
         keyboard = std::make_unique<Keyboard>();
     }
@@ -89,11 +94,33 @@ namespace pkzo
         return *keyboard;
     }
 
+    std::shared_ptr<Screen> Engine::get_screen()
+    {
+        return screen;
+    }
+
+    const std::shared_ptr<Screen> Engine::get_screen() const
+    {
+        return screen;
+    }
+
+    void Engine::set_screen(std::shared_ptr<Screen> screen)
+    {
+        PKZO_SOFT_ASSERT(next_screen == nullptr);
+        next_screen = screen;
+    }
+
     int Engine::run()
     {
         running = true;
         while (running)
         {
+            if (next_screen)
+            {
+                screen = next_screen;
+                next_screen = nullptr;
+            }
+
             handle_events();
             tick();
             get_window().draw();
@@ -140,6 +167,11 @@ namespace pkzo
                     break;
              }
         }
+    }
+
+    void Engine::draw()
+    {
+        screen->draw();
     }
 
     void show_error_dialog(const std::string_view title, const std::string_view message)

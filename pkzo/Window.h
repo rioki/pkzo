@@ -48,6 +48,11 @@ namespace pkzo
 
         const Window& operator = (const Window&) = delete;
 
+        /*!
+         * Get the window's size.
+         *
+         * @return the window's size.
+         */
         glm::uvec2 get_size() const;
 
         Mode get_mode() const;
