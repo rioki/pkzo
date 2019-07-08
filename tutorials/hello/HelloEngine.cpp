@@ -12,9 +12,9 @@
 namespace hello
 {
     HelloEngine::HelloEngine()
-    : Engine{"Hello"},
-      screen{glm::vec2(get_window().get_size())}
+    : Engine{"Hello"}
     {
-        set_screen(stdex::wrap_shared(screen));
+        auto screen = std::make_shared<GreetingScreen>(glm::vec2(get_window().get_size()));
+        set_screen(screen);
     }
 }

@@ -7,17 +7,15 @@
 
 #include <pkzo/Engine.h>
 
-#include "GreetingScreen.h"
-
 namespace hello
 {
     class HelloEngine : public pkzo::Engine
     {
     public:
         HelloEngine();
-        
+
     private:
-        GreetingScreen screen;
+
     };
 }
 

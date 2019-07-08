@@ -23,7 +23,7 @@ void main()
 #ifdef PKZO_FRAGMENT_CODE
 
 uniform vec4 Color;
-uniform sampler2D Texture;
+uniform sampler2D pkzo_Texture;
 
 in vec2 texcoords;
 
@@ -31,6 +31,6 @@ out vec4 pkzo_FragColor;
 
 void main()
 {
-	pkzo_FragColor = texture(Texture, texcoords) * Color;
+	pkzo_FragColor = texture(pkzo_Texture, texcoords) * Color;
 }
 #endif

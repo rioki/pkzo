@@ -26,6 +26,7 @@
     <ClInclude Include="EventEmitter.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Text.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Key.h" />
     <ClInclude Include="Keyboard.h" />
@@ -47,6 +48,7 @@
     <ClCompile Include="EventEmitter.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Text.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Key.cpp" />
     <ClCompile Include="Keyboard.cpp" />

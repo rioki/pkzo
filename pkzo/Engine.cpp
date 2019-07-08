@@ -19,7 +19,7 @@
 namespace pkzo
 {
     Engine::Engine(const std::string_view i)
-    : id{i} 
+    : id{i}
     {
         if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
         {
@@ -47,6 +47,8 @@ namespace pkzo
 
     Engine::~Engine()
     {
+        next_screen = nullptr;
+        screen = nullptr;
         keyboard = nullptr;
         mouse = nullptr;
         window = nullptr;
@@ -132,7 +134,7 @@ namespace pkzo
     {
         running = false;
     }
-    
+
     void Engine::tick()
     {
     }
@@ -140,14 +142,14 @@ namespace pkzo
     void Engine::handle_events()
     {
         SDL_Event event;
-        while (SDL_PollEvent(&event)) 
+        while (SDL_PollEvent(&event))
         {
              switch (event.type)
              {
                 case SDL_QUIT:
                     get_window().handle_event(event);
                     stop();
-                    break; 
+                    break;
                 case SDL_WINDOWEVENT:
                     get_window().handle_event(event);
                     break;
