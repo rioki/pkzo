@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <glm/gtc/matrix_transform.hpp>
+#include <GL/glew.h>
 
 #include "dbg.h"
 #include "ScreenNode.h"
@@ -50,6 +51,9 @@ namespace pkzo
 
     void Screen::draw()
     {
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
         auto hs = size / 2.0f;
         auto proj = glm::ortho(-hs.x, hs.x, -hs.y, hs.y);
         auto view = glm::mat4(1.0);

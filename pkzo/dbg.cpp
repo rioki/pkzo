@@ -59,14 +59,14 @@ namespace pkzo
         #endif
         HANDLE process = GetCurrentProcess();
         HANDLE thread  = GetCurrentThread();
-                
+
         if (SymInitialize(process, NULL, TRUE) == FALSE)
         {
-            return std::vector<StackFrame>(); 
+            return std::vector<StackFrame>();
         }
 
         SymSetOptions(SYMOPT_LOAD_LINES);
-        
+
         CONTEXT context = {};
         context.ContextFlags = CONTEXT_FULL;
         RtlCaptureContext(&context);
@@ -88,7 +88,7 @@ namespace pkzo
         frame.AddrStack.Offset = context.Esp;
         frame.AddrStack.Mode = AddrModeFlat;
         #endif
-       
+
         bool first = true;
 
         std::vector<StackFrame> frames;
@@ -96,7 +96,7 @@ namespace pkzo
         {
             StackFrame f = {};
             f.address = frame.AddrPC.Offset;
-            
+
             #if _WIN64
             DWORD64 moduleBase = 0;
             #else
@@ -105,7 +105,7 @@ namespace pkzo
 
             moduleBase = SymGetModuleBase(process, frame.AddrPC.Offset);
 
-            char moduelBuff[MAX_PATH];            
+            char moduelBuff[MAX_PATH];
             if (moduleBase && GetModuleFileNameA((HINSTANCE)moduleBase, moduelBuff, MAX_PATH))
             {
                 f.module = basename(moduelBuff);
@@ -132,10 +132,10 @@ namespace pkzo
             {
                 f.name = "Unknown Function";
             }
-            
+
             IMAGEHLP_LINE line;
             line.SizeOfStruct = sizeof(IMAGEHLP_LINE);
-            
+
             DWORD offset_ln = 0;
             if (SymGetLineFromAddr(process, frame.AddrPC.Offset, &offset_ln, &line))
             {
@@ -145,10 +145,10 @@ namespace pkzo
             else
             {
                 f.line = 0;
-            } 
+            }
 
             if (!first)
-            { 
+            {
                 frames.push_back(f);
             }
             first = false;
@@ -158,12 +158,21 @@ namespace pkzo
 
         return frames;
     }
-    
+
     void handle_assert(const std::string_view func, const std::string_view cond)
     {
         std::stringstream buff;
         buff << "Assertion '" << cond << "' failed! \n";
         trace(func, TraceLevel::TRACE_ERROR, buff.str());
-        throw_with_callstack<std::logic_error>(func, buff.str());
+
+        int r = MessageBoxA(NULL, buff.str().c_str(), "General Software Fault", MB_ABORTRETRYIGNORE|MB_ICONSTOP);
+        if (r == IDABORT)
+        {
+            throw_with_callstack<std::logic_error>(func, buff.str());
+        }
+        if (r == IDRETRY)
+        {
+            DebugBreak();
+        }
     }
 }

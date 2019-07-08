@@ -218,6 +218,7 @@ namespace pkzo
             {
                 glDeleteProgram(program_id);
             }
+            throw;
         }
 
     }
