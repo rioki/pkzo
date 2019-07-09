@@ -48,6 +48,8 @@ namespace pkzo
       mesh(make_uniform_rect()),
       material(m) {}
 
+    Rectangle::~Rectangle() = default;
+
     void Rectangle::set_material(const std::shared_ptr<Material>& value)
     {
         material = value;

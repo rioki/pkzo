@@ -22,6 +22,8 @@ namespace pkzo
         explicit
         Text(const glm::vec2& position, const std::string& text, const std::shared_ptr<Font>& font, const std::shared_ptr<Material>& material);
 
+        ~Text();
+
         void set_text(const std::string& value);
 
         const std::string& get_text() const;

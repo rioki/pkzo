@@ -20,17 +20,16 @@ namespace pkzo
         surface = IMG_Load(file.string().data());
         if (surface == nullptr)
         {
-            throw std::runtime_error(IMG_GetError());
+            PKZO_THROW(std::runtime_error, IMG_GetError());
         }
     }
 
     Texture::Texture(SDL_Surface* s)
     : surface(s)
     {
-        assert(s != nullptr);
-        if (s == nullptr)
+        if (surface == nullptr)
         {
-            throw std::invalid_argument("Texture::Texture surface is null.");
+            PKZO_THROW(std::invalid_argument, "Texture::Texture surface is null.");
         }
     }
 
@@ -52,13 +51,13 @@ namespace pkzo
 
     glm::uvec2 Texture::get_size() const
     {
-        assert(surface != nullptr);
+        PKZO_ASSERT(surface != nullptr);
         return glm::uvec2(surface->w, surface->h);
     }
 
     ColorType Texture::get_color_type() const
     {
-        assert(surface != nullptr);
+        PKZO_ASSERT(surface != nullptr);
         switch (surface->format->BytesPerPixel)
         {
         case 1:

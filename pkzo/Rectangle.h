@@ -18,6 +18,8 @@ namespace pkzo
         explicit
         Rectangle(const glm::vec2& position, const glm::vec2& size, const std::shared_ptr<Material>& material);
 
+        ~Rectangle();
+
         void set_material(const std::shared_ptr<Material>& value);
 
         const std::shared_ptr<Material>& get_material() const;

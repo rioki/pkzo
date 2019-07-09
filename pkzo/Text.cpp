@@ -8,6 +8,7 @@
 #include "Mesh.h"
 #include "Font.h"
 #include "Material.h"
+#include "Texture.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace pkzo
@@ -32,6 +33,8 @@ namespace pkzo
       text(t),
       font(f),
       material(m) {}
+
+    Text::~Text() = default;
 
     void Text::set_text(const std::string& value)
     {

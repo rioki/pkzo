@@ -4,10 +4,10 @@
 
 #include "Font.h"
 
-#include <cassert>
 #include <stdexcept>
 #include <SDL2/SDL_ttf.h>
-#include "Image.h"
+#include "dbg.h"
+#include "Texture.h"
 
 namespace pkzo
 {
@@ -19,16 +19,16 @@ namespace pkzo
             throw std::runtime_error(TTF_GetError());
         }
     }
-    
+
     Font::~Font()
     {
-        assert(font != nullptr);
+        PKZO_ASSERT(font != nullptr);
         TTF_CloseFont(font);
     }
 
     glm::uvec2 Font::estimate(const std::string& text) const
     {
-        assert(font != nullptr);
+        PKZO_ASSERT(font != nullptr);
 
         int w, h;
         TTF_SizeUTF8(font, text.data(), &w, &h);
@@ -38,8 +38,8 @@ namespace pkzo
 
     std::shared_ptr<Texture> Font::render(const std::string& text) const
     {
-        assert(font != nullptr);
-        
+        PKZO_ASSERT(font != nullptr);
+
         SDL_Surface* surface = nullptr;
 
         SDL_Color sdl_color = {0};
