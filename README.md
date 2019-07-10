@@ -5,7 +5,7 @@
 
 You will find a number of tutirials in the following folder:
 
-* [/tutorials](tutorials/README.md)
+* [/tutorials](tutorials/)
 
 ## License
 
