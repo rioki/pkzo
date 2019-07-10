@@ -168,7 +168,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GreetingScreen.cpp" />
-    <ClCompile Include="hello.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="HelloEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -179,6 +179,9 @@
   <ItemGroup>
     <ClInclude Include="GreetingScreen.h" />
     <ClInclude Include="HelloEngine.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
