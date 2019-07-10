@@ -127,7 +127,7 @@ The greeting screen contains two nodes a text node and a rectangle node.
 The text node is constructed as follows:
 
 ``` cpp
-		auto font = std::make_shared<pkzo::Font>("../data/fonts/DejaVuSans.ttf", 52);
+        auto font = std::make_shared<pkzo::Font>("../data/fonts/DejaVuSans.ttf", 52);
         auto white = std::make_shared<pkzo::Material>("../data/materials/TextWhite.pxm");
         auto hello_text = std::make_shared<pkzo::Text>(glm::vec2{0.0f, 150.0f}, "Hello", font, white);
         add_node(hello_text);
