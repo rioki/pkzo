@@ -4,7 +4,6 @@
 
 #include "HelloEngine.h"
 
-#include <pkzo/stdex.h>
 #include <pkzo/Window.h>
 
 #include "GreetingScreen.h"

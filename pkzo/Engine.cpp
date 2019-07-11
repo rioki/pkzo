@@ -119,10 +119,9 @@ namespace pkzo
         running = true;
         while (running)
         {
-            if (next_screen)
+            if (screen != next_screen)
             {
                 screen = next_screen;
-                next_screen = nullptr;
             }
 
             handle_events();
@@ -175,7 +174,10 @@ namespace pkzo
 
     void Engine::draw()
     {
-        screen->draw();
+        if (screen)
+        {
+            screen->draw();
+        }
     }
 
     void show_error_dialog(const std::string_view title, const std::string_view message)
