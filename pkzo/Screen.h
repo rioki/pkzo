@@ -11,7 +11,6 @@
 
 #include "defines.h"
 #include "stdex.h"
-#include "EventEmitter.h"
 
 namespace pkzo
 {
@@ -30,6 +29,8 @@ namespace pkzo
          */
         explicit
         Screen(const glm::vec2& size);
+
+        virtual ~Screen();
 
         /*!
          * Get the screen size

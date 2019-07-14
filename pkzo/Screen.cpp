@@ -19,6 +19,8 @@ namespace pkzo
         PKZO_ASSERT(glm::all(glm::lessThan(glm::vec2(0.0f), size)));
     }
 
+    Screen::~Screen() = default;
+
     const glm::vec2& Screen::get_size() const
     {
         return size;

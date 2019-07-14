@@ -15,6 +15,8 @@
 #include "Mouse.h"
 #include "Keyboard.h"
 #include "Screen.h"
+#include "Scene.h"
+#include "Camera.h"
 
 namespace pkzo
 {
@@ -47,8 +49,9 @@ namespace pkzo
 
     Engine::~Engine()
     {
-        next_screen = nullptr;
         screen = nullptr;
+        camera = nullptr;
+        scene = nullptr;
         keyboard = nullptr;
         mouse = nullptr;
         window = nullptr;
@@ -98,20 +101,34 @@ namespace pkzo
         return *keyboard;
     }
 
-    std::shared_ptr<Screen> Engine::get_screen()
+    void Engine::set_screen(std::shared_ptr<Screen> value)
+    {
+        screen = std::move(value);
+    }
+
+    std::shared_ptr<Screen> Engine::get_screen() const
     {
         return screen;
     }
 
-    const std::shared_ptr<Screen> Engine::get_screen() const
+    void Engine::set_scene(std::shared_ptr<Scene> value)
     {
-        return screen;
+        scene = std::move(value);
     }
 
-    void Engine::set_screen(std::shared_ptr<Screen> screen)
+    std::shared_ptr<Scene> Engine::get_scene() const
     {
-        PKZO_SOFT_ASSERT(next_screen == nullptr);
-        next_screen = screen;
+        return scene;
+    }
+
+    void Engine::set_camera(std::shared_ptr<Camera> value)
+    {
+        camera = std::move(value);
+    }
+
+    std::shared_ptr<Camera> Engine::get_camera() const
+    {
+        return camera;
     }
 
     int Engine::run()
@@ -119,11 +136,6 @@ namespace pkzo
         running = true;
         while (running)
         {
-            if (screen != next_screen)
-            {
-                screen = next_screen;
-            }
-
             handle_events();
             tick();
             get_window().draw();
@@ -174,6 +186,12 @@ namespace pkzo
 
     void Engine::draw()
     {
+        if (scene && camera)
+        {
+            camera->set_resolution(window->get_size());
+            scene->draw(*camera);
+        }
+
         if (screen)
         {
             screen->draw();

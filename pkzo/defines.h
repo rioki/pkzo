@@ -13,7 +13,7 @@
 #ifdef _WIN32
 #define PKZO_EXPORT __declspec(dllexport)
 #else
-#define PKZO_EXPORT  
+#define PKZO_EXPORT
 #endif
 
 // disable silly warnings
@@ -21,5 +21,7 @@
 #pragma warning(disable: 4251)
 #pragma warning(disable: 4275)
 #endif
+
+#define GLM_FORCE_SWIZZLE
 
 #endif

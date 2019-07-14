@@ -19,6 +19,8 @@ namespace pkzo
     class Mouse;
     class Keyboard;
     class Screen;
+    class Scene;
+    class Camera;
 
     /*!
      * Central object holding all the bits together.
@@ -74,9 +76,24 @@ namespace pkzo
          * The overlay screen.
          * @{
          */
-        std::shared_ptr<Screen> get_screen();
-        const std::shared_ptr<Screen> get_screen() const;
-        void set_screen(std::shared_ptr<Screen> screen);
+        void set_screen(std::shared_ptr<Screen> value);
+        std::shared_ptr<Screen> get_screen() const;
+        /*! @} */
+
+        /*!
+         * Scene
+         * @{
+         */
+        void set_scene(std::shared_ptr<Scene> value);
+        std::shared_ptr<Scene> get_scene() const;
+        /*! @} */
+
+        /*!
+         * Camera
+         * @{
+         */
+        void set_camera(std::shared_ptr<Camera> value);
+        std::shared_ptr<Camera> get_camera() const;
         /*! @} */
 
         /*!
@@ -95,11 +112,13 @@ namespace pkzo
     private:
         std::string               id;
         std::atomic<bool>         running;
-        std::unique_ptr<Window>   window; 
-        std::unique_ptr<Mouse>    mouse; 
-        std::unique_ptr<Keyboard> keyboard; 
+        std::unique_ptr<Window>   window;
+        std::unique_ptr<Mouse>    mouse;
+        std::unique_ptr<Keyboard> keyboard;
+
         std::shared_ptr<Screen>   screen;
-        std::shared_ptr<Screen>   next_screen;   
+        std::shared_ptr<Scene>    scene;
+        std::shared_ptr<Camera>   camera;
 
         void handle_events();
         void draw();

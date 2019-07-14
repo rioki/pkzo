@@ -1,18 +1,18 @@
 //
 // PLY Parser
-// 
+//
 // Copyright (c) 2014 Sean Farrell
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,7 +24,7 @@
 
 #include "PlyParser.h"
 
-#include <iterator> 
+#include <iterator>
 #include <sstream>
 #include <map>
 
@@ -47,6 +47,24 @@ std::ostream& operator << (std::ostream& os, const std::vector<std::string>& val
     return os;
 }
 }
+
+enum HeaderKeyword
+{
+    COMMENT,
+    ELEMENT,
+    PROPERTY,
+    END_HEADER
+};
+
+enum ElementKeyword
+{
+    VERTEX,
+    FACE
+};
+
+const auto header_keywords = std::vector<std::string>{"comment", "element", "property", "end_header"};
+const auto format_keywords = std::vector<std::string>{"ascii", "binary"};
+const auto element_keywords = std::vector<std::string>{"vertex", "face"};
 
 PlyParser::PlyParser()
 : line(0) {}
@@ -81,7 +99,7 @@ void PlyParser::parse(const std::string& f)
     {
         std::stringstream buff;
         buff << "Failed to open " << file << " for reading.";
-        throw std::runtime_error(buff.str());    
+        throw std::runtime_error(buff.str());
     }
 
     parse_header();
@@ -102,7 +120,7 @@ TokenType PlyParser::get_next_token(std::string& value)
         value = "";
         token = lex_token(value);
     }
-                
+
     return token;
 }
 
@@ -122,15 +140,15 @@ TokenType PlyParser::lex_token(std::string& value)
             value.push_back(c);
             return lex_number(value);
         case 'a': case 'b': case 'c': case 'd': case 'e': case 'f':
-        case 'g': case 'h': case 'i': case 'j': case 'k': case 'l': 
+        case 'g': case 'h': case 'i': case 'j': case 'k': case 'l':
         case 'm': case 'n': case 'o': case 'p': case 'q': case 'r':
         case 's': case 't': case 'u': case 'v': case 'w': case 'x':
-        case 'y': case 'z': 
+        case 'y': case 'z':
         case 'A': case 'B': case 'C': case 'D': case 'E': case 'F':
-        case 'G': case 'H': case 'I': case 'J': case 'K': case 'L': 
+        case 'G': case 'H': case 'I': case 'J': case 'K': case 'L':
         case 'M': case 'N': case 'O': case 'P': case 'Q': case 'R':
         case 'S': case 'T': case 'U': case 'V': case 'W': case 'X':
-        case 'Y': case 'Z': 
+        case 'Y': case 'Z':
         case '_':
             value.push_back(c);
             return lex_identifier(value);
@@ -142,7 +160,7 @@ TokenType PlyParser::lex_token(std::string& value)
 
             std::stringstream buff;
             buff << "Unexpected character " << value << ".";
-            throw std::runtime_error(buff.str());  
+            throw std::runtime_error(buff.str());
         }
     }
 }
@@ -150,7 +168,7 @@ TokenType PlyParser::lex_token(std::string& value)
 TokenType PlyParser::lex_whitespace(std::string& value)
 {
     int c = input.get();
-    while (true)        
+    while (true)
     {
         switch (c)
         {
@@ -179,7 +197,7 @@ TokenType PlyParser::lex_newline(std::string& value)
             else
             {
                 // treat \n \n as two newline, obviously
-                input.unget();                            
+                input.unget();
             }
             return NEWLINE;
         default:
@@ -191,22 +209,22 @@ TokenType PlyParser::lex_newline(std::string& value)
 TokenType PlyParser::lex_identifier(std::string& value)
 {
     int c = input.get();
-    while (true)        
+    while (true)
     {
         switch (c)
-        {                            
-            case '0': case '1': case '2': case '3': case '4': 
+        {
+            case '0': case '1': case '2': case '3': case '4':
             case '5': case '6': case '7': case '8': case '9':
             case 'a': case 'b': case 'c': case 'd': case 'e': case 'f':
-            case 'g': case 'h': case 'i': case 'j': case 'k': case 'l': 
+            case 'g': case 'h': case 'i': case 'j': case 'k': case 'l':
             case 'm': case 'n': case 'o': case 'p': case 'q': case 'r':
             case 's': case 't': case 'u': case 'v': case 'w': case 'x':
-            case 'y': case 'z': 
+            case 'y': case 'z':
             case 'A': case 'B': case 'C': case 'D': case 'E': case 'F':
-            case 'G': case 'H': case 'I': case 'J': case 'K': case 'L': 
+            case 'G': case 'H': case 'I': case 'J': case 'K': case 'L':
             case 'M': case 'N': case 'O': case 'P': case 'Q': case 'R':
             case 'S': case 'T': case 'U': case 'V': case 'W': case 'X':
-            case 'Y': case 'Z': 
+            case 'Y': case 'Z':
             case '_':
                 value.push_back(c);
                 break;
@@ -215,7 +233,7 @@ TokenType PlyParser::lex_identifier(std::string& value)
                 return IDENTIFIER;
         }
         c = input.get();
-    }        
+    }
 }
 
 TokenType PlyParser::lex_number(std::string& value)
@@ -223,12 +241,12 @@ TokenType PlyParser::lex_number(std::string& value)
     // NOTE: we don't actually validate if it makes a valid number here
     // NOTE: the e-notation is not implemented, is that actually valid in PLY?
     int c = input.get();
-    while (true)        
+    while (true)
     {
         switch (c)
-        {                            
+        {
             case '+': case '-': case '.': case 'e': case 'E':
-            case '0': case '1': case '2': case '3': case '4': 
+            case '0': case '1': case '2': case '3': case '4':
             case '5': case '6': case '7': case '8': case '9':
                 value.push_back(c);
                 break;
@@ -243,7 +261,7 @@ TokenType PlyParser::lex_number(std::string& value)
 void PlyParser::lex_discard_line()
 {
     int c = input.get();
-    while (c != '\n' && c != '\r' && c != EOF) 
+    while (c != '\n' && c != '\r' && c != EOF)
     {
         c = input.get();
     }
@@ -325,54 +343,13 @@ unsigned long PlyParser::parse_integer()
     }
 }
 
-std::vector<std::string> format_keywords = [] () -> std::vector<std::string> {
-    std::vector<std::string> result;
 
-    result.push_back("ascii");
-    result.push_back("binary");
-
-    return result;
-}();
-
-enum HeaderKeyword
-{
-    COMMENT,
-    ELEMENT,
-    PROPERTY,
-    END_HEADER
-};
-
-std::vector<std::string> header_keywords = [] () -> std::vector<std::string> {
-    std::vector<std::string> result;
-
-    result.push_back("comment");
-    result.push_back("element");
-    result.push_back("property");
-    result.push_back("end_header");        
-
-    return result;
-}();
-
-enum ElementKeyword
-{
-    VERTEX,
-    FACE
-};
-
-std::vector<std::string> element_keywords = [] () -> std::vector<std::string> {
-    std::vector<std::string> result;
-
-    result.push_back("vertex");
-    result.push_back("face");
-        
-    return result;
-}();
 
 void PlyParser::parse_header()
 {
     parse_keyword("ply");
 
-    parse_keyword("format");                
+    parse_keyword("format");
     unsigned int format = parse_keyword(format_keywords);
     if (format != 0)
     {
@@ -425,7 +402,7 @@ void PlyParser::parse_property()
     // NOTE: we don't care about the type
 
     std::string type = parse_identifier();
-        
+
     if (type == "list")
     {
         std::string index_type = parse_identifier();
@@ -455,7 +432,7 @@ void PlyParser::parse_body()
                 parse_vertex(i, std::get<2>(element));
             }
         }
-        else 
+        else
         {
             for (unsigned int i = 0; i < std::get<1>(element); i++)
             {
@@ -463,7 +440,7 @@ void PlyParser::parse_body()
             }
         }
     }
-}    
+}
 
 void PlyParser::parse_vertex(size_t elem, const std::vector<std::string>& properties)
 {

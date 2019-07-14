@@ -25,10 +25,10 @@ namespace pkzo
     {
         switch (stdex::hash(file.extension().string()))
         {
-        case stdex::hash("ply"):
+        case stdex::hash(".ply"):
             load_ply(file);
             break;
-        case stdex::hash("obj"):
+        case stdex::hash(".obj"):
             load_obj(file);
             break;
         default:
