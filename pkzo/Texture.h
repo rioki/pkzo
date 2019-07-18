@@ -5,13 +5,16 @@
 #ifndef _PKZO_TEXTURE_H_
 #define _PKZO_TEXTURE_H_
 
+#include "defines.h"
+
 #include <memory>
 #include <string>
 #include <vector>
 #include <filesystem>
 #include <glm/glm.hpp>
 
-#include "defines.h"
+#include "stdex.h"
+#include "ColorMode.h"
 
 struct SDL_Surface;
 
@@ -19,42 +22,49 @@ namespace fs = std::filesystem;
 
 namespace pkzo
 {
-    enum class ColorType
-    {
-        MONO,
-        RGB,
-        RGBA,
-        DEPTH
-    };
-
-    class PKZO_EXPORT Texture
+    /*!
+     * 2D Image
+     */
+    class PKZO_EXPORT Texture : private stdex::non_copyable
     {
     public:
-
+        /*!
+         * Load a texture from file.
+         */
         Texture(const fs::path& file);
 
+        /*!
+         * Create a memory only texture.
+         */
+        Texture(glm::uvec2 size, ColorMode color);
+
         Texture(SDL_Surface* surface);
-
-        Texture(const Texture&) = delete;
-
         ~Texture();
 
-        const Texture& operator = (const Texture&) = delete;
+        /*!
+         * Resize the texture.
+         */
+        void resize(glm::uvec2 value);
 
         glm::uvec2 get_size() const;
 
-        ColorType get_color_type() const;
+        ColorMode get_color() const;
 
         void bind(glm::uint slot);
 
         void unbind();
 
+        glm::uint get_handle();
+
     private:
+        glm::uvec2   size    = {0, 0};
+        ColorMode    color   = ColorMode::RGB;
         SDL_Surface* surface = nullptr;
-        glm::uint gl_handle = 0;
-        glm::uint slot = 0;
+        glm::uint    glid    = 0;
+        glm::uint    slot    = 0;
 
         void upload();
+        void unload();
     };
 }
 

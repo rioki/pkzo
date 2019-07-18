@@ -8,6 +8,7 @@
 #include <intrin.h>
 #include <dbghelp.h>
 #include <array>
+#include <gl/glew.h>
 
 #pragma comment(lib, "dbghelp.lib")
 
@@ -173,6 +174,35 @@ namespace pkzo
         if (r == IDRETRY)
         {
             DebugBreak();
+        }
+    }
+
+    std::string glerror_string(GLenum error)
+    {
+        switch (error)
+        {
+            case GL_NO_ERROR:
+                return "GL_NO_ERROR";
+            case GL_INVALID_ENUM:
+                return "GL_INVALID_ENUM";
+            case GL_INVALID_VALUE:
+                return "GL_INVALID_VALUE";
+            case GL_INVALID_OPERATION:
+                return "GL_INVALID_OPERATION";
+            case GL_INVALID_FRAMEBUFFER_OPERATION:
+                return "GL_INVALID_FRAMEBUFFER_OPERATION";
+            case GL_OUT_OF_MEMORY:
+                return "GL_OUT_OF_MEMORY";
+            default:
+                return "Unknown glError ID";
+        }
+    }
+
+    void check_opengl(const std::string_view func, unsigned int error)
+    {
+        if (error != GL_NO_ERROR)
+        {
+            handle_assert(func, glerror_string(error));
         }
     }
 }

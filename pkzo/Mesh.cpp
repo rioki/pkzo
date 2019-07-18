@@ -17,6 +17,55 @@
 
 namespace pkzo
 {
+    std::shared_ptr<Mesh> Mesh::create_rectangle(glm::vec2 size, bool flip_y_uv)
+    {
+        auto hs = size * 0.5f;
+
+        auto mesh = std::make_shared<Mesh>();
+        mesh->set_vertex_count(4u);
+
+        mesh->set_vertex(0u, glm::vec3( hs[0],  hs[1], 0.0f));
+        mesh->set_vertex(1u, glm::vec3( hs[0], -hs[0], 0.0f));
+        mesh->set_vertex(2u, glm::vec3(-hs[0], -hs[0], 0.0f));
+        mesh->set_vertex(3u, glm::vec3(-hs[0],  hs[0], 0.0f));
+
+        mesh->set_normal(0u, glm::vec3(0.0f, 0.0f, 1.0f));
+        mesh->set_normal(1u, glm::vec3(0.0f, 0.0f, 1.0f));
+        mesh->set_normal(2u, glm::vec3(0.0f, 0.0f, 1.0f));
+        mesh->set_normal(3u, glm::vec3(0.0f, 0.0f, 1.0f));
+
+        if (flip_y_uv)
+        {
+            mesh->set_texcoord(0u, glm::vec2(1.0f, 0.0f));
+            mesh->set_texcoord(1u, glm::vec2(1.0f, 1.0f));
+            mesh->set_texcoord(2u, glm::vec2(0.0f, 1.0f));
+            mesh->set_texcoord(3u, glm::vec2(0.0f, 0.0f));
+        }
+        else
+        {
+            mesh->set_texcoord(0u, glm::vec2(1.0f, 1.0f));
+            mesh->set_texcoord(1u, glm::vec2(1.0f, 0.0f));
+            mesh->set_texcoord(2u, glm::vec2(0.0f, 0.0f));
+            mesh->set_texcoord(3u, glm::vec2(0.0f, 1.0f));
+        }
+
+        mesh->set_tangent(0u, glm::vec3(1.0f, 0.0f, 0.0f));
+        mesh->set_tangent(1u, glm::vec3(1.0f, 0.0f, 0.0f));
+        mesh->set_tangent(2u, glm::vec3(1.0f, 0.0f, 0.0f));
+        mesh->set_tangent(3u, glm::vec3(1.0f, 0.0f, 0.0f));
+
+        mesh->set_face_count(2u);
+        mesh->set_face(0u, 0u, 1u, 2u);
+        mesh->set_face(1u, 2u, 3u, 0u);
+
+        return mesh;
+    }
+
+    std::shared_ptr<Mesh> Mesh::create_fullscreen_rectangle()
+    {
+        return Mesh::create_rectangle(glm::uvec2(2.0f));
+    }
+
     Mesh::Mesh()
     : min(0), max(0) {}
 
@@ -358,7 +407,7 @@ namespace pkzo
             glBindBuffer(GL_ARRAY_BUFFER, buffer_id);
             glVertexAttribPointer(adr, vec::length(), GL_FLOAT, GL_FALSE, 0, 0);
             glEnableVertexAttribArray(adr);
-            PKZO_ASSERT(glGetError() == GL_NO_ERROR);
+            PKZO_CHECK_OPENGL(glGetError());
         }
     }
 
@@ -382,7 +431,7 @@ namespace pkzo
     {
         glBindVertexArray(0);
         bound = false;
-        PKZO_ASSERT(glGetError() == GL_NO_ERROR);
+        PKZO_CHECK_OPENGL(glGetError());
     }
 
     void Mesh::draw()
@@ -393,7 +442,7 @@ namespace pkzo
         glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(faces.size() * 3), GL_UNSIGNED_INT, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-        PKZO_ASSERT(glGetError() == GL_NO_ERROR);
+        PKZO_CHECK_OPENGL(glGetError());
     }
 
     template <typename vec>
@@ -404,7 +453,7 @@ namespace pkzo
         glBindBuffer(buffer_type, glid);
         glBufferData(buffer_type, values.size() * sizeof(vec), values.data(), GL_STATIC_DRAW);
         glBindBuffer(buffer_type, 0);
-        PKZO_ASSERT(glGetError() == GL_NO_ERROR);
+        PKZO_CHECK_OPENGL(glGetError());
 
         return glid;
     }
@@ -412,7 +461,7 @@ namespace pkzo
     void Mesh::upload()
     {
         glGenVertexArrays(1, &vao);
-        PKZO_ASSERT(glGetError() == GL_NO_ERROR);
+        PKZO_CHECK_OPENGL(glGetError());
 
         vertex_buffer   = upload_values(GL_ARRAY_BUFFER, vertices);
         normal_buffer   = upload_values(GL_ARRAY_BUFFER, normals);

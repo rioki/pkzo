@@ -2,7 +2,7 @@
 // Copyright (c) 2014-2019 Sean Farrell
 // See READNE.md for licensing details.
 
-#include "Geometry.h"
+#include "Light.h"
 #include "Mesh.h"
 #include "Material.h"
 #include "Shader.h"
@@ -11,30 +11,30 @@
 
 namespace pkzo
 {
-    Geometry::Geometry() = default;
-    Geometry::~Geometry() = default;
+    Light::Light() = default;
+    Light::~Light() = default;
 
-    void Geometry::set_mesh(std::shared_ptr<Mesh> value)
+    void Light::set_mesh(std::shared_ptr<Mesh> value)
     {
         mesh = std::move(value);
     }
 
-    std::shared_ptr<Mesh> Geometry::get_mesh() const
+    std::shared_ptr<Mesh> Light::get_mesh() const
     {
         return mesh;
     }
 
-    void Geometry::set_material(std::shared_ptr<Material> value)
+    void Light::set_material(std::shared_ptr<Material> value)
     {
         material = std::move(value);
     }
 
-    std::shared_ptr<Material> Geometry::get_material()
+    std::shared_ptr<Material> Light::get_material()
     {
         return material;
     }
 
-    void Geometry::draw(const Camera& camera, FrameBuffer& target)
+    void Light::draw(const Camera& camera, FrameBuffer& target)
     {
         if (!mesh || !material)
         {
@@ -54,12 +54,11 @@ namespace pkzo
         shader->set_uniform("pkzo_ProjectionMatrix", proj);
         shader->set_uniform("pkzo_ViewMatrix", view);
         shader->set_uniform("pkzo_ModelMatrix", model);
-        target.bind(*shader);
+        target.bind_inputs(*shader);
         material->bind(*shader);
         mesh->bind(*shader);
         mesh->draw();
         mesh->unbind();
-        target.unbind();
         material->unbind();
         shader->unbind();
     }

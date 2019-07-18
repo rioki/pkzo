@@ -24,4 +24,10 @@
 
 #define GLM_FORCE_SWIZZLE
 
+// debugging flags
+#ifndef NDEBUG
+#define PKZO_PEDANTIC
+#define PKZO_PEDANTIC_OPENGL
+#endif
+
 #endif

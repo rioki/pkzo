@@ -12,6 +12,8 @@
 #include "SceneNode.h"
 #include "Camera.h"
 #include "Geometry.h"
+#include "Light.h"
+#include "FrameBuffer.h"
 
 namespace pkzo
 {
@@ -42,10 +44,31 @@ namespace pkzo
     {
         PKZO_ASSERT(this == &camera.get_scene());
 
+        if (gbuffer == nullptr)
+        {
+            gbuffer = std::make_shared<GeometryBuffer>(camera.get_resolution());
+        }
+        else
+        {
+            gbuffer->resize(camera.get_resolution());
+        }
+
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LEQUAL);
+
+        gbuffer->bind();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
         auto geoms = get_nodes<Geometry>();
         for (auto& geom : geoms)
         {
-            geom->draw(camera);
+            geom->draw(camera, *gbuffer);
+        }
+
+        auto lights = get_nodes<Light>();
+        for (auto& light : lights)
+        {
+            light->draw(camera, *gbuffer);
         }
     }
 }

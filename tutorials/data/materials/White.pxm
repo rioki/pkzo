@@ -4,7 +4,9 @@
 	This is a plain wite material for user interface use.
   </note>
   <uniforms>
-	<uniform id="Color" type="vec4" x="1.0" y="1.0" z="1.0" w="1.0" />
+	<uniform id="Albedo" type="vec3" x="1.0" y="1.0" z="1.0" />
+	<uniform id="Roughtness" type="float" value="1.0" />
+	<uniform id="Metal" type="float" value="0.0" />
   </uniforms>
-  <shader src="../shaders/SolidColor.glsl" />
+  <shader src="../shaders/Geometry/SolidColor.glsl" />
 </material>

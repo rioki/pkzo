@@ -31,7 +31,7 @@
 /*!
  * Throw an exception with callstack.
  *
- * In debug builds this macro will throw an exception with full callstack 
+ * In debug builds this macro will throw an exception with full callstack
  * In release builds this macro will just throw the exception.
  *
  * @param EX the ection class to throw
@@ -39,12 +39,13 @@
  */
 #define PKZO_THROW(EX, MSG) ::pkzo::throw_with_callstack<EX>(__FUNCTION__, MSG)
 
+#ifdef PKZO_PEDANTIC
 /*!
  * Asseert that throws an exception with callstack.
  *
- * In debug builds this macro will check the given condition and 
+ * In debug builds this macro will check the given condition and
  * if the confition is false, throw an exception.
- * 
+ *
  * @param COND the confition to check
  */
 #define PKZO_ASSERT(COND) if (static_cast<bool>(COND) == false) { ::pkzo::handle_assert(__FUNCTION__, #COND); }
@@ -52,17 +53,27 @@
 /*!
  * Asseert that traces the error condition
  *
- * In debug builds this macro will check the given condition and 
+ * In debug builds this macro will check the given condition and
  * if the confition is false, trace an error.
- * 
+ *
  * @param COND the confition to check
  */
 #define PKZO_SOFT_ASSERT(COND) if (static_cast<bool>(COND) == false) { PKZO_TRACE_ERROR("Soft assert failed '" #COND "'."); }
+#else
+#define PKZO_ASSERT(COND)
+#define PKZO_SOFT_ASSERT(COND)
+#endif
+
+#ifdef PKZO_PEDANTIC_OPENGL
+#define PKZO_CHECK_OPENGL(ERROR) ::pkzo::check_opengl(__FUNCTION__, ERROR);
+#else
+#define PKZO_CHECK_OPENGL(ERROR)
+#endif
 
 #else
-#define PKZO_TRACE(SEV, MSG) 
-#define PKZO_TRACE_ERROR(MSG) 
-#define PKZO_TRACE_WARNING(MSG) 
+#define PKZO_TRACE(SEV, MSG)
+#define PKZO_TRACE_ERROR(MSG)
+#define PKZO_TRACE_WARNING(MSG)
 #define PKZO_TRACE_INFO(MSG)
 #define PKZO_THROW(EX, MSG) throw EX(MSG)
 #define PKZO_ASSERT(COND)
@@ -74,7 +85,7 @@ namespace pkzo
     /*!
      * Trace Level
      */
-    enum class TraceLevel 
+    enum class TraceLevel
     {
         TRACE_ERROR,
         TRACE_WARNING,
@@ -85,14 +96,14 @@ namespace pkzo
      * Trace a message.
      *
      * This debug function will write a message to the trace buffer,
-     * on windows this OutputDebugString. You should use DBG_TRACE macro 
+     * on windows this OutputDebugString. You should use DBG_TRACE macro
      * instead of this function.
-     * 
+     *
      * @param func the function that called the trace
      * @param lavel the trace level
      * @param msg the message to write
      *
-     * @see PKZO_TRACE 
+     * @see PKZO_TRACE
      */
     void trace(const std::string_view func, TraceLevel level, const std::string_view msg);
 
@@ -115,7 +126,7 @@ namespace pkzo
      * callstack you need to have all PDBs next to the program.
      *
      * @return the callstack
-     * 
+     *
      * @note This function is only available in debug builds.
      */
     PKZO_EXPORT
@@ -141,17 +152,17 @@ namespace pkzo
     /*!
      * Throw exception with callstack.
      *
-     * This debug utility function will pull a full callstack and append it to 
-     * the given error message. You should use DBG_THROW macro instead of this 
+     * This debug utility function will pull a full callstack and append it to
+     * the given error message. You should use DBG_THROW macro instead of this
      * function.
      *
      * @param func the calling function
      * @param msg the message to print
      *
-     * @see PKZO_THROW 
+     * @see PKZO_THROW
      */
     template <typename Exception> [[noreturn]]
-	void throw_with_callstack(const std::string_view func, const std::string_view msg) 
+	void throw_with_callstack(const std::string_view func, const std::string_view msg)
 	{
 		std::stringstream buff;
 		buff << func << ": " << msg << "\n";
@@ -166,6 +177,9 @@ namespace pkzo
 
 		throw Exception(buff.str());
 	}
+
+    PKZO_EXPORT
+    void check_opengl(const std::string_view func, unsigned int error);
 }
 
 #endif

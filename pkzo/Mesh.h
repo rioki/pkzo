@@ -23,6 +23,16 @@ namespace pkzo
     {
     public:
 
+        /*!
+         * Create a rectangle mesh.
+         */
+        static std::shared_ptr<Mesh> create_rectangle(glm::vec2 size, bool flip_y_uv = false);
+
+        /*!
+         * Create a rectangle mesh that can be used for fullscreen blitting.
+         */
+        static std::shared_ptr<Mesh> create_fullscreen_rectangle();
+
         Mesh();
 
         Mesh(const fs::path& file);

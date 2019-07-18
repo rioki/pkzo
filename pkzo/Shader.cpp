@@ -109,7 +109,7 @@ namespace pkzo
         PKZO_ASSERT(bound);
 
         unsigned int id = glGetAttribLocation(program_id, name.data());
-        PKZO_ASSERT(glGetError() == GL_NO_ERROR);
+        PKZO_CHECK_OPENGL(glGetError());
 
         return id;
     }
@@ -118,7 +118,7 @@ namespace pkzo
     {
         PKZO_ASSERT(bound);
         glBindFragDataLocation(program_id, channel, name.data());
-        PKZO_ASSERT(glGetError() == GL_NO_ERROR);
+        PKZO_CHECK_OPENGL(glGetError());
     }
 
     std::string create_preamble(const std::map<std::string, std::string> macros)
@@ -162,7 +162,7 @@ namespace pkzo
         for (auto shader_id : shader_ids)
         {
             glAttachShader(program_id, shader_id);
-            PKZO_ASSERT(glGetError() == GL_NO_ERROR);
+            PKZO_CHECK_OPENGL(glGetError());
         }
 
         glLinkProgram(program_id);
@@ -202,7 +202,7 @@ namespace pkzo
             // the program gets deleted.
             glDeleteShader(vertex_id);
             glDeleteShader(fragment_id);
-            PKZO_ASSERT(glGetError() == GL_NO_ERROR);
+            PKZO_CHECK_OPENGL(glGetError());
         }
         catch (...)
         {

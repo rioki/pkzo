@@ -22,6 +22,13 @@ namespace mats
         teapot->set_mesh(teapot_mesh);
         teapot->set_material(white_material);
         add_node(teapot);
+
+        auto fullscreen_mesh = pkzo::Mesh::create_fullscreen_rectangle();
+        auto directional_light = std::make_shared<pkzo::Material>("../data/materials/WhiteDirectionalLight.pxm");
+        auto light0 = std::make_shared<pkzo::Light>();
+        light0->set_mesh(fullscreen_mesh);
+        light0->set_material(directional_light);
+        add_node(light0);
     }
 
     std::shared_ptr<pkzo::Camera> TestScene::get_camera() const

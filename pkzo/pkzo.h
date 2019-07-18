@@ -19,6 +19,7 @@
 #include "SceneNode.h"
 #include "Camera.h"
 #include "Geometry.h"
+#include "Light.h"
 
 #include "Material.h"
 #include "Mesh.h"

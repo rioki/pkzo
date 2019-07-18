@@ -13,8 +13,6 @@
 
 namespace pkzo
 {
-    std::shared_ptr<Mesh> make_uniform_rect();
-
     glm::vec2 safe_estimate(const std::shared_ptr<Font>& font, const std::string& text)
     {
         if (font)
@@ -29,7 +27,7 @@ namespace pkzo
 
     Text::Text(const glm::vec2& position, const std::string& t, const std::shared_ptr<Font>& f,  const std::shared_ptr<Material>& m)
     : ScreenNode(position, safe_estimate(f, t)),
-      mesh(make_uniform_rect()),
+      mesh(Mesh::create_rectangle(glm::vec2(1.0), true)),
       text(t),
       font(f),
       material(m) {}

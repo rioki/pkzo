@@ -15,6 +15,22 @@
 
 namespace pkzo
 {
+    auto get_sdl_color_mode(SDL_Surface* surface)
+    {
+        PKZO_ASSERT(surface != nullptr);
+        switch (surface->format->BytesPerPixel)
+        {
+        case 1:
+            return ColorMode::GRAYSCALE;
+        case 3:
+            return ColorMode::RGB;
+        case 4:
+            return ColorMode::RGBA;
+        default:
+            PKZO_THROW(std::logic_error, "Unknown pixel format.");
+        }
+    }
+
     Texture::Texture(const fs::path& file)
     {
         surface = IMG_Load(file.string().data());
@@ -22,7 +38,13 @@ namespace pkzo
         {
             PKZO_THROW(std::runtime_error, IMG_GetError());
         }
+
+        size = glm::uvec2(surface->w, surface->h);
+        color = get_sdl_color_mode(surface);
     }
+
+    Texture::Texture(glm::uvec2 s, ColorMode c)
+    : size(s), color(c) {}
 
     Texture::Texture(SDL_Surface* s)
     : surface(s)
@@ -31,6 +53,9 @@ namespace pkzo
         {
             PKZO_THROW(std::invalid_argument, "Texture::Texture surface is null.");
         }
+
+        size = glm::uvec2(surface->w, surface->h);
+        color = get_sdl_color_mode(surface);
     }
 
     Texture::~Texture()
@@ -41,48 +66,42 @@ namespace pkzo
             surface = nullptr;
         }
 
-        if (gl_handle != 0)
+        unload();
+    }
+
+    void Texture::resize(glm::uvec2 value)
+    {
+        if (surface != nullptr)
         {
-            glDeleteTextures(1, &gl_handle);
-            gl_handle = 0;
-            PKZO_SOFT_ASSERT(glGetError() == GL_NO_ERROR);
+            PKZO_THROW(std::invalid_argument, "Can not resize surface backed texture");
         }
+
+        size = value;
+        unload();
     }
 
     glm::uvec2 Texture::get_size() const
     {
-        PKZO_ASSERT(surface != nullptr);
-        return glm::uvec2(surface->w, surface->h);
+        return size;
     }
 
-    ColorType Texture::get_color_type() const
+    ColorMode Texture::get_color() const
     {
-        PKZO_ASSERT(surface != nullptr);
-        switch (surface->format->BytesPerPixel)
-        {
-        case 1:
-            return ColorType::MONO;
-        case 3:
-            return ColorType::RGB;
-        case 4:
-            return ColorType::RGBA;
-        default:
-            throw std::logic_error("Unknown pixel format.");
-        }
+        return color;
     }
 
     void Texture::bind(glm::uint s)
     {
         slot = s;
         glActiveTexture(GL_TEXTURE0 + slot);
-        if (gl_handle == 0)
+        if (glid == 0)
         {
             upload();
         }
         else
         {
-            PKZO_ASSERT(gl_handle != 0);
-            glBindTexture(GL_TEXTURE_2D, gl_handle);
+            PKZO_ASSERT(glid != 0);
+            glBindTexture(GL_TEXTURE_2D, glid);
         }
     }
 
@@ -92,18 +111,77 @@ namespace pkzo
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
-    GLenum color2gl(ColorType type)
+    glm::uint Texture::get_handle()
     {
-        switch (type)
+        if (glid == 0)
         {
-        case ColorType::MONO:
-            return GL_ALPHA;
-        case ColorType::RGB:
+            upload();
+        }
+        return glid;
+    }
+
+        auto color2format(ColorMode color)
+    {
+        switch (color)
+        {
+        case ColorMode::GRAYSCALE_FLOAT:
+        case ColorMode::GRAYSCALE:
+            return GL_R;
+        case ColorMode::RGB_FLOAT:
+        case ColorMode::RGB:
             return GL_RGB;
-        case ColorType::RGBA:
+        case ColorMode::RGBA_FLOAT:
+        case ColorMode::RGBA:
             return GL_RGBA;
-        case ColorType::DEPTH:
+        case ColorMode::DEPTH_FLOAT:
+        case ColorMode::DEPTH:
             return GL_DEPTH_COMPONENT;
+        default:
+            PKZO_ASSERT(false && "invalid color type");
+            return 0;
+        }
+    }
+
+    auto color2intformat(ColorMode color)
+    {
+        switch (color)
+        {
+        case ColorMode::GRAYSCALE:
+            return GL_R;
+        case ColorMode::RGB:
+            return GL_RGB;
+        case ColorMode::RGBA:
+            return GL_RGBA;
+        case ColorMode::DEPTH:
+            return GL_DEPTH_COMPONENT;
+        case ColorMode::GRAYSCALE_FLOAT:
+            return GL_R32F;
+        case ColorMode::RGB_FLOAT:
+            return GL_RGB32F;
+        case ColorMode::RGBA_FLOAT:
+            return GL_RGBA32F;
+        case ColorMode::DEPTH_FLOAT:
+            return GL_DEPTH_COMPONENT32F;
+        default:
+            PKZO_ASSERT(false && "invalid color type");
+            return 0;
+        }
+    }
+
+    auto color2type(ColorMode color)
+    {
+        switch (color)
+        {
+        case ColorMode::GRAYSCALE:
+        case ColorMode::RGB:
+        case ColorMode::RGBA:
+        case ColorMode::DEPTH:
+            return GL_UNSIGNED_BYTE;
+        case ColorMode::GRAYSCALE_FLOAT:
+        case ColorMode::RGB_FLOAT:
+        case ColorMode::RGBA_FLOAT:
+        case ColorMode::DEPTH_FLOAT:
+            return GL_FLOAT;
         default:
             PKZO_ASSERT(false && "invalid color type");
             return 0;
@@ -112,23 +190,39 @@ namespace pkzo
 
     void Texture::upload()
     {
-        PKZO_ASSERT(gl_handle == 0);
-        PKZO_ASSERT(surface != nullptr);
+        PKZO_ASSERT(glid == 0);
 
-        glGenTextures(1, &gl_handle);
-        PKZO_ASSERT(glGetError() == GL_NO_ERROR);
+        glGenTextures(1, &glid);
+        PKZO_CHECK_OPENGL(glGetError());
 
-        glBindTexture(GL_TEXTURE_2D, gl_handle);
+        glBindTexture(GL_TEXTURE_2D, glid);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-        GLenum glmode = color2gl(get_color_type());
+        auto intformat = color2intformat(color);
+        auto format = color2format(color);
+        auto gltype = color2type(color);
+        void*  data = nullptr;
+        if (surface != nullptr)
+        {
+            data = surface->pixels;
+        }
 
-        glTexImage2D(GL_TEXTURE_2D, 0, glmode, surface->w, surface->h, 0, glmode, GL_UNSIGNED_BYTE, surface->pixels);
-        PKZO_ASSERT(glGetError() == GL_NO_ERROR);
+        glTexImage2D(GL_TEXTURE_2D, 0, intformat, size.x, size.y, 0, format, gltype, data);
+        PKZO_CHECK_OPENGL(glGetError());
 
-        glGenerateMipmap(GL_TEXTURE_2D);
-        PKZO_ASSERT(glGetError() == GL_NO_ERROR);
+        // TODO glGenerateMipmap(GL_TEXTURE_2D);
+        PKZO_CHECK_OPENGL(glGetError());
+    }
+
+    void Texture::unload()
+    {
+        if (glid != 0)
+        {
+            glDeleteTextures(1, &glid);
+            glid = 0;
+            PKZO_SOFT_ASSERT(glGetError() == GL_NO_ERROR);
+        }
     }
 }

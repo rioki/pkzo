@@ -2,8 +2,8 @@
 // Copyright (c) 2014-2019 Sean Farrell
 // See READNE.md for licensing details.
 
-#ifndef _PKZO_GEOMETRY_H_
-#define _PKZO_GEOMETRY_H_
+#ifndef _PKZO_LIGHT_H_
+#define _PKZO_LIGHT_H_
 
 #include "SceneNode.h"
 
@@ -17,11 +17,11 @@ namespace pkzo
     /*!
      * Geometry
      */
-    class PKZO_EXPORT Geometry : public SceneNode
+    class PKZO_EXPORT Light : public SceneNode
     {
     public:
-        Geometry();
-        ~Geometry();
+        Light();
+        ~Light();
 
         /*!
          * The mesh
@@ -41,7 +41,7 @@ namespace pkzo
         std::shared_ptr<Material> get_material();
         /*! @} */
 
-        void draw(const Camera& camera, FrameBuffer& target);
+        void draw(const Camera& camera, FrameBuffer& gbuffer);
 
     private:
         std::shared_ptr<Mesh> mesh;

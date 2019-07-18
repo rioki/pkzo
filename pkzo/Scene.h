@@ -16,6 +16,7 @@ namespace pkzo
 {
     class SceneNode;
     class Camera;
+    class FrameBuffer;
 
     /*!
      * 3d Stuff
@@ -52,6 +53,8 @@ namespace pkzo
 
     private:
         std::list<std::shared_ptr<SceneNode>> nodes;
+
+        std::shared_ptr<FrameBuffer> gbuffer;
     };
 
     template <typename NodeT>
