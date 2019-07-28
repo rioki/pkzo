@@ -4,12 +4,9 @@
 
 #include "Screen.h"
 
-#include <algorithm>
-#include <glm/gtc/matrix_transform.hpp>
-#include <GL/glew.h>
-
 #include "dbg.h"
 #include "ScreenNode.h"
+#include "RenderQueue.h"
 
 namespace pkzo
 {
@@ -51,19 +48,18 @@ namespace pkzo
         nodes.erase(i);
     }
 
-    void Screen::draw()
+    void Screen::draw(RenderQueue& queue)
     {
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        queue.clear();
 
         auto hs = size / 2.0f;
-        auto proj = glm::ortho(-hs.x, hs.x, -hs.y, hs.y);
-        auto view = glm::mat4(1.0);
-        auto model = glm::mat4(1.0);
+        queue.set_othro_camera(-hs.x, hs.x, -hs.y, hs.y, -1.0f, 1.0f);
 
         for (auto& node : nodes)
         {
-            node->draw(proj, view, model);
+            node->enqueue(queue);
         }
+
+        queue.execute(BlendMode::ALPHA);
     }
 }

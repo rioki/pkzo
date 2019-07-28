@@ -2,8 +2,8 @@
 // Copyright (c) 2014-2019 Sean Farrell
 // See READNE.md for licensing details.
 
-#ifndef _PKZO_TEXTURE_H_
-#define _PKZO_TEXTURE_H_
+#ifndef _PKZO_TEXT_H_
+#define _PKZO_TEXT_H_
 
 #include "ScreenNode.h"
 
@@ -36,14 +36,13 @@ namespace pkzo
 
         const std::shared_ptr<Material>& get_material() const;
 
-        void draw(const glm::mat4& proj, const glm::mat4& view, const glm::mat4& model) override;
+        void enqueue(RenderQueue& queue) override;
 
     private:
-        std::shared_ptr<Mesh> mesh;
         std::string text;
         std::shared_ptr<Font> font;
         std::shared_ptr<Material> material;
-        std::shared_ptr<Texture> texture;
+        std::shared_ptr<Material> material_instance;
     };
 }
 

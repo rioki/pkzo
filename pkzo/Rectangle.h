@@ -24,10 +24,9 @@ namespace pkzo
 
         const std::shared_ptr<Material>& get_material() const;
 
-        void draw(const glm::mat4& proj, const glm::mat4& view, const glm::mat4& model) override;
+        void enqueue(RenderQueue& queue) override;
 
     private:
-        std::shared_ptr<Mesh> mesh;
         std::shared_ptr<Material> material;
     };
 }

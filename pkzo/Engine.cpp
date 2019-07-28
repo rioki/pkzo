@@ -17,6 +17,7 @@
 #include "Screen.h"
 #include "Scene.h"
 #include "Camera.h"
+#include "RenderQueue.h"
 
 namespace pkzo
 {
@@ -42,6 +43,7 @@ namespace pkzo
         window->on(Window::DRAW, [this] () {
             draw();
         });
+        render_queue = std::make_unique<RenderQueue>();
 
         mouse    = std::make_unique<Mouse>();
         keyboard = std::make_unique<Keyboard>();
@@ -54,6 +56,7 @@ namespace pkzo
         scene = nullptr;
         keyboard = nullptr;
         mouse = nullptr;
+        render_queue = nullptr;
         window = nullptr;
         IMG_Quit();
         TTF_Quit();
@@ -194,7 +197,7 @@ namespace pkzo
 
         if (screen)
         {
-            screen->draw();
+            screen->draw(*render_queue);
         }
     }
 

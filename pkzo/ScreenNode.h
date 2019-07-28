@@ -13,7 +13,9 @@
 namespace pkzo
 {
     class Screen;
+    class RenderQueue;
 
+    //! Basic Screen Element
     class PKZO_EXPORT ScreenNode : private stdex::non_copyable
     {
     public:
@@ -27,7 +29,8 @@ namespace pkzo
         void set_size(const glm::vec2& value);
         const glm::vec2& get_size() const;
 
-        virtual void draw(const glm::mat4& proj, const glm::mat4& view, const glm::mat4& model);
+        //! Submit draw commands to the render queue.
+        virtual void enqueue(RenderQueue& queue);
 
     private:
         Screen* screen = nullptr;

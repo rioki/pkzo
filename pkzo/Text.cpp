@@ -4,12 +4,13 @@
 
 #include "Text.h"
 
-#include "Shader.h"
-#include "Mesh.h"
-#include "Font.h"
-#include "Material.h"
-#include "Texture.h"
 #include <glm/gtc/matrix_transform.hpp>
+
+#include "dbg.h"
+#include "RenderQueue.h"
+#include "Font.h"
+#include "Texture.h"
+#include "Material.h"
 
 namespace pkzo
 {
@@ -27,7 +28,6 @@ namespace pkzo
 
     Text::Text(const glm::vec2& position, const std::string& t, const std::shared_ptr<Font>& f,  const std::shared_ptr<Material>& m)
     : ScreenNode(position, safe_estimate(f, t)),
-      mesh(Mesh::create_rectangle(glm::vec2(1.0), true)),
       text(t),
       font(f),
       material(m) {}
@@ -37,7 +37,7 @@ namespace pkzo
     void Text::set_text(const std::string& value)
     {
         text = value;
-        texture = nullptr;
+        material_instance = nullptr;
     }
 
     const std::string& Text::get_text() const
@@ -48,7 +48,7 @@ namespace pkzo
     void Text::set_font(const std::shared_ptr<Font>& value)
     {
         font = value;
-        texture = nullptr;
+        material_instance = nullptr;
     }
 
     const std::shared_ptr<Font>& Text::get_font()
@@ -66,36 +66,22 @@ namespace pkzo
         return material;
     }
 
-    void Text::draw(const glm::mat4& proj, const glm::mat4& view, const glm::mat4& model)
+    void Text::enqueue(RenderQueue& queue)
     {
-        if (!mesh || !material || !font)
-        {
-            return;
-        }
-        auto shader = material->get_shader();
-        if (!shader)
-        {
-            return;
-        }
+        PKZO_ASSERT(font);
+        PKZO_ASSERT(material);
 
-        if (!texture)
+        if (!material_instance)
         {
-            texture = font->render(text);
+            material_instance = std::make_shared<Material>(*material);
+            material_instance->set_texture("pkzo_Mask", font->render(text));
         }
 
-        auto local_model = glm::translate(model, glm::vec3(get_position(), 0.0f));
-        local_model = glm::scale(local_model, glm::vec3(get_size(), 1.0f));
+        auto model_matrix = glm::mat4(1.0f);
+        model_matrix = glm::translate(model_matrix, glm::vec3(get_position(), 0.0f));
+        auto texture_matrix = glm::mat3(1.0f);
+        texture_matrix[1][1] = -1.0;
 
-        shader->bind();
-        shader->set_uniform("pkzo_ProjectionMatrix", proj);
-        shader->set_uniform("pkzo_ViewMatrix", view);
-        shader->set_uniform("pkzo_ModelMatrix", local_model);
-        shader->set_texture("pkzo_Text", texture);
-        material->bind(*shader);
-        mesh->bind(*shader);
-        mesh->draw();
-        mesh->unbind();
-        material->unbind();
-        shader->unbind();
+        queue.submit_rectangle(model_matrix, get_size(), material_instance, texture_matrix);
     }
 }

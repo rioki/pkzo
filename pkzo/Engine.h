@@ -21,6 +21,7 @@ namespace pkzo
     class Screen;
     class Scene;
     class Camera;
+    class RenderQueue;
 
     /*!
      * Central object holding all the bits together.
@@ -110,15 +111,16 @@ namespace pkzo
         virtual void tick();
 
     private:
-        std::string               id;
-        std::atomic<bool>         running;
-        std::unique_ptr<Window>   window;
-        std::unique_ptr<Mouse>    mouse;
-        std::unique_ptr<Keyboard> keyboard;
+        std::string                  id;
+        std::atomic<bool>            running;
+        std::unique_ptr<Window>      window;
+        std::unique_ptr<Mouse>       mouse;
+        std::unique_ptr<Keyboard>    keyboard;
+        std::unique_ptr<RenderQueue> render_queue;
 
-        std::shared_ptr<Screen>   screen;
-        std::shared_ptr<Scene>    scene;
-        std::shared_ptr<Camera>   camera;
+        std::shared_ptr<Screen>      screen;
+        std::shared_ptr<Scene>       scene;
+        std::shared_ptr<Camera>      camera;
 
         void handle_events();
         void draw();

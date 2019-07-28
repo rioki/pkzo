@@ -4,16 +4,15 @@
 
 #include "Rectangle.h"
 
-#include "Shader.h"
-#include "Mesh.h"
-#include "Material.h"
 #include <glm/gtc/matrix_transform.hpp>
+
+#include "RenderQueue.h"
+#include "Material.h"
 
 namespace pkzo
 {
     Rectangle::Rectangle(const glm::vec2& position, const glm::vec2& size, const std::shared_ptr<Material>& m)
     : ScreenNode(position, size),
-      mesh(Mesh::create_rectangle(glm::vec2(1.0), true)),
       material(m) {}
 
     Rectangle::~Rectangle() = default;
@@ -28,30 +27,13 @@ namespace pkzo
         return material;
     }
 
-    void Rectangle::draw(const glm::mat4& proj, const glm::mat4& view, const glm::mat4& model)
+    void Rectangle::enqueue(RenderQueue& queue)
     {
-        if (!mesh || !material)
-        {
-            return;
-        }
-        auto shader = material->get_shader();
-        if (!shader)
-        {
-            return;
-        }
+        auto model_matrix = glm::mat4(1.0f);
+        model_matrix = glm::translate(model_matrix, glm::vec3(get_position(), 0.0f));
+        auto texture_matrix = glm::mat3(1.0f);
+        texture_matrix[1][1] = -1.0;
 
-        auto local_model = glm::translate(model, glm::vec3(get_position(), 0.0f));
-        local_model = glm::scale(local_model, glm::vec3(get_size(), 1.0f));
-
-        shader->bind();
-        shader->set_uniform("pkzo_ProjectionMatrix", proj);
-        shader->set_uniform("pkzo_ViewMatrix", view);
-        shader->set_uniform("pkzo_ModelMatrix", local_model);
-        material->bind(*shader);
-        mesh->bind(*shader);
-        mesh->draw();
-        mesh->unbind();
-        material->unbind();
-        shader->unbind();
+        queue.submit_rectangle(model_matrix, get_size(), material, texture_matrix);
     }
 }

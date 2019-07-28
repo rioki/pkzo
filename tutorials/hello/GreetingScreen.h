@@ -5,7 +5,7 @@
 #ifndef _HELLO_GREETING_SCREEN_H_
 #define _HELLO_GREETING_SCREEN_H_
 
-#include <pkzo/Screen.h>
+#include <pkzo/pkzo.h>
 
 namespace hello
 {

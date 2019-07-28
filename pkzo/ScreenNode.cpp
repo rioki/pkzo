@@ -31,5 +31,5 @@ namespace pkzo
         return size;
     }
 
-    void ScreenNode::draw(const glm::mat4& proj, const glm::mat4& view, const glm::mat4& model) {}
+    void ScreenNode::enqueue(RenderQueue& queue) {}
 }

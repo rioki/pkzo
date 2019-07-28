@@ -14,6 +14,7 @@
 
 namespace pkzo
 {
+    class RenderQueue;
     class ScreenNode;
 
     /*!
@@ -63,7 +64,7 @@ namespace pkzo
         /*!
          * Draw the screen.
          */
-        void draw();
+        void draw(RenderQueue& queue);
 
     private:
         glm::vec2 size;
