@@ -74,17 +74,17 @@ namespace pkzo
 
     void RenderQueue::submit_directional_light(const glm::vec3& color, const glm::vec3& direction)
     {
-        lights.push_back({AMBIENT_LIGHT, color, glm::vec3(0.0f), direction});
+        lights.push_back({DIRECTIONAL_LIGHT, color, glm::vec3(0.0f), direction});
     }
 
     void RenderQueue::submit_point_light(const glm::vec3& color, const glm::vec3& position)
     {
-        lights.push_back({AMBIENT_LIGHT, color, position});
+        lights.push_back({POINT_LIGHT, color, position});
     }
 
     void RenderQueue::submit_spot_light(const glm::vec3& color, const glm::vec3& position, const glm::vec3& direction, float angle)
     {
-        lights.push_back({AMBIENT_LIGHT, color, position, direction, angle});
+        lights.push_back({SPOT_LIGHT, color, position, direction, angle});
     }
 
     void RenderQueue::execute(RenderAlgorithm algorithm)

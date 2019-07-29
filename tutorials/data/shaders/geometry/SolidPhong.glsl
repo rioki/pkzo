@@ -43,23 +43,63 @@ in vec3 ws_Normal;
 
 out vec4 pkzo_FragColor;
 
-void main()
+vec3 shade_ambient_light(vec3 albedo)
+{
+	return albedo * pkzo_LightColor;
+}
+
+vec3 shade_directional_light(vec3 normal, vec3 albedo, float rougthness, float metal)
+{
+	float ndl = dot(normal, -pkzo_LightDirection); 
+	if (ndl > 0.0)
+	{
+		return ndl * albedo * pkzo_LightColor;
+	}
+	return vec3(0.0);
+}
+
+vec3 shade_point_light(vec3 position, vec3 normal, vec3 albedo, float rougthness, float metal)
+{
+	vec3 light = position - pkzo_LightPosition;
+	float ndl = dot(normal, light); 
+	if (ndl > 0.0)
+	{
+		return ndl * albedo * pkzo_LightColor;
+	}
+	return vec3(0.0);
+}
+
+vec3 shade_spot_light(vec3 position, vec3 normal, vec3 albedo, float rougthness, float metal)
+{
+	vec3 light = position - pkzo_LightPosition;
+	float ndl = dot(normal, light); 
+	if (ndl > 0.0)
+	{
+		return ndl * albedo * pkzo_LightColor;
+	}
+	return vec3(0.0);
+}
+
+vec3 shade_light(vec3 position, vec3 normal, vec3 albedo, float rougthness, float metal)
 {
 	switch (pkzo_LightType)
 	{
 		case PKZO_AMBIENT_LIGHT:
-			pkzo_FragColor = vec4(Albedo * pkzo_LightColor, 1.0);
-			break;
+			return shade_ambient_light(albedo);
 		case PKZO_DIRECTIONAL_LIGHT:
-			pkzo_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
-			break;
+			return shade_directional_light(normal, albedo, rougthness, metal);
 		case PKZO_POINT_LIGHT:
-			pkzo_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
-			break;
+			return shade_point_light(position, normal, albedo, rougthness, metal);
 		case PKZO_SPOT_LIGHT:
-			pkzo_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
-			break;
+			return shade_spot_light(position, normal, albedo, rougthness, metal);
 	}
+}
+
+void main()
+{
+	vec3 normal = normalize(ws_Normal);
+	vec3 color = shade_light(ws_Position, normal, Albedo, Roughtness, Metal);
+	pkzo_FragColor = vec4(color, 1.0);
 }
 
 #endif

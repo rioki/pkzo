@@ -11,7 +11,9 @@ namespace mats
     TestScene::TestScene()
     {
         auto cam_position = glm::mat4(1.0f);
-        cam_position = glm::translate(cam_position, glm::vec3(0.0f, 0.0f, 10.f));
+        cam_position = glm::translate(cam_position, glm::vec3(-10.0f, 0.0f, 0.f));
+        cam_position = glm::rotate(cam_position, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+        cam_position = glm::rotate(cam_position, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
         camera = std::make_shared<pkzo::Camera>();
         camera->set_transform(cam_position);
         add_node(camera);
@@ -25,6 +27,10 @@ namespace mats
 
         auto light0 = std::make_shared<pkzo::AmbientLight>(glm::vec3(0.25f));
         add_node(light0);
+
+        auto light1 = std::make_shared<pkzo::DirectionalLight>(glm::vec3(0.5f, 0.5f, 0.7f));
+        light1->set_transform(glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 1.0f)));
+        add_node(light1);
     }
 
     std::shared_ptr<pkzo::Camera> TestScene::get_camera() const

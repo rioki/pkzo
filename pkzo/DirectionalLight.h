@@ -13,6 +13,7 @@ namespace pkzo
     class PKZO_EXPORT DirectionalLight : public Light
     {
     public:
+        DirectionalLight(const glm::vec3& color);
 
         void enqueue(RenderQueue& queue) const override;
 

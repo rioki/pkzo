@@ -9,6 +9,9 @@
 
 namespace pkzo
 {
+    DirectionalLight::DirectionalLight(const glm::vec3& color)
+    : Light(color) {}
+
     void DirectionalLight::enqueue(RenderQueue& queue) const
     {
         auto rotation = glm::mat3(get_transform());
