@@ -20,6 +20,10 @@
 #include "Camera.h"
 #include "Geometry.h"
 #include "Light.h"
+#include "AmbientLight.h"
+#include "DirectionalLight.h"
+#include "PointLight.h"
+#include "SpotLight.h"
 
 #include "Material.h"
 #include "Mesh.h"

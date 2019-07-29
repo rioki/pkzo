@@ -2,6 +2,7 @@
 // Copyright (c) 2014-2019 Sean Farrell
 // See READNE.md for licensing details.
 
+#include "pch.h"
 #include "Rectangle.h"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -27,7 +28,7 @@ namespace pkzo
         return material;
     }
 
-    void Rectangle::enqueue(RenderQueue& queue)
+    void Rectangle::enqueue(RenderQueue& queue) const
     {
         auto model_matrix = glm::mat4(1.0f);
         model_matrix = glm::translate(model_matrix, glm::vec3(get_position(), 0.0f));

@@ -2,6 +2,7 @@
 // Copyright (c) 2014-2019 Sean Farrell
 // See READNE.md for licensing details.
 
+#include "pch.h"
 #include "Text.h"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -66,7 +67,7 @@ namespace pkzo
         return material;
     }
 
-    void Text::enqueue(RenderQueue& queue)
+    void Text::enqueue(RenderQueue& queue) const
     {
         PKZO_ASSERT(font);
         PKZO_ASSERT(material);

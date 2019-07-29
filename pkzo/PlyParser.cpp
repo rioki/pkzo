@@ -22,6 +22,7 @@
 // SOFTWARE.
 //
 
+#include "pch.h"
 #include "PlyParser.h"
 
 #include <iterator>

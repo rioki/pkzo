@@ -2,6 +2,7 @@
 // Copyright (c) 2014-2019 Sean Farrell
 // See READNE.md for licensing details.
 
+#include "pch.h"
 #include "EventEmitter.h"
 
 #include <stdexcept>
@@ -18,13 +19,13 @@ namespace pkzo
         {
             throw std::invalid_argument("EventEmitter::add_listener: No callbak provided.");
         }
-    
+
         std::lock_guard<std::mutex> lock(mutex);
 
         unsigned int listener_id = ++last_listener;
         listeners.insert(std::make_pair(event_id, std::make_shared<Listener<>>(listener_id, cb)));
 
-        return listener_id;       
+        return listener_id;
     }
 
     unsigned int EventEmitter::on(unsigned int event_id, std::function<void ()> cb)

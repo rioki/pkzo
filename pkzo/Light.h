@@ -9,43 +9,20 @@
 
 namespace pkzo
 {
-    class Mesh;
-    class Material;
-    class Camera;
-    class FrameBuffer;
-
-    /*!
-     * Geometry
-     */
+    //! Light Base
     class PKZO_EXPORT Light : public SceneNode
     {
     public:
-        Light();
-        ~Light();
+        Light(const glm::vec3& color = {1.0f, 1.0f, 1.0f});
 
-        /*!
-         * The mesh
-         *
-         * @{
-         */
-        void set_mesh(std::shared_ptr<Mesh> value);
-        std::shared_ptr<Mesh> get_mesh() const;
-        /*! @} */
+        //! Set the light's color.
+        void set_color(const glm::vec3& value);
 
-        /*!
-         * The material
-         *
-         * @{
-         */
-        void set_material(std::shared_ptr<Material> value);
-        std::shared_ptr<Material> get_material();
-        /*! @} */
+        //! Get the lights color.
+        const glm::vec3& get_color() const;
 
-        void draw(const Camera& camera, FrameBuffer& gbuffer);
-
-    private:
-        std::shared_ptr<Mesh> mesh;
-        std::shared_ptr<Material> material;
+    protected:
+        glm::vec3 color = {1.0f, 1.0f, 1.0f};
     };
 }
 

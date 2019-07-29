@@ -2,7 +2,7 @@
 // Copyright (c) 2014-2019 Sean Farrell
 // See READNE.md for licensing details.
 
-
+#include "pch.h"
 #include "Engine.h"
 
 #include <stdexcept>
@@ -43,7 +43,7 @@ namespace pkzo
         window->on(Window::DRAW, [this] () {
             draw();
         });
-        render_queue = std::make_unique<RenderQueue>();
+        render_queue = std::make_unique<RenderQueue>(window->get_size());
 
         mouse    = std::make_unique<Mouse>();
         keyboard = std::make_unique<Keyboard>();
@@ -191,8 +191,7 @@ namespace pkzo
     {
         if (scene && camera)
         {
-            camera->set_resolution(window->get_size());
-            scene->draw(*camera);
+            scene->draw(*camera, *render_queue);
         }
 
         if (screen)

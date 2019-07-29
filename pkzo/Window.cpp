@@ -2,6 +2,7 @@
 // Copyright (c) 2014-2019 Sean Farrell
 // See READNE.md for licensing details.
 
+#include "pch.h"
 #include "Window.h"
 
 #include <stdexcept>
@@ -23,7 +24,7 @@ namespace pkzo
     std::string get_gl_error()
     {
         std::string result;
-        
+
         GLenum e = glGetError();
         switch (e)
         {
@@ -143,7 +144,8 @@ namespace pkzo
         int w, h;
         SDL_GetWindowSize(window, &w, &h);
 
-        glViewport(0, 0, w, h);        
+        glViewport(0, 0, w, h);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         emit(Event::DRAW);
@@ -158,21 +160,21 @@ namespace pkzo
             case SDL_QUIT:
                 emit(Event::CLOSE);
                 break;
-            case SDL_WINDOWEVENT:            
-                if (event.window.windowID == SDL_GetWindowID(window))  
+            case SDL_WINDOWEVENT:
+                if (event.window.windowID == SDL_GetWindowID(window))
                 {
-                    switch (event.window.event)  
+                    switch (event.window.event)
                     {
-                        case SDL_WINDOWEVENT_SIZE_CHANGED:  
+                        case SDL_WINDOWEVENT_SIZE_CHANGED:
                             emit(Event::RESIZE, glm::uvec2{event.window.data1, event.window.data2});
                             break;
                         default:
                             break;
                     }
                 }
-                break;   
+                break;
             default:
                 break;
-        } 
+        }
     }
 }

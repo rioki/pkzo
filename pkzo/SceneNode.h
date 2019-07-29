@@ -14,10 +14,9 @@
 namespace pkzo
 {
     class Scene;
+    class RenderQueue;
 
-    /*!
-     * Node in the Scene
-     */
+    //! Node in the Scene
     class PKZO_EXPORT SceneNode : private stdex::non_copyable
     {
     public:
@@ -46,6 +45,9 @@ namespace pkzo
          * @return the node's current transform
          */
         const glm::mat4& get_transform() const;
+
+        //! Submit draw commands to the render queue.
+        virtual void enqueue(RenderQueue& queue) const;
 
     private:
         Scene* scene = nullptr;

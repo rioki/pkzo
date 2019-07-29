@@ -30,4 +30,8 @@
 #define PKZO_PEDANTIC_OPENGL
 #endif
 
+// To ensure that all headers are self contained, 
+// disable precompiled headers and see if all builds
+// #define PKZO_SKIP_PCH
+
 #endif

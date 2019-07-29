@@ -17,17 +17,13 @@ namespace mats
         add_node(camera);
 
         auto teapot_mesh = std::make_shared<pkzo::Mesh>("../data/meshes/Teapot.ply");
-        auto white_material = std::make_shared<pkzo::Material>("../data/materials/White.pxm");
+        auto white_material = std::make_shared<pkzo::Material>("../data/materials/geometry/SolidWhitePhong.pxm");
         auto teapot = std::make_shared<pkzo::Geometry>();
         teapot->set_mesh(teapot_mesh);
         teapot->set_material(white_material);
         add_node(teapot);
 
-        auto fullscreen_mesh = pkzo::Mesh::create_fullscreen_rectangle();
-        auto directional_light = std::make_shared<pkzo::Material>("../data/materials/WhiteDirectionalLight.pxm");
-        auto light0 = std::make_shared<pkzo::Light>();
-        light0->set_mesh(fullscreen_mesh);
-        light0->set_material(directional_light);
+        auto light0 = std::make_shared<pkzo::AmbientLight>(glm::vec3(0.25f));
         add_node(light0);
     }
 

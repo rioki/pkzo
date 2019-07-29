@@ -17,6 +17,7 @@ namespace pkzo
     class SceneNode;
     class Camera;
     class FrameBuffer;
+    class RenderQueue;
 
     /*!
      * 3d Stuff
@@ -49,12 +50,10 @@ namespace pkzo
          *
          * @param camera the camera to render from
          */
-        void draw(const Camera& camera);
+        void draw(const Camera& camera, RenderQueue& queue);
 
     private:
         std::list<std::shared_ptr<SceneNode>> nodes;
-
-        std::shared_ptr<FrameBuffer> gbuffer;
     };
 
     template <typename NodeT>

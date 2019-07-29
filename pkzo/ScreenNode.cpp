@@ -2,6 +2,7 @@
 // Copyright (c) 2014-2019 Sean Farrell
 // See READNE.md for licensing details.
 
+#include "pch.h"
 #include "ScreenNode.h"
 
 namespace pkzo
@@ -31,5 +32,5 @@ namespace pkzo
         return size;
     }
 
-    void ScreenNode::enqueue(RenderQueue& queue) {}
+    void ScreenNode::enqueue(RenderQueue& queue) const {}
 }

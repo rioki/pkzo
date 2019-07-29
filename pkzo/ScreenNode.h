@@ -30,7 +30,7 @@ namespace pkzo
         const glm::vec2& get_size() const;
 
         //! Submit draw commands to the render queue.
-        virtual void enqueue(RenderQueue& queue);
+        virtual void enqueue(RenderQueue& queue) const;
 
     private:
         Screen* screen = nullptr;

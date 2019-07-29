@@ -1,6 +1,7 @@
 // pkzo
 // Copyright 2019 Sean Farrell <sean.farrell@rioki.org>
 
+#include "pch.h"
 #include "dbg.h"
 
 #include <windows.h>

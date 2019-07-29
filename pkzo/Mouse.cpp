@@ -2,6 +2,7 @@
 // Copyright (c) 2014-2019 Sean Farrell
 // See READNE.md for licensing details.
 
+#include "pch.h"
 #include "Mouse.h"
 
 #include <cassert>
@@ -13,25 +14,25 @@ namespace pkzo
 {
     Mouse::Mouse() = default;
 
-    Mouse::~Mouse() = default; 
-    
+    Mouse::~Mouse() = default;
+
     void Mouse::show_cursor()
     {
         SDL_ShowCursor(1);
         SDL_SetRelativeMouseMode(SDL_FALSE);
     }
-        
+
     void Mouse::hide_cursor()
     {
         SDL_ShowCursor(0);
         SDL_SetRelativeMouseMode(SDL_TRUE);
     }
-    
+
     bool Mouse::is_cursor_visible() const
     {
         return SDL_ShowCursor(-1) == 1;
     }
-        
+
     bool Mouse::is_pressed(unsigned int button) const
     {
         return (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(button)) == SDL_BUTTON(button);

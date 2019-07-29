@@ -2,6 +2,7 @@
 // Copyright (c) 2014-2019 Sean Farrell
 // See READNE.md for licensing details.
 
+#include "pch.h"
 #include "Scene.h"
 
 #include <algorithm>
@@ -11,9 +12,7 @@
 #include "dbg.h"
 #include "SceneNode.h"
 #include "Camera.h"
-#include "Geometry.h"
-#include "Light.h"
-#include "FrameBuffer.h"
+#include "RenderQueue.h"
 
 namespace pkzo
 {
@@ -40,35 +39,21 @@ namespace pkzo
         nodes.erase(i);
     }
 
-    void Scene::draw(const Camera& camera)
+    void Scene::draw(const Camera& camera, RenderQueue& queue)
     {
         PKZO_ASSERT(this == &camera.get_scene());
-
-        if (gbuffer == nullptr)
-        {
-            gbuffer = std::make_shared<GeometryBuffer>(camera.get_resolution());
-        }
-        else
-        {
-            gbuffer->resize(camera.get_resolution());
-        }
 
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
 
-        gbuffer->bind();
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        queue.clear();
+        camera.setup(queue);
 
-        auto geoms = get_nodes<Geometry>();
-        for (auto& geom : geoms)
+        for (auto& node : nodes)
         {
-            geom->draw(camera, *gbuffer);
+            node->enqueue(queue);
         }
 
-        auto lights = get_nodes<Light>();
-        for (auto& light : lights)
-        {
-            light->draw(camera, *gbuffer);
-        }
+        queue.execute(RenderAlgorithm::LIT_FORWARD);
     }
 }

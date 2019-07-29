@@ -41,7 +41,7 @@ namespace pkzo
         std::shared_ptr<Material> get_material();
         /*! @} */
 
-        void draw(const Camera& camera, FrameBuffer& target);
+        void enqueue(RenderQueue& queue) const override;
 
     private:
         std::shared_ptr<Mesh> mesh;

@@ -24,7 +24,7 @@ namespace pkzo
 
         const std::shared_ptr<Material>& get_material() const;
 
-        void enqueue(RenderQueue& queue) override;
+        void enqueue(RenderQueue& queue) const override;
 
     private:
         std::shared_ptr<Material> material;

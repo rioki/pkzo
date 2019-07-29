@@ -2,12 +2,13 @@
 // Copyright (c) 2014-2019 Sean Farrell
 // See READNE.md for licensing details.
 
+#include "pch.h"
 #include "Geometry.h"
+
+#include "dbg.h"
 #include "Mesh.h"
 #include "Material.h"
-#include "Shader.h"
-#include "Camera.h"
-#include "FrameBuffer.h"
+#include "RenderQueue.h"
 
 namespace pkzo
 {
@@ -34,33 +35,11 @@ namespace pkzo
         return material;
     }
 
-    void Geometry::draw(const Camera& camera, FrameBuffer& target)
+    void Geometry::enqueue(RenderQueue& queue) const
     {
-        if (!mesh || !material)
-        {
-            return;
-        }
-        auto shader = material->get_shader();
-        if (!shader)
-        {
-            return;
-        }
+        PKZO_ASSERT(material);
+        PKZO_ASSERT(mesh);
 
-        auto proj  = camera.get_projection();
-        auto view  = camera.get_view();
-        auto model = get_transform();
-
-        shader->bind();
-        shader->set_uniform("pkzo_ProjectionMatrix", proj);
-        shader->set_uniform("pkzo_ViewMatrix", view);
-        shader->set_uniform("pkzo_ModelMatrix", model);
-        target.bind(*shader);
-        material->bind(*shader);
-        mesh->bind(*shader);
-        mesh->draw();
-        mesh->unbind();
-        target.unbind();
-        material->unbind();
-        shader->unbind();
+        queue.submit_mesh(get_transform(), mesh, material);
     }
 }

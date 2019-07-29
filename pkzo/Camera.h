@@ -15,27 +15,17 @@ namespace pkzo
     class PKZO_EXPORT Camera : public SceneNode
     {
     public:
-        Camera();
-        ~Camera();
-
-        /*!
-         * The horizontal field of view.
-         *
-         * @{
-         */
+        //! Set the horizontal field of view.
         void set_fov(float value);
+
+        //! Get the horizontal field of view.
         float get_fov() const;
-        /*! @} */
 
-        void set_resolution(glm::uvec2 value);
-        glm::uvec2 get_resolution() const;
-
-        glm::mat4 get_projection() const;
-        glm::mat4 get_view() const;
+        //! Set the camera on the render queue up.
+        void setup(RenderQueue& queue) const;
 
     private:
         float fov = 90.0f;
-        glm::uvec2 resolution = glm::uvec2(800, 600);
     };
 }
 

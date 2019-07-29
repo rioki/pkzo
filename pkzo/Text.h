@@ -36,13 +36,13 @@ namespace pkzo
 
         const std::shared_ptr<Material>& get_material() const;
 
-        void enqueue(RenderQueue& queue) override;
+        void enqueue(RenderQueue& queue) const override;
 
     private:
         std::string text;
         std::shared_ptr<Font> font;
         std::shared_ptr<Material> material;
-        std::shared_ptr<Material> material_instance;
+        mutable std::shared_ptr<Material> material_instance;
     };
 }
 

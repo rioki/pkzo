@@ -2,6 +2,7 @@
 // Copyright (c) 2014-2019 Sean Farrell
 // See READNE.md for licensing details.
 
+#include "pch.h"
 #include "Screen.h"
 
 #include "dbg.h"
@@ -60,6 +61,6 @@ namespace pkzo
             node->enqueue(queue);
         }
 
-        queue.execute(BlendMode::ALPHA);
+        queue.execute(RenderAlgorithm::UNLIT);
     }
 }
