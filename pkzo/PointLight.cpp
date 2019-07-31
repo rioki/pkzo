@@ -9,6 +9,9 @@
 
 namespace pkzo
 {
+    PointLight::PointLight(const glm::vec3& color)
+    : Light(color) {}
+
     void PointLight::enqueue(RenderQueue& queue) const
     {
         auto transform = get_transform();

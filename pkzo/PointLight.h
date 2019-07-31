@@ -9,10 +9,12 @@
 
 namespace pkzo
 {
-    //! Poitn Light
+    //! Point Light
     class PKZO_EXPORT PointLight : public Light
     {
     public:
+        //! Construct a point light with given color.
+        PointLight(const glm::vec3& color);
 
         void enqueue(RenderQueue& queue) const override;
 

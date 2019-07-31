@@ -24,7 +24,11 @@ namespace mats
         add_node(light0);
 
         auto light1 = std::make_shared<pkzo::DirectionalLight>(glm::vec3(0.25f, 0.25f, 0.5f));
-        light1->set_transform(glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 1.0f)));
+        light1->rotate(glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 1.0f));
         add_node(light1);
+
+        auto light2 = std::make_shared<pkzo::PointLight>(glm::vec3(0.5f, 0.25f, 0.25f));
+        light2->move(glm::vec3{0.0f, 0.0f, 2.0f});
+        add_node(light2);
     }
 }

@@ -60,22 +60,28 @@ vec3 shade_directional_light(vec3 normal, vec3 albedo, float rougthness, float m
 
 vec3 shade_point_light(vec3 position, vec3 normal, vec3 albedo, float rougthness, float metal)
 {
-	vec3 light = position - pkzo_LightPosition;
+	vec3 light = pkzo_LightPosition - position;
+	float dist = length(light);
+	light = normalize(light);
 	float ndl = dot(normal, light); 
 	if (ndl > 0.0)
 	{
-		return ndl * albedo * pkzo_LightColor;
+		float att = 1.0 / (1.0 + 0.1*dist + 0.01*dist*dist);
+		return att * ndl * albedo * pkzo_LightColor;
 	}
 	return vec3(0.0);
 }
 
 vec3 shade_spot_light(vec3 position, vec3 normal, vec3 albedo, float rougthness, float metal)
 {
-	vec3 light = position - pkzo_LightPosition;
+	vec3 light = pkzo_LightPosition - position;
+	float dist = length(light);
+	light = normalize(light);
 	float ndl = dot(normal, light); 
 	if (ndl > 0.0)
 	{
-		return ndl * albedo * pkzo_LightColor;
+		float att = 1.0 / (1.0 + 0.1*dist + 0.01*dist*dist);
+		return att * ndl * albedo * pkzo_LightColor;
 	}
 	return vec3(0.0);
 }

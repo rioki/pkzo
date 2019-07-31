@@ -46,8 +46,11 @@ namespace pkzo
          */
         const glm::mat4& get_transform() const;
 
-        //! Move the node by a given ammount.
+        //! Move the node by a given amount.
         void move(const glm::vec3& value);
+
+        //! Rotate the node by a given amount.
+        void rotate(float angle, const glm::vec3& axis);
 
         //! Submit draw commands to the render queue.
         virtual void enqueue(RenderQueue& queue) const;

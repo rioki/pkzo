@@ -41,5 +41,10 @@ namespace pkzo
         transform = glm::translate(transform, value);
     }
 
+    void SceneNode::rotate(float angle, const glm::vec3& axis)
+    {
+        transform = glm::rotate(transform, angle, axis);
+    }
+
     void SceneNode::enqueue(RenderQueue& queue) const {}
 }
