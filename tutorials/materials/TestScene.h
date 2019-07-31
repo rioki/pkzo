@@ -14,10 +14,7 @@ namespace mats
     public:
         TestScene();
 
-        std::shared_ptr<pkzo::Camera> get_camera() const;
-
     private:
-        std::shared_ptr<pkzo::Camera> camera;
     };
 }
 

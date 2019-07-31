@@ -12,6 +12,7 @@
 
 #include "defines.h"
 #include "stdex.h"
+#include "EventEmitter.h"
 
 namespace pkzo
 {
@@ -26,9 +27,14 @@ namespace pkzo
     /*!
      * Central object holding all the bits together.
      */
-    class PKZO_EXPORT Engine : private stdex::non_copyable
+    class PKZO_EXPORT Engine : private stdex::non_copyable, public EventEmitter
     {
     public:
+        enum EventId
+        {
+            CHANGE_SCENE
+        };
+
         /*!
          * Create engine.
          *

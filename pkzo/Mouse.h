@@ -25,7 +25,8 @@ namespace pkzo
         enum Event
         {
             BUTTON_PRESS,      //!< A button is pressed. void(uint button, uvec2 pos)
-            BUTION_RELEASE,    //!< A button is released. void(uint button, uvec2 pos)
+            BUTTON_RELEASE,    //!< A button is released. void(uint button, uvec2 pos)
+            WHEEL,       //!< A mouse wheel move. void (ivec2 mov)
             MOVE               //!< The mouse is moved void(ivec2 rel, uvec2 pos)
         };
 
@@ -38,18 +39,18 @@ namespace pkzo
          * Show the cursor.
          */
         void show_cursor();
-    
+
         /*!
          * Hide the cursor.
          */
         void hide_cursor();
-        
+
         /*!
          * Check if the cursor is visible.
          *
          * @return true if the cursor is visible
          */
-        bool is_cursor_visible() const;    
+        bool is_cursor_visible() const;
 
         /*!
          * Check if a mouse button is pressed.
@@ -61,7 +62,7 @@ namespace pkzo
 
     private:
         void handle_event(SDL_Event& event);
-        
+
 		friend class Engine;
     };
 }

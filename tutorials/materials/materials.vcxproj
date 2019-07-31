@@ -169,10 +169,12 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MaterialsEngine.cpp" />
+    <ClCompile Include="OrbitSpectator.cpp" />
     <ClCompile Include="TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MaterialsEngine.h" />
+    <ClInclude Include="OrbitSpectator.h" />
     <ClInclude Include="TestScene.h" />
   </ItemGroup>
   <ItemGroup>

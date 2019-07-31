@@ -117,6 +117,7 @@ namespace pkzo
     void Engine::set_scene(std::shared_ptr<Scene> value)
     {
         scene = std::move(value);
+        emit(CHANGE_SCENE);
     }
 
     std::shared_ptr<Scene> Engine::get_scene() const
@@ -177,6 +178,7 @@ namespace pkzo
                     break;
                 case SDL_MOUSEBUTTONDOWN:
                 case SDL_MOUSEBUTTONUP:
+                case SDL_MOUSEWHEEL:
                 case SDL_MOUSEMOTION:
                     get_mouse().handle_event(event);
                     break;

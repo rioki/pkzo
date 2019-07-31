@@ -46,7 +46,10 @@ namespace pkzo
                 emit(BUTTON_PRESS, glm::uint{event.button.button}, glm::uvec2{event.button.x, event.button.y});
                 break;
             case SDL_MOUSEBUTTONUP:
-                emit(BUTTON_PRESS, glm::uint{event.button.button}, glm::uvec2{event.button.x, event.button.y});
+                emit(BUTTON_RELEASE, glm::uint{event.button.button}, glm::uvec2{event.button.x, event.button.y});
+                break;
+            case SDL_MOUSEWHEEL:
+                emit(WHEEL, glm::ivec2{event.wheel.x, event.wheel.y});
                 break;
             case SDL_MOUSEMOTION:
                 emit(MOVE, glm::ivec2{event.motion.xrel, event.motion.yrel}, glm::uvec2{event.motion.x, event.motion.y});
