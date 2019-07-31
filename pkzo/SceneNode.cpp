@@ -5,6 +5,8 @@
 #include "pch.h"
 #include "SceneNode.h"
 
+#include <glm/gtc/matrix_transform.hpp>
+
 #include "dbg.h"
 
 namespace pkzo
@@ -32,6 +34,11 @@ namespace pkzo
     const glm::mat4& SceneNode::get_transform() const
     {
         return transform;
+    }
+
+    void SceneNode::move(const glm::vec3& value)
+    {
+        transform = glm::translate(transform, value);
     }
 
     void SceneNode::enqueue(RenderQueue& queue) const {}

@@ -20,6 +20,7 @@ namespace pkzo
     : resolution(r)
     {
         rectangle_mesh = Mesh::create_rectangle({1.0f, 1.0f});
+        box_mesh = Mesh::create_box({1.0f, 1.0f, 1.0f});
     }
 
     void RenderQueue::clear()
@@ -60,6 +61,11 @@ namespace pkzo
     void RenderQueue::submit_rectangle(const glm::mat4& model_matrix, const glm::vec2& size, const std::shared_ptr<Material>& material, const glm::mat3& texture_matrix)
     {
         geometry.push_back({glm::scale(model_matrix, glm::vec3(size, 1.0f)), texture_matrix, rectangle_mesh, material});
+    }
+
+    void RenderQueue::submit_box(const glm::mat4& model_matrix, const glm::vec3& size, const std::shared_ptr<Material>& material, const glm::mat3& texture_matrix)
+    {
+        geometry.push_back({glm::scale(model_matrix, size), texture_matrix, box_mesh, material});
     }
 
     void RenderQueue::submit_mesh(const glm::mat4& model_matrix, std::shared_ptr<Mesh> mesh, const std::shared_ptr<Material>& material, const glm::mat3& texture_matrix)

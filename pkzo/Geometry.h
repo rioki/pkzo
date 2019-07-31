@@ -9,42 +9,22 @@
 
 namespace pkzo
 {
-    class Mesh;
     class Material;
-    class Camera;
-    class FrameBuffer;
 
-    /*!
-     * Geometry
-     */
+    //! Geometry base class.
     class PKZO_EXPORT Geometry : public SceneNode
     {
     public:
-        Geometry();
+        Geometry(std::shared_ptr<Material> material);
         ~Geometry();
 
-        /*!
-         * The mesh
-         *
-         * @{
-         */
-        void set_mesh(std::shared_ptr<Mesh> value);
-        std::shared_ptr<Mesh> get_mesh() const;
-        /*! @} */
-
-        /*!
-         * The material
-         *
-         * @{
-         */
+        //! Change the material.
         void set_material(std::shared_ptr<Material> value);
+
+        //! Get the material.
         std::shared_ptr<Material> get_material();
-        /*! @} */
 
-        void enqueue(RenderQueue& queue) const override;
-
-    private:
-        std::shared_ptr<Mesh> mesh;
+    protected:
         std::shared_ptr<Material> material;
     };
 }

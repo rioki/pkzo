@@ -62,6 +62,134 @@ namespace pkzo
         return mesh;
     }
 
+    // TODO tangents
+    std::shared_ptr<Mesh> Mesh::create_box(glm::vec3 size)
+    {
+        auto hs = size * 0.5f;
+
+        auto mesh = std::make_shared<Mesh>();
+        mesh->set_vertex_count(24);
+        mesh->set_face_count(12);
+
+        // x pos face
+        mesh->set_vertex(0, glm::vec3(hs[0], -hs[1], -hs[2]));
+        mesh->set_vertex(1, glm::vec3(hs[0],  hs[1], -hs[2]));
+        mesh->set_vertex(2, glm::vec3(hs[0],  hs[1],  hs[2]));
+        mesh->set_vertex(3, glm::vec3(hs[0], -hs[1],  hs[2]));
+
+        mesh->set_normal(0, glm::vec3(1, 0, 0));
+        mesh->set_normal(1, glm::vec3(1, 0, 0));
+        mesh->set_normal(2, glm::vec3(1, 0, 0));
+        mesh->set_normal(3, glm::vec3(1, 0, 0));
+
+        mesh->set_texcoord(0, glm::vec2(0, 1));
+        mesh->set_texcoord(1, glm::vec2(1, 1));
+        mesh->set_texcoord(2, glm::vec2(1, 0));
+        mesh->set_texcoord(3, glm::vec2(0, 0));
+
+        mesh->set_face(0, 0, 1, 2);
+        mesh->set_face(1, 0, 2, 3);
+
+        // x neg
+        mesh->set_vertex(4, glm::vec3(-hs[0], -hs[1], -hs[2]));
+        mesh->set_vertex(5, glm::vec3(-hs[0],  hs[1], -hs[2]));
+        mesh->set_vertex(6, glm::vec3(-hs[0],  hs[1],  hs[2]));
+        mesh->set_vertex(7, glm::vec3(-hs[0], -hs[1],  hs[2]));
+
+        mesh->set_normal(4, glm::vec3(-1, 0, 0));
+        mesh->set_normal(5, glm::vec3(-1, 0, 0));
+        mesh->set_normal(6, glm::vec3(-1, 0, 0));
+        mesh->set_normal(7, glm::vec3(-1, 0, 0));
+
+
+        mesh->set_texcoord(4, glm::vec2(0, 1));
+        mesh->set_texcoord(5, glm::vec2(1, 1));
+        mesh->set_texcoord(6, glm::vec2(1, 0));
+        mesh->set_texcoord(7, glm::vec2(0, 0));
+
+        mesh->set_face(2, 6, 5, 4);
+        mesh->set_face(3, 7, 4, 6);
+
+        // y pos
+        mesh->set_vertex( 8, glm::vec3(-hs[0], hs[1], -hs[2]));
+        mesh->set_vertex( 9, glm::vec3( hs[0], hs[1], -hs[2]));
+        mesh->set_vertex(10, glm::vec3( hs[0], hs[1],  hs[2]));
+        mesh->set_vertex(11, glm::vec3(-hs[0], hs[1],  hs[2]));
+
+        mesh->set_normal( 8, glm::vec3(0, 1, 0));
+        mesh->set_normal( 9, glm::vec3(0, 1, 0));
+        mesh->set_normal(10, glm::vec3(0, 1, 0));
+        mesh->set_normal(11, glm::vec3(0, 1, 0));
+
+
+        mesh->set_texcoord( 8, glm::vec2(0, 1));
+        mesh->set_texcoord( 9, glm::vec2(1, 1));
+        mesh->set_texcoord(10, glm::vec2(1, 0));
+        mesh->set_texcoord(11, glm::vec2(0, 0));
+
+        mesh->set_face(4, 8, 9, 10);
+        mesh->set_face(5, 8, 10, 11);
+
+        // y neg
+        mesh->set_vertex(12, glm::vec3(-hs[0], -hs[1], -hs[2]));
+        mesh->set_vertex(13, glm::vec3( hs[0], -hs[1], -hs[2]));
+        mesh->set_vertex(14, glm::vec3( hs[0], -hs[1],  hs[2]));
+        mesh->set_vertex(15, glm::vec3(-hs[0], -hs[1],  hs[2]));
+
+        mesh->set_normal(12, glm::vec3(0, -1, 0));
+        mesh->set_normal(13, glm::vec3(0, -1, 0));
+        mesh->set_normal(14, glm::vec3(0, -1, 0));
+        mesh->set_normal(15, glm::vec3(0, -1, 0));
+
+        mesh->set_texcoord(12, glm::vec2(0, 1));
+        mesh->set_texcoord(13, glm::vec2(1, 1));
+        mesh->set_texcoord(14, glm::vec2(1, 0));
+        mesh->set_texcoord(15, glm::vec2(0, 0));
+
+        mesh->set_face(6, 14, 13, 12);
+        mesh->set_face(7, 15, 12, 14);
+
+        // z pos
+        mesh->set_vertex(16, glm::vec3(-hs[0], -hs[1], hs[2]));
+        mesh->set_vertex(17, glm::vec3( hs[0], -hs[1], hs[2]));
+        mesh->set_vertex(18, glm::vec3( hs[0],  hs[1], hs[2]));
+        mesh->set_vertex(19, glm::vec3(-hs[0],  hs[1], hs[2]));
+
+        mesh->set_normal(16, glm::vec3(0, 0, 1));
+        mesh->set_normal(17, glm::vec3(0, 0, 1));
+        mesh->set_normal(18, glm::vec3(0, 0, 1));
+        mesh->set_normal(19, glm::vec3(0, 0, 1));
+
+        mesh->set_texcoord(16, glm::vec2(0, 1));
+        mesh->set_texcoord(17, glm::vec2(1, 1));
+        mesh->set_texcoord(18, glm::vec2(1, 0));
+        mesh->set_texcoord(19, glm::vec2(0, 0));
+
+        mesh->set_face(8, 16, 17, 18);
+        mesh->set_face(9, 16, 18, 19);
+
+        // z neg
+        mesh->set_vertex(20, glm::vec3(-hs[0], -hs[1], -hs[2]));
+        mesh->set_vertex(21, glm::vec3( hs[0], -hs[1], -hs[2]));
+        mesh->set_vertex(22, glm::vec3( hs[0],  hs[1], -hs[2]));
+        mesh->set_vertex(23, glm::vec3(-hs[0],  hs[1], -hs[2]));
+
+        mesh->set_normal(20, glm::vec3(0, 0, -1));
+        mesh->set_normal(21, glm::vec3(0, 0, -1));
+        mesh->set_normal(22, glm::vec3(0, 0, -1));
+        mesh->set_normal(23, glm::vec3(0, 0, -1));
+
+        mesh->set_texcoord(20, glm::vec2(0, 1));
+        mesh->set_texcoord(21, glm::vec2(1, 1));
+        mesh->set_texcoord(22, glm::vec2(1, 0));
+        mesh->set_texcoord(23, glm::vec2(0, 0));
+
+        mesh->set_face(10, 22, 21, 20);
+        mesh->set_face(11, 23, 20, 22);
+
+        return mesh;
+    }
+
     std::shared_ptr<Mesh> Mesh::create_fullscreen_rectangle()
     {
         return Mesh::create_rectangle(glm::uvec2(2.0f));

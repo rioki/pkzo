@@ -45,6 +45,9 @@ namespace pkzo
         //! Submit rectangle for drawing
         void submit_rectangle(const glm::mat4& model_matrix, const glm::vec2& size, const std::shared_ptr<Material>& material, const glm::mat3& texture_matrix = glm::mat3(1.0f));
 
+        //! Submit box for drawing
+        void submit_box(const glm::mat4& model_matrix, const glm::vec3& size, const std::shared_ptr<Material>& material, const glm::mat3& texture_matrix = glm::mat3(1.0f));
+
         //! Submit mesh for drawing
         void submit_mesh(const glm::mat4& model_matrix, std::shared_ptr<Mesh> mesh, const std::shared_ptr<Material>& material, const glm::mat3& texture_matrix = glm::mat3(1.0f));
 
@@ -95,6 +98,7 @@ namespace pkzo
         std::list<Light> lights;
 
         std::shared_ptr<Mesh> rectangle_mesh;
+        std::shared_ptr<Mesh> box_mesh;
 
         void draw_unlit_geometry();
         void draw_lit_geometry();

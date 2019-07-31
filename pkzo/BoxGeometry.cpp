@@ -1,0 +1,32 @@
+// pkzo
+// Copyright (c) 2014-2019 Sean Farrell
+// See READNE.md for licensing details.
+
+#include "pch.h"
+#include "BoxGeometry.h"
+
+#include "dbg.h"
+#include "RenderQueue.h"
+
+namespace pkzo
+{
+    BoxGeometry::BoxGeometry(const glm::vec3& s, const std::shared_ptr<Material>& material)
+    : Geometry(material), size(s) {}
+
+    BoxGeometry::~BoxGeometry() = default;
+
+    void BoxGeometry::set_size(const glm::vec3& value)
+    {
+        size = value;
+    }
+
+    const glm::vec3& BoxGeometry::get_size() const
+    {
+        return size;
+    }
+
+    void BoxGeometry::enqueue(RenderQueue& queue) const
+    {
+        queue.submit_box(get_transform(), size, material);
+    }
+}
