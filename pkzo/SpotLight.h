@@ -13,6 +13,8 @@ namespace pkzo
     class PKZO_EXPORT SpotLight : public Light
     {
     public:
+        //! Create spot light with given color and angle.
+        SpotLight(const glm::vec3& color, float a);
 
         //! Set the spot angle.
         void set_angle(float value);

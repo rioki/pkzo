@@ -9,6 +9,9 @@
 
 namespace pkzo
 {
+    SpotLight::SpotLight(const glm::vec3& color, float a)
+    : Light(color), angle(a) {}
+
     void SpotLight::set_angle(float value)
     {
         angle = value;

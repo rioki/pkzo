@@ -78,7 +78,8 @@ vec3 shade_spot_light(vec3 position, vec3 normal, vec3 albedo, float rougthness,
 	float dist = length(light);
 	light = normalize(light);
 	float ndl = dot(normal, light); 
-	if (ndl > 0.0)
+	float ldd = dot(light, -pkzo_LightDirection);
+	if (ndl > 0.0 && ldd > pkzo_LightAngle)
 	{
 		float att = 1.0 / (1.0 + 0.1*dist + 0.01*dist*dist);
 		return att * ndl * albedo * pkzo_LightColor;

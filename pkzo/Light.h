@@ -13,7 +13,7 @@ namespace pkzo
     class PKZO_EXPORT Light : public SceneNode
     {
     public:
-        Light(const glm::vec3& color = {1.0f, 1.0f, 1.0f});
+        Light(const glm::vec3& color);
 
         //! Set the light's color.
         void set_color(const glm::vec3& value);
