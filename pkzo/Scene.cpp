@@ -56,4 +56,12 @@ namespace pkzo
 
         queue.execute(RenderAlgorithm::LIT_FORWARD);
     }
+
+    void Scene::update(float dt)
+    {
+        for (auto& node : nodes)
+        {
+            node->update(dt);
+        }
+    }
 }

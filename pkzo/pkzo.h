@@ -17,6 +17,7 @@
 
 #include "Scene.h"
 #include "SceneNode.h"
+#include "SceneNodeGroup.h"
 #include "Camera.h"
 #include "Geometry.h"
 #include "BoxGeometry.h"

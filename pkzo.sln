@@ -18,6 +18,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hello", "tutorials\hello\he
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "materials", "tutorials\materials\materials.vcxproj", "{D2C0F7DD-A945-4224-9679-C4824289B41A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cubes", "tutorials\cubes\cubes.vcxproj", "{4B5A8254-A1A3-49C3-8DB0-E6E3F4B939CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -50,6 +52,14 @@ Global
 		{D2C0F7DD-A945-4224-9679-C4824289B41A}.Release|x64.Build.0 = Release|x64
 		{D2C0F7DD-A945-4224-9679-C4824289B41A}.Release|x86.ActiveCfg = Release|Win32
 		{D2C0F7DD-A945-4224-9679-C4824289B41A}.Release|x86.Build.0 = Release|Win32
+		{4B5A8254-A1A3-49C3-8DB0-E6E3F4B939CC}.Debug|x64.ActiveCfg = Debug|x64
+		{4B5A8254-A1A3-49C3-8DB0-E6E3F4B939CC}.Debug|x64.Build.0 = Debug|x64
+		{4B5A8254-A1A3-49C3-8DB0-E6E3F4B939CC}.Debug|x86.ActiveCfg = Debug|Win32
+		{4B5A8254-A1A3-49C3-8DB0-E6E3F4B939CC}.Debug|x86.Build.0 = Debug|Win32
+		{4B5A8254-A1A3-49C3-8DB0-E6E3F4B939CC}.Release|x64.ActiveCfg = Release|x64
+		{4B5A8254-A1A3-49C3-8DB0-E6E3F4B939CC}.Release|x64.Build.0 = Release|x64
+		{4B5A8254-A1A3-49C3-8DB0-E6E3F4B939CC}.Release|x86.ActiveCfg = Release|Win32
+		{4B5A8254-A1A3-49C3-8DB0-E6E3F4B939CC}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -57,6 +67,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{9739FF05-59B7-4A0C-B7F9-67E00CE5C6FC} = {BC4BB446-70F5-4BA9-AC85-218D3B6EA4E5}
 		{D2C0F7DD-A945-4224-9679-C4824289B41A} = {BC4BB446-70F5-4BA9-AC85-218D3B6EA4E5}
+		{4B5A8254-A1A3-49C3-8DB0-E6E3F4B939CC} = {BC4BB446-70F5-4BA9-AC85-218D3B6EA4E5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EC787743-9BE1-4A91-BB30-4332A5CE24FC}

@@ -21,6 +21,6 @@ namespace pkzo
 
     void Camera::setup(RenderQueue& queue) const
     {
-        queue.set_perspective_camera(get_transform(), fov);
+        queue.set_perspective_camera(get_world_transform(), fov);
     }
 }

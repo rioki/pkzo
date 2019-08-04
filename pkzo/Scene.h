@@ -52,6 +52,8 @@ namespace pkzo
          */
         void draw(const Camera& camera, RenderQueue& queue);
 
+        virtual void update(float dt);
+
     private:
         std::list<std::shared_ptr<SceneNode>> nodes;
     };

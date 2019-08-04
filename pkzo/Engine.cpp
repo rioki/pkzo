@@ -154,6 +154,15 @@ namespace pkzo
 
     void Engine::tick()
     {
+        using fsec = std::chrono::duration<float>;
+
+        auto now = std::chrono::steady_clock::now();
+        auto dt = fsec(now - last_tick).count();
+        if (scene)
+        {
+            scene->update(dt);
+        }
+        last_tick = now;
     }
 
     void Engine::handle_events()

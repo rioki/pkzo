@@ -5,25 +5,29 @@
 #include "pch.h"
 #include "SceneNode.h"
 
+#include <cassert>
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "dbg.h"
 
 namespace pkzo
 {
-    SceneNode::SceneNode() = default;
-    SceneNode::~SceneNode() = default;
-
     Scene& SceneNode::get_scene()
     {
-        PKZO_ASSERT(scene != nullptr);
-        return *scene;
+        if (parent)
+        {
+            return parent->get_scene();
+        }
+        else
+        {
+            assert(scene != nullptr);
+            return *scene;
+        }
     }
 
     const Scene& SceneNode::get_scene() const
     {
-        PKZO_ASSERT(scene != nullptr);
-        return *scene;
+        return const_cast<SceneNode*>(this)->get_scene();
     }
 
     void SceneNode::set_transform(const glm::mat4& value)
@@ -34,6 +38,18 @@ namespace pkzo
     const glm::mat4& SceneNode::get_transform() const
     {
         return transform;
+    }
+
+    glm::mat4 SceneNode::get_world_transform() const
+    {
+        if (parent)
+        {
+            return parent->get_world_transform() * transform;
+        }
+        else
+        {
+            return transform;
+        }
     }
 
     void SceneNode::move(const glm::vec3& value)
@@ -47,4 +63,6 @@ namespace pkzo
     }
 
     void SceneNode::enqueue(RenderQueue& queue) const {}
+
+    void SceneNode::update(float dt) {}
 }

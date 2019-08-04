@@ -1,0 +1,35 @@
+// pkzo
+// Copyright (c) 2014-2019 Sean Farrell
+// See READNE.md for licensing details.
+
+#ifndef _PKZO_SCENE_NODE_GROUP_H_
+#define _PKZO_SCENE_NODE_GROUP_H_
+
+#include "SceneNode.h"
+
+namespace pkzo
+{
+    class PKZO_EXPORT SceneNodeGroup : public SceneNode
+    {
+    public:
+
+        //! Add a node to the group.
+        void add_node(const std::shared_ptr<SceneNode>& node);
+
+        //! Remove a node from the group.
+        void remove_node(const std::shared_ptr<SceneNode>& node);
+
+        //! Get the nodes in the group.
+        const std::list<std::shared_ptr<SceneNode>>& get_nodes();
+
+        //! Get the nodes in the group.
+        std::list<std::shared_ptr<const SceneNode>> get_nodes() const;
+
+        void update(float dt) override;
+
+    private:
+        std::list<std::shared_ptr<SceneNode>> nodes;
+    };
+}
+
+#endif

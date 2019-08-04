@@ -65,8 +65,8 @@ namespace mats
     void OrbitSpectator::update()
     {
         auto transform = glm::mat4(1.0f);
-        transform = glm::rotate(transform, coords.x, {0.0f, 0.0f, 1.0f});
-        transform = glm::rotate(transform, coords.y, {1.0f, 0.0f, 0.0f});
+        transform = glm::rotate(transform, glm::radians(coords.x), {0.0f, 0.0f, 1.0f});
+        transform = glm::rotate(transform, glm::radians(coords.y), {0.0f, 1.0f, 0.0f});
         transform = glm::translate(transform, {0.0f, 0.0f, coords.z});
         set_transform(transform);
     }

@@ -128,6 +128,8 @@ namespace pkzo
         std::shared_ptr<Scene>       scene;
         std::shared_ptr<Camera>      camera;
 
+        std::chrono::steady_clock::time_point last_tick = std::chrono::steady_clock::now();
+
         void handle_events();
         void draw();
     };
