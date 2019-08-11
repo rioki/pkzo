@@ -38,6 +38,32 @@ namespace pkzo
         return {begin(nodes), end(nodes)};
     }
 
+    void SceneNodeGroup::enqueue(RenderQueue& queue) const
+    {
+        for (auto& node : nodes)
+        {
+            node->enqueue(queue);
+        }
+    }
+
+    void SceneNodeGroup::activate()
+    {
+        SceneNode::activate();
+        for (auto& node : nodes)
+        {
+            node->activate();
+        }
+    }
+
+    void SceneNodeGroup::deactivate()
+    {
+        for (auto& node : nodes)
+        {
+            node->deactivate();
+        }
+        SceneNode::deactivate();
+    }
+
     void SceneNodeGroup::update(float dt)
     {
         for (auto& node : nodes)

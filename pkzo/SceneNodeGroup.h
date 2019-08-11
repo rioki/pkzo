@@ -25,6 +25,9 @@ namespace pkzo
         //! Get the nodes in the group.
         std::list<std::shared_ptr<const SceneNode>> get_nodes() const;
 
+        void enqueue(RenderQueue& queue) const override;
+        void activate() override;
+        void deactivate() override;
         void update(float dt) override;
 
     private:

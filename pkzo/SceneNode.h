@@ -13,6 +13,7 @@
 
 namespace pkzo
 {
+    class Engine;
     class Scene;
     class RenderQueue;
 
@@ -20,10 +21,16 @@ namespace pkzo
     class PKZO_EXPORT SceneNode : private stdex::non_copyable
     {
     public:
+        //! Get the node's engine.
+        Engine& get_engine();
         //! Get the node's scene.
         Scene& get_scene();
         //! Get the node's scene.
         const Scene& get_scene() const;
+
+        //! Get the node's parent.
+        SceneNode* get_parent();
+        const SceneNode* get_parent() const;
 
         //! Set the node's transform.
         void set_transform(const glm::mat4& value);
@@ -43,6 +50,10 @@ namespace pkzo
         //! Submit draw commands to the render queue.
         virtual void enqueue(RenderQueue& queue) const;
 
+        //! Activate the scene node.
+        virtual void activate();
+        //! Deactivate the scene node.
+        virtual void deactivate();
         //! Update the scene.
         virtual void update(float dt);
 

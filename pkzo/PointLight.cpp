@@ -14,7 +14,7 @@ namespace pkzo
 
     void PointLight::enqueue(RenderQueue& queue) const
     {
-        auto transform = get_transform();
+        auto transform = get_world_transform();
         auto light_position = glm::vec3(transform[3]);
 
         queue.submit_point_light(color, light_position);

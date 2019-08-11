@@ -9,6 +9,8 @@
 #include "Window.h"
 #include "Mouse.h"
 #include "Keyboard.h"
+#include "System.h"
+#include "PhysicSystem.h"
 
 #include "Screen.h"
 #include "ScreenNode.h"
@@ -18,6 +20,7 @@
 #include "Scene.h"
 #include "SceneNode.h"
 #include "SceneNodeGroup.h"
+#include "Body.h"
 #include "Camera.h"
 #include "Geometry.h"
 #include "BoxGeometry.h"

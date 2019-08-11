@@ -24,12 +24,18 @@
     <ClCompile Include="FlyPawn.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DynamicBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CubesEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FlyPawn.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicBox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -303,6 +303,26 @@ namespace pkzo
         return faces.at(i);
     }
 
+    void Mesh::set_line_count(size_t value)
+    {
+        lines.resize(value);
+    }
+
+    size_t Mesh::get_line_count() const
+    {
+        return lines.size();
+    }
+
+    void Mesh::set_line(size_t i, const glm::uvec2& value)
+    {
+        lines.at(i) = value;
+    }
+
+    glm::uvec2 Mesh::get_line(size_t i) const
+    {
+        return lines.at(i);
+    }
+
     void Mesh::compute_normals()
     {
         normals.resize(vertices.size(), glm::vec3(0));
@@ -397,31 +417,6 @@ namespace pkzo
         auto center = (min + max) / 2.0f;
         auto radius = glm::length(max - center);
         return std::make_tuple(center, radius);
-    }
-
-    const std::vector<glm::vec3>& Mesh::get_vertices() const
-    {
-        return vertices;
-    }
-
-    const std::vector<glm::vec3>& Mesh::get_normals() const
-    {
-        return normals;
-    }
-
-    const std::vector<glm::vec2>& Mesh::get_texcoords() const
-    {
-        return texcoords;
-    }
-
-    const std::vector<glm::vec3>& Mesh::get_tangents() const
-    {
-        return tangents;
-    }
-
-    const std::vector<glm::uvec3>& Mesh::get_faces() const
-    {
-        return faces;
     }
 
     void Mesh::load_ply(const fs::path& file)
@@ -567,8 +562,18 @@ namespace pkzo
     {
         PKZO_ASSERT(bound);
 
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexe_buffer);
-        glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(faces.size() * 3), GL_UNSIGNED_INT, 0);
+        if (!faces.empty())
+        {
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, face_buffer);
+            glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(faces.size() * 3), GL_UNSIGNED_INT, 0);
+        }
+
+        if (!lines.empty())
+        {
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, line_buffer);
+            glDrawElements(GL_LINES, static_cast<GLsizei>(lines.size() * 2), GL_UNSIGNED_INT, 0);
+        }
+
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
         PKZO_CHECK_OPENGL(glGetError());
@@ -596,6 +601,14 @@ namespace pkzo
         normal_buffer   = upload_values(GL_ARRAY_BUFFER, normals);
         texcoord_buffer = upload_values(GL_ARRAY_BUFFER, texcoords);
         tangent_buffer  = upload_values(GL_ARRAY_BUFFER, tangents);
-        indexe_buffer   = upload_values(GL_ELEMENT_ARRAY_BUFFER, faces);
+
+        if (!faces.empty())
+        {
+            face_buffer = upload_values(GL_ELEMENT_ARRAY_BUFFER, faces);
+        }
+        if (!lines.empty())
+        {
+            line_buffer = upload_values(GL_ELEMENT_ARRAY_BUFFER, lines);
+        }
     }
 }

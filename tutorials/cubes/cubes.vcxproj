@@ -161,10 +161,12 @@
   <ItemGroup>
     <ClCompile Include="cubes.cpp" />
     <ClCompile Include="CubesEngine.cpp" />
+    <ClCompile Include="DynamicBox.cpp" />
     <ClCompile Include="FlyPawn.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CubesEngine.h" />
+    <ClInclude Include="DynamicBox.h" />
     <ClInclude Include="FlyPawn.h" />
   </ItemGroup>
   <ItemGroup>

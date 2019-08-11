@@ -23,6 +23,7 @@ namespace pkzo
     class Scene;
     class Camera;
     class RenderQueue;
+    class System;
 
     /*!
      * Central object holding all the bits together.
@@ -32,7 +33,8 @@ namespace pkzo
     public:
         enum EventId
         {
-            CHANGE_SCENE
+            CHANGE_SCENE,
+            CHANGE_CAMERA
         };
 
         /*!
@@ -113,6 +115,18 @@ namespace pkzo
          */
         void stop();
 
+        //! Start a system.
+        template <typename SystemT>
+        void start_system();
+
+        //! Get a system.
+        template <typename SystemT>
+        std::shared_ptr<SystemT> get_system();
+
+        //! Get a system.
+        template <typename SystemT>
+        std::shared_ptr<const SystemT> get_system() const;
+
     protected:
         virtual void tick();
 
@@ -125,10 +139,12 @@ namespace pkzo
         std::unique_ptr<RenderQueue> render_queue;
 
         std::shared_ptr<Screen>      screen;
-        std::shared_ptr<Scene>       scene;
-        std::shared_ptr<Camera>      camera;
+        std::shared_ptr<Scene>       scene, next_scene;
+        std::shared_ptr<Camera>      camera, next_camera;
 
         std::chrono::steady_clock::time_point last_tick = std::chrono::steady_clock::now();
+
+        std::vector<std::shared_ptr<System>> systems;
 
         void handle_events();
         void draw();
@@ -136,6 +152,34 @@ namespace pkzo
 
     PKZO_EXPORT
     void show_error_dialog(const std::string_view caption, const std::string_view message);
+
+    template <typename SystemT>
+    void Engine::start_system()
+    {
+        assert(running == false);
+        systems.push_back(std::make_shared<SystemT>(*this));
+    }
+
+    template <typename SystemT>
+    std::shared_ptr<SystemT> Engine::get_system()
+    {
+        for (auto& system : systems)
+        {
+            auto system_t = std::dynamic_pointer_cast<SystemT>(system);
+            if (system_t)
+            {
+                return system_t;
+            }
+        }
+        throw nullptr;
+    }
+
+    //! Get a system.
+    template <typename SystemT>
+    std::shared_ptr<const SystemT> Engine::get_system() const
+    {
+        return const_cast<Engine*>(this)->get_system<SystemT>();
+    }
 }
 
 #endif

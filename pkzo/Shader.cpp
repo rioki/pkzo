@@ -11,6 +11,14 @@
 #include <GL/glew.h>
 #include <glm/gtc/type_ptr.hpp>
 
+#ifdef _MSC_VER
+#include <windows.h>
+#include <tchar.h>
+#include "resource.h"
+#else
+// TODO
+#endif
+
 #include "dbg.h"
 #include "stdex.h"
 #include "Texture.h"
@@ -18,6 +26,23 @@
 namespace pkzo
 {
     constexpr auto MAX_LOG_MESSAGE = 256;
+
+    std::string LoadTextResource(HMODULE hModule, LPCTSTR lpName, LPCTSTR lpType)
+    {
+        HRSRC   hPhongVertex  = FindResource(hModule, lpName, lpType);
+        HGLOBAL hgPhongVertex = LoadResource(hModule, hPhongVertex);
+        DWORD   nSize         = SizeofResource(hModule, hPhongVertex);
+        const char* psCode = (const char*)LockResource(hgPhongVertex);
+        return std::string(psCode, nSize);
+    }
+
+    Shader::Shader() = default;
+
+    Shader::Shader(uint16_t id)
+    {
+        HMODULE hModule = GetModuleHandle(_T("pkzo.dll"));
+        code = LoadTextResource(hModule, MAKEINTRESOURCE(id), _T("GLSL"));
+    }
 
     Shader::Shader(const fs::path& file)
     {

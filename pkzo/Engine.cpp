@@ -18,6 +18,8 @@
 #include "Scene.h"
 #include "Camera.h"
 #include "RenderQueue.h"
+#include "PhysicSystem.h"
+#include "DebugDrawer.h"
 
 namespace pkzo
 {
@@ -39,7 +41,7 @@ namespace pkzo
 
         // TODO load settings
 
-        window   = std::make_unique<Window>(glm::uvec2(800, 600), Window::STATIC, id);
+        window   = std::make_unique<Window>(glm::uvec2(1600, 900), Window::STATIC, id);
         window->on(Window::DRAW, [this] () {
             draw();
         });
@@ -47,6 +49,12 @@ namespace pkzo
 
         mouse    = std::make_unique<Mouse>();
         keyboard = std::make_unique<Keyboard>();
+
+        #ifdef _DEBUG
+        start_system<DebugDrawer>();
+        #endif
+
+        start_system<PhysicSystem>();
     }
 
     Engine::~Engine()
@@ -54,6 +62,8 @@ namespace pkzo
         screen = nullptr;
         camera = nullptr;
         scene = nullptr;
+        next_camera = nullptr;
+        next_scene = nullptr;
         keyboard = nullptr;
         mouse = nullptr;
         render_queue = nullptr;
@@ -116,8 +126,11 @@ namespace pkzo
 
     void Engine::set_scene(std::shared_ptr<Scene> value)
     {
-        scene = std::move(value);
-        emit(CHANGE_SCENE);
+        next_scene = std::move(value);
+        if (next_scene)
+        {
+            next_scene->engine = this;
+        }
     }
 
     std::shared_ptr<Scene> Engine::get_scene() const
@@ -127,7 +140,7 @@ namespace pkzo
 
     void Engine::set_camera(std::shared_ptr<Camera> value)
     {
-        camera = std::move(value);
+        next_camera = std::move(value);
     }
 
     std::shared_ptr<Camera> Engine::get_camera() const
@@ -158,11 +171,39 @@ namespace pkzo
 
         auto now = std::chrono::steady_clock::now();
         auto dt = fsec(now - last_tick).count();
+        last_tick = now;
+
+        if (next_scene != scene)
+        {
+            if (scene)
+            {
+                scene->deactivate();
+            }
+            camera = nullptr;
+            scene = next_scene;
+            emit(CHANGE_SCENE);
+            if (scene)
+            {
+                scene->activate();
+            }
+        }
+
+        if (next_camera != camera)
+        {
+            camera = next_camera;
+            emit(CHANGE_CAMERA);
+        }
+
+        for (auto& system : systems)
+        {
+            system->tick(dt);
+        }
+
         if (scene)
         {
             scene->update(dt);
         }
-        last_tick = now;
+
     }
 
     void Engine::handle_events()
@@ -203,6 +244,12 @@ namespace pkzo
         if (scene && camera)
         {
             scene->draw(*camera, *render_queue);
+        }
+
+        auto dd = get_system<DebugDrawer>();
+        if (dd)
+        {
+            dd->draw(*camera);
         }
 
         if (screen)

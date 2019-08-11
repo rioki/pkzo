@@ -26,12 +26,11 @@ namespace pkzo
     class PKZO_EXPORT Shader
     {
     public:
-        /*!
-         * Create a dummy shader.
-         *
-         * A default constucted shader is unusable, set the code to compile.
-         */
+        //! Create a dummy shader.
         Shader();
+
+        //! Load shader from resoruce
+        explicit Shader(uint16_t id);
 
         /*!
          * Load the shder from a file.

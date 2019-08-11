@@ -5,6 +5,7 @@
 #include "CubesEngine.h"
 
 #include "FlyPawn.h"
+#include "DynamicBox.h"
 
 namespace cubes
 {
@@ -16,6 +17,7 @@ namespace cubes
             if (scene)
             {
                 auto pawn = std::make_shared<FlyPawn>(*this);
+                pawn->move({-10.0f, 0.0f, 3.0f});
                 scene->add_node(pawn);
                 set_camera(pawn->get_camera());
             }
@@ -28,13 +30,9 @@ namespace cubes
     {
         auto scene = std::make_shared<pkzo::Scene>();
 
-        auto teapot_mesh = std::make_shared<pkzo::Mesh>("../data/meshes/Teapot.ply");
         auto white_material = std::make_shared<pkzo::Material>("../data/materials/geometry/SolidWhitePhong.pxm");
-        auto teapot = std::make_shared<pkzo::MeshGeometry>(teapot_mesh, white_material);
-        teapot->move(glm::vec3{0.0f, 0.0f, 0.75f});
-        scene->add_node(teapot);
 
-        auto ground = std::make_shared<pkzo::BoxGeometry>(glm::vec3{10.0f, 10.0f, 1.0f}, white_material);
+        auto ground = std::make_shared<pkzo::BoxGeometry>(glm::vec3{100.0f, 100.0f, 1.0f}, white_material);
         ground->move(glm::vec3{0.0f, 0.0f, -0.5f});
         scene->add_node(ground);
 
@@ -49,10 +47,9 @@ namespace cubes
         light2->move(glm::vec3{0.0f, 0.0f, 2.0f});
         scene->add_node(light2);
 
-        auto light3 = std::make_shared<pkzo::SpotLight>(glm::vec3(0.5f, 1.0f, 0.5f), glm::radians(45.0f));
-        light3->move(glm::vec3{2.0f, 2.0f, 2.0f});
-        light3->rotate(glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 1.0f));
-        scene->add_node(light3);
+        auto cube = std::make_shared<DynamicBox>(glm::vec3(1.0f), 10.0f, white_material);
+        cube->move(glm::vec3{0.0f, 0.0f, 2.0f});
+        scene->add_node(cube);
 
         return scene;
     }

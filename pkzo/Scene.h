@@ -14,6 +14,7 @@
 
 namespace pkzo
 {
+    class Engine;
     class SceneNode;
     class Camera;
     class FrameBuffer;
@@ -25,8 +26,10 @@ namespace pkzo
     class PKZO_EXPORT Scene : private stdex::non_copyable
     {
     public:
-        Scene();
         virtual ~Scene();
+
+        //! Get the scene's engine./
+        Engine& get_engine();
 
         /*!
          * Add a node to the scene.
@@ -52,10 +55,19 @@ namespace pkzo
          */
         void draw(const Camera& camera, RenderQueue& queue);
 
+        //! Activate the scene.
+        virtual void activate();
+        //! Deactivate the scene.
+        virtual void deactivate();
+        //! Update the scene
+        //! @param dt the duration from the last frame in seconds
         virtual void update(float dt);
 
     private:
+        Engine* engine;
         std::list<std::shared_ptr<SceneNode>> nodes;
+
+    friend class Engine;
     };
 
     template <typename NodeT>

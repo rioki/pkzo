@@ -20,11 +20,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AmbientLight.h" />
+    <ClInclude Include="Body.h" />
     <ClInclude Include="BoxGeometry.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ColorMode.h" />
     <ClInclude Include="compose.h" />
     <ClInclude Include="dbg.h" />
+    <ClInclude Include="DebugDrawer.h" />
     <ClInclude Include="defines.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="Engine.h" />
@@ -35,6 +37,8 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="MeshGeometry.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="PhysicDebugDrawer.h" />
+    <ClInclude Include="PhysicSystem.h" />
     <ClInclude Include="pkzo.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="RenderQueue.h" />
@@ -44,6 +48,7 @@
     <ClInclude Include="SceneNodeGroup.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SpotLight.h" />
+    <ClInclude Include="System.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Key.h" />
@@ -62,9 +67,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AmbientLight.cpp" />
+    <ClCompile Include="Body.cpp" />
     <ClCompile Include="BoxGeometry.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="dbg.cpp" />
+    <ClCompile Include="DebugDrawer.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="EventEmitter.cpp" />
@@ -79,6 +86,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="PhysicDebugDrawer.cpp" />
+    <ClCompile Include="PhysicSystem.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="RenderQueue.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -102,6 +111,9 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="pkzo.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DebugLine.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

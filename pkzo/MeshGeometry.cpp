@@ -29,6 +29,6 @@ namespace pkzo
 
     void MeshGeometry::enqueue(RenderQueue& queue) const
     {
-        queue.submit_mesh(get_transform(), mesh, material);
+        queue.submit_mesh(get_world_transform(), mesh, material);
     }
 }

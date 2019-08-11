@@ -24,7 +24,7 @@ namespace pkzo
 
     void SpotLight::enqueue(RenderQueue& queue) const
     {
-        auto transform = get_transform();
+        auto transform = get_world_transform();
         auto rotation = glm::mat3(transform);
         auto light_position = glm::vec3(transform[3]);
         auto light_direction = rotation * glm::vec3{0.0f, 0.0f, -1.0f};

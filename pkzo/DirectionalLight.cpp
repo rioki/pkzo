@@ -14,7 +14,7 @@ namespace pkzo
 
     void DirectionalLight::enqueue(RenderQueue& queue) const
     {
-        auto rotation = glm::mat3(get_transform());
+        auto rotation = glm::mat3(get_world_transform());
         auto light_direction = rotation * glm::vec3{0.0f, 0.0f, -1.0f};
 
         queue.submit_directional_light(color, light_direction);

@@ -116,6 +116,12 @@ namespace pkzo
         return glm::uvec2(w, h);
     }
 
+    float Window::get_aspect() const
+    {
+        auto s = get_size();
+        return static_cast<float>(s.x) / static_cast<float>(s.y);
+    }
+
     Window::Mode Window::get_mode() const
     {
         return mode;

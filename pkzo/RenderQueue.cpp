@@ -47,7 +47,7 @@ namespace pkzo
         auto distance = 1000.0f; // TOOD determine the render distance from the geometry
 
         auto aspect = static_cast<float>(resolution.x) / static_cast<float>(resolution.y);
-        auto fovy = glm::radians(fov) / aspect;
+        auto fovy = glm::radians(fov / 2.0f) * aspect;
         projection_matrix = glm::perspective(fovy / 2.0f, fovy, 0.1f, distance);
 
         auto eye      = glm::vec3(transform[3]);

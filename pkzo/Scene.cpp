@@ -16,20 +16,24 @@
 
 namespace pkzo
 {
-    Scene::Scene() {}
+    Scene::~Scene() = default;
 
-    Scene::~Scene() {}
+    Engine& Scene::get_engine()
+    {
+        assert(engine != nullptr);
+        return *engine;
+    }
 
     void Scene::add_node(const std::shared_ptr<SceneNode>& node)
     {
-        PKZO_ASSERT(node->scene == nullptr);
+        assert(node->scene == nullptr);
         nodes.push_back(node);
         node->scene = this;
     }
 
     void Scene::remove_node(const std::shared_ptr<SceneNode>& node)
     {
-        PKZO_ASSERT(node->scene == this);
+        assert(node->scene == this);
         auto i = std::find(nodes.begin(), nodes.end(), node);
         if (i == nodes.end())
         {
@@ -41,7 +45,7 @@ namespace pkzo
 
     void Scene::draw(const Camera& camera, RenderQueue& queue)
     {
-        PKZO_ASSERT(this == &camera.get_scene());
+        assert(this == &camera.get_scene());
 
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
@@ -55,6 +59,24 @@ namespace pkzo
         }
 
         queue.execute(RenderAlgorithm::LIT_FORWARD);
+    }
+
+    void Scene::activate()
+    {
+        assert(engine != nullptr);
+        for (auto& node : nodes)
+        {
+            node->activate();
+        }
+    }
+
+    void Scene::deactivate()
+    {
+        assert(engine != nullptr);
+        for (auto& node : nodes)
+        {
+            node->deactivate();
+        }
     }
 
     void Scene::update(float dt)

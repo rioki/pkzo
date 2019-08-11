@@ -72,6 +72,15 @@ namespace pkzo
 
         glm::uvec3 get_face(size_t i) const;
 
+        //! Set the number of lines.
+        void set_line_count(size_t value);
+        //! Get the number of lines.
+        size_t get_line_count() const;
+        //! Set a line
+        void set_line(size_t i, const glm::uvec2& value);
+        //! Get a line.
+        glm::uvec2 get_line(size_t i) const;
+
         void compute_normals();
 
         void compute_tangents();
@@ -79,16 +88,6 @@ namespace pkzo
         std::tuple<glm::vec3, glm::vec3> get_bounds() const;
 
         std::tuple<glm::vec3, float> get_bounding_sphere() const;
-
-        const std::vector<glm::vec3>& get_vertices() const;
-
-        const std::vector<glm::vec3>& get_normals() const;
-
-        const std::vector<glm::vec2>& get_texcoords() const;
-
-        const std::vector<glm::vec3>& get_tangents() const;
-
-        const std::vector<glm::uvec3>& get_faces() const;
 
         void bind(Shader& shader);
 
@@ -106,6 +105,7 @@ namespace pkzo
         std::vector<glm::vec3> tangents;
 
         std::vector<glm::uvec3> faces;
+        std::vector<glm::uvec2> lines;
 
         bool      bound = false;
         glm::uint vao = 0;
@@ -113,7 +113,8 @@ namespace pkzo
         glm::uint normal_buffer = 0;
         glm::uint texcoord_buffer = 0;
         glm::uint tangent_buffer = 0;
-        glm::uint indexe_buffer = 0;
+        glm::uint face_buffer = 0;
+        glm::uint line_buffer = 0;
 
         void load_ply(const fs::path& file);
         void load_obj(const fs::path& file);

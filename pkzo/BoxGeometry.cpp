@@ -6,7 +6,9 @@
 #include "BoxGeometry.h"
 
 #include "dbg.h"
+#include "Engine.h"
 #include "RenderQueue.h"
+#include "PhysicSystem.h"
 
 namespace pkzo
 {
@@ -27,6 +29,35 @@ namespace pkzo
 
     void BoxGeometry::enqueue(RenderQueue& queue) const
     {
-        queue.submit_box(get_transform(), size, material);
+        queue.submit_box(get_world_transform(), size, material);
+    }
+
+    void BoxGeometry::activate()
+    {
+        Geometry::activate();
+
+        auto& engine = get_engine();
+        auto physics = engine.get_system<PhysicSystem>();
+        if (physics)
+        {
+            physics->add(this);
+        }
+    }
+
+    void BoxGeometry::deactivate()
+    {
+        auto& engine = get_engine();
+        auto physics = engine.get_system<PhysicSystem>();
+        if (physics)
+        {
+            physics->remove(this);
+        }
+
+        Geometry::deactivate();
+    }
+
+    void BoxGeometry::update(float dt)
+    {
+        //
     }
 }

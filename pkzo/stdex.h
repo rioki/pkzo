@@ -112,6 +112,39 @@ namespace stdex
 
     template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
     template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
+
+    template<typename E>
+    constexpr auto to_int(E e) -> typename std::underlying_type<E>::type
+    {
+       return static_cast<typename std::underlying_type<E>::type>(e);
+    }
 }
+
+#define STDEX_BIT(n) (1 << n)
+#define STDEX_ENUM_BIT_OPERATORS(ENUM) \
+        constexpr ENUM operator | (ENUM rhs, ENUM lhs) \
+        { \
+            return static_cast<ENUM>(::stdex::to_int(rhs) | ::stdex::to_int(lhs)); \
+        } \
+        constexpr ENUM operator & (ENUM rhs, ENUM lhs) \
+        { \
+            return static_cast<ENUM>(::stdex::to_int(rhs) & ::stdex::to_int(lhs)); \
+        } \
+        constexpr ENUM operator ^ (ENUM rhs, ENUM lhs) \
+        { \
+            return static_cast<ENUM>(::stdex::to_int(rhs) ^ ::stdex::to_int(lhs)); \
+        } \
+        constexpr ENUM operator >> (ENUM rhs, int n) \
+        { \
+            return static_cast<ENUM>(::stdex::to_int(rhs) >> n); \
+        } \
+        constexpr ENUM operator << (ENUM rhs, int n) \
+        { \
+            return static_cast<ENUM>(::stdex::to_int(rhs) << n); \
+        } \
+        constexpr ENUM operator ~ (ENUM val) \
+        { \
+            return static_cast<ENUM>(~ ::stdex::to_int(val)); \
+        }
 
 #endif

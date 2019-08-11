@@ -22,10 +22,10 @@ namespace pkzo
     class PKZO_EXPORT Window : public EventEmitter
     {
     public:
-        
+
         enum Mode
         {
-            STATIC,            
+            STATIC,
             RESIZABLE,
             FULLSCREEN
         };
@@ -55,6 +55,9 @@ namespace pkzo
          */
         glm::uvec2 get_size() const;
 
+        //! Get the widow's aspect ratio.
+        float get_aspect() const;
+
         Mode get_mode() const;
 
         void set_title(const std::string& value);
@@ -62,15 +65,15 @@ namespace pkzo
         std::string get_title() const;
 
         void draw();
-        
+
     private:
         SDL_Window*   window;
-        SDL_GLContext glcontext;  
-        
-        Mode mode;  
+        SDL_GLContext glcontext;
+
+        Mode mode;
 
         void handle_event(SDL_Event& event);
-           
+
     friend class Engine;
     };
 }

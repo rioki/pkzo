@@ -21,6 +21,10 @@ namespace pkzo
         //! Get the horizontal field of view.
         float get_fov() const;
 
+        glm::mat4 get_projection_matrix(float aspect, float distance) const;
+
+        glm::mat4 get_view_matrix() const;
+
         //! Set the camera on the render queue up.
         void setup(RenderQueue& queue) const;
 
