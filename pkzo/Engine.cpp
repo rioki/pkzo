@@ -12,12 +12,11 @@
 
 #include "dbg.h"
 #include "Window.h"
-#include "Mouse.h"
-#include "Keyboard.h"
 #include "Screen.h"
 #include "Scene.h"
 #include "Camera.h"
 #include "RenderQueue.h"
+#include "InputSystem.h"
 #include "PhysicSystem.h"
 #include "DebugDrawer.h"
 
@@ -47,8 +46,7 @@ namespace pkzo
         });
         render_queue = std::make_unique<RenderQueue>(window->get_size());
 
-        mouse    = std::make_unique<Mouse>();
-        keyboard = std::make_unique<Keyboard>();
+        start_system<InputSystem>();
 
         #ifdef _DEBUG
         start_system<DebugDrawer>();
@@ -64,10 +62,9 @@ namespace pkzo
         scene = nullptr;
         next_camera = nullptr;
         next_scene = nullptr;
-        keyboard = nullptr;
-        mouse = nullptr;
         render_queue = nullptr;
         window = nullptr;
+        systems.clear();
         IMG_Quit();
         TTF_Quit();
         SDL_Quit();
@@ -90,28 +87,30 @@ namespace pkzo
         return *window;
     }
 
-    Mouse& Engine::get_mouse()
+    std::shared_ptr<Mouse> Engine::get_mouse()
     {
-        PKZO_ASSERT(mouse);
-        return *mouse;
+        auto is = get_system<InputSystem>();
+        if (is)
+        {
+            return is->get_mouse();
+        }
+        else
+        {
+            return nullptr;
+        }
     }
 
-    const Mouse& Engine::get_mouse() const
+    std::shared_ptr<Keyboard> Engine::get_keyboard()
     {
-        PKZO_ASSERT(mouse);
-        return *mouse;
-    }
-
-    Keyboard& Engine::get_keyboard()
-    {
-        PKZO_ASSERT(keyboard);
-        return *keyboard;
-    }
-
-    const Keyboard& Engine::get_keyboard() const
-    {
-        PKZO_ASSERT(keyboard);
-        return *keyboard;
+        auto is = get_system<InputSystem>();
+        if (is)
+        {
+            return is->get_keyboard();
+        }
+        else
+        {
+            return nullptr;
+        }
     }
 
     void Engine::set_screen(std::shared_ptr<Screen> value)
@@ -153,7 +152,6 @@ namespace pkzo
         running = true;
         while (running)
         {
-            handle_events();
             tick();
             get_window().draw();
         }
@@ -202,40 +200,6 @@ namespace pkzo
         if (scene)
         {
             scene->update(dt);
-        }
-
-    }
-
-    void Engine::handle_events()
-    {
-        SDL_Event event;
-        while (SDL_PollEvent(&event))
-        {
-             switch (event.type)
-             {
-                case SDL_QUIT:
-                    get_window().handle_event(event);
-                    stop();
-                    break;
-                case SDL_WINDOWEVENT:
-                    get_window().handle_event(event);
-                    break;
-                case SDL_KEYDOWN:
-                case SDL_KEYUP:
-                case SDL_TEXTINPUT:
-                case SDL_TEXTEDITING:
-                    get_keyboard().handle_event(event);
-                    break;
-                case SDL_MOUSEBUTTONDOWN:
-                case SDL_MOUSEBUTTONUP:
-                case SDL_MOUSEWHEEL:
-                case SDL_MOUSEMOTION:
-                    get_mouse().handle_event(event);
-                    break;
-                default:
-                    /* stfu */
-                    break;
-             }
         }
     }
 

@@ -13,8 +13,9 @@ namespace mats
     {
         update();
 
-        auto& mouse = engine.get_mouse();
-        mouse.on(pkzo::Mouse::BUTTON_PRESS, [this] (glm::uint button, glm::uvec2 pos) {
+        auto mouse = engine.get_mouse();
+        assert(mouse);
+        mouse->on(pkzo::Mouse::BUTTON_PRESS, [this] (glm::uint button, glm::uvec2 pos) {
             if (button == 2)
             {
                 panning = true;
@@ -24,7 +25,7 @@ namespace mats
                 orbiting = true;
             }
         });
-        mouse.on(pkzo::Mouse::BUTTON_RELEASE, [this] (glm::uint button, glm::uvec2 pos) {
+        mouse->on(pkzo::Mouse::BUTTON_RELEASE, [this] (glm::uint button, glm::uvec2 pos) {
             if (button == 2)
             {
                 panning = false;
@@ -34,11 +35,11 @@ namespace mats
                 orbiting = false;
             }
         });
-        mouse.on(pkzo::Mouse::WHEEL, [this] (glm::ivec2 mov) {
+        mouse->on(pkzo::Mouse::WHEEL, [this] (glm::ivec2 mov) {
             coords.z += 0.5f * static_cast<float>(mov.y);
             update();
         });
-        mouse.on(pkzo::Mouse::MOVE, [this] (glm::ivec2 rel, glm::uvec2 pos) {
+        mouse->on(pkzo::Mouse::MOVE, [this] (glm::ivec2 rel, glm::uvec2 pos) {
             if (orbiting)
             {
                 coords.xy -= glm::vec2(rel) * glm::vec2{0.01f, 0.01f};

@@ -13,16 +13,12 @@ union SDL_Event;
 
 namespace pkzo
 {
-    /*!
-     * Keyboard
-     */
+    //! Keyboard
 	class PKZO_EXPORT Keyboard : public EventEmitter
     {
     public:
-        
-        /*!
-         * Events emited by the keyboard.
-         */
+
+        //! Events emited by the keyboard.
         enum Event
         {
             KEY_PRESS,      //!< A key is pressed. void(Key key)
@@ -30,23 +26,18 @@ namespace pkzo
             TEXT            //!< The textual represntation of key storkes. void(string_view text)
         };
 
-        Keyboard(); 
+        Keyboard();
         Keyboard(const Keyboard&) = delete;
-        ~Keyboard();    
+        ~Keyboard();
         const Keyboard& operator = (const Keyboard&) = delete;
-        
-        /*!
-         * Check if a given key is pressed.
-         *
-         * @param key
-         * @return true if the key is pressed
-         */
+
+        //! Check if a given key is pressed.
         bool is_pressed(Key key) const;
-        
-    private:               
+
+    private:
         void handle_event(SDL_Event& event);
-        
-		friend class Engine;
+
+		friend class InputSystem;
     };
 }
 

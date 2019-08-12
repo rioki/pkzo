@@ -63,23 +63,10 @@ namespace pkzo
         const Window& get_window() const;
         /*! @} */
 
-        /*!
-         * The mouse.
-         *
-         * @{
-         */
-        Mouse& get_mouse();
-        const Mouse& get_mouse() const;
-        /*! @} */
-
-        /*!
-         * The keyboard.
-         *
-         * @{
-         */
-        Keyboard& get_keyboard();
-        const Keyboard& get_keyboard() const;
-        /*! @} */
+        //! Get the mouse.
+        std::shared_ptr<Mouse> get_mouse();
+        //! Get the keyboard.
+        std::shared_ptr<Keyboard> get_keyboard();
 
         /*!
          * The overlay screen.
@@ -134,8 +121,6 @@ namespace pkzo
         std::string                  id;
         std::atomic<bool>            running;
         std::unique_ptr<Window>      window;
-        std::unique_ptr<Mouse>       mouse;
-        std::unique_ptr<Keyboard>    keyboard;
         std::unique_ptr<RenderQueue> render_queue;
 
         std::shared_ptr<Screen>      screen;
@@ -146,7 +131,6 @@ namespace pkzo
 
         std::vector<std::shared_ptr<System>> systems;
 
-        void handle_events();
         void draw();
     };
 

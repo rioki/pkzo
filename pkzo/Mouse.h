@@ -63,7 +63,7 @@ namespace pkzo
     private:
         void handle_event(SDL_Event& event);
 
-		friend class Engine;
+		friend class InputSystem;
     };
 }
 

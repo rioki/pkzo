@@ -20,29 +20,31 @@ namespace cubes
         camera->set_transform(transform);
         add_node(camera);
 
-        auto& mouse = engine.get_mouse();
-        mouse.on(pkzo::Mouse::BUTTON_PRESS, [this] (glm::uint button, glm::uvec2 pos) {
+        auto mouse = engine.get_mouse();
+        assert(mouse);
+        mouse->on(pkzo::Mouse::BUTTON_PRESS, [this] (glm::uint button, glm::uvec2 pos) {
             if (button == 3)
             {
                 rotating = true;
             }
         });
-        mouse.on(pkzo::Mouse::BUTTON_RELEASE, [this] (glm::uint button, glm::uvec2 pos) {
+        mouse->on(pkzo::Mouse::BUTTON_RELEASE, [this] (glm::uint button, glm::uvec2 pos) {
 
             if (button == 3)
             {
                 rotating = false;
             }
         });
-        mouse.on(pkzo::Mouse::MOVE, [this] (glm::ivec2 rel, glm::uvec2 pos) {
+        mouse->on(pkzo::Mouse::MOVE, [this] (glm::ivec2 rel, glm::uvec2 pos) {
             if (rotating)
             {
                 rotation += glm::vec2(rel) * 0.1f;
             }
         });
 
-        auto& keyboard = engine.get_keyboard();
-        keyboard.on(pkzo::Keyboard::KEY_PRESS, [this] (pkzo::Key key) {
+        auto keyboard = engine.get_keyboard();
+        assert(keyboard);
+        keyboard->on(pkzo::Keyboard::KEY_PRESS, [this] (pkzo::Key key) {
             switch (key)
             {
                 case pkzo::KEY_W:
@@ -65,7 +67,7 @@ namespace cubes
                     break;
             }
         });
-        keyboard.on(pkzo::Keyboard::KEY_RELEASE, [this] (pkzo::Key key) {
+        keyboard->on(pkzo::Keyboard::KEY_RELEASE, [this] (pkzo::Key key) {
             switch (key)
             {
                 case pkzo::KEY_W:
