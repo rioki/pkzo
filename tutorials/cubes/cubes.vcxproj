@@ -162,12 +162,14 @@
     <ClCompile Include="cubes.cpp" />
     <ClCompile Include="CubesEngine.cpp" />
     <ClCompile Include="DynamicBox.cpp" />
+    <ClCompile Include="DynamicCapsule.cpp" />
     <ClCompile Include="FlyPawn.cpp" />
     <ClCompile Include="StaticBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CubesEngine.h" />
     <ClInclude Include="DynamicBox.h" />
+    <ClInclude Include="DynamicCapsule.h" />
     <ClInclude Include="FlyPawn.h" />
     <ClInclude Include="StaticBox.h" />
   </ItemGroup>

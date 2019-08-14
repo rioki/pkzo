@@ -11,14 +11,12 @@ class btBoxShape;
 
 namespace pkzo
 {
-    //! Physics Collider Base
+    //! Box Collider
     class PKZO_EXPORT BoxCollider : public Collider
     {
     public:
         //! Create box collider.
         BoxCollider(const glm::vec3& size = {1.0f, 1.0f, 1.0f});
-        //! Set the size of the box.
-        void set_size(const glm::vec3& value);
         //! Get the size of the box.
         const glm::vec3& get_size() const;
 

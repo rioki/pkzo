@@ -33,6 +33,7 @@
 
 #include "Collider.h"
 #include "BoxCollider.h"
+#include "CapsuleCollider.h"
 
 #include "Material.h"
 #include "Mesh.h"

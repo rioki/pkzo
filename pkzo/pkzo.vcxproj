@@ -24,6 +24,7 @@
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="BoxGeometry.h" />
     <ClInclude Include="btutils.h" />
+    <ClInclude Include="CapsuleCollider.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="ColorMode.h" />
@@ -76,6 +77,7 @@
     <ClCompile Include="Body.cpp" />
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="BoxGeometry.cpp" />
+    <ClCompile Include="CapsuleCollider.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="dbg.cpp" />

@@ -1,4 +1,3 @@
-
 // pkzo
 // Copyright (c) 2014-2019 Sean Farrell
 // See READNE.md for licensing details.
@@ -13,16 +12,6 @@ namespace pkzo
 {
     BoxCollider::BoxCollider(const glm::vec3& s)
     : size(s) {}
-
-    void BoxCollider::set_size(const glm::vec3& value)
-    {
-        if (collision_shape)
-        {
-            auto change = size / value;
-            collision_shape->setLocalScaling(to_bt(change));
-        }
-        size = value;
-    }
 
     const glm::vec3& BoxCollider::get_size() const
     {
