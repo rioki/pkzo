@@ -48,6 +48,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneNode.h" />
     <ClInclude Include="SceneNodeGroup.h" />
+    <ClInclude Include="SdlSentry.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="System.h" />
@@ -97,6 +98,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="SceneNodeGroup.cpp" />
+    <ClCompile Include="SdlSentry.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="Text.cpp" />

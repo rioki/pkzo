@@ -11,6 +11,7 @@
 #include <glm/glm.hpp>
 
 #include "defines.h"
+#include "SdlSentry.h"
 
 struct _TTF_Font;
 typedef struct _TTF_Font TTF_Font;
@@ -38,7 +39,8 @@ namespace pkzo
         std::shared_ptr<Texture> render(const std::string& text) const;
 
     private:
-        TTF_Font* font; 
+        SdlSentry sentry;
+        TTF_Font* font;
     };
 }
 

@@ -7,8 +7,6 @@
 
 #include <stdexcept>
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
 
 #include "dbg.h"
 #include "Screen.h"
@@ -24,37 +22,12 @@ namespace pkzo
     Engine::Engine(const std::string_view i)
     : id{i}
     {
-        if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
-        {
-            throw std::runtime_error(SDL_GetError());
-        }
-        if (IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF | IMG_INIT_WEBP) < 0)
-        {
-            throw std::runtime_error(IMG_GetError());
-        }
-        if (TTF_Init() < 0)
-        {
-            throw std::runtime_error(TTF_GetError());
-        }
-
         start_system<GraphicSystem>();
         start_system<InputSystem>();
         start_system<PhysicSystem>();
     }
 
-    Engine::~Engine()
-    {
-        screen = nullptr;
-        camera = nullptr;
-        scene = nullptr;
-        next_screen = nullptr;
-        next_camera = nullptr;
-        next_scene = nullptr;
-        systems.clear();
-        IMG_Quit();
-        TTF_Quit();
-        SDL_Quit();
-    }
+    Engine::~Engine() = default;
 
     const std::string& Engine::get_id() const
     {

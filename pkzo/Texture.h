@@ -14,6 +14,7 @@
 #include <glm/glm.hpp>
 
 #include "stdex.h"
+#include "SdlSentry.h"
 #include "ColorMode.h"
 
 struct SDL_Surface;
@@ -57,6 +58,7 @@ namespace pkzo
         glm::uint get_handle();
 
     private:
+        SdlSentry    sentry;
         glm::uvec2   size    = {0, 0};
         ColorMode    color   = ColorMode::RGB;
         SDL_Surface* surface = nullptr;

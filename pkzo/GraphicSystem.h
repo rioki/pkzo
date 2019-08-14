@@ -6,6 +6,7 @@
 #define _PKZO_GRAPHIC_SYSTEM_H_
 
 #include "System.h"
+#include "SdlSentry.h"
 
 namespace pkzo
 {
@@ -26,6 +27,7 @@ namespace pkzo
         void tick(float dt) override;
 
     private:
+        SdlSentry                    sdl_sentry;
         Engine&                      engine;
         std::shared_ptr<Window>      window;
         std::unique_ptr<RenderQueue> render_queue;

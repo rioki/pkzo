@@ -6,6 +6,7 @@
 #define _PKZO_INPUT_SYSTEM_H_
 
 #include "System.h"
+#include "SdlSentry.h"
 
 namespace pkzo
 {
@@ -27,6 +28,7 @@ namespace pkzo
         void tick(float dt) override;
 
     private:
+        SdlSentry                 sdl_sentry;
         Engine&                   engine;
         std::shared_ptr<Mouse>    mouse;
         std::shared_ptr<Keyboard> keyboard;

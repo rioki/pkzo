@@ -156,6 +156,9 @@
     <ClInclude Include="GraphicSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SdlSentry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Key.cpp">
@@ -273,6 +276,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GraphicSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SdlSentry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
