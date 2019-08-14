@@ -43,11 +43,11 @@ namespace pkzo
              switch (event.type)
              {
                 case SDL_QUIT:
-                    engine.get_window().handle_event(event);
+                    engine.get_window()->handle_event(event);
                     engine.stop();
                     break;
                 case SDL_WINDOWEVENT:
-                    engine.get_window().handle_event(event);
+                    engine.get_window()->handle_event(event);
                     break;
                 case SDL_KEYDOWN:
                 case SDL_KEYUP:

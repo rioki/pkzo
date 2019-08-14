@@ -13,7 +13,7 @@ namespace hello
     HelloEngine::HelloEngine()
     : Engine{"Hello"}
     {
-        auto screen = std::make_shared<GreetingScreen>(glm::vec2(get_window().get_size()));
+        auto screen = std::make_shared<GreetingScreen>(glm::vec2(get_window()->get_size()));
         set_screen(screen);
     }
 }

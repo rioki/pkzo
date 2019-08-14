@@ -68,8 +68,8 @@ namespace pkzo
 
     void DebugDrawer::draw(Camera& camera)
     {
-        auto& window = engine.get_window();
-        projection = camera.get_projection_matrix(window.get_aspect(), 1000.0f);
+        auto window = engine.get_window();
+        projection = camera.get_projection_matrix(window->get_aspect(), 1000.0f);
         model_view = camera.get_view_matrix();
 
         glDisable(GL_DEPTH_TEST);

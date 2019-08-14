@@ -11,11 +11,10 @@
 #include <SDL2/SDL_ttf.h>
 
 #include "dbg.h"
-#include "Window.h"
 #include "Screen.h"
 #include "Scene.h"
 #include "Camera.h"
-#include "RenderQueue.h"
+#include "GraphicSystem.h"
 #include "InputSystem.h"
 #include "PhysicSystem.h"
 #include "DebugDrawer.h"
@@ -38,20 +37,8 @@ namespace pkzo
             throw std::runtime_error(TTF_GetError());
         }
 
-        // TODO load settings
-
-        window   = std::make_unique<Window>(glm::uvec2(1600, 900), Window::STATIC, id);
-        window->on(Window::DRAW, [this] () {
-            draw();
-        });
-        render_queue = std::make_unique<RenderQueue>(window->get_size());
-
+        start_system<GraphicSystem>();
         start_system<InputSystem>();
-
-        #ifdef _DEBUG
-        start_system<DebugDrawer>();
-        #endif
-
         start_system<PhysicSystem>();
     }
 
@@ -60,10 +47,9 @@ namespace pkzo
         screen = nullptr;
         camera = nullptr;
         scene = nullptr;
+        next_screen = nullptr;
         next_camera = nullptr;
         next_scene = nullptr;
-        render_queue = nullptr;
-        window = nullptr;
         systems.clear();
         IMG_Quit();
         TTF_Quit();
@@ -75,16 +61,17 @@ namespace pkzo
         return id;
     }
 
-    Window& Engine::get_window()
+    std::shared_ptr<Window> Engine::get_window()
     {
-        PKZO_ASSERT(window);
-        return *window;
-    }
-
-    const Window& Engine::get_window() const
-    {
-        PKZO_ASSERT(window);
-        return *window;
+        auto gs = get_system<GraphicSystem>();
+        if (gs)
+        {
+            return gs->get_window();
+        }
+        else
+        {
+            return nullptr;
+        }
     }
 
     std::shared_ptr<Mouse> Engine::get_mouse()
@@ -115,7 +102,7 @@ namespace pkzo
 
     void Engine::set_screen(std::shared_ptr<Screen> value)
     {
-        screen = std::move(value);
+        next_screen = std::move(value);
     }
 
     std::shared_ptr<Screen> Engine::get_screen() const
@@ -130,6 +117,7 @@ namespace pkzo
         {
             next_scene->engine = this;
         }
+        next_camera = nullptr;
     }
 
     std::shared_ptr<Scene> Engine::get_scene() const
@@ -153,7 +141,6 @@ namespace pkzo
         while (running)
         {
             tick();
-            get_window().draw();
         }
         return 0;
     }
@@ -192,6 +179,12 @@ namespace pkzo
             emit(CHANGE_CAMERA);
         }
 
+        if (next_screen != screen)
+        {
+            screen = next_screen;
+            emit(CHANGE_SCREEN);
+        }
+
         for (auto& system : systems)
         {
             system->tick(dt);
@@ -200,25 +193,6 @@ namespace pkzo
         if (scene)
         {
             scene->update(dt);
-        }
-    }
-
-    void Engine::draw()
-    {
-        if (scene && camera)
-        {
-            scene->draw(*camera, *render_queue);
-        }
-
-        auto dd = get_system<DebugDrawer>();
-        if (dd)
-        {
-            dd->draw(*camera);
-        }
-
-        if (screen)
-        {
-            screen->draw(*render_queue);
         }
     }
 

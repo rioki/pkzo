@@ -25,81 +25,52 @@ namespace pkzo
     class RenderQueue;
     class System;
 
-    /*!
-     * Central object holding all the bits together.
-     */
+    //! Central object holding all the bits together.
     class PKZO_EXPORT Engine : private stdex::non_copyable, public EventEmitter
     {
     public:
         enum EventId
         {
-            CHANGE_SCENE,
-            CHANGE_CAMERA
+            CHANGE_SCREEN, //!< The screen has changed. void()
+            CHANGE_SCENE,  //!< The scene has changed. void()
+            CHANGE_CAMERA  //!< The camera has cahnged. void()
         };
 
-        /*!
-         * Create engine.
-         *
-         * @param id the id of the engine
-         * @param argc command line argument count
-         * @param argv command line values
-         */
+        //! Create engine.
         Engine(const std::string_view id);
         virtual ~Engine();
 
-        /*!
-         * The engine id.
-         *
-         * The engine id is used for many things, such as settings.
-         */
+        //! The engine id.
         const std::string& get_id() const;
 
-        /*!
-         * The primary output window.
-         *
-         * @{
-         */
-        Window& get_window();
-        const Window& get_window() const;
-        /*! @} */
-
+        //! The primary output window.
+        std::shared_ptr<Window> get_window();
         //! Get the mouse.
         std::shared_ptr<Mouse> get_mouse();
         //! Get the keyboard.
         std::shared_ptr<Keyboard> get_keyboard();
 
-        /*!
-         * The overlay screen.
-         * @{
-         */
+        //! Set the overlay screen.
         void set_screen(std::shared_ptr<Screen> value);
+        //! Get the overlay screen.
         std::shared_ptr<Screen> get_screen() const;
-        /*! @} */
 
-        /*!
-         * Scene
-         * @{
-         */
+        //! Change the current scene.
+        //!
+        //! @note Changing the scene will also invalidate the current camera.
         void set_scene(std::shared_ptr<Scene> value);
+        //! Get the current scene.
         std::shared_ptr<Scene> get_scene() const;
-        /*! @} */
 
-        /*!
-         * Camera
-         * @{
-         */
+        //! Chagne the current camera.
         void set_camera(std::shared_ptr<Camera> value);
+        //! Get the current camera.
         std::shared_ptr<Camera> get_camera() const;
-        /*! @} */
 
-        /*!
-         * Main event loop.
-         */
+        //!  Main event loop.
         int run();
 
-        /*!
-         * Break out of the main even loop.
-         */
+        //! Break out of the main even loop.
         void stop();
 
         //! Start a system.
@@ -120,10 +91,8 @@ namespace pkzo
     private:
         std::string                  id;
         std::atomic<bool>            running;
-        std::unique_ptr<Window>      window;
-        std::unique_ptr<RenderQueue> render_queue;
 
-        std::shared_ptr<Screen>      screen;
+        std::shared_ptr<Screen>      screen, next_screen;
         std::shared_ptr<Scene>       scene, next_scene;
         std::shared_ptr<Camera>      camera, next_camera;
 

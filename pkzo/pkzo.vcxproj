@@ -34,6 +34,7 @@
     <ClInclude Include="Font.h" />
     <ClInclude Include="FrameBuffer.h" />
     <ClInclude Include="Geometry.h" />
+    <ClInclude Include="GraphicSystem.h" />
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="MeshGeometry.h" />
@@ -79,6 +80,7 @@
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="FrameBuffer.cpp" />
     <ClCompile Include="Geometry.cpp" />
+    <ClCompile Include="GraphicSystem.cpp" />
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="MeshGeometry.cpp" />
