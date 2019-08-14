@@ -2,12 +2,11 @@
 #include "PhysicDebugDrawer.h"
 
 #include "dbg.h"
+#include "btutils.h"
 #include "DebugDrawer.h"
 
 namespace pkzo
 {
-    glm::vec3 to_glm(const btVector3& vec);
-
     PhysicDebugDrawer::PhysicDebugDrawer(std::shared_ptr<DebugDrawer> d)
     : drawer(d) {}
 

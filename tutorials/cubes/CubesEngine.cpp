@@ -6,6 +6,7 @@
 
 #include "FlyPawn.h"
 #include "DynamicBox.h"
+#include "StaticBox.h"
 
 namespace cubes
 {
@@ -32,7 +33,7 @@ namespace cubes
 
         auto white_material = std::make_shared<pkzo::Material>("../data/materials/geometry/SolidWhitePhong.pxm");
 
-        auto ground = std::make_shared<pkzo::BoxGeometry>(glm::vec3{100.0f, 100.0f, 1.0f}, white_material);
+        auto ground = std::make_shared<StaticBox>(glm::vec3{100.0f, 100.0f, 1.0f}, white_material);
         ground->move(glm::vec3{0.0f, 0.0f, -0.5f});
         scene->add_node(ground);
 

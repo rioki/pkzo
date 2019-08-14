@@ -9,9 +9,10 @@
 #include <bullet/btBulletDynamicsCommon.h>
 
 #include "stdex.h"
+#include "btutils.h"
 #include "Engine.h"
 #include "Body.h"
-#include "BoxGeometry.h"
+#include "Collider.h"
 #include "DebugDrawer.h"
 #include "PhysicDebugDrawer.h"
 
@@ -26,30 +27,6 @@ namespace pkzo
     };
     STDEX_ENUM_BIT_OPERATORS(CollisionType);
 
-    btTransform to_bt(const glm::mat4& trans)
-    {
-        auto result = btTransform{};
-        result.setFromOpenGLMatrix(glm::value_ptr(trans));
-        return result;
-    }
-
-    glm::mat4 to_glm(const btTransform& trans)
-    {
-        auto result = glm::mat4(1.0f);
-        trans.getOpenGLMatrix(glm::value_ptr(result));
-        return result;
-    }
-
-    btVector3 to_bt(const glm::vec3& vec)
-    {
-        return {vec.x, vec.y, vec.z};
-    }
-
-    glm::vec3 to_glm(const btVector3& vec)
-    {
-        return {vec[0], vec[1], vec[2]};
-    }
-
     PhysicSystem::PhysicSystem(Engine& e)
     : engine(e)
     {
@@ -62,13 +39,13 @@ namespace pkzo
         world->setGravity(btVector3(0.0f, 0.0f, -9.8f));
 
         // TODO make this configurable
-        /*auto dd = engine.get_system<DebugDrawer>();
+        auto dd = engine.get_system<DebugDrawer>();
         if (dd)
         {
             debug_drawer = std::make_unique<PhysicDebugDrawer>(dd);
             debug_drawer->setDebugMode(btIDebugDraw::DBG_DrawWireframe | btIDebugDraw::DBG_DrawAabb);
             world->setDebugDrawer(debug_drawer.get());
-        }*/
+        }
     }
 
     PhysicSystem::~PhysicSystem()
@@ -98,14 +75,14 @@ namespace pkzo
         }
     }
 
-    std::tuple<std::unique_ptr<btCollisionShape>, glm::mat4> create_shape(Body* body)
+    std::tuple<std::shared_ptr<btCollisionShape>, glm::mat4> create_shape(Body* body)
     {
         for (auto& node : body->get_nodes())
         {
-            auto box = std::dynamic_pointer_cast<BoxGeometry>(node);
-            if (box)
+            auto collider = std::dynamic_pointer_cast<Collider>(node);
+            if (collider)
             {
-                return std::make_tuple(std::make_unique<btBoxShape>(to_bt(box->get_size() / 2.0f)), box->get_transform());
+                return std::make_tuple(collider->get_collision_shape(), collider->get_transform());
             }
         }
         throw std::logic_error("Body has no collision shape.");
@@ -128,18 +105,17 @@ namespace pkzo
         bodies[body] = {move(motion_state), move(shape), move(btBody)};
     }
 
-    void PhysicSystem::add(BoxGeometry* box)
+    void PhysicSystem::add(Collider* collider)
     {
-        if (box->get_parent() == nullptr) // TODO convert check to body
+        if (dynamic_cast<Body*>(collider->get_parent()) == nullptr)
         {
-            auto motion_state = std::make_unique<btDefaultMotionState>(to_bt(box->get_world_transform()));
-            auto shape = std::make_unique<btBoxShape>(to_bt(box->get_size() / 2.0f));
+            auto motion_state = std::make_unique<btDefaultMotionState>(to_bt(collider->get_world_transform()));
+            auto shape = collider->get_collision_shape();
             auto body = std::make_unique<btRigidBody>(0.0f, motion_state.get(), shape.get());
-            body->setUserPointer(box);
 
             world->addRigidBody(body.get(), stdex::to_int(CollisionType::STATIC), stdex::to_int(CollisionType::DYNAMIC));
 
-            bodies[box] = {move(motion_state), move(shape), move(body)};
+            bodies[collider] = {move(motion_state), move(shape), move(body)};
         }
     }
 

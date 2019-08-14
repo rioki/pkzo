@@ -31,6 +31,9 @@
 #include "PointLight.h"
 #include "SpotLight.h"
 
+#include "Collider.h"
+#include "BoxCollider.h"
+
 #include "Material.h"
 #include "Mesh.h"
 #include "Texture.h"

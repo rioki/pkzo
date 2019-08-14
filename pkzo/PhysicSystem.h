@@ -23,6 +23,7 @@ namespace pkzo
     class Engine;
     class SceneNode;
     class Body;
+    class Collider;
     class Geometry;
     class BoxGeometry;
     class PhysicDebugDrawer;
@@ -49,17 +50,17 @@ namespace pkzo
         struct RigidBodyData
         {
             std::unique_ptr<btMotionState> motion_state;
-            std::unique_ptr<btCollisionShape> shape;
+            std::shared_ptr<btCollisionShape> shape;
             std::unique_ptr<btRigidBody> body;
         };
         std::map<SceneNode*, RigidBodyData> bodies;
 
         void add(Body* body);
-        void add(BoxGeometry* body);
+        void add(Collider* collider);
         void remove(SceneNode* body);
 
     friend class Body;
-    friend class BoxGeometry;
+    friend class Collider;
     };
 }
 

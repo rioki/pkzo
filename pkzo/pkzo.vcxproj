@@ -21,8 +21,11 @@
   <ItemGroup>
     <ClInclude Include="AmbientLight.h" />
     <ClInclude Include="Body.h" />
+    <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="BoxGeometry.h" />
+    <ClInclude Include="btutils.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Collider.h" />
     <ClInclude Include="ColorMode.h" />
     <ClInclude Include="compose.h" />
     <ClInclude Include="dbg.h" />
@@ -71,8 +74,10 @@
   <ItemGroup>
     <ClCompile Include="AmbientLight.cpp" />
     <ClCompile Include="Body.cpp" />
+    <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="BoxGeometry.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Collider.cpp" />
     <ClCompile Include="dbg.cpp" />
     <ClCompile Include="DebugDrawer.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />

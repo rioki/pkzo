@@ -26,8 +26,6 @@ namespace pkzo
         const glm::vec3& get_size() const;
 
         void enqueue(RenderQueue& queue) const override;
-        void activate() override;
-        void deactivate() override;
         void update(float dt) override;
 
     private:
