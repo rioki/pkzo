@@ -8,6 +8,7 @@
 #include "DynamicBox.h"
 #include "StaticBox.h"
 #include "DynamicCapsule.h"
+#include "DynamicSphere.h"
 
 namespace cubes
 {
@@ -53,9 +54,13 @@ namespace cubes
         cube->move(glm::vec3{0.0f, 0.0f, 2.0f});
         scene->add_node(cube);
 
-        auto capsule = std::make_shared<DynamicCapsule>(0.5f, 2.0f, 10.0f, white_material);
+        auto capsule = std::make_shared<DynamicCapsule>(1.0f, 2.0f, 10.0f, white_material);
         capsule->move(glm::vec3{0.0f, 3.0f, 2.0f});
         scene->add_node(capsule);
+
+        auto sphere = std::make_shared<DynamicSphere>(1.0f, 10.0f, white_material);
+        sphere->move(glm::vec3{0.0f, -3.0f, 2.0f});
+        scene->add_node(sphere);
 
         return scene;
     }

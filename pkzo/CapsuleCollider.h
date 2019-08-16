@@ -15,10 +15,10 @@ namespace pkzo
     class PKZO_EXPORT CapsuleCollider : public Collider
     {
     public:
-        //! Create box collider.
+        //! Create capsule collider.
         CapsuleCollider(float radius, float height);
-        //! Get the radius.
-        float get_radius() const;
+        //! Get the diameter.
+        float get_diameter() const;
         //! Get the height;
         float get_height() const;
 
@@ -26,7 +26,7 @@ namespace pkzo
         std::shared_ptr<btCollisionShape> get_collision_shape() override;
 
     private:
-        float                           radius;
+        float                           diameter;
         float                           height;
         std::shared_ptr<btCapsuleShape> collision_shape;
     };
