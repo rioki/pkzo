@@ -64,9 +64,9 @@ namespace pkzo
         assert(world);
         world->stepSimulation(dt);
 
-        for (auto& [node, body] : bodies)
+        for (auto body : bodies)
         {
-            node->set_transform(to_glm(body.body->getWorldTransform()));
+            body->sync_physics();
         }
 
         if (debug_drawer)
@@ -75,57 +75,39 @@ namespace pkzo
         }
     }
 
-    std::tuple<std::shared_ptr<btCollisionShape>, glm::mat4> create_shape(Body* body)
-    {
-        for (auto& node : body->get_nodes())
-        {
-            auto collider = std::dynamic_pointer_cast<Collider>(node);
-            if (collider)
-            {
-                return std::make_tuple(collider->get_collision_shape(), collider->get_transform());
-            }
-        }
-        throw std::logic_error("Body has no collision shape.");
-    }
-
     void PhysicSystem::add(Body* body)
     {
-        auto [shape, offset] = create_shape(body);
-
-        auto interia = btVector3{};
-        shape->calculateLocalInertia(body->get_mass(), interia);
-
-        auto motion_state = std::make_unique<btDefaultMotionState>(to_bt(body->get_world_transform()), to_bt(offset));
-
-        auto btBody = std::make_unique<btRigidBody>(body->get_mass(), motion_state.get(), shape.get(), interia);
-        btBody->setUserPointer(body);
-
+        auto btBody = body->get_rigid_body();
         world->addRigidBody(btBody.get(), stdex::to_int(CollisionType::DYNAMIC), stdex::to_int(CollisionType::DYNAMIC | CollisionType::STATIC));
 
-        bodies[body] = {move(motion_state), move(shape), move(btBody)};
+        bodies.push_back(body);
     }
 
     void PhysicSystem::add(Collider* collider)
     {
         if (dynamic_cast<Body*>(collider->get_parent()) == nullptr)
         {
-            auto motion_state = std::make_unique<btDefaultMotionState>(to_bt(collider->get_world_transform()));
-            auto shape = collider->get_collision_shape();
-            auto body = std::make_unique<btRigidBody>(0.0f, motion_state.get(), shape.get());
-
-            world->addRigidBody(body.get(), stdex::to_int(CollisionType::STATIC), stdex::to_int(CollisionType::DYNAMIC));
-
-            bodies[collider] = {move(motion_state), move(shape), move(body)};
+            auto bt_body = collider->get_rigid_body();
+            world->addRigidBody(bt_body.get(), stdex::to_int(CollisionType::STATIC), stdex::to_int(CollisionType::DYNAMIC));
         }
     }
 
-    void PhysicSystem::remove(SceneNode* node)
+    void PhysicSystem::remove(Body* body)
     {
-        auto i = bodies.find(node);
-        if (i != end(bodies))
+        auto bt_body = body->get_rigid_body();
+        world->removeRigidBody(bt_body.get());
+
+        auto i = std::find(begin(bodies), end(bodies), body);
+        assert(i != end(bodies));
+        bodies.erase(i);
+    }
+
+    void PhysicSystem::remove(Collider* collider)
+    {
+        if (dynamic_cast<Body*>(collider->get_parent()) == nullptr)
         {
-            world->removeRigidBody(i->second.body.get());
-            bodies.erase(i);
+            auto bt_body = collider->get_rigid_body();
+            world->removeRigidBody(bt_body.get());
         }
     }
 }

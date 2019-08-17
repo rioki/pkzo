@@ -21,9 +21,15 @@ namespace pkzo
 
         //! Get the nodes in the group.
         const std::list<std::shared_ptr<SceneNode>>& get_nodes();
-
         //! Get the nodes in the group.
         std::list<std::shared_ptr<const SceneNode>> get_nodes() const;
+        //! Get the node of a specific type.
+        template <typename NodeT>
+        std::list<std::shared_ptr<NodeT>> get_nodes();
+        //! Get the node of a specific type.
+        template <typename NodeT>
+        std::list<std::shared_ptr<const NodeT>> get_nodes() const;
+
 
         void enqueue(RenderQueue& queue) const override;
         void activate() override;
@@ -33,6 +39,30 @@ namespace pkzo
     private:
         std::list<std::shared_ptr<SceneNode>> nodes;
     };
+
+    template <typename NodeT>
+    std::list<std::shared_ptr<NodeT>> SceneNodeGroup::get_nodes()
+    {
+        auto result = std::list<std::shared_ptr<NodeT>>{};
+
+        for (auto& node : nodes)
+        {
+            auto rnode = std::dynamic_pointer_cast<NodeT>(node);
+            if (rnode)
+            {
+                result.push_back(rnode);
+            }
+        }
+
+        return result;
+    }
+
+    template <typename NodeT>
+    std::list<std::shared_ptr<const NodeT>> SceneNodeGroup::get_nodes() const
+    {
+        auto nodes  = const_cast<SceneNodeGroup*>(this)->get_nodes<NodeT>();
+        return {begin(nodes), end(nodes)};
+    }
 }
 
 #endif

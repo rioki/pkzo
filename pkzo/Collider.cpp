@@ -5,11 +5,16 @@
 #include "pch.h"
 #include "Collider.h"
 
+#include <bullet/btBulletDynamicsCommon.h>
+
+#include "btutils.h"
 #include "Engine.h"
 #include "PhysicSystem.h"
 
 namespace pkzo
 {
+    Collider::~Collider() = default;
+
     void Collider::activate()
     {
         SceneNode::activate();
@@ -32,5 +37,16 @@ namespace pkzo
         }
 
         SceneNode::deactivate();
+    }
+
+    std::shared_ptr<btRigidBody> Collider::get_rigid_body()
+    {
+        if (rigid_body == nullptr)
+        {
+            motion_state = std::make_shared<btDefaultMotionState>(to_bt(get_world_transform()));
+            collision_shape = get_collision_shape();
+            rigid_body = std::make_unique<btRigidBody>(0.0f, motion_state.get(), collision_shape.get());
+        }
+        return rigid_body;
     }
 }

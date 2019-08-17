@@ -14,9 +14,6 @@ class btCollisionConfiguration;
 class btCollisionDispatcher;
 class btConstraintSolver;
 class btDynamicsWorld;
-class btMotionState;
-class btCollisionShape;
-class btRigidBody;
 
 namespace pkzo
 {
@@ -24,8 +21,6 @@ namespace pkzo
     class SceneNode;
     class Body;
     class Collider;
-    class Geometry;
-    class BoxGeometry;
     class PhysicDebugDrawer;
 
     //! Physic system
@@ -47,17 +42,12 @@ namespace pkzo
         std::unique_ptr<btDynamicsWorld>          world;
         std::unique_ptr<PhysicDebugDrawer>        debug_drawer;
 
-        struct RigidBodyData
-        {
-            std::unique_ptr<btMotionState> motion_state;
-            std::shared_ptr<btCollisionShape> shape;
-            std::unique_ptr<btRigidBody> body;
-        };
-        std::map<SceneNode*, RigidBodyData> bodies;
+        std::list<Body*> bodies;
 
         void add(Body* body);
         void add(Collider* collider);
-        void remove(SceneNode* body);
+        void remove(Body* body);
+        void remove(Collider* collider);
 
     friend class Body;
     friend class Collider;

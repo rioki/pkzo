@@ -13,6 +13,8 @@
 
 namespace pkzo
 {
+    SceneNode::~SceneNode() = default;
+
     Engine& SceneNode::get_engine()
     {
         return get_scene().get_engine();

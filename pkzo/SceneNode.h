@@ -21,6 +21,8 @@ namespace pkzo
     class PKZO_EXPORT SceneNode : private stdex::non_copyable
     {
     public:
+        virtual ~SceneNode();
+
         //! Get the node's engine.
         Engine& get_engine();
         //! Get the node's scene.

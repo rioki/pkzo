@@ -12,6 +12,8 @@
 
 namespace cubes
 {
+    constexpr auto IMPULSE = 5.0f;
+
     CubesEngine::CubesEngine()
     : Engine{"Cubes"}
     {
@@ -51,15 +53,18 @@ namespace cubes
         scene->add_node(light2);
 
         auto cube = std::make_shared<DynamicBox>(glm::vec3(1.0f), 10.0f, white_material);
-        cube->move(glm::vec3{0.0f, 0.0f, 2.0f});
+        cube->move({0.0f, 0.0f, 2.0f});
+        cube->apply_impulse({IMPULSE, 0.0f, 0.0f});
         scene->add_node(cube);
 
-        auto capsule = std::make_shared<DynamicCapsule>(1.0f, 2.0f, 10.0f, white_material);
-        capsule->move(glm::vec3{0.0f, 3.0f, 2.0f});
+        auto capsule = std::make_shared<DynamicCapsule>(1.0f, 2.0f, 5.0f, white_material);
+        capsule->move({0.0f, 3.0f, 2.0f});
+        capsule->apply_impulse({IMPULSE, 0.0f, 0.0f});
         scene->add_node(capsule);
 
-        auto sphere = std::make_shared<DynamicSphere>(1.0f, 10.0f, white_material);
-        sphere->move(glm::vec3{0.0f, -3.0f, 2.0f});
+        auto sphere = std::make_shared<DynamicSphere>(1.0f, 5.0f, white_material);
+        sphere->move({0.0f, -3.0f, 2.0f});
+        sphere->apply_impulse({IMPULSE, 0.0f, 0.0f});
         scene->add_node(sphere);
 
         return scene;
