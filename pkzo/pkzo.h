@@ -35,6 +35,7 @@
 #include "BoxCollider.h"
 #include "SphereCollider.h"
 #include "CapsuleCollider.h"
+#include "MeshCollider.h"
 
 #include "Material.h"
 #include "Mesh.h"

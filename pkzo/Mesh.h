@@ -95,11 +95,24 @@ namespace pkzo
 
         void draw();
 
+        //! Get array of vertexes.
+        const std::vector<glm::vec3>& get_vertexes() const;
+        //! Get array of normals
+        const std::vector<glm::vec3>& get_normals() const;
+        //! Get array of texture coordinates.
+        const std::vector<glm::vec2>& get_texcoords() const;
+        //! Get array of tangents.
+        const std::vector<glm::vec3>& get_tangents() const;
+        //! Get array of triangle indexes.
+        const std::vector<glm::uvec3>& get_faces() const;
+        //! Get array of line indexes.
+        const std::vector<glm::uvec2>& get_lines() const;
+
     private:
         glm::vec3 min;
         glm::vec3 max;
 
-        std::vector<glm::vec3> vertices;
+        std::vector<glm::vec3> vertexes;
         std::vector<glm::vec3> normals;
         std::vector<glm::vec2> texcoords;
         std::vector<glm::vec3> tangents;

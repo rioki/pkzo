@@ -9,6 +9,7 @@
 #include "StaticBox.h"
 #include "DynamicCapsule.h"
 #include "DynamicSphere.h"
+#include "StaticMesh.h"
 
 namespace cubes
 {
@@ -36,6 +37,7 @@ namespace cubes
         auto scene = std::make_shared<pkzo::Scene>();
 
         auto white_material = std::make_shared<pkzo::Material>("../data/materials/geometry/SolidWhitePhong.pxm");
+        auto teapot_mesh    = std::make_shared<pkzo::Mesh>("../data/meshes/Teapot.ply");
 
         auto ground = std::make_shared<StaticBox>(glm::vec3{100.0f, 100.0f, 1.0f}, white_material);
         ground->move(glm::vec3{0.0f, 0.0f, -0.5f});
@@ -66,6 +68,10 @@ namespace cubes
         sphere->move({0.0f, -3.0f, 2.0f});
         sphere->apply_impulse({IMPULSE, 0.0f, 0.0f});
         scene->add_node(sphere);
+
+        auto teapot = std::make_shared<StaticMesh>(teapot_mesh, white_material);
+        teapot->move({0.0f, 0.0f, 0.0f});
+        scene->add_node(teapot);
 
         return scene;
     }

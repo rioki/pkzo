@@ -192,7 +192,7 @@ namespace pkzo
 
     std::shared_ptr<Mesh> Mesh::create_fullscreen_rectangle()
     {
-        return Mesh::create_rectangle(glm::uvec2(2.0f));
+        return Mesh::create_rectangle({2.0f, 2.0f});
     }
 
     Mesh::Mesh()
@@ -225,7 +225,7 @@ namespace pkzo
 
     void Mesh::set_vertex_count(size_t value)
     {
-        vertices.resize(value);
+        vertexes.resize(value);
         normals.resize(value);
         texcoords.resize(value);
         tangents.resize(value);
@@ -233,19 +233,19 @@ namespace pkzo
 
     size_t Mesh::get_vertex_count() const
     {
-        return vertices.size();
+        return vertexes.size();
     }
 
     void Mesh::set_vertex(size_t i, const glm::vec3& v)
     {
         min = glm::min(min, v);
         max = glm::max(max, v);
-        vertices.at(i) = v;
+        vertexes.at(i) = v;
     }
 
     glm::vec3 Mesh::get_vertex(size_t i) const
     {
-        return vertices.at(i);
+        return vertexes.at(i);
     }
 
     void Mesh::set_normal(size_t i, const glm::vec3& v)
@@ -325,7 +325,7 @@ namespace pkzo
 
     void Mesh::compute_normals()
     {
-        normals.resize(vertices.size(), glm::vec3(0));
+        normals.resize(vertexes.size(), glm::vec3(0));
 
         for (size_t i = 0; i < faces.size(); i++)
         {
@@ -333,8 +333,8 @@ namespace pkzo
             unsigned int ib = faces[i][1];
             unsigned int ic = faces[i][2];
 
-            glm::vec3 e1 = vertices[ia] - vertices[ib];
-            glm::vec3 e2 = vertices[ia] - vertices[ic];
+            glm::vec3 e1 = vertexes[ia] - vertexes[ib];
+            glm::vec3 e2 = vertexes[ia] - vertexes[ic];
             glm::vec3 no = glm::cross(e1, e2);
 
             normals[ia] += no;
@@ -355,9 +355,9 @@ namespace pkzo
 
         for (size_t i = 0; i < faces.size(); i++)
         {
-            glm::vec3 v1 = vertices[faces[i][0]];
-            glm::vec3 v2 = vertices[faces[i][1]];
-            glm::vec3 v3 = vertices[faces[i][2]];
+            glm::vec3 v1 = vertexes[faces[i][0]];
+            glm::vec3 v2 = vertexes[faces[i][1]];
+            glm::vec3 v3 = vertexes[faces[i][2]];
 
             glm::vec2 w1 = get_texcoord(faces[i][0]);
             glm::vec2 w2 = get_texcoord(faces[i][1]);
@@ -388,7 +388,7 @@ namespace pkzo
             tan2[faces[i][2]] += tdir;
         }
 
-        tangents.resize(vertices.size());
+        tangents.resize(vertexes.size());
         for (size_t i = 0; i < get_vertex_count(); i++)
         {
             glm::vec3& n  = normals[i];
@@ -424,11 +424,11 @@ namespace pkzo
         PlyParser parser;
         parser.parse(file.string());
 
-        vertices  = parser.get_vertices();
+        vertexes  = parser.get_vertexes();
         normals   = parser.get_normals();
         texcoords = parser.get_texcoords();
 
-        for (auto& v : vertices)
+        for (auto& v : vertexes)
         {
             min = glm::min(min, v);
             max = glm::max(max, v);
@@ -469,13 +469,13 @@ namespace pkzo
         ObjParser parser;
         parser.parse(file.string());
 
-        auto v = parser.get_vertices();
+        auto v = parser.get_vertexes();
         auto n = parser.get_normals();
         auto t = parser.get_texcoords();
 
         auto f = parser.get_faces();
 
-        vertices.clear();
+        vertexes.clear();
         normals.clear();
         texcoords.clear();
 
@@ -495,9 +495,9 @@ namespace pkzo
                 }
                 else
                 {
-                    size_t vi = vertices.size();
+                    size_t vi = vertexes.size();
 
-                    vertices.push_back(v[fv[0] - 1]);
+                    vertexes.push_back(v[fv[0] - 1]);
                     normals.push_back(n[fv[2] - 1]);
 
                     glm::vec2 tc = t[fv[1] - 1];
@@ -515,7 +515,7 @@ namespace pkzo
             }
         }
 
-        for (glm::vec3 v : vertices)
+        for (glm::vec3 v : vertexes)
         {
             min = glm::min(min, v);
             max = glm::max(max, v);
@@ -579,6 +579,36 @@ namespace pkzo
         PKZO_CHECK_OPENGL(glGetError());
     }
 
+    const std::vector<glm::vec3>& Mesh::get_vertexes() const
+    {
+        return vertexes;
+    }
+
+    const std::vector<glm::vec3>& Mesh::get_normals() const
+    {
+        return normals;
+    }
+
+    const std::vector<glm::vec2>& Mesh::get_texcoords() const
+    {
+        return texcoords;
+    }
+
+    const std::vector<glm::vec3>& Mesh::get_tangents() const
+    {
+        return tangents;
+    }
+
+    const std::vector<glm::uvec3>& Mesh::get_faces() const
+    {
+        return faces;
+    }
+
+    const std::vector<glm::uvec2>& Mesh::get_lines() const
+    {
+        return lines;
+    }
+
     template <typename vec>
     glm::uint upload_values(GLenum buffer_type, const std::vector<vec>& values)
     {
@@ -597,7 +627,7 @@ namespace pkzo
         glGenVertexArrays(1, &vao);
         PKZO_CHECK_OPENGL(glGetError());
 
-        vertex_buffer   = upload_values(GL_ARRAY_BUFFER, vertices);
+        vertex_buffer   = upload_values(GL_ARRAY_BUFFER, vertexes);
         normal_buffer   = upload_values(GL_ARRAY_BUFFER, normals);
         texcoord_buffer = upload_values(GL_ARRAY_BUFFER, texcoords);
         tangent_buffer  = upload_values(GL_ARRAY_BUFFER, tangents);

@@ -22,6 +22,7 @@ namespace pkzo
     class Body;
     class Collider;
     class PhysicDebugDrawer;
+    class Mesh;
 
     //! Physic system
     class PhysicSystem : public System
@@ -51,6 +52,7 @@ namespace pkzo
 
     friend class Body;
     friend class Collider;
+    friend class MeshCollider;
     };
 }
 

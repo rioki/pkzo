@@ -72,9 +72,9 @@ PlyParser::PlyParser()
 
 PlyParser::~PlyParser() {}
 
-const std::vector<glm::vec3>& PlyParser::get_vertices() const
+const std::vector<glm::vec3>& PlyParser::get_vertexes() const
 {
-    return vertices;
+    return vertexes;
 }
 
 const std::vector<glm::vec3>& PlyParser::get_normals() const
@@ -455,7 +455,7 @@ void PlyParser::parse_vertex(size_t elem, const std::vector<std::string>& proper
         values[properties[i]] = (float)parse_float();
     }
 
-    vertices.push_back(glm::vec3(values["x"], values["y"], values["z"]));
+    vertexes.push_back(glm::vec3(values["x"], values["y"], values["z"]));
     normals.push_back(glm::vec3(values["nx"], values["ny"], values["nz"]));
     texcoords.push_back(glm::vec2(values["s"], 1.0f - values["t"]));
 }

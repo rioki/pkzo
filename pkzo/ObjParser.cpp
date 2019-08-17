@@ -56,9 +56,9 @@ ObjParser::ObjParser()
 
 ObjParser::~ObjParser() {}
 
-const std::vector<glm::vec3>& ObjParser::get_vertices() const
+const std::vector<glm::vec3>& ObjParser::get_vertexes() const
 {
-    return vertices;
+    return vertexes;
 }
 
 const std::vector<glm::vec3>& ObjParser::get_normals() const
@@ -463,7 +463,7 @@ void ObjParser::parse_vertex()
         w = parse_float();
     }
 
-    vertices.push_back(glm::vec3(x, y, z));
+    vertexes.push_back(glm::vec3(x, y, z));
 }
 
 void ObjParser::parse_texcoord()

@@ -40,7 +40,7 @@ public:
 
     ~ObjParser();
 
-    const std::vector<glm::vec3>& get_vertices() const;
+    const std::vector<glm::vec3>& get_vertexes() const;
 
     const std::vector<glm::vec3>& get_normals() const;
 
@@ -74,7 +74,7 @@ private:
     std::string value;
     std::string next_value;
 
-    std::vector<glm::vec3> vertices;
+    std::vector<glm::vec3> vertexes;
     std::vector<glm::vec3> normals;
     std::vector<glm::vec2> texcoords;
     std::vector<std::vector<glm::ivec3>> faces;

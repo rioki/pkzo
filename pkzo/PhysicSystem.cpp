@@ -15,6 +15,7 @@
 #include "Collider.h"
 #include "DebugDrawer.h"
 #include "PhysicDebugDrawer.h"
+#include "Mesh.h"
 
 namespace pkzo
 {

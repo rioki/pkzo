@@ -48,7 +48,7 @@ public:
 
     ~PlyParser();
 
-    const std::vector<glm::vec3>& get_vertices() const;
+    const std::vector<glm::vec3>& get_vertexes() const;
     const std::vector<glm::vec3>& get_normals() const; 
     const std::vector<glm::vec2>& get_texcoords() const; 
     const std::vector<glm::ivec3>& get_indexes() const;  
@@ -56,7 +56,7 @@ public:
     void parse(const std::string& file);
 
 private:
-    std::vector<glm::vec3> vertices;  // v4f
+    std::vector<glm::vec3> vertexes;  // v4f
     std::vector<glm::vec3> normals;   // v3f
     std::vector<glm::vec2> texcoords; // v2f
     std::vector<glm::ivec3> indexes;  // trangles
