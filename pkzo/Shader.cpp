@@ -1,53 +1,44 @@
+// GLint id;
+// glGetIntegerv(GL_CURRENT_PROGRAM,&id);//
 // pkzo
-// Copyright (c) 2014-2019 Sean Farrell
-// See READNE.md for licensing details.
+//
+// Copyright 2014-2021 Sean Farrell <sean.farrell@rioki.org>
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+//
 
 #include "pch.h"
 #include "Shader.h"
 
-#include <array>
-#include <map>
-#include <sstream>
-#include <GL/glew.h>
-#include <glm/gtc/type_ptr.hpp>
-
-#ifdef _MSC_VER
-#include <windows.h>
-#include <tchar.h>
-#include "resource.h"
-#else
-// TODO
-#endif
-
-#include "dbg.h"
-#include "stdex.h"
 #include "Texture.h"
 
 namespace pkzo
 {
-    constexpr auto MAX_LOG_MESSAGE = 256;
-
-    std::string LoadTextResource(HMODULE hModule, LPCTSTR lpName, LPCTSTR lpType)
+    auto get_bound_shader() noexcept
     {
-        HRSRC   hPhongVertex  = FindResource(hModule, lpName, lpType);
-        HGLOBAL hgPhongVertex = LoadResource(hModule, hPhongVertex);
-        DWORD   nSize         = SizeofResource(hModule, hPhongVertex);
-        const char* psCode = (const char*)LockResource(hgPhongVertex);
-        return std::string(psCode, nSize);
+        GLint id = 0;
+        glGetIntegerv(GL_CURRENT_PROGRAM, &id);
+        return id;
     }
 
-    Shader::Shader() = default;
-
-    Shader::Shader(uint16_t id)
-    {
-        HMODULE hModule = GetModuleHandle(_T("pkzo.dll"));
-        code = LoadTextResource(hModule, MAKEINTRESOURCE(id), _T("GLSL"));
-    }
-
-    Shader::Shader(const fs::path& file)
-    {
-        code = stdex::read_file(file);
-    }
+    Shader::Shader(const std::string& vc, const std::string& fc)
+    : vertex_code(vc), fragment_code(fc) {}
 
     Shader::~Shader()
     {
@@ -55,19 +46,75 @@ namespace pkzo
         {
             glDeleteProgram(program_id);
             program_id = 0;
-            PKZO_SOFT_ASSERT(glGetError() == GL_NO_ERROR);
+            assert(glGetError() == GL_NO_ERROR);
         }
     }
 
-    void Shader::set_code(const std::string& value)
+    bool Shader::compile()
     {
-        PKZO_ASSERT(program_id == 0);
-        code = value;
-    }
+        assert(program_id == 0);
 
-    const std::string& Shader::get_code()
-    {
-        return code;
+        int status = 0;
+        char logstr[256];
+
+        const GLchar* vbuff[1] = { vertex_code.c_str() };
+
+        unsigned int vertex_id = glCreateShader(GL_VERTEX_SHADER);
+        glShaderSource(vertex_id, 1, vbuff, NULL);
+        glCompileShader(vertex_id);
+
+        glGetShaderInfoLog(vertex_id, 256, NULL, logstr);
+
+        glGetShaderiv(vertex_id, GL_COMPILE_STATUS, &status);
+        if (!status)
+        {
+            glDeleteShader(vertex_id);
+            throw std::runtime_error(logstr);
+        }
+
+        const GLchar* fbuff[1] = { fragment_code.c_str() };
+
+        unsigned int fragment_id = glCreateShader(GL_FRAGMENT_SHADER);
+        glShaderSource(fragment_id, 1, fbuff, NULL);
+        glCompileShader(fragment_id);
+
+        glGetShaderInfoLog(fragment_id, 256, NULL, logstr);
+
+        glGetShaderiv(fragment_id, GL_COMPILE_STATUS, &status);
+        if (!status)
+        {
+            glDeleteShader(vertex_id);
+            glDeleteShader(fragment_id);
+            throw std::runtime_error(logstr);
+        }
+
+        assert(glGetError() == GL_NO_ERROR);
+
+        program_id = glCreateProgram();
+        glAttachShader(program_id, vertex_id);
+        assert(glGetError() == GL_NO_ERROR);
+        glAttachShader(program_id, fragment_id);
+        assert(glGetError() == GL_NO_ERROR);
+        glLinkProgram(program_id);
+
+        glGetProgramInfoLog(program_id, 256, NULL, logstr);
+
+        glGetProgramiv(program_id, GL_LINK_STATUS, &status);
+        if (!status)
+        {
+            glDeleteShader(vertex_id);
+            glDeleteShader(fragment_id);
+            glDeleteProgram(program_id);
+            throw std::runtime_error(logstr);
+        }
+
+        // NOTE: glDeleteShader() actually does not delete the shader, it only
+        // flags the shader for deletion. The shaders will be deleted when
+        // the program gets deleted.
+        glDeleteShader(vertex_id);
+        glDeleteShader(fragment_id);
+
+        assert(glGetError() == GL_NO_ERROR);
     }
 
     void Shader::bind()
@@ -76,176 +123,67 @@ namespace pkzo
         {
             compile();
         }
-
-        PKZO_ASSERT(program_id != 0);
         glUseProgram(program_id);
-        bound = true;
+        assert(glGetError() == GL_NO_ERROR);
         texture_slot = 0u;
     }
 
-    void Shader::unbind()
-    {
-        PKZO_ASSERT(bound == true);
-        glUseProgram(0);
-        bound = false;
-    }
+    template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
+    template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
 
-    void Shader::set_uniform(const std::string_view id, const UniformValue& value)
+    void Shader::set_uniform(const std::string_view id, const UniformValue& value) noexcept
     {
-        PKZO_ASSERT(bound == true);
+        assert(get_bound_shader() == program_id);
 
         int location = glGetUniformLocation(program_id, id.data());
         if (location != -1)
         {
-            std::visit(stdex::overloaded {
-            [&] (bool v) { glUniform1i(location, v); },
-            [&] (int v) { glUniform1i(location, v); },
-            [&] (glm::uint v) { glUniform1i(location, v); },
-            [&] (float v) { glUniform1f(location, v); },
-            [&] (const glm::ivec2 v) { glUniform2i(location, v.x, v.y); },
-            [&] (const glm::uvec2 v) { glUniform2i(location, v.x, v.y); },
-            [&] (const glm::vec2 v) { glUniform2f(location, v.x, v.y); },
-            [&] (const glm::ivec3 v) { glUniform3i(location, v.x, v.y, v.z); },
-            [&] (const glm::uvec3 v) { glUniform3i(location, v.x, v.y, v.z); },
-            [&] (const glm::vec3 v) { glUniform3f(location, v.x, v.y, v.z); },
-            [&] (const glm::ivec4 v) { glUniform4i(location, v.x, v.y, v.z, v.w); },
-            [&] (const glm::uvec4 v) { glUniform4i(location, v.x, v.y, v.z, v.w); },
-            [&] (const glm::vec4 v) { glUniform4f(location, v.x, v.y, v.z, v.w); },
-            [&] (const glm::mat2 v) { glUniformMatrix2fv(location, 1u, GL_FALSE, glm::value_ptr(v)); },
-            [&] (const glm::mat3 v) { glUniformMatrix3fv(location, 1u, GL_FALSE, glm::value_ptr(v)); },
-            [&] (const glm::mat4 v) { glUniformMatrix4fv(location, 1u, GL_FALSE, glm::value_ptr(v)); },
+            std::visit(overloaded {
+                [&] (bool v) { glUniform1i(location, v); },
+                [&] (int v) { glUniform1i(location, v); },
+                [&] (glm::uint v) { glUniform1i(location, v); },
+                [&] (float v) { glUniform1f(location, v); },
+                [&] (glm::ivec2 v) { glUniform2i(location, v.x, v.y); },
+                [&] (glm::uvec2 v) { glUniform2i(location, v.x, v.y); },
+                [&] (glm::vec2 v) { glUniform2f(location, v.x, v.y); },
+                [&] (glm::ivec3 v) { glUniform3i(location, v.x, v.y, v.z); },
+                [&] (glm::uvec3 v) { glUniform3i(location, v.x, v.y, v.z); },
+                [&] (glm::vec3 v) { glUniform3f(location, v.x, v.y, v.z); },
+                [&] (glm::ivec4 v) { glUniform4i(location, v.x, v.y, v.z, v.w); },
+                [&] (glm::uvec4 v) { glUniform4i(location, v.x, v.y, v.z, v.w); },
+                [&] (glm::vec4 v) { glUniform4f(location, v.x, v.y, v.z, v.w); },
+                [&] (glm::mat2 v) { glUniformMatrix2fv(location, 1u, GL_FALSE, glm::value_ptr(v)); },
+                [&] (glm::mat3 v) { glUniformMatrix3fv(location, 1u, GL_FALSE, glm::value_ptr(v)); },
+                [&] (glm::mat4 v) { glUniformMatrix4fv(location, 1u, GL_FALSE, glm::value_ptr(v)); },
             }, value);
         }
+        assert(glGetError() == GL_NO_ERROR);
     }
 
-    void Shader::set_texture(const std::string_view id, const std::shared_ptr<Texture>& value)
+    void Shader::set_uniform(const std::string_view id, const std::shared_ptr<Texture>& value) noexcept
     {
-        PKZO_ASSERT(bound);
+        assert(get_bound_shader() == program_id);
         if (value == nullptr)
         {
-            PKZO_THROW(std::invalid_argument, "Texture value is null.");
+            throw std::invalid_argument("Texture value is null.");
         }
         value->bind(texture_slot);
         set_uniform(id, texture_slot);
         texture_slot++;
     }
 
-    unsigned int Shader::get_attribute(const std::string_view name)
+    unsigned int Shader::get_attribute(const std::string& name) noexcept
     {
-        PKZO_ASSERT(bound);
-
-        unsigned int id = glGetAttribLocation(program_id, name.data());
-        PKZO_CHECK_OPENGL(glGetError());
-
+        assert(get_bound_shader() == program_id);
+        unsigned int id = glGetAttribLocation(program_id, name.c_str());
+        assert(glGetError() == GL_NO_ERROR);
         return id;
     }
 
-    void Shader::bind_output(const std::string_view name, unsigned int channel)
+    void Shader::bind_output(const std::string& name, unsigned int channel) noexcept
     {
-        PKZO_ASSERT(bound);
-        glBindFragDataLocation(program_id, channel, name.data());
-        PKZO_CHECK_OPENGL(glGetError());
-    }
-
-    std::string create_preamble(const std::map<std::string, std::string> macros)
-    {
-        std::stringstream buff;
-        buff << "#version 430" << std::endl;
-        for (auto [id, value] : macros)
-        {
-            buff << "#define " << id << " " << value << std::endl;
-        }
-        return buff.str();
-    }
-
-    glm::uint compile_source(GLenum type, const std::map<std::string, std::string>& macros, const std::string& code)
-    {
-        auto preamble = create_preamble(macros);
-        auto shader_id = glCreateShader(type);
-
-        auto sources = std::array<const GLchar *, 2>{preamble.data(), code.data()};
-        auto sources_lengths = std::array<GLint, 2>{static_cast<GLint>(preamble.size()), static_cast<GLint>(code.size())};
-        glShaderSource(shader_id, 2, sources.data(), sources_lengths.data());
-        glCompileShader(shader_id);
-
-        auto logstr = std::string(MAX_LOG_MESSAGE, '\0');
-        glGetShaderInfoLog(shader_id, static_cast<GLint>(logstr.size()), NULL, logstr.data());
-
-        auto status = 0;
-        glGetShaderiv(shader_id, GL_COMPILE_STATUS, &status);
-        if (!status)
-        {
-            glDeleteShader(shader_id);
-            throw std::runtime_error(logstr);
-        }
-
-        return shader_id;
-    }
-
-    glm::uint link_program(const std::vector<glm::uint>& shader_ids)
-    {
-        auto program_id = glCreateProgram();
-        for (auto shader_id : shader_ids)
-        {
-            glAttachShader(program_id, shader_id);
-            PKZO_CHECK_OPENGL(glGetError());
-        }
-
-        glLinkProgram(program_id);
-
-        auto logstr = std::string(MAX_LOG_MESSAGE, '\0');
-        glGetProgramInfoLog(program_id, static_cast<GLint>(logstr.size()), NULL, logstr.data());
-
-        auto status = 0;
-        glGetProgramiv(program_id, GL_LINK_STATUS, &status);
-        if (!status)
-        {
-            glDeleteProgram(program_id);
-            throw std::runtime_error(logstr);
-        }
-
-        return program_id;
-    }
-
-    void Shader::compile()
-    {
-        PKZO_ASSERT(program_id == 0);
-
-        auto vertex_id = 0u;
-        auto fragment_id = 0u;
-        try
-        {
-            auto vertex_macros = std::map<std::string, std::string>{{"PKZO_VERTEX_CODE", "1"}};
-            vertex_id = compile_source(GL_VERTEX_SHADER, vertex_macros, code);
-
-            auto fragment_macros = std::map<std::string, std::string>{{"PKZO_FRAGMENT_CODE", "1"}};
-            fragment_id = compile_source(GL_FRAGMENT_SHADER, fragment_macros, code);
-
-            program_id = link_program({vertex_id, fragment_id});
-
-            // NOTE: glDeleteShader() actually does not delete the shader, it only
-            // flags the shader for deletion. The shaders will be deleted when
-            // the program gets deleted.
-            glDeleteShader(vertex_id);
-            glDeleteShader(fragment_id);
-            PKZO_CHECK_OPENGL(glGetError());
-        }
-        catch (...)
-        {
-            if (vertex_id != 0)
-            {
-                glDeleteShader(vertex_id);
-            }
-            if (fragment_id != 0)
-            {
-                glDeleteShader(fragment_id);
-            }
-            if (program_id != 0)
-            {
-                glDeleteProgram(program_id);
-            }
-            throw;
-        }
-
+        assert(get_bound_shader() == program_id);
+        glBindFragDataLocation(program_id, channel, name.c_str());
+        assert(glGetError() == GL_NO_ERROR);
     }
 }

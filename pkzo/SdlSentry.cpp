@@ -1,32 +1,52 @@
-
+//
 // pkzo
-// Copyright (c) 2014-2019 Sean Farrell
-// See READNE.md for licensing details.
+//
+// Copyright 2014-2021 Sean Farrell <sean.farrell@rioki.org>
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+//
 
 #include "pch.h"
 #include "SdlSentry.h"
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
+#include <stdexcept>
 
 namespace pkzo
 {
-    std::atomic<size_t> SdlSentry::count = 0;
+    std::atomic<unsigned int> SdlSentry::init_count = 0;
 
     SdlSentry::SdlSentry()
     {
-        if (count++ == 0)
+        if (init_count++ == 0)
         {
-            if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
+            auto r = SDL_Init(SDL_INIT_EVERYTHING);
+            if (r < 0)
             {
                 throw std::runtime_error(SDL_GetError());
             }
-            if (IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF | IMG_INIT_WEBP) < 0)
+            r = IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF | IMG_INIT_WEBP);
+            if (r < 0)
             {
                 throw std::runtime_error(IMG_GetError());
             }
-            if (TTF_Init() < 0)
+            r = TTF_Init();
+            if (r < 0)
             {
                 throw std::runtime_error(TTF_GetError());
             }
@@ -35,12 +55,11 @@ namespace pkzo
 
     SdlSentry::~SdlSentry()
     {
-        if (--count == 0)
+        if (--init_count == 0)
         {
-            IMG_Quit();
             TTF_Quit();
+            IMG_Quit();
             SDL_Quit();
         }
     }
 }
-

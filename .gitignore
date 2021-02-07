@@ -1,7 +1,5 @@
-# Visual Studio Files
 .vs
+*.user
 x86
 x64
-*.user
-
-ext/*/
+/lab/imgui.ini

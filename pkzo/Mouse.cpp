@@ -1,61 +1,112 @@
+//
 // pkzo
-// Copyright (c) 2014-2019 Sean Farrell
-// See READNE.md for licensing details.
+//
+// Copyright 2014-2021 Sean Farrell <sean.farrell@rioki.org>
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+//
 
 #include "pch.h"
 #include "Mouse.h"
 
-#include <cassert>
-#include <stdexcept>
-#include <SDL2/SDL.h>
-#include <glm/glm.hpp>
-
 namespace pkzo
 {
-    Mouse::Mouse() = default;
-
+    Mouse::Mouse() noexcept = default;
     Mouse::~Mouse() = default;
 
-    void Mouse::show_cursor()
+    void Mouse::set_cursor_visible(bool value) noexcept
     {
-        SDL_ShowCursor(1);
-        SDL_SetRelativeMouseMode(SDL_FALSE);
+        if (value)
+        {
+            SDL_ShowCursor(SDL_TRUE);
+            SDL_SetRelativeMouseMode(SDL_FALSE);
+        }
+        else
+        {
+            SDL_ShowCursor(SDL_FALSE);
+            SDL_SetRelativeMouseMode(SDL_TRUE);
+        }
     }
 
-    void Mouse::hide_cursor()
+    bool Mouse::get_cursor_visible() const noexcept
     {
-        SDL_ShowCursor(0);
-        SDL_SetRelativeMouseMode(SDL_TRUE);
+        return SDL_ShowCursor(SDL_QUERY) == SDL_TRUE;
     }
 
-    bool Mouse::is_cursor_visible() const
+    glm::ivec2 Mouse::get_cursor_position() const noexcept
     {
-        return SDL_ShowCursor(-1) == 1;
+        int x, y;
+        SDL_GetMouseState(&x, &y);
+        return {x, y};
     }
 
-    bool Mouse::is_pressed(unsigned int button) const
+    void Mouse::on_button_down(const std::function<void(MouseButton, glm::ivec2)>& cb)
     {
-        return (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(button)) == SDL_BUTTON(button);
+        button_down_cb = cb;
     }
 
-    void Mouse::handle_event(SDL_Event& event)
+    void Mouse::on_button_up(const std::function<void(MouseButton, glm::ivec2)>& cb)
+    {
+        button_up_cb = cb;
+    }
+
+    void Mouse::on_move(const std::function<void(glm::ivec2, glm::ivec2)>& cb)
+    {
+        move_cb = cb;
+    }
+
+    void Mouse::on_wheel(const std::function<void(glm::ivec2)>& cb)
+    {
+        wheel_cb = cb;
+    }
+
+    void Mouse::handle_event(const SDL_Event& event) const
     {
         switch (event.type)
         {
-            case SDL_MOUSEBUTTONDOWN:
-                emit(BUTTON_PRESS, glm::uint{event.button.button}, glm::uvec2{event.button.x, event.button.y});
-                break;
-            case SDL_MOUSEBUTTONUP:
-                emit(BUTTON_RELEASE, glm::uint{event.button.button}, glm::uvec2{event.button.x, event.button.y});
-                break;
-            case SDL_MOUSEWHEEL:
-                emit(WHEEL, glm::ivec2{event.wheel.x, event.wheel.y});
-                break;
-            case SDL_MOUSEMOTION:
-                emit(MOVE, glm::ivec2{event.motion.xrel, event.motion.yrel}, glm::uvec2{event.motion.x, event.motion.y});
-                break;
-            default:
-                throw std::logic_error("NOT WITH ME!");
+        case SDL_MOUSEMOTION:
+            if (move_cb)
+            {
+                move_cb({event.motion.x, event.motion.y}, {event.motion.xrel, event.motion.yrel});
+            }
+            break;
+        case SDL_MOUSEBUTTONDOWN:
+            if (button_down_cb)
+            {
+                button_down_cb(MouseButton(event.button.button), {event.button.x, event.button.y});
+            }
+            break;
+        case SDL_MOUSEBUTTONUP:
+            if (button_up_cb)
+            {
+                button_up_cb(MouseButton(event.button.button), {event.button.x, event.button.y});
+            }
+            break;
+        case SDL_MOUSEWHEEL:
+            if (wheel_cb)
+            {
+                wheel_cb({event.wheel.x, event.wheel.y});
+            }
+            break;
+        default:
+            assert(false);
+            break;
         }
     }
 }

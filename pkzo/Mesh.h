@@ -1,19 +1,35 @@
+//
 // pkzo
-// Copyright (c) 2014-2019 Sean Farrell
-// See READNE.md for licensing details.
+//
+// Copyright 2014-2021 Sean Farrell <sean.farrell@rioki.org>
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+//
 
-#ifndef _PKZO_MESH_H_
-#define _PKZO_MESH_H_
+#ifndef _ICE_MESH_H_
+#define _ICE_MESH_H_
+
+#include "config.h"
 
 #include <memory>
-#include <vector>
-#include <tuple>
-#include <string>
-#include <filesystem>
+#include <array>
 #include <glm/glm.hpp>
-#include "defines.h"
-
-namespace fs = std::filesystem;
 
 namespace pkzo
 {
@@ -22,119 +38,31 @@ namespace pkzo
     class PKZO_EXPORT Mesh
     {
     public:
-
-        //! Create a rectangle mesh.
-        static std::shared_ptr<Mesh> create_rectangle(glm::vec2 size, bool flip_y_uv = false);
-
-        //! Create a rectangle mesh that can be used for fullscreen blitting.
-        static std::shared_ptr<Mesh> create_fullscreen_rectangle();
-
-        //! Create a box mesh.
-        static std::shared_ptr<Mesh> create_box(glm::vec3 size);
-
-        Mesh();
-
-        Mesh(const fs::path& file);
-
+        Mesh() noexcept;
         Mesh(const Mesh&) = delete;
-
         ~Mesh();
+        Mesh& operator = (const Mesh&) = delete;
 
-        const Mesh& operator = (const Mesh&) = delete;
+        glm::uint add_vertex(const glm::vec3 position, const glm::vec2& texcoord) noexcept;
 
-        void set_vertex_count(size_t value);
+        void add_triangle(const glm::uvec3& face) noexcept;
 
-        size_t get_vertex_count() const;
+        void upload() noexcept;
 
-        void set_vertex(size_t i, const glm::vec3& v);
+        void bind(Shader& shader) noexcept;
 
-        glm::vec3 get_vertex(size_t i) const;
-
-        void set_normal(size_t i, const glm::vec3& v);
-
-        glm::vec3 get_normal(size_t i) const;
-
-        void set_texcoord(size_t i, const glm::vec2& v);
-
-        glm::vec2 get_texcoord(size_t i) const;
-
-        void set_tangent(size_t i, const glm::vec3& v);
-
-        glm::vec3 get_tangent(size_t i) const;
-
-        void set_face_count(size_t value);
-
-        size_t get_face_count() const;
-
-        void set_face(size_t i, unsigned int a, unsigned int b, unsigned int c);
-
-        void add_face(unsigned int a, unsigned int b, unsigned int c);
-
-        glm::uvec3 get_face(size_t i) const;
-
-        //! Set the number of lines.
-        void set_line_count(size_t value);
-        //! Get the number of lines.
-        size_t get_line_count() const;
-        //! Set a line
-        void set_line(size_t i, const glm::uvec2& value);
-        //! Get a line.
-        glm::uvec2 get_line(size_t i) const;
-
-        void compute_normals();
-
-        void compute_tangents();
-
-        std::tuple<glm::vec3, glm::vec3> get_bounds() const;
-
-        std::tuple<glm::vec3, float> get_bounding_sphere() const;
-
-        void bind(Shader& shader);
-
-        void unbind();
-
-        void draw();
-
-        //! Get array of vertexes.
-        const std::vector<glm::vec3>& get_vertexes() const;
-        //! Get array of normals
-        const std::vector<glm::vec3>& get_normals() const;
-        //! Get array of texture coordinates.
-        const std::vector<glm::vec2>& get_texcoords() const;
-        //! Get array of tangents.
-        const std::vector<glm::vec3>& get_tangents() const;
-        //! Get array of triangle indexes.
-        const std::vector<glm::uvec3>& get_faces() const;
-        //! Get array of line indexes.
-        const std::vector<glm::uvec2>& get_lines() const;
+        void draw() noexcept;
 
     private:
-        glm::vec3 min;
-        glm::vec3 max;
+        glm::uint gl_id = 0u;
 
-        std::vector<glm::vec3> vertexes;
-        std::vector<glm::vec3> normals;
+        std::vector<glm::vec3> positions;
         std::vector<glm::vec2> texcoords;
-        std::vector<glm::vec3> tangents;
+        std::vector<glm::uvec3> indexes;
 
-        std::vector<glm::uvec3> faces;
-        std::vector<glm::uvec2> lines;
-
-        bool      bound = false;
-        glm::uint vao = 0;
-        glm::uint vertex_buffer = 0;
-        glm::uint normal_buffer = 0;
-        glm::uint texcoord_buffer = 0;
-        glm::uint tangent_buffer = 0;
-        glm::uint face_buffer = 0;
-        glm::uint line_buffer = 0;
-
-        void load_ply(const fs::path& file);
-        void load_obj(const fs::path& file);
-        void upload();
+        glm::uint                vao          = 0u;
+        std::array<glm::uint, 3> buffers      = {0u, 0u};
     };
 }
 
 #endif
-
-

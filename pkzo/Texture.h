@@ -1,72 +1,63 @@
+//
 // pkzo
-// Copyright (c) 2014-2019 Sean Farrell
-// See READNE.md for licensing details.
+//
+// Copyright 2014-2021 Sean Farrell <sean.farrell@rioki.org>
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+//
 
-#ifndef _PKZO_TEXTURE_H_
-#define _PKZO_TEXTURE_H_
+#ifndef _ICE_TEXTURE_H_
+#define _ICE_TEXTURE_H_
 
-#include "defines.h"
+#include "config.h"
 
 #include <memory>
-#include <string>
-#include <vector>
 #include <filesystem>
-#include <glm/glm.hpp>
+#include <glm/fwd.hpp>
 
-#include "stdex.h"
 #include "SdlSentry.h"
-#include "ColorMode.h"
 
 struct SDL_Surface;
 
-namespace fs = std::filesystem;
-
 namespace pkzo
 {
-    /*!
-     * 2D Image
-     */
-    class PKZO_EXPORT Texture : private stdex::non_copyable
+    class PKZO_EXPORT Texture
     {
     public:
-        /*!
-         * Load a texture from file.
-         */
-        Texture(const fs::path& file);
-
-        /*!
-         * Create a memory only texture.
-         */
-        Texture(glm::uvec2 size, ColorMode color);
-
-        Texture(SDL_Surface* surface);
+        Texture(const std::filesystem::path& file);
+        Texture(SDL_Surface* surface, const std::string& label = "memory") noexcept;
+        Texture(const Texture&) = delete;
         ~Texture();
+        Texture& operator = (const Texture&) = delete;
 
-        /*!
-         * Resize the texture.
-         */
-        void resize(glm::uvec2 value);
+        //! Get the texture size.
+        glm::uvec2 get_size() const noexcept;
 
-        glm::uvec2 get_size() const;
-
-        ColorMode get_color() const;
+        void upload();
 
         void bind(glm::uint slot);
 
-        void unbind();
-
-        glm::uint get_handle();
-
     private:
-        SdlSentry    sentry;
-        glm::uvec2   size    = {0, 0};
-        ColorMode    color   = ColorMode::RGB;
+        SdlSentry    sdl_sentry;
         SDL_Surface* surface = nullptr;
-        glm::uint    glid    = 0;
-        glm::uint    slot    = 0;
-
-        void upload();
-        void unload();
+        std::string  label;
+        glm::uint    gl_id = 0u;
     };
 }
 

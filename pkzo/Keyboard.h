@@ -1,43 +1,63 @@
+//
 // pkzo
-// Copyright (c) 2014-2019 Sean Farrell
-// See READNE.md for licensing details.
+//
+// Copyright 2014-2021 Sean Farrell <sean.farrell@rioki.org>
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+//
 
-#ifndef _PKZO_KEYBOARD_H_
-#define _PKZO_KEYBOARD_H_
+#ifndef _ICE_KEYBOARD_H_
+#define _ICE_KEYBOARD_H_
 
-#include "defines.h"
-#include "EventEmitter.h"
-#include "Key.h"
+#include "config.h"
+
+#include <functional>
+#include <glm/fwd.hpp>
+
+#include "enums.h"
 
 union SDL_Event;
 
 namespace pkzo
 {
-    //! Keyboard
-	class PKZO_EXPORT Keyboard : public EventEmitter
+    class PKZO_EXPORT Keyboard
     {
     public:
-
-        //! Events emited by the keyboard.
-        enum Event
-        {
-            KEY_PRESS,      //!< A key is pressed. void(Key key)
-            KEY_RELEASE,    //!< A key is released. void(Key key)
-            TEXT            //!< The textual represntation of key storkes. void(string_view text)
-        };
-
-        Keyboard();
+        Keyboard() noexcept;
         Keyboard(const Keyboard&) = delete;
         ~Keyboard();
-        const Keyboard& operator = (const Keyboard&) = delete;
+        Keyboard& operator = (const Keyboard&) = delete;
 
-        //! Check if a given key is pressed.
-        bool is_pressed(Key key) const;
+        bool is_pressed(Key key) const noexcept;
+
+        void on_key_down(const std::function<void (KeyMod, Key)>& cb);
+        void on_key_up(const std::function<void (KeyMod, Key)>& cb);
+        void on_text(const std::function<void (const std::string_view)>& cb);
 
     private:
-        void handle_event(SDL_Event& event);
+        std::function<void (KeyMod, Key)>            key_down_cb;
+        std::function<void (KeyMod, Key)>            key_up_cb;
+        std::function<void (const std::string_view)> text_cb;
 
-		friend class InputSystem;
+        void handle_event(const SDL_Event& event) const;
+
+    friend class Main;
     };
 }
 

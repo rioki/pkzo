@@ -1,80 +1,108 @@
+//
 // pkzo
-// Copyright (c) 2014-2019 Sean Farrell
-// See READNE.md for licensing details.
+//
+// Copyright 2014-2021 Sean Farrell <sean.farrell@rioki.org>
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+//
 
 #ifndef _PKZO_WINDOW_H_
 #define _PKZO_WINDOW_H_
 
-#include <glm/glm.hpp>
+#include "config.h"
 
-#include "defines.h"
-#include "EventEmitter.h"
+#include <string>
+#include <string_view>
+#include <functional>
+#include <glm/fwd.hpp>
 
-typedef struct SDL_Window SDL_Window;
+#include "enums.h"
+#include "SdlSentry.h"
+
+struct SDL_Window;
 typedef void *SDL_GLContext;
 union SDL_Event;
 
 namespace pkzo
 {
-    /*!
-     * The system window.
-     */
-    class PKZO_EXPORT Window : public EventEmitter
+    class PKZO_EXPORT Window
     {
     public:
-
-        enum Mode
-        {
-            STATIC,
-            RESIZABLE,
-            FULLSCREEN
-        };
-
-        /*!
-         * Events emited by the window.
-         */
-        enum Event
-        {
-            DRAW,   //!< The qindow is being redrawn. void()
-            RESIZE, //!< The qindow is being resized. void(uvec2 size)
-            CLOSE   //!< The window is being closed. void()
-        };
-
-        Window(const glm::uvec2& size, Mode mode = STATIC, const std::string& title = "PKZO " PZKO_VERSION);
-
+        Window(const glm::uvec2& size, WindowMode mode, const std::string_view caption);
         Window(const Window&) = delete;
-
         ~Window();
+        Window& operator = (const Window&) = delete;
 
-        const Window& operator = (const Window&) = delete;
+        void set_caption(const std::string_view text) noexcept;
+        std::string get_caption() const noexcept;
 
-        /*!
-         * Get the window's size.
-         *
-         * @return the window's size.
-         */
-        glm::uvec2 get_size() const;
+        void set_cursor_position(glm::ivec2 pos) noexcept;
+        glm::ivec2 get_cursor_position() const noexcept;
 
-        //! Get the widow's aspect ratio.
-        float get_aspect() const;
+        void resize(const glm::uvec2& size, WindowMode flags);
+        glm::uvec2 get_size() const noexcept;
+        WindowMode get_mode() const noexcept;
 
-        Mode get_mode() const;
+        void close();
 
-        void set_title(const std::string& value);
-
-        std::string get_title() const;
-
-        void draw();
+        void on_draw(const std::function<void ()>& cb);
+        void on_show(const std::function<void ()>& cb);
+        void on_hide(const std::function<void ()>& cb);
+        void on_exposed(const std::function<void ()>& cb);
+        void on_moved(const std::function<void (glm::ivec2)>& cb);
+        void on_resized(const std::function<void (glm::uvec2)>& cb);
+        void on_size_changed(const std::function<void (glm::uvec2)>& cb);
+        void on_minimixed(const std::function<void ()>& cb);
+        void on_maximixed(const std::function<void ()>& cb);
+        void on_restore(const std::function<void ()>& cb);
+        void on_enter(const std::function<void ()>& cb);
+        void on_leave(const std::function<void ()>& cb);
+        void on_gain_focus(const std::function<void ()>& cb);
+        void on_lose_focus(const std::function<void ()>& cb);
+        void on_close(const std::function<void ()>& cb);
 
     private:
-        SDL_Window*   window;
-        SDL_GLContext glcontext;
+        SdlSentry                sdl_sentry;
 
-        Mode mode;
+        SDL_Window*              window    = nullptr;
+        SDL_GLContext            glcontext = nullptr;
 
-        void handle_event(SDL_Event& event);
+        std::function<void ()>           draw_cb;
+        std::function<void ()>           show_cb;
+        std::function<void ()>           hide_cb;
+        std::function<void ()>           exposed_cb;
+        std::function<void (glm::ivec2)> moved_cb;
+        std::function<void (glm::uvec2)> size_changed_cb;
+        std::function<void (glm::uvec2)> resized_cb;
+        std::function<void ()>           minimize_cb;
+        std::function<void ()>           maximize_cb;
+        std::function<void ()>           restore_cb;
+        std::function<void ()>           enter_cb;
+        std::function<void ()>           leave_cb;
+        std::function<void ()>           gain_focus_cb;
+        std::function<void ()>           lose_focus_cb;
+        std::function<void ()>           close_cb;
 
-    friend class InputSystem;
+        void draw() const noexcept;
+        void handle_event(const SDL_Event& event) const;
+
+    friend class Main;
     };
 }
 
