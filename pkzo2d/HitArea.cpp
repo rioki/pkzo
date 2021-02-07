@@ -27,6 +27,13 @@
 
 namespace pkzo2d
 {
+    template <typename Enum>
+    auto to_underlying(Enum value)
+    {
+        return static_cast<std::underlying_type<MouseButton>::type>(value);
+    }
+
+
     HitArea::HitArea() noexcept = default;
 
     HitArea::HitArea(const glm::vec2& p, const glm::vec2& s) noexcept
@@ -54,6 +61,31 @@ namespace pkzo2d
         return size;
     }
 
+    void HitArea::on_enter(const std::function<void()>& cb) noexcept
+    {
+        enter_cb = cb;
+    }
+
+    void HitArea::on_leave(const std::function<void()>&cb) noexcept
+    {
+        leave_cb = cb;
+    }
+
+    void HitArea::on_mouse_move(const std::function<void(glm::vec2)>&cb) noexcept
+    {
+        mouse_move_cb = cb;
+    }
+
+    void HitArea::on_mouse_down(const std::function<void(MouseButton, glm::vec2)>&cb) noexcept
+    {
+        mouse_down_cb = cb;
+    }
+
+    void HitArea::on_mouse_up(const std::function<void(MouseButton, glm::vec2)>&cb) noexcept
+    {
+        mouse_up_cb = cb;
+    }
+
     void HitArea::on_click(const std::function<void ()>& cb) noexcept
     {
         click_cb = cb;
@@ -66,23 +98,71 @@ namespace pkzo2d
         if (pos.x >= min.x && pos.y >= min.y &&
             pos.x <= max.x && pos.y <= max.y)
         {
-            click_armed = true;
+            click_armed[to_underlying(button)] = true;
+            if (mouse_down_cb)
+            {
+                auto local_pos = pos - position;
+                mouse_down_cb(button, local_pos);
+            }
         }
     }
 
     void HitArea::handle_mouse_button_up(MouseButton button, glm::vec2 pos)
     {
-        if (click_armed && click_cb)
+        if (click_armed[to_underlying(button)])
         {
             auto min = position - size / 2.0f;
             auto max = position + size / 2.0f;
             if (pos.x >= min.x && pos.y >= min.y &&
                 pos.x <= max.x && pos.y <= max.y)
             {
-                click_cb();
+                if (click_cb && button == MouseButton::LEFT)
+                {
+                    click_cb();
+                }
+            }
+
+            if (mouse_up_cb)
+            {
+                auto local_pos = pos - position;
+                mouse_up_cb(button, local_pos);
             }
         }
-        click_armed = false;
+        click_armed[to_underlying(button)] = false;
+    }
+
+    void HitArea::handle_mouse_move(glm::vec2 pos, glm::vec2 rel)
+    {
+        auto min = position - size / 2.0f;
+        auto max = position + size / 2.0f;
+        if (pos.x >= min.x && pos.y >= min.y &&
+            pos.x <= max.x && pos.y <= max.y)
+        {
+            if (mouse_in == false)
+            {
+                if (enter_cb)
+                {
+                    enter_cb();
+                }
+                mouse_in = true;
+            }
+
+            if (mouse_move_cb)
+            {
+                mouse_move_cb(pos);
+            }
+        }
+        else
+        {
+            if (mouse_in == true)
+            {
+                if (leave_cb)
+                {
+                    leave_cb();
+                }
+                mouse_in = false;
+            }
+        }
     }
 }
 

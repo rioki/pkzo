@@ -45,5 +45,7 @@ namespace pkzo2d
 
     void ScreenNode::handle_mouse_button_up(MouseButton button, glm::vec2 position) {}
 
+    void ScreenNode::handle_mouse_move(glm::vec2 pos, glm::vec2 rel) {}
+
     void ScreenNode::render(ScreenRenderer& renderer, const glm::vec2& offset) const noexcept {}
 }

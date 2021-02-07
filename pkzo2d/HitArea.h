@@ -48,18 +48,30 @@ namespace pkzo2d
         void set_size(const glm::vec2& value) noexcept;
         const glm::vec2& get_size() const noexcept;
 
+        void on_enter(const std::function<void ()>& cb) noexcept;
+        void on_leave(const std::function<void ()>& cb) noexcept;
+        void on_mouse_move(const std::function<void (glm::vec2)>& cb) noexcept;
+        void on_mouse_down(const std::function<void (MouseButton, glm::vec2)>& cb) noexcept;
+        void on_mouse_up(const std::function<void (MouseButton, glm::vec2)>& cb) noexcept;
         void on_click(const std::function<void ()>& cb) noexcept;
 
         void handle_mouse_button_down(MouseButton button, glm::vec2 position) override;
         void handle_mouse_button_up(MouseButton button, glm::vec2 position) override;
+        void handle_mouse_move(glm::vec2 pos, glm::vec2 rel) override;
 
     private:
         glm::vec2 position = glm::vec2(0.0f);
         glm::vec2 size     = glm::vec2(15.0f);
 
+        std::function<void ()> enter_cb;
+        std::function<void ()> leave_cb;
+        std::function<void (glm::vec2)> mouse_move_cb;
+        std::function<void (MouseButton, glm::vec2)> mouse_down_cb;
+        std::function<void (MouseButton, glm::vec2)> mouse_up_cb;
         std::function<void ()> click_cb;
 
-        bool click_armed = false;
+        bool click_armed[5] = {false};
+        bool mouse_in = false;
     };
 }
 

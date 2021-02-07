@@ -40,6 +40,9 @@ namespace pong2d
         auto checkbox_checked     = std::make_shared<pkzo::Texture>("../assets/ui/pixels/CheckBox_Checked.png");
         auto checkbox_unchecked   = std::make_shared<pkzo::Texture>("../assets/ui/pixels/CheckBox_Unchecked.png");
 
+        auto slider_background    = std::make_shared<pkzo::Texture>("../assets/ui/pixels/Slider_Horizontal_200.png");
+        auto slider_handle        = std::make_shared<pkzo::Texture>("../assets/ui/pixels/Slider_Handle.png");
+
         auto title = std::make_shared<pkzo2d::Text>(title_font, "Options");
         title->set_position({0.0f, 250.0f});
         add_node(title);
@@ -54,6 +57,13 @@ namespace pong2d
         old_vhs_effect_label->set_position({-390.0f + old_vhs_effect_label->get_size().x / 2.0f, 50.0f});
         add_node(old_vhs_effect_label);
 
+        auto fullscreen_value = std::make_shared<pkzoui::CheckBox>(checkbox_checked, checkbox_unchecked);
+        fullscreen_value->set_position({-10.0f - fullscreen_value->get_size().x / 2.0f, 100.0f});
+        add_node(fullscreen_value);
+        auto old_vhs_effect_value = std::make_shared<pkzoui::CheckBox>(checkbox_checked, checkbox_unchecked);
+        old_vhs_effect_value->set_position({-10.0f - fullscreen_value->get_size().x / 2.0f, 50.0f});
+        add_node(old_vhs_effect_value);
+
         auto music_volume_label = std::make_shared<pkzo2d::Text>(text_font, label_color, "Music Volume");
         music_volume_label->set_position({-390.0f + music_volume_label->get_size().x / 2.0f, -50.0f});
         add_node(music_volume_label);
@@ -61,13 +71,12 @@ namespace pong2d
         sfx_volume_label->set_position({-390.0f + sfx_volume_label->get_size().x / 2.0f, -100.0f});
         add_node(sfx_volume_label);
 
-        auto fullscreen_value = std::make_shared<pkzoui::CheckBox>(checkbox_checked, checkbox_unchecked);
-        fullscreen_value->set_position({-10.0f - fullscreen_value->get_size().x / 2.0f, 100.0f});
-        add_node(fullscreen_value);
-
-        auto old_vhs_effect_value = std::make_shared<pkzoui::CheckBox>(checkbox_checked, checkbox_unchecked);
-        old_vhs_effect_value->set_position({-10.0f - fullscreen_value->get_size().x / 2.0f, 50.0f});
-        add_node(old_vhs_effect_value);
+        auto music_volume_value = std::make_shared<pkzoui::Slider>(slider_background, slider_handle);
+        music_volume_value->set_position({-10.0f - music_volume_value->get_size().x / 2.0f, -50.0f});
+        add_node(music_volume_value);
+        auto sfx_volume_value = std::make_shared<pkzoui::Slider>(slider_background, slider_handle);
+        sfx_volume_value->set_position({-10.0f - sfx_volume_value->get_size().x / 2.0f, -100.0f});
+        add_node(sfx_volume_value);
 
         auto p1_up_label = std::make_shared<pkzo2d::Text>(text_font, label_color, "Player 1 Up");
         p1_up_label->set_position({10.0f + p1_up_label->get_size().x / 2.0f, 150.0f});

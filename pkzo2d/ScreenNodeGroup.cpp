@@ -86,6 +86,15 @@ namespace pkzo2d
         }
     }
 
+    void ScreenNodeGroup::handle_mouse_move(glm::vec2 pos, glm::vec2 rel)
+    {
+        auto new_pos = pos - position;
+        for (const auto& node : nodes)
+        {
+            node->handle_mouse_move(new_pos, rel);
+        }
+    }
+
     void ScreenNodeGroup::render(ScreenRenderer& renderer, const glm::vec2& offset) const noexcept
     {
         auto new_offset = offset + position;

@@ -62,6 +62,14 @@ namespace pong2d
                 screen->handle_mouse_button_up(button, p);
             }
         });
+        mouse.on_move([this, &window] (auto pos, auto mov) {
+            if (screen)
+            {
+                auto p = pkzo2d::map_to_screen(window.get_size(), screen->get_size(), pos);
+                auto m = pkzo2d::map_to_screen(window.get_size(), screen->get_size(), mov);
+                screen->handle_mouse_move(p, m);
+            }
+        });
 
         screen_renderer = std::make_unique<pkzo2d::ScreenRenderer>();
     }

@@ -52,6 +52,7 @@ namespace pkzo2d
 
         void handle_mouse_button_down(MouseButton button, glm::vec2 position) override;
         void handle_mouse_button_up(MouseButton button, glm::vec2 position) override;
+        void handle_mouse_move(glm::vec2 pos, glm::vec2 rel) override;
 
     protected:
         void render(ScreenRenderer& renderer, const glm::vec2& offset) const noexcept override;
