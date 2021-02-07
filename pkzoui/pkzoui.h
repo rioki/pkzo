@@ -27,5 +27,6 @@
 
 #include "config.h"
 #include "Button.h"
+#include "CheckBox.h"
 
 #endif
