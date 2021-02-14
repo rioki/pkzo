@@ -27,6 +27,11 @@
 
 #include "config.h"
 
+#include <iosfwd>
+#include <stdexcept>
+#include <string>
+#include <sstream>
+
 #ifdef DELETE
 #undef DELETE
 #endif
@@ -347,6 +352,39 @@ namespace pkzo
         META  = PKZO_BIT(4)
     };
     PKZO_ENUM_BIT_OPERATORS(KeyMod)
+
+    PKZO_EXPORT std::ostream& operator << (std::ostream& os, WindowMode mode) noexcept;
+    PKZO_EXPORT std::istream& operator >> (std::istream& is, WindowMode& mode);
+    PKZO_EXPORT std::ostream& operator << (std::ostream& os, MouseButton button) noexcept;
+    PKZO_EXPORT std::istream& operator >> (std::istream& is, MouseButton& button);
+    PKZO_EXPORT std::ostream& operator << (std::ostream& os, Key key) noexcept;
+    PKZO_EXPORT std::istream& operator >> (std::istream& is, Key& key);
+    PKZO_EXPORT std::ostream& operator << (std::ostream& os, KeyMod mod) noexcept;
+    PKZO_EXPORT std::istream& operator >> (std::istream& is, KeyMod& mod);
+
+    PKZO_EXPORT std::string to_string(KeyMod mod, Key key);
+
+    template <typename T>
+    std::string to_string(T value)
+    {
+        std::stringstream buff;
+        buff << value;
+        return buff.str();
+    }
+
+    template <typename T>
+    T from_string(const std::string& str)
+    {
+        std::stringstream buff(str);
+        T value;
+        buff >> value;
+        return value;
+    }
+
+    struct format_error : public std::runtime_error
+    {
+        using runtime_error::runtime_error;
+    };
 }
 
 #endif

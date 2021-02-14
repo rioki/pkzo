@@ -28,7 +28,10 @@
 #include <memory>
 #include <vector>
 #include <functional>
+#include <iosfwd>
+#include <iostream>
 #include <filesystem>
+#include <sstream>
 
 #include <glm/fwd.hpp>
 #include <glm/glm.hpp>

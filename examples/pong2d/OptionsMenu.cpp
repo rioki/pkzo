@@ -25,6 +25,7 @@
 #include "pch.h"
 #include "OptionsMenu.h"
 
+#include "KeyInput.h"
 #include "Game.h"
 
 namespace pong2d
@@ -90,6 +91,54 @@ namespace pong2d
         auto p2_down_label = std::make_shared<pkzo2d::Text>(text_font, label_color, "Player 2 Down");
         p2_down_label->set_position({10.0f + p2_down_label->get_size().x / 2.0f, 0.0f});
         add_node(p2_down_label);
+
+        auto p1_up_value = std::make_shared<KeyInput>(text_font, pkzo::Key::Q);
+        p1_up_value->set_position({250.0f, 150.0f});
+        p1_up_value->on_click([&game, p1_up_value] () {
+            game.capture_key([p1_up_value] (auto mod, auto key) {
+                if (key != pkzo::Key::ESCAPE)
+                {
+                    p1_up_value->set_key(key);
+                }
+            });
+        });
+        add_node(p1_up_value);
+
+        auto p1_down_value = std::make_shared<KeyInput>(text_font, pkzo::Key::A);
+        p1_down_value->set_position({250.0f, 100.0f});
+        p1_down_value->on_click([&game, p1_down_value] () {
+            game.capture_key([p1_down_value] (auto mod, auto key) {
+                if (key != pkzo::Key::ESCAPE)
+                {
+                    p1_down_value->set_key(key);
+                }
+            });
+        });
+        add_node(p1_down_value);
+
+        auto p2_up_value = std::make_shared<KeyInput>(text_font, pkzo::Key::P);
+        p2_up_value->set_position({250.0f, 50.0f});
+        p2_up_value->on_click([&game, p2_up_value] () {
+            game.capture_key([p2_up_value] (auto mod, auto key) {
+                if (key != pkzo::Key::ESCAPE)
+                {
+                    p2_up_value->set_key(key);
+                }
+            });
+        });
+        add_node(p2_up_value);
+
+        auto p2_down_value = std::make_shared<KeyInput>(text_font, pkzo::Key::L);
+        p2_down_value->set_position({250.0f, 0.0f});
+        p2_down_value->on_click([&game, p2_down_value] () {
+            game.capture_key([p2_down_value] (auto mod, auto key) {
+                if (key != pkzo::Key::ESCAPE)
+                {
+                    p2_down_value->set_key(key);
+                }
+            });
+        });
+        add_node(p2_down_value);
 
         auto back_button = std::make_shared<pkzoui::Button>(button_background, text_font, button_caption_color, "Back");
         back_button->set_position({165.0f, -270.0f});

@@ -95,6 +95,30 @@ namespace pkzo2d
         }
     }
 
+    void ScreenNodeGroup::handle_key_down(KeyMod mod, Key key)
+    {
+        for (const auto& node : nodes)
+        {
+            node->handle_key_down(mod, key);
+        }
+    }
+
+    void ScreenNodeGroup::handle_key_up(KeyMod mod, Key key)
+    {
+        for (const auto& node : nodes)
+        {
+            node->handle_key_up(mod, key);
+        }
+    }
+
+    void ScreenNodeGroup::handle_text(const std::string_view text)
+    {
+        for (const auto& node : nodes)
+        {
+            node->handle_text(text);
+        }
+    }
+
     void ScreenNodeGroup::render(ScreenRenderer& renderer, const glm::vec2& offset) const noexcept
     {
         auto new_offset = offset + position;

@@ -46,6 +46,8 @@ namespace pong2d
         void change_state(GameState next_state) noexcept;
         GameState get_state() const noexcept;
 
+        void capture_key(const std::function<void (pkzo::KeyMod&, pkzo::Key&)>& cb);
+
         int run();
 
     private:
@@ -56,6 +58,8 @@ namespace pong2d
 
         std::unique_ptr<pkzo2d::ScreenRenderer> screen_renderer;
         std::unique_ptr<pkzo2d::Screen>         screen;
+
+        std::function<void (pkzo::KeyMod&, pkzo::Key&)> key_capture_cb;
 
         void tick();
         void update_state();

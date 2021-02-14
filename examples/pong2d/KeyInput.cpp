@@ -23,31 +23,34 @@
 //
 
 #include "pch.h"
-#include "ScreenNode.h"
+#include "KeyInput.h"
 
-namespace pkzo2d
+namespace pong2d
 {
-    ScreenNode::ScreenNode() noexcept = default;
-
-    ScreenNode::~ScreenNode() = default;
-
-    ScreenNode* ScreenNode::get_parent() noexcept
+    KeyInput::KeyInput(const std::shared_ptr<pkzo::Font>& font, pkzo::Key k) noexcept
+    : key(k)
     {
-        return parent;
+        text = std::make_shared<pkzoui::Text>(font, to_string(key));
+        add_node(text);
+
+        hit_area = std::make_shared<pkzoui::HitArea>();
+        hit_area->set_size(font->estimate("ESCAPE"));
+        add_node(hit_area);
     }
 
-    const ScreenNode* ScreenNode::get_parent() const noexcept
+    void KeyInput::set_key(pkzo::Key value) noexcept
     {
-        return parent;
+        key = value;
+        text->set_text(to_string(value));
     }
 
-    void ScreenNode::handle_mouse_button_down(MouseButton button, glm::vec2 position) {}
-    void ScreenNode::handle_mouse_button_up(MouseButton button, glm::vec2 position) {}
-    void ScreenNode::handle_mouse_move(glm::vec2 pos, glm::vec2 rel) {}
+    pkzo::Key KeyInput::get_key() const noexcept
+    {
+        return key;
+    }
 
-    void ScreenNode::handle_key_down(KeyMod mod, Key key) {}
-    void ScreenNode::handle_key_up(KeyMod mod, Key key) {}
-    void ScreenNode::handle_text(const std::string_view text) {}
-
-    void ScreenNode::render(ScreenRenderer& renderer, const glm::vec2& offset) const noexcept {}
+    void KeyInput::on_click(const std::function<void()>& cb)
+    {
+        hit_area->on_click(cb);
+    }
 }

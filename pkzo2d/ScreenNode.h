@@ -27,6 +27,9 @@
 
 #include "config.h"
 
+#include <string_view>
+#include <glm/glm.hpp>
+
 namespace pkzo2d
 {
     using namespace pkzo;
@@ -47,6 +50,9 @@ namespace pkzo2d
         virtual void handle_mouse_button_down(MouseButton button, glm::vec2 position);
         virtual void handle_mouse_button_up(MouseButton button, glm::vec2 position);
         virtual void handle_mouse_move(glm::vec2 pos, glm::vec2 rel);
+        virtual void handle_key_down(KeyMod mod, Key key);
+        virtual void handle_key_up(KeyMod mod, Key key);
+        virtual void handle_text(const std::string_view text);
 
     protected:
         virtual void render(ScreenRenderer& renderer, const glm::vec2& offset) const noexcept;

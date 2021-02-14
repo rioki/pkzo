@@ -71,6 +71,28 @@ namespace pong2d
             }
         });
 
+        auto& keyboard = main.get_keyboard();
+        keyboard.on_key_down([this] (auto mod, auto key) {
+            if (!key_capture_cb)
+            {
+                screen->handle_key_down(mod, key);
+            }
+        });
+        keyboard.on_key_down([this] (auto mod, auto key) {
+            if (!key_capture_cb)
+            {
+                screen->handle_key_down(mod, key);
+            }
+            else
+            {
+                key_capture_cb(mod, key);
+                key_capture_cb = nullptr;
+            }
+        });
+        keyboard.on_text([this] (auto text) {
+            screen->handle_text(text);
+        });
+
         screen_renderer = std::make_unique<pkzo2d::ScreenRenderer>();
     }
 
@@ -83,6 +105,11 @@ namespace pong2d
     GameState Game::get_state() const noexcept
     {
         return state;
+    }
+
+    void Game::capture_key(const std::function<void(pkzo::KeyMod&, pkzo::Key&)>& cb)
+    {
+        key_capture_cb = cb;
     }
 
     int Game::run()
