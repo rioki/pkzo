@@ -25,13 +25,47 @@
 #include "pch.h"
 #include "Game.h"
 
+#ifdef _WIN32
+#include <shlobj.h>
+#include <windows.h>
+#endif
+
 #include "MainMenu.h"
 #include "OptionsMenu.h"
 
 namespace pong2d
 {
+    auto get_user_folder()
+    {
+    #ifdef _WIN32
+        PWSTR szPath = nullptr;
+        auto hr = SHGetKnownFolderPath(FOLDERID_LocalAppData, KF_FLAG_CREATE, nullptr, &szPath);
+        if (SUCCEEDED(hr))
+        {
+            auto result = std::filesystem::path(szPath) / "pkzo" / "pong2d";
+            CoTaskMemFree(szPath);
+            return result;
+        }
+        else
+        {
+            throw std::runtime_error("Failed to get %LOCALAPPDATA%.");
+        }
+    #else
+    #error port me
+    #endif
+    }
+
     Game::Game(int argc, char* argv[])
     {
+        auto user_folder = get_user_folder();
+        std::filesystem::create_directories(user_folder);
+
+        auto settings_file = user_folder / "settings.json";
+        if (std::filesystem::exists(settings_file))
+        {
+            settings.load(settings_file);
+        }
+
         main.on_tick([this] () {
             tick();
         });
@@ -39,7 +73,10 @@ namespace pong2d
             change_state(GameState::QUIT);
         });
 
-        auto& window = main.open_window({1600, 900}, pkzo::WindowMode::STATIC, "Pkzo - Pong 2D");
+        auto width = settings.get_value("Video", "width", 800u);
+        auto height = settings.get_value("Video", "height", 600u);
+        auto fullscreen = settings.get_value("Video", "fullscreen", false);
+        auto& window = main.open_window({width, height}, fullscreen ? pkzo::WindowMode::FULLSCREEN : pkzo::WindowMode::STATIC, "Pkzo - Pong 2D");
         window.on_draw([this] () {
             if (screen)
             {
@@ -94,6 +131,21 @@ namespace pong2d
         });
 
         screen_renderer = std::make_unique<pkzo2d::ScreenRenderer>();
+    }
+
+    Game::~Game()
+    {
+        settings.save(get_user_folder() / "settings.json");
+    }
+
+    Settings& Game::get_settings() noexcept
+    {
+        return settings;
+    }
+
+    pkzo::Window& Game::get_window() noexcept
+    {
+        return main.get_main_window();
     }
 
     void Game::change_state(GameState ns) noexcept

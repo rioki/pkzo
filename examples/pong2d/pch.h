@@ -25,8 +25,12 @@
 #ifndef _PONG2d_PCH_H_
 #define _PONG2d_PCH_H_
 
+#include <fstream>
+
 #include <pkzo/pkzo.h>
 #include <pkzo2d/pkzo2d.h>
 #include <pkzoui/pkzoui.h>
+
+#include <nlohmann/json.hpp>
 
 #endif

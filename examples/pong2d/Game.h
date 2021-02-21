@@ -28,6 +28,8 @@
 #include <pkzo/pkzo.h>
 #include <pkzo2d/pkzo2d.h>
 
+#include "Settings.h"
+
 namespace pong2d
 {
     enum class GameState
@@ -42,6 +44,11 @@ namespace pong2d
     {
     public:
         Game(int argc, char* argv[]);
+        ~Game();
+
+        Settings& get_settings() noexcept;
+
+        pkzo::Window& get_window() noexcept;
 
         void change_state(GameState next_state) noexcept;
         GameState get_state() const noexcept;
@@ -54,6 +61,7 @@ namespace pong2d
         GameState state      = GameState::INITIAL;
         GameState next_state = GameState::MAIN_MENU;
 
+        Settings   settings;
         pkzo::Main main;
 
         std::unique_ptr<pkzo2d::ScreenRenderer> screen_renderer;

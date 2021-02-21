@@ -27,6 +27,7 @@
 
 #include "KeyInput.h"
 #include "Game.h"
+#include "Settings.h"
 
 namespace pong2d
 {
@@ -51,6 +52,8 @@ namespace pong2d
         auto menu_bottom          = std::make_shared<pkzo::Texture>("../assets/ui/pixels/Menu_200_Bottom.png");
         auto menu_text_color      = glm::vec4(0.0, 0.0, 0.0, 1.0);
 
+        auto& settings = game.get_settings();
+
         auto title = std::make_shared<pkzo2d::Text>(title_font, "Options");
         title->set_position({0.0f, 250.0f});
         add_node(title);
@@ -61,9 +64,9 @@ namespace pong2d
         auto fullscren_label = std::make_shared<pkzo2d::Text>(text_font, label_color, "Fullscreen");
         fullscren_label->set_position({-390.0f + fullscren_label->get_size().x / 2.0f, 100.0f});
         add_node(fullscren_label);
-        auto old_vhs_effect_label = std::make_shared<pkzo2d::Text>(text_font, label_color, "Old VHS Effect");
-        old_vhs_effect_label->set_position({-390.0f + old_vhs_effect_label->get_size().x / 2.0f, 50.0f});
-        add_node(old_vhs_effect_label);
+        auto old_tv_effect_label = std::make_shared<pkzo2d::Text>(text_font, label_color, "Old TV Effect");
+        old_tv_effect_label->set_position({-390.0f + old_tv_effect_label->get_size().x / 2.0f, 50.0f});
+        add_node(old_tv_effect_label);
 
         auto resolutions = pkzo::Window::get_valid_reslutions(0);
         std::vector<std::string> resolution_text(resolutions.size());
@@ -72,17 +75,23 @@ namespace pong2d
             buff << res.x << "x" << res.y;
             return buff.str();
         });
+        auto width = settings.get_value("Video", "width", 800u);
+        auto height = settings.get_value("Video", "height", 600u);
+        auto index = std::distance(begin(resolutions), std::find(begin(resolutions), end(resolutions), glm::uvec2(width, height)));
         auto resolution_value = std::make_shared<pkzoui::DropDownMenu>(dropdown_background, dropdown_button, menu_top, menu_body, menu_bottom, text_font, menu_text_color);
         resolution_value->set_options(resolution_text);
+        resolution_value->set_selected_option(index);
         resolution_value->set_position({-10.0f - resolution_value->get_size().x / 2.0f, 150.0f});
         add_node(resolution_value);
 
         auto fullscreen_value = std::make_shared<pkzoui::CheckBox>(checkbox_checked, checkbox_unchecked);
         fullscreen_value->set_position({-10.0f - fullscreen_value->get_size().x / 2.0f, 100.0f});
+        fullscreen_value->set_checked(settings.get_value("Video", "fullscreen", false));
         add_node(fullscreen_value);
-        auto old_vhs_effect_value = std::make_shared<pkzoui::CheckBox>(checkbox_checked, checkbox_unchecked);
-        old_vhs_effect_value->set_position({-10.0f - fullscreen_value->get_size().x / 2.0f, 50.0f});
-        add_node(old_vhs_effect_value);
+        auto old_tv_effect_value = std::make_shared<pkzoui::CheckBox>(checkbox_checked, checkbox_unchecked);
+        old_tv_effect_value->set_position({-10.0f - fullscreen_value->get_size().x / 2.0f, 50.0f});
+        old_tv_effect_value->set_checked(settings.get_value("Video", "old_tv_effect", true));
+        add_node(old_tv_effect_value);
 
         auto music_volume_label = std::make_shared<pkzo2d::Text>(text_font, label_color, "Music Volume");
         music_volume_label->set_position({-390.0f + music_volume_label->get_size().x / 2.0f, -50.0f});
@@ -168,8 +177,23 @@ namespace pong2d
 
         auto apply_button = std::make_shared<pkzoui::Button>(button_background, text_font, button_caption_color, "Apply");
         apply_button->set_position({320.0f, -270.0f});
-        apply_button->on_click([&game] () {
+        apply_button->on_click([=, &game] () {
+            auto& settings = game.get_settings();
+
             game.change_state(GameState::MAIN_MENU);
+
+            auto res_idx = resolution_value->get_selected_option();
+            assert(res_idx);
+            auto res = resolutions[res_idx.value()];
+            auto fullscreen = fullscreen_value->get_checked();
+            auto old_tv_effect = old_tv_effect_value->get_checked();
+
+            game.get_window().resize(res, fullscreen ? pkzo::WindowMode::FULLSCREEN : pkzo::WindowMode::STATIC);
+            settings.set_value("Video", "width", res.x);
+            settings.set_value("Video", "height", res.y);
+            settings.set_value("Video", "fullscreen", fullscreen);
+            settings.set_value("Video", "old_tv_effect", old_tv_effect);
+
         });
         add_node(apply_button);
     }
