@@ -41,12 +41,15 @@ namespace pkzoui
     public:
         Button() noexcept;
 
+        Button(const std::shared_ptr<Texture>& background) noexcept;
         Button(const std::shared_ptr<Texture>& background, const std::shared_ptr<Font>& caption_font, const std::string& caption) noexcept;
         Button(const std::shared_ptr<Texture>& background, const glm::vec4& background_color, const std::shared_ptr<Font>& caption_font, const std::string& caption) noexcept;
         Button(const std::shared_ptr<Texture>& background, const std::shared_ptr<Font>& caption_font, const glm::vec4& caption_color, const std::string& caption) noexcept;
         Button(const std::shared_ptr<Texture>& background, const glm::vec4& background_color, const std::shared_ptr<Font>& caption_font, const glm::vec4& caption_color, const std::string& caption) noexcept;
 
         ~Button();
+
+        glm::vec2 get_size() const noexcept;
 
         void set_caption(const std::string& value) noexcept;
         const std::string& get_caption() const noexcept;

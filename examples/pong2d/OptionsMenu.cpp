@@ -44,6 +44,13 @@ namespace pong2d
         auto slider_background    = std::make_shared<pkzo::Texture>("../assets/ui/pixels/Slider_Horizontal_200.png");
         auto slider_handle        = std::make_shared<pkzo::Texture>("../assets/ui/pixels/Slider_Handle.png");
 
+        auto dropdown_background  = std::make_shared<pkzo::Texture>("../assets/ui/pixels/Dropdown_200_Background.png");
+        auto dropdown_button      = std::make_shared<pkzo::Texture>("../assets/ui/pixels/Dropdown_Button.png");
+        auto menu_top             = std::make_shared<pkzo::Texture>("../assets/ui/pixels/Menu_200_Top.png");
+        auto menu_body            = std::make_shared<pkzo::Texture>("../assets/ui/pixels/Menu_200_Body.png");
+        auto menu_bottom          = std::make_shared<pkzo::Texture>("../assets/ui/pixels/Menu_200_Bottom.png");
+        auto menu_text_color      = glm::vec4(0.0, 0.0, 0.0, 1.0);
+
         auto title = std::make_shared<pkzo2d::Text>(title_font, "Options");
         title->set_position({0.0f, 250.0f});
         add_node(title);
@@ -57,6 +64,18 @@ namespace pong2d
         auto old_vhs_effect_label = std::make_shared<pkzo2d::Text>(text_font, label_color, "Old VHS Effect");
         old_vhs_effect_label->set_position({-390.0f + old_vhs_effect_label->get_size().x / 2.0f, 50.0f});
         add_node(old_vhs_effect_label);
+
+        auto resolutions = pkzo::Window::get_valid_reslutions(0);
+        std::vector<std::string> resolution_text(resolutions.size());
+        std::transform(begin(resolutions), end(resolutions), begin(resolution_text), [] (auto res) {
+            std::stringstream buff;
+            buff << res.x << "x" << res.y;
+            return buff.str();
+        });
+        auto resolution_value = std::make_shared<pkzoui::DropDownMenu>(dropdown_background, dropdown_button, menu_top, menu_body, menu_bottom, text_font, menu_text_color);
+        resolution_value->set_options(resolution_text);
+        resolution_value->set_position({-10.0f - resolution_value->get_size().x / 2.0f, 150.0f});
+        add_node(resolution_value);
 
         auto fullscreen_value = std::make_shared<pkzoui::CheckBox>(checkbox_checked, checkbox_unchecked);
         fullscreen_value->set_position({-10.0f - fullscreen_value->get_size().x / 2.0f, 100.0f});

@@ -37,6 +37,30 @@ namespace pkzo
         while (e != GL_NO_ERROR);
     }
 
+    unsigned int Window::get_display_count() noexcept
+    {
+        return SDL_GetNumVideoDisplays();
+    }
+
+    std::vector<glm::uvec2> Window::get_valid_reslutions(unsigned int display) noexcept
+    {
+        std::vector<glm::uvec2> result;
+        auto count = SDL_GetNumDisplayModes(display);
+        for (auto i = 0; i < count; i++)
+        {
+            SDL_DisplayMode mode;
+            SDL_GetDisplayMode(display, i, &mode);
+
+            auto resolution = glm::uvec2(mode.w, mode.h);
+            auto j = std::find(begin(result), end(result), resolution);
+            if (j == end(result))
+            {
+                result.push_back(resolution);
+            }
+        }
+        return result;
+    }
+
     Window::Window(const glm::uvec2& size, WindowMode mode, const std::string_view caption)
     {
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);

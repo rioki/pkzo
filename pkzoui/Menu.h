@@ -22,14 +22,41 @@
 // THE SOFTWARE.
 //
 
-#ifndef _PKZOUI_H_
-#define _PKZOUI_H_
+#ifndef _PKZOUI_MENU_H_
+#define _PKZOUI_MENU_H_
 
 #include "config.h"
+
+#include <vector>
+#include <optional>
+#include <string>
+#include <memory>
+#include <pkzo/pkzo.h>
+#include <pkzo2d/pkzo2d.h>
+
 #include "Button.h"
-#include "CheckBox.h"
-#include "Slider.h"
-#include "DropDownMenu.h"
-#include "Menu.h"
+
+namespace pkzoui
+{
+    using namespace pkzo;
+    using namespace pkzo2d;
+
+    class PKZOUI_EXPORT Menu : public ScreenNodeGroup
+    {
+    public:
+        Menu(const std::shared_ptr<pkzo::Texture>& top_texture, const std::shared_ptr<pkzo::Texture>& body_texture, const std::shared_ptr<pkzo::Texture>& bottom_texture, const std::shared_ptr<Font>& caption_font, const glm::vec4& text_color, const std::vector<std::string>& options) noexcept;
+        ~Menu();
+
+        glm::vec2 get_size() const noexcept;
+
+        void on_select(const std::function<void (size_t)>& cb);
+
+    private:
+        std::shared_ptr<pkzo2d::Rectangle>           top;
+        std::vector<std::shared_ptr<pkzoui::Button>> bodies;
+        std::shared_ptr<pkzo2d::Rectangle>           bottom;
+        std::function<void (size_t)>                 select_cb;
+    };
+}
 
 #endif

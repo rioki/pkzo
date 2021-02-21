@@ -99,12 +99,14 @@ namespace pkzo2d
 
     void Text::render(ScreenRenderer& renderer, const glm::vec2& offset) const noexcept
     {
-        assert(font);
-        if (texture == nullptr)
+        if (font)
         {
-            texture = font->render(text);
-        }
+            if (texture == nullptr)
+            {
+                texture = font->render(text);
+            }
 
-        renderer.draw_rectangle(offset + position, texture->get_size(), color, texture);
+            renderer.draw_rectangle(offset + position, texture->get_size(), color, texture);
+        }
     }
 }

@@ -45,7 +45,7 @@ namespace pkzo2d
         const glm::vec2& get_position() const noexcept;
 
         void add_node(const std::shared_ptr<ScreenNode>& node) noexcept;
-        void remove_nodes(const std::shared_ptr<ScreenNode>& node) noexcept;
+        void remove_node(const std::shared_ptr<ScreenNode>& node) noexcept;
 
         const std::list<std::shared_ptr<ScreenNode>>& get_nodes() noexcept;
         std::list<std::shared_ptr<const ScreenNode>> get_nodes() const noexcept;

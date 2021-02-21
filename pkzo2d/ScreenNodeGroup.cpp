@@ -48,7 +48,7 @@ namespace pkzo2d
         nodes.push_back(node);
     }
 
-    void ScreenNodeGroup::remove_nodes(const std::shared_ptr<ScreenNode>& node) noexcept
+    void ScreenNodeGroup::remove_node(const std::shared_ptr<ScreenNode>& node) noexcept
     {
         assert(node);
         assert(node->parent == this);

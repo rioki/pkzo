@@ -25,13 +25,19 @@
 #ifndef _PKZO_PCH_H_
 #define _PKZO_PCH_H_
 
+#include <cstdlib>
 #include <memory>
+#include <map>
 #include <vector>
+#include <queue>
 #include <functional>
 #include <iosfwd>
 #include <iostream>
 #include <filesystem>
 #include <sstream>
+#include <mutex>
+#include <thread>
+#include <atomic>
 
 #include <glm/fwd.hpp>
 #include <glm/glm.hpp>

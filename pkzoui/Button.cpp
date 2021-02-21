@@ -39,6 +39,9 @@ namespace pkzoui
         add_node(hit_area);
     }
 
+    Button::Button(const std::shared_ptr<Texture>& b) noexcept
+    : Button(b, glm::vec4(1.0f), nullptr, glm::vec4(1.0f), "") {}
+
     Button::Button(const std::shared_ptr<Texture>& b, const std::shared_ptr<Font>& cf, const std::string& c) noexcept
     : Button(b, glm::vec4(1.0f), cf, glm::vec4(1.0f), c) {}
 
@@ -51,12 +54,18 @@ namespace pkzoui
     Button::Button(const std::shared_ptr<Texture>& b, const glm::vec4& bc, const std::shared_ptr<Font>& cf, const glm::vec4& cc, const std::string& c) noexcept
     {
         assert(b);
-        assert(cf);
         background = std::make_shared<Rectangle>(b, bc);
         background->set_size(b->get_size());
         add_node(background);
 
-        caption = std::make_shared<Text>(cf, cc, c);
+        if (cf)
+        {
+            caption = std::make_shared<Text>(cf, cc, c);
+        }
+        else
+        {
+            caption = std::make_shared<Text>();
+        }
         add_node(caption);
 
         hit_area = std::make_shared<HitArea>();
@@ -65,6 +74,11 @@ namespace pkzoui
     }
 
     Button::~Button() = default;
+
+    glm::vec2 Button::get_size() const noexcept
+    {
+        return background->get_size();
+    }
 
     void Button::set_caption(const std::string& value) noexcept
     {

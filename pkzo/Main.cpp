@@ -25,6 +25,7 @@
 #include "pch.h"
 #include "Main.h"
 
+#include "async.h"
 #include "Mouse.h"
 #include "Keyboard.h"
 #include "Joystick.h"
@@ -34,6 +35,8 @@ namespace pkzo
 {
     Main::Main()
     {
+        async::set_main_thread_id(std::this_thread::get_id());
+
         mouse = std::make_unique<Mouse>();
         keyboard = std::make_unique<Keyboard>();
 
@@ -131,6 +134,7 @@ namespace pkzo
         {
             window->draw();
         }
+        async::sync_point();
     }
 
     void Main::stop()

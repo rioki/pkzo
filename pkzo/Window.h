@@ -44,6 +44,11 @@ namespace pkzo
     class PKZO_EXPORT Window
     {
     public:
+        //! Get the number of attached displays.
+        static unsigned int get_display_count() noexcept;
+        //! Get the valid resolutions of the given display.
+        static std::vector<glm::uvec2> get_valid_reslutions(unsigned int desktop = 0) noexcept;
+
         Window(const glm::uvec2& size, WindowMode mode, const std::string_view caption);
         Window(const Window&) = delete;
         ~Window();
