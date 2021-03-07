@@ -32,6 +32,7 @@
 
 #include "MainMenu.h"
 #include "OptionsMenu.h"
+#include "View.h"
 
 namespace pong2d
 {
@@ -55,6 +56,8 @@ namespace pong2d
     #endif
     }
 
+
+
     Game::Game(int argc, char* argv[])
     {
         auto user_folder = get_user_folder();
@@ -66,8 +69,8 @@ namespace pong2d
             settings.load(settings_file);
         }
 
-        main.on_tick([this] () {
-            tick();
+        main.on_tick([this] (auto dt) {
+            tick(dt);
         });
         main.on_quit([this] () {
             change_state(GameState::QUIT);
@@ -115,10 +118,10 @@ namespace pong2d
                 screen->handle_key_down(mod, key);
             }
         });
-        keyboard.on_key_down([this] (auto mod, auto key) {
+        keyboard.on_key_up([this] (auto mod, auto key) {
             if (!key_capture_cb)
             {
-                screen->handle_key_down(mod, key);
+                screen->handle_key_up(mod, key);
             }
             else
             {
@@ -170,11 +173,20 @@ namespace pong2d
         return 0;
     }
 
-    void Game::tick()
+    void Game::tick(std::chrono::milliseconds dt)
     {
         if (next_state != state)
         {
             update_state();
+        }
+        if (state == GameState::PLAY)
+        {
+            assert(simulation);
+            simulation->tick(dt);
+        }
+        if (screen)
+        {
+            screen->animate(dt);
         }
     }
 
@@ -188,6 +200,13 @@ namespace pong2d
             case GameState::OPTIONS_MENU:
                 screen = std::make_unique<OptionsMenu>(*this);
                 break;
+            case GameState::PLAY:
+            {
+                std::random_device rd;
+                simulation = std::make_unique<Simulation>(rd());
+                screen = std::make_unique<View>(*this, *simulation);
+                break;
+            }
             case GameState::QUIT:
                 screen = nullptr;
                 main.stop();

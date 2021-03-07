@@ -201,14 +201,14 @@ namespace pong2d
             settings.set_value("Sound", "music_volume", music_volume);
             settings.set_value("Sound", "sfx_volume",   sfx_volume);
 
-            auto p1_up   = p1_up_value->get_key();
-            auto p1_down = p1_down_value->get_key();
-            auto p2_up   = p2_up_value->get_key();
-            auto p2_down = p2_down_value->get_key();
-            settings.set_value("Player1", "up", p1_up);
-            settings.set_value("Player1", "down", p1_down);
-            settings.set_value("Player2", "up", p2_up);
-            settings.set_value("Player2", "down", p2_down);
+            auto left_up   = p1_up_value->get_key();
+            auto left_down = p1_down_value->get_key();
+            auto right_up   = p2_up_value->get_key();
+            auto right_down = p2_down_value->get_key();
+            settings.set_value("Player1", "up", left_up);
+            settings.set_value("Player1", "down", left_down);
+            settings.set_value("Player2", "up", right_up);
+            settings.set_value("Player2", "down", right_down);
         });
         add_node(apply_button);
     }

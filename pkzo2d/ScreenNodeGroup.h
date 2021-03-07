@@ -50,6 +50,8 @@ namespace pkzo2d
         const std::list<std::shared_ptr<ScreenNode>>& get_nodes() noexcept;
         std::list<std::shared_ptr<const ScreenNode>> get_nodes() const noexcept;
 
+        void animate(std::chrono::milliseconds dt) override;
+
         void handle_mouse_button_down(MouseButton button, glm::vec2 position) override;
         void handle_mouse_button_up(MouseButton button, glm::vec2 position) override;
         void handle_mouse_move(glm::vec2 pos, glm::vec2 rel) override;

@@ -54,10 +54,10 @@
     <ClInclude Include="Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="async.h">
+    <ClInclude Include="Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Window.h">
+    <ClInclude Include="sync.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -98,7 +98,7 @@
     <ClCompile Include="enums.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="async.cpp">
+    <ClCompile Include="sync.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

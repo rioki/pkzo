@@ -27,6 +27,7 @@
 
 #include "config.h"
 
+#include <chrono>
 #include <string_view>
 #include <glm/glm.hpp>
 
@@ -47,6 +48,7 @@ namespace pkzo2d
         ScreenNode* get_parent() noexcept;
         const ScreenNode* get_parent() const noexcept;
 
+        virtual void animate(std::chrono::milliseconds dt);
         virtual void handle_mouse_button_down(MouseButton button, glm::vec2 position);
         virtual void handle_mouse_button_up(MouseButton button, glm::vec2 position);
         virtual void handle_mouse_move(glm::vec2 pos, glm::vec2 rel);

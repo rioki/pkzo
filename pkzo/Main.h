@@ -30,6 +30,7 @@
 #include <memory>
 #include <vector>
 #include <functional>
+#include <chrono>
 #include <glm/fwd.hpp>
 
 #include "enums.h"
@@ -68,19 +69,20 @@ namespace pkzo
         void tick();
         void stop();
 
-        void on_tick(const std::function<void ()>& cb);
+        void on_tick(const std::function<void (std::chrono::milliseconds)>& cb);
         void on_quit(const std::function<void ()>& cb);
 
     private:
         SdlSentry sdl_sentry;
         bool running = false;
+        std::chrono::steady_clock::time_point  last_tick;
 
         std::unique_ptr<Mouse>                 mouse;
         std::unique_ptr<Keyboard>              keyboard;
         std::vector<std::unique_ptr<Joystick>> joysticks;
         std::vector<std::unique_ptr<Window>>   windows;
 
-        std::function<void ()> tick_cb;
+        std::function<void (std::chrono::milliseconds)> tick_cb;
         std::function<void ()> quit_cb;
 
         void handle_events();

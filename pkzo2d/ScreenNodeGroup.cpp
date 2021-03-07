@@ -68,6 +68,14 @@ namespace pkzo2d
         return {begin(nodes), end(nodes)};
     }
 
+    void ScreenNodeGroup::animate(std::chrono::milliseconds dt)
+    {
+        for (const auto& node : nodes)
+        {
+            node->animate(dt);
+        }
+    }
+
     void ScreenNodeGroup::handle_mouse_button_down(MouseButton button, glm::vec2 pos)
     {
         auto new_pos = pos - position;

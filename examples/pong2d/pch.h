@@ -26,6 +26,9 @@
 #define _PONG2d_PCH_H_
 
 #include <fstream>
+#include <chrono>
+#include <random>
+#include <memory>
 
 #include <pkzo/pkzo.h>
 #include <pkzo2d/pkzo2d.h>

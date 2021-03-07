@@ -25,7 +25,7 @@
 #include "pch.h"
 #include "DropDownMenu.h"
 
-#include <pkzo/async.h>
+#include <pkzo/sync.h>
 
 #include "Button.h"
 #include "Menu.h"
@@ -47,7 +47,7 @@ namespace pkzoui
         button->set_position({total_size.x / 2.0f - button_size.x / 2.0f, 0.0f});
 
         button->on_click([this] () {
-            async::delay([this] () {
+            sync::delay([this] () {
                 if (menu)
                 {
                     close_menu(std::nullopt);
@@ -113,7 +113,7 @@ namespace pkzoui
             auto size = get_size();
             menu->set_position({pos.x, pos.y - size.y / 2.0f - menu->get_size().y / 2.0f});
             menu->on_select([this] (auto selection) {
-                async::delay([this, selection] () {
+                sync::delay([this, selection] () {
                     close_menu(selection);
                 });
             });

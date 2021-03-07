@@ -25,7 +25,7 @@
 #include "pch.h"
 #include "Main.h"
 
-#include "async.h"
+#include "sync.h"
 #include "Mouse.h"
 #include "Keyboard.h"
 #include "Joystick.h"
@@ -35,7 +35,7 @@ namespace pkzo
 {
     Main::Main()
     {
-        async::set_main_thread_id(std::this_thread::get_id());
+        sync::set_main_thread_id(std::this_thread::get_id());
 
         mouse = std::make_unique<Mouse>();
         keyboard = std::make_unique<Keyboard>();
@@ -45,6 +45,8 @@ namespace pkzo
         {
             joysticks.push_back(std::make_unique<Joystick>(j));
         }
+
+        last_tick = std::chrono::steady_clock::now();
     }
 
     Main::~Main() = default;
@@ -117,6 +119,7 @@ namespace pkzo
     void Main::run()
     {
         running = true;
+        last_tick = std::chrono::steady_clock::now();
         while (running)
         {
             tick();
@@ -125,16 +128,20 @@ namespace pkzo
 
     void Main::tick()
     {
+        auto now = std::chrono::steady_clock::now();
+        auto dt  = now - last_tick;
+        last_tick = now;
+
         handle_events();
         if (tick_cb)
         {
-            tick_cb();
+            tick_cb(std::chrono::duration_cast<std::chrono::milliseconds>(dt));
         }
         for (const auto& window : windows)
         {
             window->draw();
         }
-        async::sync_point();
+        sync::sync_point();
     }
 
     void Main::stop()
@@ -142,7 +149,7 @@ namespace pkzo
         running = false;
     }
 
-    void Main::on_tick(const std::function<void()>& cb)
+    void Main::on_tick(const std::function<void(std::chrono::milliseconds)>& cb)
     {
         tick_cb = cb;
     }

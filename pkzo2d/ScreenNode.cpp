@@ -41,6 +41,8 @@ namespace pkzo2d
         return parent;
     }
 
+    void ScreenNode::animate(std::chrono::milliseconds dt) {}
+
     void ScreenNode::handle_mouse_button_down(MouseButton button, glm::vec2 position) {}
     void ScreenNode::handle_mouse_button_up(MouseButton button, glm::vec2 position) {}
     void ScreenNode::handle_mouse_move(glm::vec2 pos, glm::vec2 rel) {}

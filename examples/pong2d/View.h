@@ -22,58 +22,42 @@
 // THE SOFTWARE.
 //
 
-#ifndef _PONG2D_GAME_H_
-#define _PONG2D_GAME_H_
+#ifndef _PONG2D_VIEW_H_
+#define _PONG2D_VIEW_H_
 
 #include <pkzo/pkzo.h>
 #include <pkzo2d/pkzo2d.h>
 
-#include "Simulation.h"
-#include "Settings.h"
-
 namespace pong2d
 {
-    enum class GameState
-    {
-        INITIAL,
-        MAIN_MENU,
-        OPTIONS_MENU,
-        PLAY,
-        QUIT
-    };
+    class Game;
+    class Simulation;
 
-    class Game
+    class View : public pkzo2d::Screen
     {
     public:
-        Game(int argc, char* argv[]);
-        ~Game();
+        View(Game& game, Simulation& simulation);
 
-        Settings& get_settings() noexcept;
+        void animate(std::chrono::milliseconds dt) override;
 
-        pkzo::Window& get_window() noexcept;
-
-        void change_state(GameState next_state) noexcept;
-        GameState get_state() const noexcept;
-
-        void capture_key(const std::function<void (pkzo::KeyMod&, pkzo::Key&)>& cb);
-
-        int run();
+        void handle_key_down(pkzo::KeyMod mod, pkzo::Key key) override;
+        void handle_key_up(pkzo::KeyMod mod, pkzo::Key key) override;
 
     private:
-        GameState state      = GameState::INITIAL;
-        GameState next_state = GameState::MAIN_MENU;
+        Game& game;
+        Simulation& simulation;
 
-        Settings   settings;
-        pkzo::Main main;
-        std::unique_ptr<Simulation> simulation;
+        std::shared_ptr<pkzo2d::Text> left_score_text;
+        std::shared_ptr<pkzo2d::Text> right_score_text;
 
-        std::unique_ptr<pkzo2d::ScreenRenderer> screen_renderer;
-        std::unique_ptr<pkzo2d::Screen>         screen;
+        std::shared_ptr<pkzo2d::Rectangle> ball_pawn;
+        std::shared_ptr<pkzo2d::Rectangle> left_paddle_pawn;
+        std::shared_ptr<pkzo2d::Rectangle> right_paddle_pawn;
 
-        std::function<void (pkzo::KeyMod&, pkzo::Key&)> key_capture_cb;
-
-        void tick(std::chrono::milliseconds dt);
-        void update_state();
+        pkzo::Key left_up_key;
+        pkzo::Key left_down_key;
+        pkzo::Key right_up_key;
+        pkzo::Key right_down_key;
     };
 }
 

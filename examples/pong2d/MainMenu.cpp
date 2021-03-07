@@ -44,7 +44,7 @@ namespace pong2d
         auto new_game_button = std::make_shared<pkzoui::Button>(button_background, text_font, button_caption_color, "New Game");
         new_game_button->set_position({200.0f, -25.0f});
         new_game_button->on_click([&game] () {
-            // TODO
+            game.change_state(GameState::PLAY);
         });
         add_node(new_game_button);
 
