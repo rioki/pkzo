@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hello", "examples\hello\hel
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pong2d", "examples\pong2d\pong2d.vcxproj", "{4DDBD758-C05F-4592-8A15-7D24DAE3AB29}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "model-viewer", "examples\model-viewer\model-viewer.vcxproj", "{1D6F0106-A027-4463-B696-63CE4475860E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -63,6 +65,14 @@ Global
 		{4DDBD758-C05F-4592-8A15-7D24DAE3AB29}.Release|x64.Build.0 = Release|x64
 		{4DDBD758-C05F-4592-8A15-7D24DAE3AB29}.Release|x86.ActiveCfg = Release|Win32
 		{4DDBD758-C05F-4592-8A15-7D24DAE3AB29}.Release|x86.Build.0 = Release|Win32
+		{1D6F0106-A027-4463-B696-63CE4475860E}.Debug|x64.ActiveCfg = Debug|x64
+		{1D6F0106-A027-4463-B696-63CE4475860E}.Debug|x64.Build.0 = Debug|x64
+		{1D6F0106-A027-4463-B696-63CE4475860E}.Debug|x86.ActiveCfg = Debug|Win32
+		{1D6F0106-A027-4463-B696-63CE4475860E}.Debug|x86.Build.0 = Debug|Win32
+		{1D6F0106-A027-4463-B696-63CE4475860E}.Release|x64.ActiveCfg = Release|x64
+		{1D6F0106-A027-4463-B696-63CE4475860E}.Release|x64.Build.0 = Release|x64
+		{1D6F0106-A027-4463-B696-63CE4475860E}.Release|x86.ActiveCfg = Release|Win32
+		{1D6F0106-A027-4463-B696-63CE4475860E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +80,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{9149C76B-D332-41B1-90E4-0B37F4712C5A} = {A3AEF7D1-EE50-4795-AA98-8C61555A29F7}
 		{4DDBD758-C05F-4592-8A15-7D24DAE3AB29} = {A3AEF7D1-EE50-4795-AA98-8C61555A29F7}
+		{1D6F0106-A027-4463-B696-63CE4475860E} = {A3AEF7D1-EE50-4795-AA98-8C61555A29F7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7E5D0B41-B3FF-47D8-8356-B0DD794736D6}
