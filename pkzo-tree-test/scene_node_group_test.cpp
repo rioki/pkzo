@@ -1,7 +1,7 @@
 //
 // pkzo
 //
-// Copyright 2014-2021 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2010-2021 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,22 +22,44 @@
 // THE SOFTWARE.
 //
 
-#ifndef _PKZO_CONFIG_H_
-#define _PKZO_CONFIG_H_
+#include "pch.h"
 
-#define PKZO_EXPORT __declspec(dllexport)
+TEST(SceneNodeGroup, default_contruct)
+{
+    pkzo::three::SceneNodeGroup node;
+    EXPECT_EQ(glm::mat4(1.0), node.get_transform());
+}
 
-// disable silly warnings
-#ifndef _MSVC
-#pragma warning(disable: 4251 4275 26812)
-#endif
+TEST(SceneNodeGroup, init_transform)
+{
+    pkzo::three::SceneNodeGroup node(glm::mat4(2.0f));
+    EXPECT_EQ(glm::mat4(2.0), node.get_transform());
+}
 
-// ensure pkzo works without dbg.h
-#ifndef DBG_ASSERT
-#define DBG_TRACE(MSG, ...)
-#define DBG_SOFT_ASSERT(COND)
-#define DBG_ASSERT(COND) assert(COND)
-#define DBG_FAIL(MSG) assert(false && MSG)
-#endif
+TEST(SceneNodeGroup, add_child)
+{
+    pkzo::three::SceneNodeGroup root;
 
-#endif
+    auto child = std::make_shared<pkzo::three::SceneNode>();
+    root.add_child(child);
+
+    auto nodes = root.get_children();
+    ASSERT_EQ(1, nodes.size());
+    EXPECT_EQ(child, nodes[0]);
+
+    EXPECT_EQ(&root, child->get_parent());
+}
+
+TEST(SceneNodeGroup, remove_child)
+{
+    pkzo::three::SceneNodeGroup root;
+
+    auto child = std::make_shared<pkzo::three::SceneNode>();
+    root.add_child(child);
+    root.remove_child(child);
+
+    auto nodes = root.get_children();
+    ASSERT_EQ(0, nodes.size());
+
+    EXPECT_EQ(nullptr, child->get_parent());
+}

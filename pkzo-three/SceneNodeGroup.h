@@ -1,7 +1,7 @@
 //
 // pkzo
 //
-// Copyright 2014-2021 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2010-2021 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,22 +22,34 @@
 // THE SOFTWARE.
 //
 
-#ifndef _PKZO_CONFIG_H_
-#define _PKZO_CONFIG_H_
+#pragma once
+#include <pkzo/config.h>
+#include <memory>
+#include <vector>
 
-#define PKZO_EXPORT __declspec(dllexport)
+#include "SceneNode.h"
 
-// disable silly warnings
-#ifndef _MSVC
-#pragma warning(disable: 4251 4275 26812)
-#endif
+namespace pkzo::three
+{
+    //! Scene Node
+    class PKZO_EXPORT SceneNodeGroup : public SceneNode
+    {
+    public:
+        SceneNodeGroup() noexcept = default;
+        SceneNodeGroup(const glm::mat4& transform) noexcept;
 
-// ensure pkzo works without dbg.h
-#ifndef DBG_ASSERT
-#define DBG_TRACE(MSG, ...)
-#define DBG_SOFT_ASSERT(COND)
-#define DBG_ASSERT(COND) assert(COND)
-#define DBG_FAIL(MSG) assert(false && MSG)
-#endif
+        //! Add child to group.
+        void add_child(std::shared_ptr<SceneNode> child) noexcept;
+        //! Remove child to group.
+        void remove_child(std::shared_ptr<SceneNode> child) noexcept;
 
-#endif
+        //! Get all direct children of this node.
+        //! @{
+        const std::vector<std::shared_ptr<SceneNode>>& get_children() noexcept;
+        std::vector<std::shared_ptr<const SceneNode>> get_children() const noexcept;
+        //! @}
+
+    private:
+        std::vector<std::shared_ptr<SceneNode>> children;
+    };
+}

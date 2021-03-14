@@ -1,7 +1,7 @@
 //
 // pkzo
 //
-// Copyright 2014-2021 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2010-2021 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,22 +22,41 @@
 // THE SOFTWARE.
 //
 
-#ifndef _PKZO_CONFIG_H_
-#define _PKZO_CONFIG_H_
+#include "pch.h"
+#include "SceneNodeGroup.h"
 
-#define PKZO_EXPORT __declspec(dllexport)
+namespace pkzo::three
+{
+    SceneNodeGroup::SceneNodeGroup(const glm::mat4& t) noexcept
+    : SceneNode(t) {}
 
-// disable silly warnings
-#ifndef _MSVC
-#pragma warning(disable: 4251 4275 26812)
-#endif
+    void SceneNodeGroup::add_child(std::shared_ptr<SceneNode> child) noexcept
+    {
+        DBG_ASSERT(child);
+        DBG_ASSERT(child->get_parent() == nullptr);
 
-// ensure pkzo works without dbg.h
-#ifndef DBG_ASSERT
-#define DBG_TRACE(MSG, ...)
-#define DBG_SOFT_ASSERT(COND)
-#define DBG_ASSERT(COND) assert(COND)
-#define DBG_FAIL(MSG) assert(false && MSG)
-#endif
+        children.push_back(child);
+        child->on_attach(this);
+    }
 
-#endif
+    void SceneNodeGroup::remove_child(std::shared_ptr<SceneNode> child) noexcept
+    {
+        DBG_ASSERT(child);
+        DBG_ASSERT(child->get_parent() == this);
+
+        auto i = find(begin(children), end(children), child);
+        DBG_ASSERT(i != end(children));
+        children.erase(i);
+        child->on_detach();
+    }
+
+    const std::vector<std::shared_ptr<SceneNode>>& SceneNodeGroup::get_children() noexcept
+    {
+        return children;
+    }
+
+    std::vector<std::shared_ptr<const SceneNode>> SceneNodeGroup::get_children() const noexcept
+    {
+        return {begin(children), end(children)};
+    }
+}
