@@ -27,3 +27,7 @@
 #include "SceneNode.h"
 #include "SceneNodeGroup.h"
 #include "Scene.h"
+
+#include "Camera.h"
+
+#include "SceneRenderer.h"

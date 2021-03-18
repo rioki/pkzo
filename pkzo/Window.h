@@ -41,6 +41,8 @@ union SDL_Event;
 
 namespace pkzo
 {
+    class Texture;
+
     class PKZO_EXPORT Window
     {
     public:
@@ -82,6 +84,10 @@ namespace pkzo
         void on_lose_focus(const std::function<void ()>& cb);
         void on_close(const std::function<void ()>& cb);
 
+        void draw() const noexcept;
+        //! Save the current window content.
+        std::shared_ptr<Texture> save() const noexcept;
+
     private:
         SdlSentry                sdl_sentry;
 
@@ -104,7 +110,6 @@ namespace pkzo
         std::function<void ()>           lose_focus_cb;
         std::function<void ()>           close_cb;
 
-        void draw() const noexcept;
         void handle_event(const SDL_Event& event) const;
 
     friend class Main;

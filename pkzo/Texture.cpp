@@ -39,6 +39,58 @@ namespace pkzo
         label = file.filename().u8string();
     }
 
+    Texture::Texture(const glm::uvec2& size, ColorFormat color, std::byte* memory, const std::string& l)
+    : label(l)
+    {
+        int depth, pitch;
+        Uint32 rmask, gmask, bmask, amask;
+        switch (color)
+        {
+            case ColorFormat::MONO:
+                depth = 8;
+                pitch = 1;
+                rmask = 0xFF;
+                gmask = 0;
+                bmask = 0;
+                amask = 0;
+                break;
+            case ColorFormat::RGB:
+                depth = 24;
+                pitch = 3;
+            #if SDL_BYTEORDER == SDL_BIG_ENDIAN
+                rmask = 0xff0000;
+                gmask = 0x00ff00;
+                bmask = 0x0000ff;
+                amask = 0;
+            #else
+                rmask = 0x0000ff;
+                gmask = 0x00ff00;
+                bmask = 0xff0000;
+                amask = 0;
+            #endif
+            case ColorFormat::RGBA:
+                depth = 32;
+                pitch = 4;
+            #if SDL_BYTEORDER == SDL_BIG_ENDIAN
+                rmask = 0xff000000;
+                gmask = 0x00ff0000;
+                bmask = 0x0000ff00;
+                amask = 0x000000ff;
+            #else
+                rmask = 0x000000ff;
+                gmask = 0x0000ff00;
+                bmask = 0x00ff0000;
+                amask = 0xff000000;
+            #endif
+
+        }
+        surface = SDL_CreateRGBSurfaceFrom(memory, size.x, size.y, depth, pitch, rmask, gmask, bmask, amask);
+        if (surface == nullptr)
+        {
+            throw std::runtime_error(IMG_GetError());
+        }
+    }
+
     Texture::Texture(SDL_Surface* s, const std::string& l) noexcept
     : surface(s), label(l)
     {

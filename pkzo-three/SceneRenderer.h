@@ -1,7 +1,7 @@
 //
 // pkzo
 //
-// Copyright 2014-2021 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2010-2021 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,51 +22,26 @@
 // THE SOFTWARE.
 //
 
-#ifndef _ICE_TEXTURE_H_
-#define _ICE_TEXTURE_H_
+#pragma once
 
-#include "config.h"
+#include <pkzo/config.h>
 
-#include <memory>
-#include <filesystem>
-#include <glm/fwd.hpp>
+#include "SceneNodeGroup.h"
 
-#include "SdlSentry.h"
-
-struct SDL_Surface;
-
-namespace pkzo
+namespace pkzo::three
 {
-    enum class ColorFormat
-    {
-        MONO,
-        RGB,
-        RGBA
-    };
+    class Scene;
+    class Camera;
 
-    class PKZO_EXPORT Texture
+    //! Scene Renderer
+    class PKZO_EXPORT SceneRenderer
     {
     public:
-        Texture(const std::filesystem::path& file);
-        Texture(const glm::uvec2& size, ColorFormat color, std::byte* memory, const std::string& label = "memory");
-        Texture(SDL_Surface* surface, const std::string& label = "memory") noexcept;
-        Texture(const Texture&) = delete;
-        ~Texture();
-        Texture& operator = (const Texture&) = delete;
+        SceneRenderer() = default;
+        SceneRenderer(const SceneRenderer&) = delete;
+        ~SceneRenderer() = default;
+        SceneRenderer& operator = (const SceneRenderer&) = delete;
 
-        //! Get the texture size.
-        glm::uvec2 get_size() const noexcept;
-
-        void upload();
-
-        void bind(glm::uint slot);
-
-    private:
-        SdlSentry    sdl_sentry;
-        SDL_Surface* surface = nullptr;
-        std::string  label;
-        glm::uint    gl_id = 0u;
+        void render(const Scene& scene, const Camera& camera) noexcept;
     };
 }
-
-#endif

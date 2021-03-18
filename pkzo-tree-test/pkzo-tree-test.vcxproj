@@ -163,6 +163,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="scene_node_group_test.cpp" />
     <ClCompile Include="scene_node_test.cpp" />
+    <ClCompile Include="scene_renderer_test.cpp" />
     <ClCompile Include="scene_test.cpp" />
   </ItemGroup>
   <ItemGroup>

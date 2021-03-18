@@ -1,7 +1,7 @@
 //
 // pkzo
 //
-// Copyright 2014-2021 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2010-2021 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,51 +22,24 @@
 // THE SOFTWARE.
 //
 
-#ifndef _ICE_TEXTURE_H_
-#define _ICE_TEXTURE_H_
+#include "pch.h"
 
-#include "config.h"
-
-#include <memory>
-#include <filesystem>
-#include <glm/fwd.hpp>
-
-#include "SdlSentry.h"
-
-struct SDL_Surface;
-
-namespace pkzo
+TEST(SceneRenderer, empty_scene)
 {
-    enum class ColorFormat
-    {
-        MONO,
-        RGB,
-        RGBA
-    };
+    pkzo::Window window({800, 600}, pkzo::WindowMode::STATIC, __FUNCTION__);
 
-    class PKZO_EXPORT Texture
-    {
-    public:
-        Texture(const std::filesystem::path& file);
-        Texture(const glm::uvec2& size, ColorFormat color, std::byte* memory, const std::string& label = "memory");
-        Texture(SDL_Surface* surface, const std::string& label = "memory") noexcept;
-        Texture(const Texture&) = delete;
-        ~Texture();
-        Texture& operator = (const Texture&) = delete;
+    pkzo::three::Scene scene;
 
-        //! Get the texture size.
-        glm::uvec2 get_size() const noexcept;
+    auto camera = std::make_shared<pkzo::three::Camera>();
+    scene.add_child(camera);
 
-        void upload();
+    pkzo::three::SceneRenderer renderer;
 
-        void bind(glm::uint slot);
+    window.on_draw([&] () {
+        renderer.render(scene, *camera);
+    });
+    window.draw();
 
-    private:
-        SdlSentry    sdl_sentry;
-        SDL_Surface* surface = nullptr;
-        std::string  label;
-        glm::uint    gl_id = 0u;
-    };
+    auto test_image = window.save();
+    ASSERT_NE(nullptr, test_image);
 }
-
-#endif

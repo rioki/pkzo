@@ -25,6 +25,8 @@
 #include "pch.h"
 #include "Window.h"
 
+#include "Texture.h"
+
 namespace pkzo
 {
     void clear_errors()
@@ -266,6 +268,14 @@ namespace pkzo
         }
 
         SDL_GL_SwapWindow(window);
+    }
+
+    std::shared_ptr<Texture> Window::save() const noexcept
+    {
+        auto s = get_size();
+        std::vector<std::byte> buffer(s.x * s.y * 3);
+        glReadPixels(0, 0, s.x, s.y, GL_RGB, GL_UNSIGNED_BYTE, buffer.data());
+        return std::make_shared<Texture>(s, ColorFormat::RGB, buffer.data(), "screen");
     }
 
     void Window::handle_event(const SDL_Event& event) const

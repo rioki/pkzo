@@ -1,7 +1,7 @@
 //
 // pkzo
 //
-// Copyright 2014-2021 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2010-2021 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,51 +22,22 @@
 // THE SOFTWARE.
 //
 
-#ifndef _ICE_TEXTURE_H_
-#define _ICE_TEXTURE_H_
+#include "pch.h"
 
-#include "config.h"
-
-#include <memory>
-#include <filesystem>
-#include <glm/fwd.hpp>
-
-#include "SdlSentry.h"
-
-struct SDL_Surface;
-
-namespace pkzo
+TEST(Window, contruct)
 {
-    enum class ColorFormat
-    {
-        MONO,
-        RGB,
-        RGBA
-    };
+    pkzo::Window window({800, 600}, pkzo::WindowMode::STATIC, __FUNCTION__);
 
-    class PKZO_EXPORT Texture
-    {
-    public:
-        Texture(const std::filesystem::path& file);
-        Texture(const glm::uvec2& size, ColorFormat color, std::byte* memory, const std::string& label = "memory");
-        Texture(SDL_Surface* surface, const std::string& label = "memory") noexcept;
-        Texture(const Texture&) = delete;
-        ~Texture();
-        Texture& operator = (const Texture&) = delete;
-
-        //! Get the texture size.
-        glm::uvec2 get_size() const noexcept;
-
-        void upload();
-
-        void bind(glm::uint slot);
-
-    private:
-        SdlSentry    sdl_sentry;
-        SDL_Surface* surface = nullptr;
-        std::string  label;
-        glm::uint    gl_id = 0u;
-    };
+    EXPECT_EQ(glm::uvec2(800, 600), window.get_size());
+    EXPECT_EQ(pkzo::WindowMode::STATIC, window.get_mode());
+    EXPECT_EQ(__FUNCTION__, window.get_caption());
 }
 
-#endif
+TEST(Window, save)
+{
+    pkzo::Window window({800, 600}, pkzo::WindowMode::STATIC, __FUNCTION__);
+
+    auto test_image = window.save();
+    ASSERT_NE(nullptr, test_image);
+    EXPECT_EQ(glm::uvec2(800, 600), test_image->get_size());
+}
