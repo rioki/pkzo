@@ -24,19 +24,10 @@
 
 #include "pch.h"
 #include "enums.h"
+#include "utils.h"
 
 namespace pkzo
 {
-    constexpr unsigned int hash(const char* str, int h = 0)
-    {
-        return !str[h] ? 5381 : (hash(str, h+1)*33) ^ str[h];
-    }
-
-    unsigned int hash(const std::string& str)
-    {
-        return hash(str.c_str());
-    }
-
     std::vector<std::string> explode(const std::string& str, const std::string& delimiter)
     {
         std::vector<std::string> gibs;

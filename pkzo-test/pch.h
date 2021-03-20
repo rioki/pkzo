@@ -24,6 +24,9 @@
 
 #pragma once
 
-#include <gtest/gtest.h>
+#include "dbg.h"
+#include "glmio.h"
+#include "glmtest.h"
 
+#include <gtest/gtest.h>
 #include <pkzo/pkzo.h>

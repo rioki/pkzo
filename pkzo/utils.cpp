@@ -22,21 +22,5 @@
 // THE SOFTWARE.
 //
 
-#ifndef _PKZO_H_
-#define _PKZO_H_
-
-#include "config.h"
+#include "pch.h"
 #include "utils.h"
-
-#include "Main.h"
-#include "Mouse.h"
-#include "Keyboard.h"
-#include "Joystick.h"
-#include "Window.h"
-
-#include "Texture.h"
-#include "Font.h"
-#include "Mesh.h"
-#include "Shader.h"
-
-#endif

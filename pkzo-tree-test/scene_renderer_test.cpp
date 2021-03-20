@@ -42,4 +42,7 @@ TEST(SceneRenderer, empty_scene)
 
     auto test_image = window.save();
     ASSERT_NE(nullptr, test_image);
+
+    // TODO image comparison with reference image.
+    EXPECT_EQ(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f), test_image->get_texel({0,0}));
 }

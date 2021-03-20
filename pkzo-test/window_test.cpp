@@ -39,5 +39,6 @@ TEST(Window, save)
 
     auto test_image = window.save();
     ASSERT_NE(nullptr, test_image);
-    EXPECT_EQ(glm::uvec2(800, 600), test_image->get_size());
+    EXPECT_GLM_EQ(glm::uvec2(800, 600), test_image->get_size());
+    EXPECT_GLM_EQ(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f), test_image->get_texel({0,0}));
 }

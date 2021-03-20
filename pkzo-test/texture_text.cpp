@@ -1,7 +1,7 @@
 //
 // pkzo
 //
-// Copyright 2014-2021 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2010-2021 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,21 +22,18 @@
 // THE SOFTWARE.
 //
 
-#ifndef _PKZO_H_
-#define _PKZO_H_
+#include "pch.h"
 
-#include "config.h"
-#include "utils.h"
+TEST(Texture, load_png)
+{
+    pkzo::Texture texture("../../pkzo-test/data/lena.png");
+    EXPECT_EQ(glm::uvec2(512, 512), texture.get_size());
+    EXPECT_GLM_NEAR(glm::vec4(0.6f, 0.215686f, 0.301961f, 0.0f), texture.get_texel({265, 265}), 1e-6f);
+}
 
-#include "Main.h"
-#include "Mouse.h"
-#include "Keyboard.h"
-#include "Joystick.h"
-#include "Window.h"
-
-#include "Texture.h"
-#include "Font.h"
-#include "Mesh.h"
-#include "Shader.h"
-
-#endif
+TEST(Texture, load_jpg)
+ {
+    pkzo::Texture texture("../../pkzo-test/data/lena.jpg");
+    EXPECT_EQ(glm::uvec2(512, 512), texture.get_size());
+    EXPECT_GLM_NEAR(glm::vec4(0.619608f, 0.223529f, 0.286275f, 0.0f), texture.get_texel({265, 265}), 1e-6f);
+}

@@ -37,18 +37,46 @@ struct SDL_Surface;
 
 namespace pkzo
 {
-    enum class ColorFormat
+    //! Color Format
+    enum class ColorMode
     {
-        MONO,
+        UNKNOWN,
+        R,
+        RG,
         RGB,
-        RGBA
+        BGR,
+        RGBA,
+        BGRA
     };
 
+    //! Data Type
+    enum class DataType
+    {
+        UNKNOWN,
+        INT8,
+        UINT8,
+        INT16,
+        UINT16,
+        UINT32,
+        INT32,
+        FLOAT,
+        DOUBLE
+    };
+
+    class TextureImpl;
+    class GraphicTextureImpl;
+
+    //! 2D Image
     class PKZO_EXPORT Texture
     {
     public:
+        //! Load texture form file.
+        //!
+        //! @param file the file to load the texture from.
         Texture(const std::filesystem::path& file);
-        Texture(const glm::uvec2& size, ColorFormat color, std::byte* memory, const std::string& label = "memory");
+        //! Create texture from memory buffer.
+        Texture(const glm::uvec2& size, ColorMode mode, DataType type, const void* memory, const std::string& label = "memory");
+
         Texture(SDL_Surface* surface, const std::string& label = "memory") noexcept;
         Texture(const Texture&) = delete;
         ~Texture();
@@ -56,16 +84,28 @@ namespace pkzo
 
         //! Get the texture size.
         glm::uvec2 get_size() const noexcept;
+        //! Get the color mode.
+        ColorMode get_color_mode() const noexcept;
+        //! Get the data type.
+        DataType get_data_type() const noexcept;
 
-        void upload();
+        //! Get the color value from the given texel.
+        glm::vec4 get_texel(const glm::uvec2& index) const noexcept;
 
-        void bind(glm::uint slot);
+        //! Get the data buffer.
+        void* get_data() const noexcept;
+
+        //! Upload the texture to VRAM
+        void upload() noexcept;
+        //! Bind the texture to a given slot for rendering.
+        void bind(glm::uint slot) noexcept;
+
+        //! Save file to disk.
+        void save(const std::filesystem::path& file);
 
     private:
-        SdlSentry    sdl_sentry;
-        SDL_Surface* surface = nullptr;
-        std::string  label;
-        glm::uint    gl_id = 0u;
+        std::unique_ptr<TextureImpl> impl;
+        std::unique_ptr<GraphicTextureImpl> graphic_impl;
     };
 }
 
