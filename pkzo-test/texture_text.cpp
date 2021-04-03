@@ -28,12 +28,38 @@ TEST(Texture, load_png)
 {
     pkzo::Texture texture("../../pkzo-test/data/lena.png");
     EXPECT_EQ(glm::uvec2(512, 512), texture.get_size());
-    EXPECT_GLM_NEAR(glm::vec4(0.6f, 0.215686f, 0.301961f, 0.0f), texture.get_texel({265, 265}), 1e-6f);
+    EXPECT_GLM_NEAR(glm::vec4(0.6f, 0.215686f, 0.301961f, 1.0f), texture.get_texel({265, 265}), 1e-6f);
 }
 
 TEST(Texture, load_jpg)
  {
     pkzo::Texture texture("../../pkzo-test/data/lena.jpg");
     EXPECT_EQ(glm::uvec2(512, 512), texture.get_size());
-    EXPECT_GLM_NEAR(glm::vec4(0.619608f, 0.223529f, 0.286275f, 0.0f), texture.get_texel({265, 265}), 1e-6f);
+    EXPECT_GLM_NEAR(glm::vec4(0.619608f, 0.223529f, 0.286275f, 1.0f), texture.get_texel({265, 265}), 1e-6f);
+}
+
+TEST(Texture, compare)
+{
+    auto lena_png = pkzo::Texture("../../pkzo-test/data/lena.png");
+    auto lena_jpg = pkzo::Texture("../../pkzo-test/data/lena.jpg");
+
+    EXPECT_FLOAT_EQ(0.0f, pkzo::compare(lena_png, lena_png));
+    EXPECT_FLOAT_EQ(5033.1348f, pkzo::compare(lena_png, lena_jpg));
+}
+
+TEST(Texture, diff)
+{
+    auto lena_png = pkzo::Texture("../../pkzo-test/data/lena.png");
+    auto rectangle = pkzo::Texture("../../pkzo-test/data/rectangle.png");
+    auto ref = pkzo::Texture("../../pkzo-test/data/ref_diff.png");
+
+    auto diff = pkzo::diff(lena_png, rectangle);
+
+    auto diff_error = pkzo::compare(diff, ref);
+    EXPECT_FLOAT_EQ(0.0f, diff_error);
+
+    if (diff_error > 1e-4f)
+    {
+        diff.save("../../pkzo-test/data/test_diff.png");
+    }
 }

@@ -163,6 +163,7 @@ namespace pkzo
         virtual ColorMode get_color_mode() const noexcept = 0;
         virtual DataType get_data_type() const noexcept = 0;
         virtual glm::vec4 get_texel(const glm::uvec2& index) const noexcept = 0;
+        virtual void set_texel(const glm::uvec2& index, const glm::vec4& value) noexcept = 0;
         virtual void* get_data() const noexcept = 0;
         virtual void save(const std::filesystem::path& file) const = 0;
     };
@@ -177,6 +178,7 @@ namespace pkzo
         ColorMode get_color_mode() const noexcept override;
         DataType get_data_type() const noexcept override;
         glm::vec4 get_texel(const glm::uvec2& index) const noexcept override;
+        void set_texel(const glm::uvec2& index, const glm::vec4& value) noexcept override;
         void* get_data() const noexcept override;
         void save(const std::filesystem::path& file) const override;
 
@@ -267,6 +269,11 @@ namespace pkzo
         return {static_cast<float>(r) / 255.0f, static_cast<float>(g) / 255.0f, static_cast<float>(b) / 255.0f, static_cast<float>(a) / 255.0f};
     }
 
+    void SdlTextureImpl::set_texel(const glm::uvec2& index, const glm::vec4& value) noexcept
+    {
+        DBG_FAIL("this code path is obsolete");
+    }
+
     void* SdlTextureImpl::get_data() const noexcept
     {
         DBG_ASSERT(surface != nullptr);
@@ -308,6 +315,7 @@ namespace pkzo
         ColorMode get_color_mode() const noexcept override;
         DataType get_data_type() const noexcept override;
         glm::vec4 get_texel(const glm::uvec2& index) const noexcept override;
+        void set_texel(const glm::uvec2& index, const glm::vec4& value) noexcept override;
         void* get_data() const noexcept override;
         void save(const std::filesystem::path& file) const override;
 
@@ -462,10 +470,21 @@ namespace pkzo
         auto rm = red_mask(mode);
         auto gm = green_mask(mode);
         auto bm = blue_mask(mode);
-        bitmap = FreeImage_ConvertFromRawBitsEx(TRUE, raw, fitype, size.x, size.y, Bpp * size.x, bpp, rm, gm, bm);
-        if (bitmap == nullptr)
+        if (memory != nullptr)
         {
-            throw std::runtime_error("Failed to convert raw data.");
+            bitmap = FreeImage_ConvertFromRawBitsEx(TRUE, raw, fitype, size.x, size.y, Bpp * size.x, bpp, rm, gm, bm);
+            if (bitmap == nullptr)
+            {
+                throw std::runtime_error("Failed to convert raw data.");
+            }
+        }
+        else
+        {
+            bitmap = FreeImage_AllocateT(fitype, size.x, size.y, bpp, rm, gm, bm);
+            if (bitmap == nullptr)
+            {
+                throw std::runtime_error("Failed to convert raw data.");
+            }
         }
     }
 
@@ -481,11 +500,32 @@ namespace pkzo
         return {FreeImage_GetWidth(bitmap), FreeImage_GetHeight(bitmap)};
     }
 
+    constexpr bool has_alpha(ColorMode cm)
+    {
+        switch (cm)
+        {
+            case ColorMode::RGBA:
+            case ColorMode::BGRA:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     glm::vec4 FreeImageTextureImpl::get_texel(const glm::uvec2& index) const noexcept
     {
         RGBQUAD color;
         FreeImage_GetPixelColor(bitmap, index.x, index.y, &color);
-        return {color.rgbRed/255.0f, color.rgbGreen/255.0f, color.rgbBlue/255.0f, color.rgbReserved/255.0f};
+        return {color.rgbRed/255.0f, color.rgbGreen/255.0f, color.rgbBlue/255.0f, has_alpha(get_color_mode()) ? color.rgbReserved/255.0f : 1.0f};
+    }
+
+    void FreeImageTextureImpl::set_texel(const glm::uvec2& index, const glm::vec4& value) noexcept
+    {
+        auto color = RGBQUAD{static_cast<BYTE>(value.x * 255.0f),
+                             static_cast<BYTE>(value.y * 255.0f),
+                             static_cast<BYTE>(value.z * 255.0f),
+                             static_cast<BYTE>(value.w * 255.0f)};
+        FreeImage_SetPixelColor(bitmap, index.x, index.y, &color);
     }
 
     ColorMode FreeImageTextureImpl::get_color_mode() const noexcept
@@ -617,7 +657,17 @@ namespace pkzo
     Texture::Texture(SDL_Surface* surface, const std::string& label) noexcept
     : impl(std::make_unique<SdlTextureImpl>(surface)), graphic_impl(std::make_unique<OpenGLTextureImpl>(label)) {}
 
+    Texture::Texture(Texture&& other) noexcept
+    : impl(std::move(other.impl)), graphic_impl(std::move(other.graphic_impl)) {}
+
     Texture::~Texture() = default;
+
+    Texture& Texture::operator = (Texture&& other) noexcept
+    {
+        impl         = std::move(other.impl);
+        graphic_impl = std::move(other.graphic_impl);
+        return *this;
+    }
 
     glm::uvec2 Texture::get_size() const noexcept
     {
@@ -643,6 +693,12 @@ namespace pkzo
         return impl->get_texel(index);
     }
 
+    void Texture::set_texel(const glm::uvec2& index, const glm::vec4& value) noexcept
+    {
+        DBG_ASSERT(impl);
+        impl->set_texel(index, value);
+    }
+
     void* Texture::get_data() const noexcept
     {
         DBG_ASSERT(impl);
@@ -666,5 +722,51 @@ namespace pkzo
     {
         DBG_ASSERT(impl);
         return impl->save(file);
+    }
+
+    PKZO_EXPORT float compare(const Texture& a, const Texture& b)
+    {
+        if (a.get_size() != b.get_size())
+        {
+            throw std::runtime_error("compare: textures are not the same size");
+        }
+
+        float error = 0.0f;
+
+        auto s = a.get_size();
+        for (auto u = 0u; u < s.x; u++)
+        {
+            for (auto v = 0u; v < s.y; v++)
+            {
+                auto ac = a.get_texel({u, v});
+                auto bc = b.get_texel({u, v});
+                error += glm::length(glm::abs(ac - bc));
+            }
+        }
+
+        return error;
+    }
+
+    PKZO_EXPORT Texture diff(const Texture& a, const Texture& b)
+    {
+        if (a.get_size() != b.get_size())
+        {
+            throw std::runtime_error("diff: textures are not the same size");
+        }
+
+        auto s = a.get_size();
+        auto result = Texture(s, ColorMode::RGBA, DataType::UINT8, nullptr, "diff");
+        for (auto u = 0u; u < s.x; u++)
+        {
+            for (auto v = 0u; v < s.y; v++)
+            {
+                auto ac = a.get_texel({u, v});
+                auto bc = b.get_texel({u, v});
+                auto diff = glm::abs(ac - bc);
+                diff.a = 1.0f - diff.a;
+                result.set_texel({u, v}, diff);
+            }
+        }
+        return result;
     }
 }

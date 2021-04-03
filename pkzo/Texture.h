@@ -79,8 +79,10 @@ namespace pkzo
 
         Texture(SDL_Surface* surface, const std::string& label = "memory") noexcept;
         Texture(const Texture&) = delete;
+        Texture(Texture&& other) noexcept;
         ~Texture();
         Texture& operator = (const Texture&) = delete;
+        Texture& operator = (Texture&& other) noexcept;
 
         //! Get the texture size.
         glm::uvec2 get_size() const noexcept;
@@ -91,6 +93,8 @@ namespace pkzo
 
         //! Get the color value from the given texel.
         glm::vec4 get_texel(const glm::uvec2& index) const noexcept;
+        //! Set the color value of a the given text.
+        void set_texel(const glm::uvec2& index, const glm::vec4& value) noexcept;
 
         //! Get the data buffer.
         void* get_data() const noexcept;
@@ -107,6 +111,18 @@ namespace pkzo
         std::unique_ptr<TextureImpl> impl;
         std::unique_ptr<GraphicTextureImpl> graphic_impl;
     };
+
+    //! Compare Textures
+    //!
+    //! This function will compare two images and return a error score.
+    //!
+    //! @param a the first image
+    //! @param b the second image
+    //! @return an error score
+    PKZO_EXPORT float compare(const Texture& a, const Texture& b);
+
+    //! Create a difference of two textures.
+    PKZO_EXPORT Texture diff(const Texture& a, const Texture& b);
 }
 
 #endif

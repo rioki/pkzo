@@ -22,7 +22,7 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{feb1a143-59b8-4b2b-a661-c9e5b7c63a32}</ProjectGuid>
-    <RootNamespace>pkzotreetest</RootNamespace>
+    <RootNamespace>pkzothreetest</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
