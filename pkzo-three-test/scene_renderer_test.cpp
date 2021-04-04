@@ -43,13 +43,13 @@ TEST(SceneRenderer, empty_scene)
     auto test_image = window.save();
     ASSERT_NE(nullptr, test_image);
 
-    auto ref = pkzo::Texture("../../pkzo-three-test/data/ref_empty_scene.png");
+    auto ref = pkzo::Texture("../../data/textures/reference/ref_empty_scene.png");
     auto diff = pkzo::diff(*test_image, ref);
     auto diff_error = pkzo::compare(diff, ref);
     EXPECT_FLOAT_EQ(0.0f, diff_error);
     if (diff_error > 1e-4f)
     {
         auto diff = pkzo::diff(*test_image, ref);
-        diff.save("../../pkzo-three-test/data/test_empty_scene.png");
+        diff.save("../../data/temp/test_empty_scene.png");
     }
 }
