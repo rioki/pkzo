@@ -51,7 +51,7 @@ TEST(Texture, diff)
 {
     auto lena_png = pkzo::Texture("../../data/textures/test/lena.png");
     auto rectangle = pkzo::Texture("../../data/textures/test/rectangle.png");
-    auto ref = pkzo::Texture("../../data/textures/reference/ref_diff.png");
+    auto ref = pkzo::Texture("../../data/textures/reference/Texture-diff-ref.png");
 
     auto diff = pkzo::diff(lena_png, rectangle);
 

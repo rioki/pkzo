@@ -33,3 +33,4 @@
 #include <pkzo-three/pkzo-three.h>
 
 #include "glmio.h"
+#include "test_utils.h"

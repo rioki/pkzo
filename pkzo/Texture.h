@@ -105,7 +105,7 @@ namespace pkzo
         void bind(glm::uint slot) noexcept;
 
         //! Save file to disk.
-        void save(const std::filesystem::path& file);
+        void save(const std::filesystem::path& file) const;
 
     private:
         std::unique_ptr<TextureImpl> impl;

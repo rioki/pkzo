@@ -50,7 +50,7 @@ namespace pkzo
         ~Shader();
         Shader& operator = (const Shader&) = delete;
 
-        bool compile();
+        void compile();
 
         void bind();
 

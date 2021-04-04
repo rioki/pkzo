@@ -50,7 +50,7 @@ namespace pkzo
         }
     }
 
-    bool Shader::compile()
+    void Shader::compile()
     {
         assert(program_id == 0);
 

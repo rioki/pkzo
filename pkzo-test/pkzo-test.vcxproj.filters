@@ -30,6 +30,9 @@
     <ClCompile Include="texture_text.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="font_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">

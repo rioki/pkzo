@@ -167,6 +167,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="font_test.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="main_test.cpp" />
     <ClCompile Include="pch.cpp">

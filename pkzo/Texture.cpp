@@ -298,12 +298,6 @@ namespace pkzo
         }
     }
 
-    void SdlTextureImpl::save(const std::filesystem::path& file) const
-    {
-        DBG_FAIL("TODO");
-        // TODO
-    }
-
     class FreeImageTextureImpl : public TextureImpl
     {
     public:
@@ -633,6 +627,13 @@ namespace pkzo
         }
     }
 
+    void SdlTextureImpl::save(const std::filesystem::path& file) const
+    {
+        // This code path will die soon anyway.
+        FreeImageTextureImpl tmp(get_size(), get_color_mode(), get_data_type(), get_data());
+        tmp.save(file);
+    }
+
     void FreeImageTextureImpl::save(const std::filesystem::path& file) const
     {
         std::filesystem::create_directories(file.parent_path());
@@ -718,7 +719,7 @@ namespace pkzo
         return graphic_impl->bind(slot);
     }
 
-    void Texture::save(const std::filesystem::path& file)
+    void Texture::save(const std::filesystem::path& file) const
     {
         DBG_ASSERT(impl);
         return impl->save(file);
