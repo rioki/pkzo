@@ -28,6 +28,7 @@
 #include <cstdlib>
 #include <memory>
 #include <map>
+#include <array>
 #include <vector>
 #include <queue>
 #include <functional>
@@ -50,5 +51,6 @@
 #include <SDL2/SDL_ttf.h>
 
 #include "dbg.h"
+#include "compose.h"
 
 #endif

@@ -24,3 +24,36 @@
 
 #include "pch.h"
 #include "utils.h"
+
+#include <iconv.h>
+
+namespace pkzo
+{
+    std::u32string utf32(const std::string& buff)
+    {
+        std::u32string result;
+
+        auto cd = iconv_open("UTF-32LE", "UTF-8");
+        DBG_ASSERT(cd);
+
+        char* inbuf        = const_cast<char*>(buff.data());
+        size_t inbytesleft = buff.size();
+
+        std::array<char, 512> temp;
+        char*  outbuf       = temp.data();
+        size_t outbytesleft = temp.size();
+
+        while (inbytesleft > 0u)
+        {
+            iconv(cd, &inbuf, &inbytesleft, &outbuf, &outbytesleft);
+            result.append(reinterpret_cast<char32_t*>(temp.data()), reinterpret_cast<char32_t*>(outbuf));
+            outbuf       = temp.data();
+            outbytesleft = temp.size();
+        }
+
+        int r = iconv_close(cd);
+        DBG_ASSERT(r == 0);
+
+        return result;
+    }
+}

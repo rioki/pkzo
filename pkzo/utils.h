@@ -83,4 +83,6 @@ namespace pkzo
     {
         return hash(str.c_str());
     }
+
+    PKZO_EXPORT std::u32string utf32(const std::string& buff);
 }

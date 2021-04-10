@@ -22,15 +22,10 @@
 // THE SOFTWARE.
 //
 
-#pragma once
+#include "pch.h"
 
-#include <string>
-
-#include "dbg.h"
-#include "glmio.h"
-#include "glmtest.h"
-
-#include <gtest/gtest.h>
-#include <pkzo/pkzo.h>
-
-#include "test_utils.h"
+using namespace std::literals::string_literals;
+TEST(utils, utf32)
+{
+    EXPECT_EQ(U"Halöle"s, pkzo::utf32(u8"Halöle"s));
+}

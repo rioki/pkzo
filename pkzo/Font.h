@@ -37,7 +37,10 @@ typedef struct _TTF_Font TTF_Font;
 
 namespace pkzo
 {
+
     class Texture;
+
+    class FontImpl;
 
     //! True Type Font
     class PKZO_EXPORT Font
@@ -47,10 +50,6 @@ namespace pkzo
         //!
         //! @param file the font file to load
         //! @param size the font size to load
-        //! @returns the requested font
-        //! @excaption file_not_found
-        static std::shared_ptr<Font> load(const std::filesystem::path& file, unsigned int size);
-
         Font(const std::filesystem::path& file, unsigned int size);
         Font(const Font&) = delete;
         ~Font();
@@ -75,10 +74,9 @@ namespace pkzo
         std::shared_ptr<Texture> render(const std::string& text) const noexcept;
 
     private:
-        SdlSentry             sdl_sentry;
+        std::unique_ptr<FontImpl> impl;
         std::filesystem::path file;
-        unsigned int          size;
-        TTF_Font*             font = nullptr;
+        unsigned int size;
     };
 }
 

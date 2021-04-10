@@ -33,6 +33,9 @@
     <ClCompile Include="font_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="utils_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
