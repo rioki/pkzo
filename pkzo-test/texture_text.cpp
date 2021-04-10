@@ -38,6 +38,13 @@ TEST(Texture, load_jpg)
     EXPECT_GLM_NEAR(glm::vec4(0.619608f, 0.223529f, 0.286275f, 1.0f), texture.get_texel({265, 265}), 1e-6f);
 }
 
+TEST(Texture, load_hdr)
+{
+    pkzo::Texture texture("../../data/textures/sky/chinese_garden_1k.hdr");
+    EXPECT_EQ(pkzo::DataType::FLOAT, texture.get_data_type());
+    EXPECT_EQ(glm::uvec2(1024, 512), texture.get_size());
+    EXPECT_GLM_NEAR(glm::vec4(0.80000001192092896f, 0.80000001192092896f, 0.80000001192092896f, 1.0f), texture.get_texel({265, 265}), 1e-6f);
+}
 TEST(Texture, compare)
 {
     auto lena_png = pkzo::Texture("../../data/textures/test/lena.png");

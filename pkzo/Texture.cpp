@@ -25,7 +25,6 @@
 #include "pch.h"
 #include "Texture.h"
 
-#include <SDL2/SDL_image.h>
 #include <FreeImage.h>
 
 #include "utils.h"
@@ -167,136 +166,6 @@ namespace pkzo
         virtual void* get_data() const noexcept = 0;
         virtual void save(const std::filesystem::path& file) const = 0;
     };
-
-    class SdlTextureImpl : public TextureImpl
-    {
-    public:
-        SdlTextureImpl(SDL_Surface* surface) noexcept;
-        ~SdlTextureImpl();
-
-        glm::uvec2 get_size() const noexcept override;
-        ColorMode get_color_mode() const noexcept override;
-        DataType get_data_type() const noexcept override;
-        glm::vec4 get_texel(const glm::uvec2& index) const noexcept override;
-        void set_texel(const glm::uvec2& index, const glm::vec4& value) noexcept override;
-        void* get_data() const noexcept override;
-        void save(const std::filesystem::path& file) const override;
-
-    public:
-        SdlSentry    sdl_sentry;
-        SDL_Surface* surface = nullptr;
-    };
-
-    SdlTextureImpl::SdlTextureImpl(SDL_Surface* s) noexcept
-    : surface(s)
-    {
-        DBG_ASSERT(surface != nullptr);
-    }
-
-    SdlTextureImpl::~SdlTextureImpl()
-    {
-        DBG_ASSERT(surface != nullptr);
-        SDL_FreeSurface(surface);
-    }
-
-    glm::uvec2 SdlTextureImpl::get_size() const noexcept
-    {
-        DBG_ASSERT(surface != nullptr);
-        return {surface->w, surface->h};
-    }
-
-    ColorMode SdlTextureImpl::get_color_mode() const noexcept
-    {
-        DBG_ASSERT(surface != nullptr);
-        switch (surface->format->BytesPerPixel)
-        {
-        case 1:
-            return ColorMode::R;
-        case 2:
-            return ColorMode::RG;
-        case 3:
-            return ColorMode::RGB;
-        case 4:
-            return ColorMode::RGBA;
-        default:
-            DBG_FAIL("Unexpected bytes per pixel.");
-            return ColorMode::UNKNOWN;
-        }
-    }
-
-    DataType SdlTextureImpl::get_data_type() const noexcept
-    {
-        return DataType::UINT8;
-    }
-
-    Uint32 getpixel(SDL_Surface *surface, int x, int y)
-    {
-        int bpp = surface->format->BytesPerPixel;
-        /* Here p is the address to the pixel we want to retrieve */
-        Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
-
-        switch (bpp)
-        {
-        case 1:
-            return *p;
-            break;
-
-        case 2:
-            return *(Uint16 *)p;
-            break;
-
-        case 3:
-            if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-                return p[0] << 16 | p[1] << 8 | p[2];
-            else
-                return p[0] | p[1] << 8 | p[2] << 16;
-            break;
-
-        case 4:
-            return *(Uint32 *)p;
-            break;
-
-        default:
-            return 0;       /* shouldn't happen, but avoids warnings */
-        }
-    }
-
-    glm::vec4 SdlTextureImpl::get_texel(const glm::uvec2& index) const noexcept
-    {
-        Uint8 r, g, b, a;
-        Uint32 data = getpixel(surface, index.x, index.y);
-        SDL_GetRGBA(data, surface->format, &r, &g, &b, &a);
-        return {static_cast<float>(r) / 255.0f, static_cast<float>(g) / 255.0f, static_cast<float>(b) / 255.0f, static_cast<float>(a) / 255.0f};
-    }
-
-    void SdlTextureImpl::set_texel(const glm::uvec2& index, const glm::vec4& value) noexcept
-    {
-        DBG_FAIL("this code path is obsolete");
-    }
-
-    void* SdlTextureImpl::get_data() const noexcept
-    {
-        DBG_ASSERT(surface != nullptr);
-        return surface->pixels;
-    }
-
-    auto bytes2mode(uint8_t bytes)
-    {
-        switch (bytes)
-        {
-        case 1:
-            return ColorMode::R;
-        case 2:
-            return ColorMode::RG;
-        case 3:
-            return ColorMode::RGB;
-        case 4:
-            return ColorMode::RGBA;
-        default:
-            DBG_ASSERT(false);
-            return ColorMode::UNKNOWN;
-        }
-    }
 
     class FreeImageTextureImpl : public TextureImpl
     {
@@ -627,13 +496,6 @@ namespace pkzo
         }
     }
 
-    void SdlTextureImpl::save(const std::filesystem::path& file) const
-    {
-        // This code path will die soon anyway.
-        FreeImageTextureImpl tmp(get_size(), get_color_mode(), get_data_type(), get_data());
-        tmp.save(file);
-    }
-
     void FreeImageTextureImpl::save(const std::filesystem::path& file) const
     {
         std::filesystem::create_directories(file.parent_path());
@@ -654,9 +516,6 @@ namespace pkzo
 
     Texture::Texture(const glm::uvec2& size, ColorMode mode, DataType type, const void* memory, const std::string& label)
     : impl(std::make_unique<FreeImageTextureImpl>(size, mode, type, memory)), graphic_impl(std::make_unique<OpenGLTextureImpl>(label)) {}
-
-    Texture::Texture(SDL_Surface* surface, const std::string& label) noexcept
-    : impl(std::make_unique<SdlTextureImpl>(surface)), graphic_impl(std::make_unique<OpenGLTextureImpl>(label)) {}
 
     Texture::Texture(Texture&& other) noexcept
     : impl(std::move(other.impl)), graphic_impl(std::move(other.graphic_impl)) {}
