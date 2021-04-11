@@ -2,4 +2,5 @@
 *.user
 x86
 x64
+.opencppcov
 /data/temp/*
