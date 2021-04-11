@@ -24,15 +24,8 @@
 
 #include "pch.h"
 
-TEST(Font, load_ttf)
+int main(int argc, char* argv[])
 {
-    auto font     = pkzo::Font("../../data/fonts/DejaVuSans.ttf", 32);
-
-    auto estimate = font.estimate("pzko");
-    EXPECT_EQ(glm::uvec2(73u, 31u), estimate);
-
-    auto texture  = font.render("pzko");
-    ASSERT_NE(nullptr, texture);
-    EXPECT_EQ(estimate, texture->get_size());
-    EXPECT_TEXTURE_EQ(pkzo::Texture("../../data/textures/reference/Font-load_ttf-ref.png"), *texture);
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }

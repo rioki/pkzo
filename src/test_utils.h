@@ -48,8 +48,8 @@ namespace pkzo::test
     inline void save_test_output(const Texture& lhs_value, const Texture& rhs_value)
     {
 
-        auto lhs_name  = get_test_temp() / (get_test_name() + "-rhs.png"s);
-        auto rhs_name  = get_test_temp() / (get_test_name() + "-lhs.png"s);
+        auto lhs_name  = get_test_temp() / (get_test_name() + "-lhs.png"s);
+        auto rhs_name  = get_test_temp() / (get_test_name() + "-rhs.png"s);
         lhs_value.save(lhs_name);
         rhs_value.save(rhs_name);
     }

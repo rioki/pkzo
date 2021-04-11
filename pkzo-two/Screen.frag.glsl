@@ -16,10 +16,10 @@ void main()
 {
     if (pkzo_HasBaseColorMap)
     {
-        pkzo_FragColor = texture(pkzo_BaseColorMap, vTexCoord) * pkzo_BaseColorFactor + vec4(0.3, 0.0, 0.0, 1.0);
+        pkzo_FragColor = texture(pkzo_BaseColorMap, vTexCoord) * pkzo_BaseColorFactor;
     }
     else
     {
-        pkzo_FragColor = pkzo_BaseColorFactor + vec4(0.0, 0.0, 0.3, 1.0);
+        pkzo_FragColor = pkzo_BaseColorFactor;
     }
 }

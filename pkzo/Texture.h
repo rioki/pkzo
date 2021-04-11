@@ -63,6 +63,18 @@ namespace pkzo
         DOUBLE
     };
 
+    enum class FilterMode
+    {
+        NEAREST,
+        LINEAR
+    };
+
+    enum class WrapMode
+    {
+        CLAMP,
+        REPEAT
+    };
+
     class TextureImpl;
     class GraphicTextureImpl;
 
@@ -93,6 +105,12 @@ namespace pkzo
         glm::vec4 get_texel(const glm::uvec2& index) const noexcept;
         //! Set the color value of a the given text.
         void set_texel(const glm::uvec2& index, const glm::vec4& value) noexcept;
+
+        void set_filter_mode(FilterMode value) noexcept;
+        FilterMode get_filter_mode() const noexcept;
+
+        void set_wrap_mode(WrapMode value) noexcept;
+        WrapMode get_wrap_mode() const noexcept;
 
         //! Get the data buffer.
         void* get_data() const noexcept;

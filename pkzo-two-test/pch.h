@@ -22,17 +22,16 @@
 // THE SOFTWARE.
 //
 
-#include "pch.h"
+#pragma once
 
-TEST(Font, load_ttf)
-{
-    auto font     = pkzo::Font("../../data/fonts/DejaVuSans.ttf", 32);
+#include <string>
 
-    auto estimate = font.estimate("pzko");
-    EXPECT_EQ(glm::uvec2(73u, 31u), estimate);
+#include "dbg.h"
+#include "glmio.h"
+#include "glmtest.h"
 
-    auto texture  = font.render("pzko");
-    ASSERT_NE(nullptr, texture);
-    EXPECT_EQ(estimate, texture->get_size());
-    EXPECT_TEXTURE_EQ(pkzo::Texture("../../data/textures/reference/Font-load_ttf-ref.png"), *texture);
-}
+#include <gtest/gtest.h>
+#include <pkzo/pkzo.h>
+#include <pkzo-two/pkzo-two.h>
+
+#include "test_utils.h"

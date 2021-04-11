@@ -36,6 +36,12 @@ namespace pkzo
     public:
         virtual ~GraphicTextureImpl() = default;
 
+        virtual void set_filter_mode(FilterMode value) noexcept = 0;
+        virtual FilterMode get_filter_mode() const noexcept = 0;
+
+        virtual void set_wrap_mode(WrapMode value) noexcept = 0;
+        virtual WrapMode get_wrap_mode() const noexcept = 0;
+
         virtual bool is_uploaded() const noexcept = 0;
         virtual void upload(const glm::uvec2& size, ColorMode mode, DataType type, const void* memory) noexcept = 0;
         virtual void bind(glm::uint slot) noexcept = 0;
@@ -47,13 +53,21 @@ namespace pkzo
         OpenGLTextureImpl(const std::string& label);
         ~OpenGLTextureImpl();
 
+        void set_filter_mode(FilterMode value) noexcept override;
+        FilterMode get_filter_mode() const noexcept override;
+
+        void set_wrap_mode(WrapMode value) noexcept override;
+        WrapMode get_wrap_mode() const noexcept override;
+
         bool is_uploaded() const noexcept override;
         void upload(const glm::uvec2& size, ColorMode mode, DataType type, const void* memory) noexcept override;
         void bind(glm::uint slot) noexcept override;
 
     private:
         std::string label;
-        glm::uint   gl_id = 0u;
+        glm::uint   gl_id       = 0u;
+        FilterMode  filter_mode = FilterMode::LINEAR;
+        WrapMode    wrap_mode   = WrapMode::REPEAT;
     };
 
     OpenGLTextureImpl::OpenGLTextureImpl(const std::string& l)
@@ -69,12 +83,164 @@ namespace pkzo
         }
     }
 
+    void OpenGLTextureImpl::set_filter_mode(FilterMode value) noexcept
+    {
+        DBG_ASSERT(!is_uploaded());
+        filter_mode = value;
+    }
+
+    FilterMode OpenGLTextureImpl::get_filter_mode() const noexcept
+    {
+        return filter_mode;
+    }
+
+    void OpenGLTextureImpl::set_wrap_mode(WrapMode value) noexcept
+    {
+        DBG_ASSERT(!is_uploaded());
+        wrap_mode = value;
+    }
+
+    WrapMode OpenGLTextureImpl::get_wrap_mode() const noexcept
+    {
+        return wrap_mode;
+    }
+
     bool OpenGLTextureImpl::is_uploaded() const noexcept
     {
         return gl_id != 0;
     }
 
-    GLenum glmode(ColorMode mode) noexcept
+    GLenum glinternalformat(ColorMode mode, DataType type) noexcept
+    {
+        switch (type)
+        {
+        case DataType::INT8:
+            switch (mode)
+            {
+            case ColorMode::R:
+                return GL_R8I;
+            case ColorMode::RG:
+                return GL_RG8I;
+            case ColorMode::RGB:
+            case ColorMode::BGR:
+                return GL_RGB8I;
+            case ColorMode::RGBA:
+            case ColorMode::BGRA:
+                return GL_RGBA8I;
+            default:
+                DBG_FAIL("Unexpected color mode.");
+                return GL_RGBA8I;
+            }
+        case DataType::UINT8:
+            switch (mode)
+            {
+            case ColorMode::R:
+                return GL_R;
+            case ColorMode::RG:
+                return GL_RG;
+            case ColorMode::RGB:
+            case ColorMode::BGR:
+                return GL_RGB;
+            case ColorMode::RGBA:
+            case ColorMode::BGRA:
+                return GL_RGBA;
+            default:
+                DBG_FAIL("Unexpected color mode.");
+                return GL_RGBA;
+            }
+        case DataType::INT16:
+            switch (mode)
+            {
+            case ColorMode::R:
+                return GL_R16I;
+            case ColorMode::RG:
+                return GL_RG16I;
+            case ColorMode::RGB:
+            case ColorMode::BGR:
+                return GL_RGB16I;
+            case ColorMode::RGBA:
+            case ColorMode::BGRA:
+                return GL_RGBA16I;
+            default:
+                DBG_FAIL("Unexpected color mode.");
+                return GL_RGBA16I;
+            }
+        case DataType::UINT16:
+            switch (mode)
+            {
+            case ColorMode::R:
+                return GL_R16UI;
+            case ColorMode::RG:
+                return GL_RG16UI;
+            case ColorMode::RGB:
+            case ColorMode::BGR:
+                return GL_RGB16UI;
+            case ColorMode::RGBA:
+            case ColorMode::BGRA:
+                return GL_RGBA16UI;
+            default:
+                DBG_FAIL("Unexpected color mode.");
+                return GL_RGBA16UI;
+            }
+        case DataType::INT32:
+            switch (mode)
+            {
+            case ColorMode::R:
+                return GL_R32I;
+            case ColorMode::RG:
+                return GL_RG32I;
+            case ColorMode::RGB:
+            case ColorMode::BGR:
+                return GL_RGB32I;
+            case ColorMode::RGBA:
+            case ColorMode::BGRA:
+                return GL_RGBA32I;
+            default:
+                DBG_FAIL("Unexpected color mode.");
+                return GL_RGBA32I;
+            }
+        case DataType::UINT32:
+            switch (mode)
+            {
+            case ColorMode::R:
+                return GL_R32UI;
+            case ColorMode::RG:
+                return GL_RG32UI;
+            case ColorMode::RGB:
+            case ColorMode::BGR:
+                return GL_RGB32UI;
+            case ColorMode::RGBA:
+            case ColorMode::BGRA:
+                return GL_RGBA32UI;
+            default:
+                DBG_FAIL("Unexpected color mode.");
+                return GL_RGBA32UI;
+            }
+        case DataType::FLOAT:
+        case DataType::DOUBLE:
+            switch (mode)
+            {
+            case ColorMode::R:
+                return GL_R32F;
+            case ColorMode::RG:
+                return GL_RG32F;
+            case ColorMode::RGB:
+            case ColorMode::BGR:
+                return GL_RGB32F;
+            case ColorMode::RGBA:
+            case ColorMode::BGRA:
+                return GL_RGBA32F;
+            default:
+                DBG_FAIL("Unexpected color mode.");
+                return GL_RGBA32F;
+            }
+        default:
+            DBG_FAIL("Unexpected type.");
+            return GL_RGB;
+        }
+    }
+
+    GLenum glformat(ColorMode mode) noexcept
     {
         switch (mode)
         {
@@ -129,20 +295,48 @@ namespace pkzo
         glGenTextures(1, &gl_id);
         glBindTexture(GL_TEXTURE_2D, gl_id);
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        switch (filter_mode)
+        {
+            case FilterMode::LINEAR:
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                break;
+            case FilterMode::NEAREST:
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+                break;
+            default:
+                DBG_FAIL("Unknown filter mode.");
+                break;
+        }
 
-        GLenum gl_mode = glmode(mode);
+        switch (wrap_mode)
+        {
+        case WrapMode::CLAMP:
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            break;
+        case WrapMode::REPEAT:
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            break;
+        default:
+            DBG_FAIL("Unknown filter mode.");
+            break;
+        }
+
+
+        GLenum gl_internalformat = glinternalformat(mode, type);
+        GLenum gl_format = glformat(mode);
         GLenum gl_type = gltype(type);
-        // USE RGBA_32F and similar
-        DBG_ASSERT(type == DataType::FLOAT || type == DataType::DOUBLE);
-
-        glTexImage2D(GL_TEXTURE_2D, 0, gl_mode, size.x, size.y, 0, gl_mode, gl_type, memory);
-        DBG_ASSERT(glGetError() == GL_NO_ERROR);
+        glTexImage2D(GL_TEXTURE_2D, 0, gl_internalformat, size.x, size.y, 0, gl_format, gl_type, memory);
+        DBG_CHECK_GLERROR("uploading texture data");
 
     #ifndef NDEBUG
         glObjectLabel(GL_TEXTURE, gl_id, 0, label.data());
-        DBG_ASSERT(glGetError() == GL_NO_ERROR);
+        DBG_CHECK_GLERROR("setting texture label");
     #endif
     }
 
@@ -150,7 +344,7 @@ namespace pkzo
     {
         glActiveTexture(GL_TEXTURE0 + slot);
         glBindTexture(GL_TEXTURE_2D, gl_id);
-        DBG_ASSERT(glGetError() == GL_NO_ERROR);
+        DBG_CHECK_GLERROR("binding texture");
     }
 
     class TextureImpl
@@ -559,6 +753,30 @@ namespace pkzo
         impl->set_texel(index, value);
     }
 
+    void Texture::set_filter_mode(FilterMode value) noexcept
+    {
+        DBG_ASSERT(graphic_impl);
+        graphic_impl->set_filter_mode(value);
+    }
+
+    FilterMode Texture::get_filter_mode() const noexcept
+    {
+        DBG_ASSERT(graphic_impl);
+        return graphic_impl->get_filter_mode();
+    }
+
+    void Texture::set_wrap_mode(WrapMode value) noexcept
+    {
+        DBG_ASSERT(graphic_impl);
+        graphic_impl->set_wrap_mode(value);
+    }
+
+    WrapMode Texture::get_wrap_mode() const noexcept
+    {
+        DBG_ASSERT(graphic_impl);
+        return graphic_impl->get_wrap_mode();
+    }
+
     void* Texture::get_data() const noexcept
     {
         DBG_ASSERT(impl);
@@ -575,7 +793,11 @@ namespace pkzo
     void Texture::bind(glm::uint slot) noexcept
     {
         DBG_ASSERT(graphic_impl);
-        return graphic_impl->bind(slot);
+        if (!graphic_impl->is_uploaded())
+        {
+            upload();
+        }
+        graphic_impl->bind(slot);
     }
 
     void Texture::save(const std::filesystem::path& file) const

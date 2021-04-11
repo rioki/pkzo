@@ -173,7 +173,7 @@ namespace pkzo
                 pen.x += delta.x >> 6;
             }
 
-            auto left   = pen.x - face->glyph->bitmap_left;
+            auto left   = pen.x + face->glyph->bitmap_left;
             auto top    = pen.y - face->glyph->bitmap_top;
             auto right  = left + face->glyph->bitmap.width;
             auto bottom = top + face->glyph->bitmap.rows;

@@ -56,4 +56,41 @@ namespace pkzo
 
         return result;
     }
+
+
+    const char* gl_error_to_string(unsigned int glerror)
+    {
+        switch (glerror)
+        {
+        case GL_NO_ERROR:
+            return "GL_NO_ERROR";
+        case GL_INVALID_ENUM:
+            return "GL_INVALID_ENUM";
+        case GL_INVALID_VALUE:
+            return "GL_INVALID_VALUE";
+        case GL_INVALID_OPERATION:
+            return "GL_INVALID_OPERATION";
+        case GL_INVALID_FRAMEBUFFER_OPERATION:
+            return "GL_INVALID_FRAMEBUFFER_OPERATION";
+        case GL_OUT_OF_MEMORY:
+            return "GL_OUT_OF_MEMORY";
+        default:
+            DBG_FAIL("Unknown glerror type");
+            return "UNKNOWN";
+        }
+    }
+
+#ifndef NDEBUG
+    void handle_gl_error(const std::string_view func, const std::string_view descr)
+    {
+        auto error = glGetError();
+        if (error != GL_NO_ERROR)
+        {
+            std::stringstream msg;
+            msg << func << ": OpenGL Error: " << gl_error_to_string(error) << " while " << descr << "!";
+            dbg::trace(msg.str());
+            dbg::show_message_box_with_callstack(msg.str());
+        }
+    }
+#endif
 }

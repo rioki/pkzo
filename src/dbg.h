@@ -221,61 +221,22 @@ namespace dbg
         }
     }
 
-    inline
-    void handle_assert(bool cond, const std::string_view func, const std::string_view scond)
-    {
-        if (cond == false)
-        {
-            std::stringstream msg;
-            msg << func << ": Assertion '" << scond << "' failed!";
-            trace(msg.str());
-
-            std::stringstream buff;
-            buff << msg.str() << "\n";
-            buff << "\n";
-
-            std::vector<StackFrame> stack = stack_trace();
-            buff << "Callstack: \n";
-            for (unsigned int i = 0; i < stack.size(); i++)
-            {
-                buff << "0x" << std::hex << stack[i].address << ": " << stack[i].name << "(" << std::dec << stack[i].line << ") in " << stack[i].module << "\n";
-            }
-
-            auto r = MessageBoxA(NULL, buff.str().c_str(), "Assert Failed", MB_ABORTRETRYIGNORE|MB_ICONSTOP);
-            switch (r)
-            {
-                case IDIGNORE:
-                    // do nothing;
-                    break;
-                case IDRETRY:
-                    _CrtDbgBreak();
-                    break;
-                default:
-                    abort();
-                    break;
-            }
-        }
-    }
 
     inline
-    void handle_fail(const std::string_view func, const std::string_view message)
+    void show_message_box_with_callstack(const std::string_view& message)
     {
-        std::stringstream msg;
-        msg << func << ": General Software Fault: '" << message << "'!";
-        trace(msg.str());
-
         std::stringstream buff;
-        buff << msg.str() << "\n";
+        buff << message << "\n";
         buff << "\n";
 
         std::vector<StackFrame> stack = stack_trace();
         buff << "Callstack: \n";
         for (unsigned int i = 0; i < stack.size(); i++)
         {
-            buff << "0x" << std::hex << stack[i].address << ": " << stack[i].name << "(" << stack[i].line << ") in " << stack[i].module << "\n";
+            buff << "0x" << std::hex << stack[i].address << ": " << stack[i].name << "(" << std::dec << stack[i].line << ") in " << stack[i].module << "\n";
         }
 
-        auto r = MessageBoxA(NULL, buff.str().c_str(), "General Software Fault", MB_ABORTRETRYIGNORE|MB_ICONSTOP);
+        auto r = MessageBoxA(NULL, buff.str().c_str(), "Assert Failed", MB_ABORTRETRYIGNORE|MB_ICONSTOP);
         switch (r)
         {
         case IDIGNORE:
@@ -288,6 +249,27 @@ namespace dbg
             abort();
             break;
         }
+    }
+
+    inline
+    void handle_assert(bool cond, const std::string_view func, const std::string_view scond)
+    {
+        if (cond == false)
+        {
+            std::stringstream msg;
+            msg << func << ": Assertion '" << scond << "' failed!";
+            trace(msg.str());
+            show_message_box_with_callstack(msg.str());
+        }
+    }
+
+    inline
+    void handle_fail(const std::string_view func, const std::string_view message)
+    {
+        std::stringstream msg;
+        msg << func << ": General Software Fault: '" << message << "'!";
+        trace(msg.str());
+        show_message_box_with_callstack(msg.str());
     }
 }
 #else

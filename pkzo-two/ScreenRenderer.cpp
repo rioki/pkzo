@@ -29,6 +29,8 @@
 #include "resource.h"
 #endif
 
+#include "Screen.h"
+
 namespace pkzo::two
 {
     #ifdef _WIN32
@@ -48,10 +50,10 @@ namespace pkzo::two
     {
         auto mesh = std::make_unique<Mesh>();
 
-        mesh->add_vertex({-0.5f, -0.5f, 0.0f}, {0.0f, 1.0f});
-        mesh->add_vertex({-0.5f,  0.5f, 0.0f}, {0.0f, 0.0f});
-        mesh->add_vertex({ 0.5f,  0.5f, 0.0f}, {1.0f, 0.0f});
-        mesh->add_vertex({ 0.5f, -0.5f, 0.0f}, {1.0f, 1.0f});
+        mesh->add_vertex({-0.5f, -0.5f, 0.0f}, {0.0f, 0.0f});
+        mesh->add_vertex({-0.5f,  0.5f, 0.0f}, {0.0f, 1.0f});
+        mesh->add_vertex({ 0.5f,  0.5f, 0.0f}, {1.0f, 1.0f});
+        mesh->add_vertex({ 0.5f, -0.5f, 0.0f}, {1.0f, 0.0f});
 
         mesh->add_triangle({0, 1, 2});
         mesh->add_triangle({2, 3, 0});
@@ -74,6 +76,11 @@ namespace pkzo::two
     }
 
     ScreenRenderer::~ScreenRenderer() = default;
+
+    void ScreenRenderer::render(const Screen& screen)
+    {
+        screen.draw(*this);
+    }
 
     void ScreenRenderer::start(const glm::vec2& size) noexcept
     {

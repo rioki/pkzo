@@ -104,6 +104,7 @@ namespace pkzo::two
             if (texture == nullptr)
             {
                 texture = font->render(text);
+                texture->set_wrap_mode(WrapMode::CLAMP);
             }
 
             renderer.draw_rectangle(offset + position, texture->get_size(), color, texture);

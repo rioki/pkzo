@@ -33,6 +33,8 @@
 
 namespace pkzo::two
 {
+    class Screen;
+
     class PKZO2D_EXPORT ScreenRenderer
     {
     public:
@@ -41,10 +43,10 @@ namespace pkzo::two
         ~ScreenRenderer();
         ScreenRenderer& operator = (const ScreenRenderer&) = delete;
 
+        void render(const Screen& screen);
+
         void start(const glm::vec2& size) noexcept;
-
         void draw_rectangle(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color, const std::shared_ptr<Texture>& texture) noexcept;
-
         void finalize() noexcept;
 
     private:

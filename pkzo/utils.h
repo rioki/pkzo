@@ -85,4 +85,16 @@ namespace pkzo
     }
 
     PKZO_EXPORT std::u32string utf32(const std::string& buff);
+
+    PKZO_EXPORT const char* gl_error_to_string(unsigned int glerror);
+
+#ifndef NDEBUG
+    PKZO_EXPORT void handle_gl_error(const std::string_view func, const std::string_view descr);
+#endif
 }
+
+#ifndef NDEBUG
+#define DBG_CHECK_GLERROR(DESCR) ::pkzo::handle_gl_error(__FUNCTION__, DESCR)
+#else
+#define DBG_CHECK_GLERROR(DESCR)
+#endif

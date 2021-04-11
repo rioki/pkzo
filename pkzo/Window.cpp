@@ -275,7 +275,7 @@ namespace pkzo
     {
         auto s = get_size();
         std::vector<std::byte> buffer(s.x * s.y * 3);
-        glReadPixels(0, 0, s.x, s.y, GL_RGB, GL_UNSIGNED_BYTE, buffer.data());
+        glReadPixels(0, 0, s.x, s.y, GL_BGR, GL_UNSIGNED_BYTE, buffer.data());
         return std::make_shared<Texture>(s, ColorMode::RGB, DataType::UINT8, buffer.data(), "screen");
     }
 
