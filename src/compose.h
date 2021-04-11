@@ -10,6 +10,8 @@
 
 namespace impl
 {
+    using namespace std::literals::string_literals;
+
     template <typename T>
     std::string to_string(T value)
     {
@@ -21,7 +23,20 @@ namespace impl
     template <>
     inline std::string to_string(bool value)
     {
-        return value ? "true" : "false";
+        return value ? "true"s : "false"s;
+    }
+
+    template <>
+    inline std::string to_string(const char* value)
+    {
+        if (value != nullptr)
+        {
+            return {value};
+        }
+        else
+        {
+            return "NULL"s;
+        }
     }
 
     template <>
@@ -42,11 +57,11 @@ namespace impl
     template <>
     inline bool from_string(const std::string& str)
     {
-        if (str == "true")
+        if (str == "true"s)
             return true;
-        if (str == "false")
+        if (str == "false"s)
             return false;
-        throw std::logic_error("No a boolean value");
+        throw std::logic_error("No a boolean value"s);
     }
 
     template <>
@@ -81,7 +96,7 @@ namespace impl
             case '9':
                 return 9;
             default:
-                throw std::logic_error("not a number");
+                throw std::logic_error("not a number"s);
         }
     }
 
@@ -103,7 +118,7 @@ namespace impl
     {
         std::vector<std::string> sargs;
         unpack(sargs, args...);
-        
+
         std::string result;
 
         for (unsigned int i = 0; i < format.size(); i++)
@@ -118,7 +133,7 @@ namespace impl
                 }
                 else
                 {
-                    throw std::logic_error("% at end of string.");
+                    throw std::logic_error("% at end of string."s);
                 }
             }
             else
