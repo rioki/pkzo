@@ -26,13 +26,13 @@
 #define _PONG2D_MAIN_MENU_H_
 
 #include <pkzo/pkzo.h>
-#include <pkzo2d/pkzo2d.h>
+#include <pkzo-two/pkzo-two.h>
 
 namespace pong2d
 {
     class Game;
 
-    class MainMenu : public pkzo2d::Screen
+    class MainMenu : public pkzo::two::Screen
     {
     public:
         MainMenu(Game& game);

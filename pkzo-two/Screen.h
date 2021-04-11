@@ -22,30 +22,39 @@
 // THE SOFTWARE.
 //
 
-#ifndef _PONG2D_KEY_INTPUT_H_
-#define _PONG2D_KEY_INTPUT_H_
+#ifndef _PKZO_TWO_SCREEN_H_
+#define _PKZO_TWO_SCREEN_H_
 
-#include <memory>
-#include <pkzo/pkzo.h>
-#include <pkzo-two/pkzo-two.h>
+#include "config.h"
 
-namespace pong2d
+#include <glm/glm.hpp>
+
+#include "ScreenNodeGroup.h"
+
+namespace pkzo::two
 {
-    class KeyInput : public pkzo::two::ScreenNodeGroup
+    // Screen
+    class PKZO2D_EXPORT Screen : public ScreenNodeGroup
     {
     public:
-        KeyInput(const std::shared_ptr<pkzo::Font>& font, pkzo::Key key) noexcept;
+        //! Create screen
+        //!
+        //! @param size the size of the screen
+        Screen(const glm::vec2& size);
+        ~Screen();
 
-        void set_key(pkzo::Key value) noexcept;
-        pkzo::Key get_key() const noexcept;
+        //! Get the Screen size.
+        const glm::vec2& get_size() const noexcept;
 
-        void on_click(const std::function<void ()>& cb);
+        //! Draw screen
+        void draw(ScreenRenderer& renderer) const noexcept;
 
     private:
-        pkzo::Key key;
-        std::shared_ptr<pkzo::two::Text>    text;
-        std::shared_ptr<pkzo::two::HitArea> hit_area;
+        glm::vec2 size;
     };
+
+    PKZO2D_EXPORT
+    glm::vec2 map_to_screen(glm::vec2 win_size, glm::vec2 screen_size, glm::vec2 pos);
 }
 
 #endif

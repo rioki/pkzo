@@ -22,30 +22,44 @@
 // THE SOFTWARE.
 //
 
-#ifndef _PONG2D_KEY_INTPUT_H_
-#define _PONG2D_KEY_INTPUT_H_
+#include "pch.h"
+#include "Screen.h"
 
-#include <memory>
-#include <pkzo/pkzo.h>
-#include <pkzo-two/pkzo-two.h>
+#include "ScreenRenderer.h"
 
-namespace pong2d
+namespace pkzo::two
 {
-    class KeyInput : public pkzo::two::ScreenNodeGroup
+    Screen::Screen(const glm::vec2& s)
+    : size(s) {}
+
+    Screen::~Screen() = default;
+
+    const glm::vec2& Screen::get_size() const noexcept
     {
-    public:
-        KeyInput(const std::shared_ptr<pkzo::Font>& font, pkzo::Key key) noexcept;
+        return size;
+    }
 
-        void set_key(pkzo::Key value) noexcept;
-        pkzo::Key get_key() const noexcept;
+    void Screen::draw(ScreenRenderer& renderer) const noexcept
+    {
+        renderer.start(size);
+        render(renderer, glm::vec2(0.0f));
+        renderer.finalize();
+    }
 
-        void on_click(const std::function<void ()>& cb);
+    template <typename T>
+    T map(T source_left, T source_right, T target_left, T target_right, T value)
+    {
+        auto source_range = source_right - source_left;
+        auto target_range = target_right - target_left;
+        return (value - source_left) * (target_range / source_range) + target_left;
+    }
 
-    private:
-        pkzo::Key key;
-        std::shared_ptr<pkzo::two::Text>    text;
-        std::shared_ptr<pkzo::two::HitArea> hit_area;
-    };
+    glm::vec2 map_to_screen(glm::vec2 win_size, glm::vec2 screen_size, glm::vec2 pos)
+    {
+        auto hs = screen_size / 2.0f;
+        return {
+            map<float>(0.0f, win_size.x, -hs.x, hs.x, pos.x),
+            map<float>(0.0f, win_size.y, hs.y, -hs.y, pos.y)
+        };
+    }
 }
-
-#endif

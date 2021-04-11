@@ -1,6 +1,13 @@
+
+# IDE Cache Folders & Files
 .vs
+*.aps
 *.user
+.opencppcov
+
+# Build Output
 x86
 x64
-.opencppcov
+
+# Test Output & Working Dirs
 /data/temp/*

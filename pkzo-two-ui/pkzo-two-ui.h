@@ -22,30 +22,14 @@
 // THE SOFTWARE.
 //
 
-#ifndef _PONG2D_KEY_INTPUT_H_
-#define _PONG2D_KEY_INTPUT_H_
+#ifndef _PKZO_TWO_UI_H_
+#define _PKZO_TWO_UI_H_
 
-#include <memory>
-#include <pkzo/pkzo.h>
-#include <pkzo-two/pkzo-two.h>
-
-namespace pong2d
-{
-    class KeyInput : public pkzo::two::ScreenNodeGroup
-    {
-    public:
-        KeyInput(const std::shared_ptr<pkzo::Font>& font, pkzo::Key key) noexcept;
-
-        void set_key(pkzo::Key value) noexcept;
-        pkzo::Key get_key() const noexcept;
-
-        void on_click(const std::function<void ()>& cb);
-
-    private:
-        pkzo::Key key;
-        std::shared_ptr<pkzo::two::Text>    text;
-        std::shared_ptr<pkzo::two::HitArea> hit_area;
-    };
-}
+#include "config.h"
+#include "Button.h"
+#include "CheckBox.h"
+#include "Slider.h"
+#include "DropDownMenu.h"
+#include "Menu.h"
 
 #endif

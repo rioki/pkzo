@@ -37,25 +37,25 @@ namespace pong2d
         auto button_background = std::make_shared<pkzo::Texture>("../assets/ui/pixels/Button_Background.png");
         auto button_caption_color = glm::vec4(0.1f, 0.1f, 0.1f, 1.0f);
 
-        auto title = std::make_shared<pkzo2d::Text>(title_font, "pkzo's Pong Demo");
+        auto title = std::make_shared<pkzo::two::Text>(title_font, "pkzo's Pong Demo");
         title->set_position({0.0f, 150.0f});
         add_node(title);
 
-        auto new_game_button = std::make_shared<pkzoui::Button>(button_background, text_font, button_caption_color, "New Game");
+        auto new_game_button = std::make_shared<pkzo::two::ui::Button>(button_background, text_font, button_caption_color, "New Game");
         new_game_button->set_position({200.0f, -25.0f});
         new_game_button->on_click([&game] () {
             game.change_state(GameState::PLAY);
         });
         add_node(new_game_button);
 
-        auto options_button = std::make_shared<pkzoui::Button>(button_background, text_font, button_caption_color, "Options");
+        auto options_button = std::make_shared<pkzo::two::ui::Button>(button_background, text_font, button_caption_color, "Options");
         options_button->set_position({200.0f, -100.0f});
         options_button->on_click([&game] () {
             game.change_state(GameState::OPTIONS_MENU);
         });
         add_node(options_button);
 
-        auto quit_button = std::make_shared<pkzoui::Button>(button_background, text_font, button_caption_color, "Quit");
+        auto quit_button = std::make_shared<pkzo::two::ui::Button>(button_background, text_font, button_caption_color, "Quit");
         quit_button->set_position({200.0f, -175.0f});
         quit_button->on_click([&game] () {
             game.change_state(GameState::QUIT);

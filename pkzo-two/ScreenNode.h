@@ -22,29 +22,45 @@
 // THE SOFTWARE.
 //
 
-#ifndef _PONG2D_KEY_INTPUT_H_
-#define _PONG2D_KEY_INTPUT_H_
+#ifndef _PKZO_TWO_SCREEN_NODE_H_
+#define _PKZO_TWO_SCREEN_NODE_H_
 
-#include <memory>
-#include <pkzo/pkzo.h>
-#include <pkzo-two/pkzo-two.h>
+#include "config.h"
 
-namespace pong2d
+#include <chrono>
+#include <string_view>
+#include <glm/glm.hpp>
+
+namespace pkzo::two
 {
-    class KeyInput : public pkzo::two::ScreenNodeGroup
+    class ScreenRenderer;
+
+    class PKZO2D_EXPORT ScreenNode
     {
     public:
-        KeyInput(const std::shared_ptr<pkzo::Font>& font, pkzo::Key key) noexcept;
+        ScreenNode() noexcept;
+        ScreenNode(const ScreenNode&) = delete;
+        virtual ~ScreenNode();
+        ScreenNode& operator = (const ScreenNode&) = delete;
 
-        void set_key(pkzo::Key value) noexcept;
-        pkzo::Key get_key() const noexcept;
+        ScreenNode* get_parent() noexcept;
+        const ScreenNode* get_parent() const noexcept;
 
-        void on_click(const std::function<void ()>& cb);
+        virtual void animate(std::chrono::milliseconds dt);
+        virtual void handle_mouse_button_down(MouseButton button, glm::vec2 position);
+        virtual void handle_mouse_button_up(MouseButton button, glm::vec2 position);
+        virtual void handle_mouse_move(glm::vec2 pos, glm::vec2 rel);
+        virtual void handle_key_down(KeyMod mod, Key key);
+        virtual void handle_key_up(KeyMod mod, Key key);
+        virtual void handle_text(const std::string_view text);
+
+    protected:
+        virtual void render(ScreenRenderer& renderer, const glm::vec2& offset) const noexcept;
 
     private:
-        pkzo::Key key;
-        std::shared_ptr<pkzo::two::Text>    text;
-        std::shared_ptr<pkzo::two::HitArea> hit_area;
+        ScreenNode* parent = nullptr;
+
+    friend class ScreenNodeGroup;
     };
 }
 

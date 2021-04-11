@@ -22,29 +22,34 @@
 // THE SOFTWARE.
 //
 
-#ifndef _PONG2D_KEY_INTPUT_H_
-#define _PONG2D_KEY_INTPUT_H_
+#ifndef _PKZO_TWO_SCREEN_RENDERER_H_
+#define _PKZO_TWO_SCREEN_RENDERER_H_
+
+#include "config.h"
 
 #include <memory>
+#include <glm/glm.hpp>
 #include <pkzo/pkzo.h>
-#include <pkzo-two/pkzo-two.h>
 
-namespace pong2d
+namespace pkzo::two
 {
-    class KeyInput : public pkzo::two::ScreenNodeGroup
+    class PKZO2D_EXPORT ScreenRenderer
     {
     public:
-        KeyInput(const std::shared_ptr<pkzo::Font>& font, pkzo::Key key) noexcept;
+        ScreenRenderer() noexcept;
+        ScreenRenderer(const ScreenRenderer&) = delete;
+        ~ScreenRenderer();
+        ScreenRenderer& operator = (const ScreenRenderer&) = delete;
 
-        void set_key(pkzo::Key value) noexcept;
-        pkzo::Key get_key() const noexcept;
+        void start(const glm::vec2& size) noexcept;
 
-        void on_click(const std::function<void ()>& cb);
+        void draw_rectangle(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color, const std::shared_ptr<Texture>& texture) noexcept;
+
+        void finalize() noexcept;
 
     private:
-        pkzo::Key key;
-        std::shared_ptr<pkzo::two::Text>    text;
-        std::shared_ptr<pkzo::two::HitArea> hit_area;
+        std::unique_ptr<Shader> shader;
+        std::unique_ptr<Mesh>   rectangle;
     };
 }
 

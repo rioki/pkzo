@@ -36,6 +36,6 @@
 #include <nlohmann/json.hpp>
 
 #include <pkzo/pkzo.h>
-#include <pkzo2d/pkzo2d.h>
+#include <pkzo-two/pkzo-two.h>
 
 #endif

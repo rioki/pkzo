@@ -26,11 +26,11 @@
 #define _MV_EDITOR_SCREEN_H_
 
 #include <pkzo/pkzo.h>
-#include <pkzo2d/pkzo2d.h>
+#include <pkzo-two/pkzo-two.h>
 
 namespace mv
 {
-    class EditorScreen : public pkzo2d::Screen
+    class EditorScreen : public pkzo::two::Screen
     {
     public:
         EditorScreen(const glm::vec2& size);

@@ -31,8 +31,8 @@
 #include <memory>
 
 #include <pkzo/pkzo.h>
-#include <pkzo2d/pkzo2d.h>
-#include <pkzoui/pkzoui.h>
+#include <pkzo-two/pkzo-two.h>
+#include <pkzo-two-ui/pkzo-two-ui.h>
 
 #include <nlohmann/json.hpp>
 

@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.30711.63
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pkzo", "pkzo\pkzo.vcxproj", "{3965C595-9031-4F89-9FED-050E1AEE3D67}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pkzo2d", "pkzo2d\pkzo2d.vcxproj", "{08391430-6E1F-45BC-9B9E-B0F4E63591BC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pkzo-two", "pkzo-two\pkzo-two.vcxproj", "{08391430-6E1F-45BC-9B9E-B0F4E63591BC}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pkzoui", "pkzoui\pkzoui.vcxproj", "{7E8AF083-55B5-4A7E-972E-A752F0B52E24}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pkzo-two-ui", "pkzo-two-ui\pkzo-two-ui.vcxproj", "{7E8AF083-55B5-4A7E-972E-A752F0B52E24}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{A3AEF7D1-EE50-4795-AA98-8C61555A29F7}"
 EndProject

@@ -22,29 +22,37 @@
 // THE SOFTWARE.
 //
 
-#ifndef _PONG2D_KEY_INTPUT_H_
-#define _PONG2D_KEY_INTPUT_H_
+#ifndef _PKZO_TWO_UI_MENU_H_
+#define _PKZO_TWO_UI_MENU_H_
 
+#include "config.h"
+
+#include <vector>
+#include <optional>
+#include <string>
 #include <memory>
 #include <pkzo/pkzo.h>
 #include <pkzo-two/pkzo-two.h>
 
-namespace pong2d
+#include "Button.h"
+
+namespace pkzo::two::ui
 {
-    class KeyInput : public pkzo::two::ScreenNodeGroup
+    class PKZOUI_EXPORT Menu : public ScreenNodeGroup
     {
     public:
-        KeyInput(const std::shared_ptr<pkzo::Font>& font, pkzo::Key key) noexcept;
+        Menu(const std::shared_ptr<pkzo::Texture>& top_texture, const std::shared_ptr<pkzo::Texture>& body_texture, const std::shared_ptr<pkzo::Texture>& bottom_texture, const std::shared_ptr<Font>& caption_font, const glm::vec4& text_color, const std::vector<std::string>& options) noexcept;
+        ~Menu();
 
-        void set_key(pkzo::Key value) noexcept;
-        pkzo::Key get_key() const noexcept;
+        glm::vec2 get_size() const noexcept;
 
-        void on_click(const std::function<void ()>& cb);
+        void on_select(const std::function<void (size_t)>& cb);
 
     private:
-        pkzo::Key key;
-        std::shared_ptr<pkzo::two::Text>    text;
-        std::shared_ptr<pkzo::two::HitArea> hit_area;
+        std::shared_ptr<Rectangle>           top;
+        std::vector<std::shared_ptr<Button>> bodies;
+        std::shared_ptr<Rectangle>           bottom;
+        std::function<void (size_t)>         select_cb;
     };
 }
 

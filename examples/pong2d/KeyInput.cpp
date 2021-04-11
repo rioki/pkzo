@@ -30,10 +30,10 @@ namespace pong2d
     KeyInput::KeyInput(const std::shared_ptr<pkzo::Font>& font, pkzo::Key k) noexcept
     : key(k)
     {
-        text = std::make_shared<pkzoui::Text>(font, to_string(key));
+        text = std::make_shared<pkzo::two::Text>(font, to_string(key));
         add_node(text);
 
-        hit_area = std::make_shared<pkzoui::HitArea>();
+        hit_area = std::make_shared<pkzo::two::HitArea>();
         hit_area->set_size(font->estimate("ESCAPE"));
         add_node(hit_area);
     }
