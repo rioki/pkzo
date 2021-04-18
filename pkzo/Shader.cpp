@@ -65,10 +65,15 @@ namespace pkzo
         glCompileShader(vertex_id);
 
         glGetShaderInfoLog(vertex_id, 256, NULL, logstr);
+        if (strlen(logstr) > 0)
+        {
+            DBG_TRACE(logstr);
+        }
 
         glGetShaderiv(vertex_id, GL_COMPILE_STATUS, &status);
         if (!status)
         {
+            DBG_ASSERT(logstr);
             glDeleteShader(vertex_id);
             throw std::runtime_error(logstr);
         }
@@ -80,10 +85,15 @@ namespace pkzo
         glCompileShader(fragment_id);
 
         glGetShaderInfoLog(fragment_id, 256, NULL, logstr);
+        if (strlen(logstr) > 0)
+        {
+            DBG_TRACE(logstr);
+        }
 
         glGetShaderiv(fragment_id, GL_COMPILE_STATUS, &status);
         if (!status)
         {
+            DBG_ASSERT(logstr);
             glDeleteShader(vertex_id);
             glDeleteShader(fragment_id);
             throw std::runtime_error(logstr);
@@ -96,10 +106,15 @@ namespace pkzo
         glLinkProgram(program_id);
 
         glGetProgramInfoLog(program_id, 256, NULL, logstr);
+        if (strlen(logstr) > 0)
+        {
+            DBG_TRACE(logstr);
+        }
 
         glGetProgramiv(program_id, GL_LINK_STATUS, &status);
         if (!status)
         {
+            DBG_ASSERT(logstr);
             glDeleteShader(vertex_id);
             glDeleteShader(fragment_id);
             glDeleteProgram(program_id);

@@ -48,6 +48,20 @@ namespace pkzo
         // SHADOW            // for each light but camera = light source
     };
 
+    enum class DepthTest
+    {
+        OFF,
+        READ_ONLY,
+        ON
+    };
+
+    enum class Blending
+    {
+        OFF,
+        ALPHA,
+        MULTIPASS
+    };
+
     //! Rendering Pipeline
     class PKZO_EXPORT Pipeline
     {
@@ -57,7 +71,8 @@ namespace pkzo
         ~Pipeline() = default;
         Pipeline& operator = (const Pipeline& orig) = delete;
 
-        void add_pass(PassType type, const std::shared_ptr<Shader>& shader, const std::shared_ptr<Parameters>& parameters = std::make_shared<Parameters>()) noexcept;
+        void add_pass(PassType type, const std::shared_ptr<Shader>& shader) noexcept;
+        void add_pass(PassType type, const std::shared_ptr<Shader>& shader, DepthTest depth_test, Blending blending, const std::shared_ptr<Parameters>& parameters) noexcept;
 
         void set_camera(const glm::mat4& projection, const glm::mat4& view) noexcept;
 
@@ -80,6 +95,8 @@ namespace pkzo
         {
             PassType                    type;
             std::shared_ptr<Shader>     shader;
+            DepthTest                   depth_test;
+            Blending                    blending;
             std::shared_ptr<Parameters> parameters;
         };
 

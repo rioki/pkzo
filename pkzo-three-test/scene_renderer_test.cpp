@@ -26,7 +26,7 @@
 
 using namespace pkzo::test;
 
-TEST(SceneRenderer, shapes_and_directional_light)
+TEST(Phong, shapes)
 {
     pkzo::Window window({800, 600}, pkzo::WindowMode::STATIC, __FUNCTION__);
 
@@ -38,8 +38,15 @@ TEST(SceneRenderer, shapes_and_directional_light)
     auto sphere = std::make_shared<pkzo::three::Sphere>(glm::translate(glm::mat4{1.0f}, {0.0f, 1.0f, 0.0f}), 0.5f);
     scene.add_child(sphere);
 
-    auto light = std::make_shared<pkzo::three::DirectionalLight>();
-    scene.add_child(light);
+    auto light0 = std::make_shared<pkzo::three::AmbientLight>(glm::vec3{0.106, 0.161, 0.2});
+    scene.add_child(light0);
+
+    auto l1t = glm::inverse(glm::lookAt(glm::vec3(0.0), {1.0, -0.5, -1.}, {0.0, 1.0, 0.0}));
+    auto light1 = std::make_shared<pkzo::three::DirectionalLight>(l1t, glm::vec3(0.839, 0.718, 0.573));
+    scene.add_child(light1);
+
+    auto light2 = std::make_shared<pkzo::three::DirectionalLight>(glm::mat4(1.0f), glm::vec3(0.125, 0.165, 0.329));
+    scene.add_child(light2);
 
     auto ct = glm::mat4(1.0f);
     ct = glm::translate(ct, {0.0f, 0.0f, 5.0f});

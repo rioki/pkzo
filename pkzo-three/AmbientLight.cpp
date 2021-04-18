@@ -22,26 +22,29 @@
 // THE SOFTWARE.
 //
 
-#pragma once
-
-#include "Light.h"
+#include "pch.h"
+#include "AmbientLight.h"
 
 namespace pkzo::three
 {
-    //! Light
-    class PKZO_EXPORT DirectionalLight : public Light
+    AmbientLight::AmbientLight(const glm::vec3& c) noexcept
+    : color(c) {}
+
+    void AmbientLight::set_color(const glm::vec3& value) noexcept
     {
-    public:
-        DirectionalLight() noexcept = default;
-        DirectionalLight(const glm::mat4& transform, const glm::vec3& color) noexcept;
+        color = value;
+    }
 
-        void set_color(const glm::vec3& value) noexcept;
-        const glm::vec3& get_color() const noexcept;
+    const glm::vec3& AmbientLight::get_color() const noexcept
+    {
+        return color;
+    }
 
-    protected:
-        std::shared_ptr<Parameters> get_parameters() const noexcept override;
-
-    private:
-        glm::vec3 color = {1.0f, 1.0f, 1.0f};
-    };
+    std::shared_ptr<Parameters> AmbientLight::get_parameters() const noexcept
+    {
+        return make_shared_parameters({
+            {"pkzo_LightType", static_cast<glm::uint>(LightType::AMBIENT)},
+            {"pkzo_LightColor", color}
+        });
+    }
 }

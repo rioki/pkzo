@@ -27,18 +27,28 @@
 
 namespace pkzo::three
 {
-    DirectionalLight::DirectionalLight(const glm::mat4& transform) noexcept
-    : Light(transform) {}
+    DirectionalLight::DirectionalLight(const glm::mat4& transform, const glm::vec3& c) noexcept
+    : Light(transform), color(c) {}
 
-    auto dirToRotaton(const glm::vec3& from, const glm::vec3& to) noexcept
+    void DirectionalLight::set_color(const glm::vec3& value) noexcept
     {
-        const auto& a = from;
-        const auto& b = to; // in my case (1, 0, 0)
-        auto v = glm::cross(b, a);
-        auto angle = glm::acos(glm::dot(b, a) / (glm::length(b) * glm::length(a)));
-        return glm::rotate(glm::mat4(1.0f), angle, v);
+        color = value;
     }
 
-    DirectionalLight::DirectionalLight(const glm::vec3& direction) noexcept
-    : Light(dirToRotaton(glm::vec3(0.0f, 0.0f, -1.0f), direction)) {}
+    const glm::vec3& DirectionalLight::get_color() const noexcept
+    {
+        return color;
+    }
+
+    std::shared_ptr<Parameters> DirectionalLight::get_parameters() const noexcept
+    {
+        auto wt = get_world_transform();
+        auto dir = wt * glm::vec4(0.0, 0.0, -1.0, 0.0);
+
+        return make_shared_parameters({
+            {"pkzo_LightType", static_cast<glm::uint>(LightType::DIRECTIONAL)},
+            {"pkzo_LightColor", color},
+            {"pkzo_LightDirection", glm::vec3(dir)},
+        });
+    }
 }

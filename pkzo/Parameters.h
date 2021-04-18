@@ -79,5 +79,10 @@ namespace pkzo
         std::map<std::string, Value> values;
     };
 
-    void apply(Shader& shader, const Parameters& parameters) noexcept;
+    PKZO_EXPORT void apply(Shader& shader, const Parameters& parameters) noexcept;
+
+    inline std::shared_ptr<Parameters> make_shared_parameters(const std::map<std::string, Parameters::Value>& values)
+    {
+        return std::make_shared<Parameters>(values);
+    }
 }

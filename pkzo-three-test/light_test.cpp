@@ -22,26 +22,33 @@
 // THE SOFTWARE.
 //
 
-#pragma once
+#include "pch.h"
 
-#include "Light.h"
-
-namespace pkzo::three
+TEST(AmbientLight, default_construct)
 {
-    //! Light
-    class PKZO_EXPORT DirectionalLight : public Light
-    {
-    public:
-        DirectionalLight() noexcept = default;
-        DirectionalLight(const glm::mat4& transform, const glm::vec3& color) noexcept;
+    auto light = pkzo::three::AmbientLight{};
+    EXPECT_GLM_NEAR(glm::mat4(1.0f), light.get_transform(), 1e-6f);
+    EXPECT_GLM_NEAR(glm::vec3(0.1f), light.get_color(), 1e-6f);
+}
 
-        void set_color(const glm::vec3& value) noexcept;
-        const glm::vec3& get_color() const noexcept;
+TEST(AmbientLight, initilize)
+{
+    auto light = pkzo::three::AmbientLight{{0.106f, 0.161f, 0.2f}};
+    EXPECT_GLM_NEAR(glm::mat4(1.0f), light.get_transform(), 1e-6f);
+    EXPECT_GLM_NEAR(glm::vec3(0.106f, 0.161f, 0.2f), light.get_color(), 1e-6f);
+}
 
-    protected:
-        std::shared_ptr<Parameters> get_parameters() const noexcept override;
+TEST(DirectionalLight, default_construct)
+{
+    auto light = pkzo::three::DirectionalLight{};
+    EXPECT_GLM_NEAR(glm::mat4(1.0f), light.get_transform(), 1e-6f);
+    EXPECT_GLM_NEAR(glm::vec3(1.0f), light.get_color(), 1e-6f);
+}
 
-    private:
-        glm::vec3 color = {1.0f, 1.0f, 1.0f};
-    };
+TEST(DirectionalLight, initilize)
+{
+    auto t = glm::inverse(glm::lookAt(glm::vec3(0.0f), {1.0f, 2.0f, 3.0f}, {0.0f, 1.0f, 0.0f}));
+    auto light = pkzo::three::DirectionalLight{t, {0.839f, 0.718f, 0.573f}};
+    EXPECT_GLM_NEAR(t, light.get_transform(), 1e-6f);
+    EXPECT_GLM_NEAR(glm::vec3(0.839f, 0.718f, 0.573f), light.get_color(), 1e-6f);
 }

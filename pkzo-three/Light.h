@@ -28,6 +28,14 @@
 
 namespace pkzo::three
 {
+    enum class LightType
+    {
+        AMBIENT,
+        DIRECTIONAL,
+        POINT,
+        SPOT
+    };
+
     //! Light
     class PKZO_EXPORT Light : public SceneNode
     {
@@ -38,6 +46,7 @@ namespace pkzo::three
     protected:
         void on_attach_scene(Scene* scene) noexcept override;
         void on_detach_scene() noexcept override;
+        virtual std::shared_ptr<Parameters> get_parameters() const noexcept = 0;
 
     private:
         Pipeline*    pipeline        = nullptr;

@@ -36,7 +36,7 @@ namespace pkzo::three
     {
         SceneNode::on_attach_scene(scene);
         pipeline = scene->get_render_pipeline();
-        pipeline_handle = pipeline->add_light(std::make_shared<Parameters>());
+        pipeline_handle = pipeline->add_light(get_parameters());
     }
 
     void Light::on_detach_scene() noexcept

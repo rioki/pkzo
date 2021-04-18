@@ -49,11 +49,39 @@ namespace pkzo
     Pipeline::Pipeline() noexcept
     : fullscreen_rectangle(make_fullscreen_rectangle()) {}
 
-    void Pipeline::add_pass(PassType type, const std::shared_ptr<Shader>& shader, const std::shared_ptr<Parameters>& parameters) noexcept
+    void Pipeline::add_pass(PassType type, const std::shared_ptr<Shader>& shader) noexcept
+    {
+        DepthTest depth_test;
+        Blending  blending;
+        switch (type)
+        {
+        case PassType::FULLSCREEN:
+            depth_test = DepthTest::OFF;
+            blending   = Blending::OFF;
+            break;
+        case PassType::GEOMETRY:
+            depth_test = DepthTest::ON;
+            blending   = Blending::ALPHA;
+            break;
+        case PassType::LIGHTS:
+            depth_test = DepthTest::OFF;
+            blending   = Blending::OFF;
+            break;
+        case PassType::LIGHTS_AND_GEOMETRY:
+        case PassType::GEOMETRY_AND_LIGHTS:
+            depth_test = DepthTest::ON;
+            blending   = Blending::MULTIPASS;
+            break;
+        }
+
+        add_pass(type, shader, depth_test, blending, std::make_shared<Parameters>());
+    }
+
+    void Pipeline::add_pass(PassType type, const std::shared_ptr<Shader>& shader, DepthTest depth_test, Blending blending, const std::shared_ptr<Parameters>& parameters) noexcept
     {
         DBG_ASSERT(shader);
         DBG_ASSERT(parameters);
-        passes.push_back({type, shader, parameters});
+        passes.push_back({type, shader, depth_test, blending, parameters});
     }
 
     void Pipeline::set_camera(const glm::mat4& projection, const glm::mat4& view) noexcept
@@ -145,6 +173,51 @@ namespace pkzo
         apply(shader, *geom.parameters);
     }
 
+    void apply(DepthTest depth_test) noexcept
+    {
+        switch (depth_test)
+        {
+            case DepthTest::OFF:
+                glDisable(GL_DEPTH_TEST);
+                break;
+            case DepthTest::READ_ONLY:
+                glEnable(GL_DEPTH_TEST);
+                glDepthFunc(GL_LEQUAL);
+                glDepthMask(GL_FALSE);
+                break;
+            case DepthTest::ON:
+                glEnable(GL_DEPTH_TEST);
+                glDepthFunc(GL_LEQUAL);
+                glDepthMask(GL_TRUE);
+                break;
+        }
+    }
+
+    void apply(Blending blending, bool first_layer = true) noexcept
+    {
+        switch (blending)
+        {
+        case Blending::OFF:
+            glDisable(GL_BLEND);
+            break;
+        case Blending::ALPHA:
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            break;
+        case Blending::MULTIPASS:
+            if (first_layer)
+            {
+                glDisable(GL_BLEND);
+                glBlendFunc(GL_ONE, GL_ONE);
+            }
+            else
+            {
+                glEnable(GL_BLEND);
+            }
+            break;
+        }
+    }
+
     void Pipeline::execute() noexcept
     {
         for (auto& pass : passes)
@@ -153,15 +226,18 @@ namespace pkzo
             pass.shader->set_uniform("pkzo_ProjectionMatrix", projection_matrix);
             pass.shader->set_uniform("pkzo_ViewMatrix",       view_matrix);
             apply(*pass.shader, *pass.parameters);
+            apply(pass.depth_test);
             switch (pass.type)
             {
             case PassType::FULLSCREEN:
+                apply(pass.blending);
                 fullscreen_rectangle->bind(*pass.shader);
                 fullscreen_rectangle->draw();
                 break;
             case PassType::GEOMETRY:
                 for (auto& [id, geom] : geoms)
                 {
+                    apply(pass.blending);
                     apply(*pass.shader, geom);
                     geom.mesh->bind(*pass.shader);
                     geom.mesh->draw();
@@ -170,12 +246,14 @@ namespace pkzo
             case PassType::LIGHTS:
                 for (auto& [id, light] : lights)
                 {
+                    apply(pass.blending);
                     apply(*pass.shader, light);
                     fullscreen_rectangle->bind(*pass.shader);
                     fullscreen_rectangle->draw();
                 }
                 break;
             case PassType::LIGHTS_AND_GEOMETRY:
+                apply(pass.blending);
                 for (auto& [id, light] : lights)
                 {
                     apply(*pass.shader, light);
@@ -184,18 +262,22 @@ namespace pkzo
                         apply(*pass.shader, geom);
                         geom.mesh->bind(*pass.shader);
                         geom.mesh->draw();
+
                     }
+                    apply(pass.blending, false);
                 }
                 break;
             case PassType::GEOMETRY_AND_LIGHTS:
                 for (auto& [id, geom] : geoms)
                 {
+                    apply(pass.blending);
                     apply(*pass.shader, geom);
                     geom.mesh->bind(*pass.shader);
                     for (auto& [id, light] : lights)
                     {
                         apply(*pass.shader, light);
                         geom.mesh->draw();
+                        apply(pass.blending, false);
                     }
                 }
                 break;

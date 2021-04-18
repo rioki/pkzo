@@ -33,6 +33,7 @@
 
 // Lights
 #include "Light.h"
+#include "AmbientLight.h"
 #include "DirectionalLight.h"
 
 // Action

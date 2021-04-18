@@ -29,11 +29,11 @@
 namespace pkzo::three
 {
     //! Light
-    class PKZO_EXPORT DirectionalLight : public Light
+    class PKZO_EXPORT AmbientLight : public Light
     {
     public:
-        DirectionalLight() noexcept = default;
-        DirectionalLight(const glm::mat4& transform, const glm::vec3& color) noexcept;
+        AmbientLight() noexcept = default;
+        AmbientLight(const glm::vec3& color) noexcept;
 
         void set_color(const glm::vec3& value) noexcept;
         const glm::vec3& get_color() const noexcept;
@@ -42,6 +42,6 @@ namespace pkzo::three
         std::shared_ptr<Parameters> get_parameters() const noexcept override;
 
     private:
-        glm::vec3 color = {1.0f, 1.0f, 1.0f};
+        glm::vec3 color = {0.1f, 0.1f, 0.1f};
     };
 }

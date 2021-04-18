@@ -36,6 +36,9 @@
     <ClCompile Include="box_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="light_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
