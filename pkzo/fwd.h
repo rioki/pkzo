@@ -1,7 +1,7 @@
 //
 // pkzo
 //
-// Copyright 2010-2021 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2014-2021 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,14 +24,18 @@
 
 #pragma once
 
-#include <gtest/gtest.h>
+namespace pkzo
+{
+    class Main;
+    class Mouse;
+    class Keyboard;
+    class Joystick;
+    class Window;
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
-#include <pkzo/pkzo.h>
-#include <pkzo-three/pkzo-three.h>
-
-#include "glmio.h"
-#include "glmtest.h"
-#include "test_utils.h"
+    class Texture;
+    class Font;
+    class Mesh;
+    class Shader;
+    class Properties;
+    class Pipeline;
+}

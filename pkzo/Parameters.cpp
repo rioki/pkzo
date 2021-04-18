@@ -1,7 +1,7 @@
 //
 // pkzo
 //
-// Copyright 2010-2021 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2014-2021 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,16 +22,46 @@
 // THE SOFTWARE.
 //
 
-#pragma once
+#include "pch.h"
+#include "Parameters.h"
 
-#include <gtest/gtest.h>
+#include "utils.h"
+#include "Shader.h"
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+namespace pkzo
+{
+    Parameters::Parameters(const std::map<std::string, Value>& v) noexcept
+    : values(v) {}
 
-#include <pkzo/pkzo.h>
-#include <pkzo-three/pkzo-three.h>
+    void Parameters::set_value(const std::string& id, const Value& value) noexcept
+    {
+        values[id] = value;
+    }
 
-#include "glmio.h"
-#include "glmtest.h"
-#include "test_utils.h"
+    bool Parameters::has_value(const std::string& id) const noexcept
+    {
+        return values.find(id) != end(values);
+    }
+
+    const Parameters::Value& Parameters::get_value(const std::string& id) const noexcept
+    {
+        auto i = values.find(id);
+        DBG_ASSERT(i != end(values));
+        return i->second;
+    }
+
+    const std::map<std::string, Parameters::Value>& Parameters::get_values() const
+    {
+        return values;
+    }
+
+    void apply(Shader& shader, const Parameters& parmeters) noexcept
+    {
+        for (auto& [key, value] : parmeters.get_values())
+        {
+            std::visit([&] (auto v) {
+                shader.set_uniform(key, v);
+            }, value);
+        }
+    }
+}

@@ -25,6 +25,7 @@
 #include "pch.h"
 #include "Mesh.h"
 
+#include "utils.h"
 #include "Shader.h"
 
 namespace pkzo
@@ -32,6 +33,7 @@ namespace pkzo
     enum Slot
     {
         POSITION,
+        NORMAL,
         TEXCOORD,
         INDEX
     };
@@ -46,38 +48,51 @@ namespace pkzo
     Mesh::Mesh() noexcept = default;
     Mesh::~Mesh()
     {
-
+        if (vao != 0)
+        {
+            glDeleteBuffers(static_cast<GLsizei>(buffers.size()), buffers.data());
+            glDeleteVertexArrays(1, &vao);
+            DBG_CHECK_GLERROR("deleting vertex data");
+        }
     }
 
     glm::uint Mesh::add_vertex(const glm::vec3 position, const glm::vec2& texcoord) noexcept
     {
-        assert(gl_id == 0); // only change mesh before upload
+        return add_vertex(position, {0.0, 0.0, 0.0}, texcoord);
+    }
+
+    glm::uint Mesh::add_vertex(const glm::vec3 position, const glm::vec3& normal, const glm::vec2& texcoord) noexcept
+    {
+        DBG_ASSERT(gl_id == 0); // only change mesh before upload
         positions.push_back(position);
+        normals.push_back(normal);
         texcoords.push_back(texcoord);
-        return positions.size() - 1;
+        return static_cast<glm::uint>(positions.size() - 1);
     }
 
     void Mesh::add_triangle(const glm::uvec3& face) noexcept
     {
-        assert(gl_id == 0); // only change mesh before upload
+        DBG_ASSERT(gl_id == 0); // only change mesh before upload
         indexes.push_back(face);
     }
 
     void Mesh::upload() noexcept
     {
-        assert(gl_id == 0);
+        DBG_ASSERT(gl_id == 0);
         glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);
 
-        glGenBuffers(buffers.size(), buffers.data());
+        glGenBuffers(static_cast<GLsizei>(buffers.size()), buffers.data());
         glBindBuffer(GL_ARRAY_BUFFER, buffers[POSITION]);
         glBufferData(GL_ARRAY_BUFFER, positions.size() * 3 * sizeof(float), glm::value_ptr(positions[0]), GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, buffers[NORMAL]);
+        glBufferData(GL_ARRAY_BUFFER, normals.size() * 3 * sizeof(float),   glm::value_ptr(normals[0]),   GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, buffers[TEXCOORD]);
         glBufferData(GL_ARRAY_BUFFER, texcoords.size() * 2 * sizeof(float), glm::value_ptr(texcoords[0]), GL_STATIC_DRAW);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[INDEX]);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexes.size() * 3 * sizeof(unsigned int), glm::value_ptr(indexes[0]), GL_STATIC_DRAW);
 
-        assert(glGetError() == GL_NO_ERROR);
+        DBG_CHECK_GLERROR("uploading vertex data");
     }
 
     void Mesh::bind(Shader& shader) noexcept
@@ -89,7 +104,7 @@ namespace pkzo
         else
         {
             glBindVertexArray(vao);
-            assert(glGetError() == GL_NO_ERROR);
+            DBG_CHECK_GLERROR("uploading binding vertex array");
         }
 
         auto vertex_id = shader.get_attribute("pkzo_Vertex");
@@ -98,7 +113,15 @@ namespace pkzo
             glBindBuffer(GL_ARRAY_BUFFER, buffers[POSITION]);
             glVertexAttribPointer(vertex_id, 3, GL_FLOAT, GL_FALSE, 0, 0);
             glEnableVertexAttribArray(vertex_id);
-            assert(glGetError() == GL_NO_ERROR);
+            DBG_CHECK_GLERROR("uploading position");
+        }
+        auto normal_id = shader.get_attribute("pkzo_Normal");
+        if (normal_id != -1)
+        {
+            glBindBuffer(GL_ARRAY_BUFFER, buffers[NORMAL]);
+            glVertexAttribPointer(normal_id, 3, GL_FLOAT, GL_FALSE, 0, 0);
+            glEnableVertexAttribArray(normal_id);
+            DBG_CHECK_GLERROR("uploading normals");
         }
         auto texcoord_id = shader.get_attribute("pkzo_TexCoord");
         if (texcoord_id != -1)
@@ -106,16 +129,17 @@ namespace pkzo
             glBindBuffer(GL_ARRAY_BUFFER, buffers[TEXCOORD]);
             glVertexAttribPointer(texcoord_id, 2, GL_FLOAT, GL_FALSE, 0, 0);
             glEnableVertexAttribArray(texcoord_id);
-            assert(glGetError() == GL_NO_ERROR);
+            DBG_CHECK_GLERROR("uploading texture coordinates");
         }
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[INDEX]);
-        assert(glGetError() == GL_NO_ERROR);
+        DBG_CHECK_GLERROR("binding mesh");
     }
 
     void Mesh::draw() noexcept
     {
-        assert(vao == get_bound_vao());
-        glDrawElements(GL_TRIANGLES, indexes.size() * 3u, GL_UNSIGNED_INT, 0);
+        DBG_ASSERT(vao == get_bound_vao());
+        glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indexes.size() * 3u), GL_UNSIGNED_INT, 0);
+        DBG_CHECK_GLERROR("drawing mesh");
     }
 }

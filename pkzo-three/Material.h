@@ -24,14 +24,27 @@
 
 #pragma once
 
-#include <gtest/gtest.h>
-
+#include <pkzo/config.h>
+#include <pkzo/Parameters.h>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 
-#include <pkzo/pkzo.h>
-#include <pkzo-three/pkzo-three.h>
+namespace pkzo::three
+{
+    //! Material
+    class PKZO_EXPORT Material
+    {
+    public:
 
-#include "glmio.h"
-#include "glmtest.h"
-#include "test_utils.h"
+        void set_base_color_factor(const glm::vec4& value) noexcept;
+        const glm::vec4& get_base_color_factor() const noexcept;
+
+        void set_base_color_map(const std::shared_ptr<Texture>& value) noexcept;
+        const std::shared_ptr<Texture>& get_base_color_map() const noexcept;
+
+        std::shared_ptr<Parameters> to_parameters() const noexcept;
+
+    private:
+        glm::vec4                base_color_factor = {1.0f, 1.0f, 1.0f, 1.0f};
+        std::shared_ptr<Texture> base_color_map;
+    };
+}

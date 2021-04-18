@@ -23,12 +23,46 @@
 //
 
 #include "pch.h"
-#include "SceneRenderer.h"
+#include "Geometry.h"
+
+#include "Scene.h"
 
 namespace pkzo::three
 {
-    void SceneRenderer::render(const Scene& scene, const Camera& camera) noexcept
-    {
+    Geometry::Geometry(const glm::mat4& transform) noexcept
+    : SceneNode(transform) {}
 
+
+    void Geometry::set_material(const std::shared_ptr<Material>& value) noexcept
+    {
+        material = value;
+    }
+
+    const std::shared_ptr<Material>& Geometry::get_material() const noexcept
+    {
+        return material;
+    }
+
+    void Geometry::update(std::chrono::milliseconds dt) noexcept
+    {
+        SceneNode::update(dt);
+        DBG_ASSERT(pipeline);
+        DBG_ASSERT(pipeline_handle != 0);
+        pipeline->update_geometry(pipeline_handle, get_world_transform());
+    }
+
+    void Geometry::on_attach_scene(Scene* scene) noexcept
+    {
+        SceneNode::on_attach_scene(scene);
+        pipeline = scene->get_render_pipeline();
+        pipeline_handle = pipeline->add_geometry(get_world_transform(), get_mesh(), get_material()->to_parameters());
+    }
+
+    void Geometry::on_detach_scene() noexcept
+    {
+        pipeline->remove_geometry(pipeline_handle);
+        pipeline        = nullptr;
+        pipeline_handle = 0;
+        SceneNode::on_detach_scene();
     }
 }

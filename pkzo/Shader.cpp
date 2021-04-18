@@ -26,6 +26,7 @@
 #include "pch.h"
 #include "Shader.h"
 
+#include "utils.h"
 #include "Texture.h"
 
 namespace pkzo
@@ -46,13 +47,13 @@ namespace pkzo
         {
             glDeleteProgram(program_id);
             program_id = 0;
-            assert(glGetError() == GL_NO_ERROR);
+            DBG_CHECK_GLERROR("deleteing shader");
         }
     }
 
     void Shader::compile()
     {
-        assert(program_id == 0);
+        DBG_ASSERT(program_id == 0);
 
         int status = 0;
         char logstr[256];
@@ -87,14 +88,11 @@ namespace pkzo
             glDeleteShader(fragment_id);
             throw std::runtime_error(logstr);
         }
-
-        assert(glGetError() == GL_NO_ERROR);
+        DBG_CHECK_GLERROR("compiling shader");
 
         program_id = glCreateProgram();
         glAttachShader(program_id, vertex_id);
-        assert(glGetError() == GL_NO_ERROR);
         glAttachShader(program_id, fragment_id);
-        assert(glGetError() == GL_NO_ERROR);
         glLinkProgram(program_id);
 
         glGetProgramInfoLog(program_id, 256, NULL, logstr);
@@ -107,6 +105,7 @@ namespace pkzo
             glDeleteProgram(program_id);
             throw std::runtime_error(logstr);
         }
+        DBG_CHECK_GLERROR("linking shader");
 
         // NOTE: glDeleteShader() actually does not delete the shader, it only
         // flags the shader for deletion. The shaders will be deleted when
@@ -114,7 +113,7 @@ namespace pkzo
         glDeleteShader(vertex_id);
         glDeleteShader(fragment_id);
 
-        assert(glGetError() == GL_NO_ERROR);
+        DBG_CHECK_GLERROR("freeing vertex and fragment handles");
     }
 
     void Shader::bind()
@@ -124,16 +123,13 @@ namespace pkzo
             compile();
         }
         glUseProgram(program_id);
-        assert(glGetError() == GL_NO_ERROR);
+        DBG_CHECK_GLERROR("binding shader");
         texture_slot = 0u;
     }
 
-    template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
-    template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
-
     void Shader::set_uniform(const std::string_view id, const UniformValue& value) noexcept
     {
-        assert(get_bound_shader() == program_id);
+        DBG_ASSERT(get_bound_shader() == program_id);
 
         int location = glGetUniformLocation(program_id, id.data());
         if (location != -1)
@@ -157,33 +153,31 @@ namespace pkzo
                 [&] (glm::mat4 v) { glUniformMatrix4fv(location, 1u, GL_FALSE, glm::value_ptr(v)); },
             }, value);
         }
-        assert(glGetError() == GL_NO_ERROR);
+        DBG_CHECK_GLERROR("assigning uniform variable");
     }
 
     void Shader::set_uniform(const std::string_view id, const std::shared_ptr<Texture>& value) noexcept
     {
-        assert(get_bound_shader() == program_id);
-        if (value == nullptr)
-        {
-            throw std::invalid_argument("Texture value is null.");
-        }
+        DBG_ASSERT(get_bound_shader() == program_id);
+        DBG_ASSERT(value != nullptr);
         value->bind(texture_slot);
         set_uniform(id, texture_slot);
         texture_slot++;
+        DBG_CHECK_GLERROR("assigning uniform texture");
     }
 
-    unsigned int Shader::get_attribute(const std::string& name) noexcept
+    unsigned int Shader::get_attribute(const std::string& name) const noexcept
     {
-        assert(get_bound_shader() == program_id);
+        DBG_ASSERT(get_bound_shader() == program_id);
         unsigned int id = glGetAttribLocation(program_id, name.c_str());
-        assert(glGetError() == GL_NO_ERROR);
+        DBG_CHECK_GLERROR("getting attribute pointer");
         return id;
     }
 
     void Shader::bind_output(const std::string& name, unsigned int channel) noexcept
     {
-        assert(get_bound_shader() == program_id);
+        DBG_ASSERT(get_bound_shader() == program_id);
         glBindFragDataLocation(program_id, channel, name.c_str());
-        assert(glGetError() == GL_NO_ERROR);
+        DBG_CHECK_GLERROR("binding output to shader");
     }
 }

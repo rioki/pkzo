@@ -23,63 +23,45 @@
 //
 
 #include "pch.h"
-#include "SceneNode.h"
+#include "Material.h"
 
 namespace pkzo::three
 {
-    SceneNode::SceneNode(const glm::mat4& t) noexcept
-    : transform(t) {}
-
-    SceneNode* SceneNode::get_parent() noexcept
+    void Material::set_base_color_factor(const glm::vec4& value) noexcept
     {
-        return parent;
+        base_color_factor = value;
     }
 
-    const SceneNode* SceneNode::get_parent() const noexcept
+    const glm::vec4& Material::get_base_color_factor() const noexcept
     {
-        return parent;
+        return base_color_factor;
     }
 
-    void SceneNode::set_transform(const glm::mat4& value) noexcept
+    void Material::set_base_color_map(const std::shared_ptr<Texture>& value) noexcept
     {
-        transform = value;
+        base_color_map = value;
     }
 
-    const glm::mat4& SceneNode::get_transform() const noexcept
+    const std::shared_ptr<Texture>& Material::get_base_color_map() const noexcept
     {
-        return transform;
+        return base_color_map;
     }
 
-    glm::mat4 SceneNode::get_world_transform() const noexcept
+    std::shared_ptr<Parameters> Material::to_parameters() const noexcept
     {
-        if (parent)
+        auto params = std::make_shared<Parameters>();
+
+        params->set_value("pkzo_BaseColorFactor", base_color_factor);
+        if (base_color_map)
         {
-            return parent->get_world_transform() * transform;
+            params->set_value("pkzo_HasBaseColorMap", true);
+            params->set_value("pkzo_BaseColorMap", base_color_map);
         }
         else
         {
-            return transform;
+            params->set_value("pkzo_HasBaseColorMap", false);
         }
-    }
 
-    void SceneNode::update(std::chrono::milliseconds dt) noexcept
-    {
-        // do nothing
+        return params;
     }
-
-    void SceneNode::on_attach(SceneNode* p) noexcept
-    {
-        DBG_ASSERT(parent == nullptr);
-        DBG_ASSERT(p != nullptr);
-        parent = p;
-    }
-
-    void SceneNode::on_detach() noexcept
-    {
-        DBG_ASSERT(parent != nullptr);
-        parent = nullptr;
-    }
-
-    void SceneNode::on_attach_scene(Scene* scene) noexcept {}
-    void SceneNode::on_detach_scene() noexcept {}
 }

@@ -22,64 +22,37 @@
 // THE SOFTWARE.
 //
 
-#include "pch.h"
+#pragma once
+
 #include "SceneNode.h"
+
+#include "Material.h"
 
 namespace pkzo::three
 {
-    SceneNode::SceneNode(const glm::mat4& t) noexcept
-    : transform(t) {}
+    class Material;
 
-    SceneNode* SceneNode::get_parent() noexcept
+    //! Geometry
+    class PKZO_EXPORT Geometry : public SceneNode
     {
-        return parent;
-    }
+    public:
+        Geometry() noexcept = default;
+        Geometry(const glm::mat4& transform) noexcept;
 
-    const SceneNode* SceneNode::get_parent() const noexcept
-    {
-        return parent;
-    }
+        virtual std::shared_ptr<Mesh> get_mesh() const noexcept = 0;
 
-    void SceneNode::set_transform(const glm::mat4& value) noexcept
-    {
-        transform = value;
-    }
+        void set_material(const std::shared_ptr<Material>& value) noexcept;
+        const std::shared_ptr<Material>& get_material() const noexcept;
 
-    const glm::mat4& SceneNode::get_transform() const noexcept
-    {
-        return transform;
-    }
+    protected:
+        void on_attach_scene(Scene* scene) noexcept override;
+        void on_detach_scene() noexcept override;
+        void update(std::chrono::milliseconds dt) noexcept override;
 
-    glm::mat4 SceneNode::get_world_transform() const noexcept
-    {
-        if (parent)
-        {
-            return parent->get_world_transform() * transform;
-        }
-        else
-        {
-            return transform;
-        }
-    }
+    private:
+        std::shared_ptr<Material> material = std::make_shared<Material>();
 
-    void SceneNode::update(std::chrono::milliseconds dt) noexcept
-    {
-        // do nothing
-    }
-
-    void SceneNode::on_attach(SceneNode* p) noexcept
-    {
-        DBG_ASSERT(parent == nullptr);
-        DBG_ASSERT(p != nullptr);
-        parent = p;
-    }
-
-    void SceneNode::on_detach() noexcept
-    {
-        DBG_ASSERT(parent != nullptr);
-        parent = nullptr;
-    }
-
-    void SceneNode::on_attach_scene(Scene* scene) noexcept {}
-    void SceneNode::on_detach_scene() noexcept {}
+        Pipeline*    pipeline        = nullptr;
+        unsigned int pipeline_handle = 0;
+    };
 }

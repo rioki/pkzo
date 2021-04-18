@@ -93,4 +93,17 @@ namespace pkzo
         }
     }
 #endif
+
+#ifdef _WIN32
+    std::string LoadTextResource(HMODULE hModule, LPCTSTR lpName, LPCTSTR lpType)
+    {
+        HRSRC   hRSrc = FindResource(hModule, lpName, lpType);
+        assert(hRSrc);
+        HGLOBAL hGlobal = LoadResource(hModule, hRSrc);
+        assert(hGlobal);
+        DWORD   nSize = SizeofResource(hModule, hRSrc);
+        const char* psCode = (const char*)LockResource(hGlobal);
+        return std::string(psCode, nSize);
+    }
+#endif
 }

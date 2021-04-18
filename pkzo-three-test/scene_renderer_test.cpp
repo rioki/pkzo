@@ -24,23 +24,33 @@
 
 #include "pch.h"
 
-TEST(SceneRenderer, empty_scene)
+using namespace pkzo::test;
+
+TEST(SceneRenderer, shapes_and_directional_light)
 {
     pkzo::Window window({800, 600}, pkzo::WindowMode::STATIC, __FUNCTION__);
 
     pkzo::three::Scene scene;
 
-    auto camera = std::make_shared<pkzo::three::Camera>();
+    auto box = std::make_shared<pkzo::three::Box>();
+    scene.add_child(box);
+
+    auto light = std::make_shared<pkzo::three::DirectionalLight>();
+    scene.add_child(light);
+
+    auto ct = glm::mat4(1.0f);
+    ct = glm::translate(ct, {0.0f, 0.0f, 5.0f});
+    auto camera = std::make_shared<pkzo::three::Camera>(ct);
+    camera->set_resolution(window.get_size());
     scene.add_child(camera);
 
-    pkzo::three::SceneRenderer renderer;
-
     window.on_draw([&] () {
-        renderer.render(scene, *camera);
+        scene.draw(*camera);
     });
+    window.draw();
     window.draw();
 
     auto test_image = window.save();
     ASSERT_NE(nullptr, test_image);
-    EXPECT_TEXTURE_EQ(pkzo::Texture("../../data/textures/reference/SceneRenderer-empty_scene-ref.png"), *test_image);
+    EXPECT_TEXTURE_REF_EQ(*test_image);
 }

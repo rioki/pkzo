@@ -58,7 +58,7 @@ namespace pkzo
 
         void set_uniform(const std::string_view id, const std::shared_ptr<Texture>& value) noexcept;
 
-        unsigned int get_attribute(const std::string& name) noexcept;
+        unsigned int get_attribute(const std::string& name) const noexcept;
 
         void bind_output(const std::string& name, unsigned int channel) noexcept;
 

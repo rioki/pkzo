@@ -25,6 +25,8 @@
 #include "pch.h"
 #include "SceneNodeGroup.h"
 
+#include "Scene.h"
+
 namespace pkzo::three
 {
     SceneNodeGroup::SceneNodeGroup(const glm::mat4& t) noexcept
@@ -37,6 +39,12 @@ namespace pkzo::three
 
         children.push_back(child);
         child->on_attach(this);
+
+        auto s = find_elder<Scene>();
+        if (s)
+        {
+            child->on_attach_scene(s);
+        }
     }
 
     void SceneNodeGroup::remove_child(std::shared_ptr<SceneNode> child) noexcept
@@ -46,8 +54,15 @@ namespace pkzo::three
 
         auto i = find(begin(children), end(children), child);
         DBG_ASSERT(i != end(children));
-        children.erase(i);
+
+        auto s = find_elder<Scene>();
+        if (s)
+        {
+            child->on_detach_scene();
+        }
         child->on_detach();
+
+        children.erase(i);
     }
 
     const std::vector<std::shared_ptr<SceneNode>>& SceneNodeGroup::get_children() noexcept
@@ -58,5 +73,32 @@ namespace pkzo::three
     std::vector<std::shared_ptr<const SceneNode>> SceneNodeGroup::get_children() const noexcept
     {
         return {begin(children), end(children)};
+    }
+
+    void SceneNodeGroup::on_attach_scene(Scene* scene) noexcept
+    {
+        SceneNode::on_attach_scene(scene);
+        for (auto& child : children)
+        {
+            child->on_attach_scene(scene);
+        }
+    }
+
+    void SceneNodeGroup::on_detach_scene() noexcept
+    {
+        for (auto& child : children)
+        {
+            child->on_detach_scene();
+        }
+        SceneNode::on_detach_scene();
+    }
+
+    void SceneNodeGroup::update(std::chrono::milliseconds dt) noexcept
+    {
+        SceneNode::update(dt);
+        for (auto& child : children)
+        {
+            child->update(dt);
+        }
     }
 }

@@ -29,6 +29,12 @@
 #include <string>
 #include <glm/glm.hpp>
 
+#ifdef _WIN32
+#include <windows.h>
+#undef max
+#undef min
+#endif
+
 namespace pkzo
 {
     inline
@@ -84,12 +90,19 @@ namespace pkzo
         return hash(str.c_str());
     }
 
+    template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
+    template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
+
     PKZO_EXPORT std::u32string utf32(const std::string& buff);
 
     PKZO_EXPORT const char* gl_error_to_string(unsigned int glerror);
 
 #ifndef NDEBUG
     PKZO_EXPORT void handle_gl_error(const std::string_view func, const std::string_view descr);
+#endif
+
+#ifdef _WIN32
+    PKZO_EXPORT std::string LoadTextResource(HMODULE hModule, LPCTSTR lpName, LPCTSTR lpType);
 #endif
 }
 

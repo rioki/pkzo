@@ -22,16 +22,22 @@
 // THE SOFTWARE.
 //
 
-#pragma once
+#include "pch.h"
 
-#include <gtest/gtest.h>
+TEST(Box, default_construct)
+{
+    auto box = pkzo::three::Box{};
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+    EXPECT_GLM_NEAR(glm::mat4(1.0f), box.get_transform(), 1e-6f);
+    EXPECT_GLM_NEAR(glm::vec3(1.0, 1.0, 1.0), box.get_size(), 1e-6f);
+}
 
-#include <pkzo/pkzo.h>
-#include <pkzo-three/pkzo-three.h>
+TEST(Box, initilize)
+{
+    auto t = glm::mat4(1.0f);
+    t = glm::translate(t, {1.1, 1.3, 1.5});
+    auto box = pkzo::three::Box{t, glm::vec3(1.2, 1.3, 1.4)};
 
-#include "glmio.h"
-#include "glmtest.h"
-#include "test_utils.h"
+    EXPECT_GLM_NEAR(t, box.get_transform(), 1e-6f);
+    EXPECT_GLM_NEAR(glm::vec3(1.2, 1.3, 1.4), box.get_size(), 1e-6f);
+}

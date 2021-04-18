@@ -23,11 +23,15 @@
 //
 
 #pragma once
+
+#include <chrono>
 #include <pkzo/config.h>
 #include <glm/glm.hpp>
 
 namespace pkzo::three
 {
+    class Scene;
+
     //! Scene Node
     class PKZO_EXPORT SceneNode
     {
@@ -46,6 +50,11 @@ namespace pkzo::three
         const SceneNode* get_parent() const noexcept;
         //! @}
 
+        template <typename NodeT>
+        NodeT* find_elder() noexcept;
+        template <typename NodeT>
+        const NodeT* find_elder() const noexcept;
+
         //! Set the node's transform.
         void set_transform(const glm::mat4& value) noexcept;
         //! Get the node's transform.
@@ -58,11 +67,43 @@ namespace pkzo::three
         virtual void on_attach(SceneNode* parent) noexcept;
         //! Handle detaching from parent.
         virtual void on_detach() noexcept;
+        //! Handle attaching to scene.
+        virtual void on_attach_scene(Scene* scene) noexcept;
+        //! Handle detaching from scene.
+        virtual void on_detach_scene() noexcept;
+        //! Update the node every frame.
+        virtual void update(std::chrono::milliseconds dt) noexcept;
 
     private:
         SceneNode* parent    = nullptr;
         glm::mat4  transform = glm::mat4(1.0f);
 
         friend class SceneNodeGroup;
+        friend class Scene;
     };
+
+    template <typename NodeT>
+    NodeT* SceneNode::find_elder() noexcept
+    {
+        if (parent == nullptr)
+        {
+            return nullptr;
+        }
+
+        auto p = dynamic_cast<NodeT*>(parent);
+        if (p)
+        {
+            return p;
+        }
+        else
+        {
+            return parent->find_elder<NodeT>();
+        }
+    }
+
+    template <typename NodeT>
+    const NodeT* SceneNode::find_elder() const noexcept
+    {
+        return const_cast<SceneNode*>(this)->find_elder<NodeT>();
+    }
 }

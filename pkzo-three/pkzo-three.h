@@ -28,6 +28,13 @@
 #include "SceneNodeGroup.h"
 #include "Scene.h"
 
+// Camera
 #include "Camera.h"
 
-#include "SceneRenderer.h"
+// Lights
+#include "Light.h"
+#include "DirectionalLight.h"
+
+// Action
+#include "Box.h"
+

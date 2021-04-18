@@ -110,7 +110,7 @@ namespace pong2d
         if ((overlap(*this, *simulation.left_paddle) && velocity.x < 0.0f) ||
             (overlap(*this, *simulation.right_paddle) && velocity.x > 0.0f))
         {
-            std::uniform_real_distribution<float> ydis(-0.2, 0.2);
+            std::uniform_real_distribution<float> ydis(-0.2f, 0.2f);
             velocity.x = -velocity.x;
             velocity = velocity * BALL_SPEEDUP;
             velocity.y += ydis(simulation.random_engine);

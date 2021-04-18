@@ -24,14 +24,23 @@
 
 #pragma once
 
-#include <gtest/gtest.h>
+#include "SceneNode.h"
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+namespace pkzo::three
+{
+    //! Light
+    class PKZO_EXPORT Light : public SceneNode
+    {
+    public:
+        Light() noexcept = default;
+        Light(const glm::mat4& transform) noexcept;
 
-#include <pkzo/pkzo.h>
-#include <pkzo-three/pkzo-three.h>
+    protected:
+        void on_attach_scene(Scene* scene) noexcept override;
+        void on_detach_scene() noexcept override;
 
-#include "glmio.h"
-#include "glmtest.h"
-#include "test_utils.h"
+    private:
+        Pipeline*    pipeline        = nullptr;
+        unsigned int pipeline_handle = 0;
+    };
+}

@@ -24,14 +24,16 @@
 
 #pragma once
 
-#include <gtest/gtest.h>
+#include "Light.h"
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
-#include <pkzo/pkzo.h>
-#include <pkzo-three/pkzo-three.h>
-
-#include "glmio.h"
-#include "glmtest.h"
-#include "test_utils.h"
+namespace pkzo::three
+{
+    //! Light
+    class PKZO_EXPORT DirectionalLight : public Light
+    {
+    public:
+        DirectionalLight() noexcept = default;
+        DirectionalLight(const glm::mat4& transform) noexcept;
+        DirectionalLight(const glm::vec3& direction) noexcept;
+    };
+}

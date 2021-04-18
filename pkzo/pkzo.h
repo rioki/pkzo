@@ -38,5 +38,7 @@
 #include "Font.h"
 #include "Mesh.h"
 #include "Shader.h"
+#include "Parameters.h"
+#include "Pipeline.h"
 
 #endif

@@ -17,8 +17,8 @@
 
 namespace internal
 {
-    template <typename RawType>
-    testing::AssertionResult CmpHelperGlmNear(const char* lhs_expression, const char* rhs_expression, const char* abs_error_expr, const RawType& lhs_value, const RawType& rhs_value, typename RawType::value_type abs_error)
+    template<unsigned int N, typename T, glm::qualifier Q>
+    testing::AssertionResult CmpHelperGlmNear(const char* lhs_expression, const char* rhs_expression, const char* abs_error_expr, const glm::vec<N, T, Q>& lhs_value, const glm::vec<N, T, Q>& rhs_value, T abs_error)
     {
         if (glm::all(glm::epsilonEqual(lhs_value, rhs_value, abs_error))) {
             return testing::AssertionSuccess();
@@ -32,8 +32,8 @@ namespace internal
             << abs_error_expr << " evaluates to " << abs_error << ".";
     }
 
-    template <typename RawType>
-    testing::AssertionResult CmpHelperGlmEQ(const char* lhs_expression, const char* rhs_expression, const RawType& lhs_value, const RawType& rhs_value)
+    template<unsigned int N, typename T, glm::qualifier Q>
+    testing::AssertionResult CmpHelperGlmEQ(const char* lhs_expression, const char* rhs_expression, const glm::vec<N, T, Q>& lhs_value, const glm::vec<N, T, Q>& rhs_value)
     {
         if (glm::all(glm::equal(lhs_value, rhs_value))) {
             return testing::AssertionSuccess();
@@ -49,6 +49,68 @@ namespace internal
                          testing::internal::StringStreamToString(&lhs_ss),
                          testing::internal::StringStreamToString(&rhs_ss),
                          false);
+    }
+
+    template<unsigned int N, unsigned int M, typename T, glm::qualifier Q>
+    testing::AssertionResult CmpHelperGlmNear(const char* lhs_expression, const char* rhs_expression, const char* abs_error_expr, const glm::mat<N, M, T, Q>& lhs_value, const glm::mat<N, M, T, Q>& rhs_value, T abs_error)
+    {
+        bool pass = true;
+        glm::mat<N, M, T, Q> diff;
+        for (auto i = 0u; i < N; i++)
+        {
+            for (auto j = 0u; j < M; j++)
+            {
+                diff[i][j] = glm::abs(lhs_value[i][j] - rhs_value[i][j]);
+                if (diff[i][j] > abs_error)
+                {
+                    pass = false;
+                }
+            }
+        }
+
+        if (pass)
+        {
+            return testing::AssertionSuccess();
+        }
+
+        return testing::AssertionFailure()
+            << "The difference between " << lhs_expression << " and " << rhs_expression
+            << " is " << diff  << ", which exceeds " << abs_error_expr << ", where\n"
+            << lhs_expression << " evaluates to " << lhs_value << ",\n"
+            << rhs_expression << " evaluates to " << rhs_value << ", and\n"
+            << abs_error_expr << " evaluates to " << abs_error << ".";
+    }
+
+    template<unsigned int N, unsigned int M, typename T, glm::qualifier Q>
+    testing::AssertionResult CmpHelperGlmEQ(const char* lhs_expression, const char* rhs_expression, const glm::mat<N, M, T, Q>& lhs_value, const glm::mat<N, M, T, Q>& rhs_value)
+    {
+        bool pass = true;
+        for (auto i = 0u; i < N; i++)
+        {
+            for (auto j = 0u; j < M; j++)
+            {
+                if (lhs_value[i][j] == rhs_value[i][j])
+                {
+                    pass = false;
+                }
+            }
+        }
+
+        if (pass)
+        {
+            return testing::AssertionSuccess();
+        }
+
+        ::std::stringstream lhs_ss;
+        lhs_ss << lhs_value;
+
+        ::std::stringstream rhs_ss;
+        rhs_ss << rhs_value;
+        return testing::internal::EqFailure(lhs_expression,
+                                            rhs_expression,
+                                            testing::internal::StringStreamToString(&lhs_ss),
+                                            testing::internal::StringStreamToString(&rhs_ss),
+                                            false);
     }
 }
 

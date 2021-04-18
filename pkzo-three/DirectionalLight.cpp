@@ -22,26 +22,23 @@
 // THE SOFTWARE.
 //
 
-#pragma once
-
-#include <pkzo/config.h>
-
-#include "SceneNodeGroup.h"
+#include "pch.h"
+#include "DirectionalLight.h"
 
 namespace pkzo::three
 {
-    class Scene;
-    class Camera;
+    DirectionalLight::DirectionalLight(const glm::mat4& transform) noexcept
+    : Light(transform) {}
 
-    //! Scene Renderer
-    class PKZO_EXPORT SceneRenderer
+    auto dirToRotaton(const glm::vec3& from, const glm::vec3& to) noexcept
     {
-    public:
-        SceneRenderer() = default;
-        SceneRenderer(const SceneRenderer&) = delete;
-        ~SceneRenderer() = default;
-        SceneRenderer& operator = (const SceneRenderer&) = delete;
+        const auto& a = from;
+        const auto& b = to; // in my case (1, 0, 0)
+        auto v = glm::cross(b, a);
+        auto angle = glm::acos(glm::dot(b, a) / (glm::length(b) * glm::length(a)));
+        return glm::rotate(glm::mat4(1.0f), angle, v);
+    }
 
-        void render(const Scene& scene, const Camera& camera) noexcept;
-    };
+    DirectionalLight::DirectionalLight(const glm::vec3& direction) noexcept
+    : Light(dirToRotaton(glm::vec3(0.0f, 0.0f, -1.0f), direction)) {}
 }

@@ -147,16 +147,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Box.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="DirectionalLight.h" />
+    <ClInclude Include="Geometry.h" />
+    <ClInclude Include="Light.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="pkzo-three.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneNode.h" />
     <ClInclude Include="SceneNodeGroup.h" />
-    <ClInclude Include="SceneRenderer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Box.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="DirectionalLight.cpp" />
+    <ClCompile Include="Geometry.cpp" />
+    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -166,7 +176,18 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="SceneNodeGroup.cpp" />
-    <ClCompile Include="SceneRenderer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Phong.frag.glsl" />
+    <None Include="Phong.vert.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="pkzo-three.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\pkzo\pkzo.vcxproj">
+      <Project>{3965c595-9031-4f89-9fed-050e1aee3d67}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

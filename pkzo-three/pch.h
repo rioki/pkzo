@@ -26,6 +26,12 @@
 
 #include <memory>
 #include <vector>
+#include <map>
+
+#ifdef _WIN32
+#include <Windows.h>
+#include <tchar.h>
+#endif
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>

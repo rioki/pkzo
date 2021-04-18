@@ -63,7 +63,6 @@ namespace pkzo::two
 
     ScreenRenderer::ScreenRenderer() noexcept
     {
-
         #ifdef _WIN32
         HMODULE hModule = GetModuleHandle(_T("pkzo-two.dll"));
         auto vertex_code   = LoadTextResource(hModule, MAKEINTRESOURCE(IDR_GLSL_SCREEN_VERT), _T("GLSL"));

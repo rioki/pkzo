@@ -24,3 +24,59 @@
 
 #include "pch.h"
 #include "Scene.h"
+
+#include "resource.h"
+#include "Camera.h"
+
+namespace pkzo::three
+{
+    auto load_shader(HMODULE hModule, unsigned int vertex_id, unsigned int fragment_id)
+    {
+        auto vertex_code   = LoadTextResource(hModule, MAKEINTRESOURCE(vertex_id), _T("GLSL"));
+        auto fragment_code = LoadTextResource(hModule, MAKEINTRESOURCE(fragment_id), _T("GLSL"));
+        return std::make_shared<Shader>(vertex_code, fragment_code);
+    }
+
+    auto create_phong_pipeline()
+    {
+        HMODULE hModule = GetModuleHandle(_T("pkzo-three.dll"));
+
+        auto render_pipeline = std::make_unique<Pipeline>();
+        render_pipeline->add_pass(PassType::GEOMETRY_AND_LIGHTS, load_shader(hModule, IDR_GLSL_PHONG_VERT, IDR_GLSL_PHONG_FRAG));
+
+        return render_pipeline;
+    }
+
+    Scene::Scene()
+    {
+        render_pipeline = create_phong_pipeline();
+    }
+
+    Pipeline* Scene::get_render_pipeline() noexcept
+    {
+        return render_pipeline.get();
+    }
+
+    const Pipeline* Scene::get_render_pipeline() const noexcept
+    {
+        return render_pipeline.get();
+    }
+
+    void Scene::add_child(std::shared_ptr<SceneNode> child) noexcept
+    {
+        SceneNodeGroup::add_child(child);
+        child->on_attach_scene(this);
+    }
+
+    void Scene::remove_child(std::shared_ptr<SceneNode> child) noexcept
+    {
+        child->on_detach_scene();
+        SceneNodeGroup::remove_child(child);
+    }
+
+    void Scene::draw(Camera& camera)
+    {
+        render_pipeline->set_camera(camera.get_projection(), camera.get_view());
+        render_pipeline->execute();
+    }
+}

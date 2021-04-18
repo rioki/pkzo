@@ -25,14 +25,29 @@
 #pragma once
 
 #include <pkzo/config.h>
+#include <pkzo/fwd.h>
 
 #include "SceneNodeGroup.h"
 
 namespace pkzo::three
 {
+    class Camera;
+
     //! 3D Scene
     class PKZO_EXPORT Scene : public SceneNodeGroup
     {
     public:
+        Scene();
+
+        Pipeline* get_render_pipeline() noexcept;
+        const Pipeline* get_render_pipeline() const noexcept;
+
+        void add_child(std::shared_ptr<SceneNode> child) noexcept override;
+        void remove_child(std::shared_ptr<SceneNode> child) noexcept override;
+
+        void draw(Camera& camera);
+
+    private:
+        std::unique_ptr<Pipeline> render_pipeline;
     };
 }

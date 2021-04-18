@@ -44,6 +44,7 @@ namespace pkzo
         Mesh& operator = (const Mesh&) = delete;
 
         glm::uint add_vertex(const glm::vec3 position, const glm::vec2& texcoord) noexcept;
+        glm::uint add_vertex(const glm::vec3 position, const glm::vec3& normal, const glm::vec2& texcoord) noexcept;
 
         void add_triangle(const glm::uvec3& face) noexcept;
 
@@ -57,11 +58,12 @@ namespace pkzo
         glm::uint gl_id = 0u;
 
         std::vector<glm::vec3> positions;
+        std::vector<glm::vec3> normals;
         std::vector<glm::vec2> texcoords;
         std::vector<glm::uvec3> indexes;
 
         glm::uint                vao          = 0u;
-        std::array<glm::uint, 3> buffers      = {0u, 0u};
+        std::array<glm::uint, 4> buffers      = {0u, 0u};
     };
 }
 

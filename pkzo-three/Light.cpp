@@ -23,63 +23,27 @@
 //
 
 #include "pch.h"
-#include "SceneNode.h"
+#include "Light.h"
+
+#include "Scene.h"
 
 namespace pkzo::three
 {
-    SceneNode::SceneNode(const glm::mat4& t) noexcept
-    : transform(t) {}
+    Light::Light(const glm::mat4& transform) noexcept
+    : SceneNode(transform) {}
 
-    SceneNode* SceneNode::get_parent() noexcept
+    void Light::on_attach_scene(Scene* scene) noexcept
     {
-        return parent;
+        SceneNode::on_attach_scene(scene);
+        pipeline = scene->get_render_pipeline();
+        pipeline_handle = pipeline->add_light(std::make_shared<Parameters>());
     }
 
-    const SceneNode* SceneNode::get_parent() const noexcept
+    void Light::on_detach_scene() noexcept
     {
-        return parent;
+        pipeline->remove_light(pipeline_handle);
+        pipeline        = nullptr;
+        pipeline_handle = 0;
+        SceneNode::on_detach_scene();
     }
-
-    void SceneNode::set_transform(const glm::mat4& value) noexcept
-    {
-        transform = value;
-    }
-
-    const glm::mat4& SceneNode::get_transform() const noexcept
-    {
-        return transform;
-    }
-
-    glm::mat4 SceneNode::get_world_transform() const noexcept
-    {
-        if (parent)
-        {
-            return parent->get_world_transform() * transform;
-        }
-        else
-        {
-            return transform;
-        }
-    }
-
-    void SceneNode::update(std::chrono::milliseconds dt) noexcept
-    {
-        // do nothing
-    }
-
-    void SceneNode::on_attach(SceneNode* p) noexcept
-    {
-        DBG_ASSERT(parent == nullptr);
-        DBG_ASSERT(p != nullptr);
-        parent = p;
-    }
-
-    void SceneNode::on_detach() noexcept
-    {
-        DBG_ASSERT(parent != nullptr);
-        parent = nullptr;
-    }
-
-    void SceneNode::on_attach_scene(Scene* scene) noexcept {}
-    void SceneNode::on_detach_scene() noexcept {}
 }

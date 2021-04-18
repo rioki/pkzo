@@ -39,6 +39,11 @@ namespace pkzo::test
         return std::filesystem::path("../../data/temp/");
     }
 
+    inline auto get_test_ref() noexcept
+    {
+        return std::filesystem::path("../../data/references/");
+    }
+
     inline auto get_test_name() noexcept
     {
         auto test_info = ::testing::UnitTest::GetInstance()->current_test_info();
@@ -92,3 +97,9 @@ namespace pkzo::test
 #define ASSERT_TEXTURE_NEAR(val1, val2, abs_error) ASSERT_PRED_FORMAT3(::pkzo::test::compare_textures, val1, val2, abs_error)
 #define EXPECT_TEXTURE_EQ(val1, val2) EXPECT_TEXTURE_NEAR(val1, val2, 0.0f)
 #define ASSERT_TEXTURE_EQ(val1, val2) ASSERT_TEXTURE_NEAR(val1, val2, 0.0f)
+
+#define _TEXTURE_REF_ pkzo::Texture(get_test_ref() / (get_test_name() + "-ref.png"s))
+#define EXPECT_TEXTURE_REF_NEAR(val) EXPECT_TEXTURE_NEAR(_TEXTURE_REF_, val2, 0.0f)
+#define ASSERT_TEXTURE_REF_NEAR(val) EXPECT_TEXTURE_NEAR(_TEXTURE_REF_, val2, 0.0f)
+#define EXPECT_TEXTURE_REF_EQ(val) EXPECT_TEXTURE_EQ(_TEXTURE_REF_, val)
+#define ASSERT_TEXTURE_REF_EQ(val) EXPECT_TEXTURE_EQ(_TEXTURE_REF_, val)

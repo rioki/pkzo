@@ -23,15 +23,32 @@
 //
 
 #pragma once
+#include <pkzo/config.h>
 
-#include <gtest/gtest.h>
+#include "Geometry.h"
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+namespace pkzo::three
+{
+    //! Box
+    class PKZO_EXPORT Box : public Geometry
+    {
+    public:
+        //! Default Constructor
+        Box() noexcept;
 
-#include <pkzo/pkzo.h>
-#include <pkzo-three/pkzo-three.h>
+        //! Initializing Contructor
+        //!
+        //! @param transform
+        //! @param size
+        Box(const glm::mat4& transform, const glm::vec3& size) noexcept;
 
-#include "glmio.h"
-#include "glmtest.h"
-#include "test_utils.h"
+        //! Get the box's size.
+        const glm::vec3& get_size() const noexcept;
+
+        std::shared_ptr<Mesh> get_mesh() const noexcept override;
+
+    private:
+        glm::vec3 size = {1.0f, 1.0f, 1.0f};
+        std::shared_ptr<Mesh> mesh;
+    };
+}

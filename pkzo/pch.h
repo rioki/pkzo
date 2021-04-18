@@ -36,6 +36,7 @@
 #include <iostream>
 #include <filesystem>
 #include <sstream>
+#include <variant>
 #include <mutex>
 #include <thread>
 #include <atomic>
