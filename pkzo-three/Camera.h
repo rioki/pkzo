@@ -36,6 +36,9 @@ namespace pkzo::three
         Camera() noexcept = default;
         Camera(const glm::mat4& transform) noexcept;
 
+
+        void look_at(const glm::vec3 pos, const glm::vec3 target, const glm::vec3 up);
+
         void set_resolution(const glm::uvec2& value) noexcept;
         const glm::uvec2& get_resolution() const noexcept;
 

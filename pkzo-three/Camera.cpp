@@ -30,6 +30,11 @@ namespace pkzo::three
     Camera::Camera(const glm::mat4& transform) noexcept
     : SceneNode(transform) {}
 
+    void Camera::look_at(const glm::vec3 pos, const glm::vec3 target, const glm::vec3 up)
+    {
+        set_transform(glm::inverse(glm::lookAt(pos, target, up)));
+    }
+
     void Camera::set_resolution(const glm::uvec2& value) noexcept
     {
         resolution = value;

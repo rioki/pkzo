@@ -32,15 +32,19 @@ TEST(SceneRenderer, shapes_and_directional_light)
 
     pkzo::three::Scene scene;
 
-    auto box = std::make_shared<pkzo::three::Box>();
+    auto box = std::make_shared<pkzo::three::Box>(glm::translate(glm::mat4{1.0f}, {0.0f, -1.0f, 0.0f}), glm::vec3(1.0f));
     scene.add_child(box);
+
+    auto sphere = std::make_shared<pkzo::three::Sphere>(glm::translate(glm::mat4{1.0f}, {0.0f, 1.0f, 0.0f}), 0.5f);
+    scene.add_child(sphere);
 
     auto light = std::make_shared<pkzo::three::DirectionalLight>();
     scene.add_child(light);
 
     auto ct = glm::mat4(1.0f);
     ct = glm::translate(ct, {0.0f, 0.0f, 5.0f});
-    auto camera = std::make_shared<pkzo::three::Camera>(ct);
+    auto camera = std::make_shared<pkzo::three::Camera>();
+    camera->look_at({-5.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f});
     camera->set_resolution(window.get_size());
     scene.add_child(camera);
 
