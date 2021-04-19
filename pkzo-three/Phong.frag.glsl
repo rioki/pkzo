@@ -4,28 +4,32 @@
 
 #version 430
 
+// Material
 uniform vec4      pkzo_BaseColorFactor;
 uniform bool      pkzo_HasBaseColorMap;
 uniform sampler2D pkzo_BaseColorMap;
 
+// Light
 #define AMBIENT_LIGHT     0
 #define DIRECTIONAL_LIGHT 1
 #define POINT_LIGHT       2
 #define SPOT_LIGHT        3
-uniform int  pkzo_LightType;
-uniform vec3 pkzo_LightColor;
-uniform vec3 pkzo_LightDirection;
-uniform vec3 pkzo_LightPosition;
-uniform vec3 pkzo_LightAngle;
+#define ATTENUATION_FACTOR_LIN 1.0
+#define ATTENUATION_FACTOR_QUAD 1.0
+uniform int   pkzo_LightType;
+uniform vec3  pkzo_LightColor;
+uniform vec3  pkzo_LightDirection;
+uniform vec3  pkzo_LightPosition;
+uniform float pkzo_LightInnerAngle;
+uniform float pkzo_LightOuterAngle;
 
+// Inputs
 in vec3 vPosition;
 in vec3 vNormal;
 in vec2 vTexCoord;
 
+// Outputs
 out vec4 pkzo_FragColor;
-
-#define ATTENUATION_FACTOR_LIN 1.0
-#define ATTENUATION_FACTOR_QUAD 1.0
 
 vec4 getBaseColor()
 {
@@ -70,8 +74,9 @@ float getLightAttenuation(vec3 lightDir)
         case SPOT_LIGHT:
         {
             float d = length(lightDir);
-            // TODO attenuation base on angle to light dir
-            return 1.0/(1.0 + ATTENUATION_FACTOR_LIN * d + ATTENUATION_FACTOR_QUAD * pow(d, 2.0));
+            float a = acos(dot(normalize(lightDir), normalize(-pkzo_LightDirection)));
+            float dist_atten = 1.0/(1.0 + ATTENUATION_FACTOR_LIN * d + ATTENUATION_FACTOR_QUAD * pow(d, 2.0));
+            return dist_atten * (smoothstep(pkzo_LightOuterAngle, pkzo_LightInnerAngle, a));
         }
     }
 }

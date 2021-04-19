@@ -162,6 +162,7 @@
     <ClInclude Include="SceneNode.h" />
     <ClInclude Include="SceneNodeGroup.h" />
     <ClInclude Include="Sphere.h" />
+    <ClInclude Include="SpotLight.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AmbientLight.cpp" />
@@ -182,6 +183,7 @@
     <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="SceneNodeGroup.cpp" />
     <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="SpotLight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Phong.frag.glsl" />

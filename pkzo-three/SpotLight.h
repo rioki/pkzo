@@ -24,21 +24,32 @@
 
 #pragma once
 
-#include "SceneNode.h"
-#include "SceneNodeGroup.h"
-#include "Scene.h"
-
-// Camera
-#include "Camera.h"
-
-// Lights
 #include "Light.h"
-#include "AmbientLight.h"
-#include "DirectionalLight.h"
-#include "PointLight.h"
-#include "SpotLight.h"
 
-// Action
-#include "Box.h"
-#include "Sphere.h"
+namespace pkzo::three
+{
+    //! Spot Light
+    class PKZO_EXPORT SpotLight : public Light
+    {
+    public:
+        SpotLight() noexcept = default;
+        SpotLight(const glm::mat4& transform, const glm::vec3& color, float inner_angle, float outer_angle) noexcept;
 
+        void set_color(const glm::vec3& value) noexcept;
+        const glm::vec3& get_color() const noexcept;
+
+        void set_inner_angle(float value) noexcept;
+        float get_inner_angle() const noexcept;
+
+        void set_outer_angle(float value) noexcept;
+        float get_outer_angle() const noexcept;
+
+    protected:
+        std::shared_ptr<Parameters> get_parameters() const noexcept override;
+
+    private:
+        glm::vec3 color = {1.0f, 1.0f, 1.0f};
+        float     inner_angle = 25.0f;
+        float     outer_angle = 30.0f;
+    };
+}
