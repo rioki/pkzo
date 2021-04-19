@@ -65,3 +65,38 @@ TEST(Phong, shapes)
     ASSERT_NE(nullptr, test_image);
     EXPECT_TEXTURE_REF_EQ(*test_image);
 }
+
+TEST(Phong, point_light)
+{
+    pkzo::Window window({800, 600}, pkzo::WindowMode::STATIC, __FUNCTION__);
+
+    pkzo::three::Scene scene;
+
+    auto ground = std::make_shared<pkzo::three::Box>(glm::translate(glm::mat4{1.0f}, {0.0f, 0.0f, -0.5f}), glm::vec3(10.0f, 10.0f, 1.0f));
+    scene.add_child(ground);
+    auto sphere = std::make_shared<pkzo::three::Sphere>(glm::translate(glm::mat4{1.0f}, {0.0f, 0.0f, 0.5f}), 0.25f);
+    scene.add_child(sphere);
+
+    auto light0 = std::make_shared<pkzo::three::AmbientLight>(glm::vec3{0.106, 0.161, 0.2});
+    scene.add_child(light0);
+
+    auto light1 = std::make_shared<pkzo::three::PointLight>(glm::translate(glm::mat4{1.0f}, {-0.5f, -0.6f, 1.0f}), glm::vec3(0.839, 0.718, 0.573));
+    scene.add_child(light1);
+
+    auto ct = glm::mat4(1.0f);
+    ct = glm::translate(ct, {0.0f, 0.0f, 5.0f});
+    auto camera = std::make_shared<pkzo::three::Camera>();
+    camera->look_at({-2.0f, 0.5f, 1.0f}, {0.0f, 0.0f, 0.5f}, {0.0f, 0.0f, 1.0f});
+    camera->set_resolution(window.get_size());
+    scene.add_child(camera);
+
+    window.on_draw([&] () {
+        scene.draw(*camera);
+    });
+    window.draw();
+    window.draw();
+
+    auto test_image = window.save();
+    ASSERT_NE(nullptr, test_image);
+    EXPECT_TEXTURE_REF_EQ(*test_image);
+}

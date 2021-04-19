@@ -73,7 +73,7 @@ namespace pkzo
         glGetShaderiv(vertex_id, GL_COMPILE_STATUS, &status);
         if (!status)
         {
-            DBG_ASSERT(logstr);
+            DBG_FAIL(logstr);
             glDeleteShader(vertex_id);
             throw std::runtime_error(logstr);
         }
@@ -93,7 +93,7 @@ namespace pkzo
         glGetShaderiv(fragment_id, GL_COMPILE_STATUS, &status);
         if (!status)
         {
-            DBG_ASSERT(logstr);
+            DBG_FAIL(logstr);
             glDeleteShader(vertex_id);
             glDeleteShader(fragment_id);
             throw std::runtime_error(logstr);
@@ -114,7 +114,7 @@ namespace pkzo
         glGetProgramiv(program_id, GL_LINK_STATUS, &status);
         if (!status)
         {
-            DBG_ASSERT(logstr);
+            DBG_FAIL(logstr);
             glDeleteShader(vertex_id);
             glDeleteShader(fragment_id);
             glDeleteProgram(program_id);

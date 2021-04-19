@@ -22,22 +22,33 @@
 // THE SOFTWARE.
 //
 
-#pragma once
-
-#include "SceneNode.h"
-#include "SceneNodeGroup.h"
-#include "Scene.h"
-
-// Camera
-#include "Camera.h"
-
-// Lights
-#include "Light.h"
-#include "AmbientLight.h"
-#include "DirectionalLight.h"
+#include "pch.h"
 #include "PointLight.h"
 
-// Action
-#include "Box.h"
-#include "Sphere.h"
+namespace pkzo::three
+{
+    PointLight::PointLight(const glm::mat4& transform, const glm::vec3& c) noexcept
+    : Light(transform), color(c) {}
 
+    void PointLight::set_color(const glm::vec3& value) noexcept
+    {
+        color = value;
+    }
+
+    const glm::vec3& PointLight::get_color() const noexcept
+    {
+        return color;
+    }
+
+    std::shared_ptr<Parameters> PointLight::get_parameters() const noexcept
+    {
+        auto wt = get_world_transform();
+        auto pos = glm::vec3(wt[3]);
+
+        return make_shared_parameters({
+            {"pkzo_LightType", static_cast<glm::uint>(LightType::POINT)},
+            {"pkzo_LightColor", color},
+            {"pkzo_LightPosition", glm::vec3(pos)},
+        });
+    }
+}

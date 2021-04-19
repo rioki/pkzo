@@ -24,6 +24,9 @@ in vec2 vTexCoord;
 
 out vec4 pkzo_FragColor;
 
+#define ATTENUATION_FACTOR_LIN 1.0
+#define ATTENUATION_FACTOR_QUAD 1.0
+
 vec4 getBaseColor()
 {
     if (pkzo_HasBaseColorMap)
@@ -49,7 +52,27 @@ vec3 getLightDirection()
             return normalize(-pkzo_LightDirection);
         case POINT_LIGHT:
         case SPOT_LIGHT:
-            return normalize(vPosition - pkzo_LightPosition);
+            return pkzo_LightPosition - vPosition;
+    }
+}
+
+float getLightAttenuation(vec3 lightDir)
+{
+    switch (pkzo_LightType)
+    {
+        case DIRECTIONAL_LIGHT:
+            return 1.0;
+        case POINT_LIGHT:
+        {
+            float d = length(lightDir);
+            return 1.0/(1.0 + ATTENUATION_FACTOR_LIN * d + ATTENUATION_FACTOR_QUAD * pow(d, 2.0));
+        }
+        case SPOT_LIGHT:
+        {
+            float d = length(lightDir);
+            // TODO attenuation base on angle to light dir
+            return 1.0/(1.0 + ATTENUATION_FACTOR_LIN * d + ATTENUATION_FACTOR_QUAD * pow(d, 2.0));
+        }
     }
 }
 
@@ -63,18 +86,18 @@ void main()
 
     vec3 normal    = getNormal();
     vec3 lightDir  = getLightDirection();
-    float NdL = dot(normal, lightDir);
+    float NdL = dot(normal, normalize(lightDir));
     if (NdL > 0.0)
     {
         vec3 result    = vec3(0.0);
         vec4 baseColor = getBaseColor();
+        float atten    = getLightAttenuation(lightDir);
 
-        // TODO attenuation
-        result = NdL * baseColor.rgb * pkzo_LightColor;
+        result = NdL * baseColor.rgb * pkzo_LightColor * atten;
 
         // TODO specular
         pkzo_FragColor = vec4(result, baseColor.a);
+        return;
     }
-    //pkzo_FragColor = vec4(normal * vec3(0.5) + vec3(0.5), 1.0);
-    //pkzo_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    discard;
 }
