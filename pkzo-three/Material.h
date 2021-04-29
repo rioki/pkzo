@@ -30,21 +30,48 @@
 
 namespace pkzo::three
 {
+    using FloatValue = std::variant<float, std::shared_ptr<Texture>>;
+    using Vec3Value  = std::variant<glm::vec3, std::shared_ptr<Texture>>;
+
     //! Material
     class PKZO_EXPORT Material
     {
     public:
 
-        void set_base_color_factor(const glm::vec4& value) noexcept;
-        const glm::vec4& get_base_color_factor() const noexcept;
+        void set_base_color_factor(const glm::vec3& value) noexcept;
+        const glm::vec3& get_base_color_factor() const noexcept;
 
         void set_base_color_map(const std::shared_ptr<Texture>& value) noexcept;
         const std::shared_ptr<Texture>& get_base_color_map() const noexcept;
 
+        void set_roughness_factor(float value) noexcept;
+        float get_roughness_factor() const noexcept;
+
+        void set_metallic_factor(float value) noexcept;
+        float get_metallic_factor() const noexcept;
+
+        void set_metallic_roughtness_map(const std::shared_ptr<Texture>& value) noexcept;
+        const std::shared_ptr<Texture>& get_metallic_roughtness_map() const noexcept;
+
+        void set_normal_map(const std::shared_ptr<Texture>& value) noexcept;
+        const std::shared_ptr<Texture>& get_normal_map() const noexcept;
+
+        void set_emissive_factor(const glm::vec3& value) noexcept;
+        const glm::vec3& get_emissive_factor() const noexcept;
+
+        void set_emissive_map(const std::shared_ptr<Texture>& value) noexcept;
+        const std::shared_ptr<Texture>& get_emissive_map() const noexcept;
+
         std::shared_ptr<Parameters> to_parameters() const noexcept;
 
     private:
-        glm::vec4                base_color_factor = {1.0f, 1.0f, 1.0f, 1.0f};
+        glm::vec3                base_color_factor = glm::vec3(1.0f);
         std::shared_ptr<Texture> base_color_map;
+        float                    roughness_factor = 0.5f;
+        float                    metallic_factor = 0.0f;
+        std::shared_ptr<Texture> metallic_roughtness_map;
+        std::shared_ptr<Texture> normal_map;
+        glm::vec3                emissive_factor = glm::vec3(0.0f);
+        std::shared_ptr<Texture> emissive_map;
     };
 }
