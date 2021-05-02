@@ -27,14 +27,23 @@
 #include <memory>
 #include <vector>
 #include <map>
+#include <fstream>
 
 #ifdef _WIN32
 #include <Windows.h>
 #include <tchar.h>
 #endif
 
+#include <fmt/core.h>
+
+#define GLM_FORCE_SWIZZLE
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <nlohmann/json.hpp>
+
+#include <fmt/core.h>
+
 #include "dbg.h"
 #include <pkzo/pkzo.h>
+#include <pkzo/glmjson.h>

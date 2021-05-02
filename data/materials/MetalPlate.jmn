@@ -1,0 +1,7 @@
+{
+  "diffuseMap": "../textures/texturehaven/metal_plate/metal_plate_diff_1k.jpg",
+  "specularMap": "../textures/texturehaven/metal_plate/metal_plate_spec_1k.jpg",
+  "roughtnessMap": "../textures/texturehaven/metal_plate/metal_plate_rough_1k.jpg",
+  "normalMap": "../textures/texturehaven/metal_plate/metal_plate_Nor_1k.jpg",
+  "ambientOcclusionMap": "../textures/texturehaven/metal_plate/metal_plate_AO_1k.jpg"
+}

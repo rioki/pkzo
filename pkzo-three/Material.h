@@ -25,53 +25,57 @@
 #pragma once
 
 #include <pkzo/config.h>
-#include <pkzo/Parameters.h>
+
+#include <filesystem>
+#include <memory>
+
 #include <glm/glm.hpp>
+#include <pkzo/Texture.h>
 
 namespace pkzo::three
 {
-    using FloatValue = std::variant<float, std::shared_ptr<Texture>>;
-    using Vec3Value  = std::variant<glm::vec3, std::shared_ptr<Texture>>;
+    PKZO_EXPORT std::shared_ptr<Texture> single_color_texture(std::byte value);
+    PKZO_EXPORT std::shared_ptr<Texture> single_color_texture(float value);
+    PKZO_EXPORT std::shared_ptr<Texture> single_color_texture(std::byte r, std::byte g, std::byte b);
+    PKZO_EXPORT std::shared_ptr<Texture> single_color_texture(float r, float g, float b);
+    PKZO_EXPORT std::shared_ptr<Texture> default_diffuse_texture();
+    PKZO_EXPORT std::shared_ptr<Texture> default_specular_texture();
+    PKZO_EXPORT std::shared_ptr<Texture> default_roughtness_texture();
+    PKZO_EXPORT std::shared_ptr<Texture> default_normal_texture();
+    PKZO_EXPORT std::shared_ptr<Texture> default_emissive_texture();
 
     //! Material
     class PKZO_EXPORT Material
     {
     public:
+        Material() noexcept = default;
+        Material(const std::shared_ptr<Texture>& diffuse, const std::shared_ptr<Texture>& specular, const std::shared_ptr<Texture>& roughtness);
+        Material(const std::shared_ptr<Texture>& diffuse, const std::shared_ptr<Texture>& specular, const std::shared_ptr<Texture>& roughtness, const std::shared_ptr<Texture>& normal);
+        Material(const std::shared_ptr<Texture>& diffuse, const std::shared_ptr<Texture>& specular, const std::shared_ptr<Texture>& roughtness, const std::shared_ptr<Texture>& normal, const std::shared_ptr<Texture>& emissive);
+        Material(const std::filesystem::path& filename);
 
-        void set_base_color_factor(const glm::vec3& value) noexcept;
-        const glm::vec3& get_base_color_factor() const noexcept;
+        void set_diffuse(const std::shared_ptr<Texture>& value) noexcept;
+        const std::shared_ptr<Texture>& get_diffuse() const noexcept;
 
-        void set_base_color_map(const std::shared_ptr<Texture>& value) noexcept;
-        const std::shared_ptr<Texture>& get_base_color_map() const noexcept;
+        void set_specular(const std::shared_ptr<Texture>& value) noexcept;
+        const std::shared_ptr<Texture>& get_specular() const noexcept;
 
-        void set_roughness_factor(float value) noexcept;
-        float get_roughness_factor() const noexcept;
+        void set_roughtness(const std::shared_ptr<Texture>& value) noexcept;
+        const std::shared_ptr<Texture>& get_roughtness() const noexcept;
 
-        void set_metallic_factor(float value) noexcept;
-        float get_metallic_factor() const noexcept;
+        void set_normal(const std::shared_ptr<Texture>& value) noexcept;
+        const std::shared_ptr<Texture>& get_normal() const noexcept;
 
-        void set_metallic_roughtness_map(const std::shared_ptr<Texture>& value) noexcept;
-        const std::shared_ptr<Texture>& get_metallic_roughtness_map() const noexcept;
-
-        void set_normal_map(const std::shared_ptr<Texture>& value) noexcept;
-        const std::shared_ptr<Texture>& get_normal_map() const noexcept;
-
-        void set_emissive_factor(const glm::vec3& value) noexcept;
-        const glm::vec3& get_emissive_factor() const noexcept;
-
-        void set_emissive_map(const std::shared_ptr<Texture>& value) noexcept;
-        const std::shared_ptr<Texture>& get_emissive_map() const noexcept;
+        void set_emissive(const std::shared_ptr<Texture>& value) noexcept;
+        const std::shared_ptr<Texture>& get_emissive() const noexcept;
 
         std::shared_ptr<Parameters> to_parameters() const noexcept;
 
     private:
-        glm::vec3                base_color_factor = glm::vec3(1.0f);
-        std::shared_ptr<Texture> base_color_map;
-        float                    roughness_factor = 0.5f;
-        float                    metallic_factor = 0.0f;
-        std::shared_ptr<Texture> metallic_roughtness_map;
-        std::shared_ptr<Texture> normal_map;
-        glm::vec3                emissive_factor = glm::vec3(0.0f);
-        std::shared_ptr<Texture> emissive_map;
+        std::shared_ptr<Texture> diffuse    = default_diffuse_texture();
+        std::shared_ptr<Texture> specular   = default_specular_texture();
+        std::shared_ptr<Texture> roughtness = default_roughtness_texture();
+        std::shared_ptr<Texture> normal     = default_normal_texture();
+        std::shared_ptr<Texture> emissive   = default_emissive_texture();
     };
 }

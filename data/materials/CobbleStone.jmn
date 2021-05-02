@@ -1,0 +1,6 @@
+{
+  "diffuseMap": "../textures/texturehaven/cobblestone_floor_04/cobblestone_floor_04_diff_1k.jpg",
+  "roughtnessMap": "../textures/texturehaven/cobblestone_floor_04/cobblestone_floor_04_rough_1k.jpg",
+  "normalMap": "../textures/texturehaven/cobblestone_floor_04/cobblestone_floor_04_nor_1k.jpg",
+  "ambientOcclusionMap": "../textures/texturehaven/cobblestone_floor_04/cobblestone_floor_04_ao_1k.jpg"
+}

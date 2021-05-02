@@ -40,6 +40,8 @@
 #define DBG_FAIL(MSG) assert(false && MSG)
 #endif
 
+#define GLM_FORCE_SWIZZLE
+
 constexpr auto PI = 3.14159265358979323846f;
 
 #endif

@@ -5,9 +5,7 @@
 #version 430
 
 // Material
-uniform vec3      pkzo_BaseColorFactor;
-uniform bool      pkzo_HasBaseColorMap;
-uniform sampler2D pkzo_BaseColorMap;
+uniform sampler2D pkzo_DiffuseMap;
 
 // Light
 #define AMBIENT_LIGHT     0
@@ -33,14 +31,7 @@ out vec4 pkzo_FragColor;
 
 vec3 getBaseColor()
 {
-    if (pkzo_HasBaseColorMap)
-    {
-        return texture(pkzo_BaseColorMap, vTexCoord).rgb * pkzo_BaseColorFactor;
-    }
-    else
-    {
-        return pkzo_BaseColorFactor;
-    }
+    return texture(pkzo_DiffuseMap, vTexCoord).rgb;
 }
 
 vec3 getNormal()
@@ -89,20 +80,15 @@ void main()
         return;
     }
 
+    vec3 result    = vec3(0.0);
     vec3 normal    = getNormal();
     vec3 lightDir  = getLightDirection();
-    float NdL = dot(normal, normalize(lightDir));
-    if (NdL > 0.0)
-    {
-        vec3 result    = vec3(0.0);
-        vec3 baseColor = getBaseColor();
-        float atten    = getLightAttenuation(lightDir);
 
-        result = NdL * baseColor * pkzo_LightColor * atten;
+    vec3 baseColor = getBaseColor();
+    float atten    = getLightAttenuation(lightDir);
 
-        // TODO specular
-        pkzo_FragColor = vec4(result, 1.0);
-        return;
-    }
-    discard;
+    float NdL = clamp(dot(normal, normalize(lightDir)), 0.0, 1.0);
+    result = NdL * baseColor * pkzo_LightColor * atten;
+
+    pkzo_FragColor = vec4(result, 1.0);
 }

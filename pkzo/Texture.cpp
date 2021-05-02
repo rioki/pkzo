@@ -135,7 +135,7 @@ namespace pkzo
             switch (mode)
             {
             case ColorMode::R:
-                return GL_R;
+                return GL_RED;
             case ColorMode::RG:
                 return GL_RG;
             case ColorMode::RGB:
@@ -245,7 +245,7 @@ namespace pkzo
         switch (mode)
         {
             case ColorMode::R:
-                return GL_R;
+                return GL_RED;
             case ColorMode::RG:
                 return GL_RG;
             case ColorMode::RGB:

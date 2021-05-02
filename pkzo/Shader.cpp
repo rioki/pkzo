@@ -139,7 +139,6 @@ namespace pkzo
         }
         glUseProgram(program_id);
         DBG_CHECK_GLERROR("binding shader");
-        texture_slot = 0u;
     }
 
     void Shader::set_uniform(const std::string_view id, const UniformValue& value) noexcept
@@ -174,10 +173,13 @@ namespace pkzo
     void Shader::set_uniform(const std::string_view id, const std::shared_ptr<Texture>& value) noexcept
     {
         DBG_ASSERT(get_bound_shader() == program_id);
-        DBG_ASSERT(value != nullptr);
-        value->bind(texture_slot);
-        set_uniform(id, texture_slot);
-        texture_slot++;
+
+        int location = glGetUniformLocation(program_id, id.data());
+        if (location != -1)
+        {
+            value->bind(location);
+            set_uniform(id, location);
+        }
         DBG_CHECK_GLERROR("assigning uniform texture");
     }
 

@@ -27,7 +27,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BA3004D7-4BA
 		src\dbg.h = src\dbg.h
 		src\glmio.h = src\glmio.h
 		src\glmtest.h = src\glmtest.h
-		test_utils.h = test_utils.h
 		src\test_utils.h = src\test_utils.h
 	EndProjectSection
 EndProject

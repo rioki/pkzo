@@ -66,7 +66,6 @@ namespace pkzo
         std::string vertex_code;
         std::string fragment_code;
         glm::uint   program_id   = 0u;
-        glm::uint   texture_slot = 0u;
     };
 }
 
