@@ -42,6 +42,8 @@ namespace pkzo::three
         //! @param size
         Box(const glm::mat4& transform, const glm::vec3& size) noexcept;
 
+        Box(const glm::mat4& transform, const glm::vec3& size, const std::shared_ptr<Material>& material) noexcept;
+
         //! Get the box's size.
         const glm::vec3& get_size() const noexcept;
 

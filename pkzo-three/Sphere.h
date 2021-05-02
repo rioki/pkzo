@@ -35,6 +35,7 @@ namespace pkzo::three
     public:
         Sphere() noexcept;
         Sphere(const glm::mat4& transform, float radius) noexcept;
+        Sphere(const glm::mat4& transform, float radius, const std::shared_ptr<Material>& material) noexcept;
 
         float get_radius() const noexcept;
 

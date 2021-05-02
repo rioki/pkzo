@@ -69,6 +69,12 @@ namespace pkzo::three
         mesh = make_sphere(radius);
     }
 
+    Sphere::Sphere(const glm::mat4& transform, float r, const std::shared_ptr<Material>& material) noexcept
+    : Geometry(transform, material), radius(r)
+    {
+        mesh = make_sphere(radius);
+    }
+
     float Sphere::get_radius() const noexcept
     {
         return radius;

@@ -32,6 +32,8 @@ namespace pkzo::three
     Geometry::Geometry(const glm::mat4& transform) noexcept
     : SceneNode(transform) {}
 
+    Geometry::Geometry(const glm::mat4& transform, const std::shared_ptr<Material>& m) noexcept
+    : SceneNode(transform), material(m) {}
 
     void Geometry::set_material(const std::shared_ptr<Material>& value) noexcept
     {

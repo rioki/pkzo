@@ -95,6 +95,12 @@ namespace pkzo::three
         mesh = make_box(size);
     }
 
+    Box::Box(const glm::mat4& transform, const glm::vec3& s, const std::shared_ptr<Material>& material) noexcept
+    : Geometry(transform, material), size(s)
+    {
+        mesh = make_box(size);
+    }
+
     const glm::vec3& Box::get_size() const noexcept
     {
         return size;

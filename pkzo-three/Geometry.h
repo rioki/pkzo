@@ -38,6 +38,7 @@ namespace pkzo::three
     public:
         Geometry() noexcept = default;
         Geometry(const glm::mat4& transform) noexcept;
+        Geometry(const glm::mat4& transform, const std::shared_ptr<Material>& material) noexcept;
 
         virtual std::shared_ptr<Mesh> get_mesh() const noexcept = 0;
 
