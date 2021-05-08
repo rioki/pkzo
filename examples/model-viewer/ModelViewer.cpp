@@ -51,7 +51,7 @@ namespace mv
 
     ModelViewer::ModelViewer(int argc, char* argv[])
     {
-        using pkzo::two::map_to_screen;
+        using pkzo::map_to_screen;
 
         auto user_folder = get_user_folder();
         std::filesystem::create_directories(user_folder);
@@ -66,7 +66,7 @@ namespace mv
         auto height = settings.get_value("Video", "height", 600u);
         auto& window = main.open_window({width, height}, pkzo::WindowMode::STATIC, "Pkzo - Model Viewer");
 
-        screen_renderer = std::make_unique<pkzo::two::ScreenRenderer>();
+        screen_renderer = std::make_unique<pkzo::ScreenRenderer>();
         screen = std::make_unique<EditorScreen>(window.get_size());
 
         window.on_draw([this] () {

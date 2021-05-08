@@ -31,9 +31,6 @@
 #include <memory>
 
 #include <pkzo/pkzo.h>
-#include <pkzo-two/pkzo-two.h>
-#include <pkzo-two-ui/pkzo-two-ui.h>
-
 #include <nlohmann/json.hpp>
 
 #endif

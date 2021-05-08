@@ -147,32 +147,70 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AmbientLight.h" />
+    <ClInclude Include="Box.h" />
+    <ClInclude Include="Button.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="CheckBox.h" />
     <ClInclude Include="config.h" />
+    <ClInclude Include="DirectionalLight.h" />
+    <ClInclude Include="DropDownMenu.h" />
     <ClInclude Include="enums.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="fwd.h" />
+    <ClInclude Include="Geometry.h" />
+    <ClInclude Include="glmio.h" />
+    <ClInclude Include="HitArea.h" />
     <ClInclude Include="Joystick.h" />
     <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="Main.h" />
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Parameters.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Pipeline.h" />
     <ClInclude Include="pkzo.h" />
+    <ClInclude Include="PointLight.h" />
+    <ClInclude Include="Rectangle.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneNode.h" />
+    <ClInclude Include="SceneNodeGroup.h" />
+    <ClInclude Include="Screen.h" />
+    <ClInclude Include="ScreenNode.h" />
+    <ClInclude Include="ScreenNodeGroup.h" />
+    <ClInclude Include="ScreenRenderer.h" />
     <ClInclude Include="SdlSentry.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Slider.h" />
+    <ClInclude Include="Sphere.h" />
+    <ClInclude Include="SpotLight.h" />
     <ClInclude Include="sync.h" />
+    <ClInclude Include="Text.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AmbientLight.cpp" />
+    <ClCompile Include="Box.cpp" />
+    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CheckBox.cpp" />
+    <ClCompile Include="DirectionalLight.cpp" />
+    <ClCompile Include="DropDownMenu.cpp" />
     <ClCompile Include="enums.cpp" />
     <ClCompile Include="Font.cpp" />
+    <ClCompile Include="Geometry.cpp" />
+    <ClCompile Include="HitArea.cpp" />
     <ClCompile Include="Joystick.cpp" />
     <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Material.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Parameters.cpp" />
@@ -183,17 +221,39 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Pipeline.cpp" />
+    <ClCompile Include="PointLight.cpp" />
+    <ClCompile Include="Rectangle.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneNode.cpp" />
+    <ClCompile Include="SceneNodeGroup.cpp" />
+    <ClCompile Include="Screen.cpp" />
+    <ClCompile Include="ScreenNode.cpp" />
+    <ClCompile Include="ScreenNodeGroup.cpp" />
+    <ClCompile Include="ScreenRenderer.cpp" />
     <ClCompile Include="SdlSentry.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Slider.cpp" />
+    <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="sync.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Text.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="Window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Phong.frag.glsl" />
+    <None Include="Phong.vert.glsl" />
+    <None Include="Screen.frag.glsl" />
+    <None Include="Screen.vert.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="pkzo.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

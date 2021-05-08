@@ -25,12 +25,10 @@
 #pragma once
 
 #include <string>
-
-#include "dbg.h"
-#include "glmio.h"
-#include "glmtest.h"
-
 #include <gtest/gtest.h>
 #include <pkzo/pkzo.h>
+#include <pkzo/glmio.h>
+#include <glm/gtc/matrix_transform.hpp>
 
+#include "glmtest.h"
 #include "test_utils.h"

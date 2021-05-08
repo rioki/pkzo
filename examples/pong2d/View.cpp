@@ -30,7 +30,7 @@
 
 namespace pong2d
 {
-    class ObjectView : public pkzo::two::Rectangle
+    class ObjectView : public pkzo::Rectangle
     {
     public:
         ObjectView(Object& obj, const glm::vec4& color = glm::vec4(1.0f))
@@ -54,11 +54,11 @@ namespace pong2d
     {
         auto score_font = std::make_shared<pkzo::Font>("../assets/fonts/Hardpixel.ttf", 60);
 
-        left_score_text = std::make_shared<pkzo::two::Text>(score_font, pkzo::to_string(simulation.get_left_score()));
+        left_score_text = std::make_shared<pkzo::Text>(score_font, pkzo::to_string(simulation.get_left_score()));
         left_score_text->set_position({-133, 250});
         add_node(left_score_text);
 
-        right_score_text = std::make_shared<pkzo::two::Text>(score_font, pkzo::to_string(simulation.get_right_score()));
+        right_score_text = std::make_shared<pkzo::Text>(score_font, pkzo::to_string(simulation.get_right_score()));
         right_score_text->set_position({133, 250});
         add_node(right_score_text);
 

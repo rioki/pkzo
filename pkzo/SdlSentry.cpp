@@ -40,16 +40,6 @@ namespace pkzo
             {
                 throw std::runtime_error(SDL_GetError());
             }
-            r = IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF | IMG_INIT_WEBP);
-            if (r < 0)
-            {
-                throw std::runtime_error(IMG_GetError());
-            }
-            r = TTF_Init();
-            if (r < 0)
-            {
-                throw std::runtime_error(TTF_GetError());
-            }
         }
     }
 
@@ -57,8 +47,6 @@ namespace pkzo
     {
         if (--init_count == 0)
         {
-            TTF_Quit();
-            IMG_Quit();
             SDL_Quit();
         }
     }

@@ -27,6 +27,8 @@
 
 #include <iconv.h>
 
+#include "dbg.h"
+
 namespace pkzo
 {
     std::u32string utf32(const std::string& buff)

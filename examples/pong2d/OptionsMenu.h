@@ -26,13 +26,12 @@
 #define _PONG2D_OPTIONS_MENU_H_
 
 #include <pkzo/pkzo.h>
-#include <pkzo-two/pkzo-two.h>
 
 namespace pong2d
 {
     class Game;
 
-    class OptionsMenu : public pkzo::two::Screen
+    class OptionsMenu : public pkzo::Screen
     {
     public:
         OptionsMenu(Game& game);

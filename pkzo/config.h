@@ -32,13 +32,7 @@
 #pragma warning(disable: 4251 4275 26812)
 #endif
 
-// ensure pkzo works without dbg.h
-#ifndef DBG_ASSERT
-#define DBG_TRACE(MSG, ...)
-#define DBG_SOFT_ASSERT(COND)
-#define DBG_ASSERT(COND) assert(COND)
-#define DBG_FAIL(MSG) assert(false && MSG)
-#endif
+#include "dbg.h"
 
 #define GLM_FORCE_SWIZZLE
 

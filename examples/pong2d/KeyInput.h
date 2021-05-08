@@ -27,11 +27,10 @@
 
 #include <memory>
 #include <pkzo/pkzo.h>
-#include <pkzo-two/pkzo-two.h>
 
 namespace pong2d
 {
-    class KeyInput : public pkzo::two::ScreenNodeGroup
+    class KeyInput : public pkzo::ScreenNodeGroup
     {
     public:
         KeyInput(const std::shared_ptr<pkzo::Font>& font, pkzo::Key key) noexcept;
@@ -43,8 +42,8 @@ namespace pong2d
 
     private:
         pkzo::Key key;
-        std::shared_ptr<pkzo::two::Text>    text;
-        std::shared_ptr<pkzo::two::HitArea> hit_area;
+        std::shared_ptr<pkzo::Text>    text;
+        std::shared_ptr<pkzo::HitArea> hit_area;
     };
 }
 

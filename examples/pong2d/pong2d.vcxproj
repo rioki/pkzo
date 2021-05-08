@@ -166,12 +166,6 @@
     <ClInclude Include="View.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\pkzo-two-ui\pkzo-two-ui.vcxproj">
-      <Project>{7e8af083-55b5-4a7e-972e-a752f0b52e24}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\pkzo-two\pkzo-two.vcxproj">
-      <Project>{08391430-6e1f-45bc-9b9e-b0f4e63591bc}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\..\pkzo\pkzo.vcxproj">
       <Project>{3965c595-9031-4f89-9fed-050e1aee3d67}</Project>
     </ProjectReference>

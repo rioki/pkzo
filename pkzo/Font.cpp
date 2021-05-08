@@ -47,7 +47,7 @@ namespace pkzo
             auto error = FT_Init_FreeType(&ft_library);
             if (error)
             {
-                throw std::runtime_error(compose("Failed to initialize free type: %0", FT_Error_String(error)));
+                throw std::runtime_error(fmt::format("Failed to initialize free type: {}", FT_Error_String(error)));
             }
         }
         return ft_library;
@@ -76,13 +76,13 @@ namespace pkzo
         auto error = FT_New_Face(ft_library, file.u8string().c_str(), 0, &face);
         if (error)
         {
-            throw std::runtime_error(compose("Failed to load font %0: %1", file, FT_Error_String(error)));
+            throw std::runtime_error(fmt::format("Failed to load font {}: {}", file.u8string(), FT_Error_String(error)));
         }
 
         error = FT_Set_Char_Size(face, 0, size*64, 72, 72);
         if (error)
         {
-            throw std::runtime_error(compose("Failed size font %0: %1", file, FT_Error_String(error)));
+            throw std::runtime_error(fmt::format("Failed size font {}: {}", file.u8string(), FT_Error_String(error)));
         }
     }
 

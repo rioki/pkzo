@@ -22,15 +22,13 @@
 // THE SOFTWARE.
 //
 
-#ifndef _MV_EDITOR_SCREEN_H_
-#define _MV_EDITOR_SCREEN_H_
+#pragma once
 
 #include <pkzo/pkzo.h>
-#include <pkzo-two/pkzo-two.h>
 
 namespace mv
 {
-    class EditorScreen : public pkzo::two::Screen
+    class EditorScreen : public pkzo::Screen
     {
     public:
         EditorScreen(const glm::vec2& size);
@@ -39,4 +37,3 @@ namespace mv
     };
 }
 
-#endif

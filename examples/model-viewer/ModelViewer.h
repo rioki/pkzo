@@ -22,11 +22,9 @@
 // THE SOFTWARE.
 //
 
-#ifndef _MV_MODEL_VIEWER_H_
-#define _MV_MODEL_VIEWER_H_
+#pragma once
 
 #include <pkzo/pkzo.h>
-#include <pkzo-two/pkzo-two.h>
 
 #include "Settings.h"
 
@@ -44,9 +42,7 @@ namespace mv
         Settings   settings;
         pkzo::Main main;
 
-        std::unique_ptr<pkzo::two::ScreenRenderer> screen_renderer;
-        std::unique_ptr<pkzo::two::Screen>         screen;
+        std::unique_ptr<pkzo::ScreenRenderer> screen_renderer;
+        std::unique_ptr<pkzo::Screen>         screen;
     };
 }
-
-#endif

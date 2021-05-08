@@ -22,8 +22,7 @@
 // THE SOFTWARE.
 //
 
-#ifndef _ICE_TEXTURE_H_
-#define _ICE_TEXTURE_H_
+#pragma once
 
 #include "config.h"
 
@@ -140,5 +139,3 @@ namespace pkzo
     //! Create a difference of two textures.
     PKZO_EXPORT Texture diff(const Texture& a, const Texture& b);
 }
-
-#endif

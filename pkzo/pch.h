@@ -34,6 +34,7 @@
 #include <functional>
 #include <iosfwd>
 #include <iostream>
+#include <fstream>
 #include <filesystem>
 #include <sstream>
 #include <variant>
@@ -41,17 +42,20 @@
 #include <thread>
 #include <atomic>
 
+#include <fmt/core.h>
+
 #include <glm/fwd.hpp>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 #include <GL/glew.h>
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
 
-#include "dbg.h"
-#include "compose.h"
+#include <nlohmann/json.hpp>
+
+#include <windows.h>
+#include <tchar.h>
 
 #endif

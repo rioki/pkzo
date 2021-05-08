@@ -89,22 +89,22 @@ namespace pong2d
         mouse.on_button_down([this, &window] (auto button, auto pos) {
             if (screen)
             {
-                auto p = pkzo::two::map_to_screen(window.get_size(), screen->get_size(), pos);
+                auto p = pkzo::map_to_screen(window.get_size(), screen->get_size(), pos);
                 screen->handle_mouse_button_down(button, p);
             }
         });
         mouse.on_button_up([this, &window] (auto button, auto pos) {
             if (screen)
             {
-                auto p = pkzo::two::map_to_screen(window.get_size(), screen->get_size(), pos);
+                auto p = pkzo::map_to_screen(window.get_size(), screen->get_size(), pos);
                 screen->handle_mouse_button_up(button, p);
             }
         });
         mouse.on_move([this, &window] (auto pos, auto mov) {
             if (screen)
             {
-                auto p = pkzo::two::map_to_screen(window.get_size(), screen->get_size(), pos);
-                auto m = pkzo::two::map_to_screen(window.get_size(), screen->get_size(), mov);
+                auto p = pkzo::map_to_screen(window.get_size(), screen->get_size(), pos);
+                auto m = pkzo::map_to_screen(window.get_size(), screen->get_size(), mov);
                 screen->handle_mouse_move(p, m);
             }
         });
@@ -131,7 +131,7 @@ namespace pong2d
             screen->handle_text(text);
         });
 
-        screen_renderer = std::make_unique<pkzo::two::ScreenRenderer>();
+        screen_renderer = std::make_unique<pkzo::ScreenRenderer>();
     }
 
     Game::~Game()

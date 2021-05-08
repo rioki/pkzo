@@ -26,14 +26,13 @@
 #define _PONG2D_VIEW_H_
 
 #include <pkzo/pkzo.h>
-#include <pkzo-two/pkzo-two.h>
 
 namespace pong2d
 {
     class Game;
     class Simulation;
 
-    class View : public pkzo::two::Screen
+    class View : public pkzo::Screen
     {
     public:
         View(Game& game, Simulation& simulation);
@@ -47,12 +46,12 @@ namespace pong2d
         Game& game;
         Simulation& simulation;
 
-        std::shared_ptr<pkzo::two::Text> left_score_text;
-        std::shared_ptr<pkzo::two::Text> right_score_text;
+        std::shared_ptr<pkzo::Text> left_score_text;
+        std::shared_ptr<pkzo::Text> right_score_text;
 
-        std::shared_ptr<pkzo::two::Rectangle> ball_pawn;
-        std::shared_ptr<pkzo::two::Rectangle> left_paddle_pawn;
-        std::shared_ptr<pkzo::two::Rectangle> right_paddle_pawn;
+        std::shared_ptr<pkzo::Rectangle> ball_pawn;
+        std::shared_ptr<pkzo::Rectangle> left_paddle_pawn;
+        std::shared_ptr<pkzo::Rectangle> right_paddle_pawn;
 
         pkzo::Key left_up_key;
         pkzo::Key left_down_key;

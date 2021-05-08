@@ -26,7 +26,6 @@
 #define _PONG2D_GAME_H_
 
 #include <pkzo/pkzo.h>
-#include <pkzo-two/pkzo-two.h>
 
 #include "Simulation.h"
 #include "Settings.h"
@@ -67,8 +66,8 @@ namespace pong2d
         pkzo::Main main;
         std::unique_ptr<Simulation> simulation;
 
-        std::unique_ptr<pkzo::two::ScreenRenderer> screen_renderer;
-        std::unique_ptr<pkzo::two::Screen>         screen;
+        std::unique_ptr<pkzo::ScreenRenderer> screen_renderer;
+        std::unique_ptr<pkzo::Screen>         screen;
 
         std::function<void (pkzo::KeyMod&, pkzo::Key&)> key_capture_cb;
 
