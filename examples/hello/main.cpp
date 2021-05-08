@@ -25,6 +25,8 @@
 #include <pkzo/pkzo.h>
 #include <pkzo-two/pkzo-two.h>
 #include <pkzo-two-ui/pkzo-two-ui.h>
+#include <pkzo-three/pkzo-three.h>
+#include <glm/gtc/matrix_transform.hpp>
 
 auto create_hello_screen(pkzo::Main& main)
 {
@@ -68,7 +70,7 @@ auto create_hello_screen(pkzo::Main& main)
 
 int main(int argc, char* argv[])
 {
-    pkzo::Main main;
+    /*pkzo::Main main;
 
     auto& window = main.open_window({800, 600}, pkzo::WindowMode::STATIC, "Hello Pkzo!");
 
@@ -90,6 +92,42 @@ int main(int argc, char* argv[])
         screen->handle_mouse_button_up(button, p);
     });
 
+    main.run();*/
+
+    pkzo::Main main;
+
+    auto& window = main.open_window({800, 600}, pkzo::WindowMode::STATIC, __FUNCTION__);
+
+    pkzo::three::Scene scene;
+
+    auto metal_plate = std::make_shared<pkzo::three::Material>("../../data/materials/MetalPlate.jmn");
+    auto metal_plate_sphere = std::make_shared<pkzo::three::Sphere>(glm::translate(glm::mat4{1.0f}, {0.0f, 1.0f, 0.0f}), 0.5f, metal_plate);
+    scene.add_child(metal_plate_sphere);
+
+    auto cobble_stone = std::make_shared<pkzo::three::Material>("../../data/materials/CobbleStone.jmn");
+    auto cobble_stone_sphere = std::make_shared<pkzo::three::Sphere>(glm::translate(glm::mat4{1.0f}, {0.0f, -1.0f, 0.0f}), 0.5f, cobble_stone);
+    scene.add_child(cobble_stone_sphere);
+
+    auto light0 = std::make_shared<pkzo::three::AmbientLight>(glm::vec3{0.106, 0.161, 0.2});
+    scene.add_child(light0);
+
+    auto l1t = glm::inverse(glm::lookAt(glm::vec3(0.0), {1.0, -0.5, -1.}, {0.0, 1.0, 0.0}));
+    auto light1 = std::make_shared<pkzo::three::DirectionalLight>(l1t, glm::vec3(0.839, 0.718, 0.573));
+    scene.add_child(light1);
+
+    auto light2 = std::make_shared<pkzo::three::DirectionalLight>(glm::mat4(1.0f), glm::vec3(0.125, 0.165, 0.329));
+    scene.add_child(light2);
+
+    auto ct = glm::mat4(1.0f);
+    ct = glm::translate(ct, {0.0f, 0.0f, 5.0f});
+    auto camera = std::make_shared<pkzo::three::Camera>();
+    camera->look_at({-5.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f});
+    camera->set_resolution(window.get_size());
+    scene.add_child(camera);
+
+    window.on_draw([&] () {
+        scene.draw(*camera);
+    });
     main.run();
     return 0;
 }

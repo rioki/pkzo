@@ -60,6 +60,7 @@ TEST(Rendering, shapes)
     });
     window.draw();
     window.draw();
+    window.draw();
 
     auto test_image = window.save();
     ASSERT_NE(nullptr, test_image);
@@ -95,6 +96,7 @@ TEST(Rendering, point_light)
     });
     window.draw();
     window.draw();
+    window.draw();
 
     auto test_image = window.save();
     ASSERT_NE(nullptr, test_image);
@@ -115,7 +117,7 @@ TEST(Rendering, spot_light)
     auto light0 = std::make_shared<pkzo::three::AmbientLight>(glm::vec3{0.106, 0.161, 0.2});
     scene.add_child(light0);
 
-    auto l1t = glm::inverse(glm::lookAt(glm::vec3{-0.5f, -0.6f, 1.0f}, glm::vec3{0.0f, 0.0f, 0.0f}, glm::vec3{0.0, 1.0, 0.0}));
+    auto l1t = glm::inverse(glm::lookAt(glm::vec3{-1.0f, -0.6f, 1.0f}, glm::vec3{0.0f, 0.0f, 0.0f}, glm::vec3{0.0, 1.0, 0.0}));
     auto light1 = std::make_shared<pkzo::three::SpotLight>(l1t, glm::vec3(0.839, 0.718, 0.573), 25.0f, 30.0f);
     scene.add_child(light1);
 
@@ -131,6 +133,7 @@ TEST(Rendering, spot_light)
     });
     window.draw();
     window.draw();
+    window.draw();
 
     auto test_image = window.save();
     ASSERT_NE(nullptr, test_image);
@@ -139,7 +142,9 @@ TEST(Rendering, spot_light)
 
 TEST(Rendering, materials)
 {
-    pkzo::Window window({800, 600}, pkzo::WindowMode::STATIC, __FUNCTION__);
+    pkzo::Main main;
+
+    auto& window = main.open_window({800, 600}, pkzo::WindowMode::STATIC, __FUNCTION__);
 
     pkzo::three::Scene scene;
 
@@ -171,8 +176,9 @@ TEST(Rendering, materials)
     window.on_draw([&] () {
         scene.draw(*camera);
     });
-    window.draw();
-    window.draw();
+    main.tick();
+    main.tick();
+    main.tick();
 
     auto test_image = window.save();
     ASSERT_NE(nullptr, test_image);

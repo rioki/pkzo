@@ -6,6 +6,8 @@
 
 // Material
 uniform sampler2D pkzo_DiffuseMap;
+uniform sampler2D pkzo_SpecularMap;
+uniform sampler2D pkzo_RoughtnessMap;
 
 // Light
 #define AMBIENT_LIGHT     0
@@ -23,20 +25,36 @@ uniform float pkzo_LightOuterAngle;
 
 // Inputs
 in vec3 vPosition;
+in vec3 vCamera;
 in vec3 vNormal;
 in vec2 vTexCoord;
 
 // Outputs
 out vec4 pkzo_FragColor;
 
-vec3 getBaseColor()
+vec3 getDiffuse()
 {
     return texture(pkzo_DiffuseMap, vTexCoord).rgb;
+}
+
+vec3 getSpecular()
+{
+    return texture(pkzo_SpecularMap, vTexCoord).rgb;
+}
+
+float getRoughtnes()
+{
+    return texture(pkzo_RoughtnessMap, vTexCoord).r;
 }
 
 vec3 getNormal()
 {
     return normalize(vNormal);
+}
+
+vec3 getLightColor()
+{
+    return pkzo_LightColor;
 }
 
 vec3 getLightDirection()
@@ -49,6 +67,11 @@ vec3 getLightDirection()
         case SPOT_LIGHT:
             return pkzo_LightPosition - vPosition;
     }
+}
+
+vec3 getEyeVector()
+{
+    return normalize(vPosition - vCamera);
 }
 
 float getLightAttenuation(vec3 lightDir)
@@ -76,19 +99,26 @@ void main()
 {
     if (pkzo_LightType == AMBIENT_LIGHT)
     {
-        pkzo_FragColor = vec4(getBaseColor() * pkzo_LightColor, 1.0);
+        pkzo_FragColor = vec4(getDiffuse() * pkzo_LightColor, 1.0);
         return;
     }
 
-    vec3 result    = vec3(0.0);
-    vec3 normal    = getNormal();
-    vec3 lightDir  = getLightDirection();
-
-    vec3 baseColor = getBaseColor();
+    vec3  result   = vec3(0.0);
+    vec3  normal   = getNormal();
+    vec3  lightDir = getLightDirection();
     float atten    = getLightAttenuation(lightDir);
+    vec3  eye      = getEyeVector();
+    vec3  lColor   = getLightColor();
 
     float NdL = clamp(dot(normal, normalize(lightDir)), 0.0, 1.0);
-    result = NdL * baseColor * pkzo_LightColor * atten;
+    result = NdL * getDiffuse() * lColor * atten;
+
+    vec3 refl = reflect(lightDir, normal);
+    float RdE = clamp(dot(refl, eye), 0.0, 1.0);
+
+    float shiny = 1.0 - getRoughtnes();
+    float fs = pow(RdE, 128.0 * shiny);
+    result += fs * getSpecular() * lColor * atten;
 
     pkzo_FragColor = vec4(result, 1.0);
 }

@@ -150,6 +150,9 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\pkzo-three\pkzo-three.vcxproj">
+      <Project>{f9f32579-a67c-437a-82a6-a45fff2d70e8}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\pkzo-two-ui\pkzo-two-ui.vcxproj">
       <Project>{7e8af083-55b5-4a7e-972e-a752f0b52e24}</Project>
     </ProjectReference>

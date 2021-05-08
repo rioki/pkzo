@@ -13,11 +13,14 @@ in vec3 pkzo_Normal;
 in vec2 pkzo_TexCoord;
 
 out vec3 vPosition;
+out vec3 vCamera;
 out vec3 vNormal;
 out vec2 vTexCoord;
 
 void main()
 {
+    mat4 viewInv = inverse(pkzo_ViewMatrix);
+    vCamera     = vec3(viewInv[3]);
     vPosition   = vec3(pkzo_ModelMatrix * vec4(pkzo_Vertex, 1.0));
     vNormal     = mat3(pkzo_ModelMatrix) * pkzo_Normal;
     vTexCoord   = pkzo_TexCoord;
