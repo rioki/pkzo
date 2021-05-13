@@ -28,7 +28,7 @@
 #include "config.h"
 #include "utils.h"
 
-#include "Main.h"
+#include "Engine.h"
 #include "Mouse.h"
 #include "Keyboard.h"
 #include "Joystick.h"

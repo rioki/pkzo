@@ -40,7 +40,7 @@ namespace mv
 
     private:
         Settings   settings;
-        pkzo::Main main;
+        pkzo::Engine engine;
 
         std::unique_ptr<pkzo::ScreenRenderer> screen_renderer;
         std::unique_ptr<pkzo::Screen>         screen;

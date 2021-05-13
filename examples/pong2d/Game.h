@@ -63,7 +63,7 @@ namespace pong2d
         GameState next_state = GameState::MAIN_MENU;
 
         Settings   settings;
-        pkzo::Main main;
+        pkzo::Engine engine;
         std::unique_ptr<Simulation> simulation;
 
         std::unique_ptr<pkzo::ScreenRenderer> screen_renderer;

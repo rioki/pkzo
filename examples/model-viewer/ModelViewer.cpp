@@ -64,7 +64,7 @@ namespace mv
 
         auto width = settings.get_value("Video", "width", 800u);
         auto height = settings.get_value("Video", "height", 600u);
-        auto& window = main.open_window({width, height}, pkzo::WindowMode::STATIC, "Pkzo - Model Viewer");
+        auto& window = engine.open_window({width, height}, pkzo::WindowMode::STATIC, "Pkzo - Model Viewer");
 
         screen_renderer = std::make_unique<pkzo::ScreenRenderer>();
         screen = std::make_unique<EditorScreen>(window.get_size());
@@ -76,7 +76,7 @@ namespace mv
             }
         });
 
-        auto& mouse = main.get_mouse();
+        auto& mouse = engine.get_mouse();
         mouse.on_button_down([this, &window] (auto button, auto pos) {
             if (screen)
             {
@@ -100,7 +100,7 @@ namespace mv
             }
         });
 
-        auto& keyboard = main.get_keyboard();
+        auto& keyboard = engine.get_keyboard();
         keyboard.on_key_down([this] (auto mod, auto key) {
             if (screen)
             {
@@ -128,7 +128,7 @@ namespace mv
 
     int ModelViewer::run()
     {
-        main.run();
+        engine.run();
         return 0;
     }
 }

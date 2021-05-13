@@ -26,7 +26,7 @@
 
 namespace pkzo
 {
-    class Main;
+    class Engine;
     class Mouse;
     class Keyboard;
     class Joystick;

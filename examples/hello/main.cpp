@@ -25,7 +25,7 @@
 #include <pkzo/pkzo.h>
 #include <glm/gtc/matrix_transform.hpp>
 
-auto create_hello_screen(pkzo::Main& main)
+auto create_hello_screen(pkzo::Engine& main)
 {
     auto size = glm::vec2(main.get_main_window().get_size());
     auto hs = size / 2.0f;
@@ -67,7 +67,7 @@ auto create_hello_screen(pkzo::Main& main)
 
 int main(int argc, char* argv[])
 {
-    pkzo::Main main;
+    pkzo::Engine main;
 
     auto& window = main.open_window({800, 600}, pkzo::WindowMode::STATIC, "Hello Pkzo!");
 

@@ -22,8 +22,7 @@
 // THE SOFTWARE.
 //
 
-#ifndef _PKZO_MAIN_H_
-#define _PKZO_MAIN_H_
+#pragma once
 
 #include "config.h"
 
@@ -43,13 +42,13 @@ namespace pkzo
     class Joystick;
     class Window;
 
-    class PKZO_EXPORT Main
+    class PKZO_EXPORT Engine
     {
     public:
-        Main();
-        Main(const Main&) = delete;
-        ~Main();
-        Main& operator = (const Main&) = delete;
+        Engine();
+        Engine(const Engine&) = delete;
+        ~Engine();
+        Engine& operator = (const Engine&) = delete;
 
         Mouse& get_mouse() noexcept;
         const Mouse& get_mouse() const noexcept;
@@ -88,5 +87,3 @@ namespace pkzo
         void handle_events();
     };
 }
-
-#endif

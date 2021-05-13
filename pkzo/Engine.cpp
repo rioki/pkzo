@@ -23,7 +23,7 @@
 //
 
 #include "pch.h"
-#include "Main.h"
+#include "Engine.h"
 
 #include "sync.h"
 #include "Mouse.h"
@@ -33,7 +33,7 @@
 
 namespace pkzo
 {
-    Main::Main()
+    Engine::Engine()
     {
         sync::set_main_thread_id(std::this_thread::get_id());
 
@@ -49,52 +49,52 @@ namespace pkzo
         last_tick = std::chrono::steady_clock::now();
     }
 
-    Main::~Main() = default;
+    Engine::~Engine() = default;
 
-    Mouse& Main::get_mouse() noexcept
+    Mouse& Engine::get_mouse() noexcept
     {
         assert(mouse);
         return *mouse;
     }
 
-    const Mouse& Main::get_mouse() const noexcept
+    const Mouse& Engine::get_mouse() const noexcept
     {
         assert(mouse);
         return *mouse;
     }
 
-    Keyboard& Main::get_keyboard() noexcept
+    Keyboard& Engine::get_keyboard() noexcept
     {
         assert(keyboard);
         return *keyboard;
     }
 
-    const Keyboard& Main::get_keyboard() const noexcept
+    const Keyboard& Engine::get_keyboard() const noexcept
     {
         assert(keyboard);
         return *keyboard;
     }
 
-    size_t Main::get_joystick_count() const noexcept
+    size_t Engine::get_joystick_count() const noexcept
     {
         return joysticks.size();
     }
 
-    Joystick& Main::get_joystick(size_t id) noexcept
+    Joystick& Engine::get_joystick(size_t id) noexcept
     {
         assert(id < joysticks.size());
         assert(joysticks[id]);
         return *joysticks[id];
     }
 
-    const Joystick& Main::get_joystick(size_t id) const noexcept
+    const Joystick& Engine::get_joystick(size_t id) const noexcept
     {
         assert(id < joysticks.size());
         assert(joysticks[id]);
         return *joysticks[id];
     }
 
-    Window& Main::open_window(const glm::uvec2& size, WindowMode mode, const std::string_view caption)
+    Window& Engine::open_window(const glm::uvec2& size, WindowMode mode, const std::string_view caption)
     {
         auto window = std::make_unique<Window>(size, mode, caption);
         auto tmp = window.get();
@@ -102,21 +102,21 @@ namespace pkzo
         return *tmp;
     }
 
-    Window& Main::get_main_window() noexcept
+    Window& Engine::get_main_window() noexcept
     {
         assert(!windows.empty());
         assert(windows.front());
         return *windows.front();
     }
 
-    const Window& Main::get_main_window() const noexcept
+    const Window& Engine::get_main_window() const noexcept
     {
         assert(!windows.empty());
         assert(windows.front());
         return *windows.front();
     }
 
-    void Main::run()
+    void Engine::run()
     {
         running = true;
         last_tick = std::chrono::steady_clock::now();
@@ -126,7 +126,7 @@ namespace pkzo
         }
     }
 
-    void Main::tick()
+    void Engine::tick()
     {
         auto now = std::chrono::steady_clock::now();
         auto dt  = now - last_tick;
@@ -144,22 +144,22 @@ namespace pkzo
         sync::sync_point();
     }
 
-    void Main::stop()
+    void Engine::stop()
     {
         running = false;
     }
 
-    void Main::on_tick(const std::function<void(std::chrono::milliseconds)>& cb)
+    void Engine::on_tick(const std::function<void(std::chrono::milliseconds)>& cb)
     {
         tick_cb = cb;
     }
 
-    void Main::on_quit(const std::function<void()>&cb)
+    void Engine::on_quit(const std::function<void()>&cb)
     {
         quit_cb = cb;
     }
 
-    void Main::handle_events()
+    void Engine::handle_events()
     {
         SDL_Event event;
         while (SDL_PollEvent(&event))

@@ -142,7 +142,7 @@ TEST(Rendering, spot_light)
 
 TEST(Rendering, materials)
 {
-    pkzo::Main main;
+    pkzo::Engine main;
 
     auto& window = main.open_window({800, 600}, pkzo::WindowMode::STATIC, __FUNCTION__);
 

@@ -67,17 +67,17 @@ namespace pong2d
             settings.load(settings_file);
         }
 
-        main.on_tick([this] (auto dt) {
+        engine.on_tick([this] (auto dt) {
             tick(dt);
         });
-        main.on_quit([this] () {
+        engine.on_quit([this] () {
             change_state(GameState::QUIT);
         });
 
         auto width = settings.get_value("Video", "width", 800u);
         auto height = settings.get_value("Video", "height", 600u);
         auto fullscreen = settings.get_value("Video", "fullscreen", false);
-        auto& window = main.open_window({width, height}, fullscreen ? pkzo::WindowMode::FULLSCREEN : pkzo::WindowMode::STATIC, "Pkzo - Pong 2D");
+        auto& window = engine.open_window({width, height}, fullscreen ? pkzo::WindowMode::FULLSCREEN : pkzo::WindowMode::STATIC, "Pkzo - Pong 2D");
         window.on_draw([this] () {
             if (screen)
             {
@@ -85,7 +85,7 @@ namespace pong2d
             }
         });
 
-        auto& mouse = main.get_mouse();
+        auto& mouse = engine.get_mouse();
         mouse.on_button_down([this, &window] (auto button, auto pos) {
             if (screen)
             {
@@ -109,7 +109,7 @@ namespace pong2d
             }
         });
 
-        auto& keyboard = main.get_keyboard();
+        auto& keyboard = engine.get_keyboard();
         keyboard.on_key_down([this] (auto mod, auto key) {
             if (!key_capture_cb)
             {
@@ -146,7 +146,7 @@ namespace pong2d
 
     pkzo::Window& Game::get_window() noexcept
     {
-        return main.get_main_window();
+        return engine.get_main_window();
     }
 
     void Game::change_state(GameState ns) noexcept
@@ -167,7 +167,7 @@ namespace pong2d
 
     int Game::run()
     {
-        main.run();
+        engine.run();
         return 0;
     }
 
@@ -207,7 +207,7 @@ namespace pong2d
             }
             case GameState::QUIT:
                 screen = nullptr;
-                main.stop();
+                engine.stop();
                 break;
             default:
                 assert(false);

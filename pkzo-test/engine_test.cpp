@@ -24,7 +24,7 @@
 
 #include "pch.h"
 
-TEST(Main, contruct)
+TEST(Engine, contruct)
 {
-    pkzo::Main main;
+    pkzo::Engine engine;
 }
