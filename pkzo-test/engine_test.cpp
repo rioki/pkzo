@@ -68,3 +68,14 @@ TEST(Engine, open_window)
     EXPECT_EQ(pkzo::WindowMode::STATIC, window.get_mode());
     EXPECT_EQ(glm::uvec2(1600, 900), window.get_size());
 }
+
+TEST(Engine, dont_init_anything)
+{
+    pkzo::test::setup_test_settings({1600, 900});
+
+    pkzo::Engine engine(pkzo::test::ENGINE_ID, pkzo::EngineInit::NONE);
+
+    auto& settings = engine.get_settings();
+    EXPECT_FALSE(settings.has_value("Graphic", "resolution"));
+    EXPECT_EQ(0u, engine.get_open_windows());
+}

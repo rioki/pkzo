@@ -46,6 +46,8 @@ namespace pkzo
     class Window;
     class Settings;
 
+    constexpr EngineInit DEFAULT_ENGINE_INIT = EngineInit::LOAD_SETTINGS | EngineInit::WINDOW;
+
     //! Main object, controller of all
     class PKZO_EXPORT Engine
     {
@@ -53,7 +55,7 @@ namespace pkzo
         //! Construct Engine
         //!
         //! @param id the engine id.
-        explicit Engine(const std::string& id);
+        explicit Engine(const std::string& id, EngineInit init = DEFAULT_ENGINE_INIT);
         Engine(const Engine&) = delete;
         ~Engine();
         Engine& operator = (const Engine&) = delete;
@@ -80,8 +82,19 @@ namespace pkzo
         const Joystick& get_joystick(size_t id) const noexcept;
 
         Window& open_window(const glm::uvec2& size, WindowMode mode = WindowMode::STATIC, const std::string_view caption = "pkzo");
+
         Window& get_main_window() noexcept;
         const Window& get_main_window() const noexcept;
+
+        //! Get the number of windows open.
+        size_t get_open_windows() const noexcept;
+
+        //! Get the window with the given index.
+        //!
+        //! @{
+        Window& get_window(size_t index) noexcept;
+        const Window& get_window(size_t index) const noexcept;
+        //! @}
 
         void run();
         void tick();

@@ -35,22 +35,28 @@
 
 namespace pkzo
 {
-    Engine::Engine(const std::string& i)
+    Engine::Engine(const std::string& i, EngineInit init)
     : id(i)
     {
         sync::set_main_thread_id(std::this_thread::get_id());
 
         settings = std::make_unique<Settings>();
-        auto settings_file = get_user_folder() / "settings.json";
-        if (std::filesystem::exists(settings_file))
+        if ((init & EngineInit::LOAD_SETTINGS) == EngineInit::LOAD_SETTINGS)
         {
-            settings->load(settings_file);
+            auto settings_file = get_user_folder() / "settings.json";
+            if (std::filesystem::exists(settings_file))
+            {
+                settings->load(settings_file);
+            }
         }
 
-        // TODO in release the defaults should be fullscreen & native resolution
-        auto resolution = settings->get_value("Graphic", "resolution", glm::uvec2(800, 600));
-        auto fullscreen = settings->get_value("Graphic", "fullscreen", false);
-        open_window(resolution, fullscreen ? WindowMode::FULLSCREEN : WindowMode::STATIC, id);
+        if ((init & EngineInit::WINDOW) == EngineInit::WINDOW)
+        {
+            // TODO in release the defaults should be fullscreen & native resolution
+            auto resolution = settings->get_value("Graphic", "resolution", glm::uvec2(800, 600));
+            auto fullscreen = settings->get_value("Graphic", "fullscreen", false);
+            open_window(resolution, fullscreen ? WindowMode::FULLSCREEN : WindowMode::STATIC, id);
+        }
 
         mouse = std::make_unique<Mouse>();
         keyboard = std::make_unique<Keyboard>();
@@ -209,16 +215,29 @@ namespace pkzo
 
     Window& Engine::get_main_window() noexcept
     {
-        assert(!windows.empty());
-        assert(windows.front());
-        return *windows.front();
+        return get_window(0);
     }
 
     const Window& Engine::get_main_window() const noexcept
     {
-        assert(!windows.empty());
-        assert(windows.front());
-        return *windows.front();
+        return get_window(0);
+    }
+
+    size_t Engine::get_open_windows() const noexcept
+    {
+        return windows.size();
+    }
+
+    Window& Engine::get_window(size_t index) noexcept
+    {
+        DBG_ASSERT(index < windows.size());
+        return *windows[index];
+    }
+
+    const Window& Engine::get_window(size_t index) const noexcept
+    {
+        DBG_ASSERT(index < windows.size());
+        return *windows[index];
     }
 
     void Engine::run()
