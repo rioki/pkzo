@@ -26,9 +26,9 @@
 #define _PONG2D_GAME_H_
 
 #include <pkzo/pkzo.h>
+#include <pkzo/Settings.h>
 
 #include "Simulation.h"
-#include "Settings.h"
 
 namespace pong2d
 {
@@ -47,7 +47,7 @@ namespace pong2d
         Game(int argc, char* argv[]);
         ~Game();
 
-        Settings& get_settings() noexcept;
+        pkzo::Settings& get_settings() noexcept;
 
         pkzo::Window& get_window() noexcept;
 
@@ -62,7 +62,6 @@ namespace pong2d
         GameState state      = GameState::INITIAL;
         GameState next_state = GameState::MAIN_MENU;
 
-        Settings   settings;
         pkzo::Engine engine;
         std::unique_ptr<Simulation> simulation;
 

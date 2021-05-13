@@ -25,7 +25,7 @@
 #include "pch.h"
 #include "Settings.h"
 
-namespace pong2d
+namespace pkzo
 {
     Settings::Settings() = default;
     Settings::~Settings() = default;
@@ -51,7 +51,7 @@ namespace pong2d
         auto input = std::ifstream(config_file);
         if (!input.is_open())
         {
-            throw std::runtime_error("Failed to open seetings for reading.");
+            throw std::runtime_error(compose("Failed to open %0 for reading.", config_file));
         }
 
         std::map<std::string, std::map<std::string, std::string>> tmp;
@@ -66,10 +66,8 @@ namespace pong2d
         std::ofstream output(config_file);
         if (!output.is_open())
         {
-            throw std::runtime_error("Failed to open settings for writing.");
+            throw std::runtime_error(compose("Failed to open %0 for writing.", config_file));
         }
         output << std::setw(2) << json(values) << std::endl;
-
     }
-
 }

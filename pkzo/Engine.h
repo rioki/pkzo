@@ -30,6 +30,9 @@
 #include <vector>
 #include <functional>
 #include <chrono>
+#include <mutex>
+#include <string>
+#include <filesystem>
 #include <glm/fwd.hpp>
 
 #include "enums.h"
@@ -41,13 +44,14 @@ namespace pkzo
     class Keyboard;
     class Joystick;
     class Window;
+    class Settings;
 
     //! Main object, controller of all
     class PKZO_EXPORT Engine
     {
     public:
         //! Construct Engine
-        //! 
+        //!
         //! @param id the engine id.
         explicit Engine(const std::string& id);
         Engine(const Engine&) = delete;
@@ -55,7 +59,15 @@ namespace pkzo
         Engine& operator = (const Engine&) = delete;
 
         //! Get the engine's id.
-        const std::string& get_id() const;
+        const std::string& get_id() const noexcept;
+
+        //! Get the folder that can be used to store user specific persistent data.
+        std::filesystem::path get_user_folder() const;
+        //! Get the folder that can be used to store throw away data.
+        std::filesystem::path get_temp_folder() const;
+
+        Settings& get_settings() noexcept;
+        const Settings& get_settings() const noexcept;
 
         Mouse& get_mouse() noexcept;
         const Mouse& get_mouse() const noexcept;
@@ -80,10 +92,14 @@ namespace pkzo
 
     private:
         SdlSentry sdl_sentry;
+        mutable std::recursive_mutex mutex;
         std::string id;
+        mutable std::filesystem::path user_folder;
+        mutable std::filesystem::path temp_folder;
         bool running = false;
         std::chrono::steady_clock::time_point  last_tick;
 
+        std::unique_ptr<Settings>              settings;
         std::unique_ptr<Mouse>                 mouse;
         std::unique_ptr<Keyboard>              keyboard;
         std::vector<std::unique_ptr<Joystick>> joysticks;

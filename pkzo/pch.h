@@ -41,6 +41,7 @@
 #include <mutex>
 #include <thread>
 #include <atomic>
+#include <string>
 
 #include <fmt/core.h>
 
@@ -57,5 +58,10 @@
 
 #include <windows.h>
 #include <tchar.h>
+
+#ifdef _WIN32
+#include <shlobj.h>
+#include <windows.h>
+#endif
 
 #endif

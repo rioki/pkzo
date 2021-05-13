@@ -22,6 +22,8 @@
 // THE SOFTWARE.
 //
 
+#pragma once
+
 #include <string>
 #include <tuple>
 #include <filesystem>
@@ -31,6 +33,15 @@
 
 namespace pkzo::test
 {
+    constexpr auto ENGINE_ID = "pkzo-test";
+
+    //! Get system temp folder.
+    std::filesystem::path get_temp_folder();
+    //! Get the system user folder.
+    //!
+    //! On Windows this is %LOCALAPPDATA%
+    std::filesystem::path get_user_folder();
+
     std::filesystem::path get_test_temp() noexcept;
     std::filesystem::path get_test_ref() noexcept;
     std::string get_test_name() noexcept;
@@ -38,6 +49,9 @@ namespace pkzo::test
     void save_test_output_diff(const Texture& lhs_value, const Texture& rhs_value);
 
     testing::AssertionResult compare_textures(const char* lhs_expression, const char* rhs_expression, const char* abs_error_expr, const Texture& lhs_value, const Texture& rhs_value, float abs_error);
+
+    //! Make sure the settings the test engine loads are deterministic
+    void setup_test_settings(const glm::uvec2 resolution = glm::uvec2(800u, 600u));
 }
 
 #define EXPECT_TEXTURE_NEAR(val1, val2, abs_error) EXPECT_PRED_FORMAT3(::pkzo::test::compare_textures, val1, val2, abs_error)

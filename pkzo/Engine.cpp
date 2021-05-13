@@ -25,11 +25,13 @@
 #include "pch.h"
 #include "Engine.h"
 
+#include "glmio.h"
 #include "sync.h"
 #include "Mouse.h"
 #include "Keyboard.h"
 #include "Joystick.h"
 #include "Window.h"
+#include "Settings.h"
 
 namespace pkzo
 {
@@ -37,6 +39,18 @@ namespace pkzo
     : id(i)
     {
         sync::set_main_thread_id(std::this_thread::get_id());
+
+        settings = std::make_unique<Settings>();
+        auto settings_file = get_user_folder() / "settings.json";
+        if (std::filesystem::exists(settings_file))
+        {
+            settings->load(settings_file);
+        }
+
+        // TODO in release the defaults should be fullscreen & native resolution
+        auto resolution = settings->get_value("Graphic", "resolution", glm::uvec2(800, 600));
+        auto fullscreen = settings->get_value("Graphic", "fullscreen", false);
+        open_window(resolution, fullscreen ? WindowMode::FULLSCREEN : WindowMode::STATIC, id);
 
         mouse = std::make_unique<Mouse>();
         keyboard = std::make_unique<Keyboard>();
@@ -50,11 +64,96 @@ namespace pkzo
         last_tick = std::chrono::steady_clock::now();
     }
 
-    Engine::~Engine() = default;
+    Engine::~Engine()
+    {
+        try
+        {
+            settings->save(get_user_folder() / "settings.json");
+        }
+        catch (const std::exception& ex)
+        {
+            DBG_FAIL(ex.what());
+        }
+    }
 
-    const std::string& Engine::get_id() const
+    const std::string& Engine::get_id() const noexcept
     {
         return id;
+    }
+
+    std::filesystem::path Engine::get_user_folder() const
+    {
+        std::scoped_lock sl(mutex);
+        if (user_folder.empty())
+        {
+            #ifdef _WIN32
+            PWSTR path = nullptr;
+            auto hr = SHGetKnownFolderPath(FOLDERID_LocalAppData, KF_FLAG_CREATE, nullptr, &path);
+            if (SUCCEEDED(hr))
+            {
+                user_folder = std::filesystem::path(path) / id;
+                CoTaskMemFree(path);
+                if (!std::filesystem::exists(user_folder))
+                {
+                    std::filesystem::create_directories(user_folder);
+                }
+                return user_folder;
+            }
+            else
+            {
+                throw std::runtime_error("Failed to get %LOCALAPPDATA%.");
+            }
+            #else
+            #error port me
+            #endif
+        }
+        else
+        {
+            return user_folder;
+        }
+    }
+
+    std::filesystem::path Engine::get_temp_folder() const
+    {
+        std::scoped_lock sl(mutex);
+        if (temp_folder.empty())
+        {
+            #ifdef _WIN32
+            TCHAR path[MAX_PATH];
+            auto ret = GetTempPath(MAX_PATH, path); // buffer for path
+            if (ret > MAX_PATH || (ret == 0))
+            {
+                throw std::runtime_error("Failed to get temporary folder.");
+            }
+            else
+            {
+                temp_folder = std::filesystem::path(path) / id;
+                if (!std::filesystem::exists(temp_folder))
+                {
+                    std::filesystem::create_directories(temp_folder);
+                }
+                return temp_folder;
+            }
+            #else
+            #error port me
+            #endif
+        }
+        else
+        {
+            return temp_folder;
+        }
+    }
+
+    Settings& Engine::get_settings() noexcept
+    {
+        DBG_ASSERT(settings);
+        return *settings;
+    }
+
+    const Settings& Engine::get_settings() const noexcept
+    {
+        DBG_ASSERT(settings);
+        return *settings;
     }
 
     Mouse& Engine::get_mouse() noexcept

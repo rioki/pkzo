@@ -27,7 +27,6 @@
 
 #include "KeyInput.h"
 #include "Game.h"
-#include "Settings.h"
 
 namespace pong2d
 {

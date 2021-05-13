@@ -377,9 +377,5 @@ namespace pkzo
                 break;
             }
         }
-        else
-        {
-            assert(false);
-        }
     }
 }

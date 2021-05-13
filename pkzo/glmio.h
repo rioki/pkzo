@@ -45,4 +45,44 @@ namespace glm
         os << ")";
         return os;
     }
+
+    template<size_t N, typename T, qualifier Q>
+    std::istream& operator >> (std::istream& is, vec<N, T, Q>& v)
+    {
+        char c;
+        is >> c;
+        assert(c == '(');
+        for (auto i = 0u; i < N; i++)
+        {
+            is >> v[i];
+            if (i != N - 1)
+            {
+                is >> c;
+                assert(c == ',');
+            }
+        }
+        is >> c;
+        assert(c == ')');
+        return is;
+    }
+
+    template<size_t N, size_t M, typename T, qualifier Q>
+    std::istream& operator >> (std::istream& is, mat<N, M, T, Q>& v)
+    {
+        char c;
+        is >> c;
+        assert(c == '(');
+        for (auto i = 0u; i < N; i++)
+        {
+            is >> v[i];
+            if (i != N - 1)
+            {
+                is >> c;
+                assert(c == ',');
+            }
+        }
+        is >> c;
+        assert(c == ')');
+        return is;
+    }
 }

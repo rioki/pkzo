@@ -36,38 +36,9 @@
 
 namespace pong2d
 {
-    auto get_user_folder()
-    {
-    #ifdef _WIN32
-        PWSTR szPath = nullptr;
-        auto hr = SHGetKnownFolderPath(FOLDERID_LocalAppData, KF_FLAG_CREATE, nullptr, &szPath);
-        if (SUCCEEDED(hr))
-        {
-            auto result = std::filesystem::path(szPath) / "pkzo" / "pong2d";
-            CoTaskMemFree(szPath);
-            return result;
-        }
-        else
-        {
-            throw std::runtime_error("Failed to get %LOCALAPPDATA%.");
-        }
-    #else
-    #error port me
-    #endif
-    }
-
     Game::Game(int argc, char* argv[])
     : engine("pong2d")
     {
-        auto user_folder = get_user_folder();
-        std::filesystem::create_directories(user_folder);
-
-        auto settings_file = user_folder / "settings.json";
-        if (std::filesystem::exists(settings_file))
-        {
-            settings.load(settings_file);
-        }
-
         engine.on_tick([this] (auto dt) {
             tick(dt);
         });
@@ -75,10 +46,8 @@ namespace pong2d
             change_state(GameState::QUIT);
         });
 
-        auto width = settings.get_value("Video", "width", 800u);
-        auto height = settings.get_value("Video", "height", 600u);
-        auto fullscreen = settings.get_value("Video", "fullscreen", false);
-        auto& window = engine.open_window({width, height}, fullscreen ? pkzo::WindowMode::FULLSCREEN : pkzo::WindowMode::STATIC, "Pkzo - Pong 2D");
+        auto& window = engine.get_main_window();
+        window.set_caption("Pkzo - Pong 2D");
         window.on_draw([this] () {
             if (screen)
             {
@@ -135,14 +104,11 @@ namespace pong2d
         screen_renderer = std::make_unique<pkzo::ScreenRenderer>();
     }
 
-    Game::~Game()
-    {
-        settings.save(get_user_folder() / "settings.json");
-    }
+    Game::~Game() = default;
 
-    Settings& Game::get_settings() noexcept
+    pkzo::Settings& Game::get_settings() noexcept
     {
-        return settings;
+        return engine.get_settings();
     }
 
     pkzo::Window& Game::get_window() noexcept

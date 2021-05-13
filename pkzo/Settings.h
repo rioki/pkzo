@@ -22,16 +22,19 @@
 // THE SOFTWARE.
 //
 
-#ifndef _PONG2D_SETTINGS_H_
-#define _PONG2D_SETTINGS_H_
+#pragma once
+
+#include "config.h"
 
 #include <string>
 #include <map>
 #include <filesystem>
 
-namespace pong2d
+#include "utils.h"
+
+namespace pkzo
 {
-    class Settings
+    class PKZO_EXPORT Settings
     {
     public:
         Settings();
@@ -75,4 +78,3 @@ namespace pong2d
         values[section][key] = pkzo::to_string(value);
     }
 }
-#endif

@@ -183,6 +183,7 @@
     <ClInclude Include="ScreenNodeGroup.h" />
     <ClInclude Include="ScreenRenderer.h" />
     <ClInclude Include="SdlSentry.h" />
+    <ClInclude Include="Settings.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Slider.h" />
     <ClInclude Include="Sphere.h" />
@@ -231,6 +232,7 @@
     <ClCompile Include="ScreenNodeGroup.cpp" />
     <ClCompile Include="ScreenRenderer.cpp" />
     <ClCompile Include="SdlSentry.cpp" />
+    <ClCompile Include="Settings.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Slider.cpp" />
     <ClCompile Include="Sphere.cpp" />

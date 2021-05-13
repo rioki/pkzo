@@ -32,3 +32,8 @@
 
 #include "glmtest.h"
 #include "test_utils.h"
+
+#ifdef _WIN32
+#include <shlobj.h>
+#include <windows.h>
+#endif

@@ -35,8 +35,14 @@
 #undef min
 #endif
 
+#include "compose.h"
+
 namespace pkzo
 {
+    // inline compose's to_string and from_string
+    using impl::to_string;
+    using impl::from_string;
+
     inline
     glm::vec3 rgb(float r, float g, float b)
     {

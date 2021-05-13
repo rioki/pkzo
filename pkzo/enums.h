@@ -364,23 +364,6 @@ namespace pkzo
 
     PKZO_EXPORT std::string to_string(KeyMod mod, Key key);
 
-    template <typename T>
-    std::string to_string(T value)
-    {
-        std::stringstream buff;
-        buff << value;
-        return buff.str();
-    }
-
-    template <typename T>
-    T from_string(const std::string& str)
-    {
-        std::stringstream buff(str);
-        T value;
-        buff >> value;
-        return value;
-    }
-
     struct format_error : public std::runtime_error
     {
         using runtime_error::runtime_error;

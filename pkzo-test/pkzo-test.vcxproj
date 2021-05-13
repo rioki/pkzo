@@ -179,6 +179,7 @@
     <ClCompile Include="scene_node_test.cpp" />
     <ClCompile Include="scene_renderer_test.cpp" />
     <ClCompile Include="scene_test.cpp" />
+    <ClCompile Include="settings_test.cpp" />
     <ClCompile Include="test_utils.cpp" />
     <ClCompile Include="texture_text.cpp" />
     <ClCompile Include="text_test.cpp" />
