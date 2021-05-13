@@ -57,6 +57,7 @@ namespace pong2d
     }
 
     Game::Game(int argc, char* argv[])
+    : engine("pong2d")
     {
         auto user_folder = get_user_folder();
         std::filesystem::create_directories(user_folder);

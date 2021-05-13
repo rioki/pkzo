@@ -50,6 +50,7 @@ namespace mv
     }
 
     ModelViewer::ModelViewer(int argc, char* argv[])
+    : engine("pkzo-model-viewer")
     {
         using pkzo::map_to_screen;
 

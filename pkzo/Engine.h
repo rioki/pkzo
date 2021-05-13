@@ -42,13 +42,20 @@ namespace pkzo
     class Joystick;
     class Window;
 
+    //! Main object, controller of all
     class PKZO_EXPORT Engine
     {
     public:
-        Engine();
+        //! Construct Engine
+        //! 
+        //! @param id the engine id.
+        explicit Engine(const std::string& id);
         Engine(const Engine&) = delete;
         ~Engine();
         Engine& operator = (const Engine&) = delete;
+
+        //! Get the engine's id.
+        const std::string& get_id() const;
 
         Mouse& get_mouse() noexcept;
         const Mouse& get_mouse() const noexcept;
@@ -73,6 +80,7 @@ namespace pkzo
 
     private:
         SdlSentry sdl_sentry;
+        std::string id;
         bool running = false;
         std::chrono::steady_clock::time_point  last_tick;
 

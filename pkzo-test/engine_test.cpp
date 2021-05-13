@@ -26,5 +26,6 @@
 
 TEST(Engine, contruct)
 {
-    pkzo::Engine engine;
+    pkzo::Engine engine("pkzo-test");
+    EXPECT_EQ("pkzo-test", engine.get_id());
 }

@@ -33,7 +33,8 @@
 
 namespace pkzo
 {
-    Engine::Engine()
+    Engine::Engine(const std::string& i)
+    : id(i)
     {
         sync::set_main_thread_id(std::this_thread::get_id());
 
@@ -50,6 +51,11 @@ namespace pkzo
     }
 
     Engine::~Engine() = default;
+
+    const std::string& Engine::get_id() const
+    {
+        return id;
+    }
 
     Mouse& Engine::get_mouse() noexcept
     {

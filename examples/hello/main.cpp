@@ -67,7 +67,7 @@ auto create_hello_screen(pkzo::Engine& main)
 
 int main(int argc, char* argv[])
 {
-    pkzo::Engine main;
+    pkzo::Engine main("pkzo-hello");
 
     auto& window = main.open_window({800, 600}, pkzo::WindowMode::STATIC, "Hello Pkzo!");
 
