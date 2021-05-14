@@ -26,8 +26,6 @@
 
 #include <pkzo/pkzo.h>
 
-#include "Settings.h"
-
 namespace mv
 {
     class ModelViewer
@@ -39,7 +37,6 @@ namespace mv
         int run();
 
     private:
-        Settings   settings;
         pkzo::Engine engine;
 
         std::unique_ptr<pkzo::ScreenRenderer> screen_renderer;
