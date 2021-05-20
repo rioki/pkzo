@@ -358,6 +358,8 @@ namespace pkzo
         NONE  = 0,
         LOAD_SETTINGS   = PKZO_BIT(1),
         WINDOW          = PKZO_BIT(2),
+        HANDLE_DRAW     = PKZO_BIT(3),
+        ROUTE_EVENTS    = PKZO_BIT(4),
     };
     PKZO_ENUM_BIT_OPERATORS(EngineInit)
 

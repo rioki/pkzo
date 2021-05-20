@@ -27,6 +27,9 @@
 
 namespace pkzo
 {
+    PerspectiveCamera::PerspectiveCamera(const glm::mat4& transform) noexcept
+    : Camera(transform) {}
+
     void PerspectiveCamera::set_fov(const float value) noexcept
     {
         fov = value;

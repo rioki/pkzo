@@ -45,6 +45,8 @@
 #include "SceneNode.h"
 #include "SceneNodeGroup.h"
 #include "Camera.h"
+#include "PerspectiveCamera.h"
+#include "OrthographicCamera.h"
 #include "Geometry.h"
 #include "Box.h"
 #include "Sphere.h"

@@ -33,5 +33,7 @@ out vec4 pkzo_FragColor;
 
 void main()
 {
-    pkzo_FragColor = texture(pkzo_EmissiveMap, vTexCoord) * vec4(1.0, 1.0, 1.0, texture(pkzo_Mask, vTexCoord).r);
+    // HACK while we are using alpha blending in this pass we need to compute the ammount added
+    vec3 emissive = texture(pkzo_EmissiveMap, vTexCoord).rgb;
+    pkzo_FragColor = vec4(emissive, length(emissive) * texture(pkzo_Mask, vTexCoord).r);
 }

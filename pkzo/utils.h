@@ -28,6 +28,7 @@
 
 #include <string>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -84,6 +85,11 @@ namespace pkzo
         uint8_t b = (hex & 0x0000FF00) >> 8;
         uint8_t a = (hex & 0x000000FF) >> 0;
         return rgba(r, g, b, a);
+    }
+
+    inline glm::mat4 lookat(const glm::vec3 pos, const glm::vec3 target, const glm::vec3 up)
+    {
+        return glm::inverse(glm::lookAt(pos, target, up));
     }
 
     constexpr unsigned int hash(const char* str, int h = 0)

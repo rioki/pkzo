@@ -32,6 +32,7 @@
 #include <functional>
 #include <glm/fwd.hpp>
 
+#include "rsig.h"
 #include "enums.h"
 #include "SdlSentry.h"
 
@@ -68,7 +69,12 @@ namespace pkzo
 
         void close();
 
-        void on_draw(const std::function<void ()>& cb);
+        //! Signal emitted each time the window needs to be redrawn
+        //! @{
+        rsig::signal<>& get_draw_sginal() noexcept;
+        rsig::connection on_draw(const std::function<void ()>& cb) noexcept;
+        //! @}
+
         void on_show(const std::function<void ()>& cb);
         void on_hide(const std::function<void ()>& cb);
         void on_exposed(const std::function<void ()>& cb);
@@ -94,7 +100,7 @@ namespace pkzo
         SDL_Window*              window    = nullptr;
         SDL_GLContext            glcontext = nullptr;
 
-        std::function<void ()>           draw_cb;
+        rsig::signal<>                   draw_signal;
         std::function<void ()>           show_cb;
         std::function<void ()>           hide_cb;
         std::function<void ()>           exposed_cb;

@@ -35,6 +35,7 @@
 #include <filesystem>
 #include <glm/fwd.hpp>
 
+#include "rsig.h"
 #include "enums.h"
 #include "SdlSentry.h"
 
@@ -45,8 +46,13 @@ namespace pkzo
     class Joystick;
     class Window;
     class Settings;
+    class Scene;
+    class Camera;
 
-    constexpr EngineInit DEFAULT_ENGINE_INIT = EngineInit::LOAD_SETTINGS | EngineInit::WINDOW;
+    constexpr EngineInit DEFAULT_ENGINE_INIT = EngineInit::LOAD_SETTINGS
+                                             | EngineInit::WINDOW
+                                             | EngineInit::HANDLE_DRAW
+                                             | EngineInit::ROUTE_EVENTS;
 
     //! Main object, controller of all
     class PKZO_EXPORT Engine
@@ -56,6 +62,7 @@ namespace pkzo
         //!
         //! @param id the engine id.
         explicit Engine(const std::string& id, EngineInit init = DEFAULT_ENGINE_INIT);
+        explicit Engine(const std::string& id, int argc, const char* argv[], EngineInit init = DEFAULT_ENGINE_INIT);
         Engine(const Engine&) = delete;
         ~Engine();
         Engine& operator = (const Engine&) = delete;
@@ -96,12 +103,43 @@ namespace pkzo
         const Window& get_window(size_t index) const noexcept;
         //! @}
 
-        void run();
+        //! Change the current scene.
+        //!
+        //! @note The scene will only become active at the next frame.
+        void change_scene(const std::shared_ptr<Scene>& scene, const std::shared_ptr<Camera>& camera) noexcept;
+
+        //! Change the primary camera.
+        void change_camera(const std::shared_ptr<Camera>& camera) noexcept;
+
+        //! Get the current active scene.
+        //!
+        //! @{
+        const std::shared_ptr<Scene>& get_scene() noexcept;
+        std::shared_ptr<const Scene> get_scene() const noexcept;
+        //! @}
+
+        //! Get the current active primart camera.
+        //!
+        //! @{
+        const std::shared_ptr<Camera>& get_camera() noexcept;
+        std::shared_ptr<const Camera> get_camera() const noexcept;
+        //! @}
+
+        int run();
         void tick();
         void stop();
 
-        void on_tick(const std::function<void (std::chrono::milliseconds)>& cb);
-        void on_quit(const std::function<void ()>& cb);
+        //! Singal emitted every frame.
+        //! @{
+        rsig::signal<std::chrono::milliseconds>& get_tick_signal() noexcept;
+        rsig::connection on_tick(const std::function<void (std::chrono::milliseconds)>& cb);
+        //! @}
+
+        //! Signal emitted when stop is requeted.
+        //! @{
+        rsig::signal<>& get_quit_signal() noexcept;
+        rsig::connection on_quit(const std::function<void ()>& cb);
+        //! @}
 
     private:
         SdlSentry sdl_sentry;
@@ -118,9 +156,15 @@ namespace pkzo
         std::vector<std::unique_ptr<Joystick>> joysticks;
         std::vector<std::unique_ptr<Window>>   windows;
 
-        std::function<void (std::chrono::milliseconds)> tick_cb;
-        std::function<void ()> quit_cb;
+        std::shared_ptr<Scene> scene;
+        std::shared_ptr<Scene> next_scene;
+        std::shared_ptr<Camera> camera;
+        std::shared_ptr<Camera> next_camera;
+
+        rsig::signal<std::chrono::milliseconds> tick_signal;
+        rsig::signal<>                          quit_signal;
 
         void handle_events();
+        void switch_scenes();
     };
 }

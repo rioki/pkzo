@@ -49,10 +49,4 @@ namespace pkzo
     {
         return glm::inverse(get_world_transform());
     }
-
-    void Camera::look_at(const glm::vec3 pos, const glm::vec3 target, const glm::vec3 up)
-    {
-        set_transform(glm::inverse(glm::lookAt(pos, target, up)));
-    }
-
 }
