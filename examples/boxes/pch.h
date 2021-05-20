@@ -25,15 +25,3 @@
 #pragma once
 
 #include <pkzo/pkzo.h>
-
-namespace mv
-{
-    class EditorScreen : public pkzo::Screen
-    {
-    public:
-        EditorScreen(const glm::vec2& size);
-
-    private:
-    };
-}
-

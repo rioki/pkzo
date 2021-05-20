@@ -22,14 +22,20 @@
 // THE SOFTWARE.
 //
 
-#include "pch.h"
-#include "EditorScreen.h"
+#pragma once
 
-namespace mv
+#include <pkzo/pkzo.h>
+
+namespace boxes
 {
-    EditorScreen::EditorScreen(const glm::vec2& size)
-    : Screen(size)
+    class Game : public pkzo::Engine
     {
+    public:
+        Game(int argc, const char* argv[]);
 
-    }
+    private:
+        void create_test_scene();
+    };
 }
+
+

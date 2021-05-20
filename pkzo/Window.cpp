@@ -180,9 +180,14 @@ namespace pkzo
         SDL_DestroyWindow(window);
     }
 
-    void Window::on_draw(const std::function<void()>& cb)
+    rsig::signal<>& Window::get_draw_sginal() noexcept
     {
-        draw_cb = cb;
+        return draw_signal;
+    }
+
+    rsig::connection Window::on_draw(const std::function<void()>& cb) noexcept
+    {
+        return draw_signal.connect(cb);
     }
 
     void Window::on_show(const std::function<void()>& cb)
@@ -262,12 +267,7 @@ namespace pkzo
         SDL_GL_GetDrawableSize(window, &w, &h);
         glViewport(0, 0, w, h);
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-
-        if (draw_cb)
-        {
-            draw_cb();
-        }
-
+        draw_signal.emit();
         SDL_GL_SwapWindow(window);
     }
 

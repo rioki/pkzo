@@ -48,9 +48,6 @@ namespace pkzo
         //! Get the camera's view matrix.
         glm::mat4 get_view() const noexcept;
 
-        //! Orient the camera to look at a specific target.
-        void look_at(const glm::vec3 pos, const glm::vec3 target, const glm::vec3 up);
-
     private:
         glm::uvec2 resolution = {800, 600};
     };

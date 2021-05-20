@@ -46,6 +46,14 @@ TEST(Engine, environment)
     EXPECT_NE(user_folder, temp_folder);
 }
 
+TEST(Engine, arguments)
+{
+    int   argc = 2;
+    const char* argv[2] = {"pkzo-test", "arguments"};
+    pkzo::Engine engine("pkzo-test", argc, argv);
+    EXPECT_EQ("pkzo-test", engine.get_id());
+}
+
 TEST(Engine, settings)
 {
     pkzo::Settings ref;
@@ -78,4 +86,17 @@ TEST(Engine, dont_init_anything)
     auto& settings = engine.get_settings();
     EXPECT_FALSE(settings.has_value("Graphic", "resolution"));
     EXPECT_EQ(0u, engine.get_open_windows());
+}
+
+TEST(Engine, on_handlers_can_disconnect)
+{
+    pkzo::test::setup_test_settings();
+
+    pkzo::Engine engine(pkzo::test::ENGINE_ID, pkzo::EngineInit::NONE);
+
+    auto tick_con = engine.on_tick([] (auto dt) {});
+    EXPECT_NO_THROW(engine.get_tick_signal().disconnect(tick_con));
+
+    auto quit_con = engine.on_quit([] () {});
+    EXPECT_NO_THROW(engine.get_quit_signal().disconnect(quit_con));
 }

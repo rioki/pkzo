@@ -52,8 +52,7 @@ TEST(Rendering, shapes)
 
     auto ct = glm::mat4(1.0f);
     ct = glm::translate(ct, {0.0f, 0.0f, 5.0f});
-    auto camera = std::make_shared<pkzo::PerspectiveCamera>();
-    camera->look_at({-5.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f});
+    auto camera = std::make_shared<pkzo::PerspectiveCamera>(pkzo::lookat({-5.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}));
     camera->set_resolution(window.get_size());
     scene.add_node(camera);
 
@@ -77,7 +76,7 @@ TEST(Rendering, point_light)
 
     auto ground = std::make_shared<pkzo::Box>(glm::translate(glm::mat4{1.0f}, {0.0f, 0.0f, -0.5f}), glm::vec3(10.0f, 10.0f, 1.0f));
     scene.add_node(ground);
-    auto sphere = std::make_shared<pkzo::Sphere>(glm::translate(glm::mat4{1.0f}, {0.0f, 0.0f, 0.5f}), 0.25f);
+    auto sphere = std ::make_shared<pkzo::Sphere>(glm::translate(glm::mat4{1.0f}, {0.0f, 0.0f, 0.5f}), 0.25f);
     scene.add_node(sphere);
 
     auto light0 = std::make_shared<pkzo::AmbientLight>(glm::vec3{0.106, 0.161, 0.2});
@@ -86,10 +85,7 @@ TEST(Rendering, point_light)
     auto light1 = std::make_shared<pkzo::PointLight>(glm::translate(glm::mat4{1.0f}, {-0.5f, -0.6f, 1.0f}), glm::vec3(0.839, 0.718, 0.573));
     scene.add_node(light1);
 
-    auto ct = glm::mat4(1.0f);
-    ct = glm::translate(ct, {0.0f, 0.0f, 5.0f});
-    auto camera = std::make_shared<pkzo::PerspectiveCamera>();
-    camera->look_at({-2.0f, 0.5f, 1.0f}, {0.0f, 0.0f, 0.5f}, {0.0f, 0.0f, 1.0f});
+    auto camera = std::make_shared<pkzo::PerspectiveCamera>(pkzo::lookat({-2.0f, 0.5f, 1.0f}, {0.0f, 0.0f, 0.5f}, {0.0f, 0.0f, 1.0f}));
     camera->set_resolution(window.get_size());
     scene.add_node(camera);
 
@@ -125,8 +121,7 @@ TEST(Rendering, spot_light)
 
     auto ct = glm::mat4(1.0f);
     ct = glm::translate(ct, {0.0f, 0.0f, 5.0f});
-    auto camera = std::make_shared<pkzo::PerspectiveCamera>();
-    camera->look_at({-2.0f, 0.5f, 1.0f}, {0.0f, 0.0f, 0.5f}, {0.0f, 0.0f, 1.0f});
+    auto camera = std::make_shared<pkzo::PerspectiveCamera>(pkzo::lookat({-2.0f, 0.5f, 1.0f}, {0.0f, 0.0f, 0.5f}, {0.0f, 0.0f, 1.0f}));
     camera->set_resolution(window.get_size());
     scene.add_node(camera);
 
@@ -171,8 +166,7 @@ TEST(Rendering, materials)
 
     auto ct = glm::mat4(1.0f);
     ct = glm::translate(ct, {0.0f, 0.0f, 5.0f});
-    auto camera = std::make_shared<pkzo::PerspectiveCamera>();
-    camera->look_at({-5.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f});
+    auto camera = std::make_shared<pkzo::PerspectiveCamera>(pkzo::lookat({-5.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}));
     camera->set_resolution(window.get_size());
     scene.add_node(camera);
 

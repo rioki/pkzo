@@ -32,10 +32,15 @@
 #include "Joystick.h"
 #include "Window.h"
 #include "Settings.h"
+#include "Scene.h"
+#include "Camera.h"
 
 namespace pkzo
 {
     Engine::Engine(const std::string& i, EngineInit init)
+    : Engine(i, 0, nullptr, init) {}
+
+    Engine::Engine(const std::string& i, int argc, const char* argv[], EngineInit init)
     : id(i)
     {
         sync::set_main_thread_id(std::this_thread::get_id());
@@ -55,7 +60,17 @@ namespace pkzo
             // TODO in release the defaults should be fullscreen & native resolution
             auto resolution = settings->get_value("Graphic", "resolution", glm::uvec2(800, 600));
             auto fullscreen = settings->get_value("Graphic", "fullscreen", false);
-            open_window(resolution, fullscreen ? WindowMode::FULLSCREEN : WindowMode::STATIC, id);
+            auto& window = open_window(resolution, fullscreen ? WindowMode::FULLSCREEN : WindowMode::STATIC, id);
+
+            if ((init & EngineInit::HANDLE_DRAW) == EngineInit::HANDLE_DRAW)
+            {
+                window.on_draw([this] () {
+                    if (scene && camera)
+                    {
+                        scene->draw(*camera);
+                    }
+                });
+            }
         }
 
         mouse = std::make_unique<Mouse>();
@@ -74,6 +89,9 @@ namespace pkzo
     {
         try
         {
+            scene = next_scene = nullptr;
+            camera = next_camera = nullptr;
+
             settings->save(get_user_folder() / "settings.json");
         }
         catch (const std::exception& ex)
@@ -240,13 +258,58 @@ namespace pkzo
         return *windows[index];
     }
 
-    void Engine::run()
+    void Engine::change_scene(const std::shared_ptr<Scene>& s, const std::shared_ptr<Camera>& c) noexcept
     {
-        running = true;
-        last_tick = std::chrono::steady_clock::now();
-        while (running)
+        next_scene = s;
+        next_camera = c;
+    }
+
+    void Engine::change_camera(const std::shared_ptr<Camera>& c) noexcept
+    {
+        next_camera = c;
+    }
+
+    const std::shared_ptr<Scene>& Engine::get_scene() noexcept
+    {
+        return scene;
+    }
+
+    std::shared_ptr<const Scene> Engine::get_scene() const noexcept
+    {
+        return scene;
+    }
+
+    const std::shared_ptr<Camera>& Engine::get_camera() noexcept
+    {
+        return camera;
+    }
+
+    std::shared_ptr<const Camera> Engine::get_camera() const noexcept
+    {
+        return camera;
+    }
+
+    int Engine::run()
+    {
+        try
         {
-            tick();
+            running = true;
+            last_tick = std::chrono::steady_clock::now();
+            while (running)
+            {
+                tick();
+            }
+            return 0;
+        }
+        catch (const std::exception& ex)
+        {
+            DBG_TRACE(ex.what());
+            return -1;
+        }
+        catch (...)
+        {
+            DBG_TRACE("Unknwon exception.");
+            return -1;
         }
     }
 
@@ -256,11 +319,9 @@ namespace pkzo
         auto dt  = now - last_tick;
         last_tick = now;
 
+        switch_scenes();
         handle_events();
-        if (tick_cb)
-        {
-            tick_cb(std::chrono::duration_cast<std::chrono::milliseconds>(dt));
-        }
+        tick_signal.emit(std::chrono::duration_cast<std::chrono::milliseconds>(dt));
         for (const auto& window : windows)
         {
             window->draw();
@@ -273,14 +334,24 @@ namespace pkzo
         running = false;
     }
 
-    void Engine::on_tick(const std::function<void(std::chrono::milliseconds)>& cb)
+    rsig::signal<std::chrono::milliseconds>& Engine::get_tick_signal() noexcept
     {
-        tick_cb = cb;
+        return tick_signal;
     }
 
-    void Engine::on_quit(const std::function<void()>&cb)
+    rsig::connection Engine::on_tick(const std::function<void(std::chrono::milliseconds)>& cb)
     {
-        quit_cb = cb;
+        return tick_signal.connect(cb);
+    }
+
+    rsig::signal<>& Engine::get_quit_signal() noexcept
+    {
+        return quit_signal;
+    }
+
+    rsig::connection Engine::on_quit(const std::function<void()>& cb)
+    {
+        return quit_signal.connect(cb);
     }
 
     void Engine::handle_events()
@@ -291,17 +362,11 @@ namespace pkzo
             switch (event.type)
             {
                 case SDL_QUIT:
-                {
-                    if (quit_cb)
-                    {
-                        quit_cb();
-                    }
-                    else
+                    if (quit_signal.emit() == 0)
                     {
                         stop();
                     }
                     break;
-                }
                 case SDL_MOUSEMOTION:
                 case SDL_MOUSEBUTTONDOWN:
                 case SDL_MOUSEBUTTONUP:
@@ -340,6 +405,22 @@ namespace pkzo
                 default:
                     // do nothing
                     break;
+            }
+        }
+    }
+
+    void Engine::switch_scenes()
+    {
+        if (scene != next_scene)
+        {
+            scene = next_scene;
+        }
+        if (camera != next_camera)
+        {
+            camera = next_camera;
+            if (camera && !windows.empty())
+            {
+                camera->set_resolution(windows[0]->get_size());
             }
         }
     }
