@@ -56,11 +56,10 @@
 
 #include "Screen.h"
 #include "SceneNode.h"
-#include "ScreenNodeGroup.h"
+#include "SceneNodeGroup.h"
 #include "Text.h"
 #include "Rectangle.h"
 #include "HitArea.h"
-#include "ScreenRenderer.h"
 #include "Button.h"
 #include "DropDownMenu.h"
 #include "Slider.h"

@@ -169,19 +169,19 @@
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="OrthographicCamera.h" />
     <ClInclude Include="Parameters.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="PerspectiveCamera.h" />
     <ClInclude Include="Pipeline.h" />
     <ClInclude Include="pkzo.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="Rectangle.h" />
+    <ClInclude Include="rsig.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneNode.h" />
     <ClInclude Include="SceneNodeGroup.h" />
     <ClInclude Include="Screen.h" />
-    <ClInclude Include="ScreenNode.h" />
-    <ClInclude Include="ScreenNodeGroup.h" />
-    <ClInclude Include="ScreenRenderer.h" />
     <ClInclude Include="SdlSentry.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="Shader.h" />
@@ -214,6 +214,7 @@
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="OrthographicCamera.cpp" />
     <ClCompile Include="Parameters.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -221,6 +222,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="PerspectiveCamera.cpp" />
     <ClCompile Include="Pipeline.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="Rectangle.cpp" />
@@ -228,9 +230,6 @@
     <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="SceneNodeGroup.cpp" />
     <ClCompile Include="Screen.cpp" />
-    <ClCompile Include="ScreenNode.cpp" />
-    <ClCompile Include="ScreenNodeGroup.cpp" />
-    <ClCompile Include="ScreenRenderer.cpp" />
     <ClCompile Include="SdlSentry.cpp" />
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -249,10 +248,10 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Emissive.frag.glsl" />
+    <None Include="Emissive.vert.glsl" />
     <None Include="Phong.frag.glsl" />
     <None Include="Phong.vert.glsl" />
-    <None Include="Screen.frag.glsl" />
-    <None Include="Screen.vert.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="pkzo.rc" />

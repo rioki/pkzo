@@ -34,7 +34,7 @@ namespace pkzo
     SceneNodeGroup::SceneNodeGroup(const glm::mat4& t) noexcept
     : SceneNode(t) {}
 
-    void SceneNodeGroup::add_child(std::shared_ptr<SceneNode> child) noexcept
+    void SceneNodeGroup::add_node(std::shared_ptr<SceneNode> child) noexcept
     {
         DBG_ASSERT(child);
         DBG_ASSERT(child->get_parent() == nullptr);
@@ -49,7 +49,7 @@ namespace pkzo
         }
     }
 
-    void SceneNodeGroup::remove_child(std::shared_ptr<SceneNode> child) noexcept
+    void SceneNodeGroup::remove_node(std::shared_ptr<SceneNode> child) noexcept
     {
         DBG_ASSERT(child);
         DBG_ASSERT(child->get_parent() == this);
@@ -67,12 +67,12 @@ namespace pkzo
         children.erase(i);
     }
 
-    const std::vector<std::shared_ptr<SceneNode>>& SceneNodeGroup::get_children() noexcept
+    const std::vector<std::shared_ptr<SceneNode>>& SceneNodeGroup::get_nodes() noexcept
     {
         return children;
     }
 
-    std::vector<std::shared_ptr<const SceneNode>> SceneNodeGroup::get_children() const noexcept
+    std::vector<std::shared_ptr<const SceneNode>> SceneNodeGroup::get_nodes() const noexcept
     {
         return {begin(children), end(children)};
     }

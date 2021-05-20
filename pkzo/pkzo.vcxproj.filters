@@ -117,15 +117,6 @@
     <ClInclude Include="Screen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ScreenNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ScreenNodeGroup.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ScreenRenderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Text.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -151,6 +142,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Settings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OrthographicCamera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PerspectiveCamera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rsig.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -248,15 +248,6 @@
     <ClCompile Include="Screen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ScreenNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ScreenNodeGroup.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ScreenRenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Text.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -281,6 +272,12 @@
     <ClCompile Include="Settings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OrthographicCamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PerspectiveCamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Phong.frag.glsl">
@@ -289,10 +286,10 @@
     <None Include="Phong.vert.glsl">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="Screen.frag.glsl">
+    <None Include="Emissive.frag.glsl">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="Screen.vert.glsl">
+    <None Include="Emissive.vert.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

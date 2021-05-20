@@ -47,7 +47,7 @@ TEST(SceneNode, world_transform)
     child_transform = glm::translate(child_transform, {0.0f, 0.0f, 1.0f});
     child_transform = glm::rotate(child_transform, glm::radians(30.0f), {0.0f, 0.0f, 1.0f});
     auto child = std::make_shared<pkzo::SceneNode>(child_transform);
-    root.add_child(child);
+    root.add_node(child);
 
     EXPECT_EQ(root_transform, root.get_transform());
     EXPECT_EQ(root_transform, root.get_world_transform());

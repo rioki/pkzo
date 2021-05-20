@@ -110,7 +110,7 @@ namespace pkzo
                 auto color = static_cast<float>(pixel) / static_cast<float>(bitmap.num_grays);
                 auto p = position + glm::uvec2{i, j};
                 p.y = th - p.y;
-                target.set_texel(p, glm::vec4(1.0f, 1.0f, 1.0f, color));
+                target.set_texel(p, glm::vec4(color));
             }
         }
     }
@@ -120,6 +120,7 @@ namespace pkzo
         auto u32text = utf32(text);
         auto [size, start] = estimate_impl(u32text);
         auto texture = std::make_shared<Texture>(size, ColorMode::RGBA, DataType::UINT8, nullptr, text);
+        texture->set_filter_mode(FilterMode::NEAREST); // REVIEWME
         auto pen = start;
         auto use_kerning = FT_HAS_KERNING(face);
         auto prev_index = 0u;

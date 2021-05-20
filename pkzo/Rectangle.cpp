@@ -25,50 +25,33 @@
 #include "pch.h"
 #include "Rectangle.h"
 
-#include "ScreenRenderer.h"
+#include "Scene.h"
+#include "Pipeline.h"
+#include "Material.h"
+#include "Mesh.h"
 
 namespace pkzo
 {
     Rectangle::Rectangle() noexcept = default;
 
-    Rectangle::Rectangle(const std::shared_ptr<Texture>& t) noexcept
-    : texture(t)
+    Rectangle::Rectangle(const glm::vec2& s, const std::shared_ptr<Material>& m) noexcept
+    : size(s), material(m)
     {
-        assert(texture);
-        size = texture->get_size();
+        DBG_ASSERT(material);
     }
 
-    Rectangle::Rectangle(const std::shared_ptr<Texture>& t, const glm::vec2& s) noexcept
-    : texture(t), size(s) {}
-
-    Rectangle::Rectangle(const glm::vec4& c, const glm::vec2& s) noexcept
-    : color(c), size(s) {}
-
-    Rectangle::Rectangle(const std::shared_ptr<Texture>& t, const glm::vec4& c) noexcept
-    : texture(t), color(c)
+    Rectangle::Rectangle(const glm::mat4& transform, const glm::vec2& s, const std::shared_ptr<Material>& m) noexcept
+    : SceneNode(transform), size(s), material(m)
     {
-        assert(texture);
-        size = texture->get_size();
+        DBG_ASSERT(material);
     }
-
-    Rectangle::Rectangle(const std::shared_ptr<Texture>& t, const glm::vec4& c, const glm::vec2& s) noexcept
-    : texture(t), color(c), size(s) {}
 
     Rectangle::~Rectangle() = default;
-
-    void Rectangle::set_position(const glm::vec2& value) noexcept
-    {
-        position = value;
-    }
-
-    const glm::vec2& Rectangle::get_position() const noexcept
-    {
-        return position;
-    }
 
     void Rectangle::set_size(const glm::vec2& value) noexcept
     {
         size = value;
+        dirty = true;
     }
 
     const glm::vec2& Rectangle::get_size() const noexcept
@@ -76,28 +59,42 @@ namespace pkzo
         return size;
     }
 
-    void Rectangle::set_color(const glm::vec4& value) noexcept
+    void Rectangle::set_material(const std::shared_ptr<Material>& value)
     {
-        color = value;
+        material = value;
+        dirty = true;
     }
 
-    const glm::vec4& Rectangle::get_color() const noexcept
+    const std::shared_ptr<Material>& Rectangle::get_material() const
     {
-        return color;
+        return material;
     }
 
-    void Rectangle::set_texture(const std::shared_ptr<Texture>& value)
+    void Rectangle::update(std::chrono::milliseconds dt) noexcept
     {
-        texture = value;
+        SceneNode::update(dt);
+        DBG_ASSERT(pipeline);
+        DBG_ASSERT(pipeline_handle != 0);
+        pipeline->update_geometry(pipeline_handle, get_world_transform());
+        if (dirty)
+        {
+            pipeline->update_geometry(pipeline_handle, make_rectangle(size));
+            pipeline->update_geometry(pipeline_handle, material->to_parameters());
+        }
     }
 
-    const std::shared_ptr<Texture>& Rectangle::get_texture() const
+    void Rectangle::on_attach_scene(Scene* scene) noexcept
     {
-        return texture;
+        SceneNode::on_attach_scene(scene);
+        pipeline = scene->get_render_pipeline();
+        pipeline_handle = pipeline->add_geometry(get_world_transform(), make_rectangle(size), material->to_parameters());
     }
 
-    void Rectangle::render(ScreenRenderer& renderer, const glm::vec2& offset) const noexcept
+    void Rectangle::on_detach_scene() noexcept
     {
-        renderer.draw_rectangle(offset + position, size, color, texture);
+        pipeline->remove_geometry(pipeline_handle);
+        pipeline        = nullptr;
+        pipeline_handle = 0;
+        SceneNode::on_detach_scene();
     }
 }

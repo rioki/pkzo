@@ -31,7 +31,7 @@
 #include <string>
 #include <memory>
 
-#include "ScreenNodeGroup.h"
+#include "SceneNodeGroup.h"
 
 namespace pkzo
 {
@@ -40,7 +40,7 @@ namespace pkzo
     class Text;
     class Font;
 
-    class PKZO_EXPORT DropDownMenu : public ScreenNodeGroup
+    class PKZO_EXPORT DropDownMenu : public SceneNodeGroup
     {
     public:
         DropDownMenu(const std::shared_ptr<pkzo::Texture>& background_texture, const std::shared_ptr<pkzo::Texture>& button_texture, const std::shared_ptr<pkzo::Texture>& menu_top_texture, const std::shared_ptr<pkzo::Texture>& menu_body_texture, const std::shared_ptr<pkzo::Texture>& menu_bottom_texture, const std::shared_ptr<Font>& font, const glm::vec4& text_color) noexcept;

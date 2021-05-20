@@ -28,12 +28,14 @@
 
 #include <glm/glm.hpp>
 
-#include "ScreenNodeGroup.h"
+#include "Scene.h"
 
 namespace pkzo
 {
-    // Screen
-    class PKZO_EXPORT Screen : public ScreenNodeGroup
+    class OrthographicCamera;
+
+    //! Screen
+    class PKZO_EXPORT Screen : public Scene
     {
     public:
         //! Create screen
@@ -46,10 +48,11 @@ namespace pkzo
         const glm::vec2& get_size() const noexcept;
 
         //! Draw screen
-        void draw(ScreenRenderer& renderer) const noexcept;
+        void draw() const noexcept;
 
     private:
         glm::vec2 size;
+        std::shared_ptr<OrthographicCamera> camera;
     };
 
     PKZO_EXPORT

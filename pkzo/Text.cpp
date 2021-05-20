@@ -25,34 +25,55 @@
 #include "pch.h"
 #include "Text.h"
 
-#include "ScreenRenderer.h"
+#include "Pipeline.h"
+#include "Font.h"
+#include "Material.h"
 
 namespace pkzo
 {
-    Text::Text() noexcept = default;
+    auto safe_estimate(const std::shared_ptr<Font>& font, const std::string& text)
+    {
+        DBG_ASSERT(font);
+        if (font)
+        {
+            return glm::vec2(font->estimate(text));
+        }
+        else
+        {
+            return glm::vec2(1.0f);
+        }
+    }
 
-    Text::Text(const std::shared_ptr<Font>& f, const std::string& t) noexcept
-    : font(f), text(t) {}
+    auto make_rectangle_material(const std::shared_ptr<Font>& font, const std::string& text, const std::shared_ptr<Material>& material)
+    {
+        DBG_ASSERT(font);
+        DBG_ASSERT(material);
+        if (font)
+        {
+            auto text_mask = font->render(text);
+            auto material_copy = std::make_shared<Material>(*material);
+            material_copy->set_mask(text_mask);
+            return material_copy;
+        }
+        else
+        {
+            return material;
+        }
+    }
 
-    Text::Text(const std::shared_ptr<Font>& f, const glm::vec4& c, const std::string& t) noexcept
-    : font(f), color(c), text(t) {}
+    Text::Text(const std::string& t, const std::shared_ptr<Font>& f, const std::shared_ptr<Material>& m) noexcept
+    : Rectangle(safe_estimate(f, t), make_rectangle_material(f, t, m)), font(f), text(t), material(m) {}
+
+    Text::Text(const glm::mat4& transform, const std::string& t, const std::shared_ptr<Font>& f, const std::shared_ptr<Material>& m) noexcept
+    : Rectangle(transform, safe_estimate(f, t), make_rectangle_material(f, t, m)), font(f), text(t), material(m) {}
 
     Text::~Text() = default;
 
-    void Text::set_position(const glm::vec2& value) noexcept
-    {
-        position = value;
-    }
-
-    const glm::vec2& Text::get_position() const noexcept
-    {
-        return position;
-    }
-
     void Text::set_font(const std::shared_ptr<Font>& value) noexcept
     {
+        DBG_ASSERT(value);
         font = value;
-        texture = nullptr;
+        dirty = true;
     }
 
     const std::shared_ptr<Font>& Text::get_font() const noexcept
@@ -60,20 +81,10 @@ namespace pkzo
         return font;
     }
 
-    void Text::set_color(const glm::vec4& value) noexcept
-    {
-        color = value;
-    }
-
-    const glm::vec4& Text::get_color() const noexcept
-    {
-        return color;
-    }
-
     void Text::set_text(const std::string& value) noexcept
     {
         text = value;
-        texture = nullptr;
+        dirty = true;
     }
 
     const std::string& Text::get_text() const noexcept
@@ -81,33 +92,27 @@ namespace pkzo
         return text;
     }
 
-    glm::vec2 Text::get_size() const noexcept
+    void Text::set_material(const std::shared_ptr<Material>& value) noexcept
     {
-        if (texture)
-        {
-            return texture->get_size();
-        }
-        else if (font)
-        {
-            return font->estimate(text);
-        }
-        else
-        {
-            return {0.0f, 0.0f};
-        }
+        DBG_ASSERT(value);
+        material = value;
+        dirty = true;
     }
 
-    void Text::render(ScreenRenderer& renderer, const glm::vec2& offset) const noexcept
+    const std::shared_ptr<Material>& Text::get_material() const noexcept
     {
-        if (font)
-        {
-            if (texture == nullptr)
-            {
-                texture = font->render(text);
-                texture->set_wrap_mode(WrapMode::CLAMP);
-            }
+        return material;
+    }
 
-            renderer.draw_rectangle(offset + position, texture->get_size(), color, texture);
+    void Text::update(std::chrono::milliseconds dt) noexcept
+    {
+        if (dirty)
+        {
+            DBG_ASSERT(font);
+            DBG_ASSERT(material);
+            set_size(safe_estimate(font, text));
+            set_material(make_rectangle_material(font, text, material));
         }
+        Rectangle::update(dt);
     }
 }

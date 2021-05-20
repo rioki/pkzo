@@ -68,26 +68,54 @@ namespace pkzo
     public:
         Pipeline() noexcept;
         Pipeline(const Pipeline& orig) = delete;
-        ~Pipeline() = default;
+        ~Pipeline();
         Pipeline& operator = (const Pipeline& orig) = delete;
 
+        //! Add a Pass
+        //!
+        //! @param type the type of render pass
+        //! @param shader the shader to use
+        //! @param depth_test the depth test algorithm to use
+        //! @param blending the blending mode to use
+        //! @param parameters additional shader parameters
+        //!
+        //! @{
         void add_pass(PassType type, const std::shared_ptr<Shader>& shader) noexcept;
+        void add_pass(PassType type, const std::shared_ptr<Shader>& shader, DepthTest depth_test, Blending blending) noexcept;
         void add_pass(PassType type, const std::shared_ptr<Shader>& shader, DepthTest depth_test, Blending blending, const std::shared_ptr<Parameters>& parameters) noexcept;
+        //! @}
 
+        //! Set the camera matrixes
         void set_camera(const glm::mat4& projection, const glm::mat4& view) noexcept;
 
+        //! Add geometry.
         unsigned int add_geometry(const glm::mat4& transform, const std::shared_ptr<Mesh>& mesh, const std::shared_ptr<Parameters>& parameters) noexcept;
+
+        //! Update geometry
+        //!
+        //! @{
         void update_geometry(unsigned int id, const glm::mat4& transform) noexcept;
         void update_geometry(unsigned int id, const std::shared_ptr<Mesh>& mesh) noexcept;
         void update_geometry(unsigned int id, const std::shared_ptr<Parameters>& parameters) noexcept;
         void remove_geometry(unsigned int id) noexcept;
+        //! @}
+
+        //! Remove geometry.
         void remove_all_geometry() noexcept;
 
+        //! Add light
         unsigned int add_light(const std::shared_ptr<Parameters>& parameters) noexcept;
+
+        //! Update light
+        //!
+        //! @{
         void update_light(unsigned int id, const std::shared_ptr<Parameters>& parameters) noexcept;
         void remove_light(unsigned int id) noexcept;
+
+        //! Remove light
         void remove_all_light() noexcept;
 
+        //! Execute the pipeline
         void execute() noexcept;
 
     private:

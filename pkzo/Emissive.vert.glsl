@@ -22,46 +22,19 @@
 // THE SOFTWARE.
 //
 
-#pragma once
+#version 430
 
-#include "config.h"
+uniform mat4 pkzo_ProjectionMatrix;
+uniform mat4 pkzo_ViewMatrix;
+uniform mat4 pkzo_ModelMatrix;
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+in vec3 pkzo_Vertex;
+in vec2 pkzo_TexCoord;
 
-#include "SceneNodeGroup.h"
+out vec2 vTexCoord;
 
-namespace pkzo
+void main()
 {
-    class Camera;
-    class Pipeline;
-
-    //! 3D Scene
-    class PKZO_EXPORT Scene : public SceneNodeGroup
-    {
-    public:
-        Scene();
-        ~Scene();
-
-        Pipeline* get_render_pipeline() noexcept;
-        const Pipeline* get_render_pipeline() const noexcept;
-
-        void add_node(std::shared_ptr<SceneNode> child) noexcept override;
-        void remove_node(std::shared_ptr<SceneNode> child) noexcept override;
-
-        void draw(const Camera& camera) const noexcept;
-
-    private:
-        std::unique_ptr<Pipeline> render_pipeline;
-    };
-
-    inline glm::mat4 position(float x, float y)
-    {
-        return glm::translate(glm::mat4(1.0f), glm::vec3(x, y, 0.0f));
-    }
-
-    inline glm::mat4 position(const glm::vec2& pos)
-    {
-        return position(pos.x, pos.y);
-    }
+    vTexCoord = pkzo_TexCoord;
+    gl_Position = pkzo_ProjectionMatrix * pkzo_ViewMatrix * pkzo_ModelMatrix * vec4(pkzo_Vertex, 1.0);
 }

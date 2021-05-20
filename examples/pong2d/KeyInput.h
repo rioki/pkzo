@@ -22,18 +22,21 @@
 // THE SOFTWARE.
 //
 
-#ifndef _PONG2D_KEY_INTPUT_H_
-#define _PONG2D_KEY_INTPUT_H_
+#pragma once
 
 #include <memory>
-#include <pkzo/pkzo.h>
+#include <pkzo/SceneNodeGroup.h>
+#include <pkzo/Font.h>
+#include <pkzo/Material.h>
+#include <pkzo/Text.h>
+#include <pkzo/HitArea.h>
 
 namespace pong2d
 {
-    class KeyInput : public pkzo::ScreenNodeGroup
+    class KeyInput : public pkzo::SceneNodeGroup
     {
     public:
-        KeyInput(const std::shared_ptr<pkzo::Font>& font, pkzo::Key key) noexcept;
+        KeyInput(pkzo::Key key, const std::shared_ptr<pkzo::Font>& font, const std::shared_ptr<pkzo::Material>& material) noexcept;
 
         void set_key(pkzo::Key value) noexcept;
         pkzo::Key get_key() const noexcept;
@@ -46,5 +49,3 @@ namespace pong2d
         std::shared_ptr<pkzo::HitArea> hit_area;
     };
 }
-
-#endif

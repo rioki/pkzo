@@ -36,14 +36,14 @@ TEST(SceneNodeGroup, init_transform)
     EXPECT_EQ(glm::mat4(2.0), node.get_transform());
 }
 
-TEST(SceneNodeGroup, add_child)
+TEST(SceneNodeGroup, add_node)
 {
     pkzo::SceneNodeGroup root;
 
     auto child = std::make_shared<pkzo::SceneNode>();
-    root.add_child(child);
+    root.add_node(child);
 
-    auto nodes = root.get_children();
+    auto nodes = root.get_nodes();
     ASSERT_EQ(1, nodes.size());
     EXPECT_EQ(child, nodes[0]);
 
@@ -55,10 +55,10 @@ TEST(SceneNodeGroup, remove_child)
     pkzo::SceneNodeGroup root;
 
     auto child = std::make_shared<pkzo::SceneNode>();
-    root.add_child(child);
-    root.remove_child(child);
+    root.add_node(child);
+    root.remove_node(child);
 
-    auto nodes = root.get_children();
+    auto nodes = root.get_nodes();
     ASSERT_EQ(0, nodes.size());
 
     EXPECT_EQ(nullptr, child->get_parent());

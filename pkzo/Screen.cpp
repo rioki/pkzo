@@ -25,12 +25,16 @@
 #include "pch.h"
 #include "Screen.h"
 
-#include "ScreenRenderer.h"
+#include "OrthographicCamera.h"
 
 namespace pkzo
 {
     Screen::Screen(const glm::vec2& s)
-    : size(s) {}
+    : size(s)
+    {
+        camera = std::make_shared<OrthographicCamera>(size);
+        add_node(camera);
+    }
 
     Screen::~Screen() = default;
 
@@ -39,11 +43,9 @@ namespace pkzo
         return size;
     }
 
-    void Screen::draw(ScreenRenderer& renderer) const noexcept
+    void Screen::draw() const noexcept
     {
-        renderer.start(size);
-        render(renderer, glm::vec2(0.0f));
-        renderer.finalize();
+        Scene::draw(*camera);
     }
 
     template <typename T>

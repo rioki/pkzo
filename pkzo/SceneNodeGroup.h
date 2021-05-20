@@ -39,22 +39,22 @@ namespace pkzo
         SceneNodeGroup(const glm::mat4& transform) noexcept;
 
         //! Add child to group.
-        virtual void add_child(std::shared_ptr<SceneNode> child) noexcept;
+        virtual void add_node(std::shared_ptr<SceneNode> child) noexcept;
         //! Remove child to group.
-        virtual void remove_child(std::shared_ptr<SceneNode> child) noexcept;
+        virtual void remove_node(std::shared_ptr<SceneNode> child) noexcept;
 
         //! Get all direct children of this node.
         //! @{
-        const std::vector<std::shared_ptr<SceneNode>>& get_children() noexcept;
-        std::vector<std::shared_ptr<const SceneNode>> get_children() const noexcept;
+        const std::vector<std::shared_ptr<SceneNode>>& get_nodes() noexcept;
+        std::vector<std::shared_ptr<const SceneNode>> get_nodes() const noexcept;
         //! @}
 
         //! //! Get all children of specific type.
         //! @{
         template <typename NodeT>
-        std::vector<std::shared_ptr<NodeT>> find_children() noexcept;
+        std::vector<std::shared_ptr<NodeT>> find_nodes() noexcept;
         template <typename NodeT>
-        std::vector<std::shared_ptr<const SceneNode>> find_children() const noexcept;
+        std::vector<std::shared_ptr<const SceneNode>> find_nodes() const noexcept;
         //! @}
 
     protected:
@@ -77,7 +77,7 @@ namespace pkzo
          auto g = std::dynamic_pointer_cast<SceneNodeGroup>(node);
          if (g)
          {
-             for (auto& child : g->get_children())
+             for (auto& child : g->get_nodes())
              {
                  _find_children<NodeT>(nodes, child);
              }
@@ -85,7 +85,7 @@ namespace pkzo
     }
 
     template <typename NodeT>
-    std::vector<std::shared_ptr<NodeT>> SceneNodeGroup::find_children() noexcept
+    std::vector<std::shared_ptr<NodeT>> SceneNodeGroup::find_nodes() noexcept
     {
         std::vector<std::shared_ptr<NodeT>> result;
         for (auto& child : children)
@@ -96,9 +96,9 @@ namespace pkzo
     }
 
     template <typename NodeT>
-    std::vector<std::shared_ptr<const SceneNode>> SceneNodeGroup::find_children() const noexcept
+    std::vector<std::shared_ptr<const SceneNode>> SceneNodeGroup::find_nodes() const noexcept
     {
-        auto result = const_cast<SceneNodeGroup*>(this)->find_children<NodeT>();
+        auto result = const_cast<SceneNodeGroup*>(this)->find_nodes<NodeT>();
         return {begin(result), end(result)};
     }
 

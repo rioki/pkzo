@@ -22,46 +22,16 @@
 // THE SOFTWARE.
 //
 
-#pragma once
+#version 430
 
-#include "config.h"
+uniform sampler2D pkzo_EmissiveMap;
+uniform sampler2D pkzo_Mask;
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+in vec2 vTexCoord;
 
-#include "SceneNodeGroup.h"
+out vec4 pkzo_FragColor;
 
-namespace pkzo
+void main()
 {
-    class Camera;
-    class Pipeline;
-
-    //! 3D Scene
-    class PKZO_EXPORT Scene : public SceneNodeGroup
-    {
-    public:
-        Scene();
-        ~Scene();
-
-        Pipeline* get_render_pipeline() noexcept;
-        const Pipeline* get_render_pipeline() const noexcept;
-
-        void add_node(std::shared_ptr<SceneNode> child) noexcept override;
-        void remove_node(std::shared_ptr<SceneNode> child) noexcept override;
-
-        void draw(const Camera& camera) const noexcept;
-
-    private:
-        std::unique_ptr<Pipeline> render_pipeline;
-    };
-
-    inline glm::mat4 position(float x, float y)
-    {
-        return glm::translate(glm::mat4(1.0f), glm::vec3(x, y, 0.0f));
-    }
-
-    inline glm::mat4 position(const glm::vec2& pos)
-    {
-        return position(pos.x, pos.y);
-    }
+    pkzo_FragColor = texture(pkzo_EmissiveMap, vTexCoord) * vec4(1.0, 1.0, 1.0, texture(pkzo_Mask, vTexCoord).r);
 }

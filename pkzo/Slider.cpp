@@ -25,58 +25,21 @@
 #include "pch.h"
 #include "Slider.h"
 
+#include "Rectangle.h"
+#include "HitArea.h"
+
 namespace pkzo
 {
-    Slider::Slider() noexcept
+    Slider::Slider(SliderOrientation o, const glm::vec2& s, const std::shared_ptr<Material>& bm, const glm::vec2& hs, const std::shared_ptr<Material>& hm, float v) noexcept
+    : orientation(o), value(v)
     {
-        background = std::make_shared<Rectangle>();
+        background = std::make_shared<Rectangle>(s, bm);
         add_node(background);
 
-        handle = std::make_shared<Rectangle>();
+        handle = std::make_shared<Rectangle>(hs, hm);
         add_node(handle);
 
-        hit_area = std::make_shared<HitArea>();
-        hit_area->on_mouse_down([this] (auto button, auto pos) {
-            handle_down(button, pos);
-        });
-        hit_area->on_mouse_move([this] (auto pos) {
-            handle_move(pos);
-        });
-        hit_area->on_mouse_up([this] (auto button, auto pos) {
-            handle_up(button, pos);
-        });
-        add_node(hit_area);
-    }
-
-    Slider::Slider(const std::shared_ptr<Texture>& bt, const std::shared_ptr<Texture>& ht) noexcept
-    : Slider(bt, ht, 0.5f) {}
-
-    Slider::Slider(const std::shared_ptr<Texture>& bt, const std::shared_ptr<Texture>& ht, float v) noexcept
-    : value(v)
-    {
-        assert(bt);
-        assert(ht);
-        if (bt->get_size().x == ht->get_size().x)
-        {
-            orientation = SliderOrientation::VERTICAL;
-        }
-        else if (bt->get_size().y == ht->get_size().y)
-        {
-            orientation = SliderOrientation::HORIZONTAL;
-        }
-        else
-        {
-            assert(false);
-        }
-
-        background = std::make_shared<Rectangle>(bt);
-        add_node(background);
-
-        handle = std::make_shared<Rectangle>(ht);
-        add_node(handle);
-
-        hit_area = std::make_shared<HitArea>();
-        hit_area->set_size(background->get_size());
+        hit_area = std::make_shared<HitArea>(glm::vec3(s, 0.01f));
         hit_area->on_mouse_down([this] (auto button, auto pos) {
             handle_down(button, pos);
         });
@@ -93,36 +56,54 @@ namespace pkzo
 
     Slider::~Slider() = default;
 
+    void Slider::set_size(const glm::vec2& value) noexcept
+    {
+        DBG_ASSERT(background);
+        background->set_size(value);
+        DBG_ASSERT(hit_area);
+        hit_area->set_size(glm::vec3(value, 0.01f));
+    }
+
     const glm::vec2& Slider::get_size() const noexcept
     {
-        assert(background);
+        DBG_ASSERT(background);
         return background->get_size();
     }
 
-    void Slider::set_background_texture(const std::shared_ptr<Texture>& value) noexcept
+    void Slider::set_background_material(const std::shared_ptr<Material>& value) noexcept
     {
-        assert(background);
-        assert(hit_area);
-        background->set_texture(value);
-        hit_area->set_size(background->get_size());
+        DBG_ASSERT(background);
+        background->set_material(value);
     }
 
-    const std::shared_ptr<Texture>& Slider::get_background_texture() const noexcept
+    const std::shared_ptr<Material>& Slider::get_background_material() const noexcept
     {
-        assert(background);
-        return background->get_texture();
+        DBG_ASSERT(background);
+        return background->get_material();
     }
 
-    void Slider::set_handle_texture(const std::shared_ptr<Texture>& value) noexcept
+    void Slider::set_handle_size(const glm::vec2& value) noexcept
     {
-        assert(handle);
-        handle->set_texture(value);
+        DBG_ASSERT(handle);
+        handle->set_size(value);
     }
 
-    const std::shared_ptr<Texture>& Slider::get_handle_texture() const noexcept
+    const glm::vec2& Slider::get_handle_size() const noexcept
     {
-        assert(handle);
-        return handle->get_texture();
+        DBG_ASSERT(handle);
+        return handle->get_size();
+    }
+
+    void Slider::set_handle_material(const std::shared_ptr<Material>& value) noexcept
+    {
+        DBG_ASSERT(handle);
+        handle->set_material(value);
+    }
+
+    const std::shared_ptr<Material>& Slider::get_handle_material() const noexcept
+    {
+        DBG_ASSERT(handle);
+        return handle->get_material();
     }
 
     void Slider::set_orientation(SliderOrientation value) noexcept
@@ -153,8 +134,8 @@ namespace pkzo
 
     void Slider::update_hadle_position()
     {
-        assert(background);
-        assert(handle);
+        DBG_ASSERT(background);
+        DBG_ASSERT(handle);
 
         auto bs = background->get_size();
         auto hs = handle->get_size();
@@ -173,7 +154,7 @@ namespace pkzo
             hp.y = -hl + l * value;
         }
 
-        handle->set_position(hp);
+        handle->set_transform(glm::translate(glm::mat4(1.0f), {hp.x, hp.y, 0.0f}));
     }
 
     void Slider::set_value_from_pos(glm::vec2 pos)

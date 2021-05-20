@@ -27,14 +27,13 @@
 
 namespace pong2d
 {
-    KeyInput::KeyInput(const std::shared_ptr<pkzo::Font>& font, pkzo::Key k) noexcept
+    KeyInput::KeyInput(pkzo::Key k, const std::shared_ptr<pkzo::Font>& f, const std::shared_ptr<pkzo::Material>& m) noexcept
     : key(k)
     {
-        text = std::make_shared<pkzo::Text>(font, to_string(key));
+        text = std::make_shared<pkzo::Text>(to_string(key), f, m);
         add_node(text);
 
-        hit_area = std::make_shared<pkzo::HitArea>();
-        hit_area->set_size(font->estimate("ESCAPE"));
+        hit_area = std::make_shared<pkzo::HitArea>(glm::vec3(f->estimate("ESCAPE"), 0.01f));
         add_node(hit_area);
     }
 

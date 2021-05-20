@@ -34,16 +34,30 @@ namespace pkzo
 {
     class Parameters;
     class Texture;
+    class Material;
 
     PKZO_EXPORT std::shared_ptr<Texture> single_color_texture(std::byte value);
     PKZO_EXPORT std::shared_ptr<Texture> single_color_texture(float value);
     PKZO_EXPORT std::shared_ptr<Texture> single_color_texture(std::byte r, std::byte g, std::byte b);
     PKZO_EXPORT std::shared_ptr<Texture> single_color_texture(float r, float g, float b);
+    PKZO_EXPORT std::shared_ptr<Texture> make_color_texture(const glm::vec3& color) noexcept;
+    PKZO_EXPORT std::shared_ptr<Texture> make_black_texture() noexcept;
+
     PKZO_EXPORT std::shared_ptr<Texture> default_diffuse_texture();
     PKZO_EXPORT std::shared_ptr<Texture> default_specular_texture();
     PKZO_EXPORT std::shared_ptr<Texture> default_roughtness_texture();
     PKZO_EXPORT std::shared_ptr<Texture> default_normal_texture();
     PKZO_EXPORT std::shared_ptr<Texture> default_emissive_texture();
+    PKZO_EXPORT std::shared_ptr<Texture> default_mask_texture();
+
+    //! Make a plain emisisve material.
+    //!
+    //! @param color the color and intensity of the emissive material.
+    PKZO_EXPORT std::shared_ptr<Material> make_emissive_material(const glm::vec3& color) noexcept;
+    //! Make an emisisve material from a texture..
+    //!
+    //! @param texture the textreu emissive material.
+    PKZO_EXPORT std::shared_ptr<Material> make_emissive_material(const std::shared_ptr<Texture>& texture) noexcept;
 
     //! Material
     class PKZO_EXPORT Material
@@ -53,6 +67,7 @@ namespace pkzo
         Material(const std::shared_ptr<Texture>& diffuse, const std::shared_ptr<Texture>& specular, const std::shared_ptr<Texture>& roughtness);
         Material(const std::shared_ptr<Texture>& diffuse, const std::shared_ptr<Texture>& specular, const std::shared_ptr<Texture>& roughtness, const std::shared_ptr<Texture>& normal);
         Material(const std::shared_ptr<Texture>& diffuse, const std::shared_ptr<Texture>& specular, const std::shared_ptr<Texture>& roughtness, const std::shared_ptr<Texture>& normal, const std::shared_ptr<Texture>& emissive);
+        Material(const std::shared_ptr<Texture>& diffuse, const std::shared_ptr<Texture>& specular, const std::shared_ptr<Texture>& roughtness, const std::shared_ptr<Texture>& normal, const std::shared_ptr<Texture>& emissive, const std::shared_ptr<Texture>& mask);
         Material(const std::filesystem::path& filename);
 
         void set_diffuse(const std::shared_ptr<Texture>& value) noexcept;
@@ -70,6 +85,9 @@ namespace pkzo
         void set_emissive(const std::shared_ptr<Texture>& value) noexcept;
         const std::shared_ptr<Texture>& get_emissive() const noexcept;
 
+        void set_mask(const std::shared_ptr<Texture>& value) noexcept;
+        const std::shared_ptr<Texture>& get_mask() const noexcept;
+
         std::shared_ptr<Parameters> to_parameters() const noexcept;
 
     private:
@@ -78,5 +96,6 @@ namespace pkzo
         std::shared_ptr<Texture> roughtness = default_roughtness_texture();
         std::shared_ptr<Texture> normal     = default_normal_texture();
         std::shared_ptr<Texture> emissive   = default_emissive_texture();
+        std::shared_ptr<Texture> mask       = default_mask_texture();
     };
 }

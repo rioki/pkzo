@@ -26,51 +26,67 @@
 #include "config.h"
 
 #include <memory>
-#include "ScreenNodeGroup.h"
+#include <glm/glm.hpp>
+
+#include "SceneNodeGroup.h"
 
 namespace pkzo
 {
+    class Rectangle;
     class Text;
     class HitArea;
-    class Rectangle;
-    class Texture;
+    class Material;
     class Font;
 
-    class PKZO_EXPORT Button : public ScreenNodeGroup
+    //! 2D Button
+    class PKZO_EXPORT Button : public SceneNodeGroup
     {
     public:
-        Button() noexcept;
-
-        Button(const std::shared_ptr<Texture>& background) noexcept;
-        Button(const std::shared_ptr<Texture>& background, const std::shared_ptr<Font>& caption_font, const std::string& caption) noexcept;
-        Button(const std::shared_ptr<Texture>& background, const glm::vec4& background_color, const std::shared_ptr<Font>& caption_font, const std::string& caption) noexcept;
-        Button(const std::shared_ptr<Texture>& background, const std::shared_ptr<Font>& caption_font, const glm::vec4& caption_color, const std::string& caption) noexcept;
-        Button(const std::shared_ptr<Texture>& background, const glm::vec4& background_color, const std::shared_ptr<Font>& caption_font, const glm::vec4& caption_color, const std::string& caption) noexcept;
+        //! Construct Button
+        //!
+        //! @param caption the button caption
+        //! @param size the size of the button
+        //! @param background_material
+        //! @param text_material
+        //! @param font
+        //!
+        //! @{
+        Button(const std::string& caption, const glm::vec2& size, const std::shared_ptr<Material>& background_material, const std::shared_ptr<Material>& text_material, const std::shared_ptr<Font>& font) noexcept;
+        Button(const glm::mat4& transform, const std::string& caption, const glm::vec2& size, const std::shared_ptr<Material>& background_material, const std::shared_ptr<Material>& text_material, const std::shared_ptr<Font>& font) noexcept;
+        //! @}
 
         ~Button();
 
+        //! Set the button size.
+        void set_size(const glm::vec2& value) const noexcept;
+        //! Get the button size.
         glm::vec2 get_size() const noexcept;
 
+        //! Set the caption.
         void set_caption(const std::string& value) noexcept;
+        //! Get the caption.
         const std::string& get_caption() const noexcept;
 
-        void set_caption_color(const glm::vec4& value) noexcept;
-        const glm::vec4& get_caption_color() const noexcept;
+        //! Set the background material.
+        void set_background_material(const std::shared_ptr<Material>& value) noexcept;
+        //! Get the background material.
+        const std::shared_ptr<Material>& get_background_material() const noexcept;
 
-        void set_caption_font(const std::shared_ptr<Font>& value) noexcept;
-        const std::shared_ptr<Font>& get_caption_font() const noexcept;
+        //! Set the text material.
+        void set_text_material(const std::shared_ptr<Material>& value) noexcept;
+        //! Get the text material.
+        const std::shared_ptr<Material>& get_text_material() const noexcept;
 
-        void set_background(const std::shared_ptr<Texture>& value) noexcept;
-        const std::shared_ptr<Texture>& get_background() const noexcept;
-
-        void set_background_color(const glm::vec4& value) noexcept;
-        const glm::vec4& get_background_color() const noexcept;
+        //! Set the font.
+        void set_font(const std::shared_ptr<Font>& value) noexcept;
+        //! Get the font.
+        const std::shared_ptr<Font>& get_font() const noexcept;
 
         void on_click(const std::function<void ()>& cb) noexcept;
 
     private:
-        std::shared_ptr<Text>      caption;
         std::shared_ptr<Rectangle> background;
+        std::shared_ptr<Text>      caption;
         std::shared_ptr<HitArea>   hit_area;
     };
 }

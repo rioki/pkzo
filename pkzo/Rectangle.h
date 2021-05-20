@@ -29,42 +29,53 @@
 #include <memory>
 #include <list>
 #include <glm/glm.hpp>
-#include <pkzo/Texture.h>
 
-#include "ScreenNode.h"
+#include "SceneNode.h"
 
 namespace pkzo
 {
-    class PKZO_EXPORT Rectangle : public ScreenNode
+    class Pipeline;
+    class Material;
+
+    //! Recangle in the X/Y plane.
+    class PKZO_EXPORT Rectangle : public SceneNode
     {
     public:
+        //! Construct a rectangle.
+        //!
+        //! @param transform the initial transformation
+        //! @param size the size of the rectangle
+        //! @param material
+        //!
+        //! @{
         Rectangle() noexcept;
-        Rectangle(const std::shared_ptr<Texture>& texture) noexcept;
-        Rectangle(const std::shared_ptr<Texture>& texture, const glm::vec2& size) noexcept;
-        Rectangle(const glm::vec4& color, const glm::vec2& size) noexcept;
-        Rectangle(const std::shared_ptr<Texture>& texture, const glm::vec4& color) noexcept;
-        Rectangle(const std::shared_ptr<Texture>& texture, const glm::vec4& color, const glm::vec2& size) noexcept;
+        Rectangle(const glm::vec2& size, const std::shared_ptr<Material>& material) noexcept;
+        Rectangle(const glm::mat4& transform, const glm::vec2& size, const std::shared_ptr<Material>& material) noexcept;
+        //! @}
+
         ~Rectangle();
 
-        void set_position(const glm::vec2& value) noexcept;
-        const glm::vec2& get_position() const noexcept;
-
+        //! Get the size of the rectangle.
         void set_size(const glm::vec2& value) noexcept;
+        //! Set the size of the rectangle.
         const glm::vec2& get_size() const noexcept;
 
-        void set_color(const glm::vec4& value) noexcept;
-        const glm::vec4& get_color() const noexcept;
+        //! Set the material of the rectangle.
+        void set_material(const std::shared_ptr<Material>& value);
+        //! Get the material of the rectangle.
+        const std::shared_ptr<Material>& get_material() const;
 
-        void set_texture(const std::shared_ptr<Texture>& value);
-        const std::shared_ptr<Texture>& get_texture() const;
+    protected:
+        void on_attach_scene(Scene* scene) noexcept override;
+        void on_detach_scene() noexcept override;
+        void update(std::chrono::milliseconds dt) noexcept override;
 
     private:
-        void render(ScreenRenderer& renderer, const glm::vec2& offset) const noexcept override;
+        glm::vec2                 size     = glm::vec2(15.0f);
+        std::shared_ptr<Material> material = std::make_shared<Material>();
 
-    private:
-        glm::vec2                position = glm::vec2(0.0f);
-        std::shared_ptr<Texture> texture;
-        glm::vec4                color    = glm::vec4(1.0f);
-        glm::vec2                size     = glm::vec2(15.0f);
+        Pipeline*             pipeline        = nullptr;
+        unsigned int          pipeline_handle = 0;
+        bool                  dirty = false;
     };
 }

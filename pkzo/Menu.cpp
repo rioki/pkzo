@@ -33,7 +33,7 @@ namespace pkzo
     Menu::Menu(const std::shared_ptr<pkzo::Texture>& top_texture, const std::shared_ptr<pkzo::Texture>& body_texture, const std::shared_ptr<pkzo::Texture>& bottom_texture, const std::shared_ptr<Font>& font, const glm::vec4& text_color, const std::vector<std::string>& options) noexcept
     {
         // create
-        top = std::make_shared<Rectangle>(top_texture);
+        /*top = std::make_shared<Rectangle>(top_texture);
         add_node(top);
 
         for (auto i = 0u; i < options.size(); i++)
@@ -50,10 +50,10 @@ namespace pkzo
         }
 
         bottom = std::make_shared<Rectangle>(bottom_texture);
-        add_node(bottom);
+        add_node(bottom);*/
 
         // layout
-        auto size = get_size();
+        /*auto size = get_size();
         top->set_position({0.0, size.y / 2.0f - top->get_size().y / 2.0f});
         auto pos = size.y / 2.0f - top->get_size().y;
         for (auto& body : bodies)
@@ -62,7 +62,7 @@ namespace pkzo
             body->set_position({0.0, pos - bs / 2.0f});
             pos -= bs;
         }
-        bottom->set_position({0.0, -size.y / 2.0f + bottom->get_size().y / 2.0f});
+        bottom->set_position({0.0, -size.y / 2.0f + bottom->get_size().y / 2.0f});*/
     }
 
     Menu::~Menu() = default;

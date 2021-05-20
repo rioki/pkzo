@@ -35,7 +35,7 @@ namespace pkzo
     DropDownMenu::DropDownMenu(const std::shared_ptr<pkzo::Texture>& background_texture, const std::shared_ptr<pkzo::Texture>& button_texture, const std::shared_ptr<pkzo::Texture>& mtt, const std::shared_ptr<pkzo::Texture>& mbt, const std::shared_ptr<pkzo::Texture>& mbot, const std::shared_ptr<Font>& f, const glm::vec4& tc) noexcept
     : size(background_texture->get_size()), menu_top_texture(mtt), menu_body_texture(mbt), menu_bottom_texture(mbot), font(f), text_color(tc)
     {
-        auto background = std::make_shared<Rectangle>(background_texture);
+        /*auto background = std::make_shared<Rectangle>(background_texture);
         add_node(background);
 
         selected_text = std::make_shared<Text>(font, text_color, "");
@@ -44,7 +44,7 @@ namespace pkzo
         auto button = std::make_shared<Button>(button_texture);
         auto total_size = background->get_size();
         auto button_size = button->get_size();
-        button->set_position({total_size.x / 2.0f - button_size.x / 2.0f, 0.0f});
+        //button->set_position({total_size.x / 2.0f - button_size.x / 2.0f, 0.0f});
 
         button->on_click([this] () {
             sync::delay([this] () {
@@ -58,7 +58,7 @@ namespace pkzo
                 }
             });
         });
-        add_node(button);
+        add_node(button);*/
     }
 
     DropDownMenu::~DropDownMenu() = default;
@@ -105,13 +105,13 @@ namespace pkzo
     {
         assert(menu == nullptr);
 
-        auto parent = dynamic_cast<ScreenNodeGroup*>(get_parent());
+        auto parent = dynamic_cast<SceneNodeGroup*>(get_parent());
         if (parent)
         {
             menu = std::make_shared<Menu>(menu_top_texture, menu_body_texture, menu_bottom_texture, font, text_color, options);
-            auto pos = get_position();
+            //auto pos = get_position();
             auto size = get_size();
-            menu->set_position({pos.x, pos.y - size.y / 2.0f - menu->get_size().y / 2.0f});
+            //menu->set_position({pos.x, pos.y - size.y / 2.0f - menu->get_size().y / 2.0f});
             menu->on_select([this] (auto selection) {
                 sync::delay([this, selection] () {
                     close_menu(selection);
@@ -125,7 +125,7 @@ namespace pkzo
     {
         assert(menu);
 
-        auto parent = dynamic_cast<ScreenNodeGroup*>(get_parent());
+        auto parent = dynamic_cast<SceneNodeGroup*>(get_parent());
         if (parent)
         {
             selected_option = value;

@@ -34,15 +34,15 @@ namespace pong2d
     {
     public:
         ObjectView(Object& obj, const glm::vec4& color = glm::vec4(1.0f))
-        : Rectangle(color, obj.get_size()), object(obj)
+        : Rectangle(obj.get_size(), pkzo::make_emissive_material(color)), object(obj)
         {
-            set_position(object.get_position());
+            set_transform(pkzo::position(object.get_position()));
         }
 
-        void animate(std::chrono::milliseconds dt) override
+        void update(std::chrono::milliseconds dt) noexcept override
         {
-            Rectangle::animate(dt);
-            set_position(object.get_position());
+            Rectangle::update(dt);
+            set_transform(pkzo::position(object.get_position()));
         }
 
     private:
@@ -52,14 +52,13 @@ namespace pong2d
     View::View(Game& g, Simulation& s)
     : Screen(s.get_field_size()), game(g), simulation(s)
     {
-        auto score_font = std::make_shared<pkzo::Font>("../assets/fonts/Hardpixel.ttf", 60);
+        auto score_font    = std::make_shared<pkzo::Font>("../assets/fonts/Hardpixel.ttf", 60);
+        auto text_material = pkzo::make_emissive_material(glm::vec3(1.0f));
 
-        left_score_text = std::make_shared<pkzo::Text>(score_font, pkzo::to_string(simulation.get_left_score()));
-        left_score_text->set_position({-133, 250});
+        left_score_text = std::make_shared<pkzo::Text>(pkzo::position(-133, 250), pkzo::to_string(simulation.get_left_score()), score_font, text_material);
         add_node(left_score_text);
 
-        right_score_text = std::make_shared<pkzo::Text>(score_font, pkzo::to_string(simulation.get_right_score()));
-        right_score_text->set_position({133, 250});
+        right_score_text = std::make_shared<pkzo::Text>(pkzo::position(133, 250), pkzo::to_string(simulation.get_right_score()), score_font, text_material);
         add_node(right_score_text);
 
         ball_pawn = std::make_shared<ObjectView>(simulation.get_ball());
@@ -78,9 +77,9 @@ namespace pong2d
         right_down_key = settings.get_value("Player2", "down", pkzo::Key::L);
     }
 
-    void View::animate(std::chrono::milliseconds dt)
+    void View::update(std::chrono::milliseconds dt) noexcept
     {
-        Screen::animate(dt);
+        //Screen::animate(dt);
 
         // REVIEW:
         // This looks expensive, consider implementing event callback.
@@ -88,9 +87,9 @@ namespace pong2d
         right_score_text->set_text(pkzo::to_string(simulation.get_right_score()));
     }
 
-    void View::handle_key_down(pkzo::KeyMod mod, pkzo::Key key)
+    /*void View::handle_key_down(pkzo::KeyMod mod, pkzo::Key key)
     {
-        Screen::handle_key_down(mod, key);
+        //Screen::handle_key_down(mod, key);
         if (key == pkzo::Key::ESCAPE)
         {
             // TODO: PAUSE_MENU
@@ -117,7 +116,7 @@ namespace pong2d
 
     void View::handle_key_up(pkzo::KeyMod mod, pkzo::Key key)
     {
-        Screen::handle_key_up(mod, key);
+        //Screen::handle_key_up(mod, key);
 
         if (key == left_up_key)
         {
@@ -135,5 +134,5 @@ namespace pong2d
         {
             simulation.get_right_paddle().stop_down();
         }
-    }
+    }*/
 }

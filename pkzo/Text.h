@@ -27,45 +27,53 @@
 #include "config.h"
 
 #include <memory>
-#include <list>
+#include <string>
 #include <glm/glm.hpp>
-#include <pkzo/Font.h>
 
-#include "ScreenNode.h"
+#include "Rectangle.h"
 
 namespace pkzo
 {
-    class PKZO_EXPORT Text : public ScreenNode
+    class Font;
+    class Material;
+    class Texture;
+
+    //! 2D Text
+    class PKZO_EXPORT Text : public Rectangle
     {
     public:
-        Text() noexcept;
-        Text(const std::shared_ptr<Font>& font, const std::string& text) noexcept;
-        Text(const std::shared_ptr<Font>& font, const glm::vec4& color, const std::string& text) noexcept;
+        //! Construct Text
+        //!
+        //! @{
+        Text(const std::string& text, const std::shared_ptr<Font>& font, const std::shared_ptr<Material>& material) noexcept;
+        Text(const glm::mat4& transform, const std::string& text, const std::shared_ptr<Font>& font, const std::shared_ptr<Material>& material) noexcept;
+        //! @}
+
         ~Text();
 
-        void set_position(const glm::vec2& value) noexcept;
-        const glm::vec2& get_position() const noexcept;
-
+        //! Set the font.
         void set_font(const std::shared_ptr<Font>& value) noexcept;
+        //! Get teh font.
         const std::shared_ptr<Font>& get_font() const noexcept;
 
-        void set_color(const glm::vec4& value) noexcept;
-        const glm::vec4& get_color() const noexcept;
-
+        //! Set the text.
         void set_text(const std::string& value) noexcept;
+        //! Get the text.
         const std::string& get_text() const noexcept;
 
-        glm::vec2 get_size() const noexcept;
+        //! Set the material.
+        void set_material(const std::shared_ptr<Material>& value) noexcept;
+        //! Get the material.
+        const std::shared_ptr<Material>& get_material() const noexcept;
+
+    protected:
+        void update(std::chrono::milliseconds dt) noexcept override;
 
     private:
-        void render(ScreenRenderer& renderer, const glm::vec2& offset) const noexcept override;
-
-    private:
-        glm::vec2                position = glm::vec2(0.0f);
-        std::shared_ptr<Font>    font;
-        glm::vec4                color    = glm::vec4(1.0f);
-        std::string              text;
-        mutable std::shared_ptr<Texture> texture;
+        std::shared_ptr<Font>     font;
+        std::string               text;
+        std::shared_ptr<Material> material;
+        bool                      dirty    = false;
     };
 }
 

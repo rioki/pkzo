@@ -25,7 +25,7 @@
 #include "resource.h"
 #include "winres.h"
 
-IDR_GLSL_SCREEN_VERT GLSL "Screen.vert.glsl"
-IDR_GLSL_SCREEN_FRAG GLSL "Screen.frag.glsl"
 IDR_GLSL_PHONG_VERT  GLSL "Phong.vert.glsl"
 IDR_GLSL_PHONG_FRAG  GLSL "Phong.frag.glsl"
+IDR_GLSL_EMISSIVE_VERT GLSL "Emissive.vert.glsl"
+IDR_GLSL_EMISSIVE_FRAG GLSL "Emissive.frag.glsl"

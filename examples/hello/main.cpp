@@ -32,35 +32,18 @@ auto create_hello_screen(pkzo::Engine& main)
 
     auto screen = std::make_shared<pkzo::Screen>(size);
 
-    auto title_font        = std::make_shared<pkzo::Font>("../assets/fonts/DejaVuSans.ttf", 50);
-    auto text_font         = std::make_shared<pkzo::Font>("../assets/fonts/DejaVuSans.ttf", 22);
-    auto pkzo_logo         = std::make_shared<pkzo::Texture>("../assets/textures/pkzo.png");
-    auto button_background = std::make_shared<pkzo::Texture>("../assets/ui/Button_Background.png");
+    auto font      = std::make_shared<pkzo::Font>("../assets/fonts/DejaVuSans.ttf", 50);
+    auto pkzo_logo = std::make_shared<pkzo::Texture>("../assets/textures/pkzo.png");
 
-    auto hello = std::make_shared<pkzo::Text>();
-    hello->set_position({0.0, pkzo_logo->get_size().y / 2.0f + 50.0f});
-    hello->set_font(title_font);
-    hello->set_text("Hello");
+    auto white_emissive_material = pkzo::make_emissive_material(glm::vec3(1.0f));
+    auto hello_pos = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, pkzo_logo->get_size().y / 2.0f + 50.0f, 0.0f));
+    auto hello = std::make_shared<pkzo::Text>(hello_pos, "Hello", font, white_emissive_material);
     screen->add_node(hello);
 
-    auto logo = std::make_shared<pkzo::Rectangle>();
-    logo->set_position({0.0, 0.0});
-    logo->set_size(glm::vec2(pkzo_logo->get_size()));
-    logo->set_texture(pkzo_logo);
+    auto logo_pos = glm::mat4(1.0f);
+    auto white_logo_material = pkzo::make_emissive_material(pkzo_logo);
+    auto logo = std::make_shared<pkzo::Rectangle>(logo_pos, glm::vec2(pkzo_logo->get_size()), white_logo_material);
     screen->add_node(logo);
-
-
-    auto bhs = glm::vec2(button_background->get_size()) / 2.0f;
-    auto exit_button = std::make_shared<pkzo::Button>();
-    exit_button->set_position({hs.x - bhs.x - 10.0f, -hs.y + bhs.y + 10.0f});
-    exit_button->set_caption("Close");
-    exit_button->set_caption_color({0.9f, 0.9f, 0.9f, 1.0f});
-    exit_button->set_caption_font(text_font);
-    exit_button->set_background(button_background);
-    exit_button->on_click([&] () {
-        main.stop();
-    });
-    screen->add_node(exit_button);
 
     return screen;
 }
@@ -72,22 +55,9 @@ int main(int argc, char* argv[])
     auto& window = main.get_main_window();
     window.set_caption("Hello Pkzo!");
 
-    pkzo::ScreenRenderer screen_renderer;
-
     auto screen = create_hello_screen(main);
-
     window.on_draw([&] () {
-        screen->draw(screen_renderer);
-    });
-
-    auto& mouse = main.get_mouse();
-    mouse.on_button_down([&] (auto button, auto pos) {
-        auto p = pkzo::map_to_screen(window.get_size(), screen->get_size(), pos);
-        screen->handle_mouse_button_down(button, p);
-    });
-    mouse.on_button_up([&] (auto button, auto pos) {
-        auto p = pkzo::map_to_screen(window.get_size(), screen->get_size(), pos);
-        screen->handle_mouse_button_up(button, p);
+        screen->draw();
     });
 
     main.run();

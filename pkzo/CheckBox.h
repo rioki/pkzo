@@ -28,31 +28,31 @@
 
 #include <memory>
 
-#include "ScreenNodeGroup.h"
+#include "SceneNodeGroup.h"
 
 namespace pkzo
 {
-    class Texture;
+    class Material;
     class HitArea;
     class Rectangle;
 
-    class PKZO_EXPORT CheckBox : public ScreenNodeGroup
+    //! Check Box
+    class PKZO_EXPORT CheckBox : public SceneNodeGroup
     {
     public:
-        CheckBox() noexcept;
-
-        CheckBox(const std::shared_ptr<Texture>& checked_texture, const std::shared_ptr<Texture>& unchecked_texture) noexcept;
-        CheckBox(const std::shared_ptr<Texture>& checked_texture, const std::shared_ptr<Texture>& unchecked_texture, bool checked) noexcept;
+        CheckBox(const glm::vec2& size, const std::shared_ptr<Material>& checked_material, const std::shared_ptr<Material>& unchecked_material, bool checked) noexcept;
 
         ~CheckBox();
 
+        //! Set the check box size.
+        void set_size(const glm::vec2& value) const noexcept;
         const glm::vec2& get_size() const noexcept;
 
-        void set_checked_texture(const std::shared_ptr<Texture>& value) noexcept;
-        const std::shared_ptr<Texture>& get_checked_texture() const noexcept;
+        void set_checked_material(const std::shared_ptr<Material>& value) noexcept;
+        const std::shared_ptr<Material>& get_checked_material() const noexcept;
 
-        void set_unchecked_texture(const std::shared_ptr<Texture>& value) noexcept;
-        const std::shared_ptr<Texture>& get_unchecked_texture() const noexcept;
+        void set_unchecked_material(const std::shared_ptr<Material>& value) noexcept;
+        const std::shared_ptr<Material>& get_unchecked_material() const noexcept;
 
         void set_checked(bool value) noexcept;
         bool get_checked() const noexcept;
@@ -61,8 +61,8 @@ namespace pkzo
 
     private:
         bool checked = false;
-        std::shared_ptr<Texture> unchecked_texture;
-        std::shared_ptr<Texture> checked_texture;
+        std::shared_ptr<Material> unchecked_material;
+        std::shared_ptr<Material> checked_material;
 
         std::shared_ptr<Rectangle> background;
         std::shared_ptr<HitArea>   hit_area;

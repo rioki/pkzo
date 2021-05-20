@@ -29,126 +29,96 @@
 #include "Text.h"
 #include "HitArea.h"
 
+using namespace std::literals::string_literals;
+
 namespace pkzo
 {
-    Button::Button() noexcept
+    Button::Button(const std::string& caption, const glm::vec2& size, const std::shared_ptr<Material>& background_material, const std::shared_ptr<Material>& text_material, const std::shared_ptr<Font>& font) noexcept
+    : Button(glm::mat4(1.0f), caption, size, background_material, text_material, font) {}
+
+    Button::Button(const glm::mat4& transform, const std::string& c, const glm::vec2& size, const std::shared_ptr<Material>& background_material, const std::shared_ptr<Material>& text_material, const std::shared_ptr<Font>& font) noexcept
+    : SceneNodeGroup(transform)
     {
-        background = std::make_shared<Rectangle>();
+        DBG_ASSERT(glm::all(glm::greaterThan(size, glm::vec2(0.0f))));
+        DBG_ASSERT(background_material);
+        DBG_ASSERT(text_material);
+        DBG_ASSERT(font);
+
+        background = std::make_shared<Rectangle>(size, background_material);
         add_node(background);
 
-        caption = std::make_shared<Text>();
+        caption = std::make_shared<Text>(c, font, text_material);
         add_node(caption);
 
-        hit_area = std::make_shared<HitArea>();
-        add_node(hit_area);
-    }
-
-    Button::Button(const std::shared_ptr<Texture>& b) noexcept
-    : Button(b, glm::vec4(1.0f), nullptr, glm::vec4(1.0f), "") {}
-
-    Button::Button(const std::shared_ptr<Texture>& b, const std::shared_ptr<Font>& cf, const std::string& c) noexcept
-    : Button(b, glm::vec4(1.0f), cf, glm::vec4(1.0f), c) {}
-
-    Button::Button(const std::shared_ptr<Texture>& b, const glm::vec4& bc, const std::shared_ptr<Font>& cf, const std::string& c) noexcept
-    : Button(b, bc, cf, glm::vec4(1.0f), c) {}
-
-    Button::Button(const std::shared_ptr<Texture>& b, const std::shared_ptr<Font>& cf, const glm::vec4& cc, const std::string& c) noexcept
-    : Button(b, glm::vec4(1.0f), cf, cc, c) {}
-
-    Button::Button(const std::shared_ptr<Texture>& b, const glm::vec4& bc, const std::shared_ptr<Font>& cf, const glm::vec4& cc, const std::string& c) noexcept
-    {
-        assert(b);
-        background = std::make_shared<Rectangle>(b, bc);
-        background->set_size(b->get_size());
-        add_node(background);
-
-        if (cf)
-        {
-            caption = std::make_shared<Text>(cf, cc, c);
-        }
-        else
-        {
-            caption = std::make_shared<Text>();
-        }
-        add_node(caption);
-
-        hit_area = std::make_shared<HitArea>();
-        hit_area->set_size(background->get_size());
+        hit_area = std::make_shared<HitArea>(glm::vec3(size, 0.01f));
         add_node(hit_area);
     }
 
     Button::~Button() = default;
 
+    void Button::set_size(const glm::vec2& value) const noexcept
+    {
+        DBG_ASSERT(background);
+        background->set_size(value);
+    }
+
     glm::vec2 Button::get_size() const noexcept
     {
+        DBG_ASSERT(background);
         return background->get_size();
     }
 
     void Button::set_caption(const std::string& value) noexcept
     {
-        assert(caption);
+        DBG_ASSERT(caption);
         caption->set_text(value);
     }
 
     const std::string& Button::get_caption() const noexcept
     {
-        assert(caption);
+        DBG_ASSERT(caption);
         return caption->get_text();
     }
 
-    void Button::set_caption_color(const glm::vec4& value) noexcept
+    void Button::set_background_material(const std::shared_ptr<Material>& value) noexcept
     {
-        assert(caption);
-        caption->set_color(value);
+        DBG_ASSERT(background);
+        background->set_material(value);
     }
 
-    const glm::vec4& Button::get_caption_color() const noexcept
+    const std::shared_ptr<Material>& Button::get_background_material() const noexcept
     {
-        assert(caption);
-        return caption->get_color();
+        DBG_ASSERT(background);
+        return background->get_material();
     }
 
-    void Button::set_caption_font(const std::shared_ptr<Font>& value) noexcept
+    void Button::set_text_material(const std::shared_ptr<Material>& value) noexcept
     {
-        assert(caption);
+        DBG_ASSERT(caption);
+        caption->set_material(value);
+    }
+
+    const std::shared_ptr<Material>& Button::get_text_material() const noexcept
+    {
+        DBG_ASSERT(caption);
+        return caption->get_material();
+    }
+
+    void Button::set_font(const std::shared_ptr<Font>& value) noexcept
+    {
+        DBG_ASSERT(caption);
         caption->set_font(value);
     }
 
-    const std::shared_ptr<Font>& Button::get_caption_font() const noexcept
+    const std::shared_ptr<Font>& Button::get_font() const noexcept
     {
-        assert(caption);
+        DBG_ASSERT(caption);
         return caption->get_font();
-    }
-
-    void Button::set_background(const std::shared_ptr<Texture>& value) noexcept
-    {
-        assert(background);
-        background->set_texture(value);
-        background->set_size(value->get_size());
-        hit_area->set_size(background->get_size());
-    }
-
-    const std::shared_ptr<Texture>& Button::get_background() const noexcept
-    {
-        assert(background);
-        return background->get_texture();
-    }
-
-    void Button::set_background_color(const glm::vec4& value) noexcept
-    {
-        assert(background);
-        background->set_color(value);
-    }
-
-    const glm::vec4& Button::get_background_color() const noexcept
-    {
-        assert(background);
-        return background->get_color();
     }
 
     void Button::on_click(const std::function<void()>& cb) noexcept
     {
-        assert(hit_area);
+        DBG_ASSERT(hit_area);
         hit_area->on_click(cb);
     }
 }

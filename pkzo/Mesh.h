@@ -65,6 +65,12 @@ namespace pkzo
         glm::uint                vao          = 0u;
         std::array<glm::uint, 4> buffers      = {0u, 0u};
     };
+
+    //! Make a rectangle mesh in the X/Y plane.
+    //!
+    //! @param size the size of the mesh
+    //! @return the mesh
+    PKZO_EXPORT std::unique_ptr<Mesh> make_rectangle(const glm::vec2& size) noexcept;
 }
 
 #endif
