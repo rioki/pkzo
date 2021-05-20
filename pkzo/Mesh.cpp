@@ -142,4 +142,21 @@ namespace pkzo
         glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indexes.size() * 3u), GL_UNSIGNED_INT, 0);
         DBG_CHECK_GLERROR("drawing mesh");
     }
+
+
+    std::unique_ptr<Mesh> make_rectangle(const glm::vec2& size) noexcept
+    {
+        auto hs = size * 0.5f;
+        auto mesh = std::make_unique<Mesh>();
+
+        mesh->add_vertex({-hs.x, -hs.y, 0.0f}, {0.0f, 0.0f});
+        mesh->add_vertex({-hs.x,  hs.y, 0.0f}, {0.0f, 1.0f});
+        mesh->add_vertex({ hs.x,  hs.y, 0.0f}, {1.0f, 1.0f});
+        mesh->add_vertex({ hs.x, -hs.y, 0.0f}, {1.0f, 0.0f});
+
+        mesh->add_triangle({0, 1, 2});
+        mesh->add_triangle({2, 3, 0});
+
+        return mesh;
+    }
 }

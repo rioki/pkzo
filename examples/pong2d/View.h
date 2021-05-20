@@ -37,10 +37,10 @@ namespace pong2d
     public:
         View(Game& game, Simulation& simulation);
 
-        void animate(std::chrono::milliseconds dt) override;
+        void update(std::chrono::milliseconds dt) noexcept override;
 
-        void handle_key_down(pkzo::KeyMod mod, pkzo::Key key) override;
-        void handle_key_up(pkzo::KeyMod mod, pkzo::Key key) override;
+        //void handle_key_down(pkzo::KeyMod mod, pkzo::Key key) override;
+        //void handle_key_up(pkzo::KeyMod mod, pkzo::Key key) override;
 
     private:
         Game& game;

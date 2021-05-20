@@ -1,7 +1,7 @@
 //
 // pkzo
 //
-// Copyright 2014-2021 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2010-2021 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,35 +22,17 @@
 // THE SOFTWARE.
 //
 
-#pragma once
+#include "pch.h"
 
-#include "config.h"
+#include <pkzo/PerspectiveCamera.h>
+#include <pkzo/OrthographicCamera.h>
 
-#include <memory>
-#include <glm/glm.hpp>
-#include <pkzo/pkzo.h>
-
-namespace pkzo
+TEST(PerspectiveCamera, default_construct)
 {
-    class Screen;
-
-    class PKZO_EXPORT ScreenRenderer
-    {
-    public:
-        ScreenRenderer() noexcept;
-        ScreenRenderer(const ScreenRenderer&) = delete;
-        ~ScreenRenderer();
-        ScreenRenderer& operator = (const ScreenRenderer&) = delete;
-
-        void render(const Screen& screen);
-
-        void start(const glm::vec2& size) noexcept;
-        void draw_rectangle(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color, const std::shared_ptr<Texture>& texture) noexcept;
-        void finalize() noexcept;
-
-    private:
-        std::unique_ptr<Shader> shader;
-        std::unique_ptr<Mesh>   rectangle;
-    };
+    auto camera = pkzo::PerspectiveCamera{};
 }
 
+TEST(OrthographicCamera, default_construct)
+{
+    auto camera = pkzo::OrthographicCamera{};
+}

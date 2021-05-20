@@ -22,46 +22,43 @@
 // THE SOFTWARE.
 //
 
-#pragma once
-
-#include "config.h"
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
-#include "SceneNodeGroup.h"
+#include "pch.h"
+#include "PerspectiveCamera.h"
 
 namespace pkzo
 {
-    class Camera;
-    class Pipeline;
-
-    //! 3D Scene
-    class PKZO_EXPORT Scene : public SceneNodeGroup
+    void PerspectiveCamera::set_fov(const float value) noexcept
     {
-    public:
-        Scene();
-        ~Scene();
-
-        Pipeline* get_render_pipeline() noexcept;
-        const Pipeline* get_render_pipeline() const noexcept;
-
-        void add_node(std::shared_ptr<SceneNode> child) noexcept override;
-        void remove_node(std::shared_ptr<SceneNode> child) noexcept override;
-
-        void draw(const Camera& camera) const noexcept;
-
-    private:
-        std::unique_ptr<Pipeline> render_pipeline;
-    };
-
-    inline glm::mat4 position(float x, float y)
-    {
-        return glm::translate(glm::mat4(1.0f), glm::vec3(x, y, 0.0f));
+        fov = value;
     }
 
-    inline glm::mat4 position(const glm::vec2& pos)
+    float PerspectiveCamera::get_fov() const noexcept
     {
-        return position(pos.x, pos.y);
+        return fov;
+    }
+
+    void PerspectiveCamera::set_znear(const float value) noexcept
+    {
+        znear = value;
+    }
+
+    float PerspectiveCamera::get_znear() const noexcept
+    {
+        return znear;
+    }
+
+    void PerspectiveCamera::set_zfar(const float value) noexcept
+    {
+        zfar = value;
+    }
+
+    float PerspectiveCamera::get_zfar() const noexcept
+    {
+        return zfar;
+    }
+
+    glm::mat4 PerspectiveCamera::get_projection() const noexcept
+    {
+        return glm::perspective(fov, get_aspect(), znear, zfar);
     }
 }

@@ -25,39 +25,22 @@
 #include "pch.h"
 #include "CheckBox.h"
 
+#include "Texture.h"
 #include "Rectangle.h"
 #include "HitArea.h"
 
 namespace pkzo
 {
-    CheckBox::CheckBox() noexcept
+    CheckBox::CheckBox(const glm::vec2& size, const std::shared_ptr<Material>& cm, const std::shared_ptr<Material>& ucm, bool c) noexcept
+    : checked_material(cm), unchecked_material(ucm), checked(c)
     {
+        DBG_ASSERT(checked_material);
+        DBG_ASSERT(unchecked_material);
 
-        background = std::make_shared<Rectangle>();
+        background = std::make_shared<Rectangle>(size, checked ? checked_material : unchecked_material);
         add_node(background);
 
-        hit_area = std::make_shared<HitArea>();
-        hit_area->on_click([this] () {
-            handle_click();
-        });
-        add_node(hit_area);
-    }
-
-    CheckBox::CheckBox(const std::shared_ptr<Texture>& ct, const std::shared_ptr<Texture>& uct) noexcept
-    : CheckBox(ct, uct, false) {}
-
-    CheckBox::CheckBox(const std::shared_ptr<Texture>& ct, const std::shared_ptr<Texture>& uct, bool c) noexcept
-    : checked_texture(ct), unchecked_texture(uct), checked(c)
-    {
-        assert(checked_texture);
-        assert(unchecked_texture);
-        assert(checked_texture->get_size() == unchecked_texture->get_size());
-
-        background = std::make_shared<Rectangle>(checked ? checked_texture : unchecked_texture);
-        add_node(background);
-
-        hit_area = std::make_shared<HitArea>();
-        hit_area->set_size(background->get_size());
+        hit_area = std::make_shared<HitArea>(glm::vec3(size, 0.01f));
         hit_area->on_click([this] () {
             handle_click();
         });
@@ -66,46 +49,52 @@ namespace pkzo
 
     CheckBox::~CheckBox() = default;
 
+    void CheckBox::set_size(const glm::vec2& value) const noexcept
+    {
+        DBG_ASSERT(background);
+        DBG_ASSERT(hit_area);
+        background->set_size(value);
+        hit_area->set_size(glm::vec3(value, 0.01f));
+    }
+
     const glm::vec2& CheckBox::get_size() const noexcept
     {
-        assert(background);
+        DBG_ASSERT(background);
         return background->get_size();
     }
 
-    void CheckBox::set_checked_texture(const std::shared_ptr<Texture>& value) noexcept
+    void CheckBox::set_checked_material(const std::shared_ptr<Material>& value) noexcept
     {
-        checked_texture = value;
+        checked_material = value;
         if (checked)
         {
-            background->set_texture(checked_texture);
-            hit_area->set_size(background->get_size());
+            background->set_material(checked_material);
         }
     }
 
-    const std::shared_ptr<Texture>& CheckBox::get_checked_texture() const noexcept
+    const std::shared_ptr<Material>& CheckBox::get_checked_material() const noexcept
     {
-        return checked_texture;
+        return checked_material;
     }
 
-    void CheckBox::set_unchecked_texture(const std::shared_ptr<Texture>& value) noexcept
+    void CheckBox::set_unchecked_material(const std::shared_ptr<Material>& value) noexcept
     {
-        unchecked_texture = value;
+        unchecked_material = value;
         if (!checked)
         {
-            background->set_texture(checked_texture);
-            hit_area->set_size(background->get_size());
+            background->set_material(checked_material);
         }
     }
 
-    const std::shared_ptr<Texture>& CheckBox::get_unchecked_texture() const noexcept
+    const std::shared_ptr<Material>& CheckBox::get_unchecked_material() const noexcept
     {
-        return unchecked_texture;
+        return unchecked_material;
     }
 
     void CheckBox::set_checked(bool value) noexcept
     {
         checked = value;
-        background->set_texture(checked ? checked_texture : unchecked_texture);
+        background->set_material(checked ? checked_material : unchecked_material);
     }
 
     bool CheckBox::get_checked() const noexcept
@@ -125,6 +114,6 @@ namespace pkzo
         {
             change_cb(checked);
         }
-        background->set_texture(checked ? checked_texture : unchecked_texture);
+        background->set_material(checked ? checked_material : unchecked_material);
     }
 }

@@ -33,29 +33,21 @@ namespace pkzo
         return static_cast<std::underlying_type<MouseButton>::type>(value);
     }
 
-    HitArea::HitArea() noexcept = default;
+    HitArea::HitArea(const glm::vec3& size) noexcept
+    : HitArea(glm::mat4(1.0f), size) {}
 
-    HitArea::HitArea(const glm::vec2& p, const glm::vec2& s) noexcept
-    : position(p), size(s) {}
+    HitArea::HitArea(const glm::mat4& transform, const glm::vec3& s) noexcept
+    : SceneNode(transform), size(s)
+    {}
 
     HitArea::~HitArea() = default;
 
-    void HitArea::set_position(const glm::vec2& value) noexcept
-    {
-        position = value;
-    }
-
-    const glm::vec2& HitArea::get_position() const noexcept
-    {
-        return position;
-    }
-
-    void HitArea::set_size(const glm::vec2& value) noexcept
+    void HitArea::set_size(const glm::vec3& value) noexcept
     {
         size = value;
     }
 
-    const glm::vec2& HitArea::get_size() const noexcept
+    const glm::vec3& HitArea::get_size() const noexcept
     {
         return size;
     }
@@ -90,7 +82,7 @@ namespace pkzo
         click_cb = cb;
     }
 
-    void HitArea::handle_mouse_button_down(MouseButton button, glm::vec2 pos)
+    /*void HitArea::handle_mouse_button_down(MouseButton button, glm::vec2 pos)
     {
         auto min = position - size / 2.0f;
         auto max = position + size / 2.0f;
@@ -162,6 +154,6 @@ namespace pkzo
                 mouse_in = false;
             }
         }
-    }
+    }*/
 }
 

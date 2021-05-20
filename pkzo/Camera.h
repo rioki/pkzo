@@ -36,36 +36,22 @@ namespace pkzo
         Camera() noexcept = default;
         Camera(const glm::mat4& transform) noexcept;
 
-
-        void look_at(const glm::vec3 pos, const glm::vec3 target, const glm::vec3 up);
-
+        //! Set the resolution to be rendererd into.
         void set_resolution(const glm::uvec2& value) noexcept;
+        //! Set the resolution to be rendererd into.
         const glm::uvec2& get_resolution() const noexcept;
-
+        //! Get the camera's aspect ratio.
         float get_aspect() const noexcept;
 
-        //! Set the FOV
-        void set_fov(const float value) noexcept;
-        //! Get the FOV
-        float get_fov() const noexcept;
-
-        //! Set the near clip plane
-        void set_znear(const float value) noexcept;
-        //! Get the near clip plane
-        float get_znear() const noexcept;
-
-        //! Set the far clip plane
-        void set_zfar(const float value) noexcept;
-        //! Get the far clip plane
-        float get_zfar() const noexcept;
-
-        glm::mat4 get_projection() const noexcept;
+        //! Get the camera's projection matrix.
+        virtual glm::mat4 get_projection() const noexcept = 0;
+        //! Get the camera's view matrix.
         glm::mat4 get_view() const noexcept;
+
+        //! Orient the camera to look at a specific target.
+        void look_at(const glm::vec3 pos, const glm::vec3 target, const glm::vec3 up);
 
     private:
         glm::uvec2 resolution = {800, 600};
-        float      fov        = 45.0f;
-        float      znear      = 0.01f;
-        float      zfar       = 1000.0f;
     };
 }

@@ -24,11 +24,14 @@
 
 #include "pch.h"
 
+#include <pkzo/Text.h>
+#include <pkzo/Font.h>
+#include <pkzo/Material.h>
 TEST(Text, create)
 {
     auto font = std::make_shared<pkzo::Font>("../../data/fonts/DejaVuSans.ttf", 32);
-    auto text = pkzo::Text{font, "pkzo"};
-    EXPECT_GLM_EQ(glm::vec2(0.0f), text.get_position());
+    auto text = pkzo::Text("pkzo", font, std::make_shared<pkzo::Material>());
+    //EXPECT_GLM_EQ(glm::vec2(0.0f), text.get_position());
     EXPECT_GLM_EQ(glm::vec2(font->estimate("pkzo")), text.get_size());
     EXPECT_EQ(font, text.get_font());
     EXPECT_EQ("pkzo", text.get_text());
@@ -39,13 +42,12 @@ TEST(Text, render)
     pkzo::Window window({800, 600}, pkzo::WindowMode::STATIC, __FUNCTION__);
 
     pkzo::Screen screen(glm::vec2(window.get_size()));
-    auto text = std::make_shared<pkzo::Text>(std::make_shared<pkzo::Font>("../../data/fonts/DejaVuSans.ttf", 32), "pkzo");
+    auto font = std::make_shared<pkzo::Font>("../../data/fonts/DejaVuSans.ttf", 32);
+    auto text = std::make_shared<pkzo::Text>("pkzo", font, pkzo::make_emissive_material(glm::vec3(1.0f)));
     screen.add_node(text);
 
-    pkzo::ScreenRenderer renderer;
-
     window.on_draw([&] () {
-        renderer.render(screen);
+        screen.draw();
     });
     window.draw();
     window.draw();

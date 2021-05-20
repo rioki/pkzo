@@ -28,22 +28,21 @@
 
 #include <functional>
 
-#include "ScreenNode.h"
+#include "enums.h"
+#include "SceneNode.h"
 
 namespace pkzo
 {
-    class PKZO_EXPORT HitArea : public ScreenNode
+    //! Interaction Hot Zone
+    class PKZO_EXPORT HitArea : public SceneNode
     {
     public:
-        HitArea() noexcept;
-        HitArea(const glm::vec2& position, const glm::vec2& size) noexcept;
+        HitArea(const glm::vec3& size) noexcept;
+        HitArea(const glm::mat4& transform, const glm::vec3& size) noexcept;
         ~HitArea();
 
-        void set_position(const glm::vec2& value) noexcept;
-        const glm::vec2& get_position() const noexcept;
-
-        void set_size(const glm::vec2& value) noexcept;
-        const glm::vec2& get_size() const noexcept;
+        void set_size(const glm::vec3& value) noexcept;
+        const glm::vec3& get_size() const noexcept;
 
         void on_enter(const std::function<void ()>& cb) noexcept;
         void on_leave(const std::function<void ()>& cb) noexcept;
@@ -52,13 +51,12 @@ namespace pkzo
         void on_mouse_up(const std::function<void (MouseButton, glm::vec2)>& cb) noexcept;
         void on_click(const std::function<void ()>& cb) noexcept;
 
-        void handle_mouse_button_down(MouseButton button, glm::vec2 position) override;
+        /*void handle_mouse_button_down(MouseButton button, glm::vec2 position) override;
         void handle_mouse_button_up(MouseButton button, glm::vec2 position) override;
-        void handle_mouse_move(glm::vec2 pos, glm::vec2 rel) override;
+        void handle_mouse_move(glm::vec2 pos, glm::vec2 rel) override;*/
 
     private:
-        glm::vec2 position = glm::vec2(0.0f);
-        glm::vec2 size     = glm::vec2(15.0f);
+        glm::vec3 size = glm::vec3(1.0f);
 
         std::function<void ()> enter_cb;
         std::function<void ()> leave_cb;

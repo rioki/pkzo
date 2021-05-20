@@ -22,46 +22,11 @@
 // THE SOFTWARE.
 //
 
-#pragma once
+#include "pch.h"
 
-#include "config.h"
+#include <pkzo/Button.h>
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
-#include "SceneNodeGroup.h"
-
-namespace pkzo
+TEST(Button, defaults)
 {
-    class Camera;
-    class Pipeline;
 
-    //! 3D Scene
-    class PKZO_EXPORT Scene : public SceneNodeGroup
-    {
-    public:
-        Scene();
-        ~Scene();
-
-        Pipeline* get_render_pipeline() noexcept;
-        const Pipeline* get_render_pipeline() const noexcept;
-
-        void add_node(std::shared_ptr<SceneNode> child) noexcept override;
-        void remove_node(std::shared_ptr<SceneNode> child) noexcept override;
-
-        void draw(const Camera& camera) const noexcept;
-
-    private:
-        std::unique_ptr<Pipeline> render_pipeline;
-    };
-
-    inline glm::mat4 position(float x, float y)
-    {
-        return glm::translate(glm::mat4(1.0f), glm::vec3(x, y, 0.0f));
-    }
-
-    inline glm::mat4 position(const glm::vec2& pos)
-    {
-        return position(pos.x, pos.y);
-    }
 }

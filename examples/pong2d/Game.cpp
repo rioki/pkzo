@@ -51,7 +51,7 @@ namespace pong2d
         window.on_draw([this] () {
             if (screen)
             {
-                screen->draw(*screen_renderer);
+                screen->draw();
             }
         });
 
@@ -60,14 +60,14 @@ namespace pong2d
             if (screen)
             {
                 auto p = pkzo::map_to_screen(window.get_size(), screen->get_size(), pos);
-                screen->handle_mouse_button_down(button, p);
+                //screen->handle_mouse_button_down(button, p);
             }
         });
         mouse.on_button_up([this, &window] (auto button, auto pos) {
             if (screen)
             {
                 auto p = pkzo::map_to_screen(window.get_size(), screen->get_size(), pos);
-                screen->handle_mouse_button_up(button, p);
+                //screen->handle_mouse_button_up(button, p);
             }
         });
         mouse.on_move([this, &window] (auto pos, auto mov) {
@@ -75,7 +75,7 @@ namespace pong2d
             {
                 auto p = pkzo::map_to_screen(window.get_size(), screen->get_size(), pos);
                 auto m = pkzo::map_to_screen(window.get_size(), screen->get_size(), mov);
-                screen->handle_mouse_move(p, m);
+                //screen->handle_mouse_move(p, m);
             }
         });
 
@@ -83,13 +83,13 @@ namespace pong2d
         keyboard.on_key_down([this] (auto mod, auto key) {
             if (!key_capture_cb)
             {
-                screen->handle_key_down(mod, key);
+                //screen->handle_key_down(mod, key);
             }
         });
         keyboard.on_key_up([this] (auto mod, auto key) {
             if (!key_capture_cb)
             {
-                screen->handle_key_up(mod, key);
+                //screen->handle_key_up(mod, key);
             }
             else
             {
@@ -98,10 +98,8 @@ namespace pong2d
             }
         });
         keyboard.on_text([this] (auto text) {
-            screen->handle_text(text);
+            //screen->handle_text(text);
         });
-
-        screen_renderer = std::make_unique<pkzo::ScreenRenderer>();
     }
 
     Game::~Game() = default;
@@ -151,7 +149,7 @@ namespace pong2d
         }
         if (screen)
         {
-            screen->animate(dt);
+            //screen->animate(dt);
         }
     }
 

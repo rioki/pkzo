@@ -49,6 +49,8 @@ namespace pkzo
     Pipeline::Pipeline() noexcept
     : fullscreen_rectangle(make_fullscreen_rectangle()) {}
 
+    Pipeline::~Pipeline() = default;
+
     void Pipeline::add_pass(PassType type, const std::shared_ptr<Shader>& shader) noexcept
     {
         DepthTest depth_test;
@@ -74,6 +76,11 @@ namespace pkzo
             break;
         }
 
+        add_pass(type, shader, depth_test, blending, std::make_shared<Parameters>());
+    }
+
+    void Pipeline::add_pass(PassType type, const std::shared_ptr<Shader>& shader, DepthTest depth_test, Blending blending) noexcept
+    {
         add_pass(type, shader, depth_test, blending, std::make_shared<Parameters>());
     }
 

@@ -90,6 +90,16 @@ namespace pkzo
         return single_color_texture(static_cast<std::byte>(r * 255.0f), static_cast<std::byte>(g * 255.0f), static_cast<std::byte>(b * 255.0f));
     }
 
+    std::shared_ptr<Texture> make_color_texture(const glm::vec3& color) noexcept
+    {
+        return single_color_texture(color.x, color.y, color.z);
+    }
+
+    std::shared_ptr<Texture> make_black_texture() noexcept
+    {
+        return single_color_texture(0, 0, 0);
+    }
+
     std::shared_ptr<Texture> default_diffuse_texture()
     {
         return single_color_texture(0.75f, 0.75f, 0.75f);
@@ -115,20 +125,39 @@ namespace pkzo
         return single_color_texture(0.0f);
     }
 
-    Material::Material(const std::shared_ptr<Texture>& diffuse, const std::shared_ptr<Texture>& specular, const std::shared_ptr<Texture>& roughtness)
-    : Material(diffuse, specular, roughtness, default_normal_texture(), default_emissive_texture()) {}
+    std::shared_ptr<Texture> default_mask_texture()
+    {
+        return single_color_texture(1.0f);
+    }
 
-    Material::Material(const std::shared_ptr<Texture>& diffuse, const std::shared_ptr<Texture>& specular, const std::shared_ptr<Texture>& roughtness, const std::shared_ptr<Texture>& normal)
-    : Material(diffuse, specular, roughtness, normal, default_emissive_texture()) {}
+    std::shared_ptr<Material> make_emissive_material(const glm::vec3& color) noexcept
+    {
+        return std::make_shared<Material>(make_black_texture(), make_black_texture(), make_black_texture(), default_normal_texture(), make_color_texture(color));
+    }
+
+    std::shared_ptr<Material> make_emissive_material(const std::shared_ptr<Texture>& texture) noexcept
+    {
+        return std::make_shared<Material>(make_black_texture(), make_black_texture(), make_black_texture(), default_normal_texture(), texture);
+    }
+
+    Material::Material(const std::shared_ptr<Texture>& d, const std::shared_ptr<Texture>& s, const std::shared_ptr<Texture>& r)
+    : Material(d, s, r, default_normal_texture(), default_emissive_texture(), default_mask_texture()) {}
+
+    Material::Material(const std::shared_ptr<Texture>& d, const std::shared_ptr<Texture>& s, const std::shared_ptr<Texture>& r, const std::shared_ptr<Texture>& n)
+    : Material(d, s, r, n, default_emissive_texture(), default_mask_texture()) {}
 
     Material::Material(const std::shared_ptr<Texture>& d, const std::shared_ptr<Texture>& s, const std::shared_ptr<Texture>& r, const std::shared_ptr<Texture>& n, const std::shared_ptr<Texture>& e)
-    : diffuse(d), specular(s), roughtness(r), normal(n), emissive(e)
+    : Material(d, s, r, n, e, default_mask_texture()) {}
+
+    Material::Material(const std::shared_ptr<Texture>& d, const std::shared_ptr<Texture>& s, const std::shared_ptr<Texture>& r, const std::shared_ptr<Texture>& n, const std::shared_ptr<Texture>& e, const std::shared_ptr<Texture>& m)
+    : diffuse(d), specular(s), roughtness(r), normal(n), emissive(e), mask(m)
     {
         DBG_ASSERT(diffuse);
         DBG_ASSERT(specular);
         DBG_ASSERT(roughtness);
         DBG_ASSERT(normal);
         DBG_ASSERT(emissive);
+        DBG_ASSERT(mask);
     }
 
     Material::Material(const std::filesystem::path& filename)
@@ -229,6 +258,17 @@ namespace pkzo
         return emissive;
     }
 
+    void Material::set_mask(const std::shared_ptr<Texture>& value) noexcept
+    {
+        DBG_ASSERT(value);
+        mask = value;
+    }
+
+    const std::shared_ptr<Texture>& Material::get_mask() const noexcept
+    {
+        return mask;
+    }
+
     std::shared_ptr<Parameters> Material::to_parameters() const noexcept
     {
         DBG_ASSERT(diffuse);
@@ -236,6 +276,7 @@ namespace pkzo
         DBG_ASSERT(roughtness);
         DBG_ASSERT(normal);
         DBG_ASSERT(emissive);
+        DBG_ASSERT(mask);
 
         auto params = std::make_shared<Parameters>();
 
@@ -244,6 +285,7 @@ namespace pkzo
         params->set_value("pkzo_RoughtnessMap", roughtness);
         params->set_value("pkzo_NormalMap",     normal);
         params->set_value("pkzo_EmissiveMap",   emissive);
+        params->set_value("pkzo_Mask",          mask);
 
         return params;
     }

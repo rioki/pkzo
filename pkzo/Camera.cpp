@@ -30,11 +30,6 @@ namespace pkzo
     Camera::Camera(const glm::mat4& transform) noexcept
     : SceneNode(transform) {}
 
-    void Camera::look_at(const glm::vec3 pos, const glm::vec3 target, const glm::vec3 up)
-    {
-        set_transform(glm::inverse(glm::lookAt(pos, target, up)));
-    }
-
     void Camera::set_resolution(const glm::uvec2& value) noexcept
     {
         resolution = value;
@@ -50,43 +45,14 @@ namespace pkzo
         return static_cast<float>(resolution.x) / static_cast<float>(resolution.y);
     }
 
-    void Camera::set_fov(const float value) noexcept
-    {
-        fov = value;
-    }
-
-    float Camera::get_fov() const noexcept
-    {
-        return fov;
-    }
-
-    void Camera::set_znear(const float value) noexcept
-    {
-        znear = value;
-    }
-
-    float Camera::get_znear() const noexcept
-    {
-        return znear;
-    }
-
-    void Camera::set_zfar(const float value) noexcept
-    {
-        zfar = value;
-    }
-
-    float Camera::get_zfar() const noexcept
-    {
-        return zfar;
-    }
-
-    glm::mat4 Camera::get_projection() const noexcept
-    {
-        return glm::perspective(fov, get_aspect(), znear, zfar);
-    }
-
     glm::mat4 Camera::get_view() const noexcept
     {
         return glm::inverse(get_world_transform());
     }
+
+    void Camera::look_at(const glm::vec3 pos, const glm::vec3 target, const glm::vec3 up)
+    {
+        set_transform(glm::inverse(glm::lookAt(pos, target, up)));
+    }
+
 }

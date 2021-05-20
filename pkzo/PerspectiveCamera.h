@@ -1,7 +1,7 @@
 //
 // pkzo
 //
-// Copyright 2014-2021 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2010-2021 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,43 +25,38 @@
 #pragma once
 
 #include "config.h"
-
-#include <chrono>
-#include <string_view>
-#include <glm/glm.hpp>
-
-#include "enums.h"
+#include "Camera.h"
 
 namespace pkzo
 {
-    class ScreenRenderer;
-
-    class PKZO_EXPORT ScreenNode
+    //! Perspective Camera
+    //!
+    //! This camera emulates the normal perspective view, like a real camera would.
+    class PKZO_EXPORT PerspectiveCamera : public Camera
     {
     public:
-        ScreenNode() noexcept;
-        ScreenNode(const ScreenNode&) = delete;
-        virtual ~ScreenNode();
-        ScreenNode& operator = (const ScreenNode&) = delete;
+        PerspectiveCamera() noexcept = default;
 
-        ScreenNode* get_parent() noexcept;
-        const ScreenNode* get_parent() const noexcept;
+        //! Set the FOV
+        void set_fov(const float value) noexcept;
+        //! Get the FOV
+        float get_fov() const noexcept;
 
-        virtual void animate(std::chrono::milliseconds dt);
-        virtual void handle_mouse_button_down(MouseButton button, glm::vec2 position);
-        virtual void handle_mouse_button_up(MouseButton button, glm::vec2 position);
-        virtual void handle_mouse_move(glm::vec2 pos, glm::vec2 rel);
-        virtual void handle_key_down(KeyMod mod, Key key);
-        virtual void handle_key_up(KeyMod mod, Key key);
-        virtual void handle_text(const std::string_view text);
+        //! Set the near clip plane
+        void set_znear(const float value) noexcept;
+        //! Get the near clip plane
+        float get_znear() const noexcept;
 
-    protected:
-        virtual void render(ScreenRenderer& renderer, const glm::vec2& offset) const noexcept;
+        //! Set the far clip plane
+        void set_zfar(const float value) noexcept;
+        //! Get the far clip plane
+        float get_zfar() const noexcept;
+
+        glm::mat4 get_projection() const noexcept override;
 
     private:
-        ScreenNode* parent = nullptr;
-
-    friend class ScreenNodeGroup;
+        float fov   = 45.0f;
+        float znear = 0.01f;
+        float zfar  = 1000.0f;
     };
 }
-

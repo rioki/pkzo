@@ -380,8 +380,13 @@ namespace pkzo
         FIBITMAP* bitmap;
     };
 
+    void free_image_trace(FREE_IMAGE_FORMAT fif, const char *message) {
+        DBG_TRACE(message);
+    }
+
     FreeImageTextureImpl::FreeImageTextureImpl(const std::filesystem::path& file)
     {
+        FreeImage_SetOutputMessage(free_image_trace);
     #ifdef _WIN32
         auto fif = FreeImage_GetFileTypeU(file.c_str(), 0);
         bitmap = FreeImage_LoadU(fif, file.c_str(), JPEG_ACCURATE);

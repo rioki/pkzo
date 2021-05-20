@@ -25,43 +25,31 @@
 #pragma once
 
 #include "config.h"
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
-#include "SceneNodeGroup.h"
+#include "Camera.h"
 
 namespace pkzo
 {
-    class Camera;
-    class Pipeline;
-
-    //! 3D Scene
-    class PKZO_EXPORT Scene : public SceneNodeGroup
+    //! Orthographic Camera
+    //!
+    //! This camera implements the orthographic projection. Ths means all lines
+    //! that are paralell, remain paralell.
+    class PKZO_EXPORT OrthographicCamera : public Camera
     {
     public:
-        Scene();
-        ~Scene();
+        //! Construct Orthographic Camera
+        OrthographicCamera() noexcept = default;
 
-        Pipeline* get_render_pipeline() noexcept;
-        const Pipeline* get_render_pipeline() const noexcept;
+        //! Contruct Camera for a 2D screen.
+        OrthographicCamera(const glm::vec2& size) noexcept;
 
-        void add_node(std::shared_ptr<SceneNode> child) noexcept override;
-        void remove_node(std::shared_ptr<SceneNode> child) noexcept override;
+        //! Get the volume of displayed space.
+        const glm::vec3& get_size() const noexcept;
+        //! Set the volume of displayed space.
+        void set_size(const glm::vec3& value);
 
-        void draw(const Camera& camera) const noexcept;
+        glm::mat4 get_projection() const noexcept override;
 
     private:
-        std::unique_ptr<Pipeline> render_pipeline;
+        glm::vec3 size;
     };
-
-    inline glm::mat4 position(float x, float y)
-    {
-        return glm::translate(glm::mat4(1.0f), glm::vec3(x, y, 0.0f));
-    }
-
-    inline glm::mat4 position(const glm::vec2& pos)
-    {
-        return position(pos.x, pos.y);
-    }
 }

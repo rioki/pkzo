@@ -164,6 +164,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="box_test.cpp" />
+    <ClCompile Include="button_test.cpp" />
+    <ClCompile Include="camera_test.cpp" />
     <ClCompile Include="font_test.cpp" />
     <ClCompile Include="light_test.cpp" />
     <ClCompile Include="main.cpp" />
@@ -180,6 +182,7 @@
     <ClCompile Include="scene_renderer_test.cpp" />
     <ClCompile Include="scene_test.cpp" />
     <ClCompile Include="settings_test.cpp" />
+    <ClCompile Include="signal_test.cpp" />
     <ClCompile Include="test_utils.cpp" />
     <ClCompile Include="texture_text.cpp" />
     <ClCompile Include="text_test.cpp" />

@@ -27,12 +27,16 @@
 #include "config.h"
 
 #include <memory>
-#include <pkzo/pkzo.h>
 
-#include "ScreenNodeGroup.h"
+#include "enums.h"
+#include "SceneNodeGroup.h"
 
 namespace pkzo
 {
+    class Material;
+    class Rectangle;
+    class HitArea;
+
     enum class SliderOrientation
     {
         HORIZONTAL,
@@ -40,40 +44,36 @@ namespace pkzo
     };
 
     //! Slider Widget
-    class PKZO_EXPORT Slider : public ScreenNodeGroup
+    class PKZO_EXPORT Slider : public SceneNodeGroup
     {
     public:
-        //! Default Contructor
-        //!
-        //! @warning you need to set background_texture and handle_texture before
-        //! you can use the slider.
-        Slider() noexcept;
-
         //! Construct the Slider
         //!
-        //! @param background_texture the background texture
-        //! @param handle_texture the handle texture
+        //! @param background_material the background material
+        //! @param handle_material the handle material
         //! @param value the slider value
         //!
-        //! @{
-        Slider(const std::shared_ptr<Texture>& background_texture, const std::shared_ptr<Texture>& handle_texture) noexcept;
-        Slider(const std::shared_ptr<Texture>& background_texture, const std::shared_ptr<Texture>& handle_texture, float value) noexcept;
-        //! @}
+        Slider(SliderOrientation orientation, const glm::vec2& size, const std::shared_ptr<Material>& background_material, const glm::vec2& handle_size, const std::shared_ptr<Material>& handle_material, float value) noexcept;
 
         ~Slider();
 
+        void set_size(const glm::vec2& value) noexcept;
         //! Get the widget size.
         const glm::vec2& get_size() const noexcept;
 
-        //! Set the background texture.
-        void set_background_texture(const std::shared_ptr<Texture>& value) noexcept;
-        //! Get the background texture.
-        const std::shared_ptr<Texture>& get_background_texture() const noexcept;
+        //! Set the background material.
+        void set_background_material(const std::shared_ptr<Material>& value) noexcept;
+        //! Get the background material.
+        const std::shared_ptr<Material>& get_background_material() const noexcept;
 
-        //! Set the handle texture.
-        void set_handle_texture(const std::shared_ptr<Texture>& value) noexcept;
-        //! Get the handle texture.
-        const std::shared_ptr<Texture>& get_handle_texture() const noexcept;
+        void set_handle_size(const glm::vec2& value) noexcept;
+        //! Get the handle size.
+        const glm::vec2& get_handle_size() const noexcept;
+
+        //! Set the handle material.
+        void set_handle_material(const std::shared_ptr<Material>& value) noexcept;
+        //! Get the handle material.
+        const std::shared_ptr<Material>& get_handle_material() const noexcept;
 
         //! Set the slidre orientation.
         void set_orientation(SliderOrientation value) noexcept;
