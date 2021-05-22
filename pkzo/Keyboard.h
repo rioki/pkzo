@@ -22,8 +22,8 @@
 // THE SOFTWARE.
 //
 
-#ifndef _ICE_KEYBOARD_H_
-#define _ICE_KEYBOARD_H_
+#pragma once
+#include "config.h"
 
 #include "config.h"
 
@@ -31,6 +31,7 @@
 #include <glm/fwd.hpp>
 
 #include "enums.h"
+#include "rsig.h"
 
 union SDL_Event;
 
@@ -46,19 +47,22 @@ namespace pkzo
 
         bool is_pressed(Key key) const noexcept;
 
-        void on_key_down(const std::function<void (KeyMod, Key)>& cb);
-        void on_key_up(const std::function<void (KeyMod, Key)>& cb);
-        void on_text(const std::function<void (const std::string_view)>& cb);
+        rsig::signal<KeyMod, Key>& get_key_down_signal() noexcept;
+        rsig::connection on_key_down(const std::function<void (KeyMod, Key)>& cb) noexcept;
+
+        rsig::signal<KeyMod, Key>& get_key_up_signal() noexcept;
+        rsig::connection on_key_up(const std::function<void (KeyMod, Key)>& cb) noexcept;
+
+        rsig::signal<const std::string_view>& get_text_signal() noexcept;
+        rsig::connection on_text(const std::function<void (const std::string_view)>& cb) noexcept;
 
     private:
-        std::function<void (KeyMod, Key)>            key_down_cb;
-        std::function<void (KeyMod, Key)>            key_up_cb;
-        std::function<void (const std::string_view)> text_cb;
+        rsig::signal<KeyMod, Key>            key_down_signal;
+        rsig::signal<KeyMod, Key>            key_up_signal;
+        rsig::signal<const std::string_view> text_signal;
 
         void handle_event(const SDL_Event& event) const;
 
     friend class Engine;
     };
 }
-
-#endif

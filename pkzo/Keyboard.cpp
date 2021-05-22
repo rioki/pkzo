@@ -39,19 +39,34 @@ namespace pkzo
         return keys[static_cast<int>(key)] == SDL_TRUE;
     }
 
-    void Keyboard::on_key_down(const std::function<void(KeyMod, Key)>& cb)
+    rsig::signal<KeyMod, Key>& Keyboard::get_key_down_signal() noexcept
     {
-        key_down_cb = cb;
+        return key_down_signal;
     }
 
-    void Keyboard::on_key_up(const std::function<void(KeyMod, Key)>&cb)
+    rsig::connection Keyboard::on_key_down(const std::function<void(KeyMod, Key)>& cb) noexcept
     {
-        key_up_cb = cb;
+        return key_down_signal.connect(cb);
     }
 
-    void Keyboard::on_text(const std::function<void(const std::string_view)>&cb)
+    rsig::signal<KeyMod, Key>& Keyboard::get_key_up_signal() noexcept
     {
-        text_cb = cb;
+        return key_up_signal;
+    }
+
+    rsig::connection Keyboard::on_key_up(const std::function<void(KeyMod, Key)>& cb) noexcept
+    {
+        return key_up_signal.connect(cb);
+    }
+
+    rsig::signal<const std::string_view>& Keyboard::get_text_signal() noexcept
+    {
+        return text_signal;
+    }
+
+    rsig::connection Keyboard::on_text(const std::function<void(const std::string_view)>& cb) noexcept
+    {
+        return text_signal.connect(cb);
     }
 
     Key sdl2key(SDL_Scancode sc)
@@ -88,25 +103,16 @@ namespace pkzo
         switch (event.type)
         {
         case SDL_KEYDOWN:
-            if (key_down_cb)
-            {
-                key_down_cb(sdl2mod(event.key.keysym.mod), sdl2key(event.key.keysym.scancode));
-            }
+            key_down_signal.emit(sdl2mod(event.key.keysym.mod), sdl2key(event.key.keysym.scancode));
             break;
         case SDL_KEYUP:
-            if (key_up_cb)
-            {
-                key_up_cb(sdl2mod(event.key.keysym.mod), sdl2key(event.key.keysym.scancode));
-            }
+            key_up_signal.emit(sdl2mod(event.key.keysym.mod), sdl2key(event.key.keysym.scancode));
             break;
         case SDL_TEXTINPUT:
-            if (text_cb)
-            {
-                text_cb(event.text.text);
-            }
+            text_signal.emit(event.text.text);
             break;
         default:
-            assert(false);
+            DBG_FAIL("Unexpected event.");
             break;
         }
     }

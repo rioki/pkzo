@@ -22,15 +22,14 @@
 // THE SOFTWARE.
 //
 
-#ifndef _ICE_JOYSICK_H_
-#define _ICE_JOYSICK_H_
-
+#pragma once
 #include "config.h"
 
 #include <functional>
 #include <glm/fwd.hpp>
 
 #include "enums.h"
+#include "rsig.h"
 
 union SDL_Event;
 struct _SDL_Joystick;
@@ -52,25 +51,32 @@ namespace pkzo
         uint8_t get_button_count() const noexcept;
         uint8_t get_hat_count() const noexcept;
 
-        void on_axis_motion(const std::function<void (uint8_t, float)>& cb);
-        void on_ball_motion(const std::function<void (uint8_t, glm::ivec2)>& cb);
-        void on_button_down(const std::function<void (uint8_t)>& cb);
-        void on_button_up(const std::function<void (uint8_t)>& cb);
-        void on_hat_motion(const std::function<void (uint8_t, glm::ivec2)>& cb);
+        rsig::signal<uint8_t, float>& get_axis_motion_signal() noexcept;
+        rsig::connection on_axis_motion(const std::function<void (uint8_t, float)>& cb) noexcept;
+
+        rsig::signal<uint8_t, glm::ivec2>& ball_motion_signa() noexcept;
+        rsig::connection on_ball_motion(const std::function<void (uint8_t, glm::ivec2)>& cb) noexcept;
+
+        rsig::signal<uint8_t>& get_button_down_signal() noexcept;
+        rsig::connection on_button_down(const std::function<void (uint8_t)>& cb) noexcept;
+
+        rsig::signal<uint8_t>& get_button_up_signal() noexcept;
+        rsig::connection on_button_up(const std::function<void (uint8_t)>& cb) noexcept;
+
+        rsig::signal<uint8_t, glm::ivec2>& get_hat_motion_signal() noexcept;
+        rsig::connection on_hat_motion(const std::function<void (uint8_t, glm::ivec2)>& cb) noexcept;
 
     private:
         SDL_Joystick* joystick;
 
-        std::function<void (uint8_t, float)>      axis_motion_cb;
-        std::function<void (uint8_t, glm::ivec2)> ball_motion_cb;
-        std::function<void (uint8_t)>             button_down_cb;
-        std::function<void (uint8_t)>             button_up_cb;
-        std::function<void (uint8_t, glm::ivec2)> hat_motion_cb;
+        rsig::signal<uint8_t, float>      axis_motion_signal;
+        rsig::signal<uint8_t, glm::ivec2> ball_motion_signal;
+        rsig::signal<uint8_t>             button_down_signal;
+        rsig::signal<uint8_t>             button_up_signal;
+        rsig::signal<uint8_t, glm::ivec2> hat_motion_signal;
 
         void handle_event(const SDL_Event& event) const;
 
     friend class Engine;
     };
 }
-
-#endif

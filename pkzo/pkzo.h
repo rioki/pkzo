@@ -55,6 +55,7 @@
 #include "DirectionalLight.h"
 #include "PointLight.h"
 #include "SpotLight.h"
+#include "Actor.h"
 
 #include "Screen.h"
 #include "SceneNode.h"
