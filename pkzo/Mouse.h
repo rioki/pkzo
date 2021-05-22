@@ -22,15 +22,14 @@
 // THE SOFTWARE.
 //
 
-#ifndef _PKZO_MOUSE_H_
-#define _PKZO_MOUSE_H_
-
+#pragma once
 #include "config.h"
 
 #include <functional>
 #include <glm/fwd.hpp>
 
 #include "enums.h"
+#include "rsig.h"
 
 union SDL_Event;
 
@@ -49,21 +48,26 @@ namespace pkzo
 
         glm::ivec2 get_cursor_position() const noexcept;
 
-        void on_button_down(const std::function<void (MouseButton, glm::ivec2)>& cb);
-        void on_button_up(const std::function<void (MouseButton, glm::ivec2)>& cb);
-        void on_move(const std::function<void (glm::ivec2, glm::ivec2)>& cb);
-        void on_wheel(const std::function<void (glm::ivec2)>& cb);
+        rsig::signal<MouseButton, glm::ivec2>& get_button_down_signal() noexcept;
+        rsig::connection on_button_down(const std::function<void (MouseButton, glm::ivec2)>& cb) noexcept;
+
+        rsig::signal<MouseButton, glm::ivec2>& get_button_up_signal() noexcept;
+        rsig::connection on_button_up(const std::function<void (MouseButton, glm::ivec2)>& cb) noexcept;
+
+        rsig::signal<glm::ivec2, glm::ivec2>& get_move_signal() noexcept;
+        rsig::connection on_move(const std::function<void (glm::ivec2, glm::ivec2)>& cb) noexcept;
+
+        rsig::signal<glm::ivec2>& get_wheel_signal() noexcept;
+        rsig::connection on_wheel(const std::function<void (glm::ivec2)>& cb) noexcept;
 
     private:
-        std::function<void (MouseButton, glm::ivec2)> button_down_cb;
-        std::function<void (MouseButton, glm::ivec2)> button_up_cb;
-        std::function<void (glm::ivec2, glm::ivec2)>  move_cb;
-        std::function<void (glm::ivec2)>              wheel_cb;
+        rsig::signal<MouseButton, glm::ivec2> button_down_signal;
+        rsig::signal<MouseButton, glm::ivec2> button_up_signal;
+        rsig::signal<glm::ivec2, glm::ivec2>  move_signal;
+        rsig::signal<glm::ivec2>              wheel_signal;
 
         void handle_event(const SDL_Event& event) const;
 
     friend class Engine;
     };
 }
-
-#endif

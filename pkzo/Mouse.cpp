@@ -56,24 +56,44 @@ namespace pkzo
         return {x, y};
     }
 
-    void Mouse::on_button_down(const std::function<void(MouseButton, glm::ivec2)>& cb)
+    rsig::signal<MouseButton, glm::ivec2>& Mouse::get_button_down_signal() noexcept
     {
-        button_down_cb = cb;
+        return button_down_signal;
     }
 
-    void Mouse::on_button_up(const std::function<void(MouseButton, glm::ivec2)>& cb)
+    rsig::connection Mouse::on_button_down(const std::function<void(MouseButton, glm::ivec2)>& cb) noexcept
     {
-        button_up_cb = cb;
+        return button_down_signal.connect(cb);
     }
 
-    void Mouse::on_move(const std::function<void(glm::ivec2, glm::ivec2)>& cb)
+    rsig::signal<MouseButton, glm::ivec2>& Mouse::get_button_up_signal() noexcept
     {
-        move_cb = cb;
+        return button_up_signal;
     }
 
-    void Mouse::on_wheel(const std::function<void(glm::ivec2)>& cb)
+    rsig::connection Mouse::on_button_up(const std::function<void(MouseButton, glm::ivec2)>& cb) noexcept
     {
-        wheel_cb = cb;
+        return button_up_signal.connect(cb);
+    }
+
+    rsig::signal<glm::ivec2, glm::ivec2>& Mouse::get_move_signal() noexcept
+    {
+        return move_signal;
+    }
+
+    rsig::connection Mouse::on_move(const std::function<void(glm::ivec2, glm::ivec2)>& cb) noexcept
+    {
+        return move_signal.connect(cb);
+    }
+
+    rsig::signal<glm::ivec2>& Mouse::get_wheel_signal() noexcept
+    {
+        return wheel_signal;
+    }
+
+    rsig::connection Mouse::on_wheel(const std::function<void(glm::ivec2)>& cb) noexcept
+    {
+        return wheel_signal.connect(cb);
     }
 
     void Mouse::handle_event(const SDL_Event& event) const
@@ -81,31 +101,19 @@ namespace pkzo
         switch (event.type)
         {
         case SDL_MOUSEMOTION:
-            if (move_cb)
-            {
-                move_cb({event.motion.x, event.motion.y}, {event.motion.xrel, event.motion.yrel});
-            }
+            move_signal.emit({event.motion.x, event.motion.y}, {event.motion.xrel, event.motion.yrel});
             break;
         case SDL_MOUSEBUTTONDOWN:
-            if (button_down_cb)
-            {
-                button_down_cb(MouseButton(event.button.button), {event.button.x, event.button.y});
-            }
+            button_down_signal.emit(MouseButton(event.button.button), {event.button.x, event.button.y});
             break;
         case SDL_MOUSEBUTTONUP:
-            if (button_up_cb)
-            {
-                button_up_cb(MouseButton(event.button.button), {event.button.x, event.button.y});
-            }
+            button_up_signal.emit(MouseButton(event.button.button), {event.button.x, event.button.y});
             break;
         case SDL_MOUSEWHEEL:
-            if (wheel_cb)
-            {
-                wheel_cb({event.wheel.x, event.wheel.y});
-            }
+            wheel_signal.emit({event.wheel.x, event.wheel.y});
             break;
         default:
-            assert(false);
+            DBG_FAIL("Unexpected event.");
             break;
         }
     }
