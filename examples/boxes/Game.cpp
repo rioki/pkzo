@@ -25,6 +25,8 @@
 #include "pch.h"
 #include "Game.h"
 
+#include "Pawn.h"
+
 namespace boxes
 {
     Game::Game(int argc, const char* argv[])
@@ -38,8 +40,8 @@ namespace boxes
         auto scene = std::make_shared<pkzo::Scene>();
 
         // Camera
-        auto camera = std::make_shared<pkzo::PerspectiveCamera>(pkzo::lookat({-2.0f, 0.5f, 1.0f}, {0.0f, 0.0f, 0.5f}, {0.0f, 0.0f, 1.0f}));
-        scene->add_node(camera);
+        auto pawn = std::make_shared<Pawn>(pkzo::position(-2.0f, 0.5f, 1.0f));
+        scene->add_node(pawn);
 
         // Lights
         auto light0 = std::make_shared<pkzo::AmbientLight>(glm::vec3{0.106, 0.161, 0.2});
@@ -56,7 +58,7 @@ namespace boxes
         auto ground = std::make_shared<pkzo::Box>(glm::translate(glm::mat4{1.0f}, {0.0f, 0.0f, -0.5f}), glm::vec3(10.0f, 10.0f, 1.0f));
         scene->add_node(ground);
 
-        change_scene(scene, camera);
+        change_scene(scene, pawn->get_camera());
     }
 }
 

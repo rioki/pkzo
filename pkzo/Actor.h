@@ -23,50 +23,33 @@
 //
 
 #pragma once
-
 #include "config.h"
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 
 #include "enums.h"
 #include "SceneNodeGroup.h"
 
 namespace pkzo
 {
-    class Camera;
-    class Pipeline;
-    class Actor;
-
-    //! 3D Scene
-    class PKZO_EXPORT Scene : public SceneNodeGroup
+    //! Actor
+    class PKZO_EXPORT Actor : public SceneNodeGroup
     {
     public:
-        Scene();
-        ~Scene();
+        Actor() noexcept = default;
+        Actor(const glm::mat4& transform) noexcept;
 
-        Pipeline* get_render_pipeline() noexcept;
-        const Pipeline* get_render_pipeline() const noexcept;
+    protected:
+        void on_attach_scene(Scene* scene) noexcept override;
+        void on_detach_scene() noexcept override;
+        void update(std::chrono::milliseconds dt) noexcept override;
 
-        void add_node(std::shared_ptr<SceneNode> child) noexcept override;
-        void remove_node(std::shared_ptr<SceneNode> child) noexcept override;
-
-        void draw(const Camera& camera) const noexcept;
-
-        void handle_key_press(Key key, KeyMod mod) noexcept;
-        void handle_key_release(Key key, KeyMod mod) noexcept;
-        void handle_mouse_move(glm::vec2 pos, glm::vec2 rel) noexcept;
-        void handle_mouse_press(MouseButton button, glm::vec2 pos) noexcept;
-        void handle_mouse_release(MouseButton button, glm::vec2 pos) noexcept;
+        virtual void handle_key_press(Key key, KeyMod mod) noexcept;
+        virtual void handle_key_release(Key key, KeyMod mod) noexcept;
+        virtual void handle_mouse_move(glm::vec2 pos, glm::vec2 rel) noexcept;
+        virtual void handle_mouse_press(MouseButton button, glm::vec2 pos) noexcept;
+        virtual void handle_mouse_release(MouseButton button, glm::vec2 pos) noexcept;
 
     private:
-        std::unique_ptr<Pipeline> render_pipeline;
 
-        std::list<Actor*> actors;
-
-        void register_actor(Actor* actor);
-        void unregister_actor(Actor* actor);
-
-    friend class Actor;
+    friend class Scene;
     };
 }

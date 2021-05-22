@@ -22,7 +22,44 @@
 // THE SOFTWARE.
 //
 
-#pragma once
+#include "pch.h"
+#include "Actor.h""
 
-#include <pkzo/dbg.h>
-#include <pkzo/pkzo.h>
+#include "Scene.h"
+
+namespace pkzo
+{
+    Actor::Actor(const glm::mat4& transform) noexcept
+    : SceneNodeGroup(transform) {}
+
+    void Actor::on_attach_scene(Scene* scene) noexcept
+    {
+        DBG_ASSERT(scene);
+        SceneNodeGroup::on_attach_scene(scene);
+        scene->register_actor(this);
+    }
+
+    void Actor::on_detach_scene() noexcept
+    {
+        auto scene = get_scene();
+        DBG_ASSERT(scene);
+        scene->unregister_actor(this);
+        SceneNodeGroup::on_detach_scene();
+    }
+
+    void Actor::update(std::chrono::milliseconds dt) noexcept
+    {
+
+        SceneNodeGroup::update(dt);
+    }
+
+    void Actor::handle_key_press(Key key, KeyMod mod) noexcept {}
+
+    void Actor::handle_key_release(Key key, KeyMod mod) noexcept {}
+
+    void Actor::handle_mouse_move(glm::vec2 pos, glm::vec2 rel) noexcept {}
+
+    void Actor::handle_mouse_press(MouseButton button, glm::vec2 pos) noexcept {}
+
+    void Actor::handle_mouse_release(MouseButton button, glm::vec2 pos) noexcept {}
+}
