@@ -55,6 +55,9 @@ namespace pkzo
         template <typename NodeT>
         const NodeT* find_elder() const noexcept;
 
+        Scene* get_scene() noexcept;
+        const Scene* get_scene() const noexcept;
+
         //! Set the node's transform.
         void set_transform(const glm::mat4& value) noexcept;
         //! Get the node's transform.

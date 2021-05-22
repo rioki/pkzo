@@ -24,49 +24,29 @@
 
 #pragma once
 
-#include "config.h"
+#include <pkzo/pkzo.h>
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
-#include "enums.h"
-#include "SceneNodeGroup.h"
-
-namespace pkzo
+namespace boxes
 {
-    class Camera;
-    class Pipeline;
-    class Actor;
-
-    //! 3D Scene
-    class PKZO_EXPORT Scene : public SceneNodeGroup
+    class Pawn : public pkzo::Actor
     {
     public:
-        Scene();
-        ~Scene();
+        Pawn(const glm::mat4& transform) noexcept;
 
-        Pipeline* get_render_pipeline() noexcept;
-        const Pipeline* get_render_pipeline() const noexcept;
+        const std::shared_ptr<pkzo::Camera>& get_camera() noexcept;
 
-        void add_node(std::shared_ptr<SceneNode> child) noexcept override;
-        void remove_node(std::shared_ptr<SceneNode> child) noexcept override;
-
-        void draw(const Camera& camera) const noexcept;
-
-        void handle_key_press(Key key, KeyMod mod) noexcept;
-        void handle_key_release(Key key, KeyMod mod) noexcept;
-        void handle_mouse_move(glm::vec2 pos, glm::vec2 rel) noexcept;
-        void handle_mouse_press(MouseButton button, glm::vec2 pos) noexcept;
-        void handle_mouse_release(MouseButton button, glm::vec2 pos) noexcept;
+    protected:
+        void update(std::chrono::milliseconds dt) noexcept override;
+        void handle_key_press(pkzo::Key key, pkzo::KeyMod mod) noexcept override;
+        void handle_key_release(pkzo::Key key, pkzo::KeyMod mod) noexcept override;
 
     private:
-        std::unique_ptr<Pipeline> render_pipeline;
+        std::shared_ptr<pkzo::Camera> camera;
 
-        std::list<Actor*> actors;
-
-        void register_actor(Actor* actor);
-        void unregister_actor(Actor* actor);
-
-    friend class Actor;
+        float speed      = 10.0f;
+        bool  move_fore  = false;
+        bool  move_back  = false;
+        bool  move_left  = false;
+        bool  move_right = false;
     };
 }

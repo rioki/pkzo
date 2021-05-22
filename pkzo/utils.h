@@ -92,6 +92,26 @@ namespace pkzo
         return glm::inverse(glm::lookAt(pos, target, up));
     }
 
+    inline glm::mat4 position(float x, float y)
+    {
+        return glm::translate(glm::mat4(1.0f), glm::vec3(x, y, 0.0f));
+    }
+
+    inline glm::mat4 position(const glm::vec2& pos)
+    {
+        return position(pos.x, pos.y);
+    }
+
+    inline glm::mat4 position(float x, float y, float z)
+    {
+        return glm::translate(glm::mat4(1.0f), glm::vec3(x, y, z));
+    }
+
+    inline glm::mat4 position(const glm::vec3 pos)
+    {
+        return position(pos.x, pos.y, pos.z);
+    }
+
     constexpr unsigned int hash(const char* str, int h = 0)
     {
         return !str[h] ? 5381 : (hash(str, h+1)*33) ^ str[h];

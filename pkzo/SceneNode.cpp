@@ -25,6 +25,8 @@
 #include "pch.h"
 #include "SceneNode.h"
 
+#include "Scene.h"
+
 namespace pkzo
 {
     SceneNode::SceneNode(const glm::mat4& t) noexcept
@@ -38,6 +40,16 @@ namespace pkzo
     const SceneNode* SceneNode::get_parent() const noexcept
     {
         return parent;
+    }
+
+    Scene* SceneNode::get_scene() noexcept
+    {
+        return find_elder<Scene>();
+    }
+
+    const Scene* SceneNode::get_scene() const noexcept
+    {
+        return find_elder<Scene>();
     }
 
     void SceneNode::set_transform(const glm::mat4& value) noexcept
