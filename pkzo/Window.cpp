@@ -378,4 +378,30 @@ namespace pkzo
             }
         }
     }
+
+    auto icon2sdl(MessageBoxIcon icon)
+    {
+        switch (icon)
+        {
+            case MessageBoxIcon::ICON_ERROR:
+                return SDL_MESSAGEBOX_ERROR;
+            case MessageBoxIcon::ICON_WARNING:
+                return SDL_MESSAGEBOX_WARNING;
+            case MessageBoxIcon::ICON_INFORMATION:
+                return SDL_MESSAGEBOX_INFORMATION;
+            default:
+                DBG_FAIL("Unknown icon type.");
+                return SDL_MESSAGEBOX_ERROR;
+        }
+    }
+
+    void show_message_box(MessageBoxIcon icon, const std::string_view title, const std::string_view message)
+    {
+        SDL_ShowSimpleMessageBox(icon2sdl(icon), title.data(), message.data(), nullptr);
+    }
+
+    void show_message_box(MessageBoxIcon icon, const std::string_view title, const std::string_view message, const Window& parent)
+    {
+        SDL_ShowSimpleMessageBox(icon2sdl(icon), title.data(), message.data(), parent.window);
+    }
 }

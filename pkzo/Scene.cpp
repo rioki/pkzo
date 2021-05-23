@@ -83,6 +83,11 @@ namespace pkzo
         SceneNodeGroup::remove_node(child);
     }
 
+    void Scene::update(std::chrono::milliseconds dt) noexcept
+    {
+        SceneNodeGroup::update(dt);
+    }
+
     void Scene::draw(const Camera& camera) const noexcept
     {
         render_pipeline->set_camera(camera.get_projection(), camera.get_view());

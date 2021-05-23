@@ -44,6 +44,13 @@ namespace pkzo
 {
     class Texture;
 
+    enum MessageBoxIcon
+    {
+        ICON_ERROR,
+        ICON_WARNING,
+        ICON_INFORMATION
+    };
+
     class PKZO_EXPORT Window
     {
     public:
@@ -119,7 +126,11 @@ namespace pkzo
         void handle_event(const SDL_Event& event) const;
 
     friend class Main;
+    friend PKZO_EXPORT void show_message_box(MessageBoxIcon icon, const std::string_view title, const std::string_view message, const Window& parent);
     };
+
+    PKZO_EXPORT void show_message_box(MessageBoxIcon icon, const std::string_view title, const std::string_view message);
+    PKZO_EXPORT void show_message_box(MessageBoxIcon icon, const std::string_view title, const std::string_view message, const Window& parent);
 }
 
 #endif

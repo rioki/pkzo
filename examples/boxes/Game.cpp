@@ -31,11 +31,21 @@ namespace boxes
 {
     Game::Game(int argc, const char* argv[])
     {
-        auto settings_file = pkzo::get_user_folder() / "pzko" / "boxes" / "settings.json";
+        auto user_folder = pkzo::get_user_folder() / "pkzo" / "boxes";
+        std::filesystem::create_directories(user_folder);
+
+        auto settings_file = user_folder / "settings.json";
         if (std::filesystem::exists(settings_file))
         {
             settings.load(settings_file);
         }
+
+        main.on_tick([this] (auto dt) {
+            if (scene)
+            {
+                scene->update(dt);
+            }
+        });
 
         auto resolution = settings.get_value("Graphic", "resolution", glm::uvec2(800, 600));
         auto fullscreen = settings.get_value("Graphic", "fullscreen", false);
@@ -47,7 +57,21 @@ namespace boxes
             }
         });
 
+        create_pawn();
         create_test_scene();
+    }
+
+    Game::~Game()
+    {
+        try
+        {
+            auto settings_file = pkzo::get_user_folder() / "pkzo" / "boxes" / "settings.json";
+            settings.save(settings_file);
+        }
+        catch (const std::exception& ex)
+        {
+            DBG_TRACE(ex.what());
+        }
     }
 
     int Game::run()
@@ -56,12 +80,41 @@ namespace boxes
         return 0;
     }
 
+    void Game::create_pawn()
+    {
+        pawn = std::make_shared<Pawn>();
+        pawn->set_fore_key(settings.get_value("Pawn", "fore_key", pawn->get_fore_key()));
+        pawn->set_back_key(settings.get_value("Pawn", "back_key", pawn->get_back_key()));
+        pawn->set_left_key(settings.get_value("Pawn", "left_key", pawn->get_left_key()));
+        pawn->set_right_key(settings.get_value("Pawn", "right_key", pawn->get_right_key()));
+        pawn->set_mouse_sensitivity(settings.get_value("Pawn", "mouse_sensitivity", pawn->get_mouse_sensitivity()));
+        pawn->set_invert_mouse(settings.get_value("Pawn", "invert_mouse", pawn->get_invert_mouse()));
+
+        auto& keyboard = main.get_keyboard();
+        keyboard.on_key_down([this] (auto mod, auto key) {
+            pawn->handle_key_down(key);
+        });
+        keyboard.on_key_up([this] (auto mod, auto key) {
+            pawn->handle_key_up(key);
+        });
+
+        auto& mouse = main.get_mouse();
+        mouse.on_move([this] (auto pos, auto rel) {
+            pawn->handle_mouse_move(rel);
+        });
+        mouse.on_button_down([this] (auto button, auto pos) {
+            pawn->handle_mouse_down(button);
+        });
+        mouse.on_button_up([this] (auto button, auto pos) {
+            pawn->handle_mouse_up(button);
+        });
+    }
+
     void Game::create_test_scene()
     {
         scene = std::make_shared<pkzo::Scene>();
 
-        // Camera
-        auto pawn = std::make_shared<Pawn>(pkzo::position(-2.0f, 0.5f, 1.0f));
+        pawn->set_transform(pkzo::position(-2.0f, 0.5f, 1.0f));
         scene->add_node(pawn);
         camera = pawn->get_camera();
 
@@ -84,6 +137,19 @@ namespace boxes
 
 int main(int argc, const char* argv[])
 {
-    boxes::Game game(argc, argv);
-    return game.run();
+    try
+    {
+        boxes::Game game(argc, argv);
+        return game.run();
+    }
+    catch (const std::exception& ex)
+    {
+        show_message_box(pkzo::MessageBoxIcon::ICON_ERROR, "Unhandled Exception", ex.what());
+        return -1;
+    }
+    catch (...)
+    {
+        show_message_box(pkzo::MessageBoxIcon::ICON_ERROR, "Unhandled Exception", "Unknown exception.");
+        return -1;
+    }
 }
