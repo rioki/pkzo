@@ -50,11 +50,9 @@ auto create_hello_screen(pkzo::Main& main)
 
 int main(int argc, char* argv[])
 {
-    pkzo::Main main("pkzo-hello");
+    pkzo::Main main;
 
-    auto& window = main.get_main_window();
-    window.set_caption("Hello Pkzo!");
-
+    auto& window = main.open_window({800, 600}, pkzo::WindowMode::STATIC, "Hello Pkzo!");
     auto screen = create_hello_screen(main);
     window.on_draw([&] () {
         screen->draw();

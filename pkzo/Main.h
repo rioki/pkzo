@@ -35,9 +35,7 @@
 #include <filesystem>
 #include <glm/fwd.hpp>
 
-#include "rsig.h"
 #include "enums.h"
-#include "SdlSentry.h"
 
 namespace pkzo
 {
@@ -46,36 +44,17 @@ namespace pkzo
     class Joystick;
     class Window;
     class Settings;
-    class Scene;
-    class Camera;
 
-    constexpr EngineInit DEFAULT_ENGINE_INIT = EngineInit::LOAD_SETTINGS
-                                             | EngineInit::WINDOW
-                                             | EngineInit::HANDLE_DRAW
-                                             | EngineInit::ROUTE_EVENTS;
-
-    //! Main object, controller of all
+    //! Wrapper around the Main loop, dispatcher of events.
     class PKZO_EXPORT Main
     {
     public:
         //! Construct Engine
-        //!
-        //! @param id the engine id.
-        explicit Main(const std::string& id, EngineInit init = DEFAULT_ENGINE_INIT);
+        Main() noexcept;
+
         Main(const Main&) = delete;
         ~Main();
         Main& operator = (const Main&) = delete;
-
-        //! Get the engine's id.
-        const std::string& get_id() const noexcept;
-
-        //! Get the folder that can be used to store user specific persistent data.
-        std::filesystem::path get_user_folder() const;
-        //! Get the folder that can be used to store throw away data.
-        std::filesystem::path get_temp_folder() const;
-
-        Settings& get_settings() noexcept;
-        const Settings& get_settings() const noexcept;
 
         Mouse& get_mouse() noexcept;
         const Mouse& get_mouse() const noexcept;
@@ -102,68 +81,25 @@ namespace pkzo
         const Window& get_window(size_t index) const noexcept;
         //! @}
 
-        //! Change the current scene.
-        //!
-        //! @note The scene will only become active at the next frame.
-        void change_scene(const std::shared_ptr<Scene>& scene, const std::shared_ptr<Camera>& camera) noexcept;
-
-        //! Change the primary camera.
-        void change_camera(const std::shared_ptr<Camera>& camera) noexcept;
-
-        //! Get the current active scene.
-        //!
-        //! @{
-        const std::shared_ptr<Scene>& get_scene() noexcept;
-        std::shared_ptr<const Scene> get_scene() const noexcept;
-        //! @}
-
-        //! Get the current active primart camera.
-        //!
-        //! @{
-        const std::shared_ptr<Camera>& get_camera() noexcept;
-        std::shared_ptr<const Camera> get_camera() const noexcept;
-        //! @}
-
-        int run();
+        void run();
         void tick();
         void stop();
 
-        //! Singal emitted every frame.
-        //! @{
-        rsig::signal<std::chrono::milliseconds>& get_tick_signal() noexcept;
-        rsig::connection on_tick(const std::function<void (std::chrono::milliseconds)>& cb);
-        //! @}
-
-        //! Signal emitted when stop is requeted.
-        //! @{
-        rsig::signal<>& get_quit_signal() noexcept;
-        rsig::connection on_quit(const std::function<void ()>& cb);
-        //! @}
+        void on_tick(const std::function<void (std::chrono::milliseconds)>& cb);
+        void on_quit(const std::function<void ()>& cb);
 
     private:
-        SdlSentry sdl_sentry;
         mutable std::recursive_mutex mutex;
-        std::string id;
-        mutable std::filesystem::path user_folder;
-        mutable std::filesystem::path temp_folder;
         bool running = false;
         std::chrono::steady_clock::time_point  last_tick;
-
-        std::unique_ptr<Settings>              settings;
         std::unique_ptr<Mouse>                 mouse;
         std::unique_ptr<Keyboard>              keyboard;
         std::vector<std::unique_ptr<Joystick>> joysticks;
         std::vector<std::unique_ptr<Window>>   windows;
 
-        std::shared_ptr<Scene> scene;
-        std::shared_ptr<Scene> next_scene;
-        std::shared_ptr<Camera> camera;
-        std::shared_ptr<Camera> next_camera;
-
-        rsig::signal<std::chrono::milliseconds> tick_signal;
-        rsig::signal<>                          quit_signal;
+        std::function<void (std::chrono::milliseconds)> tick_cb;
+        std::function<void ()> quit_cb;
 
         void handle_events();
-        void switch_scenes();
     };
 }

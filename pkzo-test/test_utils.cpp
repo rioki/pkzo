@@ -31,43 +31,6 @@ namespace pkzo::test
 {
     using namespace std::literals::string_literals;
 
-    std::filesystem::path get_temp_folder()
-    {
-        #ifdef _WIN32
-            TCHAR path[MAX_PATH];
-            auto ret = GetTempPath(MAX_PATH, path); // buffer for path
-            if (ret > MAX_PATH || (ret == 0))
-            {
-                throw std::runtime_error("Failed to get temporary folder.");
-            }
-            else
-            {
-                return std::filesystem::path(path);
-            }
-        #else
-        #error port me
-        #endif
-    }
-
-    std::filesystem::path get_user_folder()
-    {
-    #ifdef _WIN32
-        PWSTR path = nullptr;
-        auto hr = SHGetKnownFolderPath(FOLDERID_LocalAppData, KF_FLAG_CREATE, nullptr, &path);
-        if (SUCCEEDED(hr))
-        {
-            auto result = std::filesystem::path(path);
-            CoTaskMemFree(path);
-            return result;
-        }
-        else
-        {
-            throw std::runtime_error("Failed to get %LOCALAPPDATA%.");
-        }
-    #else
-    #error port me
-    #endif
-    }
 
     std::filesystem::path get_test_temp() noexcept
     {
@@ -125,13 +88,5 @@ namespace pkzo::test
             << "The difference between " << lhs_expression << " and " << rhs_expression
             << " is " << diff_error  << ", which exceeds " << abs_error_expr << "."
             << " Test output save to " << get_test_temp() << ".";
-    }
-
-    void setup_test_settings(const glm::uvec2 resolution)
-    {
-        pkzo::Settings settings;
-        settings.set_value("Graphic", "fullscreen", false);
-        settings.set_value("Graphic", "resolution", resolution);
-        settings.save(pkzo::test::get_user_folder() / ENGINE_ID / "settings.json");
     }
 }
