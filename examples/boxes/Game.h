@@ -34,6 +34,7 @@ namespace boxes
     {
     public:
         Game(int argc, const char* argv[]);
+        ~Game();
 
         int run();
 
@@ -45,6 +46,7 @@ namespace boxes
         std::shared_ptr<pkzo::Camera> camera;
         std::shared_ptr<Pawn>         pawn;
 
+        void create_pawn();
         void create_test_scene();
     };
 }

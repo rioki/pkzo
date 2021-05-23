@@ -51,6 +51,7 @@ namespace pkzo
         void add_node(std::shared_ptr<SceneNode> child) noexcept override;
         void remove_node(std::shared_ptr<SceneNode> child) noexcept override;
 
+        void update(std::chrono::milliseconds dt) noexcept override;
         void draw(const Camera& camera) const noexcept;
 
         void handle_key_press(Key key, KeyMod mod) noexcept;

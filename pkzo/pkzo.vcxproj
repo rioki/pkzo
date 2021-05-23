@@ -154,6 +154,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CheckBox.h" />
     <ClInclude Include="config.h" />
+    <ClInclude Include="dbg.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="DropDownMenu.h" />
     <ClInclude Include="enums.h" />
