@@ -21,7 +21,7 @@
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="engine_test.cpp">
+    <ClCompile Include="main_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="window_test.cpp">

@@ -28,12 +28,23 @@
 
 namespace boxes
 {
-    class Game : public pkzo::Engine
+    class Pawn;
+
+    class Game
     {
     public:
         Game(int argc, const char* argv[]);
 
+        int run();
+
     private:
+        pkzo::Main     main;
+        pkzo::Settings settings;
+
+        std::shared_ptr<pkzo::Scene>  scene;
+        std::shared_ptr<pkzo::Camera> camera;
+        std::shared_ptr<Pawn>         pawn;
+
         void create_test_scene();
     };
 }

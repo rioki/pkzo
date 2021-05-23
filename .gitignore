@@ -4,6 +4,7 @@
 *.aps
 *.user
 .opencppcov
+*.orig
 
 # Build Output
 x86
