@@ -55,17 +55,16 @@ namespace pkzo
                                              | EngineInit::ROUTE_EVENTS;
 
     //! Main object, controller of all
-    class PKZO_EXPORT Engine
+    class PKZO_EXPORT Main
     {
     public:
         //! Construct Engine
         //!
         //! @param id the engine id.
-        explicit Engine(const std::string& id, EngineInit init = DEFAULT_ENGINE_INIT);
-        explicit Engine(const std::string& id, int argc, const char* argv[], EngineInit init = DEFAULT_ENGINE_INIT);
-        Engine(const Engine&) = delete;
-        ~Engine();
-        Engine& operator = (const Engine&) = delete;
+        explicit Main(const std::string& id, EngineInit init = DEFAULT_ENGINE_INIT);
+        Main(const Main&) = delete;
+        ~Main();
+        Main& operator = (const Main&) = delete;
 
         //! Get the engine's id.
         const std::string& get_id() const noexcept;

@@ -24,24 +24,20 @@
 
 #include "pch.h"
 
-#include <pkzo/Engine.h>
-#include <pkzo/Settings.h>
-#include <pkzo/Window.h>
-
-TEST(Engine, contruct)
+TEST(Main, contruct)
 {
-    pkzo::Engine engine("pkzo-test");
-    EXPECT_EQ("pkzo-test", engine.get_id());
+    pkzo::Main Main("pkzo-test");
+    EXPECT_EQ("pkzo-test", Main.get_id());
 }
 
-TEST(Engine, environment)
+TEST(Main, environment)
 {
-    pkzo::Engine engine("pkzo-test");
+    pkzo::Main Main("pkzo-test");
 
-    auto user_folder = engine.get_user_folder();
+    auto user_folder = Main.get_user_folder();
     EXPECT_EQ("pkzo-test", user_folder.filename());
 
-    auto temp_folder = engine.get_temp_folder();
+    auto temp_folder = Main.get_temp_folder();
     EXPECT_EQ("pkzo-test", user_folder.filename());
     EXPECT_NE(user_folder, temp_folder);
 }
@@ -61,31 +57,31 @@ TEST(Engine, settings)
     ref.set_value("Graphic", "resolution", glm::uvec2(1600, 900));
     ref.save(pkzo::test::get_user_folder() / "pkzo-test" / "settings.json");
 
-    pkzo::Engine engine(pkzo::test::ENGINE_ID);
-    auto& settings = engine.get_settings();
+    pkzo::Main Main(pkzo::test::ENGINE_ID);
+    auto& settings = Main.get_settings();
     EXPECT_EQ(false, settings.get_value("Graphic", "fullscreen", false));
     EXPECT_EQ(glm::uvec2(1600, 900), settings.get_value("Graphic", "resolution", glm::uvec2(800, 600)));
 }
 
-TEST(Engine, open_window)
+TEST(Main, open_window)
 {
     pkzo::test::setup_test_settings({1600, 900});
 
-    pkzo::Engine engine(pkzo::test::ENGINE_ID);
-    auto& window = engine.get_main_window();
+    pkzo::Main Main(pkzo::test::ENGINE_ID);
+    auto& window = Main.get_main_window();
     EXPECT_EQ(pkzo::WindowMode::STATIC, window.get_mode());
     EXPECT_EQ(glm::uvec2(1600, 900), window.get_size());
 }
 
-TEST(Engine, dont_init_anything)
+TEST(Main, dont_init_anything)
 {
     pkzo::test::setup_test_settings({1600, 900});
 
-    pkzo::Engine engine(pkzo::test::ENGINE_ID, pkzo::EngineInit::NONE);
+    pkzo::Main Main(pkzo::test::ENGINE_ID, pkzo::EngineInit::NONE);
 
-    auto& settings = engine.get_settings();
+    auto& settings = Main.get_settings();
     EXPECT_FALSE(settings.has_value("Graphic", "resolution"));
-    EXPECT_EQ(0u, engine.get_open_windows());
+    EXPECT_EQ(0u, Main.get_open_windows());
 }
 
 TEST(Engine, on_handlers_can_disconnect)

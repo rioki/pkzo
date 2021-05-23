@@ -63,6 +63,6 @@ namespace pkzo
 
         void handle_event(const SDL_Event& event) const;
 
-    friend class Engine;
+    friend class Main;
     };
 }

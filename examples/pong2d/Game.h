@@ -22,8 +22,7 @@
 // THE SOFTWARE.
 //
 
-#ifndef _PONG2D_GAME_H_
-#define _PONG2D_GAME_H_
+#pragma once
 
 #include <pkzo/pkzo.h>
 #include <pkzo/Settings.h>
@@ -62,7 +61,7 @@ namespace pong2d
         GameState state      = GameState::INITIAL;
         GameState next_state = GameState::MAIN_MENU;
 
-        pkzo::Engine engine;
+        pkzo::Main main;
         std::unique_ptr<Simulation> simulation;
 
         std::unique_ptr<pkzo::Screen> screen;
@@ -73,5 +72,3 @@ namespace pong2d
         void update_state();
     };
 }
-
-#endif

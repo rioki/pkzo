@@ -22,17 +22,17 @@
 // THE SOFTWARE.
 //
 
-#ifndef _PKZO_H_
-#define _PKZO_H_
+#pragma once
 
 #include "config.h"
 #include "utils.h"
 
-#include "Engine.h"
+#include "Main.h"
 #include "Mouse.h"
 #include "Keyboard.h"
 #include "Joystick.h"
 #include "Window.h"
+#include "Settings.h"
 
 #include "Texture.h"
 #include "Font.h"
@@ -58,8 +58,6 @@
 #include "Actor.h"
 
 #include "Screen.h"
-#include "SceneNode.h"
-#include "SceneNodeGroup.h"
 #include "Text.h"
 #include "Rectangle.h"
 #include "HitArea.h"
@@ -68,5 +66,3 @@
 #include "Slider.h"
 #include "CheckBox.h"
 #include "Menu.h"
-
-#endif
