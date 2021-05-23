@@ -23,7 +23,7 @@
 //
 
 #include "pch.h"
-#include "Engine.h"
+#include "Main.h"
 
 #include "glmio.h"
 #include "sync.h"
@@ -37,7 +37,7 @@
 
 namespace pkzo
 {
-    Engine::Engine(const std::string& i, EngineInit init)
+    Main::Main(const std::string& i, EngineInit init)
     : Engine(i, 0, nullptr, init) {}
 
     Engine::Engine(const std::string& i, int argc, const char* argv[], EngineInit init)
@@ -85,7 +85,7 @@ namespace pkzo
         last_tick = std::chrono::steady_clock::now();
     }
 
-    Engine::~Engine()
+    Main::~Main()
     {
         try
         {
@@ -100,12 +100,12 @@ namespace pkzo
         }
     }
 
-    const std::string& Engine::get_id() const noexcept
+    const std::string& Main::get_id() const noexcept
     {
         return id;
     }
 
-    std::filesystem::path Engine::get_user_folder() const
+    std::filesystem::path Main::get_user_folder() const
     {
         std::scoped_lock sl(mutex);
         if (user_folder.empty())
@@ -137,7 +137,7 @@ namespace pkzo
         }
     }
 
-    std::filesystem::path Engine::get_temp_folder() const
+    std::filesystem::path Main::get_temp_folder() const
     {
         std::scoped_lock sl(mutex);
         if (temp_folder.empty())
@@ -168,62 +168,62 @@ namespace pkzo
         }
     }
 
-    Settings& Engine::get_settings() noexcept
+    Settings& Main::get_settings() noexcept
     {
         DBG_ASSERT(settings);
         return *settings;
     }
 
-    const Settings& Engine::get_settings() const noexcept
+    const Settings& Main::get_settings() const noexcept
     {
         DBG_ASSERT(settings);
         return *settings;
     }
 
-    Mouse& Engine::get_mouse() noexcept
+    Mouse& Main::get_mouse() noexcept
     {
         assert(mouse);
         return *mouse;
     }
 
-    const Mouse& Engine::get_mouse() const noexcept
+    const Mouse& Main::get_mouse() const noexcept
     {
         assert(mouse);
         return *mouse;
     }
 
-    Keyboard& Engine::get_keyboard() noexcept
+    Keyboard& Main::get_keyboard() noexcept
     {
         assert(keyboard);
         return *keyboard;
     }
 
-    const Keyboard& Engine::get_keyboard() const noexcept
+    const Keyboard& Main::get_keyboard() const noexcept
     {
         assert(keyboard);
         return *keyboard;
     }
 
-    size_t Engine::get_joystick_count() const noexcept
+    size_t Main::get_joystick_count() const noexcept
     {
         return joysticks.size();
     }
 
-    Joystick& Engine::get_joystick(size_t id) noexcept
+    Joystick& Main::get_joystick(size_t id) noexcept
     {
         assert(id < joysticks.size());
         assert(joysticks[id]);
         return *joysticks[id];
     }
 
-    const Joystick& Engine::get_joystick(size_t id) const noexcept
+    const Joystick& Main::get_joystick(size_t id) const noexcept
     {
         assert(id < joysticks.size());
         assert(joysticks[id]);
         return *joysticks[id];
     }
 
-    Window& Engine::open_window(const glm::uvec2& size, WindowMode mode, const std::string_view caption)
+    Window& Main::open_window(const glm::uvec2& size, WindowMode mode, const std::string_view caption)
     {
         auto window = std::make_unique<Window>(size, mode, caption);
         auto tmp = window.get();
@@ -231,34 +231,34 @@ namespace pkzo
         return *tmp;
     }
 
-    Window& Engine::get_main_window() noexcept
+    Window& Main::get_main_window() noexcept
     {
         return get_window(0);
     }
 
-    const Window& Engine::get_main_window() const noexcept
+    const Window& Main::get_main_window() const noexcept
     {
         return get_window(0);
     }
 
-    size_t Engine::get_open_windows() const noexcept
+    size_t Main::get_open_windows() const noexcept
     {
         return windows.size();
     }
 
-    Window& Engine::get_window(size_t index) noexcept
+    Window& Main::get_window(size_t index) noexcept
     {
         DBG_ASSERT(index < windows.size());
         return *windows[index];
     }
 
-    const Window& Engine::get_window(size_t index) const noexcept
+    const Window& Main::get_window(size_t index) const noexcept
     {
         DBG_ASSERT(index < windows.size());
         return *windows[index];
     }
 
-    void Engine::change_scene(const std::shared_ptr<Scene>& s, const std::shared_ptr<Camera>& c) noexcept
+    void Main::run()
     {
         next_scene = s;
         next_camera = c;
@@ -313,7 +313,7 @@ namespace pkzo
         }
     }
 
-    void Engine::tick()
+    void Main::tick()
     {
         auto now = std::chrono::steady_clock::now();
         auto dt  = now - last_tick;
@@ -329,7 +329,7 @@ namespace pkzo
         sync::sync_point();
     }
 
-    void Engine::stop()
+    void Main::stop()
     {
         running = false;
     }
@@ -354,7 +354,7 @@ namespace pkzo
         return quit_signal.connect(cb);
     }
 
-    void Engine::handle_events()
+    void Main::handle_events()
     {
         SDL_Event event;
         while (SDL_PollEvent(&event))

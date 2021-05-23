@@ -37,16 +37,16 @@
 namespace pong2d
 {
     Game::Game(int argc, char* argv[])
-    : engine("pong2d")
+    : main("pong2d")
     {
-        engine.on_tick([this] (auto dt) {
+        main.on_tick([this] (auto dt) {
             tick(dt);
         });
-        engine.on_quit([this] () {
+        main.on_quit([this] () {
             change_state(GameState::QUIT);
         });
 
-        auto& window = engine.get_main_window();
+        auto& window = main.get_main_window();
         window.set_caption("Pkzo - Pong 2D");
         window.on_draw([this] () {
             if (screen)
@@ -55,7 +55,7 @@ namespace pong2d
             }
         });
 
-        auto& mouse = engine.get_mouse();
+        auto& mouse = main.get_mouse();
         mouse.on_button_down([this, &window] (auto button, auto pos) {
             if (screen)
             {
@@ -79,7 +79,7 @@ namespace pong2d
             }
         });
 
-        auto& keyboard = engine.get_keyboard();
+        auto& keyboard = main.get_keyboard();
         keyboard.on_key_down([this] (auto mod, auto key) {
             if (!key_capture_cb)
             {
@@ -106,12 +106,12 @@ namespace pong2d
 
     pkzo::Settings& Game::get_settings() noexcept
     {
-        return engine.get_settings();
+        return main.get_settings();
     }
 
     pkzo::Window& Game::get_window() noexcept
     {
-        return engine.get_main_window();
+        return main.get_main_window();
     }
 
     void Game::change_state(GameState ns) noexcept
@@ -132,7 +132,7 @@ namespace pong2d
 
     int Game::run()
     {
-        engine.run();
+        main.run();
         return 0;
     }
 
@@ -172,7 +172,7 @@ namespace pong2d
             }
             case GameState::QUIT:
                 screen = nullptr;
-                engine.stop();
+                main.stop();
                 break;
             default:
                 assert(false);

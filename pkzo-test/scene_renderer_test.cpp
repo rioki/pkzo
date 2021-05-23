@@ -24,8 +24,6 @@
 
 #include "pch.h"
 
-#include <pkzo/PerspectiveCamera.h>
-
 using namespace pkzo::test;
 
 TEST(Rendering, shapes)
@@ -139,10 +137,7 @@ TEST(Rendering, spot_light)
 
 TEST(Rendering, materials)
 {
-    pkzo::test::setup_test_settings();
-    pkzo::Engine main(pkzo::test::ENGINE_ID);
-
-    auto& window = main.get_main_window();
+    pkzo::Window window({800, 600}, pkzo::WindowMode::STATIC, __FUNCTION__);
 
     pkzo::Scene scene;
 
@@ -173,9 +168,9 @@ TEST(Rendering, materials)
     window.on_draw([&] () {
         scene.draw(*camera);
     });
-    main.tick();
-    main.tick();
-    main.tick();
+    window.draw();
+    window.draw();
+    window.draw();
 
     auto test_image = window.save();
     ASSERT_NE(nullptr, test_image);
