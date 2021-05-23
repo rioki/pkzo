@@ -353,16 +353,6 @@ namespace pkzo
     };
     PKZO_ENUM_BIT_OPERATORS(KeyMod)
 
-    enum class EngineInit
-    {
-        NONE  = 0,
-        LOAD_SETTINGS   = PKZO_BIT(1),
-        WINDOW          = PKZO_BIT(2),
-        HANDLE_DRAW     = PKZO_BIT(3),
-        ROUTE_EVENTS    = PKZO_BIT(4),
-    };
-    PKZO_ENUM_BIT_OPERATORS(EngineInit)
-
     PKZO_EXPORT std::ostream& operator << (std::ostream& os, WindowMode mode) noexcept;
     PKZO_EXPORT std::istream& operator >> (std::istream& is, WindowMode& mode);
     PKZO_EXPORT std::ostream& operator << (std::ostream& os, MouseButton button) noexcept;

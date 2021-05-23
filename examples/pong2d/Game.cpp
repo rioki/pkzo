@@ -37,8 +37,13 @@
 namespace pong2d
 {
     Game::Game(int argc, char* argv[])
-    : main("pong2d")
     {
+        auto settings_file = pkzo::get_user_folder() / "pzko" / "pong2d" / "settings.json";
+        if (std::filesystem::exists(settings_file))
+        {
+            settings.load(settings_file);
+        }
+
         main.on_tick([this] (auto dt) {
             tick(dt);
         });
@@ -46,8 +51,9 @@ namespace pong2d
             change_state(GameState::QUIT);
         });
 
-        auto& window = main.get_main_window();
-        window.set_caption("Pkzo - Pong 2D");
+        auto resolution = settings.get_value("Graphic", "resolution", glm::uvec2(800, 600));
+        auto fullscreen = settings.get_value("Graphic", "fullscreen", false);
+        auto& window = main.open_window(resolution, fullscreen ? pkzo::WindowMode::FULLSCREEN : pkzo::WindowMode::STATIC, "Pkzo - Pong 2D");
         window.on_draw([this] () {
             if (screen)
             {
@@ -106,7 +112,7 @@ namespace pong2d
 
     pkzo::Settings& Game::get_settings() noexcept
     {
-        return main.get_settings();
+        return settings;
     }
 
     pkzo::Window& Game::get_window() noexcept

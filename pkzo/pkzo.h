@@ -26,6 +26,7 @@
 
 #include "config.h"
 #include "utils.h"
+#include "glmio.h"
 
 #include "Main.h"
 #include "Mouse.h"

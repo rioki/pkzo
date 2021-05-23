@@ -27,6 +27,7 @@
 #include "config.h"
 
 #include <string>
+#include <filesystem>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -124,6 +125,14 @@ namespace pkzo
 
     template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
     template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
+
+    //! Get system temp folder.
+    PKZO_EXPORT std::filesystem::path get_temp_folder();
+
+    //! Get the system user folder.
+    //!
+    //! On Windows this is %LOCALAPPDATA%
+    PKZO_EXPORT std::filesystem::path get_user_folder();
 
     PKZO_EXPORT std::u32string utf32(const std::string& buff);
 

@@ -24,75 +24,11 @@
 
 #include "pch.h"
 
-TEST(Main, contruct)
-{
-    pkzo::Main Main("pkzo-test");
-    EXPECT_EQ("pkzo-test", Main.get_id());
-}
-
-TEST(Main, environment)
-{
-    pkzo::Main Main("pkzo-test");
-
-    auto user_folder = Main.get_user_folder();
-    EXPECT_EQ("pkzo-test", user_folder.filename());
-
-    auto temp_folder = Main.get_temp_folder();
-    EXPECT_EQ("pkzo-test", user_folder.filename());
-    EXPECT_NE(user_folder, temp_folder);
-}
-
-TEST(Engine, arguments)
-{
-    int   argc = 2;
-    const char* argv[2] = {"pkzo-test", "arguments"};
-    pkzo::Engine engine("pkzo-test", argc, argv);
-    EXPECT_EQ("pkzo-test", engine.get_id());
-}
-
-TEST(Engine, settings)
-{
-    pkzo::Settings ref;
-    ref.set_value("Graphic", "fullscreen", false);
-    ref.set_value("Graphic", "resolution", glm::uvec2(1600, 900));
-    ref.save(pkzo::test::get_user_folder() / "pkzo-test" / "settings.json");
-
-    pkzo::Main Main(pkzo::test::ENGINE_ID);
-    auto& settings = Main.get_settings();
-    EXPECT_EQ(false, settings.get_value("Graphic", "fullscreen", false));
-    EXPECT_EQ(glm::uvec2(1600, 900), settings.get_value("Graphic", "resolution", glm::uvec2(800, 600)));
-}
-
 TEST(Main, open_window)
 {
-    pkzo::test::setup_test_settings({1600, 900});
-
-    pkzo::Main Main(pkzo::test::ENGINE_ID);
-    auto& window = Main.get_main_window();
+    pkzo::Main main;
+    auto& window = main.open_window({800, 600}, pkzo::WindowMode::STATIC, "open_window");
     EXPECT_EQ(pkzo::WindowMode::STATIC, window.get_mode());
-    EXPECT_EQ(glm::uvec2(1600, 900), window.get_size());
-}
-
-TEST(Main, dont_init_anything)
-{
-    pkzo::test::setup_test_settings({1600, 900});
-
-    pkzo::Main Main(pkzo::test::ENGINE_ID, pkzo::EngineInit::NONE);
-
-    auto& settings = Main.get_settings();
-    EXPECT_FALSE(settings.has_value("Graphic", "resolution"));
-    EXPECT_EQ(0u, Main.get_open_windows());
-}
-
-TEST(Engine, on_handlers_can_disconnect)
-{
-    pkzo::test::setup_test_settings();
-
-    pkzo::Engine engine(pkzo::test::ENGINE_ID, pkzo::EngineInit::NONE);
-
-    auto tick_con = engine.on_tick([] (auto dt) {});
-    EXPECT_NO_THROW(engine.get_tick_signal().disconnect(tick_con));
-
-    auto quit_con = engine.on_quit([] () {});
-    EXPECT_NO_THROW(engine.get_quit_signal().disconnect(quit_con));
+    EXPECT_EQ(glm::uvec2(800, 600), window.get_size());
+    EXPECT_EQ("open_window", window.get_caption());
 }

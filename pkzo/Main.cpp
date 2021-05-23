@@ -32,46 +32,12 @@
 #include "Joystick.h"
 #include "Window.h"
 #include "Settings.h"
-#include "Scene.h"
-#include "Camera.h"
 
 namespace pkzo
 {
-    Main::Main(const std::string& i, EngineInit init)
-    : Engine(i, 0, nullptr, init) {}
-
-    Engine::Engine(const std::string& i, int argc, const char* argv[], EngineInit init)
-    : id(i)
+    Main::Main() noexcept
     {
         sync::set_main_thread_id(std::this_thread::get_id());
-
-        settings = std::make_unique<Settings>();
-        if ((init & EngineInit::LOAD_SETTINGS) == EngineInit::LOAD_SETTINGS)
-        {
-            auto settings_file = get_user_folder() / "settings.json";
-            if (std::filesystem::exists(settings_file))
-            {
-                settings->load(settings_file);
-            }
-        }
-
-        if ((init & EngineInit::WINDOW) == EngineInit::WINDOW)
-        {
-            // TODO in release the defaults should be fullscreen & native resolution
-            auto resolution = settings->get_value("Graphic", "resolution", glm::uvec2(800, 600));
-            auto fullscreen = settings->get_value("Graphic", "fullscreen", false);
-            auto& window = open_window(resolution, fullscreen ? WindowMode::FULLSCREEN : WindowMode::STATIC, id);
-
-            if ((init & EngineInit::HANDLE_DRAW) == EngineInit::HANDLE_DRAW)
-            {
-                window.on_draw([this] () {
-                    if (scene && camera)
-                    {
-                        scene->draw(*camera);
-                    }
-                });
-            }
-        }
 
         mouse = std::make_unique<Mouse>();
         keyboard = std::make_unique<Keyboard>();
@@ -85,100 +51,7 @@ namespace pkzo
         last_tick = std::chrono::steady_clock::now();
     }
 
-    Main::~Main()
-    {
-        try
-        {
-            scene = next_scene = nullptr;
-            camera = next_camera = nullptr;
-
-            settings->save(get_user_folder() / "settings.json");
-        }
-        catch (const std::exception& ex)
-        {
-            DBG_FAIL(ex.what());
-        }
-    }
-
-    const std::string& Main::get_id() const noexcept
-    {
-        return id;
-    }
-
-    std::filesystem::path Main::get_user_folder() const
-    {
-        std::scoped_lock sl(mutex);
-        if (user_folder.empty())
-        {
-            #ifdef _WIN32
-            PWSTR path = nullptr;
-            auto hr = SHGetKnownFolderPath(FOLDERID_LocalAppData, KF_FLAG_CREATE, nullptr, &path);
-            if (SUCCEEDED(hr))
-            {
-                user_folder = std::filesystem::path(path) / id;
-                CoTaskMemFree(path);
-                if (!std::filesystem::exists(user_folder))
-                {
-                    std::filesystem::create_directories(user_folder);
-                }
-                return user_folder;
-            }
-            else
-            {
-                throw std::runtime_error("Failed to get %LOCALAPPDATA%.");
-            }
-            #else
-            #error port me
-            #endif
-        }
-        else
-        {
-            return user_folder;
-        }
-    }
-
-    std::filesystem::path Main::get_temp_folder() const
-    {
-        std::scoped_lock sl(mutex);
-        if (temp_folder.empty())
-        {
-            #ifdef _WIN32
-            TCHAR path[MAX_PATH];
-            auto ret = GetTempPath(MAX_PATH, path); // buffer for path
-            if (ret > MAX_PATH || (ret == 0))
-            {
-                throw std::runtime_error("Failed to get temporary folder.");
-            }
-            else
-            {
-                temp_folder = std::filesystem::path(path) / id;
-                if (!std::filesystem::exists(temp_folder))
-                {
-                    std::filesystem::create_directories(temp_folder);
-                }
-                return temp_folder;
-            }
-            #else
-            #error port me
-            #endif
-        }
-        else
-        {
-            return temp_folder;
-        }
-    }
-
-    Settings& Main::get_settings() noexcept
-    {
-        DBG_ASSERT(settings);
-        return *settings;
-    }
-
-    const Settings& Main::get_settings() const noexcept
-    {
-        DBG_ASSERT(settings);
-        return *settings;
-    }
+    Main::~Main() = default;
 
     Mouse& Main::get_mouse() noexcept
     {
@@ -260,56 +133,11 @@ namespace pkzo
 
     void Main::run()
     {
-        next_scene = s;
-        next_camera = c;
-    }
-
-    void Engine::change_camera(const std::shared_ptr<Camera>& c) noexcept
-    {
-        next_camera = c;
-    }
-
-    const std::shared_ptr<Scene>& Engine::get_scene() noexcept
-    {
-        return scene;
-    }
-
-    std::shared_ptr<const Scene> Engine::get_scene() const noexcept
-    {
-        return scene;
-    }
-
-    const std::shared_ptr<Camera>& Engine::get_camera() noexcept
-    {
-        return camera;
-    }
-
-    std::shared_ptr<const Camera> Engine::get_camera() const noexcept
-    {
-        return camera;
-    }
-
-    int Engine::run()
-    {
-        try
+        running = true;
+        last_tick = std::chrono::steady_clock::now();
+        while (running)
         {
-            running = true;
-            last_tick = std::chrono::steady_clock::now();
-            while (running)
-            {
-                tick();
-            }
-            return 0;
-        }
-        catch (const std::exception& ex)
-        {
-            DBG_TRACE(ex.what());
-            return -1;
-        }
-        catch (...)
-        {
-            DBG_TRACE("Unknwon exception.");
-            return -1;
+            tick();
         }
     }
 
@@ -319,9 +147,11 @@ namespace pkzo
         auto dt  = now - last_tick;
         last_tick = now;
 
-        switch_scenes();
         handle_events();
-        tick_signal.emit(std::chrono::duration_cast<std::chrono::milliseconds>(dt));
+        if (tick_cb)
+        {
+            tick_cb(std::chrono::duration_cast<std::chrono::milliseconds>(dt));
+        }
         for (const auto& window : windows)
         {
             window->draw();
@@ -334,24 +164,14 @@ namespace pkzo
         running = false;
     }
 
-    rsig::signal<std::chrono::milliseconds>& Engine::get_tick_signal() noexcept
+    void Main::on_tick(const std::function<void(std::chrono::milliseconds)>& cb)
     {
-        return tick_signal;
+        tick_cb = cb;
     }
 
-    rsig::connection Engine::on_tick(const std::function<void(std::chrono::milliseconds)>& cb)
+    void Main::on_quit(const std::function<void()>&cb)
     {
-        return tick_signal.connect(cb);
-    }
-
-    rsig::signal<>& Engine::get_quit_signal() noexcept
-    {
-        return quit_signal;
-    }
-
-    rsig::connection Engine::on_quit(const std::function<void()>& cb)
-    {
-        return quit_signal.connect(cb);
+        quit_cb = cb;
     }
 
     void Main::handle_events()
@@ -362,11 +182,17 @@ namespace pkzo
             switch (event.type)
             {
                 case SDL_QUIT:
-                    if (quit_signal.emit() == 0)
+                {
+                    if (quit_cb)
+                    {
+                        quit_cb();
+                    }
+                    else
                     {
                         stop();
                     }
                     break;
+                }
                 case SDL_MOUSEMOTION:
                 case SDL_MOUSEBUTTONDOWN:
                 case SDL_MOUSEBUTTONUP:
@@ -405,22 +231,6 @@ namespace pkzo
                 default:
                     // do nothing
                     break;
-            }
-        }
-    }
-
-    void Engine::switch_scenes()
-    {
-        if (scene != next_scene)
-        {
-            scene = next_scene;
-        }
-        if (camera != next_camera)
-        {
-            camera = next_camera;
-            if (camera && !windows.empty())
-            {
-                camera->set_resolution(windows[0]->get_size());
             }
         }
     }

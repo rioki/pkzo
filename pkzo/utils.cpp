@@ -31,6 +31,45 @@
 
 namespace pkzo
 {
+    std::filesystem::path get_temp_folder()
+    {
+    #ifdef _WIN32
+        TCHAR path[MAX_PATH];
+        auto ret = GetTempPath(MAX_PATH, path); // buffer for path
+        if (ret > MAX_PATH || (ret == 0))
+        {
+            throw std::runtime_error("Failed to get temporary folder.");
+        }
+        else
+        {
+            return std::filesystem::path(path);
+        }
+    #else
+    #error port me
+    #endif
+    }
+
+    std::filesystem::path get_user_folder()
+    {
+    #ifdef _WIN32
+        PWSTR path = nullptr;
+        auto hr = SHGetKnownFolderPath(FOLDERID_LocalAppData, KF_FLAG_CREATE, nullptr, &path);
+        if (SUCCEEDED(hr))
+        {
+            auto result = std::filesystem::path(path);
+            CoTaskMemFree(path);
+            return result;
+        }
+        else
+        {
+            throw std::runtime_error("Failed to get %LOCALAPPDATA%.");
+        }
+    #else
+    #error port me
+    #endif
+    }
+
+
     std::u32string utf32(const std::string& buff)
     {
         std::u32string result;
