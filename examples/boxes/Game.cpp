@@ -30,18 +30,40 @@
 namespace boxes
 {
     Game::Game(int argc, const char* argv[])
-    : Engine("boxes", argc, argv)
     {
+        auto settings_file = pkzo::get_user_folder() / "pzko" / "boxes" / "settings.json";
+        if (std::filesystem::exists(settings_file))
+        {
+            settings.load(settings_file);
+        }
+
+        auto resolution = settings.get_value("Graphic", "resolution", glm::uvec2(800, 600));
+        auto fullscreen = settings.get_value("Graphic", "fullscreen", false);
+        auto& window = main.open_window(resolution, fullscreen ? pkzo::WindowMode::FULLSCREEN : pkzo::WindowMode::STATIC, "Pkzo - Boxes");
+        window.on_draw([this] () {
+            if (scene && camera)
+            {
+                scene->draw(*camera);
+            }
+        });
+
         create_test_scene();
+    }
+
+    int Game::run()
+    {
+        main.run();
+        return 0;
     }
 
     void Game::create_test_scene()
     {
-        auto scene = std::make_shared<pkzo::Scene>();
+        scene = std::make_shared<pkzo::Scene>();
 
         // Camera
         auto pawn = std::make_shared<Pawn>(pkzo::position(-2.0f, 0.5f, 1.0f));
         scene->add_node(pawn);
+        camera = pawn->get_camera();
 
         // Lights
         auto light0 = std::make_shared<pkzo::AmbientLight>(glm::vec3{0.106, 0.161, 0.2});
@@ -57,8 +79,6 @@ namespace boxes
         // Action
         auto ground = std::make_shared<pkzo::Box>(glm::translate(glm::mat4{1.0f}, {0.0f, 0.0f, -0.5f}), glm::vec3(10.0f, 10.0f, 1.0f));
         scene->add_node(ground);
-
-        change_scene(scene, pawn->get_camera());
     }
 }
 

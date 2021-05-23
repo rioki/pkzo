@@ -148,10 +148,7 @@ namespace pkzo
         last_tick = now;
 
         handle_events();
-        if (tick_cb)
-        {
-            tick_cb(std::chrono::duration_cast<std::chrono::milliseconds>(dt));
-        }
+        tick_signal.emit(std::chrono::duration_cast<std::chrono::milliseconds>(dt));
         for (const auto& window : windows)
         {
             window->draw();
@@ -164,14 +161,24 @@ namespace pkzo
         running = false;
     }
 
-    void Main::on_tick(const std::function<void(std::chrono::milliseconds)>& cb)
+    rsig::signal<std::chrono::milliseconds>& Main::get_tick_signal() noexcept
     {
-        tick_cb = cb;
+        return tick_signal;
     }
 
-    void Main::on_quit(const std::function<void()>&cb)
+    rsig::connection Main::on_tick(const std::function<void(std::chrono::milliseconds)>& cb) noexcept
     {
-        quit_cb = cb;
+        return tick_signal.connect(cb);
+    }
+
+    rsig::signal<>& Main::get_quit_signal() noexcept
+    {
+        return quit_signal;
+    }
+
+    rsig::connection Main::on_quit(const std::function<void()>& cb) noexcept
+    {
+        return quit_signal.connect(cb);
     }
 
     void Main::handle_events()
@@ -183,11 +190,7 @@ namespace pkzo
             {
                 case SDL_QUIT:
                 {
-                    if (quit_cb)
-                    {
-                        quit_cb();
-                    }
-                    else
+                    if (quit_signal.emit() == 0)
                     {
                         stop();
                     }

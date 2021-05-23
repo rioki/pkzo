@@ -32,3 +32,14 @@ TEST(Main, open_window)
     EXPECT_EQ(glm::uvec2(800, 600), window.get_size());
     EXPECT_EQ("open_window", window.get_caption());
 }
+
+TEST(Main, on_handlers_can_disconnect)
+{
+    pkzo::Main main;
+
+    auto tick_con = main.on_tick([] (auto dt) {});
+    EXPECT_NO_THROW(main.get_tick_signal().disconnect(tick_con));
+
+    auto quit_con = main.on_quit([] () {});
+    EXPECT_NO_THROW(main.get_quit_signal().disconnect(quit_con));
+}

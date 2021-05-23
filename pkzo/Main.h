@@ -36,6 +36,7 @@
 #include <glm/fwd.hpp>
 
 #include "enums.h"
+#include "rsig.h"
 
 namespace pkzo
 {
@@ -85,20 +86,30 @@ namespace pkzo
         void tick();
         void stop();
 
-        void on_tick(const std::function<void (std::chrono::milliseconds)>& cb);
-        void on_quit(const std::function<void ()>& cb);
+        //! Singal emitted every frame.
+        //! @{
+        rsig::signal<std::chrono::milliseconds>& get_tick_signal() noexcept;
+        rsig::connection on_tick(const std::function<void (std::chrono::milliseconds)>& cb) noexcept;
+        //! @}
+
+        //! Signal emitted when stop is requeted.
+        //! @{
+        rsig::signal<>& get_quit_signal() noexcept;
+        rsig::connection on_quit(const std::function<void ()>& cb) noexcept;
+        //! @}
 
     private:
         mutable std::recursive_mutex mutex;
         bool running = false;
         std::chrono::steady_clock::time_point  last_tick;
+
         std::unique_ptr<Mouse>                 mouse;
         std::unique_ptr<Keyboard>              keyboard;
         std::vector<std::unique_ptr<Joystick>> joysticks;
         std::vector<std::unique_ptr<Window>>   windows;
 
-        std::function<void (std::chrono::milliseconds)> tick_cb;
-        std::function<void ()> quit_cb;
+        rsig::signal<std::chrono::milliseconds> tick_signal;
+        rsig::signal<>                          quit_signal;
 
         void handle_events();
     };
