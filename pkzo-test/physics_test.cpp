@@ -24,54 +24,37 @@
 
 #include "pch.h"
 
-#include "pysics_mock.h"
-
 using namespace std::literals::chrono_literals;
 using namespace pkzo::mass_literals;
 
-TEST(Scene, default_contruct)
+TEST(physics, no_gravity_no_move)
 {
-    pkzo::Scene node;
-}
+    auto world = pkzo::physics::World::create();
+    EXPECT_EQ(glm::vec3(0.0f), world->get_gravity());
 
-TEST(Scene, substitute_physics)
-{
-    auto mock_physics = std::make_shared<pkzo::test::MockWorld>();
+    auto body = world->add_box(glm::mat4(1.0f), {1.0f, 1.0f, 1.0f}, 10kg);
 
-    pkzo::Scene scene(mock_physics);
-
-    EXPECT_EQ(mock_physics, scene.get_physics());
-}
-
-TEST(Scene, gravity)
-{
-    pkzo::Scene scene;
-
-    EXPECT_EQ(glm::vec3(0.0f), scene.get_gravity());
-    scene.set_gravity({0.0f, 0.0f, -9.81f});
-    EXPECT_EQ(glm::vec3(0.0f, 0.0f, -9.81f), scene.get_gravity());
-}
-
-TEST(Scene, physics_simulation)
-{
-    auto dummy_material = std::make_shared<pkzo::Material>();
-
-    pkzo::Scene scene;
-    scene.set_gravity({0.0f, 0.0f, -9.8f});
-
-    auto ground = std::make_shared<pkzo::Box>(pkzo::position(0.0f, 0.0f, -0.5f), glm::vec3(100.0f, 100.0f, 1.0), dummy_material);
-    scene.add_node(ground);
-
-    auto box = std::make_shared<pkzo:: Body>(pkzo::position(0.0f, 0.0f, 10.0f), 10kg);
-    auto box_geom = std::make_shared<pkzo::Box>(pkzo::position(0.0f, 0.0f, 0.0f), glm::vec3(1.0f), dummy_material);
-    box->add_node(box_geom);
-    scene.add_node(box);
-
-    for (auto i = 0u; i < 1000; i++)
+    for (auto i = 0u; i < 10; i++)
     {
-        scene.update(10ms);
+        world->update(100ms);
     }
 
-    auto bt = box->get_transform();
+    EXPECT_EQ(glm::mat4(1.0f), body->get_transform());
+}
+
+TEST(physics, gravity_do_move)
+{
+    auto world = pkzo::physics::World::create();
+
+    world->set_gravity({0.0f, 0.0f, -9.8f});
+    auto body = world->add_box(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 10.0f)), {1.0f, 1.0f, 1.0f}, 10kg);
+    auto ground = world->add_box(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -0.5f)), {100.0f, 100.0f, 1.0f}, 0kg);
+
+    for (auto i = 0u; i < 100; i++)
+    {
+        world->update(100ms);
+    }
+
+    auto bt = body->get_transform();
     EXPECT_NEAR(0.5f, bt[3][2], 0.01f);
 }

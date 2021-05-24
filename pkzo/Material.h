@@ -50,10 +50,14 @@ namespace pkzo
     PKZO_EXPORT std::shared_ptr<Texture> default_emissive_texture();
     PKZO_EXPORT std::shared_ptr<Texture> default_mask_texture();
 
+    //! Make a simple material.
+    PKZO_EXPORT std::shared_ptr<Material> make_simple_material(const glm::vec3& diffuse, const glm::vec3& specular, float roughtness) noexcept;
+
     //! Make a plain emisisve material.
     //!
     //! @param color the color and intensity of the emissive material.
     PKZO_EXPORT std::shared_ptr<Material> make_emissive_material(const glm::vec3& color) noexcept;
+
     //! Make an emisisve material from a texture..
     //!
     //! @param texture the textreu emissive material.

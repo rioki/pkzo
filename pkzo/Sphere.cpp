@@ -85,4 +85,9 @@ namespace pkzo
     {
         return mesh;
     }
+
+    std::shared_ptr<physics::RigidBody> Sphere::create_rigid_body(std::shared_ptr<physics::World>& physics, KiloGramm mass) noexcept
+    {
+        return physics->add_sphere(get_world_transform(), radius * 2.0f, mass);
+    }
 }

@@ -75,6 +75,12 @@
     <ClCompile Include="signal_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="mass_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="physics_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -84,6 +90,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="test_utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pysics_mock.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

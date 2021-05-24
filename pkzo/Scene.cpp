@@ -55,6 +55,10 @@ namespace pkzo
     }
 
     Scene::Scene()
+    : Scene(physics::World::create()) {}
+
+    Scene::Scene(std::shared_ptr<physics::World> p)
+    : physics(p)
     {
         render_pipeline = create_phong_pipeline();
     }
@@ -85,6 +89,7 @@ namespace pkzo
 
     void Scene::update(std::chrono::milliseconds dt) noexcept
     {
+        physics->update(dt);
         SceneNodeGroup::update(dt);
     }
 
@@ -92,6 +97,62 @@ namespace pkzo
     {
         render_pipeline->set_camera(camera.get_projection(), camera.get_view());
         render_pipeline->execute();
+    }
+
+    void Scene::set_gravity(const glm::vec3& value) noexcept
+    {
+        assert(physics);
+        physics->set_gravity(value);
+    }
+
+    glm::vec3 Scene::get_gravity() const noexcept
+    {
+        assert(physics);
+        return physics->get_gravity();
+    }
+
+    std::shared_ptr<physics::World> Scene::get_physics() noexcept
+    {
+        assert(physics);
+        return physics;
+    }
+
+    std::shared_ptr<const physics::World> Scene::get_physics() const noexcept
+    {
+        assert(physics);
+        return physics;
+    }
+
+    std::optional<TestResult> Scene::test_ray(const glm::vec3& start, const glm::vec3& end) const noexcept
+    {
+        assert(physics);
+        auto r = physics->test_ray(start, end);
+        if (r.has_value())
+        {
+            auto node = std::any_cast<SceneNode*>(r->body->get_user_data());
+            assert(node);
+            return TestResult{node->shared_from_this(), r->position, r->normal};
+        }
+        else
+        {
+            return std::nullopt;
+        }
+    }
+
+    std::optional<TestResult> Scene::test_sphere_sweep(const glm::vec3& start, const glm::vec3& end, float radius) const noexcept
+    {
+        assert(physics);
+        auto r = physics->test_sphere_sweep(start, end, radius);
+        if (r.has_value())
+        {
+            auto node = std::any_cast<SceneNode*>(r->body->get_user_data());
+            assert(node);
+            return TestResult{node->shared_from_this(), r->position, r->normal};
+        }
+        else
+        {
+            return std::nullopt;
+        }
     }
 
     void Scene::register_actor(Actor* actor)

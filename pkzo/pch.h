@@ -56,6 +56,8 @@
 
 #include <nlohmann/json.hpp>
 
+#include <bullet/btBulletDynamicsCommon.h>
+
 #include <windows.h>
 #include <tchar.h>
 

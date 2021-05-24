@@ -24,56 +24,54 @@
 
 #pragma once
 
-#include <memory>
+#include "config.h"
+#include "SceneNodeGroup.h"
 
-#include "SceneNode.h"
-#include "Material.h"
-
+#include <bullet/btBulletDynamicsCommon.h>
+#include "Mass.h"
 #include "physics.h"
 
 namespace pkzo
 {
-    class Material;
-    class Mesh;
-    class Pipeline;
-
-    //! Geometry
-    class PKZO_EXPORT Geometry : public SceneNode
+    class PKZO_EXPORT Body : public SceneNodeGroup
     {
     public:
-        Geometry() noexcept = default;
-        Geometry(const glm::mat4& transform) noexcept;
-        Geometry(const glm::mat4& transform, const std::shared_ptr<Material>& material) noexcept;
+        Body(const glm::mat4& transform, KiloGramm mass);
+        ~Body();
 
-        void set_visible(bool value) noexcept;
-        bool get_visible() const noexcept;
+        void set_mass(KiloGramm value) noexcept;
+        KiloGramm get_mass() const noexcept;
 
-        void set_collidable(bool value) noexcept;
-        bool get_collidable() const noexcept;
+        void set_friction(float value) noexcept;
+        float get_friction() const noexcept;
 
-        virtual std::shared_ptr<Mesh> get_mesh() const noexcept = 0;
+        void set_rolling_friction(float value) noexcept;
+        float get_rolling_friction() const noexcept;
 
-        void set_material(const std::shared_ptr<Material>& value) noexcept;
-        const std::shared_ptr<Material>& get_material() const noexcept;
+        void set_linear_factor(const glm::vec3& value) noexcept;
+        glm::vec3 get_linear_factor() const noexcept;
+
+        void set_angular_factor(const glm::vec3& value) noexcept;
+        glm::vec3 get_angular_factor() const noexcept;
+
+        void apply_impulse(const glm::vec3& value) noexcept;
+        void apply_force(const glm::vec3& value) noexcept;
+
+        glm::vec3 get_linear_velocity() const noexcept;
+        glm::vec3 get_angular_velocity() const noexcept;
 
     protected:
         void on_attach_scene(Scene* scene) noexcept override;
         void on_detach_scene() noexcept override;
-        void update(std::chrono::milliseconds dt) noexcept override;
-
-        virtual std::shared_ptr<physics::RigidBody> create_rigid_body(std::shared_ptr<physics::World>& physics, KiloGramm mass) noexcept = 0;
 
     private:
-        bool visible = true;
-        bool collidable = true;
-
-        std::shared_ptr<Material> material = std::make_shared<Material>();
+        KiloGramm mass             = {1.0f};
+        float     friction         = 0.0f;
+        float     rolling_friction = 0.0f;
+        glm::vec3 linear_factor    = glm::vec3(1.0f);
+        glm::vec3 angular_factor   = glm::vec3(1.0f);
 
         std::shared_ptr<physics::RigidBody> rigid_body;
-
-        Pipeline*    pipeline        = nullptr;
-        unsigned int pipeline_handle = 0;
-
-    friend class Body;
+        glm::mat4 offset;
     };
 }

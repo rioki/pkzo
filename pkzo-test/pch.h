@@ -26,6 +26,7 @@
 
 #include <string>
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 #include <pkzo/pkzo.h>
 #include <pkzo/glmio.h>
 #include <glm/gtc/matrix_transform.hpp>

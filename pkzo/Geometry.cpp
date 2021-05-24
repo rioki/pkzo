@@ -28,6 +28,11 @@
 #include "Scene.h"
 #include "Pipeline.h"
 #include "Mesh.h"
+#include "Body.h"
+
+#include "physics.h"
+
+using namespace pkzo::mass_literals;
 
 namespace pkzo
 {
@@ -36,6 +41,28 @@ namespace pkzo
 
     Geometry::Geometry(const glm::mat4& transform, const std::shared_ptr<Material>& m) noexcept
     : SceneNode(transform), material(m) {}
+
+    void Geometry::set_visible(bool value) noexcept
+    {
+        visible = value;
+        // TODO if active add or remove from graphics
+    }
+
+    bool Geometry::get_visible() const noexcept
+    {
+        return visible;
+    }
+
+    void Geometry::set_collidable(bool value) noexcept
+    {
+        collidable = value;
+        // TODO if active add or remove from physics
+    }
+
+    bool Geometry::get_collidable() const noexcept
+    {
+        return collidable;
+    }
 
     void Geometry::set_material(const std::shared_ptr<Material>& value) noexcept
     {
@@ -60,6 +87,18 @@ namespace pkzo
         SceneNode::on_attach_scene(scene);
         pipeline = scene->get_render_pipeline();
         pipeline_handle = pipeline->add_geometry(get_world_transform(), get_mesh(), get_material()->to_parameters());
+
+        if (collidable)
+        {
+            auto body = find_elder<Body>();
+            if (body == nullptr)
+            {
+                auto physics = scene->get_physics();
+                assert(physics);
+                rigid_body = create_rigid_body(physics, 0kg);
+                rigid_body->set_user_data(static_cast<SceneNode*>(this));
+            }
+        }
     }
 
     void Geometry::on_detach_scene() noexcept
@@ -67,6 +106,15 @@ namespace pkzo
         pipeline->remove_geometry(pipeline_handle);
         pipeline        = nullptr;
         pipeline_handle = 0;
+
+        if (rigid_body)
+        {
+            auto physics = get_scene()->get_physics();
+            assert(physics);
+            physics->remove_body(rigid_body);
+            rigid_body = nullptr;
+        }
+
         SceneNode::on_detach_scene();
     }
 }
