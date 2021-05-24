@@ -130,6 +130,11 @@ namespace pkzo
         return single_color_texture(1.0f);
     }
 
+    std::shared_ptr<Material> make_simple_material(const glm::vec3& diffuse, const glm::vec3& specular, float roughtness) noexcept
+    {
+        return std::make_shared<Material>(make_color_texture(diffuse), make_color_texture(specular), make_color_texture(glm::vec3(roughtness)), default_normal_texture(), make_black_texture());
+    }
+
     std::shared_ptr<Material> make_emissive_material(const glm::vec3& color) noexcept
     {
         return std::make_shared<Material>(make_black_texture(), make_black_texture(), make_black_texture(), default_normal_texture(), make_color_texture(color));

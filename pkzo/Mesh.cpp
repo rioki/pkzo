@@ -64,16 +64,37 @@ namespace pkzo
     glm::uint Mesh::add_vertex(const glm::vec3 position, const glm::vec3& normal, const glm::vec2& texcoord) noexcept
     {
         DBG_ASSERT(gl_id == 0); // only change mesh before upload
-        positions.push_back(position);
+        vertices.push_back(position);
         normals.push_back(normal);
         texcoords.push_back(texcoord);
-        return static_cast<glm::uint>(positions.size() - 1);
+        return static_cast<glm::uint>(vertices.size() - 1);
     }
 
     void Mesh::add_triangle(const glm::uvec3& face) noexcept
     {
         DBG_ASSERT(gl_id == 0); // only change mesh before upload
-        indexes.push_back(face);
+        faces.push_back(face);
+    }
+
+
+    const std::vector<glm::vec3>& Mesh::get_vertices() const noexcept
+    {
+        return vertices;
+    }
+
+    const std::vector<glm::vec3>& Mesh::get_normals() const noexcept
+    {
+        return normals;
+    }
+
+    const std::vector<glm::vec2>& Mesh::get_texcoords() const noexcept
+    {
+        return texcoords;
+    }
+
+    const std::vector<glm::uvec3>& Mesh::get_faces() const noexcept
+    {
+        return faces;
     }
 
     void Mesh::upload() noexcept
@@ -84,13 +105,13 @@ namespace pkzo
 
         glGenBuffers(static_cast<GLsizei>(buffers.size()), buffers.data());
         glBindBuffer(GL_ARRAY_BUFFER, buffers[POSITION]);
-        glBufferData(GL_ARRAY_BUFFER, positions.size() * 3 * sizeof(float), glm::value_ptr(positions[0]), GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertices.size() * 3 * sizeof(float), glm::value_ptr(vertices[0]), GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, buffers[NORMAL]);
         glBufferData(GL_ARRAY_BUFFER, normals.size() * 3 * sizeof(float),   glm::value_ptr(normals[0]),   GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, buffers[TEXCOORD]);
         glBufferData(GL_ARRAY_BUFFER, texcoords.size() * 2 * sizeof(float), glm::value_ptr(texcoords[0]), GL_STATIC_DRAW);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[INDEX]);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexes.size() * 3 * sizeof(unsigned int), glm::value_ptr(indexes[0]), GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, faces.size() * 3 * sizeof(unsigned int), glm::value_ptr(faces[0]), GL_STATIC_DRAW);
 
         DBG_CHECK_GLERROR("uploading vertex data");
     }
@@ -139,7 +160,7 @@ namespace pkzo
     void Mesh::draw() noexcept
     {
         DBG_ASSERT(vao == get_bound_vao());
-        glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indexes.size() * 3u), GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(faces.size() * 3u), GL_UNSIGNED_INT, 0);
         DBG_CHECK_GLERROR("drawing mesh");
     }
 

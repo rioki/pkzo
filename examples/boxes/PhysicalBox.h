@@ -23,29 +23,16 @@
 //
 
 #pragma once
-#include "config.h"
+#include <pkzo/pkzo.h>
 
-#include "Geometry.h"
-
-namespace pkzo
+namespace boxes
 {
-    //! Sphere
-    class PKZO_EXPORT Sphere : public Geometry
+    class PhysicalBox : public pkzo::Body
     {
     public:
-        Sphere() noexcept;
-        Sphere(const glm::mat4& transform, float radius) noexcept;
-        Sphere(const glm::mat4& transform, float radius, const std::shared_ptr<Material>& material) noexcept;
-
-        float get_radius() const noexcept;
-
-        std::shared_ptr<Mesh> get_mesh() const noexcept override;
-
-    protected:
-        std::shared_ptr<physics::RigidBody> create_rigid_body(std::shared_ptr<physics::World>& physics, KiloGramm mass) noexcept override;
+        PhysicalBox(const glm::mat4& transform, const glm::vec3& size, pkzo::KiloGramm weight, const std::shared_ptr<pkzo::Material>& material);
 
     private:
-        float radius = 0.5f;
-        std::shared_ptr<Mesh> mesh;
+        std::shared_ptr<pkzo::Box> box;
     };
 }

@@ -31,6 +31,7 @@
 
 #include "enums.h"
 #include "SceneNodeGroup.h"
+#include "physics.h"
 
 namespace pkzo
 {
@@ -38,11 +39,19 @@ namespace pkzo
     class Pipeline;
     class Actor;
 
+    struct TestResult
+    {
+        std::shared_ptr<SceneNode> node;
+        glm::vec3 position;
+        glm::vec3 normal;
+    };
+
     //! 3D Scene
     class PKZO_EXPORT Scene : public SceneNodeGroup
     {
     public:
         Scene();
+        Scene(std::shared_ptr<physics::World> physics);
         ~Scene();
 
         Pipeline* get_render_pipeline() noexcept;
@@ -54,6 +63,15 @@ namespace pkzo
         void update(std::chrono::milliseconds dt) noexcept override;
         void draw(const Camera& camera) const noexcept;
 
+        void set_gravity(const glm::vec3& value) noexcept;
+        glm::vec3 get_gravity() const noexcept;
+
+        std::shared_ptr<physics::World> get_physics() noexcept;
+        std::shared_ptr<const physics::World> get_physics() const noexcept;
+
+        std::optional<TestResult> test_ray(const glm::vec3& start, const glm::vec3& end) const noexcept;
+        std::optional<TestResult> test_sphere_sweep(const glm::vec3& start, const glm::vec3& end, float radius) const noexcept;
+
         void handle_key_press(Key key, KeyMod mod) noexcept;
         void handle_key_release(Key key, KeyMod mod) noexcept;
         void handle_mouse_move(glm::vec2 pos, glm::vec2 rel) noexcept;
@@ -62,6 +80,7 @@ namespace pkzo
 
     private:
         std::unique_ptr<Pipeline> render_pipeline;
+        std::shared_ptr<physics::World> physics;
 
         std::list<Actor*> actors;
 

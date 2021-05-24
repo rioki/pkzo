@@ -22,8 +22,7 @@
 // THE SOFTWARE.
 //
 
-#ifndef _ICE_MESH_H_
-#define _ICE_MESH_H_
+#pragma once
 
 #include "config.h"
 
@@ -48,6 +47,11 @@ namespace pkzo
 
         void add_triangle(const glm::uvec3& face) noexcept;
 
+        const std::vector<glm::vec3>& get_vertices() const noexcept;
+        const std::vector<glm::vec3>& get_normals() const noexcept;
+        const std::vector<glm::vec2>& get_texcoords() const noexcept;
+        const std::vector<glm::uvec3>& get_faces() const noexcept;
+
         void upload() noexcept;
 
         void bind(Shader& shader) noexcept;
@@ -57,10 +61,10 @@ namespace pkzo
     private:
         glm::uint gl_id = 0u;
 
-        std::vector<glm::vec3> positions;
+        std::vector<glm::vec3> vertices;
         std::vector<glm::vec3> normals;
         std::vector<glm::vec2> texcoords;
-        std::vector<glm::uvec3> indexes;
+        std::vector<glm::uvec3> faces;
 
         glm::uint                vao          = 0u;
         std::array<glm::uint, 4> buffers      = {0u, 0u};
@@ -72,5 +76,3 @@ namespace pkzo
     //! @return the mesh
     PKZO_EXPORT std::unique_ptr<Mesh> make_rectangle(const glm::vec2& size) noexcept;
 }
-
-#endif

@@ -41,6 +41,7 @@
 #include "Shader.h"
 #include "Parameters.h"
 #include "Pipeline.h"
+#include "Mass.h"
 
 #include "Scene.h"
 #include "SceneNode.h"
@@ -56,7 +57,7 @@
 #include "DirectionalLight.h"
 #include "PointLight.h"
 #include "SpotLight.h"
-#include "Actor.h"
+#include "Body.h"
 
 #include "Screen.h"
 #include "Text.h"

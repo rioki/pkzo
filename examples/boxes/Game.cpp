@@ -26,6 +26,9 @@
 #include "Game.h"
 
 #include "Pawn.h"
+#include "PhysicalBox.h"
+
+using namespace pkzo::mass_literals;
 
 namespace boxes
 {
@@ -113,8 +116,9 @@ namespace boxes
     void Game::create_test_scene()
     {
         scene = std::make_shared<pkzo::Scene>();
+        scene->set_gravity({0.0f, 0.0f, -9.81f});
 
-        pawn->set_transform(pkzo::position(-2.0f, 0.5f, 1.0f));
+        pawn->set_transform(pkzo::position(-3.0f, 0.5f, 5.0f));
         scene->add_node(pawn);
         camera = pawn->get_camera();
 
@@ -130,8 +134,22 @@ namespace boxes
         scene->add_node(light2);
 
         // Action
-        auto ground = std::make_shared<pkzo::Box>(glm::translate(glm::mat4{1.0f}, {0.0f, 0.0f, -0.5f}), glm::vec3(10.0f, 10.0f, 1.0f));
+        auto ground_material = pkzo::make_simple_material({0.9f, 0.9f, 0.9f}, {0.04f, 0.04f, 0.04f}, 0.15f);
+        auto ground = std::make_shared<pkzo::Box>(glm::translate(glm::mat4{1.0f}, {0.0f, 0.0f, -0.5f}), glm::vec3(100.0f, 100.0f, 1.0f), ground_material);
         scene->add_node(ground);
+
+        auto box_material = pkzo::make_simple_material({0.1f, 0.1f, 0.9f}, {0.04f, 0.04f, 0.04f}, 0.15f);
+        for (auto i = 0; i < 3; i++)
+        {
+            for (auto j = 0; j < 3; j++)
+            {
+                for (auto k = 0; k < 3; k++)
+                {
+                    auto box = std::make_shared<PhysicalBox>(pkzo::position(-2.5f + i, -2.5f + j, 5.0f + k), glm::vec3(0.5f), 10kg, box_material);
+                    scene->add_node(box);
+                }
+            }
+        }
     }
 }
 

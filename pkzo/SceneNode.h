@@ -33,7 +33,7 @@ namespace pkzo
     class Scene;
 
     //! Scene Node
-    class PKZO_EXPORT SceneNode
+    class PKZO_EXPORT SceneNode : public std::enable_shared_from_this<SceneNode>
     {
     public:
         SceneNode() noexcept = default;

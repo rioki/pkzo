@@ -167,6 +167,7 @@
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Main.h" />
+    <ClInclude Include="Mass.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Mesh.h" />
@@ -175,10 +176,12 @@
     <ClInclude Include="Parameters.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PerspectiveCamera.h" />
+    <ClInclude Include="physics.h" />
     <ClInclude Include="Pipeline.h" />
     <ClInclude Include="pkzo.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="Rectangle.h" />
+    <ClInclude Include="Body.h" />
     <ClInclude Include="rsig.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneNode.h" />
@@ -226,9 +229,11 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="PerspectiveCamera.cpp" />
+    <ClCompile Include="physics.cpp" />
     <ClCompile Include="Pipeline.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="Rectangle.cpp" />
+    <ClCompile Include="Body.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="SceneNodeGroup.cpp" />

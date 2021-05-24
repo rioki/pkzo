@@ -49,6 +49,9 @@ namespace pkzo
 
         std::shared_ptr<Mesh> get_mesh() const noexcept override;
 
+    protected:
+        std::shared_ptr<physics::RigidBody> create_rigid_body(std::shared_ptr<physics::World>& physics, KiloGramm mass) noexcept override;
+
     private:
         glm::vec3 size = {1.0f, 1.0f, 1.0f};
         std::shared_ptr<Mesh> mesh;
