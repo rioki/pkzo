@@ -35,6 +35,7 @@ namespace pkzo::test
 {
     constexpr auto ENGINE_ID = "pkzo-test";
 
+    std::filesystem::path get_test_base() noexcept;
     std::filesystem::path get_test_temp() noexcept;
     std::filesystem::path get_test_ref() noexcept;
     std::string get_test_name() noexcept;
@@ -49,7 +50,7 @@ namespace pkzo::test
 #define EXPECT_TEXTURE_EQ(val1, val2) EXPECT_TEXTURE_NEAR(val1, val2, 0.0f)
 #define ASSERT_TEXTURE_EQ(val1, val2) ASSERT_TEXTURE_NEAR(val1, val2, 0.0f)
 
-#define _TEXTURE_REF_ pkzo::Texture(get_test_ref() / (get_test_name() + "-ref.png"))
+#define _TEXTURE_REF_ pkzo::Texture(::pkzo::test::get_test_ref() / (::pkzo::test::get_test_name() + "-ref.png"))
 #define EXPECT_TEXTURE_REF_NEAR(val) EXPECT_TEXTURE_NEAR(_TEXTURE_REF_, val2, 0.0f)
 #define ASSERT_TEXTURE_REF_NEAR(val) EXPECT_TEXTURE_NEAR(_TEXTURE_REF_, val2, 0.0f)
 #define EXPECT_TEXTURE_REF_EQ(val) EXPECT_TEXTURE_EQ(_TEXTURE_REF_, val)

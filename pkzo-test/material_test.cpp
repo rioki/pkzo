@@ -24,6 +24,8 @@
 
 #include "pch.h"
 
+using pkzo::test::get_test_base;
+
 TEST(Material, default_contruct)
 {
     pkzo::Material material;
@@ -36,20 +38,20 @@ TEST(Material, default_contruct)
 
 TEST(Material, load_metal_plate)
 {
-    pkzo::Material material("../../data/materials/MetalPlate.jmn");
-    EXPECT_TEXTURE_EQ(pkzo::Texture("../../data/textures/texturehaven/metal_plate/metal_plate_diff_1k.jpg"),  *material.get_diffuse());
-    EXPECT_TEXTURE_EQ(pkzo::Texture("../../data/textures/texturehaven/metal_plate/metal_plate_spec_1k.jpg"),  *material.get_specular());
-    EXPECT_TEXTURE_EQ(pkzo::Texture("../../data/textures/texturehaven/metal_plate/metal_plate_rough_1k.jpg"), *material.get_roughtness());
-    EXPECT_TEXTURE_EQ(pkzo::Texture("../../data/textures/texturehaven/metal_plate/metal_plate_Nor_1k.jpg"),   *material.get_normal());
-    EXPECT_TEXTURE_EQ(*pkzo::default_emissive_texture(),                                               *material.get_emissive());
+    pkzo::Material material(get_test_base() / "materials/MetalPlate.jmn");
+    EXPECT_TEXTURE_EQ(pkzo::Texture(get_test_base() / "textures/texturehaven/metal_plate/metal_plate_diff_1k.jpg"),  *material.get_diffuse());
+    EXPECT_TEXTURE_EQ(pkzo::Texture(get_test_base() / "textures/texturehaven/metal_plate/metal_plate_spec_1k.jpg"),  *material.get_specular());
+    EXPECT_TEXTURE_EQ(pkzo::Texture(get_test_base() / "textures/texturehaven/metal_plate/metal_plate_rough_1k.jpg"), *material.get_roughtness());
+    EXPECT_TEXTURE_EQ(pkzo::Texture(get_test_base() / "textures/texturehaven/metal_plate/metal_plate_Nor_1k.jpg"),   *material.get_normal());
+    EXPECT_TEXTURE_EQ(*pkzo::default_emissive_texture(),                                                                *material.get_emissive());
 }
 
 TEST(Material, load_cobble_stone)
 {
-    pkzo::Material material("../../data/materials/CobbleStone.jmn");
-    EXPECT_TEXTURE_EQ(pkzo::Texture("../../data/textures/texturehaven/cobblestone_floor_04/cobblestone_floor_04_diff_1k.jpg"),  *material.get_diffuse());
-    EXPECT_TEXTURE_EQ(*pkzo::default_specular_texture(),                                                                 *material.get_specular());
-    EXPECT_TEXTURE_EQ(pkzo::Texture("../../data/textures/texturehaven/cobblestone_floor_04/cobblestone_floor_04_rough_1k.jpg"), *material.get_roughtness());
-    EXPECT_TEXTURE_EQ(pkzo::Texture("../../data/textures/texturehaven/cobblestone_floor_04/cobblestone_floor_04_nor_1k.jpg"),   *material.get_normal());
-    EXPECT_TEXTURE_EQ(*pkzo::default_emissive_texture(),                                                                 *material.get_emissive());
+    pkzo::Material material(get_test_base() / "materials/CobbleStone.jmn");
+    EXPECT_TEXTURE_EQ(pkzo::Texture(get_test_base() / "textures/texturehaven/cobblestone_floor_04/cobblestone_floor_04_diff_1k.jpg"),  *material.get_diffuse());
+    EXPECT_TEXTURE_EQ(*pkzo::default_specular_texture(),                                                                                  *material.get_specular());
+    EXPECT_TEXTURE_EQ(pkzo::Texture(get_test_base() / "textures/texturehaven/cobblestone_floor_04/cobblestone_floor_04_rough_1k.jpg"), *material.get_roughtness());
+    EXPECT_TEXTURE_EQ(pkzo::Texture(get_test_base() / "textures/texturehaven/cobblestone_floor_04/cobblestone_floor_04_nor_1k.jpg"),   *material.get_normal());
+    EXPECT_TEXTURE_EQ(*pkzo::default_emissive_texture(),                                                                                  *material.get_emissive());
 }
