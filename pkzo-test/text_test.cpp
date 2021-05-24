@@ -27,9 +27,11 @@
 #include <pkzo/Text.h>
 #include <pkzo/Font.h>
 #include <pkzo/Material.h>
+
+using pkzo::test::get_test_base;
 TEST(Text, create)
 {
-    auto font = std::make_shared<pkzo::Font>("../../data/fonts/DejaVuSans.ttf", 32);
+    auto font = std::make_shared<pkzo::Font>(get_test_base() / "fonts/DejaVuSans.ttf", 32);
     auto text = pkzo::Text("pkzo", font, std::make_shared<pkzo::Material>());
     //EXPECT_GLM_EQ(glm::vec2(0.0f), text.get_position());
     EXPECT_GLM_EQ(glm::vec2(font->estimate("pkzo")), text.get_size());
@@ -42,7 +44,7 @@ TEST(Text, render)
     pkzo::Window window({800, 600}, pkzo::WindowMode::STATIC, __FUNCTION__);
 
     pkzo::Screen screen(glm::vec2(window.get_size()));
-    auto font = std::make_shared<pkzo::Font>("../../data/fonts/DejaVuSans.ttf", 32);
+    auto font = std::make_shared<pkzo::Font>(get_test_base() / "fonts/DejaVuSans.ttf", 32);
     auto text = std::make_shared<pkzo::Text>("pkzo", font, pkzo::make_emissive_material(glm::vec3(1.0f)));
     screen.add_node(text);
 
@@ -52,5 +54,5 @@ TEST(Text, render)
     window.draw();
     window.draw();
 
-    EXPECT_TEXTURE_EQ(pkzo::Texture("../../data/textures/reference/Text-render-ref.png"), *window.save());
+    EXPECT_TEXTURE_REF_EQ(*window.save());
 }

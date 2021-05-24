@@ -141,11 +141,11 @@ TEST(Rendering, materials)
 
     pkzo::Scene scene;
 
-    auto metal_plate = std::make_shared<pkzo::Material>("../../data/materials/MetalPlate.jmn");
+    auto metal_plate = std::make_shared<pkzo::Material>("../../pkzo-test/data/materials/MetalPlate.jmn");
     auto metal_plate_sphere = std::make_shared<pkzo::Sphere>(glm::translate(glm::mat4{1.0f}, {0.0f, 1.0f, 0.0f}), 0.5f, metal_plate);
     scene.add_node(metal_plate_sphere);
 
-    auto cobble_stone = std::make_shared<pkzo::Material>("../../data/materials/CobbleStone.jmn");
+    auto cobble_stone = std::make_shared<pkzo::Material>("../../pkzo-test/data/materials/CobbleStone.jmn");
     auto cobble_stone_sphere = std::make_shared<pkzo::Sphere>(glm::translate(glm::mat4{1.0f}, {0.0f, -1.0f, 0.0f}), 0.5f, cobble_stone);
     scene.add_node(cobble_stone_sphere);
 

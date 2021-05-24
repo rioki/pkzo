@@ -31,15 +31,19 @@ namespace pkzo::test
 {
     using namespace std::literals::string_literals;
 
+    std::filesystem::path get_test_base() noexcept
+    {
+        return std::filesystem::path("../../pkzo-test/data");
+    }
 
     std::filesystem::path get_test_temp() noexcept
     {
-        return std::filesystem::path("../../data/temp/");
+        return get_test_base() / "output";
     }
 
     std::filesystem::path get_test_ref() noexcept
     {
-        return std::filesystem::path("../../data/references/");
+        return get_test_base() / "references";
     }
 
     std::string get_test_name() noexcept
