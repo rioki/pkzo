@@ -39,7 +39,6 @@ namespace pkzo
 {
     class Camera;
     class Pipeline;
-    class Actor;
 
     struct TestResult
     {
@@ -74,21 +73,8 @@ namespace pkzo
         std::optional<TestResult> test_ray(const glm::vec3& start, const glm::vec3& end) const noexcept;
         std::optional<TestResult> test_sphere_sweep(const glm::vec3& start, const glm::vec3& end, float radius) const noexcept;
 
-        void handle_key_press(Key key, KeyMod mod) noexcept;
-        void handle_key_release(Key key, KeyMod mod) noexcept;
-        void handle_mouse_move(glm::vec2 pos, glm::vec2 rel) noexcept;
-        void handle_mouse_press(MouseButton button, glm::vec2 pos) noexcept;
-        void handle_mouse_release(MouseButton button, glm::vec2 pos) noexcept;
-
     private:
         std::unique_ptr<Pipeline> render_pipeline;
         std::shared_ptr<physics::World> physics;
-
-        std::list<Actor*> actors;
-
-        void register_actor(Actor* actor);
-        void unregister_actor(Actor* actor);
-
-    friend class Actor;
     };
 }

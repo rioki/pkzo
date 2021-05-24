@@ -31,7 +31,6 @@
 #include "Camera.h"
 #include "Mesh.h"
 #include "Shader.h"
-#include "Actor.h"
 #include "physics.h"
 
 namespace pkzo
@@ -153,58 +152,6 @@ namespace pkzo
         else
         {
             return std::nullopt;
-        }
-    }
-
-    void Scene::register_actor(Actor* actor)
-    {
-        actors.push_back(actor);
-    }
-
-    void Scene::unregister_actor(Actor* actor)
-    {
-        auto i = std::find(begin(actors), end(actors), actor);
-        DBG_ASSERT(i != end(actors));
-        actors.erase(i);
-    }
-
-    void Scene::handle_key_press(Key key, KeyMod mod) noexcept
-    {
-        for (auto& actor : actors)
-        {
-            actor->handle_key_press(key, mod);
-        }
-    }
-
-    void Scene::handle_key_release(Key key, KeyMod mod) noexcept
-    {
-        for (auto& actor : actors)
-        {
-            actor->handle_key_release(key, mod);
-        }
-    }
-
-    void Scene::handle_mouse_move(glm::vec2 pos, glm::vec2 rel) noexcept
-    {
-        for (auto& actor : actors)
-        {
-            actor->handle_mouse_move(pos, rel);
-        }
-    }
-
-    void Scene::handle_mouse_press(MouseButton button, glm::vec2 pos) noexcept
-    {
-        for (auto& actor : actors)
-        {
-            actor->handle_mouse_press(button, pos);
-        }
-    }
-
-    void Scene::handle_mouse_release(MouseButton button, glm::vec2 pos) noexcept
-    {
-        for (auto& actor : actors)
-        {
-            actor->handle_mouse_release(button, pos);
         }
     }
 }
