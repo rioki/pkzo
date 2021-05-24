@@ -27,21 +27,17 @@
 #include <memory>
 
 #include "SceneNode.h"
-#include "Material.h"
 
-#include "physics.h"
+#include "fwd.h"
+#include "Mass.h"
 
 namespace pkzo
 {
-    class Material;
-    class Mesh;
-    class Pipeline;
-
     //! Geometry
     class PKZO_EXPORT Geometry : public SceneNode
     {
     public:
-        Geometry() noexcept = default;
+        Geometry() noexcept;
         Geometry(const glm::mat4& transform) noexcept;
         Geometry(const glm::mat4& transform, const std::shared_ptr<Material>& material) noexcept;
 

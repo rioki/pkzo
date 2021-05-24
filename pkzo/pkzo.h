@@ -41,6 +41,7 @@
 #include "Shader.h"
 #include "Parameters.h"
 #include "Pipeline.h"
+#include "Material.h"
 #include "Mass.h"
 
 #include "Scene.h"

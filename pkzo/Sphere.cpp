@@ -25,6 +25,7 @@
 #include "pch.h"
 #include "Sphere.h"
 #include "Mesh.h"
+#include "physics.h"
 
 namespace pkzo
 {

@@ -32,6 +32,7 @@
 #include "Mesh.h"
 #include "Shader.h"
 #include "Actor.h"
+#include "physics.h"
 
 namespace pkzo
 {

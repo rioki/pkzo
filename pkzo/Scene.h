@@ -26,12 +26,14 @@
 
 #include "config.h"
 
+#include <optional>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "enums.h"
 #include "SceneNodeGroup.h"
-#include "physics.h"
+#include "fwd.h"
 
 namespace pkzo
 {
