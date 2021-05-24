@@ -38,4 +38,11 @@ namespace pkzo
     class Shader;
     class Properties;
     class Pipeline;
+    class Material;
+
+    namespace physics
+    {
+        class RigidBody;
+        class World;
+    }
 }

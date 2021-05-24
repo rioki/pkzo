@@ -29,13 +29,15 @@
 #include "Pipeline.h"
 #include "Mesh.h"
 #include "Body.h"
-
+#include "Material.h"
 #include "physics.h"
 
 using namespace pkzo::mass_literals;
 
 namespace pkzo
 {
+    Geometry::Geometry() noexcept = default;
+
     Geometry::Geometry(const glm::mat4& transform) noexcept
     : SceneNode(transform) {}
 

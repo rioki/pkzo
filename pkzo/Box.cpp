@@ -26,6 +26,7 @@
 #include "Box.h"
 
 #include "Mesh.h"
+#include "physics.h"
 
 namespace pkzo
 {

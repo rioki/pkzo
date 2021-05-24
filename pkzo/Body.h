@@ -29,7 +29,7 @@
 
 #include <bullet/btBulletDynamicsCommon.h>
 #include "Mass.h"
-#include "physics.h"
+#include "fwd.h"
 
 namespace pkzo
 {

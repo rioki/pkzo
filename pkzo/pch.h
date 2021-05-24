@@ -42,6 +42,7 @@
 #include <thread>
 #include <atomic>
 #include <string>
+#include <optional>
 
 #include <fmt/core.h>
 

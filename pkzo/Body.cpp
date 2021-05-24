@@ -25,6 +25,7 @@
 #include "pch.h"
 #include "Body.h"
 
+#include "physics.h"
 #include "Scene.h"
 #include "Geometry.h"
 
