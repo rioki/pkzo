@@ -35,5 +35,5 @@ void main()
 {
     // HACK while we are using alpha blending in this pass we need to compute the ammount added
     vec3 emissive = texture(pkzo_EmissiveMap, vTexCoord).rgb;
-    pkzo_FragColor = vec4(emissive, length(emissive) * texture(pkzo_Mask, vTexCoord).r);
+    pkzo_FragColor = vec4(emissive, length(emissive) * texture(pkzo_EmissiveMap, vTexCoord).a * texture(pkzo_Mask, vTexCoord).r);
 }
