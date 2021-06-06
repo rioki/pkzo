@@ -25,6 +25,8 @@
 #include "pch.h"
 #include "Material.h"
 
+#include "glmio.h"
+#include "compose.h"
 #include "Texture.h"
 #include "Parameters.h"
 
@@ -43,7 +45,7 @@ namespace pkzo
 
         if (!result)
         {
-            result = std::make_shared<Texture>(glm::uvec2(1), ColorMode::R, DataType::UINT8, &value, fmt::format("Single Color {}", value));
+            result = std::make_shared<Texture>(glm::uvec2(1), ColorMode::R, DataType::UINT8, &value, compose("Single Color %0", value));
             cache[value] = result;
         }
 
@@ -72,7 +74,7 @@ namespace pkzo
         if (!result)
         {
             std::byte mem[3] = {r, g, b};
-            result = std::make_shared<Texture>(glm::uvec2(1), ColorMode::RGB, DataType::UINT8, &mem, fmt::format("Single Color ({}, {}, {})", r, g, b));
+            result = std::make_shared<Texture>(glm::uvec2(1), ColorMode::RGB, DataType::UINT8, &mem, compose("Single Color (%0, %1, %2)", r, g, b));
             cache[idx] = result;
         }
 
@@ -170,7 +172,7 @@ namespace pkzo
         auto input = std::ifstream{filename};
         if (!input.is_open())
         {
-            throw std::runtime_error(fmt::format("Failed to open {} for reading.", filename.u8string()));
+            throw std::runtime_error(compose("Failed to open %0 for reading.", filename.u8string()));
         }
         auto jmn = nlohmann::json{};
         input >> jmn;
@@ -269,7 +271,7 @@ namespace pkzo
         mask = value;
     }
 
-    const std::shared_ptr<Texture>& Material::get_mask() const noexcept
+    const std::shared_ptr<Texture>& Material::get_collision_mask() const noexcept
     {
         return mask;
     }

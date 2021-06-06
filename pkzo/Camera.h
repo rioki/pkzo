@@ -25,10 +25,14 @@
 #pragma once
 #include "config.h"
 
+#include "enums.h"
 #include "SceneNode.h"
+#include "Scene.h"
 
 namespace pkzo
 {
+    class HitArea;
+
     //! Camera
     class PKZO_EXPORT Camera : public SceneNode
     {
@@ -48,7 +52,19 @@ namespace pkzo
         //! Get the camera's view matrix.
         glm::mat4 get_view() const noexcept;
 
+        //! Pick item using physics.
+        std::optional<TestResult> pick(const glm::vec2 pos) const noexcept;
+
+        //! Handle Mouse Move
+        void handle_mouse_move(const glm::vec2 pos, const glm::vec2 mov) const noexcept;
+        //! Handle Mouse Click
+        void handle_mouse_down(const glm::vec2 pos, MouseButton button) const noexcept;
+        //! Handle Mouse Click
+        void handle_mouse_up(const glm::vec2 pos, MouseButton button) const noexcept;
+
     private:
         glm::uvec2 resolution = {800, 600};
+
+        mutable std::shared_ptr<HitArea> mouse_down_hit;
     };
 }

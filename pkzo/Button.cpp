@@ -50,7 +50,14 @@ namespace pkzo
         caption = std::make_shared<Text>(c, font, text_material);
         add_node(caption);
 
-        hit_area = std::make_shared<HitArea>(glm::vec3(size, 0.01f));
+        hit_area = std::make_shared<HitArea>(glm::vec3(size, 1.0f));
+        hit_area->on_click([this] (auto button)
+        {
+            if (button == pkzo::MouseButton::LEFT)
+            {
+                click_signal.emit();
+            }
+        });
         add_node(hit_area);
     }
 
@@ -116,9 +123,13 @@ namespace pkzo
         return caption->get_font();
     }
 
-    void Button::on_click(const std::function<void()>& cb) noexcept
+    rsig::signal<>& Button::get_click_signal() noexcept
     {
-        DBG_ASSERT(hit_area);
-        hit_area->on_click(cb);
+        return click_signal;
+    }
+
+    rsig::connection Button::on_click(const std::function<void()>& cb) noexcept
+    {
+        return click_signal.connect(cb);
     }
 }

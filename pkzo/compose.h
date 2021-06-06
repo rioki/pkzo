@@ -27,6 +27,14 @@ namespace impl
     }
 
     template <>
+    inline std::string to_string(std::byte value)
+    {
+        return std::to_string(static_cast<unsigned int>(value));
+    }
+
+    using std::to_string;
+
+    template <>
     inline std::string to_string(const char* value)
     {
         if (value != nullptr)

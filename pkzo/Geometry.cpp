@@ -97,7 +97,7 @@ namespace pkzo
             {
                 auto physics = scene->get_physics();
                 assert(physics);
-                rigid_body = create_rigid_body(physics, 0kg);
+                rigid_body = create_rigid_body(physics, 0kg, physics::CollisionGroup::STATIC, physics::CollisionGroup::ALL_DYNAMIC);
                 rigid_body->set_user_data(static_cast<SceneNode*>(this));
             }
         }

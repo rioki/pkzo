@@ -114,8 +114,8 @@ namespace pkzo
         return mesh;
     }
 
-    std::shared_ptr<physics::RigidBody> Box::create_rigid_body(std::shared_ptr<physics::World>& physics, KiloGramm mass) noexcept
+    std::shared_ptr<physics::RigidBody> Box::create_rigid_body(std::shared_ptr<physics::World>& physics, KiloGramm mass, physics::CollisionGroup group, physics::CollisionGroup mask) noexcept
     {
-        return physics->add_box(get_world_transform(), size, mass);
+        return physics->add_box(get_world_transform(), size, mass, group, mask);
     }
 }

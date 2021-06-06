@@ -32,12 +32,31 @@
 #include <any>
 #include <glm/fwd.hpp>
 
+#include "enums.h"
 #include "rsig.h"
 #include "Mass.h"
 #include "Mesh.h"
 
 namespace pkzo::physics
 {
+
+    enum class CollisionGroup
+    {
+        AUTO          = 0,
+        STATIC        = PKZO_BIT(1),
+        KINEMATIC     = PKZO_BIT(2),
+        DYNAMIC       = PKZO_BIT(3),
+        CHARACTER     = PKZO_BIT(4),
+        PAWN          = PKZO_BIT(5),
+        GHOST         = PKZO_BIT(6),
+        INTERACTION   = PKZO_BIT(7),
+        ALL_PHYISICAL = STATIC | KINEMATIC | DYNAMIC | CHARACTER | PAWN,
+        ALL_DYNAMIC   = DYNAMIC | KINEMATIC | CHARACTER | PAWN,
+        ALL_VIRTUAL   = GHOST | INTERACTION,
+        ALL           = STATIC | DYNAMIC | KINEMATIC | CHARACTER | PAWN | GHOST | INTERACTION,
+    };
+    PKZO_ENUM_BIT_OPERATORS(CollisionGroup)
+
     class PKZO_EXPORT RigidBody : public std::enable_shared_from_this<RigidBody>
     {
     public:
@@ -50,6 +69,9 @@ namespace pkzo::physics
 
         virtual void set_mass(KiloGramm value) noexcept = 0;
         virtual KiloGramm get_mass() const noexcept = 0;
+
+        virtual CollisionGroup set_collision_group() const noexcept = 0;
+        virtual CollisionGroup get_collision_mask() const noexcept = 0;
 
         virtual void set_friction(float value) noexcept = 0;
         virtual float get_friction() const noexcept = 0;
@@ -96,15 +118,15 @@ namespace pkzo::physics
         virtual void set_gravity(const glm::vec3& value) noexcept = 0;
         virtual glm::vec3 get_gravity() const noexcept = 0;
 
-        virtual std::shared_ptr<RigidBody> add_box(const glm::mat4& transform, const glm::vec3& size, KiloGramm mass) noexcept = 0;
-        virtual std::shared_ptr<RigidBody> add_capsule(const glm::mat4& transform, float diameter, float height, KiloGramm mass) noexcept = 0;
-        virtual std::shared_ptr<RigidBody> add_sphere(const glm::mat4& transform, float diameter, KiloGramm mass) noexcept = 0;
-        virtual std::shared_ptr<RigidBody> add_static_mesh(const glm::mat4& transform, std::shared_ptr<Mesh> mesh) noexcept = 0;
+        virtual std::shared_ptr<RigidBody> add_box(const glm::mat4& transform, const glm::vec3& size, KiloGramm mass, CollisionGroup group, CollisionGroup mask) noexcept = 0;
+        virtual std::shared_ptr<RigidBody> add_capsule(const glm::mat4& transform, float diameter, float height, KiloGramm mass, CollisionGroup group, CollisionGroup mask) noexcept = 0;
+        virtual std::shared_ptr<RigidBody> add_sphere(const glm::mat4& transform, float diameter, KiloGramm mass, CollisionGroup group, CollisionGroup mask) noexcept = 0;
+        virtual std::shared_ptr<RigidBody> add_static_mesh(const glm::mat4& transform, std::shared_ptr<Mesh> mesh, CollisionGroup group, CollisionGroup mask) noexcept = 0;
 
         virtual void remove_body(const std::shared_ptr<RigidBody>& body) noexcept = 0;
 
-        virtual std::optional<TestResult> test_ray(const glm::vec3& start, const glm::vec3& end) const noexcept = 0;
-        virtual std::optional<TestResult> test_sphere_sweep(const glm::vec3& start, const glm::vec3& end, float radius) const noexcept = 0;
+        virtual std::optional<TestResult> test_ray(const glm::vec3& start, const glm::vec3& end, CollisionGroup group, CollisionGroup mask) const noexcept = 0;
+        virtual std::optional<TestResult> test_sphere_sweep(const glm::vec3& start, const glm::vec3& end, float radius, CollisionGroup group, CollisionGroup mask) const noexcept = 0;
 
         virtual void update(std::chrono::milliseconds dt) noexcept = 0;
     };

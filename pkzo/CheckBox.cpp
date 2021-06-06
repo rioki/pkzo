@@ -41,7 +41,7 @@ namespace pkzo
         add_node(background);
 
         hit_area = std::make_shared<HitArea>(glm::vec3(size, 0.01f));
-        hit_area->on_click([this] () {
+        hit_area->on_click([this] (auto button) {
             handle_click();
         });
         add_node(hit_area);

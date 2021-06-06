@@ -48,6 +48,24 @@ namespace pkzo
         Scene::draw(*camera);
     }
 
+    void Screen::handle_mouse_move(const glm::vec2& pos, const glm::vec2& mov) const noexcept
+    {
+        DBG_ASSERT(camera);
+        camera->handle_mouse_move(pos, mov);
+    }
+
+    void Screen::handle_mouse_down(const glm::vec2& pos, MouseButton button) const noexcept
+    {
+        DBG_ASSERT(camera);
+        camera->handle_mouse_down(pos, button);
+    }
+
+    void Screen::handle_mouse_up(const glm::vec2& pos, MouseButton button) const noexcept
+    {
+        DBG_ASSERT(camera);
+        camera->handle_mouse_up(pos, button);
+    }
+
     template <typename T>
     T map(T source_left, T source_right, T target_left, T target_right, T value)
     {
@@ -58,10 +76,9 @@ namespace pkzo
 
     glm::vec2 map_to_screen(glm::vec2 win_size, glm::vec2 screen_size, glm::vec2 pos)
     {
-        auto hs = screen_size / 2.0f;
         return {
-            map<float>(0.0f, win_size.x, -hs.x, hs.x, pos.x),
-            map<float>(0.0f, win_size.y, hs.y, -hs.y, pos.y)
+            map<float>(0.0f, win_size.x, 0.0f, screen_size.x, pos.x),
+            map<float>(0.0f, win_size.y, 0.0f, screen_size.y, pos.y)
         };
     }
 }

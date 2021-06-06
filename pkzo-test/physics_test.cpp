@@ -32,7 +32,7 @@ TEST(physics, no_gravity_no_move)
     auto world = pkzo::physics::World::create();
     EXPECT_EQ(glm::vec3(0.0f), world->get_gravity());
 
-    auto body = world->add_box(glm::mat4(1.0f), {1.0f, 1.0f, 1.0f}, 10kg);
+    auto body = world->add_box(glm::mat4(1.0f), {1.0f, 1.0f, 1.0f}, 10kg, pkzo::physics::CollisionGroup::DYNAMIC, pkzo::physics::CollisionGroup::ALL);
 
     for (auto i = 0u; i < 10; i++)
     {
@@ -47,8 +47,8 @@ TEST(physics, gravity_do_move)
     auto world = pkzo::physics::World::create();
 
     world->set_gravity({0.0f, 0.0f, -9.8f});
-    auto body = world->add_box(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 10.0f)), {1.0f, 1.0f, 1.0f}, 10kg);
-    auto ground = world->add_box(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -0.5f)), {100.0f, 100.0f, 1.0f}, 0kg);
+    auto body = world->add_box(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 10.0f)), {1.0f, 1.0f, 1.0f}, 10kg, pkzo::physics::CollisionGroup::DYNAMIC, pkzo::physics::CollisionGroup::ALL);
+    auto ground = world->add_box(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -0.5f)), {100.0f, 100.0f, 1.0f}, 0kg, pkzo::physics::CollisionGroup::STATIC, pkzo::physics::CollisionGroup::ALL_DYNAMIC);
 
     for (auto i = 0u; i < 100; i++)
     {

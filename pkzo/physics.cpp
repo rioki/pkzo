@@ -26,6 +26,9 @@
 #include "physics.h"
 
 #include <bullet/btBulletDynamicsCommon.h>
+#include <bullet/btBulletCollisionCommon.h>
+
+#include "utils.h"
 
 namespace pkzo::physics
 {
@@ -60,8 +63,8 @@ namespace pkzo::physics
     class BulletRigidBody : public RigidBody
     {
     public:
-        BulletRigidBody(std::shared_ptr<btMotionState> _state, std::shared_ptr<btCollisionShape> _shape, std::shared_ptr<btRigidBody> _body) noexcept
-            : state(_state), shape(_shape), body(_body)
+        BulletRigidBody(std::shared_ptr<btMotionState> _state, std::shared_ptr<btCollisionShape> _shape, std::shared_ptr<btRigidBody> _body, CollisionGroup _type, CollisionGroup _mask) noexcept
+        : state(_state), shape(_shape), body(_body), group(_type), mask(_mask)
         {
             assert(state);
             assert(shape);
@@ -90,6 +93,16 @@ namespace pkzo::physics
         KiloGramm get_mass() const noexcept override
         {
             return KiloGramm(body->getMass());
+        }
+
+        CollisionGroup set_collision_group() const noexcept override
+        {
+            return group;
+        }
+
+        CollisionGroup get_collision_mask() const noexcept override
+        {
+            return mask;
         }
 
         void set_friction(float value) noexcept override
@@ -196,6 +209,8 @@ namespace pkzo::physics
         }
 
     private:
+        CollisionGroup                    group;
+        CollisionGroup                    mask;
         std::shared_ptr<btMotionState>    state;
         std::shared_ptr<btCollisionShape> shape;
         std::shared_ptr<btRigidBody>      body;
@@ -244,28 +259,28 @@ namespace pkzo::physics
             return to_glm(world->getGravity());
         }
 
-        std::shared_ptr<RigidBody> add_box(const glm::mat4& transform, const glm::vec3& size, KiloGramm mass) noexcept override
+        std::shared_ptr<RigidBody> add_box(const glm::mat4& transform, const glm::vec3& size, KiloGramm mass, CollisionGroup group, CollisionGroup mask) noexcept override
         {
             auto shape = std::make_shared<btBoxShape>(to_bt(size * 0.5f));
-            return add_body(transform, mass, shape);
+            return add_body(transform, mass, shape, group, mask);
         }
 
-        std::shared_ptr<RigidBody> add_capsule(const glm::mat4& transform, float diameter, float height, KiloGramm mass) noexcept override
+        std::shared_ptr<RigidBody> add_capsule(const glm::mat4& transform, float diameter, float height, KiloGramm mass, CollisionGroup group, CollisionGroup mask) noexcept override
         {
             auto shape = std::make_shared<btCapsuleShapeZ>(diameter * 0.5f, height - diameter);
-            return add_body(transform, mass, shape);
+            return add_body(transform, mass, shape, group, mask);
         }
 
-        std::shared_ptr<RigidBody> add_sphere(const glm::mat4& transform, float diameter, KiloGramm mass) noexcept override
+        std::shared_ptr<RigidBody> add_sphere(const glm::mat4& transform, float diameter, KiloGramm mass, CollisionGroup group, CollisionGroup mask) noexcept override
         {
             auto shape = std::make_shared<btSphereShape>(diameter / 2.0f);
-            return add_body(transform, mass, shape);
+            return add_body(transform, mass, shape, group, mask);
         }
 
-        std::shared_ptr<RigidBody> add_static_mesh(const glm::mat4& transform, std::shared_ptr<Mesh> mesh) noexcept override
+        std::shared_ptr<RigidBody> add_static_mesh(const glm::mat4& transform, std::shared_ptr<Mesh> mesh, CollisionGroup group, CollisionGroup mask) noexcept override
         {
             auto shape = std::make_shared<btBvhTriangleMeshShape>(create_bullet_mesh(mesh).get(), true);
-            return add_body(transform, 0kg, shape);
+            return add_body(transform, 0kg, shape, group, mask);
         }
 
         void remove_body(const std::shared_ptr<RigidBody>& b) noexcept override
@@ -281,9 +296,11 @@ namespace pkzo::physics
             world->removeRigidBody(body->body.get());
         }
 
-        std::optional<TestResult> test_ray(const glm::vec3& start, const glm::vec3& end) const noexcept override
+        std::optional<TestResult> test_ray(const glm::vec3& start, const glm::vec3& end, CollisionGroup group, CollisionGroup mask) const noexcept override
         {
             btCollisionWorld::ClosestRayResultCallback callback(to_bt(start), to_bt(end));
+            callback.m_collisionFilterGroup = to_underlying(group);
+            callback.m_collisionFilterMask  = to_underlying(mask);
             world->rayTest(to_bt(start), to_bt(end), callback);
             if (callback.hasHit())
             {
@@ -301,10 +318,12 @@ namespace pkzo::physics
             }
         }
 
-        std::optional<TestResult> test_sphere_sweep(const glm::vec3& start, const glm::vec3& end, float radius) const noexcept override
+        std::optional<TestResult> test_sphere_sweep(const glm::vec3& start, const glm::vec3& end, float radius, CollisionGroup group, CollisionGroup mask) const noexcept override
         {
             auto sphere = btSphereShape{radius};
             btCollisionWorld::ClosestConvexResultCallback callback(to_bt(start), to_bt(end));
+            callback.m_collisionFilterGroup = to_underlying(group);
+            callback.m_collisionFilterMask  = to_underlying(mask);
             world->convexSweepTest(&sphere, btTransform{NO_ROTATION, to_bt(start)}, btTransform{NO_ROTATION, to_bt(end)}, callback);
             if (callback.hasHit())
             {
@@ -343,7 +362,7 @@ namespace pkzo::physics
         std::list<std::shared_ptr<BulletRigidBody>> bodies;
         std::map<std::shared_ptr<Mesh>, std::shared_ptr<btStridingMeshInterface>> mesh_data;
 
-        std::shared_ptr<RigidBody> add_body(const glm::mat4& transform, KiloGramm mass, std::shared_ptr<btCollisionShape> shape) noexcept
+        std::shared_ptr<RigidBody> add_body(const glm::mat4& transform, KiloGramm mass, std::shared_ptr<btCollisionShape> shape, CollisionGroup group, CollisionGroup mask) noexcept
         {
             auto state   = std::make_shared<btDefaultMotionState>(to_bt(transform));
             auto interia = btVector3{0, 0, 0};
@@ -354,15 +373,20 @@ namespace pkzo::physics
 
             auto body = std::make_shared<btRigidBody>(btScalar(mass.count()), state.get(), shape.get(), interia);
 
+            if (group == CollisionGroup::AUTO)
+            {
+                group = (mass == 0kg) ? CollisionGroup::STATIC : CollisionGroup::DYNAMIC;
+            }
+
             if (mass == 0kg)
             {
                 body->setCollisionFlags(btCollisionObject::CF_STATIC_OBJECT);
                 body->setActivationState(DISABLE_SIMULATION);
             }
 
-            world->addRigidBody(body.get());
+            world->addRigidBody(body.get(), to_underlying(group), to_underlying(mask));
 
-            auto rb = std::make_shared<BulletRigidBody>(state, shape, body);
+            auto rb = std::make_shared<BulletRigidBody>(state, shape, body, group, mask);
             bodies.push_back(rb);
             return rb;
         }

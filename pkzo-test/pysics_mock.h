@@ -67,15 +67,15 @@ namespace pkzo::test
         MOCK_METHOD(void, set_gravity, (const glm::vec3& value), (noexcept, override));
         MOCK_METHOD(glm::vec3, get_gravity, (), (const, noexcept, override));
 
-        MOCK_METHOD(std::shared_ptr<pkzo::physics::RigidBody>, add_box, (const glm::mat4& transform, const glm::vec3& size, KiloGramm mass), (noexcept, override));
-        MOCK_METHOD(std::shared_ptr<pkzo::physics::RigidBody>, add_capsule, (const glm::mat4& transform, float diameter, float height, KiloGramm mass), (noexcept, override));
-        MOCK_METHOD(std::shared_ptr<pkzo::physics::RigidBody>, add_sphere, (const glm::mat4& transform, float diameter, KiloGramm mass), (noexcept, override));
-        MOCK_METHOD(std::shared_ptr<pkzo::physics::RigidBody>, add_static_mesh, (const glm::mat4& transform, std::shared_ptr<Mesh> mesh) , (noexcept, override));
+        MOCK_METHOD(std::shared_ptr<pkzo::physics::RigidBody>, add_box, (const glm::mat4& transform, const glm::vec3& size, KiloGramm mass, pkzo::physics::CollisionGroup group, pkzo::physics::CollisionGroup mask), (noexcept, override));
+        MOCK_METHOD(std::shared_ptr<pkzo::physics::RigidBody>, add_capsule, (const glm::mat4& transform, float diameter, float height, KiloGramm mass, pkzo::physics::CollisionGroup group, pkzo::physics::CollisionGroup mask), (noexcept, override));
+        MOCK_METHOD(std::shared_ptr<pkzo::physics::RigidBody>, add_sphere, (const glm::mat4& transform, float diameter, KiloGramm mass, pkzo::physics::CollisionGroup group, pkzo::physics::CollisionGroup mask), (noexcept, override));
+        MOCK_METHOD(std::shared_ptr<pkzo::physics::RigidBody>, add_static_mesh, (const glm::mat4& transform, std::shared_ptr<Mesh> mesh, pkzo::physics::CollisionGroup group, pkzo::physics::CollisionGroup mask) , (noexcept, override));
 
         MOCK_METHOD(void, remove_body, (const std::shared_ptr<pkzo::physics::RigidBody>& body), (noexcept, override));
 
-        MOCK_METHOD(std::optional<pkzo::physics::TestResult>, test_ray, (const glm::vec3& start, const glm::vec3& end), (const, noexcept, override));
-        MOCK_METHOD(std::optional<pkzo::physics::TestResult>, test_sphere_sweep, (const glm::vec3& start, const glm::vec3& end, float radius), (const, noexcept, override));
+        MOCK_METHOD(std::optional<pkzo::physics::TestResult>, test_ray, (const glm::vec3& start, const glm::vec3& end, pkzo::physics::CollisionGroup group, pkzo::physics::CollisionGroup mask), (const, noexcept, override));
+        MOCK_METHOD(std::optional<pkzo::physics::TestResult>, test_sphere_sweep, (const glm::vec3& start, const glm::vec3& end, float radius, pkzo::physics::CollisionGroup group, pkzo::physics::CollisionGroup mask), (const, noexcept, override));
 
         MOCK_METHOD(void, update, (std::chrono::milliseconds dt), (noexcept, override));
     };

@@ -24,15 +24,14 @@
 
 #include "pch.h"
 #include "HitArea.h"
+#include "physics.h"
+#include "Scene.h"
+#include "utils.h"
+
+using namespace pkzo::mass_literals;
 
 namespace pkzo
 {
-    template <typename Enum>
-    auto to_underlying(Enum value)
-    {
-        return static_cast<std::underlying_type<MouseButton>::type>(value);
-    }
-
     HitArea::HitArea(const glm::vec3& size) noexcept
     : HitArea(glm::mat4(1.0f), size) {}
 
@@ -52,34 +51,100 @@ namespace pkzo
         return size;
     }
 
-    void HitArea::on_enter(const std::function<void()>& cb) noexcept
+    rsig::signal<glm::vec3, glm::vec3>& HitArea::get_mouse_move_signal() noexcept
     {
-        enter_cb = cb;
+        return mouse_move_signal;
     }
 
-    void HitArea::on_leave(const std::function<void()>&cb) noexcept
+    rsig::connection HitArea::on_mouse_move(const std::function<void(glm::vec3, glm::vec3)>& cb) noexcept
     {
-        leave_cb = cb;
+        return mouse_move_signal.connect(cb);
     }
 
-    void HitArea::on_mouse_move(const std::function<void(glm::vec2)>&cb) noexcept
+    rsig::signal<glm::vec3, MouseButton>& HitArea::get_mouse_down_signal() noexcept
     {
-        mouse_move_cb = cb;
+        return mouse_down_signal;
     }
 
-    void HitArea::on_mouse_down(const std::function<void(MouseButton, glm::vec2)>&cb) noexcept
+    rsig::connection HitArea::on_mouse_down(const std::function<void (glm::vec3, MouseButton)>& cb) noexcept
     {
-        mouse_down_cb = cb;
+        return mouse_down_signal.connect(cb);
     }
 
-    void HitArea::on_mouse_up(const std::function<void(MouseButton, glm::vec2)>&cb) noexcept
+    rsig::signal<glm::vec3, MouseButton>& HitArea::get_mouse_up_signal() noexcept
     {
-        mouse_up_cb = cb;
+        return mouse_up_signal;
     }
 
-    void HitArea::on_click(const std::function<void ()>& cb) noexcept
+    rsig::connection HitArea::on_mouse_up(const std::function<void (glm::vec3, MouseButton)>& cb) noexcept
     {
-        click_cb = cb;
+        return mouse_up_signal.connect(cb);
+    }
+
+    rsig::signal<MouseButton>& HitArea::get_click_signal() noexcept
+    {
+        return click_signal;
+    }
+
+    rsig::connection HitArea::on_click(const std::function<void (MouseButton)>& cb) noexcept
+    {
+        return click_signal.connect(cb);
+    }
+
+    void HitArea::handle_mouse_move(const glm::vec3 pos, const glm::vec3 mov) const noexcept
+    {
+        mouse_move_signal.emit(pos, mov);
+    }
+
+    void HitArea::handle_mouse_down(const glm::vec3 pos, MouseButton button) const noexcept
+    {
+        mouse_down_signal.emit(pos, button);
+        click_armed[to_underlying(button)] = true;
+    }
+
+    void HitArea::handle_mouse_up(const glm::vec3 pos, MouseButton button) const noexcept
+    {
+        mouse_up_signal.emit(pos, button);
+        if (click_armed[to_underlying(button)])
+        {
+            click_signal.emit(button);
+            click_armed[to_underlying(button)] = false;
+        }
+    }
+
+    void HitArea::handle_mouse_up_outside(const glm::vec3 pos, MouseButton button) const noexcept
+    {
+        mouse_up_signal.emit(pos, button); // REVIEW: add flag for outside?
+        click_armed[to_underlying(button)] = false;
+    }
+
+    void HitArea::update(std::chrono::milliseconds dt) noexcept
+    {
+        SceneNode::update(dt);
+        //rigid_body->set_transform(get_world_transform());
+    }
+
+    void HitArea::on_attach_scene(Scene* scene) noexcept
+    {
+        SceneNode::on_attach_scene(scene);
+
+        auto physics = scene->get_physics();
+        assert(physics);
+        physics_ghost = physics->add_box(get_world_transform(), size, 0kg, physics::CollisionGroup::INTERACTION, physics::CollisionGroup::INTERACTION);
+        physics_ghost->set_user_data(static_cast<SceneNode*>(this));
+    }
+
+    void HitArea::on_detach_scene() noexcept
+    {
+        if (physics_ghost)
+        {
+            auto physics = get_scene()->get_physics();
+            assert(physics);
+            physics->remove_body(physics_ghost);
+            physics_ghost = nullptr;
+        }
+
+        SceneNode::on_detach_scene();
     }
 
     /*void HitArea::handle_mouse_button_down(MouseButton button, glm::vec2 pos)

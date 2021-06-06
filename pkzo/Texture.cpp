@@ -43,7 +43,7 @@ namespace pkzo
         virtual WrapMode get_wrap_mode() const noexcept = 0;
 
         virtual bool is_uploaded() const noexcept = 0;
-        virtual void upload(const glm::uvec2& size, ColorMode mode, DataType type, const void* memory) noexcept = 0;
+        virtual void upload(const glm::uvec2& size, ColorMode mode, DataType group, const void* memory) noexcept = 0;
         virtual void bind(glm::uint slot) noexcept = 0;
     };
 
@@ -60,7 +60,7 @@ namespace pkzo
         WrapMode get_wrap_mode() const noexcept override;
 
         bool is_uploaded() const noexcept override;
-        void upload(const glm::uvec2& size, ColorMode mode, DataType type, const void* memory) noexcept override;
+        void upload(const glm::uvec2& size, ColorMode mode, DataType group, const void* memory) noexcept override;
         void bind(glm::uint slot) noexcept override;
 
     private:
@@ -110,9 +110,9 @@ namespace pkzo
         return gl_id != 0;
     }
 
-    GLenum glinternalformat(ColorMode mode, DataType type) noexcept
+    GLenum glinternalformat(ColorMode mode, DataType group) noexcept
     {
-        switch (type)
+        switch (group)
         {
         case DataType::INT8:
             switch (mode)
@@ -262,9 +262,9 @@ namespace pkzo
         }
     }
 
-    GLenum gltype(DataType type) noexcept
+    GLenum gltype(DataType group) noexcept
     {
-        switch (type)
+        switch (group)
         {
         case DataType::INT8:
             return GL_BYTE;
@@ -288,7 +288,7 @@ namespace pkzo
         }
     }
 
-    void OpenGLTextureImpl::upload(const glm::uvec2& size, ColorMode mode, DataType type, const void* memory) noexcept
+    void OpenGLTextureImpl::upload(const glm::uvec2& size, ColorMode mode, DataType group, const void* memory) noexcept
     {
         DBG_ASSERT(gl_id == 0);
 
@@ -328,9 +328,9 @@ namespace pkzo
         }
 
 
-        GLenum gl_internalformat = glinternalformat(mode, type);
+        GLenum gl_internalformat = glinternalformat(mode, group);
         GLenum gl_format = glformat(mode);
-        GLenum gl_type = gltype(type);
+        GLenum gl_type = gltype(group);
         glTexImage2D(GL_TEXTURE_2D, 0, gl_internalformat, size.x, size.y, 0, gl_format, gl_type, memory);
         DBG_CHECK_GLERROR("uploading texture data");
 
@@ -365,7 +365,7 @@ namespace pkzo
     {
     public:
         FreeImageTextureImpl(const std::filesystem::path& file);
-        FreeImageTextureImpl(const glm::uvec2& size, ColorMode mode, DataType type, const void* memory);
+        FreeImageTextureImpl(const glm::uvec2& size, ColorMode mode, DataType group, const void* memory);
         ~FreeImageTextureImpl();
 
         glm::uvec2 get_size() const noexcept override;
@@ -400,7 +400,7 @@ namespace pkzo
         }
     }
 
-    auto get_bpp(ColorMode mode, DataType type)
+    auto get_bpp(ColorMode mode, DataType group)
     {
         auto components = 0u;
         switch (mode)
@@ -423,7 +423,7 @@ namespace pkzo
             DBG_ASSERT(false);
         }
 
-        switch (type)
+        switch (group)
         {
         case DataType::INT8:
         case DataType::UINT8:
@@ -443,9 +443,9 @@ namespace pkzo
         }
     }
 
-    FREE_IMAGE_TYPE fi_type(DataType type)
+    FREE_IMAGE_TYPE fi_type(DataType group)
     {
-        switch (type)
+        switch (group)
         {
         case DataType::INT8:
         case DataType::UINT8:
@@ -523,11 +523,11 @@ namespace pkzo
         }
     }
 
-    FreeImageTextureImpl::FreeImageTextureImpl(const glm::uvec2& size, ColorMode mode, DataType type, const void* memory)
+    FreeImageTextureImpl::FreeImageTextureImpl(const glm::uvec2& size, ColorMode mode, DataType group, const void* memory)
     {
         auto raw = reinterpret_cast<BYTE*>(const_cast<void*>(memory));
-        auto fitype = fi_type(type);
-        auto bpp = get_bpp(mode, type);
+        auto fitype = fi_type(group);
+        auto bpp = get_bpp(mode, group);
         auto Bpp = bpp / 8u;
         auto rm = red_mask(mode);
         auto gm = green_mask(mode);
@@ -713,8 +713,8 @@ namespace pkzo
     Texture::Texture(const std::filesystem::path& file)
     : impl(std::make_unique<FreeImageTextureImpl>(file)), graphic_impl(std::make_unique<OpenGLTextureImpl>(file.filename().u8string())) {}
 
-    Texture::Texture(const glm::uvec2& size, ColorMode mode, DataType type, const void* memory, const std::string& label)
-    : impl(std::make_unique<FreeImageTextureImpl>(size, mode, type, memory)), graphic_impl(std::make_unique<OpenGLTextureImpl>(label)) {}
+    Texture::Texture(const glm::uvec2& size, ColorMode mode, DataType group, const void* memory, const std::string& label)
+    : impl(std::make_unique<FreeImageTextureImpl>(size, mode, group, memory)), graphic_impl(std::make_unique<OpenGLTextureImpl>(label)) {}
 
     Texture::Texture(Texture&& other) noexcept
     : impl(std::move(other.impl)), graphic_impl(std::move(other.graphic_impl)) {}

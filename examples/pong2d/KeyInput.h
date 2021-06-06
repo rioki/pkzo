@@ -41,11 +41,14 @@ namespace pong2d
         void set_key(pkzo::Key value) noexcept;
         pkzo::Key get_key() const noexcept;
 
-        void on_click(const std::function<void ()>& cb);
+        rsig::signal<>& get_click_signal() noexcept;
+        rsig::connection on_click(const std::function<void ()>& cb) noexcept;
 
     private:
         pkzo::Key key;
         std::shared_ptr<pkzo::Text>    text;
         std::shared_ptr<pkzo::HitArea> hit_area;
+
+        rsig::signal<>                 click_signal;
     };
 }

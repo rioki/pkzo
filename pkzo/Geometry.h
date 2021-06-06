@@ -30,6 +30,7 @@
 
 #include "fwd.h"
 #include "Mass.h"
+#include "physics.h"
 
 namespace pkzo
 {
@@ -57,7 +58,7 @@ namespace pkzo
         void on_detach_scene() noexcept override;
         void update(std::chrono::milliseconds dt) noexcept override;
 
-        virtual std::shared_ptr<physics::RigidBody> create_rigid_body(std::shared_ptr<physics::World>& physics, KiloGramm mass) noexcept = 0;
+        virtual std::shared_ptr<physics::RigidBody> create_rigid_body(std::shared_ptr<physics::World>& physics, KiloGramm mass, physics::CollisionGroup group, physics::CollisionGroup mask) noexcept = 0;
 
     private:
         bool visible = true;

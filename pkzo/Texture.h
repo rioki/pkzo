@@ -86,7 +86,7 @@ namespace pkzo
         //! @param file the file to load the texture from.
         Texture(const std::filesystem::path& file);
         //! Create texture from memory buffer.
-        Texture(const glm::uvec2& size, ColorMode mode, DataType type, const void* memory, const std::string& label = "memory");
+        Texture(const glm::uvec2& size, ColorMode mode, DataType group, const void* memory, const std::string& label = "memory");
         Texture(const Texture&) = delete;
         Texture(Texture&& other) noexcept;
         ~Texture();

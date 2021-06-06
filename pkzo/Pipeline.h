@@ -80,9 +80,9 @@ namespace pkzo
         //! @param parameters additional shader parameters
         //!
         //! @{
-        void add_pass(PassType type, const std::shared_ptr<Shader>& shader) noexcept;
-        void add_pass(PassType type, const std::shared_ptr<Shader>& shader, DepthTest depth_test, Blending blending) noexcept;
-        void add_pass(PassType type, const std::shared_ptr<Shader>& shader, DepthTest depth_test, Blending blending, const std::shared_ptr<Parameters>& parameters) noexcept;
+        void add_pass(PassType group, const std::shared_ptr<Shader>& shader) noexcept;
+        void add_pass(PassType group, const std::shared_ptr<Shader>& shader, DepthTest depth_test, Blending blending) noexcept;
+        void add_pass(PassType group, const std::shared_ptr<Shader>& shader, DepthTest depth_test, Blending blending, const std::shared_ptr<Parameters>& parameters) noexcept;
         //! @}
 
         //! Set the camera matrixes
@@ -121,7 +121,7 @@ namespace pkzo
     private:
         struct Pass
         {
-            PassType                    type;
+            PassType                    group;
             std::shared_ptr<Shader>     shader;
             DepthTest                   depth_test;
             Blending                    blending;

@@ -34,6 +34,7 @@
 #include "enums.h"
 #include "SceneNodeGroup.h"
 #include "fwd.h"
+#include "physics.h"
 
 namespace pkzo
 {
@@ -46,6 +47,8 @@ namespace pkzo
         glm::vec3 position;
         glm::vec3 normal;
     };
+
+    using physics::CollisionGroup;
 
     //! 3D Scene
     class PKZO_EXPORT Scene : public SceneNodeGroup
@@ -70,8 +73,8 @@ namespace pkzo
         std::shared_ptr<physics::World> get_physics() noexcept;
         std::shared_ptr<const physics::World> get_physics() const noexcept;
 
-        std::optional<TestResult> test_ray(const glm::vec3& start, const glm::vec3& end) const noexcept;
-        std::optional<TestResult> test_sphere_sweep(const glm::vec3& start, const glm::vec3& end, float radius) const noexcept;
+        std::optional<TestResult> test_ray(const glm::vec3& start, const glm::vec3& end, CollisionGroup group = CollisionGroup::INTERACTION, CollisionGroup mask = CollisionGroup::ALL_PHYISICAL) const noexcept;
+        std::optional<TestResult> test_sphere_sweep(const glm::vec3& start, const glm::vec3& end, float radius, CollisionGroup group = CollisionGroup::INTERACTION, CollisionGroup mask = CollisionGroup::ALL_PHYISICAL) const noexcept;
 
     private:
         std::unique_ptr<Pipeline> render_pipeline;

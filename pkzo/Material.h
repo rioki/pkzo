@@ -90,7 +90,7 @@ namespace pkzo
         const std::shared_ptr<Texture>& get_emissive() const noexcept;
 
         void set_mask(const std::shared_ptr<Texture>& value) noexcept;
-        const std::shared_ptr<Texture>& get_mask() const noexcept;
+        const std::shared_ptr<Texture>& get_collision_mask() const noexcept;
 
         std::shared_ptr<Parameters> to_parameters() const noexcept;
 

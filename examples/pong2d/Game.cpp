@@ -66,14 +66,14 @@ namespace pong2d
             if (screen)
             {
                 auto p = pkzo::map_to_screen(window.get_size(), screen->get_size(), pos);
-                //screen->handle_mouse_button_down(button, p);
+                screen->handle_mouse_down(p, button);
             }
         });
         mouse.on_button_up([this, &window] (auto button, auto pos) {
             if (screen)
             {
                 auto p = pkzo::map_to_screen(window.get_size(), screen->get_size(), pos);
-                //screen->handle_mouse_button_up(button, p);
+                screen->handle_mouse_down(p, button);
             }
         });
         mouse.on_move([this, &window] (auto pos, auto mov) {
@@ -81,7 +81,7 @@ namespace pong2d
             {
                 auto p = pkzo::map_to_screen(window.get_size(), screen->get_size(), pos);
                 auto m = pkzo::map_to_screen(window.get_size(), screen->get_size(), mov);
-                //screen->handle_mouse_move(p, m);
+                screen->handle_mouse_move(p, m);
             }
         });
 

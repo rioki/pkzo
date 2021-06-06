@@ -45,6 +45,12 @@ namespace pkzo
     using impl::to_string;
     using impl::from_string;
 
+    template <typename Enum>
+    auto to_underlying(Enum value)
+    {
+        return static_cast<std::underlying_type<Enum>::type>(value);
+    }
+
     inline
     glm::vec3 rgb(float r, float g, float b)
     {

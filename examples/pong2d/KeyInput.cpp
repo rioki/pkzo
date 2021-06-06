@@ -34,6 +34,13 @@ namespace pong2d
         add_node(text);
 
         hit_area = std::make_shared<pkzo::HitArea>(glm::vec3(f->estimate("ESCAPE"), 0.01f));
+        hit_area->on_click([this] (auto button)
+        {
+            if (button == pkzo::MouseButton::LEFT)
+            {
+                click_signal.emit();
+            }
+        });
         add_node(hit_area);
     }
 
@@ -48,8 +55,13 @@ namespace pong2d
         return key;
     }
 
-    void KeyInput::on_click(const std::function<void()>& cb)
+    rsig::signal<>& KeyInput::get_click_signal() noexcept
     {
-        hit_area->on_click(cb);
+        return click_signal;
+    }
+
+    rsig::connection KeyInput::on_click(const std::function<void()>& cb) noexcept
+    {
+        return click_signal.connect(cb);
     }
 }

@@ -24,6 +24,8 @@
 
 #include "pch.h"
 #include "Camera.h"
+#include "HitArea.h"
+#include "Scene.h"
 
 namespace pkzo
 {
@@ -48,5 +50,65 @@ namespace pkzo
     glm::mat4 Camera::get_view() const noexcept
     {
         return glm::inverse(get_world_transform());
+    }
+
+    std::optional<TestResult> Camera::pick(const glm::vec2 pos) const noexcept
+    {
+        auto screen = get_scene();
+        DBG_ASSERT(screen);
+
+        auto proj = get_projection();
+        auto view = get_view();
+
+        auto near_vec = glm::unProject(glm::vec3(pos, -1.0f), view, proj, glm::vec4(0.0f, 0.0f, resolution.x, resolution.y));
+        auto far_vec  = glm::unProject(glm::vec3(pos, 1.0f), view, proj, glm::vec4(0.0f, 0.0f, resolution.x, resolution.y));
+
+        return screen->test_ray(near_vec, far_vec, physics::CollisionGroup::INTERACTION, physics::CollisionGroup::ALL);
+    }
+
+    void Camera::handle_mouse_move(const glm::vec2 pos, const glm::vec2 mov) const noexcept
+    {
+        auto result = pick(pos);
+        if (result)
+        {
+            auto hit_area = std::dynamic_pointer_cast<HitArea>(result.value().node);
+            if (hit_area)
+            {
+                auto dir = glm::vec3(mov, 1.0f); // TODO
+                hit_area->handle_mouse_move(result.value().position, dir);
+            }
+        }
+
+    }
+
+    void Camera::handle_mouse_down(const glm::vec2 pos, MouseButton button) const noexcept
+    {
+        auto result = pick(pos);
+        if (result)
+        {
+            auto hit_area = std::dynamic_pointer_cast<HitArea>(result.value().node);
+            if (hit_area)
+            {
+                hit_area->handle_mouse_down(result.value().position, button);
+                mouse_down_hit = hit_area;
+            }
+        }
+    }
+
+    void Camera::handle_mouse_up(const glm::vec2 pos, MouseButton button) const noexcept
+    {
+        auto result = pick(pos);
+        if (result)
+        {
+            auto hit_area = std::dynamic_pointer_cast<HitArea>(result.value().node);
+            if (hit_area)
+            {
+                hit_area->handle_mouse_up(result.value().position, button);
+            }
+            if (hit_area != mouse_down_hit)
+            {
+                hit_area->handle_mouse_up_outside(result.value().position, button);
+            }
+        }
     }
 }

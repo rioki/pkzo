@@ -28,6 +28,7 @@
 #include <memory>
 #include <glm/glm.hpp>
 
+#include "rsig.h"
 #include "SceneNodeGroup.h"
 
 namespace pkzo
@@ -82,11 +83,14 @@ namespace pkzo
         //! Get the font.
         const std::shared_ptr<Font>& get_font() const noexcept;
 
-        void on_click(const std::function<void ()>& cb) noexcept;
+        rsig::signal<>& get_click_signal() noexcept;
+        rsig::connection on_click(const std::function<void ()>& cb) noexcept;
 
     private:
         std::shared_ptr<Rectangle> background;
         std::shared_ptr<Text>      caption;
         std::shared_ptr<HitArea>   hit_area;
+
+        rsig::signal<>             click_signal;
     };
 }

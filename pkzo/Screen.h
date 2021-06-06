@@ -50,6 +50,13 @@ namespace pkzo
         //! Draw screen
         void draw() const noexcept;
 
+        //! Handle Mouse Move
+        void handle_mouse_move(const glm::vec2& pos, const glm::vec2& mov) const noexcept;
+        //! Handle Mouse Click
+        void handle_mouse_down(const glm::vec2& pos, MouseButton button) const noexcept;
+        //! Handle Mouse Click
+        void handle_mouse_up(const glm::vec2& pos, MouseButton button) const noexcept;
+
     private:
         glm::vec2 size;
         std::shared_ptr<OrthographicCamera> camera;

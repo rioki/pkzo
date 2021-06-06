@@ -158,7 +158,7 @@ namespace pkzo
         if (!geoms.empty())
         {
             assert(geoms.size() == 1); // currently only one geometry per body is supported
-            rigid_body = geoms[0]->create_rigid_body(physics, mass);
+            rigid_body = geoms[0]->create_rigid_body(physics, mass, physics::CollisionGroup::DYNAMIC, physics::CollisionGroup::ALL_PHYISICAL);
             offset = geoms[0]->get_world_transform() * glm::inverse(get_world_transform());
             rigid_body->set_friction(friction);
             rigid_body->set_rolling_friction(rolling_friction);

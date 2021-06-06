@@ -40,13 +40,13 @@ namespace pkzo
         add_node(handle);
 
         hit_area = std::make_shared<HitArea>(glm::vec3(s, 0.01f));
-        hit_area->on_mouse_down([this] (auto button, auto pos) {
+        hit_area->on_mouse_down([this] (auto pos, auto button) {
             handle_down(button, pos);
         });
-        hit_area->on_mouse_move([this] (auto pos) {
+        hit_area->on_mouse_move([this] (auto pos, auto mov) {
             handle_move(pos);
         });
-        hit_area->on_mouse_up([this] (auto button, auto pos) {
+        hit_area->on_mouse_up([this] (auto pos, auto button) {
             handle_up(button, pos);
         });
         add_node(hit_area);

@@ -123,10 +123,10 @@ namespace pkzo
         return physics;
     }
 
-    std::optional<TestResult> Scene::test_ray(const glm::vec3& start, const glm::vec3& end) const noexcept
+    std::optional<TestResult> Scene::test_ray(const glm::vec3& start, const glm::vec3& end, CollisionGroup group, CollisionGroup mask) const noexcept
     {
         assert(physics);
-        auto r = physics->test_ray(start, end);
+        auto r = physics->test_ray(start, end, group, mask);
         if (r.has_value())
         {
             auto node = std::any_cast<SceneNode*>(r->body->get_user_data());
@@ -139,10 +139,10 @@ namespace pkzo
         }
     }
 
-    std::optional<TestResult> Scene::test_sphere_sweep(const glm::vec3& start, const glm::vec3& end, float radius) const noexcept
+    std::optional<TestResult> Scene::test_sphere_sweep(const glm::vec3& start, const glm::vec3& end, float radius, CollisionGroup group, CollisionGroup mask) const noexcept
     {
         assert(physics);
-        auto r = physics->test_sphere_sweep(start, end, radius);
+        auto r = physics->test_sphere_sweep(start, end, radius, group, mask);
         if (r.has_value())
         {
             auto node = std::any_cast<SceneNode*>(r->body->get_user_data());

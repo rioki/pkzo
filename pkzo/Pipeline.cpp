@@ -51,11 +51,11 @@ namespace pkzo
 
     Pipeline::~Pipeline() = default;
 
-    void Pipeline::add_pass(PassType type, const std::shared_ptr<Shader>& shader) noexcept
+    void Pipeline::add_pass(PassType group, const std::shared_ptr<Shader>& shader) noexcept
     {
         DepthTest depth_test;
         Blending  blending;
-        switch (type)
+        switch (group)
         {
         case PassType::FULLSCREEN:
             depth_test = DepthTest::OFF;
@@ -76,19 +76,19 @@ namespace pkzo
             break;
         }
 
-        add_pass(type, shader, depth_test, blending, std::make_shared<Parameters>());
+        add_pass(group, shader, depth_test, blending, std::make_shared<Parameters>());
     }
 
-    void Pipeline::add_pass(PassType type, const std::shared_ptr<Shader>& shader, DepthTest depth_test, Blending blending) noexcept
+    void Pipeline::add_pass(PassType group, const std::shared_ptr<Shader>& shader, DepthTest depth_test, Blending blending) noexcept
     {
-        add_pass(type, shader, depth_test, blending, std::make_shared<Parameters>());
+        add_pass(group, shader, depth_test, blending, std::make_shared<Parameters>());
     }
 
-    void Pipeline::add_pass(PassType type, const std::shared_ptr<Shader>& shader, DepthTest depth_test, Blending blending, const std::shared_ptr<Parameters>& parameters) noexcept
+    void Pipeline::add_pass(PassType group, const std::shared_ptr<Shader>& shader, DepthTest depth_test, Blending blending, const std::shared_ptr<Parameters>& parameters) noexcept
     {
         DBG_ASSERT(shader);
         DBG_ASSERT(parameters);
-        passes.push_back({type, shader, depth_test, blending, parameters});
+        passes.push_back({group, shader, depth_test, blending, parameters});
     }
 
     void Pipeline::set_camera(const glm::mat4& projection, const glm::mat4& view) noexcept
@@ -234,7 +234,7 @@ namespace pkzo
             pass.shader->set_uniform("pkzo_ViewMatrix",       view_matrix);
             apply(*pass.shader, *pass.parameters);
             apply(pass.depth_test);
-            switch (pass.type)
+            switch (pass.group)
             {
             case PassType::FULLSCREEN:
                 apply(pass.blending);

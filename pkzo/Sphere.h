@@ -42,7 +42,7 @@ namespace pkzo
         std::shared_ptr<Mesh> get_mesh() const noexcept override;
 
     protected:
-        std::shared_ptr<physics::RigidBody> create_rigid_body(std::shared_ptr<physics::World>& physics, KiloGramm mass) noexcept override;
+        std::shared_ptr<physics::RigidBody> create_rigid_body(std::shared_ptr<physics::World>& physics, KiloGramm mass, physics::CollisionGroup group, physics::CollisionGroup mask) noexcept override;
 
     private:
         float radius = 0.5f;

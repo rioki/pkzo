@@ -28,7 +28,9 @@
 
 #include <functional>
 
+#include "fwd.h"
 #include "enums.h"
+#include "rsig.h"
 #include "SceneNode.h"
 
 namespace pkzo
@@ -44,28 +46,38 @@ namespace pkzo
         void set_size(const glm::vec3& value) noexcept;
         const glm::vec3& get_size() const noexcept;
 
-        void on_enter(const std::function<void ()>& cb) noexcept;
-        void on_leave(const std::function<void ()>& cb) noexcept;
-        void on_mouse_move(const std::function<void (glm::vec2)>& cb) noexcept;
-        void on_mouse_down(const std::function<void (MouseButton, glm::vec2)>& cb) noexcept;
-        void on_mouse_up(const std::function<void (MouseButton, glm::vec2)>& cb) noexcept;
-        void on_click(const std::function<void ()>& cb) noexcept;
+        rsig::signal<glm::vec3, glm::vec3>& get_mouse_move_signal() noexcept;
+        rsig::connection on_mouse_move(const std::function<void (glm::vec3, glm::vec3)>& cb) noexcept;
 
-        /*void handle_mouse_button_down(MouseButton button, glm::vec2 position) override;
-        void handle_mouse_button_up(MouseButton button, glm::vec2 position) override;
-        void handle_mouse_move(glm::vec2 pos, glm::vec2 rel) override;*/
+        rsig::signal<glm::vec3, MouseButton>& get_mouse_down_signal() noexcept;
+        rsig::connection on_mouse_down(const std::function<void (glm::vec3, MouseButton)>& cb) noexcept;
+
+        rsig::signal<glm::vec3, MouseButton>& get_mouse_up_signal() noexcept;
+        rsig::connection on_mouse_up(const std::function<void (glm::vec3, MouseButton)>& cb) noexcept;
+
+        rsig::signal<MouseButton>& get_click_signal() noexcept;
+        rsig::connection on_click(const std::function<void (MouseButton)>& cb) noexcept;
+
+        void handle_mouse_move(const glm::vec3 pos, const glm::vec3 mov) const noexcept;
+        void handle_mouse_down(const glm::vec3 pos, MouseButton button) const noexcept;
+        void handle_mouse_up(const glm::vec3 pos, MouseButton button) const noexcept;
+        void handle_mouse_up_outside(const glm::vec3 pos, MouseButton button) const noexcept;
+
+    protected:
+        void on_attach_scene(Scene* scene) noexcept override;
+        void on_detach_scene() noexcept override;
+        void update(std::chrono::milliseconds dt) noexcept override;
 
     private:
         glm::vec3 size = glm::vec3(1.0f);
 
-        std::function<void ()> enter_cb;
-        std::function<void ()> leave_cb;
-        std::function<void (glm::vec2)> mouse_move_cb;
-        std::function<void (MouseButton, glm::vec2)> mouse_down_cb;
-        std::function<void (MouseButton, glm::vec2)> mouse_up_cb;
-        std::function<void ()> click_cb;
+        rsig::signal<glm::vec3, glm::vec3>   mouse_move_signal;
+        rsig::signal<glm::vec3, MouseButton> mouse_down_signal;
+        rsig::signal<glm::vec3, MouseButton> mouse_up_signal;
+        rsig::signal<MouseButton>            click_signal;
 
-        bool click_armed[5] = {false};
-        bool mouse_in = false;
+        mutable bool click_armed[5] = {false};
+
+        std::shared_ptr<physics::RigidBody> physics_ghost;
     };
 }
