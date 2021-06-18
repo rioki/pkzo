@@ -63,8 +63,6 @@ namespace pkzo
 
         //! Set the material.
         void set_material(const std::shared_ptr<Material>& value) noexcept;
-        //! Get the material.
-        const std::shared_ptr<Material>& get_material() const noexcept;
 
     protected:
         void update(std::chrono::milliseconds dt) noexcept override;
@@ -72,7 +70,7 @@ namespace pkzo
     private:
         std::shared_ptr<Font>     font;
         std::string               text;
-        std::shared_ptr<Material> material;
+        std::shared_ptr<Material> base_material;
         bool                      dirty    = false;
     };
 }

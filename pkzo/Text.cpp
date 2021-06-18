@@ -62,10 +62,10 @@ namespace pkzo
     }
 
     Text::Text(const std::string& t, const std::shared_ptr<Font>& f, const std::shared_ptr<Material>& m) noexcept
-    : Rectangle(safe_estimate(f, t), make_rectangle_material(f, t, m)), font(f), text(t), material(m) {}
+    : Rectangle(safe_estimate(f, t), make_rectangle_material(f, t, m)), font(f), text(t), base_material(m) {}
 
     Text::Text(const glm::mat4& transform, const std::string& t, const std::shared_ptr<Font>& f, const std::shared_ptr<Material>& m) noexcept
-    : Rectangle(transform, safe_estimate(f, t), make_rectangle_material(f, t, m)), font(f), text(t), material(m) {}
+    : Rectangle(transform, safe_estimate(f, t), make_rectangle_material(f, t, m)), font(f), text(t), base_material(m) {}
 
     Text::~Text() = default;
 
@@ -92,16 +92,13 @@ namespace pkzo
         return text;
     }
 
+    // REVIEW: because this function on Rectangle is not virtual, it may not be called
+    // when you have a pointer to base. This may result some confusion as to what happens.
     void Text::set_material(const std::shared_ptr<Material>& value) noexcept
     {
         DBG_ASSERT(value);
-        material = value;
+        base_material = value;
         dirty = true;
-    }
-
-    const std::shared_ptr<Material>& Text::get_material() const noexcept
-    {
-        return material;
     }
 
     void Text::update(std::chrono::milliseconds dt) noexcept
@@ -109,9 +106,9 @@ namespace pkzo
         if (dirty)
         {
             DBG_ASSERT(font);
-            DBG_ASSERT(material);
+            DBG_ASSERT(base_material);
             set_size(safe_estimate(font, text));
-            set_material(make_rectangle_material(font, text, material));
+            Rectangle::set_material(make_rectangle_material(font, text, base_material));
         }
         Rectangle::update(dt);
     }
