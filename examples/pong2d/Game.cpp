@@ -73,7 +73,7 @@ namespace pong2d
             if (screen)
             {
                 auto p = pkzo::map_to_screen(window.get_size(), screen->get_size(), pos);
-                screen->handle_mouse_down(p, button);
+                screen->handle_mouse_up(p, button);
             }
         });
         mouse.on_move([this, &window] (auto pos, auto mov) {
@@ -89,13 +89,13 @@ namespace pong2d
         keyboard.on_key_down([this] (auto mod, auto key) {
             if (!key_capture_cb)
             {
-                //screen->handle_key_down(mod, key);
+                screen->handle_key_down(mod, key);
             }
         });
         keyboard.on_key_up([this] (auto mod, auto key) {
             if (!key_capture_cb)
             {
-                //screen->handle_key_up(mod, key);
+                screen->handle_key_up(mod, key);
             }
             else
             {
@@ -155,7 +155,7 @@ namespace pong2d
         }
         if (screen)
         {
-            //screen->animate(dt);
+            screen->update(dt);
         }
     }
 

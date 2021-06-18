@@ -51,11 +51,15 @@ namespace pkzo
         void draw() const noexcept;
 
         //! Handle Mouse Move
-        void handle_mouse_move(const glm::vec2& pos, const glm::vec2& mov) const noexcept;
+        virtual void handle_mouse_move(const glm::vec2& pos, const glm::vec2& mov) noexcept;
         //! Handle Mouse Click
-        void handle_mouse_down(const glm::vec2& pos, MouseButton button) const noexcept;
+        virtual void handle_mouse_down(const glm::vec2& pos, MouseButton button) noexcept;
         //! Handle Mouse Click
-        void handle_mouse_up(const glm::vec2& pos, MouseButton button) const noexcept;
+        virtual void handle_mouse_up(const glm::vec2& pos, MouseButton button) noexcept;
+        //! Handle Key Down
+        virtual void handle_key_down(pkzo::KeyMod mod, pkzo::Key key) noexcept;
+        //! Handle Key Up
+        virtual void handle_key_up(pkzo::KeyMod mod, pkzo::Key key) noexcept;
 
     private:
         glm::vec2 size;

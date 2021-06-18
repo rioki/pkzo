@@ -79,7 +79,7 @@ namespace pong2d
 
     void View::update(std::chrono::milliseconds dt) noexcept
     {
-        //Screen::animate(dt);
+        Screen::update(dt);
 
         // REVIEW:
         // This looks expensive, consider implementing event callback.
@@ -87,9 +87,10 @@ namespace pong2d
         right_score_text->set_text(pkzo::to_string(simulation.get_right_score()));
     }
 
-    /*void View::handle_key_down(pkzo::KeyMod mod, pkzo::Key key)
+    void View::handle_key_down(pkzo::KeyMod mod, pkzo::Key key) noexcept
     {
-        //Screen::handle_key_down(mod, key);
+        Screen::handle_key_down(mod, key);
+
         if (key == pkzo::Key::ESCAPE)
         {
             // TODO: PAUSE_MENU
@@ -114,9 +115,9 @@ namespace pong2d
         }
     }
 
-    void View::handle_key_up(pkzo::KeyMod mod, pkzo::Key key)
+    void View::handle_key_up(pkzo::KeyMod mod, pkzo::Key key) noexcept
     {
-        //Screen::handle_key_up(mod, key);
+        Screen::handle_key_up(mod, key);
 
         if (key == left_up_key)
         {
@@ -134,5 +135,5 @@ namespace pong2d
         {
             simulation.get_right_paddle().stop_down();
         }
-    }*/
+    }
 }

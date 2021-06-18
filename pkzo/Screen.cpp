@@ -48,23 +48,27 @@ namespace pkzo
         Scene::draw(*camera);
     }
 
-    void Screen::handle_mouse_move(const glm::vec2& pos, const glm::vec2& mov) const noexcept
+    void Screen::handle_mouse_move(const glm::vec2& pos, const glm::vec2& mov) noexcept
     {
         DBG_ASSERT(camera);
         camera->handle_mouse_move(pos, mov);
     }
 
-    void Screen::handle_mouse_down(const glm::vec2& pos, MouseButton button) const noexcept
+    void Screen::handle_mouse_down(const glm::vec2& pos, MouseButton button) noexcept
     {
         DBG_ASSERT(camera);
         camera->handle_mouse_down(pos, button);
     }
 
-    void Screen::handle_mouse_up(const glm::vec2& pos, MouseButton button) const noexcept
+    void Screen::handle_mouse_up(const glm::vec2& pos, MouseButton button) noexcept
     {
         DBG_ASSERT(camera);
         camera->handle_mouse_up(pos, button);
     }
+
+    void Screen::handle_key_down(pkzo::KeyMod mod, pkzo::Key key) noexcept {}
+
+    void Screen::handle_key_up(pkzo::KeyMod mod, pkzo::Key key) noexcept {}
 
     template <typename T>
     T map(T source_left, T source_right, T target_left, T target_right, T value)
@@ -78,7 +82,7 @@ namespace pkzo
     {
         return {
             map<float>(0.0f, win_size.x, 0.0f, screen_size.x, pos.x),
-            map<float>(0.0f, win_size.y, 0.0f, screen_size.y, pos.y)
+            map<float>(0.0f, win_size.y, screen_size.y, 0.0f, pos.y)
         };
     }
 }

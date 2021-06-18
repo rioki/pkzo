@@ -39,8 +39,8 @@ namespace pong2d
 
         void update(std::chrono::milliseconds dt) noexcept override;
 
-        //void handle_key_down(pkzo::KeyMod mod, pkzo::Key key) override;
-        //void handle_key_up(pkzo::KeyMod mod, pkzo::Key key) override;
+        void handle_key_down(pkzo::KeyMod mod, pkzo::Key key) noexcept override;
+        void handle_key_up(pkzo::KeyMod mod, pkzo::Key key) noexcept override;
 
     private:
         Game& game;
