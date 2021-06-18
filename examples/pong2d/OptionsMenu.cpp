@@ -30,14 +30,20 @@
 
 namespace pong2d
 {
+    using pkzo::position;
+
     OptionsMenu::OptionsMenu(Game& game)
     : Screen(glm::vec2(800, 600))
     {
-        /*auto title_font           = std::make_shared<pkzo::Font>("../assets/fonts/KarmicArcade.ttf", 30);
-        auto text_font            = std::make_shared<pkzo::Font>("../assets/fonts/Hardpixel.ttf", 20);
-        auto label_color          = glm::vec4(0.9f, 0.9f, 0.9f, 1.0f);
-        auto button_background    = std::make_shared<pkzo::Texture>("../assets/ui/pixels/Button_Background.png");
-        auto button_caption_color = glm::vec4(0.1f, 0.1f, 0.1f, 1.0f);
+        auto title_font                = std::make_shared<pkzo::Font>("../assets/fonts/KarmicArcade.ttf", 30);
+        auto text_font                 = std::make_shared<pkzo::Font>("../assets/fonts/Hardpixel.ttf", 20);
+
+        auto text_material             = pkzo::make_emissive_material(glm::vec3(0.9f));
+        auto button_background_texture = std::make_shared<pkzo::Texture>("../assets/ui/pixels/Button_Background.png");
+        auto button_size               = button_background_texture->get_size();
+        auto button_background         = pkzo::make_emissive_material(button_background_texture);
+        auto button_text               = pkzo::make_emissive_material(glm::vec3(0.2f));
+
         auto checkbox_checked     = std::make_shared<pkzo::Texture>("../assets/ui/pixels/CheckBox_Checked.png");
         auto checkbox_unchecked   = std::make_shared<pkzo::Texture>("../assets/ui/pixels/CheckBox_Unchecked.png");
 
@@ -53,21 +59,15 @@ namespace pong2d
 
         auto& settings = game.get_settings();
 
-        auto title = std::make_shared<pkzo::Text>(title_font, "Options");
-        //title->set_position({0.0f, 250.0f});
+        auto title = std::make_shared<pkzo::Text>(position(0.0f, 250.0f), "Options", title_font, text_material);
         add_node(title);
 
-        auto resolution_label = std::make_shared<pkzo::Text>(text_font, label_color, "Resolution");
-        //resolution_label->set_position({-390.0f + resolution_label->get_size().x / 2.0f, 150.0f});
+        auto resolution_label = std::make_shared<pkzo::Text>(position({ -390.0f + text_font->estimate("Resolution").x / 2.0f, 150.0f }), "Resolution", text_font, text_material);
         add_node(resolution_label);
-        auto fullscren_label = std::make_shared<pkzo::Text>(text_font, label_color, "Fullscreen");
-        //fullscren_label->set_position({-390.0f + fullscren_label->get_size().x / 2.0f, 100.0f});
+        auto fullscren_label = std::make_shared<pkzo::Text>(position({ -390.0f + text_font->estimate("Fullscreen").x / 2.0f, 100.0f }), "Fullscreen", text_font, text_material);
         add_node(fullscren_label);
-        auto old_tv_effect_label = std::make_shared<pkzo::Text>(text_font, label_color, "Old TV Effect");
-        //old_tv_effect_label->set_position({-390.0f + old_tv_effect_label->get_size().x / 2.0f, 50.0f});
-        add_node(old_tv_effect_label);
 
-        auto resolutions = pkzo::Window::get_valid_reslutions(0);
+        /*auto resolutions = pkzo::Window::get_valid_reslutions(0);
         std::vector<std::string> resolution_text(resolutions.size());
         std::transform(begin(resolutions), end(resolutions), begin(resolution_text), [] (auto res) {
             std::stringstream buff;
@@ -86,42 +86,32 @@ namespace pong2d
         auto fullscreen_value = std::make_shared<pkzo::CheckBox>(checkbox_checked, checkbox_unchecked);
         //fullscreen_value->set_position({-10.0f - fullscreen_value->get_size().x / 2.0f, 100.0f});
         fullscreen_value->set_checked(settings.get_value("Video", "fullscreen", false));
-        add_node(fullscreen_value);
-        auto old_tv_effect_value = std::make_shared<pkzo::CheckBox>(checkbox_checked, checkbox_unchecked);
-        //old_tv_effect_value->set_position({-10.0f - fullscreen_value->get_size().x / 2.0f, 50.0f});
-        old_tv_effect_value->set_checked(settings.get_value("Video", "old_tv_effect", true));
-        add_node(old_tv_effect_value);
+        add_node(fullscreen_value); */
 
-        auto music_volume_label = std::make_shared<pkzo::Text>(text_font, label_color, "Music Volume");
-        //music_volume_label->set_position({-390.0f + music_volume_label->get_size().x / 2.0f, -50.0f});
+        auto music_volume_label = std::make_shared<pkzo::Text>(position({ -390.0f + text_font->estimate("Music Volume").x / 2.0f, -50.0f }), "Music Volume", text_font, text_material);
         add_node(music_volume_label);
-        auto sfx_volume_label = std::make_shared<pkzo::Text>(text_font, label_color, "SFX Volume");
-        //sfx_volume_label->set_position({-390.0f + sfx_volume_label->get_size().x / 2.0f, -100.0f});
+        auto sfx_volume_label = std::make_shared<pkzo::Text>(position({ -390.0f + text_font->estimate("SFX Volume").x / 2.0f, -100.0f }), "SFX Volume", text_font, text_material);
         add_node(sfx_volume_label);
 
-        auto music_volume_value = std::make_shared<pkzo::Slider>(slider_background, slider_handle);
+        /*auto music_volume_value = std::make_shared<pkzo::Slider>(slider_background, slider_handle);
         //music_volume_value->set_position({-10.0f - music_volume_value->get_size().x / 2.0f, -50.0f});
         music_volume_value->set_value(settings.get_value("Sound", "music_volume", 0.7f));
         add_node(music_volume_value);
         auto sfx_volume_value = std::make_shared<pkzo::Slider>(slider_background, slider_handle);
         //sfx_volume_value->set_position({-10.0f - sfx_volume_value->get_size().x / 2.0f, -100.0f});
         sfx_volume_value->set_value(settings.get_value("Sound", "sfx_volume", 0.7f));
-        add_node(sfx_volume_value);
+        add_node(sfx_volume_value);*/
 
-        auto p1_up_label = std::make_shared<pkzo::Text>(text_font, label_color, "Player 1 Up");
-        //p1_up_label->set_position({10.0f + p1_up_label->get_size().x / 2.0f, 150.0f});
+        auto p1_up_label = std::make_shared<pkzo::Text>(position({ 10.0f + text_font->estimate("Player 1 Up").x / 2.0f, 150.0f }), "Player 1 Up", text_font, text_material);
         add_node(p1_up_label);
-        auto p1_down_label = std::make_shared<pkzo::Text>(text_font, label_color, "Player 1 Down");
-        //p1_down_label->set_position({10.0f + p1_down_label->get_size().x / 2.0f, 100.0f});
+        auto p1_down_label = std::make_shared<pkzo::Text>(position({ 10.0f + text_font->estimate("Player 1 Down").x / 2.0f, 100.0f }), "Player 1 Down", text_font, text_material);
         add_node(p1_down_label);
-        auto p2_up_label = std::make_shared<pkzo::Text>(text_font, label_color, "Player 2 Up");
-        //p2_up_label->set_position({10.0f + p2_up_label->get_size().x / 2.0f, 50.0f});
+        auto p2_up_label = std::make_shared<pkzo::Text>(position({ 10.0f + text_font->estimate("Player 2 Up").x / 2.0f, 50.0f }), "Player 2 Up", text_font, text_material);
         add_node(p2_up_label);
-        auto p2_down_label = std::make_shared<pkzo::Text>(text_font, label_color, "Player 2 Down");
-        //p2_down_label->set_position({10.0f + p2_down_label->get_size().x / 2.0f, 0.0f});
+        auto p2_down_label = std::make_shared<pkzo::Text>(position({ 10.0f + text_font->estimate("Player 2 Down").x / 2.0f, 0.0f }), "Player 2 Down" text_font, text_material);
         add_node(p2_down_label);
 
-        auto p1_up_value = std::make_shared<KeyInput>(text_font, settings.get_value("Player1", "up", pkzo::Key::Q));
+        /*auto p1_up_value = std::make_shared<KeyInput>(text_font, settings.get_value("Player1", "up", pkzo::Key::Q));
         //p1_up_value->set_position({250.0f, 150.0f});
         p1_up_value->on_click([&game, p1_up_value] () {
             game.capture_key([p1_up_value] (auto mod, auto key) {
@@ -167,23 +157,21 @@ namespace pong2d
                 }
             });
         });
-        add_node(p2_down_value);
+        add_node(p2_down_value);*/
 
-        auto back_button = std::make_shared<pkzo::Button>(button_background, text_font, button_caption_color, "Back");
-        //back_button->set_position({165.0f, -270.0f});
+        auto back_button = std::make_shared<pkzo::Button>(position(165, -270.0f), "Back", button_size, button_background, button_text, text_font);
         back_button->on_click([&game] () {
             game.change_state(GameState::MAIN_MENU);
         });
         add_node(back_button);
 
-        auto apply_button = std::make_shared<pkzo::Button>(button_background, text_font, button_caption_color, "Apply");
-        //apply_button->set_position({320.0f, -270.0f});
+        auto apply_button = std::make_shared<pkzo::Button>(position(320.0f, -270.0f), "Apply", button_size, button_background, button_text, text_font);
         apply_button->on_click([=, &game] () {
             auto& settings = game.get_settings();
 
             game.change_state(GameState::MAIN_MENU);
 
-            auto res_idx = resolution_value->get_selected_option();
+            /*auto res_idx = resolution_value->get_selected_option();
             assert(res_idx);
             auto res = resolutions[res_idx.value()];
             auto fullscreen = fullscreen_value->get_checked();
@@ -207,8 +195,8 @@ namespace pong2d
             settings.set_value("Player1", "up", left_up);
             settings.set_value("Player1", "down", left_down);
             settings.set_value("Player2", "up", right_up);
-            settings.set_value("Player2", "down", right_down);
+            settings.set_value("Player2", "down", right_down);*/
         });
-        add_node(apply_button); */
+        add_node(apply_button); 
     }
 }
