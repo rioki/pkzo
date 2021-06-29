@@ -118,8 +118,7 @@ namespace pong2d
         auto p2_down_label = std::make_shared<pkzo::Text>(position({ 10.0f + text_font->estimate("Player 2 Down").x / 2.0f, 0.0f }), "Player 2 Down", text_font, text_material);
         add_node(p2_down_label);
 
-        /*auto p1_up_value = std::make_shared<KeyInput>(text_font, settings.get_value("Player1", "up", pkzo::Key::Q));
-        //p1_up_value->set_position({250.0f, 150.0f});
+        auto p1_up_value = std::make_shared<KeyInput>(position({ 250.0f, 150.0f }), text_font, text_material, settings.get_value("Player1", "up", pkzo::Key::Q));
         p1_up_value->on_click([&game, p1_up_value] () {
             game.capture_key([p1_up_value] (auto mod, auto key) {
                 if (key != pkzo::Key::ESCAPE)
@@ -130,8 +129,7 @@ namespace pong2d
         });
         add_node(p1_up_value);
 
-        auto p1_down_value = std::make_shared<KeyInput>(text_font, settings.get_value("Player1", "down", pkzo::Key::A));
-        //p1_down_value->set_position({250.0f, 100.0f});
+        auto p1_down_value = std::make_shared<KeyInput>(position({ 250.0f, 100.0f }), text_font, text_material, settings.get_value("Player1", "down", pkzo::Key::A));
         p1_down_value->on_click([&game, p1_down_value] () {
             game.capture_key([p1_down_value] (auto mod, auto key) {
                 if (key != pkzo::Key::ESCAPE)
@@ -142,8 +140,7 @@ namespace pong2d
         });
         add_node(p1_down_value);
 
-        auto p2_up_value = std::make_shared<KeyInput>(text_font, settings.get_value("Player2", "up", pkzo::Key::P));
-        //p2_up_value->set_position({250.0f, 50.0f});
+        auto p2_up_value = std::make_shared<KeyInput>(position({ 250.0f, 50.0f }), text_font, text_material, settings.get_value("Player2", "up", pkzo::Key::P));
         p2_up_value->on_click([&game, p2_up_value] () {
             game.capture_key([p2_up_value] (auto mod, auto key) {
                 if (key != pkzo::Key::ESCAPE)
@@ -154,8 +151,7 @@ namespace pong2d
         });
         add_node(p2_up_value);
 
-        auto p2_down_value = std::make_shared<KeyInput>(text_font, settings.get_value("Player2", "down", pkzo::Key::L));
-        //p2_down_value->set_position({250.0f, 0.0f});
+        auto p2_down_value = std::make_shared<KeyInput>(position({ 250.0f, 0.0f }), text_font, text_material, settings.get_value("Player2", "down", pkzo::Key::L));
         p2_down_value->on_click([&game, p2_down_value] () {
             game.capture_key([p2_down_value] (auto mod, auto key) {
                 if (key != pkzo::Key::ESCAPE)
@@ -164,7 +160,7 @@ namespace pong2d
                 }
             });
         });
-        add_node(p2_down_value);*/
+        add_node(p2_down_value);
 
         auto back_button = std::make_shared<pkzo::Button>(position(165, -270.0f), "Back", button_size, button_background, button_text, text_font);
         back_button->on_click([&game] () {
@@ -178,17 +174,15 @@ namespace pong2d
 
             game.change_state(GameState::MAIN_MENU);
 
-            /*auto res_idx = resolution_value->get_selected_option();
-            assert(res_idx);
-            auto res = resolutions[res_idx.value()];
+            //auto res_idx = resolution_value->get_selected_option();
+            //assert(res_idx);
+            //auto res = resolutions[res_idx.value()];
             auto fullscreen = fullscreen_value->get_checked();
-            auto old_tv_effect = old_tv_effect_value->get_checked();
 
-            game.get_window().resize(res, fullscreen ? pkzo::WindowMode::FULLSCREEN : pkzo::WindowMode::STATIC);
-            settings.set_value("Video", "width", res.x);
-            settings.set_value("Video", "height", res.y);
+            //game.get_window().resize(res, fullscreen ? pkzo::WindowMode::FULLSCREEN : pkzo::WindowMode::STATIC);
+            //settings.set_value("Video", "width", res.x);
+            //settings.set_value("Video", "height", res.y);
             settings.set_value("Video", "fullscreen", fullscreen);
-            settings.set_value("Video", "old_tv_effect", old_tv_effect);
 
             auto music_volume = music_volume_value->get_value();
             auto sfx_volume   = sfx_volume_value->get_value();
@@ -202,7 +196,7 @@ namespace pong2d
             settings.set_value("Player1", "up", left_up);
             settings.set_value("Player1", "down", left_down);
             settings.set_value("Player2", "up", right_up);
-            settings.set_value("Player2", "down", right_down);*/
+            settings.set_value("Player2", "down", right_down);
         });
         add_node(apply_button); 
     }

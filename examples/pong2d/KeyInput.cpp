@@ -27,8 +27,8 @@
 
 namespace pong2d
 {
-    KeyInput::KeyInput(pkzo::Key k, const std::shared_ptr<pkzo::Font>& f, const std::shared_ptr<pkzo::Material>& m) noexcept
-    : key(k)
+    KeyInput::KeyInput(const glm::mat4& transform, const std::shared_ptr<pkzo::Font>& f, const std::shared_ptr<pkzo::Material>& m, pkzo::Key k) noexcept
+    : SceneNodeGroup(transform), key(k)
     {
         text = std::make_shared<pkzo::Text>(to_string(key), f, m);
         add_node(text);

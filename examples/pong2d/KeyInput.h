@@ -36,7 +36,7 @@ namespace pong2d
     class KeyInput : public pkzo::SceneNodeGroup
     {
     public:
-        KeyInput(pkzo::Key key, const std::shared_ptr<pkzo::Font>& font, const std::shared_ptr<pkzo::Material>& material) noexcept;
+        KeyInput(const glm::mat4& transform, const std::shared_ptr<pkzo::Font>& font, const std::shared_ptr<pkzo::Material>& material, pkzo::Key key) noexcept;
 
         void set_key(pkzo::Key value) noexcept;
         pkzo::Key get_key() const noexcept;
