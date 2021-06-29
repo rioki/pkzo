@@ -39,6 +39,7 @@ namespace pong2d
         auto text_font                  = std::make_shared<pkzo::Font>("../assets/fonts/Hardpixel.ttf", 20);
 
         auto text_material              = pkzo::make_emissive_material(glm::vec3(0.9f));
+        
         auto button_background_texture  = std::make_shared<pkzo::Texture>("../assets/ui/pixels/Button_Background.png");
         auto button_size                = button_background_texture->get_size();
         auto button_background          = pkzo::make_emissive_material(button_background_texture);
@@ -58,12 +59,23 @@ namespace pong2d
         auto slider_handle_size         = slider_handle_texture->get_size();
         auto slider_handle              = pkzo::make_emissive_material(slider_handle_texture);
 
-        auto dropdown_background  = std::make_shared<pkzo::Texture>("../assets/ui/pixels/Dropdown_200_Background.png");
-        auto dropdown_button      = std::make_shared<pkzo::Texture>("../assets/ui/pixels/Dropdown_Button.png");
-        auto menu_top             = std::make_shared<pkzo::Texture>("../assets/ui/pixels/Menu_200_Top.png");
-        auto menu_body            = std::make_shared<pkzo::Texture>("../assets/ui/pixels/Menu_200_Body.png");
-        auto menu_bottom          = std::make_shared<pkzo::Texture>("../assets/ui/pixels/Menu_200_Bottom.png");
-        auto menu_text_color      = glm::vec4(0.0, 0.0, 0.0, 1.0);
+        auto dropdown_background_texture = std::make_shared<pkzo::Texture>("../assets/ui/pixels/Dropdown_200_Background.png");
+        auto dropdown_size               = dropdown_background_texture->get_size();
+        auto dropdown_background         = pkzo::make_emissive_material(dropdown_background_texture);
+        auto dropdown_button_texture     = std::make_shared<pkzo::Texture>("../assets/ui/pixels/Dropdown_Button.png");
+        auto dropdown_button_size        = dropdown_button_texture->get_size();
+        auto dropdown_button             = pkzo::make_emissive_material(dropdown_button_texture);
+        auto dropdown_label              = pkzo::make_emissive_material(glm::vec3(0.1f));
+
+        auto menu_top_texture             = std::make_shared<pkzo::Texture>("../assets/ui/pixels/Menu_200_Top.png");
+        auto menu_top_size                = menu_top_texture->get_size();
+        auto menu_top                     = pkzo::make_emissive_material(menu_top_texture);
+        auto menu_body_texture            = std::make_shared<pkzo::Texture>("../assets/ui/pixels/Menu_200_Body.png");
+        auto menu_body_size               = menu_body_texture->get_size();
+        auto menu_body                    = pkzo::make_emissive_material(menu_body_texture);
+        auto menu_bottom_texture          = std::make_shared<pkzo::Texture>("../assets/ui/pixels/Menu_200_Bottom.png");
+        auto menu_bottom_size             = menu_bottom_texture->get_size();
+        auto menu_bottom                  = pkzo::make_emissive_material(menu_bottom_texture);
 
         auto& settings = game.get_settings();
 
@@ -75,7 +87,7 @@ namespace pong2d
         auto fullscren_label = std::make_shared<pkzo::Text>(position({ -390.0f + text_font->estimate("Fullscreen").x / 2.0f, 100.0f }), "Fullscreen", text_font, text_material);
         add_node(fullscren_label);
 
-        /*auto resolutions = pkzo::Window::get_valid_reslutions(0);
+        auto resolutions = pkzo::Window::get_valid_reslutions(0);
         std::vector<std::string> resolution_text(resolutions.size());
         std::transform(begin(resolutions), end(resolutions), begin(resolution_text), [] (auto res) {
             std::stringstream buff;
@@ -85,11 +97,13 @@ namespace pong2d
         auto width = settings.get_value("Video", "width", 800u);
         auto height = settings.get_value("Video", "height", 600u);
         auto index = std::distance(begin(resolutions), std::find(begin(resolutions), end(resolutions), glm::uvec2(width, height)));
-        auto resolution_value = std::make_shared<pkzo::DropDownMenu>(dropdown_background, dropdown_button, menu_top, menu_body, menu_bottom, text_font, menu_text_color);
-        resolution_value->set_options(resolution_text);
-        resolution_value->set_selected_option(index);
-        //resolution_value->set_position({-10.0f - resolution_value->get_size().x / 2.0f, 150.0f});
-        add_node(resolution_value);*/
+        auto resolution_value = std::make_shared<pkzo::DropDownMenu>(position({ -10.0f - dropdown_size.x / 2.0f, 150.0f }), 
+                                                                     dropdown_size, dropdown_background, 
+                                                                     dropdown_button_size, dropdown_button, 
+                                                                     menu_top_size, menu_body_size, menu_bottom_size,
+                                                                     menu_top, menu_body, menu_bottom,
+                                                                     text_font, dropdown_label, resolution_text, index);
+        add_node(resolution_value);
 
 
         auto fullscreen = settings.get_value("Video", "fullscreen", false);
@@ -174,15 +188,14 @@ namespace pong2d
 
             game.change_state(GameState::MAIN_MENU);
 
-            //auto res_idx = resolution_value->get_selected_option();
-            //assert(res_idx);
-            //auto res = resolutions[res_idx.value()];
+            auto res_idx = resolution_value->get_selected_option();
+            assert(res_idx);
+            auto res = resolutions[res_idx.value()];
             auto fullscreen = fullscreen_value->get_checked();
 
-            //game.get_window().resize(res, fullscreen ? pkzo::WindowMode::FULLSCREEN : pkzo::WindowMode::STATIC);
-            //settings.set_value("Video", "width", res.x);
-            //settings.set_value("Video", "height", res.y);
-            settings.set_value("Video", "fullscreen", fullscreen);
+            game.get_window().resize(res, fullscreen ? pkzo::WindowMode::FULLSCREEN : pkzo::WindowMode::STATIC);
+            settings.set_value("Graphic", "resolution", res);
+            settings.set_value("Graphic", "fullscreen", fullscreen);
 
             auto music_volume = music_volume_value->get_value();
             auto sfx_volume   = sfx_volume_value->get_value();

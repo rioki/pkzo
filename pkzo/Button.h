@@ -51,7 +51,9 @@ namespace pkzo
         //! @param text_material
         //! @param font
         //!
-        //! @{
+        //! 
+        Button(const glm::vec2& size, const std::shared_ptr<Material>& background_material) noexcept;
+        Button(const glm::mat4& transform, const glm::vec2& size, const std::shared_ptr<Material>& background_material) noexcept;
         Button(const std::string& caption, const glm::vec2& size, const std::shared_ptr<Material>& background_material, const std::shared_ptr<Material>& text_material, const std::shared_ptr<Font>& font) noexcept;
         Button(const glm::mat4& transform, const std::string& caption, const glm::vec2& size, const std::shared_ptr<Material>& background_material, const std::shared_ptr<Material>& text_material, const std::shared_ptr<Font>& font) noexcept;
         //! @}

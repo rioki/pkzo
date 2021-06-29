@@ -33,23 +33,31 @@ using namespace std::literals::string_literals;
 
 namespace pkzo
 {
+    Button::Button(const glm::vec2& size, const std::shared_ptr<Material>& background_material) noexcept
+    : Button(glm::mat4(1.0f), size, background_material) {}
+
+    Button::Button(const glm::mat4& transform, const glm::vec2& size, const std::shared_ptr<Material>& background_material) noexcept
+    : Button(transform, "", size, background_material, nullptr, nullptr) {}
+
+
     Button::Button(const std::string& caption, const glm::vec2& size, const std::shared_ptr<Material>& background_material, const std::shared_ptr<Material>& text_material, const std::shared_ptr<Font>& font) noexcept
     : Button(glm::mat4(1.0f), caption, size, background_material, text_material, font) {}
 
     Button::Button(const glm::mat4& transform, const std::string& c, const glm::vec2& size, const std::shared_ptr<Material>& background_material, const std::shared_ptr<Material>& text_material, const std::shared_ptr<Font>& font) noexcept
     : SceneNodeGroup(transform)
     {
-        DBG_ASSERT(glm::all(glm::greaterThan(size, glm::vec2(0.0f))));
-        DBG_ASSERT(background_material);
-        DBG_ASSERT(text_material);
-        DBG_ASSERT(font);
+        assert(glm::all(glm::greaterThan(size, glm::vec2(0.0f))));
+        assert(background_material);
 
         background = std::make_shared<Rectangle>(size, background_material);
         add_node(background);
 
-        caption = std::make_shared<Text>(c, font, text_material);
-        add_node(caption);
-
+        if (text_material && font) 
+        {
+            caption = std::make_shared<Text>(c, font, text_material);
+            add_node(caption);
+        }
+        
         hit_area = std::make_shared<HitArea>(glm::vec3(size, 1.0f));
         hit_area->on_click([this] (auto button)
         {

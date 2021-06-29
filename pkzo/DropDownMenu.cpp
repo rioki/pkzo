@@ -32,20 +32,26 @@
 
 namespace pkzo
 {
-    DropDownMenu::DropDownMenu(const std::shared_ptr<pkzo::Texture>& background_texture, const std::shared_ptr<pkzo::Texture>& button_texture, const std::shared_ptr<pkzo::Texture>& mtt, const std::shared_ptr<pkzo::Texture>& mbt, const std::shared_ptr<pkzo::Texture>& mbot, const std::shared_ptr<Font>& f, const glm::vec4& tc) noexcept
-    : size(background_texture->get_size()), menu_top_texture(mtt), menu_body_texture(mbt), menu_bottom_texture(mbot), font(f), text_color(tc)
+    DropDownMenu::DropDownMenu(const glm::mat4& transform, 
+                               const glm::vec2& s, const std::shared_ptr<pkzo::Material>& background_material, 
+                               const glm::vec2& button_size, const std::shared_ptr<pkzo::Material>& button_material, 
+                               const glm::vec2& mhs, const glm::vec2& mis, const glm::vec2& mfs,
+                               const std::shared_ptr<pkzo::Material>& mtop, const std::shared_ptr<pkzo::Material>& mbdy, const std::shared_ptr<pkzo::Material>& mbtm,
+                               const std::shared_ptr<pkzo::Font>& f, const std::shared_ptr<pkzo::Material>& tm,
+                               const std::vector<std::string>& o, std::optional<size_t> so) noexcept
+    : SceneNodeGroup(transform), 
+      size(s), options(o), selected_option(so),
+      menu_header_size(mhs), menu_item_size(mis), menu_footer_size(mfs), menu_top(mtop), menu_body(mbdy), menu_bottom(mbtm),
+      font(f), text_material(tm)
     {
-        /*auto background = std::make_shared<Rectangle>(background_texture);
+        auto background = std::make_shared<Rectangle>(size, background_material);
         add_node(background);
 
-        selected_text = std::make_shared<Text>(font, text_color, "");
+        auto label = selected_option ? options[selected_option.value()] : std::string();
+        selected_text = std::make_shared<Text>(label, font, text_material);
         add_node(selected_text);
 
-        auto button = std::make_shared<Button>(button_texture);
-        auto total_size = background->get_size();
-        auto button_size = button->get_size();
-        //button->set_position({total_size.x / 2.0f - button_size.x / 2.0f, 0.0f});
-
+        auto button = std::make_shared<Button>(position({ size.x / 2.0f - button_size.x / 2.0f, 0.0f }), button_size, button_material);
         button->on_click([this] () {
             sync::delay([this] () {
                 if (menu)
@@ -58,7 +64,7 @@ namespace pkzo
                 }
             });
         });
-        add_node(button);*/
+        add_node(button);
     }
 
     DropDownMenu::~DropDownMenu() = default;
@@ -108,10 +114,11 @@ namespace pkzo
         auto parent = dynamic_cast<SceneNodeGroup*>(get_parent());
         if (parent)
         {
-            menu = std::make_shared<Menu>(menu_top_texture, menu_body_texture, menu_bottom_texture, font, text_color, options);
-            //auto pos = get_position();
+            menu = std::make_shared<Menu>(menu_header_size, menu_top, menu_item_size, menu_body, menu_footer_size, menu_bottom, font, text_material, options);
             auto size = get_size();
-            //menu->set_position({pos.x, pos.y - size.y / 2.0f - menu->get_size().y / 2.0f});
+            auto menu_transform = get_transform();
+            menu_transform = glm::translate(menu_transform, {0.0f, -size.y / 2.0f - menu->get_size().y / 2.0f , 0.0f});
+            menu->set_transform(menu_transform);
             menu->on_select([this] (auto selection) {
                 sync::delay([this, selection] () {
                     close_menu(selection);

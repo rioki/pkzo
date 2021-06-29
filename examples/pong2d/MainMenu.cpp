@@ -40,7 +40,7 @@ namespace pong2d
         auto button_background_texture = std::make_shared<pkzo::Texture>("../assets/ui/pixels/Button_Background.png");
         auto button_size               = button_background_texture->get_size();
         auto button_background         = pkzo::make_emissive_material(button_background_texture);
-        auto button_text               = pkzo::make_emissive_material(glm::vec3(0.2f));
+        auto button_text               = pkzo::make_emissive_material(glm::vec3(0.1f));
 
         auto title = std::make_shared<pkzo::Text>(position(0.0f, 150.0f), "pkzo's Pong Demo", title_font, text_material);
         add_node(title);

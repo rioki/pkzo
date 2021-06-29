@@ -40,7 +40,7 @@ namespace pkzo
     class PKZO_EXPORT Menu : public SceneNodeGroup
     {
     public:
-        Menu(const std::shared_ptr<pkzo::Texture>& top_texture, const std::shared_ptr<pkzo::Texture>& body_texture, const std::shared_ptr<pkzo::Texture>& bottom_texture, const std::shared_ptr<Font>& caption_font, const glm::vec4& text_color, const std::vector<std::string>& options) noexcept;
+        Menu(const glm::vec2& header_size, const std::shared_ptr<pkzo::Material>& top_material, const glm::vec2& item_size, const std::shared_ptr<pkzo::Material>& body_material, const glm::vec2& footer_size, const std::shared_ptr<pkzo::Material>& bottom_material, const std::shared_ptr<Font>& caption_font, const std::shared_ptr<pkzo::Material>& text_material, const std::vector<std::string>& options) noexcept;
         ~Menu();
 
         glm::vec2 get_size() const noexcept;

@@ -36,6 +36,7 @@
 namespace pkzo
 {
     class Menu;
+    class Material;
     class Texture;
     class Text;
     class Font;
@@ -43,7 +44,13 @@ namespace pkzo
     class PKZO_EXPORT DropDownMenu : public SceneNodeGroup
     {
     public:
-        DropDownMenu(const std::shared_ptr<pkzo::Texture>& background_texture, const std::shared_ptr<pkzo::Texture>& button_texture, const std::shared_ptr<pkzo::Texture>& menu_top_texture, const std::shared_ptr<pkzo::Texture>& menu_body_texture, const std::shared_ptr<pkzo::Texture>& menu_bottom_texture, const std::shared_ptr<Font>& font, const glm::vec4& text_color) noexcept;
+        DropDownMenu(const glm::mat4& transform, 
+                     const glm::vec2& size, const std::shared_ptr<pkzo::Material>& background_material, 
+                     const glm::vec2& button_size, const std::shared_ptr<pkzo::Material>& button_material, 
+                     const glm::vec2& menu_header_size,  const glm::vec2& menu_item_size, const glm::vec2& menu_footer_size,
+                     const std::shared_ptr<pkzo::Material>& menu_top, const std::shared_ptr<pkzo::Material>& menu_body, const std::shared_ptr<pkzo::Material>& menu_bottom,
+                     const std::shared_ptr<pkzo::Font>& font, const std::shared_ptr<pkzo::Material>& text_material,
+                     const std::vector<std::string>& options, std::optional<size_t> selected_option) noexcept;
         ~DropDownMenu();
 
         glm::vec2 get_size() const noexcept;
@@ -62,11 +69,14 @@ namespace pkzo
         std::optional<size_t>    selected_option;
 
         std::shared_ptr<Text>    selected_text;
-        std::shared_ptr<Texture> menu_top_texture;
-        std::shared_ptr<Texture> menu_body_texture;
-        std::shared_ptr<Texture> menu_bottom_texture;
+        glm::vec2 menu_header_size;
+        glm::vec2 menu_item_size;
+        glm::vec2 menu_footer_size;
+        std::shared_ptr<pkzo::Material> menu_top;
+        std::shared_ptr<pkzo::Material> menu_body;
+        std::shared_ptr<pkzo::Material> menu_bottom;
         std::shared_ptr<Font>    font;
-        glm::vec4                text_color;
+        std::shared_ptr<pkzo::Material> text_material;
         std::shared_ptr<Menu>    menu;
 
         std::function<void (size_t)> select_cb;

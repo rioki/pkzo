@@ -108,7 +108,19 @@ namespace pong2d
         });
     }
 
-    Game::~Game() = default;
+    Game::~Game()
+    {
+        try
+        {
+            auto settings_dir = pkzo::get_user_folder() / "pzko" / "pong2d" ;
+            std::filesystem::create_directories(settings_dir);
+            settings.save(settings_dir / "settings.json");
+        }
+        catch (const std::exception& ex)
+        {
+            DBG_TRACE(ex.what());
+        }
+    }
 
     pkzo::Settings& Game::get_settings() noexcept
     {

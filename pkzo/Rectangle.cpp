@@ -80,6 +80,7 @@ namespace pkzo
         {
             pipeline->update_geometry(pipeline_handle, make_rectangle(size));
             pipeline->update_geometry(pipeline_handle, material->to_parameters());
+            dirty = false;
         }
     }
 

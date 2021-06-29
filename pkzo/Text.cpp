@@ -109,6 +109,7 @@ namespace pkzo
             DBG_ASSERT(base_material);
             set_size(safe_estimate(font, text));
             Rectangle::set_material(make_rectangle_material(font, text, base_material));
+            dirty = false;
         }
         Rectangle::update(dt);
     }
