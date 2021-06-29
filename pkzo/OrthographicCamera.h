@@ -50,6 +50,6 @@ namespace pkzo
         glm::mat4 get_projection() const noexcept override;
 
     private:
-        glm::vec3 size;
+        glm::vec3 size = {1.0f, 1.0f, 1.0f};
     };
 }

@@ -97,18 +97,21 @@ namespace pkzo
 
     void Camera::handle_mouse_up(const glm::vec2 pos, MouseButton button) const noexcept
     {
+        auto hit_area = std::shared_ptr<HitArea>();
         auto result = pick(pos);
         if (result)
         {
-            auto hit_area = std::dynamic_pointer_cast<HitArea>(result.value().node);
+            hit_area = std::dynamic_pointer_cast<HitArea>(result.value().node);
             if (hit_area)
             {
                 hit_area->handle_mouse_up(result.value().position, button);
-            }
-            if (hit_area != mouse_down_hit)
-            {
-                hit_area->handle_mouse_up_outside(result.value().position, button);
-            }
+            } 
+        }
+        if (mouse_down_hit != nullptr && hit_area != mouse_down_hit)
+        {
+            auto tpos = mouse_down_hit->get_world_transform() * glm::vec4(pos, 0.0f, 1.0f);
+            mouse_down_hit->handle_mouse_up_outside({tpos.x, tpos.y, tpos.z}, button);
+            mouse_down_hit = nullptr;
         }
     }
 }

@@ -53,7 +53,7 @@ namespace pkzo
         //! @param handle_material the handle material
         //! @param value the slider value
         //!
-        Slider(SliderOrientation orientation, const glm::vec2& size, const std::shared_ptr<Material>& background_material, const glm::vec2& handle_size, const std::shared_ptr<Material>& handle_material, float value) noexcept;
+        Slider(const glm::mat4& transform, SliderOrientation orientation, const glm::vec2& size, const std::shared_ptr<Material>& background_material, const glm::vec2& handle_size, const std::shared_ptr<Material>& handle_material, float value) noexcept;
 
         ~Slider();
 

@@ -30,8 +30,8 @@
 
 namespace pkzo
 {
-    Slider::Slider(SliderOrientation o, const glm::vec2& s, const std::shared_ptr<Material>& bm, const glm::vec2& hs, const std::shared_ptr<Material>& hm, float v) noexcept
-    : orientation(o), value(v)
+    Slider::Slider(const glm::mat4& transform, SliderOrientation o, const glm::vec2& s, const std::shared_ptr<Material>& bm, const glm::vec2& hs, const std::shared_ptr<Material>& hm, float v) noexcept
+    : SceneNodeGroup(transform), orientation(o), value(v)
     {
         background = std::make_shared<Rectangle>(s, bm);
         add_node(background);
@@ -161,18 +161,20 @@ namespace pkzo
     {
         auto bs = background->get_size();
         auto hs = handle->get_size();
+        auto iws = glm::inverse(get_world_transform());
+        auto lp = iws * glm::vec4(pos, 0.0f, 1.0f);
 
         if (orientation == SliderOrientation::HORIZONTAL)
         {
             auto l  = bs.x - hs.x;
             auto hl = l / 2.0f;
-            value = glm::clamp((pos.x + hl) / l, 0.0f, 1.0f);
+            value = glm::clamp((lp.x + hl) / l, 0.0f, 1.0f);
         }
         else
         {
             auto l  = bs.y - hs.y;
             auto hl = l / 2.0f;
-            value = glm::clamp((pos.y + hl) / l, 0.0f, 1.0f);
+            value = glm::clamp((lp.y + hl) / l, 0.0f, 1.0f);
         }
     }
 

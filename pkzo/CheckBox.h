@@ -40,7 +40,7 @@ namespace pkzo
     class PKZO_EXPORT CheckBox : public SceneNodeGroup
     {
     public:
-        CheckBox(const glm::vec2& size, const std::shared_ptr<Material>& checked_material, const std::shared_ptr<Material>& unchecked_material, bool checked) noexcept;
+        CheckBox(const glm::mat4& transform, const glm::vec2& size, const std::shared_ptr<Material>& checked_material, const std::shared_ptr<Material>& unchecked_material, bool checked) noexcept;
 
         ~CheckBox();
 

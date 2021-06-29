@@ -31,8 +31,8 @@
 
 namespace pkzo
 {
-    CheckBox::CheckBox(const glm::vec2& size, const std::shared_ptr<Material>& cm, const std::shared_ptr<Material>& ucm, bool c) noexcept
-    : checked_material(cm), unchecked_material(ucm), checked(c)
+    CheckBox::CheckBox(const glm::mat4& transform, const glm::vec2& size, const std::shared_ptr<Material>& cm, const std::shared_ptr<Material>& ucm, bool c) noexcept
+    : SceneNodeGroup(transform), checked_material(cm), unchecked_material(ucm), checked(c)
     {
         DBG_ASSERT(checked_material);
         DBG_ASSERT(unchecked_material);
