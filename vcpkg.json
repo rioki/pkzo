@@ -2,9 +2,13 @@
     "name": "ice",
     "version": "0.1.0",
     "builtin-baseline": "e99d9a4facea9d7e15a91212364d7a12762b7512",
-    "dependencies": [
-      "gtest",
-      "nlohmann-json",
-      "glm"
-    ]
+  "dependencies": [
+    "gtest",
+    "nlohmann-json",
+    "glm",
+    "sdl2",
+    "glew",
+    "rioki-glow",
+    "rsig"
+  ]
 }

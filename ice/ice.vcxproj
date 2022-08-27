@@ -116,20 +116,30 @@
   <ItemGroup>
     <ClInclude Include="config.h" />
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="glm_io.h" />
+    <ClInclude Include="glm_json.h" />
+    <ClInclude Include="GraphicSystem.h" />
+    <ClInclude Include="InputSystem.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="SdlSentry.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="utils.h" />
+    <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="GraphicSystem.cpp" />
+    <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="SdlSentry.cpp" />
     <ClCompile Include="Settings.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
