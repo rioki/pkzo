@@ -148,6 +148,7 @@
     <ClCompile Include="test_settings.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="glm_test.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="test_utils.h" />
   </ItemGroup>
