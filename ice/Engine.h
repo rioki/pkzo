@@ -16,6 +16,10 @@
 namespace ice
 {
     class System;
+    class Window;
+    class Mouse;
+    class Keyboard;
+    class Joystick;
 
     class ICE_EXPORT Engine
     {
@@ -34,13 +38,33 @@ namespace ice
 
         void save_settings(const std::filesystem::path& file);
 
+        [[nodiscard]]
+        Window* get_window() noexcept;
+        [[nodiscard]]
+        const Window* get_window() const noexcept;
+
+        [[nodiscard]]
+        Mouse* get_mouse() noexcept;
+        [[nodiscard]]
+        const Mouse* get_mouse() const noexcept;
+
+        [[nodiscard]]
+        Keyboard* get_keyboard() noexcept;
+        [[nodiscard]]
+        const Keyboard* get_keyboard() const noexcept;
+
+        [[nodiscard]]
+        std::vector<Joystick*> get_joysticks() noexcept;
+        [[nodiscard]]
+        std::vector<const Joystick*> get_joysticks() const noexcept;
+
         template <typename SystemT>
         void start_system();
 
-        template <typename SystemT>
+        template <typename SystemT> [[nodiscard]]
         SystemT* get_system();
 
-        template <typename SystemT>
+        template <typename SystemT> [[nodiscard]]
         const SystemT* get_system() const;
 
         void tick();
@@ -78,6 +102,6 @@ namespace ice
     template <typename SystemT>
     const SystemT* Engine::get_system() const
     {
-        return const_cast<Engine*>(this)->get_system();
+        return const_cast<Engine*>(this)->get_system<SystemT>();
     }
 }

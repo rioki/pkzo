@@ -24,13 +24,19 @@ namespace ice
 
         ~InputSystem();
 
+        [[nodiscard]]
         Mouse* get_mouse() noexcept;
+        [[nodiscard]]
         const Mouse* get_mouse() const noexcept;
 
+        [[nodiscard]]
         Keyboard* get_keyboard() noexcept;
+        [[nodiscard]]
         const Keyboard* get_keyboard() const noexcept;
 
+        [[nodiscard]]
         std::vector<Joystick*> get_joysticks() noexcept;
+        [[nodiscard]]
         std::vector<const Joystick*> get_joysticks() const noexcept;
 
         void tick() override;

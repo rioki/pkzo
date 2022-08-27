@@ -20,7 +20,9 @@ namespace ice
 
         ~GraphicSystem();
 
+        [[nodiscard]]
         Window* get_window() noexcept;
+        [[nodiscard]]
         const Window* get_window() const noexcept;
 
         void tick() override;
