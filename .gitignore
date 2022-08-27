@@ -1,0 +1,11 @@
+
+# Build Outputs
+/.int
+/bin
+
+# Visual Studio Files
+/.vs
+*.user
+
+# vcpkg Output
+/vcpkg_installed

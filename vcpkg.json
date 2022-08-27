@@ -1,0 +1,8 @@
+{
+    "name": "ice",
+    "version": "0.1.0",
+    "builtin-baseline": "32ee2c76b0a498178996b0af942aec14c0e50b7d",
+    "dependencies": [
+        "gtest"
+    ]
+}
