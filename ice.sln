@@ -7,6 +7,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ice", "ice\ice.vcxproj", "{
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ice-test", "ice-test\ice-test.vcxproj", "{9D5DEFEF-FBC1-4A12-B46E-8C3DA36644D0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution Files", "{707FFCC1-D64F-402E-8341-8AD0280AE6D3}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		vcpkg.json = vcpkg.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
