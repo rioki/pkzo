@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <cassert>
+#include <atomic>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -13,5 +15,6 @@
 #include <fstream>
 #include <sstream>
 #include <format>
+#include <memory>
 
 #include <nlohmann/json.hpp>
