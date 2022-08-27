@@ -120,6 +120,9 @@
     <ClInclude Include="glm_json.h" />
     <ClInclude Include="GraphicSystem.h" />
     <ClInclude Include="InputSystem.h" />
+    <ClInclude Include="Joystick.h" />
+    <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="Mouse.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="SdlSentry.h" />
     <ClInclude Include="Settings.h" />
@@ -131,6 +134,9 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="GraphicSystem.cpp" />
     <ClCompile Include="InputSystem.cpp" />
+    <ClCompile Include="Joystick.cpp" />
+    <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

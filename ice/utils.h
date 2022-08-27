@@ -41,6 +41,45 @@ namespace ice
     }
 }
 
+#define ICE_BIT(n) (1 << n)
+#define ICE_ENUM_BIT_OPERATORS(ENUM) \
+    constexpr ENUM operator | (ENUM rhs, ENUM lhs) \
+    { \
+        return static_cast<ENUM>(static_cast<int>(rhs) | static_cast<int>(lhs)); \
+    } \
+    constexpr ENUM operator & (ENUM rhs, ENUM lhs) \
+    { \
+        return static_cast<ENUM>(static_cast<int>(rhs) & static_cast<int>(lhs)); \
+    } \
+    constexpr ENUM operator ^ (ENUM rhs, ENUM lhs) \
+    { \
+        return static_cast<ENUM>(static_cast<int>(rhs) ^ static_cast<int>(lhs)); \
+    } \
+    constexpr ENUM operator >> (ENUM rhs, int n) \
+    { \
+        return static_cast<ENUM>(static_cast<int>(rhs) >> n); \
+    } \
+    constexpr ENUM operator << (ENUM rhs, int n) \
+    { \
+        return static_cast<ENUM>(static_cast<int>(rhs) << n); \
+    } \
+    constexpr ENUM operator ~ (ENUM val) \
+    { \
+        return static_cast<ENUM>(~ static_cast<int>(val)); \
+    } \
+    constexpr ENUM& operator |= (ENUM& rhs, ENUM lhs) \
+    { \
+        return rhs = rhs | lhs; \
+    } \
+    constexpr ENUM& operator &= (ENUM& rhs, ENUM lhs) \
+    { \
+        return rhs = rhs & lhs; \
+    } \
+    constexpr ENUM& operator ^= (ENUM& rhs, ENUM lhs) \
+    { \
+        return rhs = rhs ^ lhs; \
+    }
+
 #define ICE_SERIALIZE_ENUM(ENUM, ...)                                                           \
     inline std::ostream& operator << (std::ostream& os, const ENUM& e)                          \
     {                                                                                           \
