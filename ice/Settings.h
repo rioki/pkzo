@@ -7,7 +7,6 @@
 #include "config.h"
 
 #include <string>
-#include <optional>
 #include <filesystem>
 
 #include <nlohmann/json.hpp>

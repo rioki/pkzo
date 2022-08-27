@@ -6,7 +6,12 @@
 
 #include <ice/Settings.h>
 
+#include <glm/glm.hpp>
+#include <ice/glm_io.h>
+#include <ice/glm_json.h>
+
 #include "test_utils.h"
+#include "glm_test.h"
 
 TEST(Settings, fall_back)
 {
@@ -47,4 +52,32 @@ TEST(Settings, save_load)
     EXPECT_EQ("currect string", b.get_value("test", "string", "some string value"));
     EXPECT_EQ(-13.13f, b.get_value("test", "float", 6.9f));
     EXPECT_EQ(-1337, b.get_value("test", "int", 42));
+}
+
+TEST(Settings, glm)
+{
+    auto settings = ice::Settings{};
+
+    settings.set_value("test", "uvec2", glm::uvec2(800u, 600u));
+    settings.set_value("test", "vec4",  glm::vec4(1.2f, 2.3f, 3.4f, 4.5f));
+
+    EXPECT_GLM_EQ(glm::uvec2(800, 600), settings.get_value("test", "uvec2", glm::uvec2(0u)));
+    EXPECT_GLM_EQ(glm::vec4(1.2f, 2.3f, 3.4f, 4.5f), settings.get_value("test", "vec4",glm::vec4(0.0f)));
+}
+
+TEST(Settings, glm_save_load)
+{
+    auto file = ice::test::get_test_output() / (ice::test::get_test_name() + ".json");
+
+    auto a = ice::Settings{};
+
+    a.set_value("test", "uvec2", glm::uvec2(800u, 600u));
+    a.set_value("test", "vec4",  glm::vec4(1.2f, 2.3f, 3.4f, 4.5f));
+    a.save(file);
+
+    auto b = ice::Settings{};
+    b.load(file);
+
+    EXPECT_GLM_EQ(glm::uvec2(800, 600), b.get_value("test", "uvec2", glm::uvec2(0u)));
+    EXPECT_GLM_EQ(glm::vec4(1.2f, 2.3f, 3.4f, 4.5f), b.get_value("test", "vec4",glm::vec4(0.0f)));
 }

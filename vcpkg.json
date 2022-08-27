@@ -4,6 +4,7 @@
     "builtin-baseline": "e99d9a4facea9d7e15a91212364d7a12762b7512",
     "dependencies": [
       "gtest",
-      "nlohmann-json"
+      "nlohmann-json",
+      "glm"
     ]
 }
