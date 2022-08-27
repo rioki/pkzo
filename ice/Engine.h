@@ -5,6 +5,10 @@
 #pragma once
 #include "config.h"
 
+#include <filesystem>
+
+#include "Settings.h"
+
 namespace ice
 {
     class ICE_EXPORT Engine
@@ -14,7 +18,18 @@ namespace ice
 
         ~Engine();
 
+        [[nodiscard]]
+        Settings& get_settings() noexcept;
+
+        [[nodiscard]]
+        const Settings& get_settings() const noexcept;
+
+        void load_settings(const std::filesystem::path& file);
+
+        void save_settings(const std::filesystem::path& file);
+
     private:
+        Settings settings;
 
         Engine(const Engine&) = delete;
         Engine& operator = (const Engine&) = delete;
