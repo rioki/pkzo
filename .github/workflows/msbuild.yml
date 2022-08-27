@@ -40,4 +40,4 @@ jobs:
       run: msbuild /m /p:Configuration=${{matrix.configuration}} /property:Platform=${{matrix.platform}} ice.sln
     - name: Test
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: ${{matrix.platform}}bin/${{matrix.platform}}/${{matrix.configuration}}/ice-test.exe
+      run: ${{matrix.platform}}/bin/${{matrix.platform}}/${{matrix.configuration}}/ice-test.exe
