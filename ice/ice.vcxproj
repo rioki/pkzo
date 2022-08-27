@@ -118,6 +118,7 @@
     <ClInclude Include="Engine.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Settings.h" />
+    <ClInclude Include="System.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>

@@ -5,6 +5,8 @@
 #include "pch.h"
 #include "Engine.h"
 
+#include "System.h"
+
 namespace ice
 {
     Engine::Engine() {}
@@ -29,5 +31,27 @@ namespace ice
     void Engine::save_settings(const std::filesystem::path& file)
     {
         settings.save(file);
+    }
+
+    void Engine::tick()
+    {
+        for (const auto& sys : systems)
+        {
+            sys->tick();
+        }
+    }
+
+    void Engine::run()
+    {
+        running = true;
+        while (running)
+        {
+            tick();
+        }
+    }
+
+    void Engine::stop()
+    {
+        running = false;
     }
 }
