@@ -7,6 +7,9 @@
     <ClCompile>
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <Link />
+    <Link />
+    <Link />
   </ItemDefinitionGroup>
   <ItemGroup />
 </Project>
