@@ -8,6 +8,8 @@
 
 #include <ice/Engine.h>
 #include <ice/System.h>
+#include <ice/GraphicSystem.h>
+#include <ice/InputSystem.h>
 
 #include "test_utils.h"
 
@@ -104,4 +106,37 @@ TEST(Engine, stops)
     const auto* count = engine.get_system<CountSystem>();
     ASSERT_NE(nullptr, count);
     EXPECT_EQ(5u, count->get_count());
+}
+
+TEST(Engine, devices)
+{
+    auto engine = ice::Engine{};
+
+    auto w0 = engine.get_window();
+    EXPECT_EQ(nullptr, w0);
+    auto m0 = engine.get_mouse();
+    EXPECT_EQ(nullptr, m0);
+    auto k0 = engine.get_keyboard();
+    EXPECT_EQ(nullptr, k0);
+    auto j0 = engine.get_joysticks();
+    EXPECT_TRUE(j0.empty());
+
+    engine.start_system<ice::GraphicSystem>();
+    engine.start_system<ice::InputSystem>();
+
+    auto window = engine.get_window();
+    EXPECT_NE(nullptr, window);
+
+    const auto* mouse = engine.get_mouse();
+    EXPECT_NE(nullptr, mouse);
+
+    const auto* keyboard = engine.get_keyboard();
+    EXPECT_NE(nullptr, keyboard);
+
+    auto js = engine.get_joysticks();
+    // if there are some, check if they are valid
+    for (const auto& j : js)
+    {
+        EXPECT_NE(nullptr, j);
+    }
 }

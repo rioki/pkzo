@@ -16,5 +16,10 @@
 #include <sstream>
 #include <format>
 #include <memory>
+#include <stdexcept>
 
+#include <SDL2/SDL.h>
 #include <nlohmann/json.hpp>
+#include <glm/glm.hpp>
+#include <GL/glew.h>
+#include <rioki/glow/glow.h>
