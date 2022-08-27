@@ -11,6 +11,13 @@
 
 #include "utils.h"
 
+#ifdef DELETE
+#undef DELETE
+#endif
+#ifdef OUT
+#undef OUT
+#endif
+
 union SDL_Event;
 
 namespace ice
