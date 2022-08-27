@@ -124,6 +124,19 @@ TEST(Engine, devices)
     engine.start_system<ice::GraphicSystem>();
     engine.start_system<ice::InputSystem>();
 
-    auto w = engine.get_window();
-    EXPECT_NE(nullptr, w);
+    auto window = engine.get_window();
+    EXPECT_NE(nullptr, window);
+
+    const auto* mouse = engine.get_mouse();
+    EXPECT_NE(nullptr, mouse);
+
+    const auto* keyboard = engine.get_keyboard();
+    EXPECT_NE(nullptr, keyboard);
+
+    auto js = engine.get_joysticks();
+    // if there are some, check if they are valid
+    for (const auto& j : js)
+    {
+        EXPECT_NE(nullptr, j);
+    }
 }

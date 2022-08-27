@@ -94,7 +94,10 @@ namespace ice
         for (const auto& sys : systems)
         {
             auto s = dynamic_cast<SystemT*>(sys.get());
-            return s;
+            if (s != nullptr)
+            {
+                return s;
+            }
         }
         return nullptr;
     }

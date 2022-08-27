@@ -11,9 +11,8 @@
 
 namespace ice
 {
-    Engine::Engine() {}
-
-    Engine::~Engine() {}
+    Engine::Engine() = default;
+    Engine::~Engine() = default;
 
     Settings& Engine::get_settings() noexcept
     {

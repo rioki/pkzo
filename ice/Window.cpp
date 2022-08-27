@@ -80,7 +80,7 @@ namespace ice
         else
         {
             // prevent an unnecessary resolution switch on the monitor.
-            if (mode == WindowMode::FULLSCREEN)
+            if (mode == WindowMode::FULLSCREEN || mode == WindowMode::NATIVE_FULLSCREEN)
             {
                 SDL_SetWindowSize(window, size.x, size.y);
                 SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
@@ -106,18 +106,19 @@ namespace ice
     WindowMode Window::get_mode() const noexcept
     {
         auto sdl_flags = SDL_GetWindowFlags(window);
+        if ((sdl_flags & SDL_WINDOW_FULLSCREEN_DESKTOP) == SDL_WINDOW_FULLSCREEN_DESKTOP)
+        {
+            return WindowMode::RESIZABLE;
+        }
         if ((sdl_flags & SDL_WINDOW_FULLSCREEN) == SDL_WINDOW_FULLSCREEN)
         {
             return WindowMode::FULLSCREEN;
         }
-        else if ((sdl_flags & SDL_WINDOW_RESIZABLE) == SDL_WINDOW_RESIZABLE)
+        if ((sdl_flags & SDL_WINDOW_RESIZABLE) == SDL_WINDOW_RESIZABLE)
         {
             return WindowMode::RESIZABLE;
         }
-        else
-        {
-            return WindowMode::STATIC;
-        }
+        return WindowMode::STATIC;
     }
 
     rsig::signal<>& Window::get_draw_sginal() noexcept

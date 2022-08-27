@@ -9,7 +9,7 @@
 
 #include "test_utils.h"
 
-TEST(GraphicSystem, has_devices_after_load)
+TEST(InputSystem, has_devices_after_load)
 {
     auto engine = ice::Engine{};
 
