@@ -4,4 +4,6 @@
 
 #pragma once
 
+#include <fstream>
+
 #include <gtest/gtest.h>

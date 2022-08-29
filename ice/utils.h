@@ -39,6 +39,24 @@ namespace ice
     {
         return hash(str.data());
     }
+
+    inline void hash_combine(std::size_t& seed) {}
+
+    template <typename Car, typename ... Cdr>
+    inline void hash_combine(std::size_t& seed, const Car& car, Cdr... cdr)
+    {
+        std::hash<Car> hasher;
+        seed ^= hasher(car) + 0x9e3779b9 + (seed<<6) + (seed>>2);
+        hash_combine(seed, cdr...);
+    }
+
+    template <typename ... Args>
+    inline size_t hash(const Args& ... args)
+    {
+        size_t seed = 0;
+        hash_combine(seed, args...);
+        return seed;
+    }
 }
 
 #define ICE_BIT(n) (1 << n)

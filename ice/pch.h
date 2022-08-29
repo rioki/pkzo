@@ -5,6 +5,8 @@
 #pragma once
 
 #include <cassert>
+#include <algorithm>
+#include <stdexcept>
 #include <atomic>
 #include <string>
 #include <string_view>
