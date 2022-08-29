@@ -3,12 +3,15 @@
     "version": "0.1.0",
     "builtin-baseline": "e99d9a4facea9d7e15a91212364d7a12762b7512",
   "dependencies": [
-    "gtest",
-    "nlohmann-json",
-    "glm",
-    "sdl2",
+    "freeimage",
+    "freetype",
     "glew",
+    "glm",
+    "gtest",
+    "libiconv",
+    "nlohmann-json",
     "rioki-glow",
-    "rsig"
+    "rsig",
+    "sdl2"
   ]
 }

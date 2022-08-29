@@ -36,6 +36,9 @@
     <ClCompile Include="test_input_system.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test_asset_library.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
