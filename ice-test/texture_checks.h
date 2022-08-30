@@ -7,7 +7,7 @@
 #include <gtest/gtest.h>
 #include <ice/Texture.h>
 
-#include "test_utils.h"
+#include "test_env.h"
 
 namespace ice::test
 {

@@ -9,7 +9,7 @@
 #include <ice/Window.h>
 #include <ice/glm_json.h>
 
-#include "test_utils.h"
+#include "test_env.h"
 
 TEST(GraphicSystem, has_window_after_load)
 {

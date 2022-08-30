@@ -27,7 +27,7 @@
     <ClCompile Include="test_settings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="test_utils.cpp">
+    <ClCompile Include="test_env.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="test_graphic_system.cpp">
@@ -45,12 +45,18 @@
     <ClCompile Include="texture_checks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test_font.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test_utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="test_utils.h">
+    <ClInclude Include="test_env.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="texture_checks.h">

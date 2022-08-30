@@ -11,7 +11,7 @@
 #include <ice/GraphicSystem.h>
 #include <ice/InputSystem.h>
 
-#include "test_utils.h"
+#include "test_env.h"
 
 class CountSystem : public ice::System
 {

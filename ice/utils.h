@@ -58,6 +58,9 @@ namespace ice
         return seed;
     }
 
+    ICE_EXPORT std::u32string utf32(const std::string& buff);
+    ICE_EXPORT std::u32string utf32(const std::u8string& buff);
+
     ICE_EXPORT void trace(const std::string_view msg);
 }
 
