@@ -20,7 +20,10 @@
 #include <memory>
 #include <stdexcept>
 
+#include <Windows.h>
+
 #include <SDL2/SDL.h>
+#include <FreeImage.h>
 #include <nlohmann/json.hpp>
 #include <glm/glm.hpp>
 #include <GL/glew.h>

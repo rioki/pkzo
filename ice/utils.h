@@ -57,6 +57,8 @@ namespace ice
         hash_combine(seed, args...);
         return seed;
     }
+
+    ICE_EXPORT void trace(const std::string_view msg);
 }
 
 #define ICE_BIT(n) (1 << n)

@@ -13,18 +13,15 @@ namespace ice
     class ICE_EXPORT Asset
     {
     public:
-        Asset(const std::filesystem::path& file) noexcept;
+        Asset() noexcept;
         virtual ~Asset();
 
         unsigned int get_id() const noexcept;
-
-        const std::filesystem::path& get_file() const noexcept;
 
     private:
         static std::atomic<unsigned int> last_id;
 
         const unsigned int id;
-        const std::filesystem::path file;
 
         Asset(const Asset&) = delete;
         Asset& operator = (const Asset&) = delete;
