@@ -3,23 +3,13 @@
 // All rights reserved.
 
 #include "pch.h"
-#include "test_utils.h"
 
-namespace ice::test
+#include <ice/utils.h>
+
+TEST(utils, utf32)
 {
-    std::filesystem::path get_test_input() noexcept
-    {
-        return std::filesystem::path(PROJECT_DIR) / "input";
-    }
+    using namespace std::literals::string_literals;
 
-    std::filesystem::path get_test_output() noexcept
-    {
-        return std::filesystem::path(PROJECT_DIR) / "output";
-    }
-
-    std::string get_test_name() noexcept
-    {
-        auto test_info = ::testing::UnitTest::GetInstance()->current_test_info();
-        return std::string(test_info->test_suite_name()) + "-" + std::string(test_info->name());
-    }
+    EXPECT_EQ(U"Halöle"s, ice::utf32(u8"Halöle"s));
+    EXPECT_EQ(U"Hello"s,  ice::utf32("Hello"s));
 }

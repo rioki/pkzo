@@ -7,7 +7,7 @@
 #include <ice/Engine.h>
 #include <ice/InputSystem.h>
 
-#include "test_utils.h"
+#include "test_env.h"
 
 TEST(InputSystem, has_devices_after_load)
 {

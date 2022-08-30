@@ -10,7 +10,7 @@
 #include <ice/glm_io.h>
 #include <ice/glm_json.h>
 
-#include "test_utils.h"
+#include "test_env.h"
 #include "glm_checks.h"
 
 TEST(Settings, fall_back)

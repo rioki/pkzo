@@ -9,6 +9,7 @@
 
 namespace ice::test
 {
+    std::filesystem::path get_asset_folder() noexcept;
     std::filesystem::path get_test_input() noexcept;
     std::filesystem::path get_test_output() noexcept;
     std::string get_test_name() noexcept;

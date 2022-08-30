@@ -22,9 +22,14 @@
 
 #include <Windows.h>
 
+#include <iconv.h>
 #include <SDL2/SDL.h>
 #include <FreeImage.h>
 #include <nlohmann/json.hpp>
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 #include <rioki/glow/glow.h>
+
+#include <ft2build.h>
+#include FT_FREETYPE_H
+

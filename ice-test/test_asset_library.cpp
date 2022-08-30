@@ -7,7 +7,7 @@
 #include <ice/AssetLibrary.h>
 #include <ice/Asset.h>
 
-#include "test_utils.h"
+#include "test_env.h"
 
 class TestAsset : public ice::Asset
 {
