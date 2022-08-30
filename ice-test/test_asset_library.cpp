@@ -12,8 +12,8 @@
 class TestAsset : public ice::Asset
 {
 public:
-    TestAsset(const std::filesystem::path& file, unsigned int _size = 12)
-    : Asset(file), size(_size)
+    TestAsset(const std::filesystem::path& _file, unsigned int _size = 12)
+    : file(_file), size(_size)
     {
         auto input = std::ifstream(file);
         if (! input.is_open())
@@ -21,6 +21,11 @@ public:
             throw std::format("Failed to open {} for reading.", file.string());
         }
         input >> value;
+    }
+
+    const std::filesystem::path& get_file() const
+    {
+        return file;
     }
 
     unsigned int get_size() const
@@ -34,8 +39,9 @@ public:
     }
 
 private:
-    unsigned int size  = 0;
-    unsigned int value = 0;
+    std::filesystem::path file;
+    unsigned int          size  = 0;
+    unsigned int          value = 0;
 };
 
 TEST(AssetLibrary, load_asset)

@@ -147,13 +147,16 @@
     <ClCompile Include="test_asset_library.cpp" />
     <ClCompile Include="test_graphic_system.cpp" />
     <ClCompile Include="test_input_system.cpp" />
+    <ClCompile Include="test_texture.cpp" />
     <ClCompile Include="test_utils.cpp" />
     <ClCompile Include="test_settings.cpp" />
+    <ClCompile Include="texture_checks.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="glm_test.h" />
+    <ClInclude Include="glm_checks.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="test_utils.h" />
+    <ClInclude Include="texture_checks.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ice\ice.vcxproj">

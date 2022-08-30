@@ -39,6 +39,12 @@
     <ClCompile Include="test_asset_library.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test_texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="texture_checks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -47,7 +53,10 @@
     <ClInclude Include="test_utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="glm_test.h">
+    <ClInclude Include="texture_checks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="glm_checks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
