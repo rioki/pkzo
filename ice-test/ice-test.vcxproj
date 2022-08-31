@@ -148,6 +148,9 @@
     <ClCompile Include="test_font.cpp" />
     <ClCompile Include="test_graphic_system.cpp" />
     <ClCompile Include="test_input_system.cpp" />
+    <ClCompile Include="test_screen.cpp" />
+    <ClCompile Include="test_screen_node.cpp" />
+    <ClCompile Include="test_screen_node_group.cpp" />
     <ClCompile Include="test_texture.cpp" />
     <ClCompile Include="test_env.cpp" />
     <ClCompile Include="test_settings.cpp" />

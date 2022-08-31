@@ -58,6 +58,12 @@ namespace ice
         return seed;
     }
 
+    template <typename ContainerT, typename RangeT>
+    ContainerT to(RangeT&& range)
+    {
+        return ContainerT(begin(range), end(range));
+    }
+    
     ICE_EXPORT std::u32string utf32(const std::string& buff);
     ICE_EXPORT std::u32string utf32(const std::u8string& buff);
 
