@@ -9,6 +9,7 @@
 #include "Engine.h"
 #include "Settings.h"
 #include "Window.h"
+#include "Texture.h"
 #include "glm_json.h"
 
 namespace ice
@@ -50,6 +51,14 @@ namespace ice
     {
         assert(window);
         window->draw();
+    }
+
+    std::shared_ptr<Texture> GraphicSystem::get_screenshot() const noexcept
+    {
+        auto s = window->get_size();
+        std::vector<std::byte> buffer(s.x * s.y * 3);
+        glReadPixels(0, 0, s.x, s.y, GL_BGR, GL_UNSIGNED_BYTE, buffer.data());
+        return std::make_shared<Texture>(s, ColorMode::RGB, DataType::UINT8, buffer.data(), "screen");
     }
 
     void GraphicSystem::render_frame() noexcept

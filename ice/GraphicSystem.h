@@ -12,6 +12,7 @@
 namespace ice
 {
     class Window;
+    class Texture;
 
     class ICE_EXPORT GraphicSystem : public System
     {
@@ -24,6 +25,8 @@ namespace ice
         Window* get_window() noexcept;
         [[nodiscard]]
         const Window* get_window() const noexcept;
+
+        [[nodiscard]] std::shared_ptr<Texture> get_screenshot() const noexcept;
 
         void tick() override;
 
