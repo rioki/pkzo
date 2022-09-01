@@ -50,6 +50,10 @@ TEST(GraphicSystem, empty_screeshot)
 {
     auto engine = ice::Engine{};
 
+    auto& settings = engine.get_settings();
+    settings.set_value("GraphicSystem", "resolution", glm::uvec2(800, 600));
+    settings.set_value("GraphicSystem", "mode",       ice::WindowMode::STATIC);
+
     engine.start_system<ice::GraphicSystem>();
 
     const auto* gs = engine.get_system<ice::GraphicSystem>();
