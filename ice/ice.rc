@@ -1,0 +1,8 @@
+// Ice Engine
+// Copyright 2022 Sean Farrell
+// All rights reserved.
+
+#include "resource.h"
+#include "winres.h"
+
+IDR_GLSL_SCREEN GLSL "Screen.glsl"

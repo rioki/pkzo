@@ -7,6 +7,9 @@
 
 #include <string>
 #include <string_view>
+#include <utility>
+#include <memory>
+#include <ranges>
 #include <sstream>
 #include <iostream>
 #include <nlohmann/json.hpp>
@@ -58,10 +61,37 @@ namespace ice
         return seed;
     }
 
+    template <typename ContainerT, typename RangeT>
+    ContainerT to(RangeT&& range)
+    {
+        return ContainerT(begin(range), end(range));
+    }
+
     ICE_EXPORT std::u32string utf32(const std::string& buff);
     ICE_EXPORT std::u32string utf32(const std::u8string& buff);
 
     ICE_EXPORT void trace(const std::string_view msg);
+
+    template <typename ValueT, typename ContainerT, typename ... Args> inline
+    [[nodiscard]] ValueT* add_unique_ptr(ContainerT& container, Args&& ... args) noexcept(std::is_nothrow_constructible_v<ValueT>)
+    {
+        auto value = std::make_unique<ValueT>(std::forward<Args>(args)...);
+        auto ptr = value.get();
+        container.push_back(std::move(value));
+        return ptr;
+    }
+
+    template <typename ValueT, typename ContainerT>
+    void remove_unique_ptr(ContainerT& container, ValueT* value)
+    {
+        assert(value != nullptr);
+        auto i = std::ranges::find_if(container, [value] (const auto& ptr) {
+            return ptr.get() == value;
+        });
+        assert(i != end(container));
+        container.erase(i);
+    }
+
 }
 
 #define ICE_BIT(n) (1 << n)

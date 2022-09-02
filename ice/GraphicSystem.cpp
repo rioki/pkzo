@@ -9,7 +9,9 @@
 #include "Engine.h"
 #include "Settings.h"
 #include "Window.h"
+#include "Texture.h"
 #include "glm_json.h"
+#include "ScreenRenderer.h"
 
 namespace ice
 {
@@ -46,14 +48,37 @@ namespace ice
         return window.get();
     }
 
+    ScreenRenderer* GraphicSystem::create_screen_renderer() noexcept
+    {
+        return add_unique_ptr<ScreenRenderer>(screen_renderers);
+    }
+
+    void GraphicSystem::release_screen_renderer(ScreenRenderer* renderer) noexcept
+    {
+        remove_unique_ptr(screen_renderers, renderer);
+    }
+
     void GraphicSystem::tick()
     {
         assert(window);
         window->draw();
     }
 
+    std::shared_ptr<Texture> GraphicSystem::get_screenshot() const noexcept
+    {
+        auto s = window->get_size();
+        std::vector<std::byte> buffer(s.x * s.y * 3);
+        glReadPixels(0, 0, s.x, s.y, GL_BGR, GL_UNSIGNED_BYTE, buffer.data());
+        return std::make_shared<Texture>(s, ColorMode::RGB, DataType::UINT8, buffer.data(), "screen");
+    }
+
     void GraphicSystem::render_frame() noexcept
     {
-
+        // we are assuming any screen renderer is the overlay screen...
+        // a better and more complex implementation will come later
+        if (!screen_renderers.empty())
+        {
+            screen_renderers[0]->render();
+        }
     }
 }

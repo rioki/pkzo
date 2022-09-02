@@ -8,11 +8,19 @@
 #include "System.h"
 #include "GraphicSystem.h"
 #include "InputSystem.h"
+#include "Screen.h"
 
 namespace ice
 {
     Engine::Engine() = default;
-    Engine::~Engine() = default;
+    Engine::~Engine()
+    {
+        if (overlay)
+        {
+            overlay->deactivate(*this);
+            overlay = nullptr;
+        }
+    }
 
     Settings& Engine::get_settings() noexcept
     {
@@ -114,8 +122,29 @@ namespace ice
         return is->get_joysticks();
     }
 
+    void Engine::set_overlay(const std::shared_ptr<Screen>& value) noexcept
+    {
+        c9y::delay([this, value] () {
+            if (overlay)
+            {
+                overlay->deactivate(*this);
+            }
+            overlay = value;
+            if (overlay)
+            {
+                overlay->activate(*this);
+            }
+        });
+    }
+
+    const std::shared_ptr<Screen>& Engine::get_overlay() const noexcept
+    {
+        return overlay;
+    }
+
     void Engine::tick()
     {
+        c9y::sync_point();
         for (const auto& sys : systems)
         {
             sys->tick();

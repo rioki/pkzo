@@ -20,6 +20,7 @@ namespace ice
     class Mouse;
     class Keyboard;
     class Joystick;
+    class Screen;
 
     class ICE_EXPORT Engine
     {
@@ -67,6 +68,9 @@ namespace ice
         template <typename SystemT> [[nodiscard]]
         const SystemT* get_system() const;
 
+        void set_overlay(const std::shared_ptr<Screen>& value) noexcept;
+        const std::shared_ptr<Screen>& get_overlay() const noexcept;
+
         void tick();
         void run();
         void stop();
@@ -75,6 +79,7 @@ namespace ice
         std::atomic<bool>                    running = false;
         Settings                             settings;
         std::vector<std::unique_ptr<System>> systems;
+        std::shared_ptr<Screen>              overlay;
 
         Engine(const Engine&) = delete;
         Engine& operator = (const Engine&) = delete;

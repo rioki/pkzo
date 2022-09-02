@@ -54,14 +54,18 @@ namespace ice
     std::vector<Joystick*> InputSystem::get_joysticks() noexcept
     {
         auto result = std::vector<Joystick*>(joysticks.size());
-        std::transform(begin(joysticks), end(joysticks), begin(result), [] (auto& uptr) { return uptr.get(); });
+        std::transform(begin(joysticks), end(joysticks), begin(result), [] (auto& uptr) {
+            return uptr.get();
+        });
         return result;
     }
 
     std::vector<const Joystick*> InputSystem::get_joysticks() const noexcept
     {
         auto result = std::vector<const Joystick*>(joysticks.size());
-        std::transform(begin(joysticks), end(joysticks), begin(result), [] (auto& uptr) { return uptr.get(); });
+        std::transform(begin(joysticks), end(joysticks), begin(result), [] (auto& uptr) {
+            return uptr.get();
+        });
         return result;
     }
 

@@ -6,10 +6,12 @@
 
 #include <limits>
 
+#include <ice/glm_io.h>
 #include <ice/Engine.h>
 #include <ice/System.h>
 #include <ice/GraphicSystem.h>
 #include <ice/InputSystem.h>
+#include <ice/Screen.h>
 
 #include "test_env.h"
 
@@ -139,4 +141,18 @@ TEST(Engine, devices)
     {
         EXPECT_NE(nullptr, j);
     }
+}
+
+TEST(Engine, overlay_change_sync_on_tick)
+{
+    auto engine = ice::Engine{};
+
+    EXPECT_EQ(nullptr, engine.get_overlay());
+
+    auto screen = std::make_shared<ice::Screen>(glm::vec2(800, 600));
+    engine.set_overlay(screen);
+    EXPECT_EQ(nullptr, engine.get_overlay());
+
+    engine.tick();
+    EXPECT_EQ(screen, engine.get_overlay());
 }

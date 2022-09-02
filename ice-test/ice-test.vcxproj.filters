@@ -45,10 +45,19 @@
     <ClCompile Include="texture_checks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test_screen_node.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test_screen_node_group.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="test_font.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="test_utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test_screen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
