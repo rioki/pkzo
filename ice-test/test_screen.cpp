@@ -96,7 +96,7 @@ TEST(Screen, GRAPHICAL_render_text)
     auto screen = std::make_shared<ice::Screen>(glm::vec2(800.0f, 600.0f));
 
     auto font = std::make_shared<ice::Font>(ice::test::get_asset_folder() / "fonts/DejaVuSans.ttf", 32);
-    auto text = std::make_shared<ice::Text>(glm::mat3(1.0f), "pkzo", font, glm::vec4(1.0f));
+    auto text = std::make_shared<ice::Text>(glm::mat3(1.0f), "Ice Engine", font, glm::vec4(1.0f));
     screen->add_node(text);
 
     engine.set_overlay(screen);

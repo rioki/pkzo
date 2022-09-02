@@ -6,7 +6,6 @@
 #include "Rectangle.h"
 
 #include "Screen.h"
-//#include "ScreenRenderer.h"
 
 namespace ice
 {
