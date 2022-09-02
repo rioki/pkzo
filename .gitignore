@@ -9,3 +9,6 @@
 
 # vcpkg Output
 /vcpkg_installed
+
+# Merge Tmp Files
+*.orig
