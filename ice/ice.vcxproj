@@ -137,6 +137,7 @@
     <ClInclude Include="SdlSentry.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="System.h" />
+    <ClInclude Include="Text.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="Window.h" />
@@ -164,6 +165,7 @@
     <ClCompile Include="ScreenRenderer.cpp" />
     <ClCompile Include="SdlSentry.cpp" />
     <ClCompile Include="Settings.cpp" />
+    <ClCompile Include="Text.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="Window.cpp" />

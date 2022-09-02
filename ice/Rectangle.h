@@ -31,9 +31,9 @@ namespace ice
         void deactivate() override;
 
     private:
-        glm::vec2                size      = {15.0f, 15.0f};
-        glm::vec4                color     = {1.0f, 1.0f, 1.0f, 1.0f};
-        std::shared_ptr<Texture> texture;
+        glm::vec2                  size      = {15.0f, 15.0f};
+        glm::vec4                  color     = {1.0f, 1.0f, 1.0f, 1.0f};
+        std::shared_ptr<Texture>   texture;
 
         ScreenRenderer::Rectangle* render_handle = nullptr;
     };

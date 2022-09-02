@@ -68,6 +68,8 @@ namespace ice
 
     void Rectangle::activate()
     {
+        assert(render_handle == nullptr);
+
         auto screen = get_screen();
         assert(screen != nullptr);
         if (auto renderer = screen->get_renderer())
