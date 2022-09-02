@@ -5,6 +5,10 @@
 #include "pch.h"
 #include "Screen.h"
 
+#include "Engine.h"
+#include "GraphicSystem.h"
+#include "ScreenRenderer.h"
+
 namespace ice
 {
     Screen::Screen(const glm::vec2& _size)
@@ -27,23 +31,50 @@ namespace ice
     {
         assert(value.x > 0.0f && value.y > 0.0f);
         size = value;
+        if (renderer)
+        {
+            renderer->set_screen_size(size);
+        }
     }
 
-    void Screen::activate()
+    ScreenRenderer* Screen::get_renderer() noexcept
+    {
+        return renderer;
+    }
+
+    const ScreenRenderer* Screen::get_renderer() const noexcept
+    {
+        return renderer;
+    }
+
+    void Screen::activate(Engine& engine)
     {
         assert(false == active);
         active = true;
 
+        if (auto gs = engine.get_system<GraphicSystem>())
+        {
+            renderer = gs->create_screen_renderer();
+            renderer->set_screen_size(size);
+        }
+
         ScreenNodeGroup::activate();
     }
 
-    void Screen::deactivate()
+    void Screen::deactivate(Engine& engine)
     {
         assert(true == active);
-
         ScreenNodeGroup::deactivate();
 
-        active   = false;
+        if (renderer)
+        {
+            auto gs = engine.get_system<GraphicSystem>();
+            assert(gs);
+            gs->release_screen_renderer(renderer);
+            renderer = nullptr;
+        }
+
+        active = false;
     }
 
     bool Screen::is_active() const noexcept

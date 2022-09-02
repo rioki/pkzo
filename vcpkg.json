@@ -12,6 +12,7 @@
     "nlohmann-json",
     "rioki-glow",
     "rsig",
-    "sdl2"
+    "sdl2",
+    "c9y"
   ]
 }

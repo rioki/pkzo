@@ -11,6 +11,7 @@
 #include "Window.h"
 #include "Texture.h"
 #include "glm_json.h"
+#include "ScreenRenderer.h"
 
 namespace ice
 {
@@ -47,6 +48,16 @@ namespace ice
         return window.get();
     }
 
+    ScreenRenderer* GraphicSystem::create_screen_renderer() noexcept
+    {
+        return add_unique_ptr<ScreenRenderer>(screen_renderers);
+    }
+
+    void GraphicSystem::release_screen_renderer(ScreenRenderer* renderer) noexcept
+    {
+        remove_unique_ptr(screen_renderers, renderer);
+    }
+
     void GraphicSystem::tick()
     {
         assert(window);
@@ -63,6 +74,11 @@ namespace ice
 
     void GraphicSystem::render_frame() noexcept
     {
-
+        // we are assuming any screen renderer is the overlay screen...
+        // a better and more complex implementation will come later
+        if (!screen_renderers.empty())
+        {
+            screen_renderers[0]->render();
+        }
     }
 }

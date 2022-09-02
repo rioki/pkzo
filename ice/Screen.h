@@ -9,25 +9,31 @@
 
 namespace ice
 {
+    class Engine;
+    class ScreenRenderer;
+
     class ICE_EXPORT Screen : public ScreenNodeGroup
     {
     public:
         Screen(const glm::vec2& size);
         ~Screen();
 
-        [[nodiscard]]
-        const glm::vec2& get_size() const noexcept;
+        [[nodiscard]] const glm::vec2& get_size() const noexcept;
         void resize(const glm::vec2& value) noexcept;
 
-        void activate() override;
-        void deactivate() override;
+        [[nodiscard]] ScreenRenderer* get_renderer() noexcept;
+        [[nodiscard]] const ScreenRenderer* get_renderer() const noexcept;
 
-        [[nodiscard]]
-        bool is_active() const noexcept;
+        void activate(Engine& engine);
+        void deactivate(Engine& engine);
+
+        [[nodiscard]] bool is_active() const noexcept;
 
     private:
         glm::vec2 size;
         bool active = false;
+
+        ScreenRenderer* renderer = nullptr;
     };
 
     ICE_EXPORT [[nodiscard]]
