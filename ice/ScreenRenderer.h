@@ -22,16 +22,16 @@ namespace ice
             ~Rectangle();
 
             void set_transform(const glm::mat3& value) noexcept;
-            const glm::mat3& get_transform() const noexcept;
+            [[nodiscard]] const glm::mat3& get_transform() const noexcept;
 
             void set_size(const glm::vec2& value) noexcept;
-            const glm::vec2& get_size() const noexcept;
+            [[nodiscard]] const glm::vec2& get_size() const noexcept;
 
             void set_color(const glm::vec4& value) noexcept;
-            const glm::vec4& get_color() const noexcept;
+            [[nodiscard]] const glm::vec4& get_color() const noexcept;
 
             void set_texture(const std::shared_ptr<Texture>& value) noexcept;
-            const std::shared_ptr<Texture>& get_texture() const noexcept;
+            [[nodiscard]] const std::shared_ptr<Texture>& get_texture() const noexcept;
 
         private:
             glow::Pipeline&          pipeline;
