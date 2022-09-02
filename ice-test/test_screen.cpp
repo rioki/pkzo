@@ -23,7 +23,7 @@ TEST(Screen, init)
     EXPECT_GLM_NEAR(glm::vec2(640.0f, 480.0f), screen.get_size(), 1e-4f);
 }
 
-TEST(Screen, render_plain_rectangle)
+TEST(Screen, GRAPHICAL_render_plain_rectangle)
 {
     auto engine = ice::Engine{};
 
@@ -52,7 +52,7 @@ TEST(Screen, render_plain_rectangle)
     EXPECT_TEXTURE_REF_EQ(screenshot);
 }
 
-TEST(Screen, render_textured_rectangle)
+TEST(Screen, GRAPHICAL_render_textured_rectangle)
 {
     auto engine = ice::Engine{};
 
