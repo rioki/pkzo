@@ -22,11 +22,24 @@ namespace ice
         AssetLibrary() noexcept;
         ~AssetLibrary();
 
+        void add_directory(const std::filesystem::path& dir);
+        const std::vector<std::filesystem::path>& get_directories() const noexcept;
+
         template <typename AssetT, typename ... Args>
         std::shared_ptr<AssetT> load(const Args& ... args);
 
+        template <typename AssetT, typename ... Args>
+        std::shared_ptr<AssetT> load(const char* path, const Args& ... args);
+
+        template <typename AssetT, typename ... Args>
+        std::shared_ptr<AssetT> load(const std::filesystem::path& path, const Args& ... args);
+
     private:
-        std::unordered_map<size_t, std::shared_ptr<Asset>> asset_cache;
+        std::vector<std::filesystem::path>                 directories;
+        std::unordered_map<size_t, std::shared_ptr<Asset>> cache;
+
+        template <typename AssetT, typename ... Args>
+        std::shared_ptr<AssetT> do_load(const Args& ... args);
 
         AssetLibrary(const AssetLibrary&) = delete;
         AssetLibrary& operator = (const AssetLibrary&) = delete;
@@ -35,10 +48,49 @@ namespace ice
     template <typename AssetT, typename ... Args>
     std::shared_ptr<AssetT> AssetLibrary::load(const Args& ... args)
     {
+        return do_load<AssetT>(args...);
+    }
+
+    template <typename AssetT, typename ... Args>
+    std::shared_ptr<AssetT> AssetLibrary::load(const char* path, const Args& ... args)
+    {
+        return load<AssetT>(std::filesystem::path(path), args ...);
+    }
+
+    std::filesystem::path _fix_path(const std::filesystem::path& path, const std::vector<std::filesystem::path>& dirs)
+    {
+        if (path.is_absolute())
+        {
+            return std::filesystem::weakly_canonical(path);
+        }
+
+        for (const auto& dir : dirs)
+        {
+            auto test_file = dir / path;
+            if (std::filesystem::exists(test_file))
+            {
+                return std::filesystem::canonical(test_file);
+            }
+        }
+
+        // this probably does not exist
+        return path;
+    }
+
+    template <typename AssetT, typename ... Args>
+    std::shared_ptr<AssetT> AssetLibrary::load(const std::filesystem::path& path, const Args& ... args)
+    {
+        auto fixed_path = _fix_path(path, directories);
+        return do_load<AssetT>(fixed_path, args ...);
+    }
+
+    template <typename AssetT, typename ... Args>
+    std::shared_ptr<AssetT> AssetLibrary::do_load(const Args& ... args)
+    {
         auto key = hash(args...);
 
-        auto i = asset_cache.find(key);
-        if (i != end(asset_cache))
+        auto i = cache.find(key);
+        if (i != end(cache))
         {
             auto a = std::dynamic_pointer_cast<AssetT>(i->second);
             assert(a != nullptr);
@@ -46,7 +98,7 @@ namespace ice
         }
 
         auto asset = std::make_shared<AssetT>(args...);
-        asset_cache[key] = asset;
+        cache[key] = asset;
         return asset;
     }
 }
