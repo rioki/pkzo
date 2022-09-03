@@ -91,3 +91,24 @@ TEST(AssetLibrary, second_argument_not_deduplicated)
 
     EXPECT_NE(a, b);
 }
+
+TEST(AssetLibrary, search_path)
+{
+    // sanity check
+    EXPECT_TRUE(ice::test::get_test_input().is_absolute());
+
+    auto lib = ice::AssetLibrary{};
+    lib.add_directory(ice::test::get_test_input());
+    lib.add_directory(ice::test::get_asset_folder());
+
+    // still loads absolute paths
+    auto a = lib.load<TestAsset>(ice::test::get_test_input() / "TestAsset.txt", 24);
+    EXPECT_NE(nullptr, a);
+
+    // loads relative paths
+    auto b = lib.load<TestAsset>("TestAsset.txt", 48);
+    EXPECT_NE(nullptr, b);
+
+    // and they are deduplicated nonetheless
+    EXPECT_NE(a, b);
+}
