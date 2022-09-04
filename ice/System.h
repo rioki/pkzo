@@ -12,12 +12,12 @@ namespace ice
     class ICE_EXPORT System
     {
     public:
-        System(Engine& e) noexcept
+        explicit System(Engine& e) noexcept
         : engine(e) {}
 
         virtual ~System() = default;
 
-        virtual void tick() = 0;
+        virtual void tick() {};
 
     protected:
         Engine& engine;

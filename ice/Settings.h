@@ -10,6 +10,7 @@
 #include <filesystem>
 
 #include <nlohmann/json.hpp>
+#include "glm_json.h"
 
 namespace ice
 {

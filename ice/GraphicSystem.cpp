@@ -11,6 +11,7 @@
 #include "Window.h"
 #include "Texture.h"
 #include "glm_json.h"
+#include "Screen.h"
 #include "ScreenRenderer.h"
 
 namespace ice
@@ -48,6 +49,18 @@ namespace ice
         return window.get();
     }
 
+    const glm::uvec2 GraphicSystem::get_window_size() const noexcept
+    {
+        if (window)
+        {
+            return window->get_size();
+        }
+        else
+        {
+            return glm::uvec2(0u);
+        }
+    }
+
     ScreenRenderer* GraphicSystem::create_screen_renderer() noexcept
     {
         return add_unique_ptr<ScreenRenderer>(screen_renderers);
@@ -72,13 +85,28 @@ namespace ice
         return std::make_shared<Texture>(s, ColorMode::RGB, DataType::UINT8, buffer.data(), "screen");
     }
 
+    rsig::connection GraphicSystem::debug_draw(const std::function<void ()>& cb) noexcept
+    {
+        return debug_draw_signal.connect(cb);
+    }
+
+    rsig::signal<>& GraphicSystem::get_debug_draw_signal() noexcept
+    {
+        return debug_draw_signal;
+    }
+
     void GraphicSystem::render_frame() noexcept
     {
-        // we are assuming any screen renderer is the overlay screen...
-        // a better and more complex implementation will come later
-        if (!screen_renderers.empty())
+        // 3D Scene
+
+        // 2D Overlay / HUD
+        const auto& overlay = engine.get_overlay();
+        if (overlay)
         {
-            screen_renderers[0]->render();
+            overlay->draw();
         }
+
+        // Debug
+        debug_draw_signal.emit();
     }
 }

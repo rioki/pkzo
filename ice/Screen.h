@@ -24,10 +24,12 @@ namespace ice
         [[nodiscard]] ScreenRenderer* get_renderer() noexcept;
         [[nodiscard]] const ScreenRenderer* get_renderer() const noexcept;
 
-        void activate(Engine& engine);
-        void deactivate(Engine& engine);
+        virtual void activate(Engine& engine);
+        virtual void deactivate(Engine& engine);
 
         [[nodiscard]] bool is_active() const noexcept;
+
+        void draw();
 
     private:
         glm::vec2 size;

@@ -32,6 +32,9 @@ namespace ice
         std::shared_ptr<AssetT> load(const char* path, const Args& ... args);
 
         template <typename AssetT, typename ... Args>
+        std::shared_ptr<AssetT> load(const std::string& path, const Args& ... args);
+
+        template <typename AssetT, typename ... Args>
         std::shared_ptr<AssetT> load(const std::filesystem::path& path, const Args& ... args);
 
     private:
@@ -53,6 +56,12 @@ namespace ice
 
     template <typename AssetT, typename ... Args>
     std::shared_ptr<AssetT> AssetLibrary::load(const char* path, const Args& ... args)
+    {
+        return load<AssetT>(std::filesystem::path(path), args ...);
+    }
+
+    template <typename AssetT, typename ... Args>
+    std::shared_ptr<AssetT> AssetLibrary::load(const std::string& path, const Args& ... args)
     {
         return load<AssetT>(std::filesystem::path(path), args ...);
     }

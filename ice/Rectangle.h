@@ -16,6 +16,7 @@ namespace ice
     {
     public:
         Rectangle(const glm::mat3& transform, const glm::vec2& size, const glm::vec4& color) noexcept;
+        Rectangle(const glm::mat3& transform, const glm::vec2& size, const std::shared_ptr<Texture>& texture) noexcept;
         Rectangle(const glm::mat3& transform, const glm::vec2& size, const glm::vec4& color, const std::shared_ptr<Texture>& texture) noexcept;
 
         void set_size(const glm::vec2& value) noexcept;

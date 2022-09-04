@@ -12,6 +12,7 @@
 #include <ranges>
 #include <sstream>
 #include <iostream>
+#include <glm/glm.hpp>
 #include <nlohmann/json.hpp>
 
 namespace ice
@@ -92,6 +93,54 @@ namespace ice
         container.erase(i);
     }
 
+    ICE_EXPORT [[nodiscard]] std::string join(const std::vector<std::string>& strs, const std::string& delimiter) noexcept;
+
+    ICE_EXPORT [[nodiscard]] std::vector<std::string> explode(const std::string& str, const std::string& delimiter) noexcept;
+
+    ICE_EXPORT [[nodiscard]] std::vector<std::string> tokenize(const std::string& str) noexcept;
+
+    inline
+    glm::vec3 rgb(float r, float g, float b)
+    {
+        return { r, g, b };
+    }
+
+    inline
+    glm::vec3 rgb(unsigned int r, unsigned int g, unsigned int b)
+    {
+        return rgb((float)r / 255.0f, (float)g / 255.0f, (float)b / 255.0f);
+    }
+
+    inline
+    glm::vec3 rgb(unsigned int hex)
+    {
+        unsigned int r = (hex & 0x00FF0000) >> 16;
+        unsigned int g = (hex & 0x0000FF00) >> 8;
+        unsigned int b = (hex & 0x000000FF) >> 0;
+        return rgb(r, g, b);
+    }
+
+    inline
+    glm::vec4 rgba(float r, float g, float b, float a)
+    {
+        return { r, g, b, a };
+    }
+
+    inline
+    glm::vec4 rgba(unsigned int r, unsigned int g, unsigned int b, unsigned int a)
+    {
+        return rgba((float)r / 255.0f, (float)g / 255.0f, (float)b / 255.0f, (float)a / 255.0f);
+    }
+
+    inline
+    glm::vec4 rgba(unsigned int hex)
+    {
+        unsigned int r = (hex & 0xFF000000) >> 24;
+        unsigned int g = (hex & 0x00FF0000) >> 16;
+        unsigned int b = (hex & 0x0000FF00) >> 8;
+        unsigned int a = (hex & 0x000000FF) >> 0;
+        return rgba(r, g, b, a);
+    }
 }
 
 #define ICE_BIT(n) (1 << n)

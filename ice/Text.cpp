@@ -47,6 +47,7 @@ namespace ice
         if (render_handle)
         {
             render_handle->set_texture(texture);
+            render_handle->set_size(glm::vec2(texture->get_size()));
         }
     }
 
@@ -80,6 +81,7 @@ namespace ice
         if (render_handle)
         {
             render_handle->set_texture(texture);
+            render_handle->set_size(glm::vec2(texture->get_size()));
         }
     }
 
