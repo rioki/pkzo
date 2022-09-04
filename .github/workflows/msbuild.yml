@@ -13,11 +13,9 @@ jobs:
   build:
     strategy:
       matrix:
-        configuration: [Release, Debug]
-        platform: [x86, x64]
+        configuration: [Release]
+        platform: [x64]
         include:
-          - platform: x86
-            triplet: x86-windows
           - platform: x64
             triplet: x64-windows
     runs-on: windows-latest
