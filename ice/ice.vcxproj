@@ -123,6 +123,7 @@
     <ClInclude Include="glm_io.h" />
     <ClInclude Include="glm_json.h" />
     <ClInclude Include="GraphicSystem.h" />
+    <ClInclude Include="ice.h" />
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="Joystick.h" />
     <ClInclude Include="Keyboard.h" />

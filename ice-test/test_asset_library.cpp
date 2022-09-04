@@ -4,10 +4,7 @@
 
 #include "pch.h"
 
-#include <ice/AssetLibrary.h>
-#include <ice/Asset.h>
-
-#include "test_env.h"
+#include <ice/ice.h>
 
 class TestAsset : public ice::Asset
 {

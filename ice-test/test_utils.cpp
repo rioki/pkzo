@@ -4,7 +4,7 @@
 
 #include "pch.h"
 
-#include <ice/utils.h>
+#include <ice/ice.h>
 
 TEST(utils, utf32)
 {

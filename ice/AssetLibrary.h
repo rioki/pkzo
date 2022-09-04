@@ -57,7 +57,7 @@ namespace ice
         return load<AssetT>(std::filesystem::path(path), args ...);
     }
 
-    std::filesystem::path _fix_path(const std::filesystem::path& path, const std::vector<std::filesystem::path>& dirs)
+    inline std::filesystem::path _fix_path(const std::filesystem::path& path, const std::vector<std::filesystem::path>& dirs)
     {
         if (path.is_absolute())
         {

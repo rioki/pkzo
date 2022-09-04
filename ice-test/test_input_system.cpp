@@ -4,10 +4,7 @@
 
 #include "pch.h"
 
-#include <ice/Engine.h>
-#include <ice/InputSystem.h>
-
-#include "test_env.h"
+#include <ice/ice.h>
 
 TEST(InputSystem, has_devices_after_load)
 {

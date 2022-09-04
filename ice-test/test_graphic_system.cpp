@@ -4,14 +4,7 @@
 
 #include "pch.h"
 
-#include <ice/Engine.h>
-#include <ice/GraphicSystem.h>
-#include <ice/Window.h>
-#include <ice/glm_json.h>
-
-#include "test_env.h"
-#include "glm_checks.h"
-#include "texture_checks.h"
+#include <ice/ice.h>
 
 TEST(GraphicSystem, has_window_after_load)
 {

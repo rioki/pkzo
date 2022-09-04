@@ -6,12 +6,7 @@
 
 #include <ice/Settings.h>
 
-#include <glm/glm.hpp>
-#include <ice/glm_io.h>
-#include <ice/glm_json.h>
-
-#include "test_env.h"
-#include "glm_checks.h"
+#include <ice/ice.h>
 
 TEST(Settings, fall_back)
 {
