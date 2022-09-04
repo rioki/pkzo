@@ -276,6 +276,8 @@ namespace ice
     };
     ICE_ENUM_BIT_OPERATORS(KeyMod);
 
+    ICE_EXPORT std::ostream& operator << (std::ostream& os, const KeyMod mod);
+
     class ICE_EXPORT Keyboard
     {
     public:

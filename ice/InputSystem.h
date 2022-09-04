@@ -11,12 +11,12 @@
 #include "System.h"
 #include "SdlSentry.h"
 
+#include "Mouse.h"
+#include "Keyboard.h"
+#include "Joystick.h"
+
 namespace ice
 {
-    class Mouse;
-    class Keyboard;
-    class Joystick;
-
     class ICE_EXPORT InputSystem : public System
     {
     public:
@@ -24,20 +24,23 @@ namespace ice
 
         ~InputSystem();
 
-        [[nodiscard]]
         Mouse* get_mouse() noexcept;
-        [[nodiscard]]
         const Mouse* get_mouse() const noexcept;
 
-        [[nodiscard]]
         Keyboard* get_keyboard() noexcept;
-        [[nodiscard]]
         const Keyboard* get_keyboard() const noexcept;
 
-        [[nodiscard]]
         std::vector<Joystick*> get_joysticks() noexcept;
-        [[nodiscard]]
         std::vector<const Joystick*> get_joysticks() const noexcept;
+
+        void inject_mouse_button_down(MouseButton button, glm::ivec2 position);
+        void inject_mouse_button_up(MouseButton button, glm::ivec2 position);
+        void inject_mouse_move(glm::ivec2 position, glm::ivec2 motion);
+        void inject_mouse_wheel(glm::ivec2 motion);
+
+        void inject_key_down(KeyMod mod, Key key);
+        void inject_key_up(KeyMod mod, Key key);
+        void inject_text(const std::string_view text);
 
         void tick() override;
 

@@ -69,6 +69,111 @@ namespace ice
         return result;
     }
 
+    void InputSystem::inject_mouse_button_down(MouseButton button, glm::ivec2 position)
+    {
+        SDL_Event event;
+        event.type             = SDL_MOUSEBUTTONDOWN;
+        event.button.type      = SDL_MOUSEBUTTONDOWN;
+        event.button.timestamp = SDL_GetTicks();
+        event.button.button    = static_cast<Uint8>(button);
+        event.button.x         = position.x;
+        event.button.y         = position.y;
+        SDL_PushEvent(&event);
+    }
+
+    void InputSystem::inject_mouse_button_up(MouseButton button, glm::ivec2 position)
+    {
+        SDL_Event event;
+        event.type             = SDL_MOUSEBUTTONUP;
+        event.button.type      = SDL_MOUSEBUTTONUP;
+        event.button.timestamp = SDL_GetTicks();
+        event.button.button    = static_cast<Uint8>(button);
+        event.button.x         = position.x;
+        event.button.y         = position.y;
+        SDL_PushEvent(&event);
+    }
+
+    void InputSystem::inject_mouse_move(glm::ivec2 position, glm::ivec2 motion)
+    {
+        SDL_Event event;
+        event.type             = SDL_MOUSEMOTION;
+        event.motion.type      = SDL_MOUSEMOTION;
+        event.motion.timestamp = SDL_GetTicks();
+        event.motion.x         = position.x;
+        event.motion.y         = position.y;
+        event.motion.xrel      = motion.x;
+        event.motion.yrel      = motion.y;
+        SDL_PushEvent(&event);
+    }
+
+    void InputSystem::inject_mouse_wheel(glm::ivec2 motion)
+    {
+        SDL_Event event;
+        event.type            = SDL_MOUSEWHEEL;
+        event.wheel.type      = SDL_MOUSEWHEEL;
+        event.wheel.timestamp = SDL_GetTicks();
+        event.wheel.x         = motion.x;
+        event.wheel.y         = motion.y;
+        SDL_PushEvent(&event);
+    }
+
+    Uint16 mode2sdl(KeyMod mod)
+    {
+        Uint16 result = 0u;
+
+        if ((mod & KeyMod::SHIFT) == KeyMod::SHIFT)
+        {
+            result |= KMOD_SHIFT;
+        }
+        if ((mod & KeyMod::CTRL) == KeyMod::CTRL)
+        {
+            result |= KMOD_CTRL;
+        }
+        if ((mod & KeyMod::ALT) == KeyMod::ALT)
+        {
+            result |= KMOD_ALT;
+        }
+        if ((mod & KeyMod::META) == KeyMod::META)
+        {
+            result |= KMOD_GUI;
+        }
+        return result;
+    }
+
+    void InputSystem::inject_key_down(KeyMod mod, Key key)
+    {
+        SDL_Event event;
+        event.type                = SDL_KEYDOWN;
+        event.key.type            = SDL_KEYDOWN;
+        event.key.timestamp       = SDL_GetTicks();
+        event.key.keysym.mod      = mode2sdl(mod);
+        event.key.keysym.sym      = SDL_GetKeyFromScancode(static_cast<SDL_Scancode>(key));
+        event.key.keysym.scancode = static_cast<SDL_Scancode>(key);
+        SDL_PushEvent(&event);
+    }
+
+    void InputSystem::inject_key_up(KeyMod mod, Key key)
+    {
+        SDL_Event event;
+        event.type                = SDL_KEYUP;
+        event.key.type            = SDL_KEYUP;
+        event.key.timestamp       = SDL_GetTicks();
+        event.key.keysym.mod      = mode2sdl(mod);
+        event.key.keysym.sym      = SDL_GetKeyFromScancode(static_cast<SDL_Scancode>(key));
+        event.key.keysym.scancode = static_cast<SDL_Scancode>(key);
+        SDL_PushEvent(&event);
+    }
+
+    void InputSystem::inject_text(const std::string_view text)
+    {
+        SDL_Event event;
+        event.type           = SDL_TEXTINPUT;
+        event.text.type      = SDL_TEXTINPUT;
+        event.text.timestamp = SDL_GetTicks();
+        strncpy_s(event.text.text, SDL_TEXTINPUTEVENT_TEXT_SIZE, text.data(), text.size());
+        SDL_PushEvent(&event);
+    }
+
     void InputSystem::tick()
     {
         SDL_Event event;
