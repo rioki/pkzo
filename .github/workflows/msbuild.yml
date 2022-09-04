@@ -11,18 +11,7 @@ permissions:
 
 jobs:
   build:
-    strategy:
-      matrix:
-        configuration: [Release, Debug]
-        platform: [x86, x64]
-        include:
-          - platform: x86
-            triplet: x86-windows
-          - platform: x64
-            triplet: x64-windows
     runs-on: windows-latest
-    env:
-      VCPKG_DEFAULT_TRIPLET: ${{ matrix.triplet }}
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -35,9 +24,21 @@ jobs:
     - name: Integrate vcpkg 
       working-directory: ${{steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT}}
       run: vcpkg.exe integrate install
-    - name: Build
+    - name: Build Debug x86
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: msbuild /m /p:Configuration=${{matrix.configuration}} /property:Platform=${{matrix.platform}} ice.sln
-    - name: Test
+      run: msbuild /m /p:Configuration=Debug /property:Platform=x86 ice.sln
+    - name: Build Debug x64
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: bin/${{matrix.platform}}/${{matrix.configuration}}/ice-test.exe --gtest_filter=-*.GRAPHICAL_*
+      run: msbuild /m /p:Configuration=Debug /property:Platform=x64 ice.sln
+    - name: Build Release x86
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: msbuild /m /p:Configuration=Release /property:Platform=x86 ice.sln
+    - name: Build Release x64
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: msbuild /m /p:Configuration=Release /property:Platform=x64 ice.sln
+    - name: Test Release x86
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: bin/x64/Release/ice-test.exe --gtest_filter=-*.GRAPHICAL_*
+    - name: Test Release x64
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: bin/x64/Release/ice-test.exe --gtest_filter=-*.GRAPHICAL_*
