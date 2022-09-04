@@ -9,6 +9,51 @@
 
 namespace ice
 {
+    std::ostream& operator << (std::ostream& os, const KeyMod mod)
+    {
+        if (mod == KeyMod::NONE)
+        {
+            os << "NONE";
+        }
+        else
+        {
+            bool first = true;
+            if (mod == KeyMod::SHIFT)
+            {
+                os << "SHIFT";
+                first = false;
+            }
+            if (mod == KeyMod::CTRL)
+            {
+                if (!first)
+                {
+                    os << "+";
+                }
+                os << "CTRL";
+                first = false;
+            }
+            if (mod == KeyMod::ALT)
+            {
+                if (!first)
+                {
+                    os << "+";
+                }
+                os << "ALT";
+                first = false;
+            }
+            if (mod == KeyMod::META)
+            {
+                if (!first)
+                {
+                    os << "+";
+                }
+                os << "META";
+                first = false;
+            }
+        }
+        return os;
+    }
+
     Keyboard::Keyboard() noexcept = default;
     Keyboard::~Keyboard() = default;
 
