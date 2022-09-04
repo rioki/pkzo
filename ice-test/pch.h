@@ -8,3 +8,7 @@
 #include <regex>
 
 #include <gtest/gtest.h>
+
+#include "test_env.h"
+#include "glm_checks.h"
+#include "texture_checks.h"

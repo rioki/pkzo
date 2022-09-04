@@ -4,11 +4,7 @@
 
 #include "pch.h"
 
-#include <ice/glm_2d.h>
-#include <ice/ScreenNode.h>
-#include <ice/ScreenNodeGroup.h>
-
-#include "glm_checks.h"
+#include <ice/ice.h>
 
 TEST(ScreenNodeGroup, default_contruct)
 {

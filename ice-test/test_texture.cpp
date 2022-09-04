@@ -4,11 +4,7 @@
 
 #include "pch.h"
 
-#include <ice/Texture.h>
-
-#include "test_env.h"
-#include "glm_checks.h"
-#include "texture_checks.h"
+#include <ice/ice.h>
 
 using ice::test::get_test_input;
 

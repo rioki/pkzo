@@ -4,11 +4,7 @@
 
 #include "pch.h"
 
-#include <ice/Font.h>
-
-#include "test_env.h"
-#include "glm_checks.h"
-#include "texture_checks.h"
+#include <ice/ice.h>
 
 TEST(Font, load_ttf)
 {

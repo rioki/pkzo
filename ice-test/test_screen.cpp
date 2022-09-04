@@ -4,19 +4,7 @@
 
 #include "pch.h"
 
-#include <ice/glm_2d.h>
-#include <ice/glm_json.h>
-#include <ice/Screen.h>
-#include <ice/Engine.h>
-#include <ice/GraphicSystem.h>
-#include <ice/Rectangle.h>
-#include <ice/Window.h>
-#include <ice/Font.h>
-#include <ice/Text.h>
-
-#include "test_env.h"
-#include "glm_checks.h"
-#include "texture_checks.h"
+#include <ice/ice.h>
 
 TEST(Screen, init)
 {

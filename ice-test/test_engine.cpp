@@ -6,14 +6,7 @@
 
 #include <limits>
 
-#include <ice/glm_io.h>
-#include <ice/Engine.h>
-#include <ice/System.h>
-#include <ice/GraphicSystem.h>
-#include <ice/InputSystem.h>
-#include <ice/Screen.h>
-
-#include "test_env.h"
+#include <ice/ice.h>
 
 class CountSystem : public ice::System
 {
