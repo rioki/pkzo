@@ -3,6 +3,7 @@ name: MSBuild
 on:
   pull_request:
     branches: [ master ]
+    types: auto_merge_enabled
 
 permissions:
   contents: read
