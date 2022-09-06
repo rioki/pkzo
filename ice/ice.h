@@ -7,6 +7,7 @@
 
 #include "Asset.h"
 #include "AssetLibrary.h"
+#include "ConsoleSystem.h"
 #include "Engine.h"
 #include "Font.h"
 #include "glm_2d.h"

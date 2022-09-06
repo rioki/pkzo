@@ -12,13 +12,23 @@
 
 namespace ice
 {
-    Engine::Engine() = default;
+    Engine::Engine()
+    {
+        c9y::set_main_thread_id(std::this_thread::get_id());
+    }
+
     Engine::~Engine()
     {
         if (overlay)
         {
             overlay->deactivate(*this);
             overlay = nullptr;
+        }
+
+        // destruct in reverse order
+        while (!systems.empty())
+        {
+            systems.erase(begin(systems) + (systems.size() - 1));
         }
     }
 
@@ -40,6 +50,26 @@ namespace ice
     void Engine::save_settings(const std::filesystem::path& file)
     {
         settings.save(file);
+    }
+
+    std::string Engine::get_setting(const std::string& section, const std::string& key, const std::string& initial) const noexcept
+    {
+        return settings.get_value(section, key, initial);
+    }
+
+    AssetLibrary& Engine::get_asset_library() noexcept
+    {
+        return asset_library;
+    }
+
+    const AssetLibrary& Engine::get_asset_library() const noexcept
+    {
+        return asset_library;
+    }
+
+    void Engine::add_asset_folder(const std::filesystem::path& dir) noexcept
+    {
+        asset_library.add_directory(dir);
     }
 
     Window* Engine::get_window() noexcept

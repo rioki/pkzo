@@ -6,3 +6,5 @@
 
 #include <windows.h>
 #include <shlobj.h>
+
+#include <ice/ice.h>

@@ -6,6 +6,8 @@
 
 #include <fstream>
 #include <regex>
+#include <string>
+#include <vector>
 
 #include <gtest/gtest.h>
 

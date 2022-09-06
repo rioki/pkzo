@@ -82,6 +82,14 @@ namespace ice
         return active;
     }
 
+    void Screen::draw()
+    {
+        if (renderer)
+        {
+            renderer->render();
+        }
+    }
+
     template <typename T>
     T map(T source_left, T source_right, T target_left, T target_right, T value)
     {

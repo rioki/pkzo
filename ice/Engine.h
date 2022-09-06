@@ -10,8 +10,10 @@
 #include <memory>
 #include <filesystem>
 #include <vector>
+#include <type_traits>
 
 #include "Settings.h"
+#include "AssetLibrary.h"
 
 namespace ice
 {
@@ -36,8 +38,19 @@ namespace ice
         const Settings& get_settings() const noexcept;
 
         void load_settings(const std::filesystem::path& file);
-
         void save_settings(const std::filesystem::path& file);
+
+        template <typename Type>
+        Type get_setting(const std::string& section, const std::string& key, const Type& initial) const noexcept;
+        std::string get_setting(const std::string& section, const std::string& key, const std::string& initial) const noexcept;
+
+        [[nodiscard]] AssetLibrary& get_asset_library() noexcept;
+        [[nodiscard]] const AssetLibrary& get_asset_library() const noexcept;
+
+        void add_asset_folder(const std::filesystem::path& dir) noexcept;
+
+        template <typename AssetT, typename ... Args>
+        std::shared_ptr<AssetT> load_asset(const Args& ... args);
 
         [[nodiscard]]
         Window* get_window() noexcept;
@@ -78,12 +91,25 @@ namespace ice
     private:
         std::atomic<bool>                    running = false;
         Settings                             settings;
+        AssetLibrary                         asset_library;
         std::vector<std::unique_ptr<System>> systems;
         std::shared_ptr<Screen>              overlay;
 
         Engine(const Engine&) = delete;
         Engine& operator = (const Engine&) = delete;
     };
+
+    template <typename Type>
+    Type Engine::get_setting(const std::string& section, const std::string& key, const Type& initial) const noexcept
+    {
+        return settings.get_value(section, key, initial);
+    }
+
+    template <typename AssetT, typename ... Args>
+    std::shared_ptr<AssetT> Engine::load_asset(const Args& ... args)
+    {
+        return asset_library.load<AssetT>(args...);
+    }
 
     template <typename SystemT>
     void Engine::start_system()

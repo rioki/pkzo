@@ -9,11 +9,14 @@
 
 namespace ice
 {
-    Rectangle::Rectangle(const glm::mat3& t, const glm::vec2& s, const glm::vec4& c) noexcept
-    : Rectangle(t, s, c, nullptr) {}
+    Rectangle::Rectangle(const glm::mat3& _transform, const glm::vec2& _size, const glm::vec4& _color) noexcept
+    : Rectangle(_transform, _size, _color, nullptr) {}
 
-    Rectangle::Rectangle(const glm::mat3& tr, const glm::vec2& s, const glm::vec4& c, const std::shared_ptr<Texture>& te) noexcept
-    : ScreenNode(tr), size(s), color(c), texture(te)
+    Rectangle::Rectangle(const glm::mat3& _transform, const glm::vec2& _size, const std::shared_ptr<Texture>& _texture) noexcept
+    : Rectangle(_transform, _size, glm::vec4(1.0f), _texture) {}
+
+    Rectangle::Rectangle(const glm::mat3& _transform, const glm::vec2& _size, const glm::vec4& _color, const std::shared_ptr<Texture>& _texture) noexcept
+    : ScreenNode(_transform), size(_size), color(_color), texture(_texture)
     {
         on_move([this] () {
             if (render_handle)

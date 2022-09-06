@@ -136,6 +136,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="test_console.cpp" />
     <ClCompile Include="test_engine.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp">
