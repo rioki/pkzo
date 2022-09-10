@@ -80,17 +80,20 @@ TEST(ConsoleSystem, register_and_execute_line)
     EXPECT_EQ("Hello  World!", buffer[3]);
 }
 
-class CatScreen : public ice::Screen
+namespace 
 {
-public:
-    CatScreen(ice::Engine& engine, const glm::vec2& size)
-    : Screen(size)
+    class CatScreen : public ice::Screen
     {
-        auto angry_cat = engine.load_asset<ice::Texture>("AngryCat.jpg");
-        auto rectangle = std::make_shared<ice::Rectangle>(glm::mat3(1.0f), size, angry_cat);
-        add_node(rectangle);
-    }
-};
+    public:
+        CatScreen(ice::Engine& engine, const glm::vec2& size)
+        : Screen(size)
+        {
+            auto angry_cat = engine.load_asset<ice::Texture>("AngryCat.jpg");
+            auto rectangle = std::make_shared<ice::Rectangle>(glm::mat3(1.0f), size, angry_cat);
+            add_node(rectangle);
+        }
+    };
+}
 
 
 TEST(ConsoleSystem, GRAPHICAL_render_hidden_console)

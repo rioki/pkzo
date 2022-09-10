@@ -88,7 +88,11 @@ namespace ice
     ICE_EXPORT std::u32string utf32(const std::string& buff);
     ICE_EXPORT std::u32string utf32(const std::u8string& buff);
 
-    ICE_EXPORT void trace(const std::string_view msg);
+    ICE_EXPORT void trace(const std::string_view msg) noexcept;
+
+#ifndef NDEBUG
+    ICE_EXPORT void handle_soft_assert(const char* file, unsigned int line, const char* scond) noexcept;
+#endif
 
     template <typename ValueT, typename ContainerT, typename ... Args> inline
     ValueT* add_unique_ptr(ContainerT& container, Args&& ... args) noexcept(std::is_nothrow_constructible_v<ValueT>)
@@ -233,3 +237,9 @@ namespace ice
         return is;                                                                              \
     }                                                                                           \
     NLOHMANN_JSON_SERIALIZE_ENUM(ENUM, __VA_ARGS__)
+
+#ifndef NDEBUG
+#define soft_assert(COND) do { if (!(COND)) { ::ice::handle_soft_assert(__FILE__, __LINE__, #COND); } } while (false)
+#else
+#define soft_assert(COND)
+#endif
