@@ -29,6 +29,8 @@
 #include <vector>
 #include <type_traits>
 
+#include <rsig/rsig.h>
+
 #include "Settings.h"
 #include "AssetLibrary.h"
 
@@ -89,12 +91,18 @@ namespace ice
         void set_overlay(const std::shared_ptr<Screen>& value) noexcept;
         const std::shared_ptr<Screen>& get_overlay() const noexcept;
 
+        rsig::connection on_tick(const std::function<void ()>& cb) noexcept;
+        rsig::signal<>& get_tick_signal() noexcept;
+
         void tick();
+        void activate();
+        void deactivate();
         void run();
         void stop();
 
     private:
         std::atomic<bool>                    running = false;
+        rsig::signal<>                       tick_signal;
         Settings                             settings;
         AssetLibrary                         asset_library;
         std::vector<std::unique_ptr<System>> systems;

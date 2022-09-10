@@ -34,7 +34,11 @@ namespace ice
 
         virtual ~System() = default;
 
+        virtual void activate() {};
+
         virtual void tick() {};
+
+        virtual void deactivate() {};
 
     protected:
         Engine& engine;
