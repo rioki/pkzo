@@ -27,5 +27,5 @@ jobs:
             pull_number: context.issue.number,
             review_id: 1,
             event: 'APPROVE',
-            body: $APPROVAL_BODY
+            body: ${{ env.APPROVAL_BODY }}
           })
