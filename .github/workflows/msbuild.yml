@@ -49,6 +49,10 @@ jobs:
         `./vcpkg/vcpkg fetch nuget | tail -n 1` \
           setapikey "${{ secrets.GITHUB_TOKEN }}" \
           -source "https://nuget.pkg.github.com/rioki/index.json"
+    - name: '[debug] vcpkg package restore'
+      shell: 'bash'
+      run: >
+        ./vcpkg/vcpkg install sdl2 --triplet ${{ matrix.triplet }} --debug
     - name: Integrate vcpkg 
       working-directory: ${{steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT}}
       run: vcpkg.exe integrate install
