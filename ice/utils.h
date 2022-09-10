@@ -74,7 +74,7 @@ namespace ice
     ICE_EXPORT void trace(const std::string_view msg);
 
     template <typename ValueT, typename ContainerT, typename ... Args> inline
-    [[nodiscard]] ValueT* add_unique_ptr(ContainerT& container, Args&& ... args) noexcept(std::is_nothrow_constructible_v<ValueT>)
+    ValueT* add_unique_ptr(ContainerT& container, Args&& ... args) noexcept(std::is_nothrow_constructible_v<ValueT>)
     {
         auto value = std::make_unique<ValueT>(std::forward<Args>(args)...);
         auto ptr = value.get();
@@ -93,11 +93,11 @@ namespace ice
         container.erase(i);
     }
 
-    ICE_EXPORT [[nodiscard]] std::string join(const std::vector<std::string>& strs, const std::string& delimiter) noexcept;
+    ICE_EXPORT std::string join(const std::vector<std::string>& strs, const std::string& delimiter) noexcept;
 
-    ICE_EXPORT [[nodiscard]] std::vector<std::string> explode(const std::string& str, const std::string& delimiter) noexcept;
+    ICE_EXPORT std::vector<std::string> explode(const std::string& str, const std::string& delimiter) noexcept;
 
-    ICE_EXPORT [[nodiscard]] std::vector<std::string> tokenize(const std::string& str) noexcept;
+    ICE_EXPORT std::vector<std::string> tokenize(const std::string& str) noexcept;
 
     inline
     glm::vec3 rgb(float r, float g, float b)

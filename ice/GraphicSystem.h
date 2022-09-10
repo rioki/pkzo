@@ -23,16 +23,14 @@ namespace ice
 
         ~GraphicSystem();
 
-        [[nodiscard]]
         Window* get_window() noexcept;
-        [[nodiscard]]
         const Window* get_window() const noexcept;
 
         const glm::uvec2 get_window_size() const noexcept;
 
-        [[nodiscard]] std::shared_ptr<Texture> get_screenshot() const noexcept;
+        std::shared_ptr<Texture> get_screenshot() const noexcept;
 
-        [[nodiscard]] ScreenRenderer* create_screen_renderer() noexcept;
+        ScreenRenderer* create_screen_renderer() noexcept;
         void release_screen_renderer(ScreenRenderer* renderer) noexcept;
 
         rsig::connection debug_draw(const std::function<void ()>& cb) noexcept;

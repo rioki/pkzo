@@ -22,8 +22,6 @@ namespace ice
 
         template <typename Type> [[nodiscard]]
         Type get_value(const std::string& section, const std::string& key, const Type& initial) const noexcept;
-
-        [[nodiscard]]
         std::string get_value(const std::string& section, const std::string& key, const std::string& initial) const noexcept;
 
         template <typename Type> [[nodiscard]]

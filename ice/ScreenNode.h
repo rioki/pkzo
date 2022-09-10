@@ -31,11 +31,11 @@ namespace ice
         const T* find_ancestor() const noexcept;
 
         void set_transform(const glm::mat3& value) noexcept;
-        [[nodiscard]] const glm::mat3& get_transform() const noexcept;
-        [[nodiscard]] glm::mat3 get_world_transform() const noexcept;
+        const glm::mat3& get_transform() const noexcept;
+        glm::mat3 get_world_transform() const noexcept;
 
         rsig::connection on_move(const std::function<void ()>& cb) noexcept;
-        [[nodiscard]] rsig::signal<>& get_move_signal() noexcept;
+        rsig::signal<>& get_move_signal() noexcept;
 
         virtual void activate();
         virtual void deactivate();
