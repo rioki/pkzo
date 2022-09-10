@@ -31,54 +31,42 @@ namespace ice
 
         ~Engine();
 
-        [[nodiscard]]
+
         Settings& get_settings() noexcept;
-
-        [[nodiscard]]
         const Settings& get_settings() const noexcept;
-
         void load_settings(const std::filesystem::path& file);
         void save_settings(const std::filesystem::path& file);
-
         template <typename Type>
         Type get_setting(const std::string& section, const std::string& key, const Type& initial) const noexcept;
         std::string get_setting(const std::string& section, const std::string& key, const std::string& initial) const noexcept;
 
-        [[nodiscard]] AssetLibrary& get_asset_library() noexcept;
-        [[nodiscard]] const AssetLibrary& get_asset_library() const noexcept;
+        AssetLibrary& get_asset_library() noexcept;
+        const AssetLibrary& get_asset_library() const noexcept;
 
         void add_asset_folder(const std::filesystem::path& dir) noexcept;
 
         template <typename AssetT, typename ... Args>
         std::shared_ptr<AssetT> load_asset(const Args& ... args);
 
-        [[nodiscard]]
         Window* get_window() noexcept;
-        [[nodiscard]]
         const Window* get_window() const noexcept;
 
-        [[nodiscard]]
         Mouse* get_mouse() noexcept;
-        [[nodiscard]]
         const Mouse* get_mouse() const noexcept;
 
-        [[nodiscard]]
         Keyboard* get_keyboard() noexcept;
-        [[nodiscard]]
         const Keyboard* get_keyboard() const noexcept;
 
-        [[nodiscard]]
         std::vector<Joystick*> get_joysticks() noexcept;
-        [[nodiscard]]
         std::vector<const Joystick*> get_joysticks() const noexcept;
 
         template <typename SystemT>
         void start_system();
 
-        template <typename SystemT> [[nodiscard]]
+        template <typename SystemT>
         SystemT* get_system();
 
-        template <typename SystemT> [[nodiscard]]
+        template <typename SystemT>
         const SystemT* get_system() const;
 
         void set_overlay(const std::shared_ptr<Screen>& value) noexcept;

@@ -18,11 +18,11 @@ namespace ice
         Screen(const glm::vec2& size);
         ~Screen();
 
-        [[nodiscard]] const glm::vec2& get_size() const noexcept;
+        const glm::vec2& get_size() const noexcept;
         void resize(const glm::vec2& value) noexcept;
 
-        [[nodiscard]] ScreenRenderer* get_renderer() noexcept;
-        [[nodiscard]] const ScreenRenderer* get_renderer() const noexcept;
+        ScreenRenderer* get_renderer() noexcept;
+        const ScreenRenderer* get_renderer() const noexcept;
 
         virtual void activate(Engine& engine);
         virtual void deactivate(Engine& engine);

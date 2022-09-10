@@ -18,16 +18,16 @@ namespace ice
         Text(const glm::mat3& transform, const std::string& text, const std::shared_ptr<Font>& font) noexcept;
         Text(const glm::mat3& transform, const std::string& text, const std::shared_ptr<Font>& font, const glm::vec4& color) noexcept;
 
-        [[nodiscard]] glm::vec2 get_size() const noexcept;
+        glm::vec2 get_size() const noexcept;
 
         void set_text(const std::string& value) noexcept;
-        [[nodiscard]] const std::string& get_text() const noexcept;
+        const std::string& get_text() const noexcept;
 
         void set_color(const glm::vec4& value) noexcept;
-        [[nodiscard]] const glm::vec4& get_color() const noexcept;
+        const glm::vec4& get_color() const noexcept;
 
         void set_font(const std::shared_ptr<Font>& value) noexcept;
-        [[nodiscard]] const std::shared_ptr<Font>& get_font() const noexcept;
+        const std::shared_ptr<Font>& get_font() const noexcept;
 
         void activate() override;
         void deactivate() override;
