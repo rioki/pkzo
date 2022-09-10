@@ -10,6 +10,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution Files", "{707FFCC1-D64F-402E-8341-8AD0280AE6D3}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		ChangeLog.md = ChangeLog.md
+		LICENSE.txt = LICENSE.txt
+		README.md = README.md
 		vcpkg.json = vcpkg.json
 	EndProjectSection
 EndProject
