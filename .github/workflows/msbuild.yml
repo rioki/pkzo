@@ -57,7 +57,7 @@ jobs:
     - name: Integrate vcpkg in MSBuild
       shell: 'bash'
       run: >
-        ./vcpkg/vcpkg iintegrate install
+        ./vcpkg/vcpkg integrate install
     - name: Build
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: msbuild /m /p:Configuration=${{matrix.configuration}} /property:Platform=${{matrix.platform}} ice.sln
