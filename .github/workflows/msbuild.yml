@@ -52,7 +52,7 @@ jobs:
     - name: '[debug] vcpkg package restore'
       shell: 'bash'
       run: >
-        ./vcpkg/vcpkg install sdl2 --triplet ${{ matrix.triplet }} --debug
+        ./vcpkg/vcpkg install sdl2 --triplet ${{ matrix.triplet }} 
     - name: Integrate vcpkg 
       working-directory: ${{steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT}}
       run: vcpkg.exe integrate install
