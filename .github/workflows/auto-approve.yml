@@ -5,11 +5,6 @@ on:
     types:
       - created
 
-env:
-  APPROVAL_USER: 'rioki'
-  APPROVAL_KEYWORD: 'LGTM'
-  APPROVAL_BODY: 'Let`s get this merged then.'
-
 jobs:
   auto-approve:
     runs-on: ubuntu-latest
@@ -18,7 +13,7 @@ jobs:
     steps:
     - uses: actions/github-script@v6
       name: Approve LGTM Review
-      if: github.actor == ${{ env.APPROVAL_USER }} &&  contains(github.event.comment.body, ${{ env.APPROVAL_KEYWORD }})
+      if: github.actor == 'rioki' &&  contains(github.event.comment.body, 'LGTM')
       with:
         script: |
           github.rest.pulls.createReview({
@@ -27,5 +22,5 @@ jobs:
             pull_number: context.issue.number,
             review_id: 1,
             event: 'APPROVE',
-            body: ${{ env.APPROVAL_BODY }}
+            body: 'Let`s get this merged then.'
           })
