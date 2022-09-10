@@ -75,6 +75,41 @@ private:
     unsigned int stop_count = std::numeric_limits<unsigned int>::max();
 };
 
+class ActivatableSystem : public ice::System
+{
+public:
+    ActivatableSystem(ice::Engine& e) noexcept
+    : System(e) {}
+
+    void activate()
+    {
+        EXPECT_FALSE(active);
+        active = true;
+        count++;
+    }
+
+    void deactivate()
+    {
+        EXPECT_TRUE(active);
+        active = false;
+        count++;
+    }
+
+    bool is_active() const noexcept
+    {
+        return active;
+    }
+
+    unsigned int get_count() const noexcept
+    {
+        return count;
+    }
+
+private:
+    bool         active = false;
+    unsigned int count  = 0u;
+};
+
 TEST(Engine, load_settings)
 {
     auto engine = ice::Engine{};
@@ -118,6 +153,25 @@ TEST(Engine, stops)
     const auto* count = engine.get_system<CountSystem>();
     ASSERT_NE(nullptr, count);
     EXPECT_EQ(5u, count->get_count());
+}
+
+TEST(Engine, tick_signal)
+{
+    auto engine = ice::Engine{};
+
+    auto& settings = engine.get_settings();
+    settings.set_value("StopSystem", "stop_count", 5u);
+
+    engine.start_system<StopSystem>();
+
+    auto count = 0u;
+    engine.on_tick([&] () {
+        count++;
+    });
+
+    engine.run();
+
+    EXPECT_EQ(5u, count);
 }
 
 TEST(Engine, devices)
@@ -166,3 +220,28 @@ TEST(Engine, overlay_change_sync_on_tick)
     engine.tick();
     EXPECT_EQ(screen, engine.get_overlay());
 }
+
+TEST(Engine, activate_systems)
+{
+    auto engine = ice::Engine{};
+
+    auto& settings = engine.get_settings();
+    settings.set_value("StopSystem", "stop_count", 5u);
+
+    engine.start_system<ActivatableSystem>();
+    engine.start_system<StopSystem>();
+
+    auto activatable = engine.get_system<ActivatableSystem>();
+    EXPECT_FALSE(activatable->is_active());
+
+    engine.on_tick([&] () {
+        EXPECT_TRUE(activatable->is_active());
+    });
+
+    engine.run();
+
+    EXPECT_FALSE(activatable->is_active());
+    EXPECT_EQ(2u, activatable->get_count());
+}
+
+

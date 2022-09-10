@@ -189,26 +189,62 @@ namespace ice
         return overlay;
     }
 
+    rsig::connection Engine::on_tick(const std::function<void ()>& cb) noexcept
+    {
+        return tick_signal.connect(cb);
+    }
+
+    rsig::signal<>& Engine::get_tick_signal() noexcept
+    {
+        return tick_signal;
+    }
+
+    void Engine::activate()
+    {
+        for (const auto& system : systems)
+        {
+            system->activate();
+        }
+    }
+
     void Engine::tick()
     {
         c9y::sync_point();
+
         for (const auto& sys : systems)
         {
             sys->tick();
+            tick_signal.emit();
+        }
+    }
+
+
+
+    void Engine::deactivate()
+    {
+        for (const auto& system : std::views::reverse(systems))
+        {
+            system->deactivate();
         }
     }
 
     void Engine::run()
     {
         running = true;
+        activate();
+
         while (running)
         {
             tick();
         }
+
+        deactivate();
     }
 
     void Engine::stop()
     {
         running = false;
     }
+
+
 }
