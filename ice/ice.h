@@ -42,6 +42,7 @@
 #include "ScreenRenderer.h"
 #include "SdlSentry.h"
 #include "Settings.h"
+#include "StatsSystem.h"
 #include "System.h"
 #include "Text.h"
 #include "Texture.h"

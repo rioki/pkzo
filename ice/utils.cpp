@@ -57,10 +57,17 @@ namespace ice
         return utf32(std::u8string(reinterpret_cast<const char8_t*>(buff.data())));
     }
 
-    void trace(const std::string_view msg)
+    void trace(const std::string_view msg) noexcept
     {
         OutputDebugStringA(msg.data());
     }
+
+    #ifndef NDEBUG
+    void handle_soft_assert(const char* file, unsigned int line, const char* scond) noexcept
+    {
+        trace(std::format("{}({}): Assert {} failed!", file, line, scond));
+    }
+    #endif
 
     std::string join(const std::vector<std::string>& strs, const std::string& delimiter) noexcept
     {

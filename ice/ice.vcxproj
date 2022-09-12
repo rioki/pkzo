@@ -138,6 +138,7 @@
     <ClInclude Include="ScreenRenderer.h" />
     <ClInclude Include="SdlSentry.h" />
     <ClInclude Include="Settings.h" />
+    <ClInclude Include="StatsSystem.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Texture.h" />
@@ -168,6 +169,7 @@
     <ClCompile Include="ScreenRenderer.cpp" />
     <ClCompile Include="SdlSentry.cpp" />
     <ClCompile Include="Settings.cpp" />
+    <ClCompile Include="StatsSystem.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="utils.cpp" />

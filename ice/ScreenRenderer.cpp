@@ -35,14 +35,14 @@ namespace ice
     // TMP: this is a workaround to keep the rendering working. -> GraphicSystem / VideoMemory?
     std::shared_ptr<glow::Texture> upload(const std::shared_ptr<Texture>& texture)
     {
-        static std::map<Texture*, std::weak_ptr<glow::Texture>> cache;
+        static std::map<unsigned int, std::weak_ptr<glow::Texture>> cache;
 
         if (!texture)
         {
             return {};
         }
 
-        auto tx = cache.find(texture.get());
+        auto tx = cache.find(texture->get_id());
         if (tx != end(cache))
         {
             auto gl_texture = tx->second.lock();
@@ -61,7 +61,7 @@ namespace ice
 
         auto gl_texture = std::make_shared<glow::Texture>();
         gl_texture->upload_2d(size, color, data, bits, filter, wrap);
-        cache[texture.get()] = gl_texture;
+        cache[texture->get_id()] = gl_texture;
         return gl_texture;
     }
 

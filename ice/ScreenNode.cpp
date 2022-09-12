@@ -40,12 +40,18 @@ namespace ice
 
     Screen* ScreenNode::get_screen() noexcept
     {
+        auto this_screen = dynamic_cast<Screen*>(this);
+        if (this_screen)
+        {
+            return this_screen;
+        }
+
         return find_ancestor<Screen>();
     }
 
     const Screen* ScreenNode::get_screen() const noexcept
     {
-        return find_ancestor<Screen>();
+        return const_cast<ScreenNode*>(this)->get_screen();
     }
 
     void ScreenNode::set_transform(const glm::mat3& value) noexcept
