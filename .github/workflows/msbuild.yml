@@ -50,10 +50,6 @@ jobs:
         `./vcpkg/vcpkg fetch nuget | tail -n 1` \
           setapikey "${{ secrets.GITHUB_TOKEN }}" \
           -source "https://nuget.pkg.github.com/rioki/index.json"
-    - name: 'Restore vcpkg packages'
-      shell: 'bash'
-      run: >
-        ./vcpkg/vcpkg install --triplet ${{ matrix.triplet }}
     - name: Integrate vcpkg in MSBuild
       shell: 'bash'
       run: >
