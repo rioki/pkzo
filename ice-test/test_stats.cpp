@@ -73,7 +73,7 @@ TEST(StatsSystem, time_based_stat)
     auto tps = static_cast<float>(count) / dt;
 
     // not super accurate, there is start up and tear down in that check
-    EXPECT_NEAR(tps, stats->get("tps"), 0.1f);
+    EXPECT_NEAR(tps, stats->get("tps"), 0.5f);
 }
 
 TEST(StatsSystem, time_based_stat_2)
@@ -110,7 +110,7 @@ TEST(StatsSystem, time_based_stat_2)
     auto tps = (static_cast<float>(count) * 2.0f) / dt;
 
     // not super accurate, there is start up and tear down in that check
-    EXPECT_NEAR(tps, stats->get("tps"), 0.1f);
+    EXPECT_NEAR(tps, stats->get("tps"), 0.5f);
 }
 
 TEST(StatsSystem, frame_based_stat)
