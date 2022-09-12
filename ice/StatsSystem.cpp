@@ -275,7 +275,10 @@ namespace ice
         {
             time_accum = 0.0f;
             // the time rollover also acts as update frequency
-            screen->set_stats(stats);
+            if (screen)
+            {
+                screen->set_stats(stats);
+            }
         }
     }
 
