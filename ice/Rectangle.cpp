@@ -89,7 +89,7 @@ namespace ice
     {
         assert(render_handle == nullptr);
 
-        auto screen = get_screen();
+        auto screen = get_root();
         assert(screen != nullptr);
         if (auto renderer = screen->get_renderer())
         {
@@ -101,7 +101,7 @@ namespace ice
     {
         if (render_handle != nullptr)
         {
-            auto screen = get_screen();
+            auto screen = get_root();
             assert(screen != nullptr);
             auto renderer = screen->get_renderer();
             assert(renderer != nullptr);

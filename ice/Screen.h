@@ -22,18 +22,26 @@
 #pragma once
 #include "config.h"
 
-#include "ScreenNodeGroup.h"
+#include <glm/glm.hpp>
+#include "NodeRoot.h"
 
 namespace ice
 {
     class Engine;
+    class Screen;
     class ScreenRenderer;
 
-    class ICE_EXPORT Screen : public ScreenNodeGroup
+    template <>
+    struct NodeTraits<Screen>
+    {
+        using Matrix = glm::mat3;
+    };
+
+    class ICE_EXPORT Screen : public NodeRoot<Screen>
     {
     public:
         Screen(const glm::vec2& size);
-        ~Screen();
+        ~Screen() = default;
 
         const glm::vec2& get_size() const noexcept;
         void resize(const glm::vec2& value) noexcept;
@@ -41,17 +49,14 @@ namespace ice
         ScreenRenderer* get_renderer() noexcept;
         const ScreenRenderer* get_renderer() const noexcept;
 
-        virtual void activate(Engine& engine);
-        virtual void deactivate(Engine& engine);
-
-        [[nodiscard]] bool is_active() const noexcept;
-
         void draw();
 
-    private:
-        glm::vec2 size;
-        bool active = false;
+    protected:
+        void local_activate(Engine& engine) override;
+        void local_deactivate(Engine& engine) override;
 
+    private:
+        glm::vec2       size;
         ScreenRenderer* renderer = nullptr;
     };
 

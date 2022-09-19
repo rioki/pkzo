@@ -129,6 +129,9 @@
     <ClInclude Include="Joystick.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="Node.h" />
+    <ClInclude Include="NodeGroup.h" />
+    <ClInclude Include="NodeRoot.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Rectangle.h" />
     <ClInclude Include="resource.h" />
@@ -156,6 +159,7 @@
     <ClCompile Include="Joystick.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="NodeGroup.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -164,8 +168,6 @@
     </ClCompile>
     <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="Screen.cpp" />
-    <ClCompile Include="ScreenNode.cpp" />
-    <ClCompile Include="ScreenNodeGroup.cpp" />
     <ClCompile Include="ScreenRenderer.cpp" />
     <ClCompile Include="SdlSentry.cpp" />
     <ClCompile Include="Settings.cpp" />
