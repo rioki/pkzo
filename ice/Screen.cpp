@@ -34,11 +34,6 @@ namespace ice
         assert(size.x > 0.0f && size.y > 0.0f);
     }
 
-    Screen::~Screen()
-    {
-        assert(active == false);
-    }
-
     const glm::vec2& Screen::get_size() const noexcept
     {
         return size;
@@ -64,46 +59,31 @@ namespace ice
         return renderer;
     }
 
-    void Screen::activate(Engine& engine)
+    void Screen::draw()
     {
-        assert(false == active);
-        active = true;
+        if (renderer)
+        {
+            renderer->render();
+        }
+    }
 
+    void Screen::local_activate(Engine& engine)
+    {
         if (auto gs = engine.get_system<GraphicSystem>())
         {
             renderer = gs->create_screen_renderer();
             renderer->set_screen_size(size);
         }
-
-        ScreenNodeGroup::activate();
     }
 
-    void Screen::deactivate(Engine& engine)
+    void Screen::local_deactivate(Engine& engine)
     {
-        assert(true == active);
-        ScreenNodeGroup::deactivate();
-
         if (renderer)
         {
             auto gs = engine.get_system<GraphicSystem>();
             assert(gs);
             gs->release_screen_renderer(renderer);
             renderer = nullptr;
-        }
-
-        active = false;
-    }
-
-    bool Screen::is_active() const noexcept
-    {
-        return active;
-    }
-
-    void Screen::draw()
-    {
-        if (renderer)
-        {
-            renderer->render();
         }
     }
 

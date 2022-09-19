@@ -22,10 +22,52 @@
 #pragma once
 #include "config.h"
 
-#include "Node.h"
-#include "Screen.h"
+#include "NodeGroup.h"
 
 namespace ice
 {
-    using ScreenNode = Node<Screen>;
+    class Engine;
+
+    template <typename Type>
+    class NodeRoot : public NodeGroup<Type>
+    {
+    public:
+        NodeRoot() = default;
+
+        ~NodeRoot()
+        {
+            assert(active == false);
+        }
+
+        void activate(Engine& engine)
+        {
+            assert(false == active);
+            active = true;
+
+            local_activate(engine);
+            NodeGroup<Type>::activate();
+        }
+
+        void deactivate(Engine& engine)
+        {
+            assert(true == active);
+            NodeGroup<Type>::deactivate();
+
+            local_deactivate(engine);
+
+            active = false;
+        }
+
+        bool is_active() const noexcept
+        {
+            return active;
+        }
+
+    protected:
+        virtual void local_activate(Engine& engine) = 0;
+        virtual void local_deactivate(Engine& engine) = 0;
+
+    private:
+        bool active = false;
+    };
 }

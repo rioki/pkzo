@@ -85,6 +85,9 @@ namespace ice
         return ContainerT(begin(range), end(range));
     }
 
+    template <typename T>
+    void no_delete(T*) {}
+
     ICE_EXPORT std::u32string utf32(const std::string& buff);
     ICE_EXPORT std::u32string utf32(const std::u8string& buff);
 
