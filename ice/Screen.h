@@ -60,6 +60,5 @@ namespace ice
         ScreenRenderer* renderer = nullptr;
     };
 
-    ICE_EXPORT [[nodiscard]]
-    glm::vec2 map_to_screen(glm::vec2 win_size, glm::vec2 screen_size, glm::vec2 pos);
+    ICE_EXPORT glm::vec2 map_to_screen(glm::vec2 win_size, glm::vec2 screen_size, glm::vec2 pos);
 }

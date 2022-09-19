@@ -22,32 +22,10 @@
 #pragma once
 #include "config.h"
 
-#include "Window.h"
-#include "utils.h"
-#include "Texture.h"
-#include "Text.h"
-#include "System.h"
-#include "StatsSystem.h"
-#include "Settings.h"
-#include "SdlSentry.h"
-#include "ScreenRenderer.h"
-#include "ScreenNodeGroup.h"
-#include "ScreenNode.h"
-#include "Screen.h"
-#include "SceneNodeGroup.h"
-#include "SceneNode.h"
+#include "Node.h"
 #include "Scene.h"
-#include "Rectangle.h"
-#include "Mouse.h"
-#include "Keyboard.h"
-#include "Joystick.h"
-#include "InputSystem.h"
-#include "GraphicSystem.h"
-#include "glm_json.h"
-#include "glm_io.h"
-#include "glm_2d.h"
-#include "Font.h"
-#include "Engine.h"
-#include "ConsoleSystem.h"
-#include "AssetLibrary.h"
-#include "Asset.h"
+
+namespace ice
+{
+    using SceneNode = Node<Scene>;
+}
