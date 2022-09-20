@@ -66,6 +66,15 @@
     <ClCompile Include="test_stats.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test_scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test_scene_node.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test_scene_node_group.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">

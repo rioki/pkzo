@@ -19,35 +19,46 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#include "config.h"
+#include "pch.h"
 
-#include "Asset.h"
-#include "AssetLibrary.h"
-#include "ConsoleSystem.h"
-#include "Engine.h"
-#include "Font.h"
-#include "glm_2d.h"
-#include "glm_io.h"
-#include "glm_json.h"
-#include "GraphicSystem.h"
-#include "InputSystem.h"
-#include "Joystick.h"
-#include "Keyboard.h"
-#include "Mouse.h"
-#include "Rectangle.h"
-#include "Scene.h"
-#include "SceneNode.h"
-#include "SceneNodeGroup.h"
-#include "Screen.h"
-#include "ScreenNode.h"
-#include "ScreenNodeGroup.h"
-#include "ScreenRenderer.h"
-#include "SdlSentry.h"
-#include "Settings.h"
-#include "StatsSystem.h"
-#include "System.h"
-#include "Text.h"
-#include "Texture.h"
-#include "utils.h"
-#include "Window.h"
+#include <ice/ice.h>
+
+TEST(SceneNodeGroup, default_contruct)
+{
+    auto node = ice::SceneNodeGroup{};
+    EXPECT_GLM_NEAR(glm::mat4(1.0), node.get_transform(), 1e-4f);
+}
+
+TEST(SceneNodeGroup, init_transform)
+{
+    auto node = ice::SceneNodeGroup{glm::mat4(2.0f)};
+    EXPECT_GLM_NEAR(glm::mat4(2.0), node.get_transform(), 1e-4f);
+}
+
+TEST(SceneNodeGroup, add_node)
+{
+    auto root = ice::SceneNodeGroup{};
+
+    auto child = std::make_shared<ice::SceneNode>();
+    root.add_node(child);
+
+    auto nodes = root.get_nodes();
+    ASSERT_EQ(1, nodes.size());
+    EXPECT_EQ(child.get(), nodes[0]);
+
+    EXPECT_EQ(&root, child->get_parent());
+}
+
+TEST(SceneNodeGroup, remove_child)
+{
+    ice::SceneNodeGroup root;
+
+    auto child = std::make_shared<ice::SceneNode>();
+    root.add_node(child);
+    root.remove_node(child);
+
+    auto nodes = root.get_nodes();
+    ASSERT_EQ(0, nodes.size());
+
+    EXPECT_EQ(nullptr, child->get_parent());
+}
