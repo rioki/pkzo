@@ -42,6 +42,7 @@ namespace ice
     class Keyboard;
     class Joystick;
     class Screen;
+    class Scene;
 
     class ICE_EXPORT Engine
     {
@@ -80,13 +81,16 @@ namespace ice
         std::vector<const Joystick*> get_joysticks() const noexcept;
 
         template <typename SystemT>
-        void start_system();
+        SystemT* start_system();
 
         template <typename SystemT>
         SystemT* get_system();
 
         template <typename SystemT>
         const SystemT* get_system() const;
+
+        void set_scene(const std::shared_ptr<Scene>& value) noexcept;
+        const std::shared_ptr<Scene>& get_scene() const noexcept;
 
         void set_overlay(const std::shared_ptr<Screen>& value) noexcept;
         const std::shared_ptr<Screen>& get_overlay() const noexcept;
@@ -97,15 +101,17 @@ namespace ice
         void tick();
         void activate();
         void deactivate();
-        void run();
+        void run(std::optional<unsigned int> max_tick_count = std::nullopt);
         void stop();
 
     private:
-        std::atomic<bool>                    running = false;
+        std::atomic<bool>                    running    = false;
+        unsigned int                         tick_count = 0u;
         rsig::signal<>                       tick_signal;
         Settings                             settings;
         AssetLibrary                         asset_library;
         std::vector<std::unique_ptr<System>> systems;
+        std::shared_ptr<Scene>               scene;
         std::shared_ptr<Screen>              overlay;
 
         Engine(const Engine&) = delete;
@@ -125,11 +131,14 @@ namespace ice
     }
 
     template <typename SystemT>
-    void Engine::start_system()
+    SystemT* Engine::start_system()
     {
         assert(running == false);
         assert(get_system<SystemT>() == nullptr);
-        systems.push_back(std::make_unique<SystemT>(*this));
+        auto sys = std::make_unique<SystemT>(*this);
+        auto ptr = sys.get();
+        systems.emplace_back(std::move(sys));
+        return ptr;
     }
 
     template <typename SystemT>

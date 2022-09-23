@@ -284,4 +284,22 @@ namespace ice
         return tokens;
     }
 
+    auto get_mb_flags(MessageBoxIcon icon)
+    {
+        switch (icon)
+        {
+            case MessageBoxIcon::INFORMATION:
+                return MB_OK|MB_ICONINFORMATION;
+            case MessageBoxIcon::WARNING:
+                return MB_OK|MB_ICONWARNING;
+            case MessageBoxIcon::ERROR:
+            default:
+                return MB_OK|MB_ICONERROR;
+        }
+    }
+
+    void show_message_box(MessageBoxIcon icon, const std::string_view title, const std::string_view message)
+    {
+        MessageBoxA(NULL, message.data(), title.data(), get_mb_flags(icon));
+    }
 }

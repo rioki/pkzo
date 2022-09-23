@@ -23,7 +23,6 @@
 #include "config.h"
 
 #include <functional>
-#include <glm/fwd.hpp>
 #include <rsig/rsig.h>
 
 #include "utils.h"
@@ -34,8 +33,6 @@
 #ifdef OUT
 #undef OUT
 #endif
-
-union SDL_Event;
 
 namespace ice
 {
@@ -298,10 +295,10 @@ namespace ice
     class ICE_EXPORT Keyboard
     {
     public:
-        Keyboard() noexcept;
-        ~Keyboard();
+        Keyboard() noexcept = default;
+        virtual ~Keyboard() = default;
 
-        bool is_pressed(Key key) const noexcept;
+        virtual bool is_pressed(Key key) const noexcept = 0;
 
         rsig::signal<KeyMod, Key>& get_key_down_signal() noexcept;
         rsig::connection on_key_down(const std::function<void (KeyMod, Key)>& cb) noexcept;
@@ -310,18 +307,15 @@ namespace ice
         rsig::connection on_key_up(const std::function<void (KeyMod, Key)>& cb) noexcept;
 
         rsig::signal<const std::string_view>& get_text_signal() noexcept;
-        rsig::connection on_text(const std::function<void (const std::string_view)>& cb) noexcept;
+        rsig::connection on_text(const std::function<void (const std::string_view)>& cb) noexcept;;
 
-    private:
+    protected:
         rsig::signal<KeyMod, Key>            key_down_signal;
         rsig::signal<KeyMod, Key>            key_up_signal;
         rsig::signal<const std::string_view> text_signal;
 
-        void handle_event(const SDL_Event& event) const;
-
+    private:
         Keyboard(const Keyboard&) = delete;
         Keyboard& operator = (const Keyboard&) = delete;
-
-    friend class InputSystem;
     };
 }

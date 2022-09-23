@@ -187,8 +187,8 @@ TEST(Engine, devices)
     auto j0 = engine.get_joysticks();
     EXPECT_TRUE(j0.empty());
 
-    engine.start_system<ice::GraphicSystem>();
-    engine.start_system<ice::InputSystem>();
+    engine.start_system<ice::SdlGraphicSystem>();
+    engine.start_system<ice::SdlInputSystem>();
 
     auto window = engine.get_window();
     EXPECT_NE(nullptr, window);
@@ -211,6 +211,8 @@ TEST(Engine, overlay_change_sync_on_tick)
 {
     auto engine = ice::Engine{};
 
+    engine.activate();
+
     EXPECT_EQ(nullptr, engine.get_overlay());
 
     auto screen = std::make_shared<ice::Screen>(glm::vec2(800, 600));
@@ -219,6 +221,8 @@ TEST(Engine, overlay_change_sync_on_tick)
 
     engine.tick();
     EXPECT_EQ(screen, engine.get_overlay());
+
+    engine.deactivate();
 }
 
 TEST(Engine, activate_systems)

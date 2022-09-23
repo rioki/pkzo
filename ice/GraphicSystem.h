@@ -32,36 +32,31 @@ namespace ice
     class Window;
     class Texture;
     class ScreenRenderer;
+    class SceneRenderer;
 
     class ICE_EXPORT GraphicSystem : public System
     {
     public:
         GraphicSystem(Engine& e);
+        virtual ~GraphicSystem() = default;
 
-        ~GraphicSystem();
+        virtual Window* get_window() noexcept = 0;
+        virtual const Window* get_window() const noexcept = 0;
 
-        Window* get_window() noexcept;
-        const Window* get_window() const noexcept;
+        virtual const glm::uvec2 get_window_size() const noexcept = 0;
 
-        const glm::uvec2 get_window_size() const noexcept;
+        virtual std::shared_ptr<Texture> get_screenshot() const noexcept = 0;
 
-        std::shared_ptr<Texture> get_screenshot() const noexcept;
+        virtual ScreenRenderer* create_screen_renderer() noexcept = 0;
+        virtual void release_screen_renderer(ScreenRenderer* renderer) noexcept = 0;
 
-        ScreenRenderer* create_screen_renderer() noexcept;
-        void release_screen_renderer(ScreenRenderer* renderer) noexcept;
+        virtual SceneRenderer* create_scene_renderer() noexcept = 0;
+        virtual void release_scene_renderer(SceneRenderer* renderer) noexcept = 0;
 
         rsig::connection debug_draw(const std::function<void ()>& cb) noexcept;
         rsig::signal<>& get_debug_draw_signal() noexcept;
 
-        void tick() override;
-
-    private:
-        std::unique_ptr<Window> window;
-
-        std::vector<std::unique_ptr<ScreenRenderer>> screen_renderers;
-
+    protected:
         rsig::signal<> debug_draw_signal;
-
-        void render_frame() noexcept;
     };
 }

@@ -65,6 +65,18 @@ namespace ice
         return gl_texture;
     }
 
+    ScreenRenderer::Rectangle::Rectangle(glow::Pipeline& _pipeline, const glm::mat3& _transform, const glm::vec2& _size, const glm::vec4& _color, const std::shared_ptr<Texture>& _texture) noexcept
+    : pipeline(_pipeline), transform(_transform), size(_size), color(_color), texture(_texture)
+    {
+        handle = pipeline.add_geometry(create_3d_transform(), create_unit_rectangle(), create_parameters());
+    }
+
+    ScreenRenderer::Rectangle::~Rectangle()
+    {
+        pipeline.remove_geometry(handle);
+        handle = 0;
+    }
+
     void ScreenRenderer::Rectangle::set_transform(const glm::mat3& value) noexcept
     {
         transform = value;
@@ -107,18 +119,6 @@ namespace ice
     const std::shared_ptr<Texture>& ScreenRenderer::Rectangle::get_texture() const noexcept
     {
         return texture;
-    }
-
-    ScreenRenderer::Rectangle::Rectangle(glow::Pipeline& _pipeline, const glm::mat3& _transform, const glm::vec2& _size, const glm::vec4& _color, const std::shared_ptr<Texture>& _texture) noexcept
-    : pipeline(_pipeline), transform(_transform), size(_size), color(_color), texture(_texture)
-    {
-        handle = pipeline.add_geometry(create_3d_transform(), create_unit_rectangle(), create_parameters());
-    }
-
-    ScreenRenderer::Rectangle::~Rectangle()
-    {
-        pipeline.remove_geometry(handle);
-        handle = 0;
     }
 
     glm::mat4 ScreenRenderer::Rectangle::create_3d_transform() const noexcept
@@ -223,7 +223,7 @@ namespace ice
         return std::string(psCode, nSize);
     }
 
-    auto load_shader(HMODULE hModule, unsigned int rcid)
+    std::shared_ptr<glow::Shader> load_shader(HMODULE hModule, unsigned int rcid)
     {
         auto code = LoadTextResource(hModule, MAKEINTRESOURCE(rcid), L"GLSL");
         return std::make_shared<glow::Shader>(code);

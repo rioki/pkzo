@@ -22,50 +22,47 @@
 #pragma once
 #include "config.h"
 
-#include <memory>
 #include <vector>
+#include <string_view>
+
+#include <glm/glm.hpp>
 
 #include "System.h"
-#include "SdlSentry.h"
-
-#include "Mouse.h"
-#include "Keyboard.h"
-#include "Joystick.h"
 
 namespace ice
 {
+    class Mouse;
+    class Keyboard;
+    class Joystick;
+
+    enum class MouseButton;
+    enum class KeyMod;
+    enum class Key;
+
     class ICE_EXPORT InputSystem : public System
     {
     public:
-        InputSystem(Engine& e);
+        InputSystem(Engine& e) noexcept
+        : System(e) {}
 
-        ~InputSystem();
+        virtual ~InputSystem() = default;
 
-        Mouse* get_mouse() noexcept;
-        const Mouse* get_mouse() const noexcept;
+        virtual Mouse* get_mouse() noexcept = 0;
+        virtual const Mouse* get_mouse() const noexcept = 0;
 
-        Keyboard* get_keyboard() noexcept;
-        const Keyboard* get_keyboard() const noexcept;
+        virtual Keyboard* get_keyboard() noexcept = 0;
+        virtual const Keyboard* get_keyboard() const noexcept = 0;
 
-        std::vector<Joystick*> get_joysticks() noexcept;
-        std::vector<const Joystick*> get_joysticks() const noexcept;
+        virtual std::vector<Joystick*> get_joysticks() noexcept = 0;
+        virtual std::vector<const Joystick*> get_joysticks() const noexcept = 0;
 
-        void inject_mouse_button_down(MouseButton button, glm::ivec2 position);
-        void inject_mouse_button_up(MouseButton button, glm::ivec2 position);
-        void inject_mouse_move(glm::ivec2 position, glm::ivec2 motion);
-        void inject_mouse_wheel(glm::ivec2 motion);
+        virtual void inject_mouse_button_down(MouseButton button, glm::ivec2 position) noexcept = 0;
+        virtual void inject_mouse_button_up(MouseButton button, glm::ivec2 position) noexcept = 0;
+        virtual void inject_mouse_move(glm::ivec2 position, glm::ivec2 motion) noexcept = 0;
+        virtual void inject_mouse_wheel(glm::ivec2 motion) noexcept = 0;
 
-        void inject_key_down(KeyMod mod, Key key);
-        void inject_key_up(KeyMod mod, Key key);
-        void inject_text(const std::string_view text);
-
-        void tick() override;
-
-    private:
-        SdlSentry                              sdl_sentry;
-
-        std::unique_ptr<Mouse>                 mouse;
-        std::unique_ptr<Keyboard>              keyboard;
-        std::vector<std::unique_ptr<Joystick>> joysticks;
+        virtual void inject_key_down(KeyMod mod, Key key) noexcept = 0;
+        virtual void inject_key_up(KeyMod mod, Key key) noexcept = 0;
+        virtual void inject_text(const std::string_view text) noexcept = 0;
     };
 }

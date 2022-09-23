@@ -65,8 +65,8 @@ namespace lab
 
         add_asset_folder(get_asset_dir());
 
-        start_system<ice::GraphicSystem>();
-        start_system<ice::InputSystem>();
+        start_system<ice::SdlGraphicSystem>();
+        start_system<ice::SdlInputSystem>();
         start_system<ice::ConsoleSystem>();
 
         auto* keyboard = get_keyboard();

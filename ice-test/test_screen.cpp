@@ -38,7 +38,7 @@ TEST(Screen, GRAPHICAL_render_plain_rectangle)
     settings.set_value("GraphicSystem", "resolution", glm::uvec2(800, 600));
     settings.set_value("GraphicSystem", "mode",       ice::WindowMode::STATIC);
 
-    engine.start_system<ice::GraphicSystem>();
+    engine.start_system<ice::SdlGraphicSystem>();
 
     auto screen = std::make_shared<ice::Screen>(glm::vec2(800.0f, 600.0f));
 
@@ -50,8 +50,7 @@ TEST(Screen, GRAPHICAL_render_plain_rectangle)
 
     engine.set_overlay(screen);
 
-    engine.tick();
-    engine.tick();
+    engine.run(3u);
 
     const auto* gs = engine.get_system<ice::GraphicSystem>();
     ASSERT_NE(nullptr, gs);
@@ -67,7 +66,7 @@ TEST(Screen, GRAPHICAL_render_textured_rectangle)
     settings.set_value("GraphicSystem", "resolution", glm::uvec2(800, 600));
     settings.set_value("GraphicSystem", "mode",       ice::WindowMode::STATIC);
 
-    engine.start_system<ice::GraphicSystem>();
+    engine.start_system<ice::SdlGraphicSystem>();
 
     auto screen = std::make_shared<ice::Screen>(glm::vec2(800.0f, 600.0f));
 
@@ -79,8 +78,7 @@ TEST(Screen, GRAPHICAL_render_textured_rectangle)
 
     engine.set_overlay(screen);
 
-    engine.tick();
-    engine.tick();
+    engine.run(3u);
 
     const auto* gs = engine.get_system<ice::GraphicSystem>();
     ASSERT_NE(nullptr, gs);
@@ -96,7 +94,7 @@ TEST(Screen, GRAPHICAL_render_text)
     settings.set_value("GraphicSystem", "resolution", glm::uvec2(800, 600));
     settings.set_value("GraphicSystem", "mode",       ice::WindowMode::STATIC);
 
-    engine.start_system<ice::GraphicSystem>();
+    engine.start_system<ice::SdlGraphicSystem>();
 
     auto screen = std::make_shared<ice::Screen>(glm::vec2(800.0f, 600.0f));
 
@@ -106,8 +104,7 @@ TEST(Screen, GRAPHICAL_render_text)
 
     engine.set_overlay(screen);
 
-    engine.tick();
-    engine.tick();
+    engine.run(3u);
 
     const auto* gs = engine.get_system<ice::GraphicSystem>();
     ASSERT_NE(nullptr, gs);

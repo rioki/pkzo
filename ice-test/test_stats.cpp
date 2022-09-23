@@ -244,8 +244,8 @@ TEST(StatsSystem, GRAPHICAL_render_stats)
     settings.set_value("ConsoleSystem", "font",       "fonts/DejaVuSansMono.ttf");
     settings.set_value("ConsoleSystem", "lines",      5);
 
-    engine.start_system<ice::GraphicSystem>();
-    engine.start_system<ice::InputSystem>();
+    engine.start_system<ice::SdlGraphicSystem>();
+    engine.start_system<ice::SdlInputSystem>();
     engine.start_system<ice::StatsSystem>();
 
     auto stats = engine.get_system<ice::StatsSystem>();

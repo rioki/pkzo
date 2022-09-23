@@ -21,11 +21,11 @@
 
 #include "pch.h"
 
-TEST(InputSystem, has_devices_after_load)
+TEST(SdlInputSystem, has_devices_after_load)
 {
     auto engine = ice::Engine{};
 
-    engine.start_system<ice::InputSystem>();
+    engine.start_system<ice::SdlInputSystem>();
 
     const auto* is = engine.get_system<ice::InputSystem>();
     ASSERT_NE(nullptr, is);
@@ -44,11 +44,11 @@ TEST(InputSystem, has_devices_after_load)
     }
 }
 
-TEST(InputSystem, inject_mouse_events)
+TEST(SdlInputSystem, inject_mouse_events)
 {
     auto engine = ice::Engine{};
 
-    engine.start_system<ice::InputSystem>();
+    engine.start_system<ice::SdlInputSystem>();
 
     auto* input = engine.get_system<ice::InputSystem>();
     ASSERT_NE(nullptr, input);
@@ -128,11 +128,11 @@ TEST(InputSystem, inject_mouse_events)
     EXPECT_EQ(wheel_count,       1u);
 }
 
-TEST(InputSystem, inject_keyboard_events)
+TEST(SdlInputSystem, inject_keyboard_events)
 {
     auto engine = ice::Engine{};
 
-    engine.start_system<ice::InputSystem>();
+    engine.start_system<ice::SdlInputSystem>();
 
     auto* input = engine.get_system<ice::InputSystem>();
     ASSERT_NE(nullptr, input);

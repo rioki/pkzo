@@ -23,10 +23,8 @@
 #include "config.h"
 
 #include <functional>
-#include <glm/fwd.hpp>
+#include <glm/glm.hpp>
 #include <rsig/rsig.h>
-
-union SDL_Event;
 
 namespace ice
 {
@@ -43,13 +41,13 @@ namespace ice
     class ICE_EXPORT Mouse
     {
     public:
-        Mouse() noexcept;
-        ~Mouse();
+        Mouse() noexcept = default;
+        virtual ~Mouse() = default;
 
-        void set_cursor_visible(bool value) noexcept;
-        bool get_cursor_visible() const noexcept;
+        virtual void set_cursor_visible(bool value) noexcept  = 0;
+        virtual bool get_cursor_visible() const noexcept = 0;
 
-        glm::ivec2 get_cursor_position() const noexcept;
+        virtual glm::ivec2 get_cursor_position() const noexcept = 0;
 
         rsig::signal<MouseButton, glm::ivec2>& get_button_down_signal() noexcept;
         rsig::connection on_button_down(const std::function<void (MouseButton, glm::ivec2)>& cb) noexcept;
@@ -63,17 +61,14 @@ namespace ice
         rsig::signal<glm::ivec2>& get_wheel_signal() noexcept;
         rsig::connection on_wheel(const std::function<void (glm::ivec2)>& cb) noexcept;
 
-    private:
+    protected:
         rsig::signal<MouseButton, glm::ivec2> button_down_signal;
         rsig::signal<MouseButton, glm::ivec2> button_up_signal;
         rsig::signal<glm::ivec2, glm::ivec2>  move_signal;
         rsig::signal<glm::ivec2>              wheel_signal;
 
-        void handle_event(const SDL_Event& event) const;
-
+    private:
         Mouse(const Mouse&) = delete;
         Mouse& operator = (const Mouse&) = delete;
-
-    friend class InputSystem;
     };
 }

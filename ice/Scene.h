@@ -43,10 +43,16 @@ namespace ice
         Scene() = default;
         ~Scene() = default;
 
+        SceneRenderer* get_renderer() noexcept;
+        const SceneRenderer* get_renderer() const noexcept;
+
+        void draw() noexcept;
+
     protected:
         void local_activate(Engine& engine) override;
         void local_deactivate(Engine& engine) override;
 
     private:
+        SceneRenderer* renderer = nullptr;
     };
 }

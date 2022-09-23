@@ -37,6 +37,7 @@
 #include <format>
 #include <memory>
 #include <stdexcept>
+#include <numbers>
 
 #include <Windows.h>
 
