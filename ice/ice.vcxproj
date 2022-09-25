@@ -114,10 +114,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AmbientLight.h" />
     <ClInclude Include="Asset.h" />
     <ClInclude Include="AssetLibrary.h" />
+    <ClInclude Include="BoxVisual.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="ConsoleSystem.h" />
+    <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="glm_2d.h" />
     <ClInclude Include="Font.h" />
@@ -128,40 +132,60 @@
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="Joystick.h" />
     <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="Light.h" />
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="NodeGroup.h" />
     <ClInclude Include="NodeRoot.h" />
+    <ClInclude Include="OpenGLRenderer.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Rectangle.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneNode.h" />
     <ClInclude Include="SceneNodeGroup.h" />
+    <ClInclude Include="SceneRenderer.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="ScreenNode.h" />
     <ClInclude Include="ScreenNodeGroup.h" />
     <ClInclude Include="ScreenRenderer.h" />
+    <ClInclude Include="SdlGraphicSystem.h" />
+    <ClInclude Include="SdlInputSystem.h" />
+    <ClInclude Include="SdlJoystick.h" />
+    <ClInclude Include="SdlKeyboard.h" />
+    <ClInclude Include="SdlMouse.h" />
     <ClInclude Include="SdlSentry.h" />
+    <ClInclude Include="SdlWindow.h" />
     <ClInclude Include="Settings.h" />
+    <ClInclude Include="SphereVisual.h" />
     <ClInclude Include="StatsSystem.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="utils.h" />
+    <ClInclude Include="Visual.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AmbientLight.cpp" />
     <ClCompile Include="Asset.cpp" />
     <ClCompile Include="AssetLibrary.cpp" />
+    <ClCompile Include="BoxVisual.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ConsoleSystem.cpp" />
+    <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="GraphicSystem.cpp" />
-    <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="Joystick.cpp" />
     <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="Material.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="OpenGLRenderer.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -172,18 +196,26 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="ScreenRenderer.cpp" />
+    <ClCompile Include="SdlGraphicSystem.cpp" />
+    <ClCompile Include="SdlInputSystem.cpp" />
+    <ClCompile Include="SdlJoystick.cpp" />
+    <ClCompile Include="SdlKeyboard.cpp" />
+    <ClCompile Include="SdlMouse.cpp" />
     <ClCompile Include="SdlSentry.cpp" />
+    <ClCompile Include="SdlWindow.cpp" />
     <ClCompile Include="Settings.cpp" />
+    <ClCompile Include="SphereVisual.cpp" />
     <ClCompile Include="StatsSystem.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="utils.cpp" />
-    <ClCompile Include="Window.cpp" />
+    <ClCompile Include="Visual.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ice.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Forward_SolidGeometry.glsl" />
     <None Include="Screen.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

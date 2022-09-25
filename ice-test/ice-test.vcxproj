@@ -136,7 +136,11 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="test_ambient_light.cpp" />
+    <ClCompile Include="test_box_visual.cpp" />
+    <ClCompile Include="test_camera.cpp" />
     <ClCompile Include="test_console.cpp" />
+    <ClCompile Include="test_directional_light.cpp" />
     <ClCompile Include="test_engine.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp">
@@ -149,12 +153,15 @@
     <ClCompile Include="test_font.cpp" />
     <ClCompile Include="test_graphic_system.cpp" />
     <ClCompile Include="test_input_system.cpp" />
+    <ClCompile Include="test_material.cpp" />
+    <ClCompile Include="test_mesh.cpp" />
     <ClCompile Include="test_scene.cpp" />
     <ClCompile Include="test_scene_node.cpp" />
     <ClCompile Include="test_scene_node_group.cpp" />
     <ClCompile Include="test_screen.cpp" />
     <ClCompile Include="test_screen_node.cpp" />
     <ClCompile Include="test_screen_node_group.cpp" />
+    <ClCompile Include="test_scene_rendering.cpp" />
     <ClCompile Include="test_stats.cpp" />
     <ClCompile Include="test_texture.cpp" />
     <ClCompile Include="test_env.cpp" />
@@ -164,6 +171,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glm_checks.h" />
+    <ClInclude Include="MockGraphicSystem.h" />
+    <ClInclude Include="MockRenderer.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="test_env.h" />
     <ClInclude Include="texture_checks.h" />

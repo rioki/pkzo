@@ -30,7 +30,12 @@
 #include <sstream>
 #include <iostream>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <nlohmann/json.hpp>
+
+#ifdef ERROR
+#undef ERROR
+#endif
 
 namespace ice
 {
@@ -165,6 +170,20 @@ namespace ice
         unsigned int a = (hex & 0x000000FF) >> 0;
         return rgba(r, g, b, a);
     }
+
+    inline glm::mat4 lookat(const glm::vec3 pos, const glm::vec3 target, const glm::vec3 up)
+    {
+        return glm::inverse(glm::lookAt(pos, target, up));
+    }
+
+    enum class MessageBoxIcon
+    {
+        ERROR,
+        WARNING,
+        INFORMATION
+    };
+
+    ICE_EXPORT void show_message_box(MessageBoxIcon icon, const std::string_view title, const std::string_view message);
 }
 
 #define ICE_BIT(n) (1 << n)

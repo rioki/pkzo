@@ -80,7 +80,7 @@ TEST(ConsoleSystem, register_and_execute_line)
     EXPECT_EQ("Hello  World!", buffer[3]);
 }
 
-namespace 
+namespace
 {
     class CatScreen : public ice::Screen
     {
@@ -108,8 +108,8 @@ TEST(ConsoleSystem, GRAPHICAL_render_hidden_console)
     settings.set_value("GraphicSystem", "mode",       ice::WindowMode::STATIC);
     settings.set_value("ConsoleSystem", "font",       "fonts/DejaVuSansMono.ttf");
 
-    engine.start_system<ice::GraphicSystem>();
-    engine.start_system<ice::InputSystem>();
+    engine.start_system<ice::SdlGraphicSystem>();
+    engine.start_system<ice::SdlInputSystem>();
     engine.start_system<ice::ConsoleSystem>();
 
     auto console = engine.get_system<ice::ConsoleSystem>();
@@ -119,8 +119,7 @@ TEST(ConsoleSystem, GRAPHICAL_render_hidden_console)
 
     engine.set_overlay(std::make_shared<CatScreen>(engine, glm::vec2(800, 600)));
 
-    engine.tick();
-    engine.tick();
+    engine.run(3u);
 
     const auto* gs = engine.get_system<ice::GraphicSystem>();
     ASSERT_NE(nullptr, gs);
@@ -141,8 +140,8 @@ TEST(ConsoleSystem, GRAPHICAL_render_console_log)
     settings.set_value("ConsoleSystem", "font",       "fonts/DejaVuSansMono.ttf");
     settings.set_value("ConsoleSystem", "lines",      5);
 
-    engine.start_system<ice::GraphicSystem>();
-    engine.start_system<ice::InputSystem>();
+    engine.start_system<ice::SdlGraphicSystem>();
+    engine.start_system<ice::SdlInputSystem>();
     engine.start_system<ice::ConsoleSystem>();
 
     auto console = engine.get_system<ice::ConsoleSystem>();
@@ -159,8 +158,7 @@ TEST(ConsoleSystem, GRAPHICAL_render_console_log)
 
     engine.set_overlay(std::make_shared<CatScreen>(engine, glm::vec2(800, 600)));
 
-    engine.tick();
-    engine.tick();
+    engine.run(3u);
 
     const auto* gs = engine.get_system<ice::GraphicSystem>();
     ASSERT_NE(nullptr, gs);
@@ -182,9 +180,11 @@ TEST(ConsoleSystem, GRAPHICAL_show_on_console_key)
     settings.set_value("ConsoleSystem", "consoel_key", ice::Key::F1);
     settings.set_value("ConsoleSystem", "lines",       5);
 
-    engine.start_system<ice::GraphicSystem>();
-    engine.start_system<ice::InputSystem>();
+    engine.start_system<ice::SdlGraphicSystem>();
+    engine.start_system<ice::SdlInputSystem>();
     engine.start_system<ice::ConsoleSystem>();
+
+    engine.activate();
 
     auto input = engine.get_system<ice::InputSystem>();
     ASSERT_NE(nullptr, input);
@@ -207,6 +207,8 @@ TEST(ConsoleSystem, GRAPHICAL_show_on_console_key)
     engine.tick();
 
     EXPECT_FALSE(console->is_visible());
+
+    engine.deactivate();
 }
 
 TEST(ConsoleSystem, GRAPHICAL_render_console_input)
@@ -222,8 +224,8 @@ TEST(ConsoleSystem, GRAPHICAL_render_console_input)
     settings.set_value("ConsoleSystem", "font",       "fonts/DejaVuSansMono.ttf");
     settings.set_value("ConsoleSystem", "lines",      5);
 
-    engine.start_system<ice::GraphicSystem>();
-    engine.start_system<ice::InputSystem>();
+    engine.start_system<ice::SdlGraphicSystem>();
+    engine.start_system<ice::SdlInputSystem>();
     engine.start_system<ice::ConsoleSystem>();
 
     auto input = engine.get_system<ice::InputSystem>();
@@ -242,9 +244,7 @@ TEST(ConsoleSystem, GRAPHICAL_render_console_input)
         input->inject_text(std::string(1, c));
     }
 
-    engine.tick();
-    engine.tick();
-    engine.tick();
+    engine.run(3u);
 
     const auto* gs = engine.get_system<ice::GraphicSystem>();
     ASSERT_NE(nullptr, gs);

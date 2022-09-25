@@ -20,13 +20,13 @@
 // SOFTWARE.
 
 #include "pch.h"
-#include "Window.h"
+#include "SdlWindow.h"
 
 #include "utils.h"
 
 namespace ice
 {
-    Window::Window(const glm::uvec2& size, WindowMode mode, const std::string_view caption)
+    SdlWindow::SdlWindow(const glm::uvec2& size, WindowMode mode, const std::string_view caption)
     {
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
@@ -63,18 +63,18 @@ namespace ice
         glow::init();
     }
 
-    Window::~Window()
+    SdlWindow::~SdlWindow()
     {
         SDL_GL_DeleteContext(glcontext);
         SDL_DestroyWindow(window);
     }
 
-    void Window::set_caption(const std::string_view text) noexcept
+    void SdlWindow::set_caption(const std::string_view text) noexcept
     {
         SDL_SetWindowTitle(window, text.data());
     }
 
-    std::string Window::get_caption() const noexcept
+    std::string SdlWindow::get_caption() const noexcept
     {
         auto caption = SDL_GetWindowTitle(window);
         if (caption != nullptr)
@@ -87,7 +87,7 @@ namespace ice
         }
     }
 
-    void Window::resize(const glm::uvec2& size, WindowMode mode)
+    void SdlWindow::resize(const glm::uvec2& size, WindowMode mode)
     {
         auto old_mode = get_mode();
         if (mode == old_mode)
@@ -113,14 +113,14 @@ namespace ice
         }
     }
 
-    glm::uvec2 Window::get_size() const noexcept
+    glm::uvec2 SdlWindow::get_size() const noexcept
     {
         int w, h;
         SDL_GetWindowSize(window, &w, &h);
         return {w, h};
     }
 
-    WindowMode Window::get_mode() const noexcept
+    WindowMode SdlWindow::get_mode() const noexcept
     {
         auto sdl_flags = SDL_GetWindowFlags(window);
         if ((sdl_flags & SDL_WINDOW_FULLSCREEN_DESKTOP) == SDL_WINDOW_FULLSCREEN_DESKTOP)
@@ -138,17 +138,17 @@ namespace ice
         return WindowMode::STATIC;
     }
 
-    rsig::signal<>& Window::get_draw_sginal() noexcept
+    rsig::signal<>& SdlWindow::get_draw_sginal() noexcept
     {
         return draw_signal;
     }
 
-    rsig::connection Window::on_draw(const std::function<void()>& cb) noexcept
+    rsig::connection SdlWindow::on_draw(const std::function<void()>& cb) noexcept
     {
         return draw_signal.connect(cb);
     }
 
-    void Window::draw() const noexcept
+    void SdlWindow::draw() const noexcept
     {
         int w, h;
         SDL_GL_GetDrawableSize(window, &w, &h);

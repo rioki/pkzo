@@ -27,6 +27,7 @@
 #include <vector>
 
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
 #include <ice/ice.h>
 

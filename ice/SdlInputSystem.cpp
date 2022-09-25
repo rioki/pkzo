@@ -20,55 +20,55 @@
 // SOFTWARE.
 
 #include "pch.h"
-#include "InputSystem.h"
+#include "SdlInputSystem.h"
 
 #include "Engine.h"
-#include "Mouse.h"
-#include "Keyboard.h"
-#include "Joystick.h"
+#include "SdlMouse.h"
+#include "SdlKeyboard.h"
+#include "SdlJoystick.h"
 
 namespace ice
 {
-    InputSystem::InputSystem(Engine& e)
-    : System(e)
+    SdlInputSystem::SdlInputSystem(Engine& e) noexcept
+    : InputSystem(e)
     {
-        mouse    = std::make_unique<Mouse>();
-        keyboard = std::make_unique<Keyboard>();
+        mouse    = std::make_unique<SdlMouse>();
+        keyboard = std::make_unique<SdlKeyboard>();
 
         auto jn = SDL_NumJoysticks();
         for (auto j = 0; j < jn; j++)
         {
-            joysticks.push_back(std::make_unique<Joystick>(j));
+            joysticks.push_back(std::make_unique<SdlJoystick>(j));
         }
     }
 
-    InputSystem::~InputSystem() = default;
+    SdlInputSystem::~SdlInputSystem() = default;
 
-    Mouse* InputSystem::get_mouse() noexcept
+    Mouse* SdlInputSystem::get_mouse() noexcept
     {
         assert(mouse);
         return mouse.get();
     }
 
-    const Mouse* InputSystem::get_mouse() const noexcept
+    const Mouse* SdlInputSystem::get_mouse() const noexcept
     {
         assert(mouse);
         return mouse.get();
     }
 
-    Keyboard* InputSystem::get_keyboard() noexcept
+    Keyboard* SdlInputSystem::get_keyboard() noexcept
     {
         assert(keyboard);
         return keyboard.get();
     }
 
-    const Keyboard* InputSystem::get_keyboard() const noexcept
+    const Keyboard* SdlInputSystem::get_keyboard() const noexcept
     {
         assert(keyboard);
         return keyboard.get();
     }
 
-    std::vector<Joystick*> InputSystem::get_joysticks() noexcept
+    std::vector<Joystick*> SdlInputSystem::get_joysticks() noexcept
     {
         auto result = std::vector<Joystick*>(joysticks.size());
         std::transform(begin(joysticks), end(joysticks), begin(result), [] (auto& uptr) {
@@ -77,7 +77,7 @@ namespace ice
         return result;
     }
 
-    std::vector<const Joystick*> InputSystem::get_joysticks() const noexcept
+    std::vector<const Joystick*> SdlInputSystem::get_joysticks() const noexcept
     {
         auto result = std::vector<const Joystick*>(joysticks.size());
         std::transform(begin(joysticks), end(joysticks), begin(result), [] (auto& uptr) {
@@ -86,7 +86,7 @@ namespace ice
         return result;
     }
 
-    void InputSystem::inject_mouse_button_down(MouseButton button, glm::ivec2 position)
+    void SdlInputSystem::inject_mouse_button_down(MouseButton button, glm::ivec2 position) noexcept
     {
         SDL_Event event;
         event.type             = SDL_MOUSEBUTTONDOWN;
@@ -98,7 +98,7 @@ namespace ice
         SDL_PushEvent(&event);
     }
 
-    void InputSystem::inject_mouse_button_up(MouseButton button, glm::ivec2 position)
+    void SdlInputSystem::inject_mouse_button_up(MouseButton button, glm::ivec2 position) noexcept
     {
         SDL_Event event;
         event.type             = SDL_MOUSEBUTTONUP;
@@ -110,7 +110,7 @@ namespace ice
         SDL_PushEvent(&event);
     }
 
-    void InputSystem::inject_mouse_move(glm::ivec2 position, glm::ivec2 motion)
+    void SdlInputSystem::inject_mouse_move(glm::ivec2 position, glm::ivec2 motion) noexcept
     {
         SDL_Event event;
         event.type             = SDL_MOUSEMOTION;
@@ -123,7 +123,7 @@ namespace ice
         SDL_PushEvent(&event);
     }
 
-    void InputSystem::inject_mouse_wheel(glm::ivec2 motion)
+    void SdlInputSystem::inject_mouse_wheel(glm::ivec2 motion) noexcept
     {
         SDL_Event event;
         event.type            = SDL_MOUSEWHEEL;
@@ -134,7 +134,7 @@ namespace ice
         SDL_PushEvent(&event);
     }
 
-    Uint16 mode2sdl(KeyMod mod)
+    Uint16 mode2sdl(KeyMod mod) noexcept
     {
         Uint16 result = 0u;
 
@@ -157,7 +157,7 @@ namespace ice
         return result;
     }
 
-    void InputSystem::inject_key_down(KeyMod mod, Key key)
+    void SdlInputSystem::inject_key_down(KeyMod mod, Key key) noexcept
     {
         SDL_Event event;
         event.type                = SDL_KEYDOWN;
@@ -169,7 +169,7 @@ namespace ice
         SDL_PushEvent(&event);
     }
 
-    void InputSystem::inject_key_up(KeyMod mod, Key key)
+    void SdlInputSystem::inject_key_up(KeyMod mod, Key key) noexcept
     {
         SDL_Event event;
         event.type                = SDL_KEYUP;
@@ -181,7 +181,7 @@ namespace ice
         SDL_PushEvent(&event);
     }
 
-    void InputSystem::inject_text(const std::string_view text)
+    void SdlInputSystem::inject_text(const std::string_view text) noexcept
     {
         SDL_Event event;
         event.type           = SDL_TEXTINPUT;
@@ -191,7 +191,7 @@ namespace ice
         SDL_PushEvent(&event);
     }
 
-    void InputSystem::tick()
+    void SdlInputSystem::tick()
     {
         SDL_Event event;
         while (SDL_PollEvent(&event))

@@ -26,23 +26,19 @@
 #include <glm/fwd.hpp>
 #include <rsig/rsig.h>
 
-union SDL_Event;
-struct _SDL_Joystick;
-typedef struct _SDL_Joystick SDL_Joystick;
-
 namespace ice
 {
     class ICE_EXPORT Joystick
     {
     public:
-        Joystick(int id);
-        ~Joystick();
+        Joystick() noexcept = default;
+        virtual ~Joystick() = default;
 
-        std::string get_name() const noexcept;
-        uint8_t get_axis_count() const noexcept;
-        uint8_t get_ball_count() const noexcept;
-        uint8_t get_button_count() const noexcept;
-        uint8_t get_hat_count() const noexcept;
+        virtual std::string get_name() const noexcept = 0;
+        virtual uint8_t get_axis_count() const noexcept = 0;
+        virtual uint8_t get_ball_count() const noexcept = 0;
+        virtual uint8_t get_button_count() const noexcept = 0;
+        virtual uint8_t get_hat_count() const noexcept = 0;
 
         rsig::signal<uint8_t, float>& get_axis_motion_signal() noexcept;
         rsig::connection on_axis_motion(const std::function<void (uint8_t, float)>& cb) noexcept;
@@ -59,20 +55,15 @@ namespace ice
         rsig::signal<uint8_t, glm::ivec2>& get_hat_motion_signal() noexcept;
         rsig::connection on_hat_motion(const std::function<void (uint8_t, glm::ivec2)>& cb) noexcept;
 
-    private:
-        SDL_Joystick* joystick;
-
+    protected:
         rsig::signal<uint8_t, float>      axis_motion_signal;
         rsig::signal<uint8_t, glm::ivec2> ball_motion_signal;
         rsig::signal<uint8_t>             button_down_signal;
         rsig::signal<uint8_t>             button_up_signal;
         rsig::signal<uint8_t, glm::ivec2> hat_motion_signal;
 
-        void handle_event(const SDL_Event& event) const;
-
+    private:
         Joystick(const Joystick&) = delete;
         Joystick& operator = (const Joystick&) = delete;
-
-    friend class InputSystem;
     };
 }

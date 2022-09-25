@@ -22,10 +22,13 @@
 #include "pch.h"
 #include "Engine.h"
 
-#include "System.h"
+#include "utils.h"
 #include "GraphicSystem.h"
 #include "InputSystem.h"
+#include "Scene.h"
 #include "Screen.h"
+#include "System.h"
+#include "SdlWindow.h"
 
 namespace ice
 {
@@ -36,12 +39,6 @@ namespace ice
 
     Engine::~Engine()
     {
-        if (overlay)
-        {
-            overlay->deactivate(*this);
-            overlay = nullptr;
-        }
-
         // destruct in reverse order
         while (!systems.empty())
         {
@@ -169,9 +166,29 @@ namespace ice
         return is->get_joysticks();
     }
 
+    void Engine::set_scene(const std::shared_ptr<Scene>& value) noexcept
+    {
+        c9y::sync([this, value] () {
+            if (scene)
+            {
+                scene->deactivate(*this);
+            }
+            scene = value;
+            if (scene)
+            {
+                scene->activate(*this);
+            }
+        });
+    }
+
+    const std::shared_ptr<Scene>& Engine::get_scene() const noexcept
+    {
+        return scene;
+    }
+
     void Engine::set_overlay(const std::shared_ptr<Screen>& value) noexcept
     {
-        c9y::delay([this, value] () {
+        c9y::sync([this, value] () {
             if (overlay)
             {
                 overlay->deactivate(*this);
@@ -209,6 +226,7 @@ namespace ice
 
     void Engine::tick()
     {
+        tick_count++;
         c9y::sync_point();
 
         for (const auto& sys : systems)
@@ -218,24 +236,55 @@ namespace ice
         }
     }
 
-
-
     void Engine::deactivate()
     {
+        if (scene)
+        {
+            scene->deactivate(*this);
+            scene = nullptr;
+        }
+
+        if (overlay)
+        {
+            overlay->deactivate(*this);
+            overlay = nullptr;
+        }
+
         for (const auto& system : std::views::reverse(systems))
         {
             system->deactivate();
         }
     }
 
-    void Engine::run()
+    void Engine::run(std::optional<unsigned int> max_tick_count)
     {
-        running = true;
+        running    = true;
+        tick_count = 0u;
         activate();
 
-        while (running)
+        try
         {
-            tick();
+            while (running)
+            {
+                tick();
+
+                if (max_tick_count && *max_tick_count == tick_count)
+                {
+                    stop();
+                }
+            }
+        }
+        catch (const std::exception& ex)
+        {
+            auto window = get_window();
+            if (window)
+            {
+                show_message_box(MessageBoxIcon::ERROR, "Error", ex.what());
+            }
+            else
+            {
+                std::cerr << std::format("Error: {}", ex.what()) << std::endl;
+            }
         }
 
         deactivate();

@@ -24,16 +24,44 @@
 
 #include "Engine.h"
 #include "GraphicSystem.h"
+#include "SceneRenderer.h"
 
 namespace ice
 {
+    SceneRenderer* Scene::get_renderer() noexcept
+    {
+        return renderer;
+    }
+
+    const SceneRenderer* Scene::get_renderer() const noexcept
+    {
+        return renderer;
+    }
+
+    void Scene::draw() noexcept
+    {
+        if (renderer)
+        {
+            renderer->render();
+        }
+    }
+
     void Scene::local_activate(Engine& engine)
     {
-        // TODO
+        if (auto gs = engine.get_system<GraphicSystem>())
+        {
+            renderer = gs->create_scene_renderer();
+        }
     }
 
     void Scene::local_deactivate(Engine& engine)
     {
-        // TODO
+        if (renderer)
+        {
+            auto gs = engine.get_system<GraphicSystem>();
+            assert(gs);
+            gs->release_scene_renderer(renderer);
+            renderer = nullptr;
+        }
     }
 }

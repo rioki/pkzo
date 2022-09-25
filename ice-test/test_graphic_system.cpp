@@ -27,7 +27,7 @@ TEST(GraphicSystem, has_window_after_load)
 {
     auto engine = ice::Engine{};
 
-    engine.start_system<ice::GraphicSystem>();
+    engine.start_system<ice::SdlGraphicSystem>();
 
     const auto* gs = engine.get_system<ice::GraphicSystem>();
     ASSERT_NE(nullptr, gs);
@@ -44,7 +44,7 @@ TEST(GraphicSystem, uses_settings)
     settings.set_value("GraphicSystem", "resolution", glm::uvec2(640, 480));
     settings.set_value("GraphicSystem", "mode",       ice::WindowMode::RESIZABLE);
 
-    engine.start_system<ice::GraphicSystem>();
+    engine.start_system<ice::SdlGraphicSystem>();
 
     const auto* gs = engine.get_system<ice::GraphicSystem>();
     ASSERT_NE(nullptr, gs);
@@ -64,7 +64,7 @@ TEST(GraphicSystem, empty_screeshot)
     settings.set_value("GraphicSystem", "resolution", glm::uvec2(800, 600));
     settings.set_value("GraphicSystem", "mode",       ice::WindowMode::STATIC);
 
-    engine.start_system<ice::GraphicSystem>();
+    engine.start_system<ice::SdlGraphicSystem>();
 
     const auto* gs = engine.get_system<ice::GraphicSystem>();
     ASSERT_NE(nullptr, gs);

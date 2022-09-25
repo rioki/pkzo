@@ -23,16 +23,11 @@
 #include "config.h"
 
 #include <string>
-#include <iostream>
 #include <string_view>
 #include <glm/glm.hpp>
-#include <rsig/rsig.h>
 
 #include "utils.h"
 #include "SdlSentry.h"
-
-struct SDL_Window;
-typedef void *SDL_GLContext;
 
 namespace ice
 {
@@ -51,33 +46,21 @@ namespace ice
                                      {WindowMode::NATIVE_FULLSCREEN, "NATIVE_FULLSCREEN"}
                                    });
 
-
     class ICE_EXPORT Window
     {
     public:
-        Window(const glm::uvec2& size, WindowMode mode, const std::string_view caption);
-        Window(const Window&) = delete;
-        ~Window();
-        Window& operator = (const Window&) = delete;
+        Window() = default;
+        virtual ~Window() = default;
 
-        void set_caption(const std::string_view text) noexcept;
-        std::string get_caption() const noexcept;
+        virtual void set_caption(const std::string_view text) noexcept = 0;
+        virtual std::string get_caption() const noexcept = 0;
 
-        void resize(const glm::uvec2& size, WindowMode flags);
-        glm::uvec2 get_size() const noexcept;
-        WindowMode get_mode() const noexcept;
-
-        rsig::signal<>& get_draw_sginal() noexcept;
-        rsig::connection on_draw(const std::function<void ()>& cb) noexcept;
-
-        void draw() const noexcept;
+        virtual void resize(const glm::uvec2& size, WindowMode flags) = 0;
+        virtual glm::uvec2 get_size() const noexcept = 0;
+        virtual WindowMode get_mode() const noexcept = 0;
 
     private:
-        SdlSentry     sdl_sentry;
-
-        SDL_Window*   window    = nullptr;
-        SDL_GLContext glcontext = nullptr;
-
-        rsig::signal<> draw_signal;
+        Window(const Window&) = delete;
+        Window& operator = (const Window&) = delete;
     };
 }
