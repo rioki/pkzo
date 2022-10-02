@@ -19,41 +19,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "pch.h"
-#include "SphereVisual.h"
+#pragma once
 
-#include "Mesh.h"
+#include <ice/ice.h>
 
-namespace ice
+namespace lab
 {
-    SphereVisual::SphereVisual()
-    : SphereVisual(glm::mat4(1.0f), 1.0f, Visual::get_default_material()) {}
-
-    SphereVisual::SphereVisual(const glm::mat4& transform, const float radius, const std::shared_ptr<const Material>& material) noexcept
-    : Visual(transform, get_sphere_mesh(), material, glm::vec3(radius)) {}
-
-    float SphereVisual::get_radius() const noexcept
+    class StaticBox : public ice::SceneNodeGroup
     {
-        return get_local_scale().x;
-    }
+    public:
+        StaticBox(const glm::mat4& transform, const glm::vec3& size, const std::shared_ptr<const ice::Material>& material);
 
-    void SphereVisual::set_radius(const float value) noexcept
-    {
-        set_local_scale(glm::vec3(value));
-    }
+        void set_size(const glm::vec3& value) noexcept;
+        const glm::vec3& get_size() const noexcept;
 
-    std::shared_ptr<Mesh> SphereVisual::get_sphere_mesh() noexcept
-    {
-        static auto cache = std::weak_ptr<Mesh>();
+        void set_material(const std::shared_ptr<const ice::Material>& value) noexcept;
+        const std::shared_ptr<const ice::Material>& get_material() const noexcept;
 
-        auto mesh = cache.lock();
-        if (mesh)
-        {
-            return mesh;
-        }
-
-        mesh = make_sphere_mesh(1.0f);
-        cache = mesh;
-        return mesh;
-    }
+    private:
+        ice::BoxVisual visual;
+    };
 }

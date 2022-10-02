@@ -1,6 +1,3 @@
-#include "pch.h"
-#include "Visual.h"
-
 // Ice Engine
 // Copyright 2022 Sean Farrell
 //
@@ -22,8 +19,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#include "config.h"
+#include "pch.h"
+#include "Visual.h"
 
 #include "SceneNode.h"
 #include "Material.h"
@@ -65,6 +62,15 @@ namespace ice
         return mesh;
     }
 
+    void Visual::set_material(const std::shared_ptr<const Material>& value)
+    {
+        material = value;
+        if (renderer)
+        {
+            renderer->update_geometry_material(render_handle, material);
+        }
+    }
+
     const std::shared_ptr<const Material>& Visual::get_material() const noexcept
     {
         return material;
@@ -98,15 +104,6 @@ namespace ice
         if (renderer)
         {
             renderer->update_geometry_mesh(render_handle, mesh);
-        }
-    }
-
-    void Visual::set_material(const std::shared_ptr<const Material>& value)
-    {
-        material = value;
-        if (renderer)
-        {
-            renderer->update_geometry_material(render_handle, material);
         }
     }
 

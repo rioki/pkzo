@@ -29,7 +29,7 @@ namespace ice
     BoxVisual::BoxVisual()
     : BoxVisual(glm::mat4(1.0f), glm::vec3(1.0f), Visual::get_default_material()) {}
 
-    BoxVisual::BoxVisual(const glm::mat4& transform, const glm::vec3& size, const std::shared_ptr<Material>& material) noexcept
+    BoxVisual::BoxVisual(const glm::mat4& transform, const glm::vec3& size, const std::shared_ptr<const Material>& material) noexcept
     : Visual(transform, get_box_mesh(), material, size) {}
 
     const glm::vec3& BoxVisual::get_size() const noexcept

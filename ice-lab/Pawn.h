@@ -19,41 +19,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "pch.h"
-#include "SphereVisual.h"
+#pragma once
 
-#include "Mesh.h"
+#include <ice/ice.h>
 
-namespace ice
+namespace lab
 {
-    SphereVisual::SphereVisual()
-    : SphereVisual(glm::mat4(1.0f), 1.0f, Visual::get_default_material()) {}
-
-    SphereVisual::SphereVisual(const glm::mat4& transform, const float radius, const std::shared_ptr<const Material>& material) noexcept
-    : Visual(transform, get_sphere_mesh(), material, glm::vec3(radius)) {}
-
-    float SphereVisual::get_radius() const noexcept
+    class Pawn : public ice::SceneNodeGroup
     {
-        return get_local_scale().x;
-    }
+    public:
+        Pawn(ice::Engine& engine, const glm::mat4& transform);
 
-    void SphereVisual::set_radius(const float value) noexcept
-    {
-        set_local_scale(glm::vec3(value));
-    }
-
-    std::shared_ptr<Mesh> SphereVisual::get_sphere_mesh() noexcept
-    {
-        static auto cache = std::weak_ptr<Mesh>();
-
-        auto mesh = cache.lock();
-        if (mesh)
-        {
-            return mesh;
-        }
-
-        mesh = make_sphere_mesh(1.0f);
-        cache = mesh;
-        return mesh;
-    }
+    private:
+        ice::Engine& engine;
+        ice::Camera  camera;
+    };
 }

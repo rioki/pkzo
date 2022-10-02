@@ -31,7 +31,7 @@ namespace ice
     public:
         SphereVisual();
 
-        SphereVisual(const glm::mat4& transform, const float radius, const std::shared_ptr<Material>& material) noexcept;
+        SphereVisual(const glm::mat4& transform, const float radius, const std::shared_ptr<const Material>& material) noexcept;
 
         float get_radius() const noexcept;
         void set_radius(const float value) noexcept;

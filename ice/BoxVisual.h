@@ -31,7 +31,7 @@ namespace ice
     public:
         BoxVisual();
 
-        BoxVisual(const glm::mat4& transform, const glm::vec3& size, const std::shared_ptr<Material>& material) noexcept;
+        BoxVisual(const glm::mat4& transform, const glm::vec3& size, const std::shared_ptr<const Material>& material) noexcept;
 
         const glm::vec3& get_size() const noexcept;
         void set_size(const glm::vec3& value) noexcept;

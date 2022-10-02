@@ -22,6 +22,9 @@
 #include "pch.h"
 #include "LabEngine.h"
 
+#include "StaticBox.h"
+#include "Pawn.h"
+
 namespace lab
 {
     std::filesystem::path get_config_folder()
@@ -86,6 +89,39 @@ namespace lab
             auto line = ice::join({begin(args) + 1, end(args)}, " ");
             console->write(line);
         });
+
+        set_scene(create_test_scene());
+    }
+
+    std::shared_ptr<ice::Scene> LabEngine::create_test_scene()
+    {
+        // later save and load scenes, but for now just create a test scene
+
+        auto scene = std::make_shared<ice::Scene>();
+
+        auto gray_material = std::make_shared<ice::Material>(glm::vec3(0.75f));
+
+        // fake global illiumunation
+        auto light0 = std::make_shared<ice::AmbientLight>(glm::vec3{0.106, 0.161, 0.2});
+        scene->add_node(light0);
+
+        auto l1t = glm::inverse(glm::lookAt(glm::vec3(0.0), {1.0, -0.5, -1.}, {0.0, 1.0, 0.0}));
+        auto light1 = std::make_shared<ice::DirectionalLight>(l1t, glm::vec3(0.839, 0.718, 0.573));
+        scene->add_node(light1);
+
+        auto light2 = std::make_shared<ice::DirectionalLight>(glm::mat4(1.0f), glm::vec3(0.125, 0.165, 0.329));
+        scene->add_node(light2);
+
+        // ground
+        auto ground = std::make_shared<StaticBox>(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -0.5f)), glm::vec3(1000.0f, 1000.0f, 1.0f), gray_material);
+        scene->add_node(ground);
+
+        // pawn
+        // TODO hock an "add scene" event and add the pawn
+        auto pawn = std::make_shared<Pawn>(*this, glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 2.5f)));
+        scene->add_node(pawn);
+
+        return scene;
     }
 }
 

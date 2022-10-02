@@ -20,40 +20,32 @@
 // SOFTWARE.
 
 #include "pch.h"
-#include "SphereVisual.h"
+#include "Pawn.h"
 
-#include "Mesh.h"
-
-namespace ice
+namespace lab
 {
-    SphereVisual::SphereVisual()
-    : SphereVisual(glm::mat4(1.0f), 1.0f, Visual::get_default_material()) {}
-
-    SphereVisual::SphereVisual(const glm::mat4& transform, const float radius, const std::shared_ptr<const Material>& material) noexcept
-    : Visual(transform, get_sphere_mesh(), material, glm::vec3(radius)) {}
-
-    float SphereVisual::get_radius() const noexcept
+    auto camera_x_forward()
     {
-        return get_local_scale().x;
+        return ice::lookat(glm::vec3(0.0f), glm::vec3(1.0f, 0.0, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
     }
 
-    void SphereVisual::set_radius(const float value) noexcept
+    auto safe_resolution(ice::Engine& engine)
     {
-        set_local_scale(glm::vec3(value));
-    }
-
-    std::shared_ptr<Mesh> SphereVisual::get_sphere_mesh() noexcept
-    {
-        static auto cache = std::weak_ptr<Mesh>();
-
-        auto mesh = cache.lock();
-        if (mesh)
+        auto window = engine.get_window();
+        if (!window)
         {
-            return mesh;
+            soft_assert(false && "No window.");
+            return glm::uvec2(800, 600);
         }
 
-        mesh = make_sphere_mesh(1.0f);
-        cache = mesh;
-        return mesh;
+        return window->get_size();
+    }
+
+    Pawn::Pawn(ice::Engine& _engine, const glm::mat4& transform)
+    : ice::SceneNodeGroup(transform),
+      engine(_engine),
+      camera(camera_x_forward(), engine.get_setting("Pawn", "fov", 90.0f), safe_resolution(engine))
+    {
+        add_node(camera);
     }
 }

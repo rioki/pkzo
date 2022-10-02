@@ -29,6 +29,9 @@ namespace lab
     {
     public:
         LabEngine();
+
+    private:
+        std::shared_ptr<ice::Scene> create_test_scene();
     };
 }
 
