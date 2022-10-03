@@ -40,6 +40,7 @@ namespace ice
     class ICE_EXPORT Screen : public NodeRoot<Screen>
     {
     public:
+        Screen();
         Screen(const glm::vec2& size);
         ~Screen() = default;
 
@@ -51,9 +52,8 @@ namespace ice
 
         void draw();
 
-    protected:
-        void local_activate(Engine& engine) override;
-        void local_deactivate(Engine& engine) override;
+        void activate() override;
+        void deactivate() override;
 
     private:
         glm::vec2       size;

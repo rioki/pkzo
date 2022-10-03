@@ -53,3 +53,21 @@ TEST(ScreenNode, world_transform)
     EXPECT_GLM_NEAR(child_transform, child->get_transform(), 1e-4f);
     EXPECT_GLM_NEAR(root_transform * child_transform, child->get_world_transform(), 1e-4f);
 }
+
+TEST(ScreenNode, in_engine_has_engien)
+{
+    auto engine = ice::Engine();
+
+    auto screen = std::make_shared<ice::Screen>();
+    auto node   = std::make_shared<ice::ScreenNode>();
+    screen->add_node(node);
+
+    engine.set_overlay(screen);
+
+    engine.on_tick([&] () {
+        EXPECT_EQ(&engine, node->get_engine());
+    });
+
+    engine.run(1u);
+}
+

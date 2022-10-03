@@ -26,6 +26,8 @@
 
 namespace ice
 {
+    class Engine;
+
     template <typename Type>
     struct NodeTraits {};
 
@@ -66,6 +68,21 @@ namespace ice
         const Type* get_root() const noexcept
         {
             return const_cast<Node<Type>*>(this)->get_root();
+        }
+
+        Engine* get_engine() noexcept
+        {
+            auto root = get_root();
+            if (root == nullptr)
+            {
+                return nullptr;
+            }
+            return root->get_engine();
+        }
+
+        const Engine* get_engine() const noexcept
+        {
+            return const_cast<Node<Type>*>(this)->get_engine();
         }
 
         template <typename T>

@@ -49,8 +49,8 @@ namespace ice
         void draw() noexcept;
 
     protected:
-        void local_activate(Engine& engine) override;
-        void local_deactivate(Engine& engine) override;
+        void activate() override;
+        void deactivate() override;
 
     private:
         SceneRenderer* renderer = nullptr;

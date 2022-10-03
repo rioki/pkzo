@@ -28,6 +28,9 @@
 
 namespace ice
 {
+    Screen::Screen()
+    : Screen({800, 600}) {}
+
     Screen::Screen(const glm::vec2& _size)
     : size(_size)
     {
@@ -67,20 +70,28 @@ namespace ice
         }
     }
 
-    void Screen::local_activate(Engine& engine)
+    void Screen::activate()
     {
-        if (auto gs = engine.get_system<GraphicSystem>())
+        auto engine = get_engine();
+        assert(engine != nullptr);
+
+        if (auto gs = engine->get_system<GraphicSystem>())
         {
             renderer = gs->create_screen_renderer();
             renderer->set_screen_size(size);
         }
+        NodeRoot<Screen>::activate();
     }
 
-    void Screen::local_deactivate(Engine& engine)
+    void Screen::deactivate()
     {
+        NodeRoot<Screen>::deactivate();
         if (renderer)
         {
-            auto gs = engine.get_system<GraphicSystem>();
+            auto engine = get_engine();
+            assert(engine != nullptr);
+
+            auto gs = engine->get_system<GraphicSystem>();
             assert(gs);
             gs->release_screen_renderer(renderer);
             renderer = nullptr;

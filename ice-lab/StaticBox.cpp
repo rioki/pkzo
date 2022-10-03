@@ -20,40 +20,34 @@
 // SOFTWARE.
 
 #include "pch.h"
-#include "SphereVisual.h"
+#include "StaticBox.h"
 
-#include "Mesh.h"
-
-namespace ice
+namespace lab
 {
-    SphereVisual::SphereVisual()
-    : SphereVisual(glm::mat4(1.0f), 1.0f, Visual::get_default_material()) {}
-
-    SphereVisual::SphereVisual(const glm::mat4& transform, const float radius, const std::shared_ptr<const Material>& material) noexcept
-    : Visual(transform, get_sphere_mesh(), material, glm::vec3(radius)) {}
-
-    float SphereVisual::get_radius() const noexcept
+    StaticBox::StaticBox(const glm::mat4& transform, const glm::vec3& size, const std::shared_ptr<const ice::Material>& material)
+    : ice::SceneNodeGroup(transform),
+      visual{glm::mat4(1.0f), size, material}
     {
-        return get_local_scale().x;
+        add_node(visual);
     }
 
-    void SphereVisual::set_radius(const float value) noexcept
+    void StaticBox::set_size(const glm::vec3& value) noexcept
     {
-        set_local_scale(glm::vec3(value));
+        visual.set_size(value);
     }
 
-    std::shared_ptr<Mesh> SphereVisual::get_sphere_mesh() noexcept
+    const glm::vec3& StaticBox::get_size() const noexcept
     {
-        static auto cache = std::weak_ptr<Mesh>();
+        return visual.get_size();
+    }
 
-        auto mesh = cache.lock();
-        if (mesh)
-        {
-            return mesh;
-        }
+    void StaticBox::set_material(const std::shared_ptr<const ice::Material>& value) noexcept
+    {
+        visual.set_material(value);
+    }
 
-        mesh = make_sphere_mesh(1.0f);
-        cache = mesh;
-        return mesh;
+    const std::shared_ptr<const ice::Material>& StaticBox::get_material() const noexcept
+    {
+        return visual.get_material();
     }
 }

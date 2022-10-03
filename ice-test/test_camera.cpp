@@ -77,3 +77,79 @@ TEST(Camera, registers_on_renderer)
 
     engine.run(5u);
 }
+
+TEST(Camera, updates_renderer_view)
+{
+    auto engine = ice::Engine{};
+    auto gs = engine.start_system<StrictMock<ice::test::MockGraphicSystem>>();
+
+    auto renderer = std::make_unique<StrictMock<ice::test::MockRenderer>>();
+
+    auto transform  = inverse(lookAt(vec3(-10.0f, 0.5f, 2.0f), vec3(0.0f), vec3(0.0, 0.0, 0.1)));
+    auto resolution = uvec2(800, 600);
+    auto fov        = 101.0f;
+
+    InSequence s;
+
+    EXPECT_CALL(*gs, create_scene_renderer())
+        .WillOnce(Return(renderer.get()));
+
+    EXPECT_CALL(*renderer, add_camera(transform, resolution, fov))
+        .WillOnce(Return(42));
+    EXPECT_CALL(*renderer, upate_camera_view(42, _));
+    EXPECT_CALL(*renderer, remove_camera(42));
+
+    EXPECT_CALL(*gs, release_scene_renderer(renderer.get()));
+
+    auto scene = std::make_shared<ice::Scene>();
+
+    auto camera = std::make_shared<ice::Camera>(transform, fov, resolution);
+    scene->add_node(camera);
+
+    engine.set_scene(scene);
+
+    engine.on_tick([&] () {
+        auto t2 = glm::translate(transform, glm::vec3(0.0f, 0.0f, 1.0f));
+        camera->set_transform(t2);
+    });
+
+    engine.run(1u);
+}
+
+TEST(Camera, updates_renderer_view_default_construct)
+{
+    auto engine = ice::Engine{};
+    auto gs = engine.start_system<StrictMock<ice::test::MockGraphicSystem>>();
+
+    auto renderer = std::make_unique<StrictMock<ice::test::MockRenderer>>();
+
+    auto transform  = inverse(lookAt(vec3(-10.0f, 0.5f, 2.0f), vec3(0.0f), vec3(0.0, 0.0, 0.1)));
+    auto resolution = uvec2(800, 600);
+    auto fov        = 101.0f;
+
+    InSequence s;
+
+    EXPECT_CALL(*gs, create_scene_renderer())
+        .WillOnce(Return(renderer.get()));
+
+    EXPECT_CALL(*renderer, add_camera(_, _, _))
+        .WillOnce(Return(42));
+    EXPECT_CALL(*renderer, upate_camera_view(42, _));
+    EXPECT_CALL(*renderer, remove_camera(42));
+
+    EXPECT_CALL(*gs, release_scene_renderer(renderer.get()));
+
+    auto scene = std::make_shared<ice::Scene>();
+
+    auto camera = std::make_shared<ice::Camera>();
+    scene->add_node(camera);
+
+    engine.set_scene(scene);
+
+    engine.on_tick([&] () {
+        auto t2 = glm::translate(transform, glm::vec3(0.0f, 0.0f, 1.0f));
+        camera->set_transform(t2);
+    });
+
+    engine.run(1u);
+}

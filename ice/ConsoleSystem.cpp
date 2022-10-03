@@ -209,7 +209,7 @@ namespace ice
 
                 screen = std::make_unique<ConsoleScreen>(size, font, text_color, background_color, lines);
                 screen->set_output(output_buffer);
-                screen->activate(engine);
+                screen->set_engine(&engine);
 
                 render_event = gs->debug_draw([this] () {
                     screen->draw();
@@ -275,7 +275,7 @@ namespace ice
                 assert(gs);
                 gs->get_debug_draw_signal().disconnect(render_event);
 
-                screen->deactivate(engine);
+                screen->set_engine(nullptr);
                 screen = nullptr;
                 visible = false;
             });

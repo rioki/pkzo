@@ -39,6 +39,7 @@ namespace ice
 
         const std::shared_ptr<const Mesh>& get_mesh() const noexcept;
 
+        void set_material(const std::shared_ptr<const Material>& value);
         const std::shared_ptr<const Material>& get_material() const noexcept;
 
         void activate() override;
@@ -46,7 +47,6 @@ namespace ice
 
     protected:
         void set_mesh(const std::shared_ptr<const Mesh>& value);
-        void set_material(const std::shared_ptr<const Material>& value);
 
         const glm::vec3& get_local_scale() const noexcept;
         void set_local_scale(const glm::vec3& value) noexcept;
