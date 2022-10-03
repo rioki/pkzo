@@ -22,6 +22,8 @@
 #include "pch.h"
 #include "Pawn.h"
 
+#include "StaticBox.h"
+
 namespace lab
 {
     using fsec = std::chrono::duration<float>;
@@ -73,6 +75,10 @@ namespace lab
             if (button == ice::MouseButton::MIDDLE)
             {
                 rotating = true;
+            }
+            if (button == ice::MouseButton::LEFT)
+            {
+                place_box();
             }
         });
         mouse_button_up_con = mouse->on_button_up([this] (auto button, auto pos) {
@@ -224,5 +230,18 @@ namespace lab
         keyboard->get_key_up_signal().disconnect(key_up_con);
 
         ice::SceneNodeGroup::deactivate();
+    }
+
+    void Pawn::place_box()
+    {
+        static auto orange_material = std::make_shared<ice::Material>(ice::rgb(0xfc8403));
+
+        auto t = camera.get_world_transform();
+        t = glm::translate(t, glm::vec3(0.0f, 0.0f, -3.0f));
+
+        auto scene = get_root();
+        assert(scene);
+
+        scene->add_node(std::make_shared<StaticBox>(t, glm::vec3(0.5f), orange_material));
     }
 }
