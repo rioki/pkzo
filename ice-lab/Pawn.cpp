@@ -52,8 +52,13 @@ namespace lab
         assert(engine);
 
         mouse_senitivity = engine->get_setting("Pawn", "mouse_senitivity", mouse_senitivity);
-        invert_mouse     = engine->get_setting("Pawn", "invert_mouse", invert_mouse);
-        // TODO key binding
+        invert_mouse     = engine->get_setting("Pawn", "invert_mouse",     invert_mouse);
+        fore_key         = engine->get_setting("Pawn", "fore_key",         fore_key);
+        down_key         = engine->get_setting("Pawn", "down_key",         down_key);
+        left_key         = engine->get_setting("Pawn", "left_key",         left_key);
+        right_key        = engine->get_setting("Pawn", "down_key",         right_key);
+        up_key           = engine->get_setting("Pawn", "up_key",           up_key);
+        down_key         = engine->get_setting("Pawn", "down_key",         down_key);
 
         camera.set_fov(engine->get_setting("Pawn", "fov", 90.0f));
         camera.set_resolution(safe_resolution(*engine));
@@ -206,14 +211,15 @@ namespace lab
     {
         auto* engine = get_engine();
         assert(engine);
-
         auto* mouse = engine->get_mouse();
         assert(mouse);
+        auto* keyboard = engine->get_keyboard();
+        assert(keyboard);
+
+        engine->get_tick_signal().disconnect(tick_con);
         mouse->get_button_down_signal().disconnect(mouse_button_down_con);
         mouse->get_button_up_signal().disconnect(mouse_button_up_con);
         mouse->get_move_signal().disconnect(mouse_move_con);
-        auto* keyboard = engine->get_keyboard();
-        assert(keyboard);
         keyboard->get_key_down_signal().disconnect(key_down_con);
         keyboard->get_key_up_signal().disconnect(key_up_con);
 

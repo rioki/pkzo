@@ -30,7 +30,7 @@ TEST(Screen, init)
     EXPECT_GLM_NEAR(glm::vec2(640.0f, 480.0f), screen.get_size(), 1e-4f);
 }
 
-TEST(Screen, in_engine_has_engien)
+TEST(Screen, in_engine_has_engine)
 {
     auto engine = ice::Engine();
 

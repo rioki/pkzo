@@ -54,7 +54,7 @@ TEST(SceneNode, world_transform)
     EXPECT_GLM_NEAR(root_transform * child_transform, child->get_world_transform(), 1e-4f);
 }
 
-TEST(SceneNode, in_engine_has_engien)
+TEST(SceneNode, in_engine_has_engine)
 {
     auto engine = ice::Engine();
 
