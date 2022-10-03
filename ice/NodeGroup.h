@@ -36,10 +36,19 @@ namespace ice
     public:
         using Matrix = Node<Type>::Matrix;
 
-        NodeGroup() noexcept = default;
+        NodeGroup() noexcept
+        : NodeGroup(glm::mat4(1.0f)) {}
 
         NodeGroup(const Matrix& _transform) noexcept
-        : Node<Type>(_transform) {}
+        : Node<Type>(_transform)
+        {
+            this->on_move([this] () {
+                for (const auto& node : nodes)
+                {
+                    node->get_move_signal().emit();
+                }
+            });
+        }
 
         void add_node(Node<Type>& node) noexcept
         {

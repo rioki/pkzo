@@ -171,12 +171,12 @@ namespace ice
         c9y::sync([this, value] () {
             if (scene)
             {
-                scene->deactivate(*this);
+                scene->set_engine(nullptr);
             }
             scene = value;
             if (scene)
             {
-                scene->activate(*this);
+                scene->set_engine(this);
             }
         });
     }
@@ -191,12 +191,12 @@ namespace ice
         c9y::sync([this, value] () {
             if (overlay)
             {
-                overlay->deactivate(*this);
+                overlay->set_engine(nullptr);
             }
             overlay = value;
             if (overlay)
             {
-                overlay->activate(*this);
+                overlay->set_engine(this);
             }
         });
     }
@@ -232,21 +232,22 @@ namespace ice
         for (const auto& sys : systems)
         {
             sys->tick();
-            tick_signal.emit();
         }
+
+        tick_signal.emit();
     }
 
     void Engine::deactivate()
     {
         if (scene)
         {
-            scene->deactivate(*this);
+            scene->set_engine(nullptr);
             scene = nullptr;
         }
 
         if (overlay)
         {
-            overlay->deactivate(*this);
+            overlay->set_engine(nullptr);
             overlay = nullptr;
         }
 

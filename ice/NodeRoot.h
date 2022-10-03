@@ -36,38 +36,42 @@ namespace ice
 
         ~NodeRoot()
         {
-            assert(active == false);
+            assert(engine == nullptr);
         }
 
-        void activate(Engine& engine)
+        Engine* get_engine() noexcept
         {
-            assert(false == active);
-            active = true;
-
-            local_activate(engine);
-            NodeGroup<Type>::activate();
+            return engine;
         }
 
-        void deactivate(Engine& engine)
+        const Engine* get_engine() const noexcept
         {
-            assert(true == active);
-            NodeGroup<Type>::deactivate();
+            return engine;
+        }
 
-            local_deactivate(engine);
-
-            active = false;
+        void set_engine(Engine* _engine)
+        {
+            if (_engine != nullptr)
+            {
+                assert(_engine != nullptr);
+                assert(engine == nullptr);
+                engine = _engine;
+                this->activate(); // this is BS here, but the compiler can't even.
+            }
+            else
+            {
+                assert(engine != nullptr);
+                this->deactivate(); // this is BS here, but the compiler can't even.
+                engine = nullptr;
+            }
         }
 
         bool is_active() const noexcept
         {
-            return active;
+            return engine != nullptr;
         }
 
-    protected:
-        virtual void local_activate(Engine& engine) = 0;
-        virtual void local_deactivate(Engine& engine) = 0;
-
     private:
-        bool active = false;
+        Engine* engine = nullptr;
     };
 }

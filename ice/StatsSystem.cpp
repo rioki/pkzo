@@ -202,7 +202,7 @@ namespace ice
 
                 screen = std::make_unique<StatsScreen>(size, font, text_color, background_color);
                 screen->set_stats(stats);
-                screen->activate(engine);
+                screen->set_engine(&engine);
 
                 render_event = gs->debug_draw([this] () {
                     screen->draw();
@@ -222,7 +222,7 @@ namespace ice
                 assert(gs);
                 gs->get_debug_draw_signal().disconnect(render_event);
 
-                screen->deactivate(engine);
+                screen->set_engine(nullptr);
                 screen = nullptr;
                 visible = false;
             });

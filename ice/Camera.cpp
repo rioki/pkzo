@@ -26,6 +26,9 @@
 
 namespace ice
 {
+    Camera::Camera() noexcept
+    : Camera(glm::mat4(1.0f), 90.0f, glm::uvec2(1600, 900)) {}
+
     Camera::Camera(const glm::mat4& _transform, const float _fov, const glm::uvec2 _resolution) noexcept
     : SceneNode(_transform), fov(_fov), resolution(_resolution)
     {
@@ -57,7 +60,7 @@ namespace ice
         return resolution;
     }
 
-    void Camera::change_resolution(const glm::uvec2 value) noexcept
+    void Camera::set_resolution(const glm::uvec2 value) noexcept
     {
         resolution = value;
         if (renderer)

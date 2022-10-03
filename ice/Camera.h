@@ -31,7 +31,7 @@ namespace ice
     class ICE_EXPORT Camera : public SceneNode
     {
     public:
-        Camera() = default;
+        Camera() noexcept;
 
         Camera(const glm::mat4& transform, const float fov, const glm::uvec2 resolution) noexcept;
 
@@ -39,7 +39,7 @@ namespace ice
         void set_fov(const float value) noexcept;
 
         glm::uvec2 get_resolution() const noexcept;
-        void change_resolution(const glm::uvec2 value) noexcept;
+        void set_resolution(const glm::uvec2 value) noexcept;
 
         void activate() override;
         void deactivate() override;

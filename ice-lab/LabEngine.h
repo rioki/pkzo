@@ -25,12 +25,16 @@
 
 namespace lab
 {
+    class Pawn;
+
     class LabEngine : public ice::Engine
     {
     public:
         LabEngine();
 
     private:
+        std::shared_ptr<Pawn> pawn;
+
         std::shared_ptr<ice::Scene> create_test_scene();
     };
 }

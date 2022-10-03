@@ -28,3 +28,17 @@ TEST(Scene, init)
     auto scene = ice::Scene();
     EXPECT_GLM_NEAR(glm::mat4(1.0), scene.get_transform(), 1e-4f);
 }
+
+TEST(Scene, in_engine_has_engine)
+{
+    auto engine = ice::Engine();
+
+    auto scene = std::make_shared<ice::Scene>();
+    engine.set_scene(scene);
+
+    engine.on_tick([&] () {
+        EXPECT_EQ(&engine, scene->get_engine());
+    });
+
+    engine.run(1u);
+}

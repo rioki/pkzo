@@ -46,19 +46,29 @@ namespace ice
         }
     }
 
-    void Scene::local_activate(Engine& engine)
+    void Scene::activate()
     {
-        if (auto gs = engine.get_system<GraphicSystem>())
+        auto engine = get_engine();
+        assert(engine != nullptr);
+
+        if (auto gs = engine->get_system<GraphicSystem>())
         {
             renderer = gs->create_scene_renderer();
         }
+
+        NodeRoot<Scene>::activate();
     }
 
-    void Scene::local_deactivate(Engine& engine)
+    void Scene::deactivate()
     {
+        NodeRoot<Scene>::deactivate();
+
         if (renderer)
         {
-            auto gs = engine.get_system<GraphicSystem>();
+            auto engine = get_engine();
+            assert(engine != nullptr);
+
+            auto gs = engine->get_system<GraphicSystem>();
             assert(gs);
             gs->release_scene_renderer(renderer);
             renderer = nullptr;

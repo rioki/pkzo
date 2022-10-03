@@ -258,31 +258,21 @@ TEST(StatsSystem, GRAPHICAL_render_stats)
 
     engine.set_overlay(std::make_shared<CatScreen>(engine, glm::vec2(800, 600)));
 
-    auto start = std::chrono::steady_clock::now();
     auto count = 0u;
     engine.on_tick([&] ()
     {
-        std::this_thread::sleep_for(20ms);
         stats->increment("ticks");
-        std::this_thread::sleep_for(20ms);
         stats->increment("ticks");
-        std::this_thread::sleep_for(20ms);
         stats->increment("ticks");
-        std::this_thread::sleep_for(20ms);
         stats->increment("ticks");
-        std::this_thread::sleep_for(20ms);
         stats->increment("ticks");
 
         stats->set("count", static_cast<float>(count));
         count++;
 
-        auto now = std::chrono::steady_clock::now();
-        if (now - start > 3s)
-        {
-            engine.stop();
-        }
+        std::this_thread::sleep_for(200ms);
     });
-    engine.run();
+    engine.run(20);
 
     const auto* gs = engine.get_system<ice::GraphicSystem>();
     ASSERT_NE(nullptr, gs);

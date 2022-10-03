@@ -62,3 +62,21 @@ TEST(ScreenNodeGroup, remove_child)
 
     EXPECT_EQ(nullptr, child->get_parent());
 }
+
+TEST(ScreenNodeGroup, move_propagates_to_children)
+{
+    ice::ScreenNodeGroup root;
+
+    auto child = std::make_shared<ice::ScreenNode>();
+    root.add_node(child);
+
+    auto count = 0u;
+    child->on_move([&] () {
+        count++;
+    });
+
+    root.set_transform(glm::translate(glm::mat4(1.0f), glm::vec3(0.1f, 0.2f, 0.3f)));
+
+    EXPECT_EQ(1u, count);
+
+}

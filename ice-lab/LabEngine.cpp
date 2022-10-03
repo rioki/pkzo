@@ -116,9 +116,19 @@ namespace lab
         auto ground = std::make_shared<StaticBox>(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -0.5f)), glm::vec3(1000.0f, 1000.0f, 1.0f), gray_material);
         scene->add_node(ground);
 
+        // a couple boxes as position reference
+        auto box1 = std::make_shared<StaticBox>(glm::translate(glm::mat4(1.0f), glm::vec3(10.0f, 10.0f, 0.5f)), glm::vec3(1.0f, 1.0f, 1.0f), gray_material);
+        scene->add_node(box1);
+        auto box2 = std::make_shared<StaticBox>(glm::translate(glm::mat4(1.0f), glm::vec3(-10.0f, 10.0f, 0.5f)), glm::vec3(1.0f, 1.0f, 1.0f), gray_material);
+        scene->add_node(box2);
+        auto box3 = std::make_shared<StaticBox>(glm::translate(glm::mat4(1.0f), glm::vec3(10.0f, -10.0f, 0.5f)), glm::vec3(1.0f, 1.0f, 1.0f), gray_material);
+        scene->add_node(box3);
+        auto box4 = std::make_shared<StaticBox>(glm::translate(glm::mat4(1.0f), glm::vec3(-10.0f, -10.0f, 0.5f)), glm::vec3(1.0f, 1.0f, 1.0f), gray_material);
+        scene->add_node(box4);
+
         // pawn
         // TODO hock an "add scene" event and add the pawn
-        auto pawn = std::make_shared<Pawn>(*this, glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 2.5f)));
+        pawn = std::make_shared<Pawn>(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 2.5f)));
         scene->add_node(pawn);
 
         return scene;

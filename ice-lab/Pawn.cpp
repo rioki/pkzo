@@ -24,28 +24,199 @@
 
 namespace lab
 {
+    using fsec = std::chrono::duration<float>;
+
     auto camera_x_forward()
     {
-        return ice::lookat(glm::vec3(0.0f), glm::vec3(1.0f, 0.0, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+        static auto cache = ice::lookat(glm::vec3(0.0f), glm::vec3(1.0f, 0.0, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+        return cache;
     }
 
     auto safe_resolution(ice::Engine& engine)
     {
         auto window = engine.get_window();
-        if (!window)
-        {
-            soft_assert(false && "No window.");
-            return glm::uvec2(800, 600);
-        }
-
+        assert(window);
         return window->get_size();
     }
 
-    Pawn::Pawn(ice::Engine& _engine, const glm::mat4& transform)
-    : ice::SceneNodeGroup(transform),
-      engine(_engine),
-      camera(camera_x_forward(), engine.get_setting("Pawn", "fov", 90.0f), safe_resolution(engine))
+    Pawn::Pawn(const glm::mat4& transform)
+    : ice::SceneNodeGroup(transform)
     {
+        camera.set_transform(camera_x_forward());
         add_node(camera);
+    }
+
+    void Pawn::activate()
+    {
+        auto* engine = get_engine();
+        assert(engine);
+
+        mouse_senitivity = engine->get_setting("Pawn", "mouse_senitivity", mouse_senitivity);
+        invert_mouse     = engine->get_setting("Pawn", "invert_mouse", invert_mouse);
+        // TODO key binding
+
+        camera.set_fov(engine->get_setting("Pawn", "fov", 90.0f));
+        camera.set_resolution(safe_resolution(*engine));
+
+        ice::SceneNodeGroup::activate();
+
+        last_tick = std::chrono::steady_clock::now();
+
+        auto* mouse = engine->get_mouse();
+        assert(mouse);
+        mouse_button_down_con = mouse->on_button_down([this] (auto button, auto pos) {
+            if (button == ice::MouseButton::MIDDLE)
+            {
+                rotating = true;
+            }
+        });
+        mouse_button_up_con = mouse->on_button_up([this] (auto button, auto pos) {
+            if (button == ice::MouseButton::MIDDLE)
+            {
+                rotating = false;
+            }
+        });
+        mouse_move_con = mouse->on_move([this] (auto pos, auto rel) {
+            if (rotating)
+            {
+                auto duv = glm::vec2(-rel) * mouse_senitivity;
+                if (invert_mouse)
+                {
+                    duv.y = -duv.y;
+                }
+                cam_uv += duv;
+                auto t = camera_x_forward();
+                // axis in camera space (-z is forward)
+                t = glm::rotate(t, glm::radians(cam_uv.x), glm::vec3(0.0f, 1.0f, 0.0f));
+                t = glm::rotate(t, glm::radians(cam_uv.y), glm::vec3(1.0f, 0.0f, 0.0f));
+                camera.set_transform(t);
+            }
+        });
+
+        auto* keyboard = engine->get_keyboard();
+        assert(keyboard);
+        key_down_con = keyboard->on_key_down([this] (auto /*mod*/, auto key) {
+            if (key == fore_key)
+            {
+                move_fore = true;
+            }
+            if (key == back_key)
+            {
+                move_back = true;
+            }
+            if (key == left_key)
+            {
+                move_left = true;
+            }
+            if (key == right_key)
+            {
+                move_right = true;
+            }
+            if (key == up_key)
+            {
+                move_up = true;
+            }
+            if (key == down_key)
+            {
+                move_down = true;
+            }
+        });
+        key_up_con = keyboard->on_key_up([this] (auto /*mod*/, auto key) {
+            if (key == fore_key)
+            {
+                move_fore = false;
+            }
+            if (key == back_key)
+            {
+                move_back = false;
+            }
+            if (key == left_key)
+            {
+                move_left = false;
+            }
+            if (key == right_key)
+            {
+                move_right = false;
+            }
+            if (key == up_key)
+            {
+                move_up = false;
+            }
+            if (key == down_key)
+            {
+                move_down = false;
+            }
+        });
+
+        tick_con = engine->on_tick([this] () {
+            // TODO dt, from engine?
+            auto now = std::chrono::steady_clock::now();
+            auto dt  = fsec(now - last_tick).count();
+            last_tick = now;
+
+            // axis in camera space (-z is forward)
+            auto move_this_frame = false;
+            auto move_dir = glm::vec3(0.0f);
+            if (move_fore)
+            {
+                move_dir += glm::vec3(0.0f, 0.0f, -1.0f);
+                move_this_frame = true;
+            }
+            if (move_back)
+            {
+                move_dir += glm::vec3(0.0f, 0.0f, 1.0f);
+                move_this_frame = true;
+            }
+            if (move_left)
+            {
+                move_dir += glm::vec3(-1.0f, 0.0f, 0.0f);
+                move_this_frame = true;
+            }
+            if (move_right)
+            {
+                move_dir += glm::vec3(1.0f, 0.0f, 0.0f);
+                move_this_frame = true;
+            }
+            if (move_up)
+            {
+                move_dir += glm::vec3(0.0f, 1.0f, 0.0f);
+                move_this_frame = true;
+            }
+            if (move_down)
+            {
+                move_dir += glm::vec3(0.0f, -1.0f, 0.0f);
+                move_this_frame = true;
+            }
+
+            if (move_this_frame == false)
+            {
+                return;
+            }
+
+            auto look_matrix = camera.get_transform();
+            auto ds = glm::transform(look_matrix, glm::normalize(move_dir) * speed * dt);
+
+            auto transform = get_transform();
+            transform = glm::translate(transform, ds);
+            set_transform(transform);
+        });
+    }
+
+    void Pawn::deactivate()
+    {
+        auto* engine = get_engine();
+        assert(engine);
+
+        auto* mouse = engine->get_mouse();
+        assert(mouse);
+        mouse->get_button_down_signal().disconnect(mouse_button_down_con);
+        mouse->get_button_up_signal().disconnect(mouse_button_up_con);
+        mouse->get_move_signal().disconnect(mouse_move_con);
+        auto* keyboard = engine->get_keyboard();
+        assert(keyboard);
+        keyboard->get_key_down_signal().disconnect(key_down_con);
+        keyboard->get_key_up_signal().disconnect(key_up_con);
+
+        ice::SceneNodeGroup::deactivate();
     }
 }

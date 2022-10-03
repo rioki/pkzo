@@ -28,10 +28,41 @@ namespace lab
     class Pawn : public ice::SceneNodeGroup
     {
     public:
-        Pawn(ice::Engine& engine, const glm::mat4& transform);
+        Pawn(const glm::mat4& transform);
+
+        void activate() override;
+        void deactivate() override;
 
     private:
-        ice::Engine& engine;
         ice::Camera  camera;
+
+        rsig::connection mouse_button_down_con;
+        rsig::connection mouse_button_up_con;
+        rsig::connection mouse_move_con;
+        rsig::connection key_down_con;
+        rsig::connection key_up_con;
+        rsig::connection tick_con;
+
+        std::chrono::steady_clock::time_point last_tick;
+
+        bool      rotating         = false;
+        glm::vec2 cam_uv           = {0.0f, 0.0f};
+        bool      invert_mouse     = false;
+        float     mouse_senitivity = 0.1f;
+        float     speed            = 10.0f;
+
+        bool move_fore  = false;
+        bool move_back  = false;
+        bool move_left  = false;
+        bool move_right = false;
+        bool move_up    = false;
+        bool move_down  = false;
+
+        ice::Key fore_key  = ice::Key::W;
+        ice::Key back_key  = ice::Key::S;
+        ice::Key left_key  = ice::Key::A;
+        ice::Key right_key = ice::Key::D;
+        ice::Key up_key    = ice::Key::SPACE;
+        ice::Key down_key  = ice::Key::LCTRL;
     };
 }

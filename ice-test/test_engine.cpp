@@ -174,6 +174,37 @@ TEST(Engine, tick_signal)
     EXPECT_EQ(5u, count);
 }
 
+TEST(Engine, tick_signal_with_no_systems)
+{
+    auto engine = ice::Engine{};
+
+    auto count = 0u;
+    engine.on_tick([&] () {
+        count++;
+    });
+
+    engine.run(5);
+
+    EXPECT_EQ(5u, count);
+}
+
+TEST(Engine, tick_signal_with_two_systems)
+{
+    auto engine = ice::Engine{};
+
+    engine.start_system<ActivatableSystem>();
+    engine.start_system<CountSystem>();
+
+    auto count = 0u;
+    engine.on_tick([&] () {
+        count++;
+    });
+
+    engine.run(5);
+
+    EXPECT_EQ(5u, count);
+}
+
 TEST(Engine, devices)
 {
     auto engine = ice::Engine{};

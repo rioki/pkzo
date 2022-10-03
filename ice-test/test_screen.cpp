@@ -30,6 +30,20 @@ TEST(Screen, init)
     EXPECT_GLM_NEAR(glm::vec2(640.0f, 480.0f), screen.get_size(), 1e-4f);
 }
 
+TEST(Screen, in_engine_has_engien)
+{
+    auto engine = ice::Engine();
+
+    auto screen = std::make_shared<ice::Screen>();
+    engine.set_overlay(screen);
+
+    engine.on_tick([&] () {
+        EXPECT_EQ(&engine, screen->get_engine());
+    });
+
+    engine.run(1u);
+}
+
 TEST(Screen, GRAPHICAL_render_plain_rectangle)
 {
     auto engine = ice::Engine{};
@@ -111,3 +125,4 @@ TEST(Screen, GRAPHICAL_render_text)
     auto screenshot = gs->get_screenshot();
     EXPECT_TEXTURE_REF_EQ(screenshot);
 }
+
