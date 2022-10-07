@@ -22,7 +22,7 @@
 #pragma once
 #include "config.h"
 
-#include <glow/glow.h>
+#include <rioki/glow/fwd.h>
 
 #include "SceneRenderer.h"
 #include "Texture.h"

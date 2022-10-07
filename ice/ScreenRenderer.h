@@ -23,7 +23,7 @@
 #include "config.h"
 
 #include <glm/glm.hpp>
-#include <glow/fwd.h>
+#include <rioki/glow/fwd.h>
 
 #include "Texture.h"
 

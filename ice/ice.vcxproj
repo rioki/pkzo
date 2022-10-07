@@ -219,11 +219,6 @@
     <None Include="Forward_SolidGeometry.glsl" />
     <None Include="Screen.glsl" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\glow\glow\glow.vcxproj">
-      <Project>{fb3d49c2-ced0-4ffc-9238-0ba2f49d1f67}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
