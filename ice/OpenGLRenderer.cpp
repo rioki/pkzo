@@ -205,7 +205,6 @@ namespace ice
 
             auto pipeline = std::make_unique<glow::Pipeline>();
 
-            //pipeline->add_pass(glow::PassType::LIGHTS_AND_GEOMETRY, load_shader(hModule, IDR_GLSL_FORWARD_SOLID_GEOMETRY), glow::DepthTest::ON, glow::Blending::MULTIPASS);
             pipeline->add_pass(glow::PassType::GEOMETRY_AND_LIGHTS, load_shader(hModule, IDR_GLSL_FORWARD_SOLID_GEOMETRY), glow::DepthTest::ON, glow::Blending::MULTIPASS);
             pipeline->add_pass(glow::PassType::GEOMETRY,            load_shader(hModule, IDR_GLSL_FORWARD_EMISSIVE),       glow::DepthTest::ON, glow::Blending::MULTIPASS);
 
