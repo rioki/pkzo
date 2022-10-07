@@ -11,6 +11,7 @@ permissions:
   packages: write
 
 env:
+  VCPKG_COMMIT: 24caf735d22bd0e5eb5fe0331ad55bece70f5938
   VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
 
 jobs:
@@ -32,7 +33,7 @@ jobs:
     - name: Restore from cache and install vcpkg
       uses: lukka/run-vcpkg@v10
       with:
-        vcpkgGitCommitId: 24caf735d22bd0e5eb5fe0331ad55bece70f5938
+        vcpkgGitCommitId: ${{ env.VCPKG_COMMIT }}
         appendedCacheKey: ${{ matrix.triplet }}
         vcpkgGitURL: https://github.com/rioki/vcpkg
     - name: 'Setup NuGet/Vcpkg Credentials'
@@ -74,7 +75,7 @@ jobs:
     - name: Restore from cache and install vcpkg
       uses: lukka/run-vcpkg@v10
       with:
-        vcpkgGitCommitId: 24caf735d22bd0e5eb5fe0331ad55bece70f5938
+        vcpkgGitCommitId: ${{ env.VCPKG_COMMIT }}
         appendedCacheKey: ${{ matrix.triplet }}
         vcpkgGitURL: https://github.com/rioki/vcpkg
     - name: 'Setup NuGet/Vcpkg Credentials'
