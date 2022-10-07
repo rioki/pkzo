@@ -215,6 +215,7 @@
     <ResourceCompile Include="ice.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Forward_Emissive.glsl" />
     <None Include="Forward_SolidGeometry.glsl" />
     <None Include="Screen.glsl" />
   </ItemGroup>

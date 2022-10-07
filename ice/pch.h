@@ -47,6 +47,7 @@
 #include <nlohmann/json.hpp>
 #include <glm/glm.hpp>
 #include <GL/glew.h>
+#include <rioki/glow/fwd.h>
 #include <rioki/glow/glow.h>
 
 #include <c9y/sync.h>

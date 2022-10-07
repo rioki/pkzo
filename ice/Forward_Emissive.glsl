@@ -19,9 +19,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "resource.h"
-#include "winres.h"
+#ifdef GLOW_VERTEX
 
-IDR_GLSL_SCREEN GLSL                 "Screen.glsl"
-IDR_GLSL_FORWARD_SOLID_GEOMETRY GLSL "Forward_SolidGeometry.glsl"
-IDR_GLSL_FORWARD_EMISSIVE       GLSL "Forward_Emissive.glsl"
+uniform mat4 glow_ProjectionMatrix;
+uniform mat4 glow_ViewMatrix;
+uniform mat4 glow_ModelMatrix;
+
+in vec3 glow_Vertex;
+in vec2 glow_TexCoord;
+
+out vec2 var_TexCoord;
+
+void main()
+{
+    var_TexCoord = glow_TexCoord;
+    gl_Position  = glow_ProjectionMatrix * glow_ViewMatrix * glow_ModelMatrix * vec4(glow_Vertex, 1.0);
+}
+
+#endif
+
+#ifdef GLOW_FRAGMENT
+
+uniform vec3      mat_EmissiveFactor;
+uniform sampler2D mat_EmissiveMap;
+
+in vec2 var_TexCoord;
+
+out vec4 glow_FragColor;
+
+void main()
+{
+    glow_FragColor = texture(mat_EmissiveMap, var_TexCoord) * vec4(mat_EmissiveFactor, 1.0f);
+}
+
+#endif

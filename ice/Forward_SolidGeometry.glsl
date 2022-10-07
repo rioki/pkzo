@@ -58,7 +58,7 @@ uniform float     lgt_OuterAngle;
 in vec3 var_Normal;
 in vec2 var_TexCoord;
 
-out vec4 out_FragColor;
+out vec4 glow_FragColor;
 
 vec3 phong(vec3 n, vec3 l, vec3 mc, vec3 lc)
 {
@@ -83,7 +83,7 @@ void main()
             break;
     }
 
-    out_FragColor = vec4(color, 1.0f);
+    glow_FragColor = vec4(color, 1.0f);
 }
 
 #endif

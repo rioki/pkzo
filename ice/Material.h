@@ -26,17 +26,32 @@
 
 namespace ice
 {
+    class Texture;
+
     class ICE_EXPORT Material : public Asset
     {
     public:
-        Material() = default;
+        Material() noexcept = default;
 
         Material(const glm::vec3& base_color) noexcept;
 
         const glm::vec3& get_base_color() const noexcept;
         void set_base_color(const glm::vec3& value) noexcept;
 
+        void set_emissive_factor(const glm::vec3& value) noexcept;
+        const glm::vec3& get_emissive_factor() const noexcept;
+
+        void set_emissive_map(const std::shared_ptr<ice::Texture>& value) noexcept;
+        const std::shared_ptr<ice::Texture>& get_emissive_map() const noexcept;
+
     private:
         glm::vec3 base_color = glm::vec3(1.0f);
+
+        glm::vec3                     emissive_factor = glm::vec3(0.0f);
+        std::shared_ptr<ice::Texture> emissive_map;
     };
+
+    ICE_EXPORT std::shared_ptr<Material> make_emissive_material(const glm::vec3& factor) noexcept;
+    ICE_EXPORT std::shared_ptr<Material> make_emissive_material(const std::shared_ptr<ice::Texture>& map) noexcept;
+    ICE_EXPORT std::shared_ptr<Material> make_emissive_material(const glm::vec3& factor, const std::shared_ptr<ice::Texture>& map) noexcept;
 }

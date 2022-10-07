@@ -300,5 +300,8 @@
     <None Include="Forward_SolidGeometry.glsl">
       <Filter>Shader Files</Filter>
     </None>
+    <None Include="Forward_Emissive.glsl">
+      <Filter>Shader Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -1,7 +1,7 @@
 {
-    "name": "ice",
-    "version": "0.1.0",
-    "builtin-baseline": "e99d9a4facea9d7e15a91212364d7a12762b7512",
+  "name": "ice",
+  "version": "0.1.0",
+  "builtin-baseline": "24caf735d22bd0e5eb5fe0331ad55bece70f5938",
   "dependencies": [
     "freeimage",
     "freetype",
@@ -10,9 +10,9 @@
     "gtest",
     "libiconv",
     "nlohmann-json",
-    "rioki-glow",
     "rsig",
     "sdl2",
-    "c9y"
+    "c9y",
+    "rioki-glow"
   ]
 }

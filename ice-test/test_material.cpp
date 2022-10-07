@@ -34,3 +34,46 @@ TEST(Material, init)
     auto material = ice::Material(glm::vec3(0.1, 0.2, 0.3));
     EXPECT_GLM_NEAR(glm::vec3(0.1, 0.2, 0.3), material.get_base_color(), 1e-4f);
 }
+
+TEST(Material, emissive)
+{
+    auto texture = std::make_shared<ice::Texture>(glm::vec2(1,1), ice::ColorMode::RGB, ice::DataType::UINT8, "test");
+
+    auto material = std::make_shared<ice::Material>();
+    material->set_emissive_factor(glm::vec3(0.8f, 0.7f, 0.6f));
+    material->set_emissive_map(texture);
+
+    EXPECT_GLM_EQ(glm::vec3(0.8f, 0.7f, 0.6f), material->get_emissive_factor());
+    EXPECT_EQ(texture, material->get_emissive_map());
+}
+
+TEST(Material, make_emissive_factor)
+{
+    auto material = ice::make_emissive_material(glm::vec3(0.8f, 0.7f, 0.6f));
+
+    EXPECT_GLM_EQ(glm::vec3(0.0f),             material->get_base_color());
+    EXPECT_GLM_EQ(glm::vec3(0.8f, 0.7f, 0.6f), material->get_emissive_factor());
+    EXPECT_EQ(    nullptr,                     material->get_emissive_map());
+}
+
+TEST(Material, make_emissive_map)
+{
+    auto texture = std::make_shared<ice::Texture>(glm::vec2(1,1), ice::ColorMode::RGB, ice::DataType::UINT8, "test");
+
+    auto material = ice::make_emissive_material(texture);
+
+    EXPECT_GLM_EQ(glm::vec3(0.0f), material->get_base_color());
+    EXPECT_GLM_EQ(glm::vec3(1.0f), material->get_emissive_factor());
+    EXPECT_EQ(    texture,         material->get_emissive_map());
+}
+
+TEST(Material, make_emissive_factor_map)
+{
+    auto texture = std::make_shared<ice::Texture>(glm::vec2(1,1), ice::ColorMode::RGB, ice::DataType::UINT8, "test");
+
+    auto material = ice::make_emissive_material(glm::vec3(0.8f, 0.7f, 0.6f), texture);
+
+    EXPECT_GLM_EQ(glm::vec3(0.0f),             material->get_base_color());
+    EXPECT_GLM_EQ(glm::vec3(0.8f, 0.7f, 0.6f), material->get_emissive_factor());
+    EXPECT_EQ(    texture,                     material->get_emissive_map());
+}
