@@ -35,8 +35,9 @@ jobs:
     - name: Restore from cache and install vcpkg
       uses: lukka/run-vcpkg@v10
       with:
-        vcpkgGitCommitId: e99d9a4facea9d7e15a91212364d7a12762b7512
+        vcpkgGitCommitId: 9ab7e5efcc9a4ec6b53bdd058959dafcd7def6b9
         appendedCacheKey: ${{ matrix.triplet }}
+        vcpkgGitURL: https://github.com/rioki/vcpkg
     - name: 'Setup NuGet/Vcpkg Credentials'
       shell: 'bash'
       run: >
