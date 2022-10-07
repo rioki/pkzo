@@ -32,7 +32,10 @@
 
 namespace ice
 {
-    constexpr auto MATERIAL_BASE_COLOR = "mat_BaseColor";
+    constexpr auto MATERIAL_BASE_COLOR       = "mat_BaseColor";
+    constexpr auto MATERIAL_EMISSIVE_FACTOR  = "mat_EmissiveFactor";
+    constexpr auto MATERIAL_EMISSIVE_MAP     = "mat_EmissiveMap";
+
 
     constexpr auto LIGHT_TYPE          = "lgt_Type";
     constexpr auto LIGHT_COLOR         = "lgt_Color";
@@ -202,7 +205,9 @@ namespace ice
 
             auto pipeline = std::make_unique<glow::Pipeline>();
 
+            //pipeline->add_pass(glow::PassType::LIGHTS_AND_GEOMETRY, load_shader(hModule, IDR_GLSL_FORWARD_SOLID_GEOMETRY), glow::DepthTest::ON, glow::Blending::MULTIPASS);
             pipeline->add_pass(glow::PassType::GEOMETRY_AND_LIGHTS, load_shader(hModule, IDR_GLSL_FORWARD_SOLID_GEOMETRY), glow::DepthTest::ON, glow::Blending::MULTIPASS);
+            pipeline->add_pass(glow::PassType::GEOMETRY,            load_shader(hModule, IDR_GLSL_FORWARD_EMISSIVE),       glow::DepthTest::ON, glow::Blending::MULTIPASS);
 
             return pipeline;
         }
@@ -228,9 +233,18 @@ namespace ice
         return buffer;
     }
 
-    std::shared_ptr<glow::Texture> OpenGLRenderer::upload(const std::shared_ptr<const Texture>& texture) noexcept
+    std::shared_ptr<glow::Texture> OpenGLRenderer::upload(const std::shared_ptr<const Texture>& texture, TextureFallback fallback) noexcept
     {
         // TODO centralize video memory
+        if (texture == nullptr)
+        {
+            switch (fallback)
+            {
+                case TextureFallback::WHITE:
+                    assert(white_fallback);
+                    return upload(white_fallback, fallback);
+            }
+        }
 
         auto size   = texture->get_size();
         auto color  = static_cast<glow::ColorMode>(texture->get_color_mode());
@@ -249,8 +263,9 @@ namespace ice
         // TODO centralize video memory
 
         return glow::make_shared_parameters({
-            {MATERIAL_BASE_COLOR, material->get_base_color()}
-            // TODO more material parameters
+            {MATERIAL_BASE_COLOR,       material->get_base_color()},
+            {MATERIAL_EMISSIVE_FACTOR,  material->get_emissive_factor()},
+            {MATERIAL_EMISSIVE_MAP,     upload(material->get_emissive_map(), TextureFallback::WHITE)},
         });
     }
 }

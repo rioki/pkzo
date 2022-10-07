@@ -505,4 +505,10 @@ namespace ice
         }
         return result;
     }
+
+    std::shared_ptr<Texture> make_white_texture()
+    {
+        static unsigned char buffer[4] = {255u, 255u, 255u, 255u};
+        return std::make_shared<Texture>(glm::uvec2(1), ice::ColorMode::RGBA, ice::DataType::UINT8, buffer, "white");
+    }
 }

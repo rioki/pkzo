@@ -36,4 +36,45 @@ namespace ice
     {
         base_color = value;
     }
+
+    void Material::set_emissive_factor(const glm::vec3& value) noexcept
+    {
+        emissive_factor = value;
+    }
+
+    const glm::vec3& Material::get_emissive_factor() const noexcept
+    {
+        return emissive_factor;
+    }
+
+    void Material::set_emissive_map(const std::shared_ptr<ice::Texture>& value) noexcept
+    {
+        emissive_map = value;
+    }
+
+    const std::shared_ptr<ice::Texture>& Material::get_emissive_map() const noexcept
+    {
+        return emissive_map;
+    }
+
+    ICE_EXPORT std::shared_ptr<Material> make_emissive_material(const glm::vec3& factor) noexcept
+    {
+        return make_emissive_material(factor, nullptr);
+    }
+
+    ICE_EXPORT std::shared_ptr<Material> make_emissive_material(const std::shared_ptr<ice::Texture>& map) noexcept
+    {
+        return make_emissive_material(glm::vec3(1.0f), map);
+    }
+
+    ICE_EXPORT std::shared_ptr<Material> make_emissive_material(const glm::vec3& factor, const std::shared_ptr<ice::Texture>& map) noexcept
+    {
+        auto material = std::make_shared<Material>();
+
+        material->set_base_color(glm::vec3(0.0f));
+        material->set_emissive_factor(factor);
+        material->set_emissive_map(map);
+
+        return material;
+    }
 }

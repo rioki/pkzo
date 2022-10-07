@@ -21,3 +21,4 @@
 
 #define IDR_GLSL_SCREEN                   101
 #define IDR_GLSL_FORWARD_SOLID_GEOMETRY   102
+#define IDR_GLSL_FORWARD_EMISSIVE         103

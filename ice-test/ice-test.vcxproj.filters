@@ -87,13 +87,13 @@
     <ClCompile Include="test_mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="test_scene_rendering.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="test_ambient_light.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="test_directional_light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test_opengl_renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

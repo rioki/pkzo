@@ -155,13 +155,13 @@
     <ClCompile Include="test_input_system.cpp" />
     <ClCompile Include="test_material.cpp" />
     <ClCompile Include="test_mesh.cpp" />
+    <ClCompile Include="test_opengl_renderer.cpp" />
     <ClCompile Include="test_scene.cpp" />
     <ClCompile Include="test_scene_node.cpp" />
     <ClCompile Include="test_scene_node_group.cpp" />
     <ClCompile Include="test_screen.cpp" />
     <ClCompile Include="test_screen_node.cpp" />
     <ClCompile Include="test_screen_node_group.cpp" />
-    <ClCompile Include="test_scene_rendering.cpp" />
     <ClCompile Include="test_stats.cpp" />
     <ClCompile Include="test_texture.cpp" />
     <ClCompile Include="test_env.cpp" />

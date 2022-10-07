@@ -46,17 +46,17 @@ uniform sampler2D pkzo_Texture;
 
 in vec2 var_TexCoord;
 
-out vec4 out_FragColor;
+out vec4 glow_FragColor;
 
 void main()
 {
     if (pkzo_HasTexture)
     {
-        out_FragColor = texture(pkzo_Texture, var_TexCoord) * pkzo_Color;
+        glow_FragColor = texture(pkzo_Texture, var_TexCoord) * pkzo_Color;
     }
     else
     {
-        out_FragColor = pkzo_Color;
+        glow_FragColor = pkzo_Color;
     }
 }
 

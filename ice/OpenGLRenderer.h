@@ -22,11 +22,10 @@
 #pragma once
 #include "config.h"
 
-#include <rioki/glow/Texture.h>
-#include <rioki/glow/VertexBuffer.h>
-#include <rioki/glow/Pipeline.h>
+#include <glow/glow.h>
 
 #include "SceneRenderer.h"
+#include "Texture.h"
 
 namespace ice
 {
@@ -75,8 +74,15 @@ namespace ice
 
         static std::unique_ptr<glow::Pipeline> create_pipeline();
 
+        enum class TextureFallback
+        {
+            WHITE
+        };
+
+        std::shared_ptr<Texture> white_fallback = make_white_texture();
+
         std::shared_ptr<glow::VertexBuffer> upload(const std::shared_ptr<const Mesh>& mesh) noexcept;
-        std::shared_ptr<glow::Texture>      upload(const std::shared_ptr<const Texture>& texture) noexcept;
+        std::shared_ptr<glow::Texture>      upload(const std::shared_ptr<const Texture>& texture, TextureFallback) noexcept;
         std::shared_ptr<glow::Parameters>   upload(const std::shared_ptr<const Material>& material) noexcept;
     };
 }
