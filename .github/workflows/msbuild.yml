@@ -14,7 +14,46 @@ env:
   VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
 
 jobs:
+  vcpkg:
+    strategy:
+      matrix:
+        platform: [x86, x64]
+        include:
+          - platform: x86
+            triplet: x86-windows
+          - platform: x64
+            triplet: x64-windows
+    runs-on: windows-latest
+    env:
+      VCPKG_DEFAULT_TRIPLET: ${{ matrix.triplet }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Restore from cache and install vcpkg
+      uses: lukka/run-vcpkg@v10
+      with:
+        vcpkgGitCommitId: 24caf735d22bd0e5eb5fe0331ad55bece70f5938
+        appendedCacheKey: ${{ matrix.triplet }}
+        vcpkgGitURL: https://github.com/rioki/vcpkg
+    - name: 'Setup NuGet/Vcpkg Credentials'
+      shell: 'bash'
+      run: >
+        `./vcpkg/vcpkg fetch nuget | tail -n 1` \
+          sources add \
+          -source "https://nuget.pkg.github.com/rioki/index.json" \
+          -storepasswordincleartext \
+          -name "GitHub" \
+          -username "rioki" \
+          -password "${{ secrets.GITHUB_TOKEN }}"
+        `./vcpkg/vcpkg fetch nuget | tail -n 1` \
+          setapikey "${{ secrets.GITHUB_TOKEN }}" \
+          -source "https://nuget.pkg.github.com/rioki/index.json"
+    - name: Integrate vcpkg in MSBuild
+      shell: 'bash'
+      run: >
+        ./vcpkg/vcpkg install
   build:
+    needs: vcpkg
     strategy:
       matrix:
         configuration: [Release, Debug]
