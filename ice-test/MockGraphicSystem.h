@@ -48,10 +48,7 @@ namespace ice::test
 
         MOCK_METHOD(std::shared_ptr<Texture>, get_screenshot, (), (const, noexcept));
 
-        MOCK_METHOD(ScreenRenderer*, create_screen_renderer, (), (noexcept));
-        MOCK_METHOD(void, release_screen_renderer, (ScreenRenderer* renderer), (noexcept));
-
-        MOCK_METHOD(SceneRenderer*, create_scene_renderer, (), (noexcept));
-        MOCK_METHOD(void, release_scene_renderer, (SceneRenderer* renderer), (noexcept));
+        MOCK_METHOD(Renderer*, create_renderer, (), (noexcept));
+        MOCK_METHOD(void, release_renderer, (Renderer* renderer), (noexcept));
     };
 }

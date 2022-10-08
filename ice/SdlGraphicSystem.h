@@ -28,7 +28,6 @@ namespace ice
 {
     class SdlWindow;
     class Texture;
-    class ScreenRenderer;
     class OpenGLRenderer;
 
     class ICE_EXPORT SdlGraphicSystem : public GraphicSystem
@@ -44,19 +43,15 @@ namespace ice
 
         std::shared_ptr<Texture> get_screenshot() const noexcept override;
 
-        ScreenRenderer* create_screen_renderer() noexcept override;
-        void release_screen_renderer(ScreenRenderer* renderer) noexcept override;
-
-        SceneRenderer* create_scene_renderer() noexcept override;
-        void release_scene_renderer(SceneRenderer* renderer) noexcept override;
+        Renderer* create_renderer() noexcept override;
+        void release_renderer(Renderer* renderer) noexcept override;
 
         void tick() override;
 
     private:
         std::unique_ptr<SdlWindow> window;
 
-        std::vector<std::unique_ptr<ScreenRenderer>> screen_renderers;
-        std::vector<std::unique_ptr<OpenGLRenderer>>  scene_renderers;
+        std::vector<std::unique_ptr<OpenGLRenderer>> renderers;
 
         void render_frame() noexcept;
     };

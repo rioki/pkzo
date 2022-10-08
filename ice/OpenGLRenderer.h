@@ -24,22 +24,24 @@
 
 #include <rioki/glow/fwd.h>
 
-#include "SceneRenderer.h"
+#include "Renderer.h"
 #include "Texture.h"
 
 namespace ice
 {
     class Texture;
 
-    class ICE_EXPORT OpenGLRenderer : public SceneRenderer
+    class ICE_EXPORT OpenGLRenderer : public Renderer
     {
     public:
         OpenGLRenderer() noexcept;
         ~OpenGLRenderer();
 
         unsigned int add_camera(const glm::mat4& transform, const glm::uvec2 resolution, const float fov) noexcept override;
+        unsigned int add_ortho_camera(const glm::mat4& transform, const glm::vec2& size, const glm::uvec2 resolution) noexcept override;
         void upate_camera_view(unsigned int id, const glm::mat4& transform) noexcept override;
         void upate_camera_projection(unsigned int id, const glm::uvec2 resolution, const float fov) noexcept override;
+        void update_camera_ortho_size(unsigned int id, const glm::vec2& size) noexcept override;
         void remove_camera(unsigned int id) noexcept override;
 
         unsigned int add_ambient_light(const glm::vec3& color) noexcept override;

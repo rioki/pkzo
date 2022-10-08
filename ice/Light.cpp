@@ -22,7 +22,7 @@
 #include "pch.h"
 #include "Light.h"
 
-#include "SceneRenderer.h"
+#include "Renderer.h"
 
 namespace ice
 {

@@ -25,7 +25,7 @@
 #include "SceneNode.h"
 #include "Material.h"
 #include "Mesh.h"
-#include "SceneRenderer.h"
+#include "Renderer.h"
 
 namespace ice
 {

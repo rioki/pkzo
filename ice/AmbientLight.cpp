@@ -22,7 +22,7 @@
 #include "pch.h"
 #include "AmbientLight.h"
 
-#include "SceneRenderer.h"
+#include "Renderer.h"
 
 namespace ice
 {
@@ -46,7 +46,7 @@ namespace ice
         return color;
     }
 
-    unsigned int AmbientLight::register_light(SceneRenderer& renderer) noexcept
+    unsigned int AmbientLight::register_light(Renderer& renderer) noexcept
     {
         return renderer.add_ambient_light(color);
     }

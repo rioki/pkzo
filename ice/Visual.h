@@ -26,7 +26,7 @@
 
 namespace ice
 {
-    class SceneRenderer;
+    class Renderer;
     class Material;
     class Mesh;
 
@@ -56,7 +56,7 @@ namespace ice
         std::shared_ptr<const Material> material;
         glm::vec3                       local_scale;
 
-        SceneRenderer* renderer = nullptr;
+        Renderer* renderer = nullptr;
         unsigned int render_handle = 0;
     };
 }

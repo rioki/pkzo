@@ -47,10 +47,10 @@ namespace ice
     OpenGLRenderer::OpenGLRenderer() noexcept = default;
     OpenGLRenderer::~OpenGLRenderer() = default;
 
-    auto create_projection_matrix(const glm::uvec2 resolution, const float hfov)
+    auto create_projection_matrix(const glm::uvec2 resolution, const float hfov, const float distance)
     {
         auto znear  = 0.1f;
-        auto zfar   = 1000.0f;
+        auto zfar   = distance;
         auto aspect = static_cast<float>(resolution.x) / static_cast<float>(resolution.y);
         auto vfov   = std::atan(std::tan(glm::radians(hfov)/2.0f)/aspect);
         // The formula is 2*atan(tan(h/2.0f)/a).
@@ -59,10 +59,25 @@ namespace ice
         return glm::perspective(vfov, aspect, znear, zfar);
     }
 
+    auto create_ortho_matrix(const glm::vec2 size, const float distance)
+    {
+        auto hs = size / 2.0f;
+        return glm::ortho(-hs.x, hs.x, -hs.y, hs.y, 0.0f, distance);
+    }
+
     unsigned int OpenGLRenderer::add_camera(const glm::mat4& transform, const glm::uvec2 resolution, const float fov) noexcept
     {
         auto id = ++last_id;
-        cameras[id] = {create_projection_matrix(resolution, fov), glm::inverse(transform)};
+        auto distance = 1000.0f; // TODO compute view distance.
+        cameras[id] = {create_projection_matrix(resolution, fov, distance), glm::inverse(transform)};
+        return id;
+    }
+
+    unsigned int OpenGLRenderer::add_ortho_camera(const glm::mat4& transform, const glm::vec2& wisizendow, const glm::uvec2 /*resolution*/) noexcept
+    {
+        auto id = ++last_id;
+        auto distance = 2.0f; // we assume a 2D rendering; TODO compute view distance.
+        cameras[id] = {create_ortho_matrix(size, distance), glm::inverse(transform)};
         return id;
     }
 
@@ -75,7 +90,15 @@ namespace ice
     void OpenGLRenderer::upate_camera_projection(unsigned int id, const glm::uvec2 resolution, const float fov) noexcept
     {
         assert(cameras.find(id) != end(cameras));
-        cameras[id].view_matrix = create_projection_matrix(resolution, fov);
+        auto distance = 1000.0f; // TODO compute view distance.
+        cameras[id].projection_matrix = create_projection_matrix(resolution, fov, distance);
+    }
+
+    void OpenGLRenderer::update_camera_ortho_size(unsigned int id, const glm::vec2& size) noexcept
+    {
+        assert(cameras.find(id) != end(cameras));
+        auto distance = 2.0f; // we assume a 2D rendering; TODO compute view distance.
+        cameras[id].projection_matrix = create_ortho_matrix(size, distance);
     }
 
     void OpenGLRenderer::remove_camera(unsigned int id) noexcept
@@ -192,9 +215,23 @@ namespace ice
         pipeline->execute();
     }
 
-    // Implemented in ScreenRenderer.cpp; should be refactoried anyway.
-    std::string LoadTextResource(HMODULE hModule, LPCWSTR lpName, LPCWSTR lpType);
-    std::shared_ptr<glow::Shader> load_shader(HMODULE hModule, unsigned int rcid);
+    // TODO Use AssetLibrary to dedup shaders
+    std::string LoadTextResource(HMODULE hModule, LPCWSTR lpName, LPCWSTR lpType)
+    {
+        auto hRSrc = FindResourceW(hModule, lpName, lpType);
+        assert(hRSrc);
+        auto hGlobal = LoadResource(hModule, hRSrc);
+        assert(hGlobal);
+        auto nSize = SizeofResource(hModule, hRSrc);
+        auto psCode = reinterpret_cast<const char*>(LockResource(hGlobal));
+        return std::string(psCode, nSize);
+    }
+
+    std::shared_ptr<glow::Shader> load_shader(HMODULE hModule, unsigned int rcid)
+    {
+        auto code = LoadTextResource(hModule, MAKEINTRESOURCE(rcid), L"GLSL");
+        return std::make_shared<glow::Shader>(code);
+    }
 
     std::unique_ptr<glow::Pipeline> OpenGLRenderer::create_pipeline()
     {
