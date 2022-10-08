@@ -25,7 +25,7 @@
 #include "SceneNode.h"
 #include "Material.h"
 #include "Mesh.h"
-#include "SceneRenderer.h"
+#include "Renderer.h"
 
 namespace ice
 {
@@ -39,7 +39,7 @@ namespace ice
             return mat;
         }
 
-        mat = std::make_shared<Material>(rgb(0xff00dc));
+        mat = make_simple_material(rgb(0xff00dc));
         cache = mat;
         return mat;
     }

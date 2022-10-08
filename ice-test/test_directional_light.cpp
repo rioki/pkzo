@@ -55,14 +55,14 @@ TEST(DirectionalLight, registers_on_renderer)
 
     InSequence s;
 
-    EXPECT_CALL(*gs, create_scene_renderer())
+    EXPECT_CALL(*gs, create_renderer(ice::RendererType::PHYSICAL))
         .WillOnce(Return(renderer.get()));
 
     EXPECT_CALL(*renderer, add_directional_light(transform, color))
         .WillOnce(Return(44));
     EXPECT_CALL(*renderer, remove_light(44));
 
-    EXPECT_CALL(*gs, release_scene_renderer(renderer.get()));
+    EXPECT_CALL(*gs, release_renderer(renderer.get()));
 
     auto scene = std::make_shared<ice::Scene>();
 

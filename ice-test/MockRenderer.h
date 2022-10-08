@@ -22,16 +22,18 @@
 #pragma once
 #include <gmock/gmock.h>
 
-#include <ice/SceneRenderer.h>
+#include <ice/Renderer.h>
 
 namespace ice::test
 {
-    class ICE_EXPORT MockRenderer : public SceneRenderer
+    class ICE_EXPORT MockRenderer : public Renderer
     {
     public:
         MOCK_METHOD(unsigned int, add_camera, (const glm::mat4& transform, const glm::uvec2 resolution, const float fov), (noexcept));
+        MOCK_METHOD(unsigned int, add_ortho_camera, (const glm::mat4& transform, const glm::vec2& window, const glm::uvec2 resolution), (noexcept));
         MOCK_METHOD(void, upate_camera_view, (unsigned int id, const glm::mat4& transform), (noexcept));
         MOCK_METHOD(void, upate_camera_projection, (unsigned int id, const glm::uvec2 resolution, const float fov), (noexcept));
+        MOCK_METHOD(void, update_camera_ortho_size, (unsigned int id, const glm::vec2& size), (noexcept));;
         MOCK_METHOD(void, remove_camera, (unsigned int id), (noexcept));
 
         MOCK_METHOD(unsigned int, add_ambient_light, (const glm::vec3& color), (noexcept));

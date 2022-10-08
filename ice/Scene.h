@@ -29,7 +29,7 @@ namespace ice
 {
     class Engine;
     class Scene;
-    class SceneRenderer;
+    class Renderer;
 
     template <>
     struct NodeTraits<Scene>
@@ -43,8 +43,8 @@ namespace ice
         Scene() = default;
         ~Scene() = default;
 
-        SceneRenderer* get_renderer() noexcept;
-        const SceneRenderer* get_renderer() const noexcept;
+        Renderer* get_renderer() noexcept;
+        const Renderer* get_renderer() const noexcept;
 
         void draw() noexcept;
 
@@ -53,6 +53,6 @@ namespace ice
         void deactivate() override;
 
     private:
-        SceneRenderer* renderer = nullptr;
+        Renderer* renderer = nullptr;
     };
 }

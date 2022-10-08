@@ -23,15 +23,17 @@
 #include "config.h"
 
 #include "ScreenNode.h"
-#include "ScreenRenderer.h"
 
 namespace ice
 {
     class Texture;
+    class Renderer;
 
     class ICE_EXPORT Rectangle : public ScreenNode
     {
     public:
+        Rectangle();
+        Rectangle(const glm::mat3& transform);
         Rectangle(const glm::mat3& transform, const glm::vec2& size, const glm::vec4& color) noexcept;
         Rectangle(const glm::mat3& transform, const glm::vec2& size, const std::shared_ptr<Texture>& texture) noexcept;
         Rectangle(const glm::mat3& transform, const glm::vec2& size, const glm::vec4& color, const std::shared_ptr<Texture>& texture) noexcept;
@@ -53,6 +55,7 @@ namespace ice
         glm::vec4                  color     = {1.0f, 1.0f, 1.0f, 1.0f};
         std::shared_ptr<Texture>   texture;
 
-        ScreenRenderer::Rectangle* render_handle = nullptr;
+        Renderer* renderer = nullptr;
+        unsigned int render_handle = 0;
     };
 }

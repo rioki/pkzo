@@ -29,7 +29,6 @@
 #include "Scene.h"
 #include "OpenGLRenderer.h"
 #include "Screen.h"
-#include "ScreenRenderer.h"
 #include "Settings.h"
 #include "Texture.h"
 #include "SdlWindow.h"
@@ -54,6 +53,8 @@ namespace ice
 
     SdlGraphicSystem::~SdlGraphicSystem()
     {
+        soft_assert(renderers.empty());
+        renderers.clear();
         window = nullptr;
     }
 
@@ -81,24 +82,14 @@ namespace ice
         }
     }
 
-    ScreenRenderer* SdlGraphicSystem::create_screen_renderer() noexcept
+    Renderer* SdlGraphicSystem::create_renderer(RendererType type) noexcept
     {
-        return add_unique_ptr<ScreenRenderer>(screen_renderers);
+        return add_unique_ptr<OpenGLRenderer>(renderers, type);
     }
 
-    void SdlGraphicSystem::release_screen_renderer(ScreenRenderer* renderer) noexcept
+    void SdlGraphicSystem::release_renderer(Renderer* renderer) noexcept
     {
-        remove_unique_ptr(screen_renderers, renderer);
-    }
-
-    SceneRenderer* SdlGraphicSystem::create_scene_renderer() noexcept
-    {
-        return add_unique_ptr<OpenGLRenderer>(scene_renderers);
-    }
-
-    void SdlGraphicSystem::release_scene_renderer(SceneRenderer* renderer) noexcept
-    {
-        remove_unique_ptr(scene_renderers, renderer);
+        remove_unique_ptr(renderers, renderer);
     }
 
     void SdlGraphicSystem::tick()

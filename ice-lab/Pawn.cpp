@@ -234,7 +234,7 @@ namespace lab
 
     void Pawn::place_box()
     {
-        static auto orange_material = std::make_shared<ice::Material>(ice::rgb(0xfc8403));
+        static auto orange_material = ice::make_simple_material(ice::rgb(0xfc8403));
 
         auto t = camera.get_world_transform();
         t = glm::translate(t, glm::vec3(0.0f, 0.0f, -3.0f));

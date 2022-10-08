@@ -22,7 +22,7 @@
 #include "pch.h"
 #include "DirectionalLight.h"
 
-#include "SceneRenderer.h"
+#include "Renderer.h"
 
 namespace ice
 {
@@ -43,7 +43,7 @@ namespace ice
         return color;
     }
 
-    unsigned int DirectionalLight::register_light(SceneRenderer& renderer) noexcept
+    unsigned int DirectionalLight::register_light(Renderer& renderer) noexcept
     {
         return renderer.add_directional_light(get_world_transform(), color);
     }

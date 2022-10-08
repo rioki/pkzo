@@ -146,11 +146,10 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneNode.h" />
     <ClInclude Include="SceneNodeGroup.h" />
-    <ClInclude Include="SceneRenderer.h" />
+    <ClInclude Include="Renderer.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="ScreenNode.h" />
     <ClInclude Include="ScreenNodeGroup.h" />
-    <ClInclude Include="ScreenRenderer.h" />
     <ClInclude Include="SdlGraphicSystem.h" />
     <ClInclude Include="SdlInputSystem.h" />
     <ClInclude Include="SdlJoystick.h" />
@@ -195,7 +194,6 @@
     <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Screen.cpp" />
-    <ClCompile Include="ScreenRenderer.cpp" />
     <ClCompile Include="SdlGraphicSystem.cpp" />
     <ClCompile Include="SdlInputSystem.cpp" />
     <ClCompile Include="SdlJoystick.cpp" />
@@ -217,7 +215,7 @@
   <ItemGroup>
     <None Include="Forward_Emissive.glsl" />
     <None Include="Forward_SolidGeometry.glsl" />
-    <None Include="Screen.glsl" />
+    <None Include="Forward_Unlit.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

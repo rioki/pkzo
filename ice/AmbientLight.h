@@ -37,7 +37,7 @@ namespace ice
         const glm::vec3& get_color() const noexcept;
 
     protected:
-        unsigned int register_light(SceneRenderer& renderer) noexcept override;
+        unsigned int register_light(Renderer& renderer) noexcept override;
 
     private:
         glm::vec3 color = glm::vec3(0.1f);

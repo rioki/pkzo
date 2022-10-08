@@ -99,7 +99,7 @@ namespace lab
 
         auto scene = std::make_shared<ice::Scene>();
 
-        auto gray_material = std::make_shared<ice::Material>(glm::vec3(0.75f));
+        auto gray_material = ice::make_simple_material(glm::vec3(0.75f));
 
         // fake global illiumunation
         auto light0 = std::make_shared<ice::AmbientLight>(glm::vec3{0.106, 0.161, 0.2});

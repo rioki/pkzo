@@ -37,15 +37,17 @@ namespace ice
         SPOT
     };
 
-    class ICE_EXPORT SceneRenderer
+    class ICE_EXPORT Renderer
     {
     public:
-        SceneRenderer() noexcept = default;
-        virtual ~SceneRenderer() = default;
+        Renderer() noexcept = default;
+        virtual ~Renderer() = default;
 
         virtual unsigned int add_camera(const glm::mat4& transform, const glm::uvec2 resolution, const float fov) noexcept = 0;
+        virtual unsigned int add_ortho_camera(const glm::mat4& transform, const glm::vec2& window, const glm::uvec2 resolution) noexcept = 0;
         virtual void upate_camera_view(unsigned int id, const glm::mat4& transform) noexcept = 0;
         virtual void upate_camera_projection(unsigned int id, const glm::uvec2 resolution, const float fov) noexcept = 0;
+        virtual void update_camera_ortho_size(unsigned int id, const glm::vec2& size) noexcept = 0;
         virtual void remove_camera(unsigned int id) noexcept = 0;
 
         virtual unsigned int add_ambient_light(const glm::vec3& color) noexcept = 0;
@@ -65,7 +67,7 @@ namespace ice
         virtual void render() const noexcept = 0;
 
     private:
-        SceneRenderer(const SceneRenderer&) = delete;
-        SceneRenderer& operator = (const SceneRenderer&) = delete;
+        Renderer(const Renderer&) = delete;
+        Renderer& operator = (const Renderer&) = delete;
     };
 }

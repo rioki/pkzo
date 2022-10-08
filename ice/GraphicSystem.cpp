@@ -27,9 +27,8 @@
 
 #include "Engine.h"
 #include "Scene.h"
-#include "SceneRenderer.h"
+#include "Renderer.h"
 #include "Screen.h"
-#include "ScreenRenderer.h"
 #include "Settings.h"
 #include "Texture.h"
 #include "Window.h"

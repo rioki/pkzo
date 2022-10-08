@@ -26,7 +26,7 @@
 
 namespace ice
 {
-    class SceneRenderer;
+    class Renderer;
 
     class ICE_EXPORT Camera : public SceneNode
     {
@@ -48,7 +48,7 @@ namespace ice
         float      fov        = 90.0f; // horizontal full range FOV
         glm::uvec2 resolution = {1600, 900};
 
-        SceneRenderer* renderer = nullptr;
+        Renderer* renderer = nullptr;
         unsigned int render_handle = 0;
     };
 }

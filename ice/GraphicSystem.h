@@ -31,8 +31,13 @@ namespace ice
 {
     class Window;
     class Texture;
-    class ScreenRenderer;
-    class SceneRenderer;
+    class Renderer;
+
+    enum class RendererType
+    {
+        UNLIT,
+        PHYSICAL
+    };
 
     class ICE_EXPORT GraphicSystem : public System
     {
@@ -47,11 +52,8 @@ namespace ice
 
         virtual std::shared_ptr<Texture> get_screenshot() const noexcept = 0;
 
-        virtual ScreenRenderer* create_screen_renderer() noexcept = 0;
-        virtual void release_screen_renderer(ScreenRenderer* renderer) noexcept = 0;
-
-        virtual SceneRenderer* create_scene_renderer() noexcept = 0;
-        virtual void release_scene_renderer(SceneRenderer* renderer) noexcept = 0;
+        virtual Renderer* create_renderer(RendererType type = RendererType::PHYSICAL) noexcept = 0;
+        virtual void release_renderer(Renderer* renderer) noexcept = 0;;
 
         rsig::connection debug_draw(const std::function<void ()>& cb) noexcept;
         rsig::signal<>& get_debug_draw_signal() noexcept;

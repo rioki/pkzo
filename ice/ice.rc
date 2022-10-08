@@ -22,6 +22,6 @@
 #include "resource.h"
 #include "winres.h"
 
-IDR_GLSL_SCREEN GLSL                 "Screen.glsl"
+IDR_GLSL_FORWARD_UNLIT          GLSL "Forward_Unlit.glsl"
 IDR_GLSL_FORWARD_SOLID_GEOMETRY GLSL "Forward_SolidGeometry.glsl"
 IDR_GLSL_FORWARD_EMISSIVE       GLSL "Forward_Emissive.glsl"

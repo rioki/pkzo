@@ -24,7 +24,7 @@
 
 #include "Engine.h"
 #include "GraphicSystem.h"
-#include "ScreenRenderer.h"
+#include "Renderer.h"
 
 namespace ice
 {
@@ -48,16 +48,16 @@ namespace ice
         size = value;
         if (renderer)
         {
-            renderer->set_screen_size(size);
+            renderer->update_camera_ortho_size(camera_handle, glm::vec2(size));
         }
     }
 
-    ScreenRenderer* Screen::get_renderer() noexcept
+    Renderer* Screen::get_renderer() noexcept
     {
         return renderer;
     }
 
-    const ScreenRenderer* Screen::get_renderer() const noexcept
+    const Renderer* Screen::get_renderer() const noexcept
     {
         return renderer;
     }
@@ -77,8 +77,9 @@ namespace ice
 
         if (auto gs = engine->get_system<GraphicSystem>())
         {
-            renderer = gs->create_screen_renderer();
-            renderer->set_screen_size(size);
+            renderer = gs->create_renderer(RendererType::UNLIT);
+            auto ct = glm::translate(glm::mat4(1.0), glm::vec3(0.0f, 0.0f, 1.0f));
+            camera_handle = renderer->add_ortho_camera(ct, glm::vec2(size), size);
         }
         NodeRoot<Screen>::activate();
     }
@@ -93,7 +94,7 @@ namespace ice
 
             auto gs = engine->get_system<GraphicSystem>();
             assert(gs);
-            gs->release_screen_renderer(renderer);
+            gs->release_renderer(renderer);
             renderer = nullptr;
         }
     }

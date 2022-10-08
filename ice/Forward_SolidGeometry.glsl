@@ -43,7 +43,8 @@ void main()
 
 #ifdef GLOW_FRAGMENT
 
-uniform vec3      mat_BaseColor;
+uniform vec4      mat_BaseColorFactor;
+uniform sampler2D mat_BaseColorMap;
 
 #define AMBIENT_LIGHT     0
 #define DIRECTIONAL_LIGHT 1
@@ -69,17 +70,19 @@ vec3 phong(vec3 n, vec3 l, vec3 mc, vec3 lc)
 
 void main()
 {
-    vec3 color = vec3(0.0, 0.0, 0.0);
+    vec3 color     = vec3(0.0, 0.0, 0.0);
+
+    vec4 baseColor = texture(mat_BaseColorMap, var_TexCoord) * mat_BaseColorFactor;
 
     switch (lgt_Type)
     {
         case AMBIENT_LIGHT:
-            color = mat_BaseColor * lgt_Color;
+            color = baseColor.rgb * lgt_Color;
             break;
         case DIRECTIONAL_LIGHT:
             vec3 n = normalize(var_Normal);
             vec3 l = normalize(-lgt_Direction);
-            color = phong(n, l, mat_BaseColor, lgt_Color);
+            color = phong(n, l, baseColor.rgb, lgt_Color);
             break;
     }
 

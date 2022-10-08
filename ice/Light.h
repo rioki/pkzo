@@ -26,7 +26,7 @@
 
 namespace ice
 {
-    class SceneRenderer;
+    class Renderer;
 
     class ICE_EXPORT Light : public SceneNode
     {
@@ -38,9 +38,9 @@ namespace ice
         void deactivate() override;
 
     protected:
-        virtual unsigned int register_light(SceneRenderer& renderer) noexcept = 0;
+        virtual unsigned int register_light(Renderer& renderer) noexcept = 0;
 
-        SceneRenderer* renderer = nullptr;
+        Renderer* renderer = nullptr;
         unsigned int render_handle = 0;
     };
 }

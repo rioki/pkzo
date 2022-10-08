@@ -90,9 +90,6 @@
     <ClInclude Include="Rectangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ScreenRenderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -153,7 +150,7 @@
     <ClInclude Include="SphereVisual.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SceneRenderer.h">
+    <ClInclude Include="Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SdlInputSystem.h">
@@ -224,9 +221,6 @@
     <ClCompile Include="Rectangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ScreenRenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Text.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -294,13 +288,13 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Screen.glsl">
-      <Filter>Shader Files</Filter>
-    </None>
     <None Include="Forward_SolidGeometry.glsl">
       <Filter>Shader Files</Filter>
     </None>
     <None Include="Forward_Emissive.glsl">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="Forward_Unlit.glsl">
       <Filter>Shader Files</Filter>
     </None>
   </ItemGroup>

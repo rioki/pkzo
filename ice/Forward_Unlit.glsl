@@ -40,9 +40,8 @@ void main()
 
 #ifdef GLOW_FRAGMENT
 
-uniform vec4      pkzo_Color;
-uniform bool      pkzo_HasTexture;
-uniform sampler2D pkzo_Texture;
+uniform vec4      mat_BaseColorFactor;
+uniform sampler2D mat_BaseColorMap;
 
 in vec2 var_TexCoord;
 
@@ -50,14 +49,7 @@ out vec4 glow_FragColor;
 
 void main()
 {
-    if (pkzo_HasTexture)
-    {
-        glow_FragColor = texture(pkzo_Texture, var_TexCoord) * pkzo_Color;
-    }
-    else
-    {
-        glow_FragColor = pkzo_Color;
-    }
+    glow_FragColor = texture(mat_BaseColorMap, var_TexCoord) * mat_BaseColorFactor;
 }
 
 #endif

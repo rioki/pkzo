@@ -32,9 +32,10 @@
 
 namespace ice
 {
-    constexpr auto MATERIAL_BASE_COLOR       = "mat_BaseColor";
-    constexpr auto MATERIAL_EMISSIVE_FACTOR  = "mat_EmissiveFactor";
-    constexpr auto MATERIAL_EMISSIVE_MAP     = "mat_EmissiveMap";
+    constexpr auto MATERIAL_BASE_COLOR_FACTOR = "mat_BaseColorFactor";
+    constexpr auto MATERIAL_BASE_COLOR_MAP    = "mat_BaseColorMap";
+    constexpr auto MATERIAL_EMISSIVE_FACTOR   = "mat_EmissiveFactor";
+    constexpr auto MATERIAL_EMISSIVE_MAP      = "mat_EmissiveMap";
 
 
     constexpr auto LIGHT_TYPE          = "lgt_Type";
@@ -44,13 +45,15 @@ namespace ice
     constexpr auto LIGHT_INNER_ANGLE   = "lgt_InnerAngle";
     constexpr auto LIGHT_OPUTER_ANGLE  = "lgt_OuterAngle";
 
-    OpenGLRenderer::OpenGLRenderer() noexcept = default;
+    OpenGLRenderer::OpenGLRenderer(RendererType type) noexcept
+    : pipeline(create_pipeline(type)) {}
+
     OpenGLRenderer::~OpenGLRenderer() = default;
 
-    auto create_projection_matrix(const glm::uvec2 resolution, const float hfov)
+    auto create_projection_matrix(const glm::uvec2 resolution, const float hfov, const float distance)
     {
         auto znear  = 0.1f;
-        auto zfar   = 1000.0f;
+        auto zfar   = distance;
         auto aspect = static_cast<float>(resolution.x) / static_cast<float>(resolution.y);
         auto vfov   = std::atan(std::tan(glm::radians(hfov)/2.0f)/aspect);
         // The formula is 2*atan(tan(h/2.0f)/a).
@@ -59,10 +62,25 @@ namespace ice
         return glm::perspective(vfov, aspect, znear, zfar);
     }
 
+    auto create_ortho_matrix(const glm::vec2 size, const float distance)
+    {
+        auto hs = size / 2.0f;
+        return glm::ortho(-hs.x, hs.x, -hs.y, hs.y, 0.0f, distance);
+    }
+
     unsigned int OpenGLRenderer::add_camera(const glm::mat4& transform, const glm::uvec2 resolution, const float fov) noexcept
     {
         auto id = ++last_id;
-        cameras[id] = {create_projection_matrix(resolution, fov), glm::inverse(transform)};
+        auto distance = 1000.0f; // TODO compute view distance.
+        cameras[id] = {create_projection_matrix(resolution, fov, distance), glm::inverse(transform)};
+        return id;
+    }
+
+    unsigned int OpenGLRenderer::add_ortho_camera(const glm::mat4& transform, const glm::vec2& wisizendow, const glm::uvec2 /*resolution*/) noexcept
+    {
+        auto id = ++last_id;
+        auto distance = 2.0f; // we assume a 2D rendering; TODO compute view distance.
+        cameras[id] = {create_ortho_matrix(size, distance), glm::inverse(transform)};
         return id;
     }
 
@@ -75,7 +93,15 @@ namespace ice
     void OpenGLRenderer::upate_camera_projection(unsigned int id, const glm::uvec2 resolution, const float fov) noexcept
     {
         assert(cameras.find(id) != end(cameras));
-        cameras[id].view_matrix = create_projection_matrix(resolution, fov);
+        auto distance = 1000.0f; // TODO compute view distance.
+        cameras[id].projection_matrix = create_projection_matrix(resolution, fov, distance);
+    }
+
+    void OpenGLRenderer::update_camera_ortho_size(unsigned int id, const glm::vec2& size) noexcept
+    {
+        assert(cameras.find(id) != end(cameras));
+        auto distance = 2.0f; // we assume a 2D rendering; TODO compute view distance.
+        cameras[id].projection_matrix = create_ortho_matrix(size, distance);
     }
 
     void OpenGLRenderer::remove_camera(unsigned int id) noexcept
@@ -192,11 +218,25 @@ namespace ice
         pipeline->execute();
     }
 
-    // Implemented in ScreenRenderer.cpp; should be refactoried anyway.
-    std::string LoadTextResource(HMODULE hModule, LPCWSTR lpName, LPCWSTR lpType);
-    std::shared_ptr<glow::Shader> load_shader(HMODULE hModule, unsigned int rcid);
+    // TODO Use AssetLibrary to dedup shaders
+    std::string LoadTextResource(HMODULE hModule, LPCWSTR lpName, LPCWSTR lpType)
+    {
+        auto hRSrc = FindResourceW(hModule, lpName, lpType);
+        assert(hRSrc);
+        auto hGlobal = LoadResource(hModule, hRSrc);
+        assert(hGlobal);
+        auto nSize = SizeofResource(hModule, hRSrc);
+        auto psCode = reinterpret_cast<const char*>(LockResource(hGlobal));
+        return std::string(psCode, nSize);
+    }
 
-    std::unique_ptr<glow::Pipeline> OpenGLRenderer::create_pipeline()
+    std::shared_ptr<glow::Shader> load_shader(HMODULE hModule, unsigned int rcid)
+    {
+        auto code = LoadTextResource(hModule, MAKEINTRESOURCE(rcid), L"GLSL");
+        return std::make_shared<glow::Shader>(code);
+    }
+
+    std::unique_ptr<glow::Pipeline> OpenGLRenderer::create_pipeline(RendererType type)
     {
         try
         {
@@ -205,8 +245,17 @@ namespace ice
 
             auto pipeline = std::make_unique<glow::Pipeline>();
 
-            pipeline->add_pass(glow::PassType::GEOMETRY_AND_LIGHTS, load_shader(hModule, IDR_GLSL_FORWARD_SOLID_GEOMETRY), glow::DepthTest::ON, glow::Blending::MULTIPASS);
-            pipeline->add_pass(glow::PassType::GEOMETRY,            load_shader(hModule, IDR_GLSL_FORWARD_EMISSIVE),       glow::DepthTest::ON, glow::Blending::MULTIPASS);
+            switch (type)
+            {
+                case RendererType::UNLIT:
+                    pipeline->add_pass(glow::PassType::GEOMETRY,            load_shader(hModule, IDR_GLSL_FORWARD_UNLIT),       glow::DepthTest::OFF, glow::Blending::ALPHA);
+                    break;
+
+                case RendererType::PHYSICAL:
+                    pipeline->add_pass(glow::PassType::GEOMETRY_AND_LIGHTS, load_shader(hModule, IDR_GLSL_FORWARD_SOLID_GEOMETRY), glow::DepthTest::ON, glow::Blending::MULTIPASS);
+                    pipeline->add_pass(glow::PassType::GEOMETRY,            load_shader(hModule, IDR_GLSL_FORWARD_EMISSIVE),       glow::DepthTest::ON, glow::Blending::MULTIPASS);
+                    break;
+            }
 
             return pipeline;
         }
@@ -262,9 +311,10 @@ namespace ice
         // TODO centralize video memory
 
         return glow::make_shared_parameters({
-            {MATERIAL_BASE_COLOR,       material->get_base_color()},
-            {MATERIAL_EMISSIVE_FACTOR,  material->get_emissive_factor()},
-            {MATERIAL_EMISSIVE_MAP,     upload(material->get_emissive_map(), TextureFallback::WHITE)},
+            {MATERIAL_BASE_COLOR_FACTOR, material->get_base_color_factor()},
+            {MATERIAL_BASE_COLOR_MAP,    upload(material->get_base_color_map(), TextureFallback::WHITE)},
+            {MATERIAL_EMISSIVE_FACTOR,   material->get_emissive_factor()},
+            {MATERIAL_EMISSIVE_MAP,      upload(material->get_emissive_map(), TextureFallback::WHITE)}
         });
     }
 }

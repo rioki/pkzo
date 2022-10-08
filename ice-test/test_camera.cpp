@@ -59,14 +59,14 @@ TEST(Camera, registers_on_renderer)
 
     InSequence s;
 
-    EXPECT_CALL(*gs, create_scene_renderer())
+    EXPECT_CALL(*gs, create_renderer(ice::RendererType::PHYSICAL))
         .WillOnce(Return(renderer.get()));
 
     EXPECT_CALL(*renderer, add_camera(transform, resolution, fov))
         .WillOnce(Return(42));
     EXPECT_CALL(*renderer, remove_camera(42));
 
-    EXPECT_CALL(*gs, release_scene_renderer(renderer.get()));
+    EXPECT_CALL(*gs, release_renderer(renderer.get()));
 
     auto scene = std::make_shared<ice::Scene>();
 
@@ -91,7 +91,7 @@ TEST(Camera, updates_renderer_view)
 
     InSequence s;
 
-    EXPECT_CALL(*gs, create_scene_renderer())
+    EXPECT_CALL(*gs, create_renderer(ice::RendererType::PHYSICAL))
         .WillOnce(Return(renderer.get()));
 
     EXPECT_CALL(*renderer, add_camera(transform, resolution, fov))
@@ -99,7 +99,7 @@ TEST(Camera, updates_renderer_view)
     EXPECT_CALL(*renderer, upate_camera_view(42, _));
     EXPECT_CALL(*renderer, remove_camera(42));
 
-    EXPECT_CALL(*gs, release_scene_renderer(renderer.get()));
+    EXPECT_CALL(*gs, release_renderer(renderer.get()));
 
     auto scene = std::make_shared<ice::Scene>();
 
@@ -129,7 +129,7 @@ TEST(Camera, updates_renderer_view_default_construct)
 
     InSequence s;
 
-    EXPECT_CALL(*gs, create_scene_renderer())
+    EXPECT_CALL(*gs, create_renderer(ice::RendererType::PHYSICAL))
         .WillOnce(Return(renderer.get()));
 
     EXPECT_CALL(*renderer, add_camera(_, _, _))
@@ -137,7 +137,7 @@ TEST(Camera, updates_renderer_view_default_construct)
     EXPECT_CALL(*renderer, upate_camera_view(42, _));
     EXPECT_CALL(*renderer, remove_camera(42));
 
-    EXPECT_CALL(*gs, release_scene_renderer(renderer.get()));
+    EXPECT_CALL(*gs, release_renderer(renderer.get()));
 
     auto scene = std::make_shared<ice::Scene>();
 

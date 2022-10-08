@@ -33,10 +33,11 @@ namespace ice
     public:
         Material() noexcept = default;
 
-        Material(const glm::vec3& base_color) noexcept;
+        void set_base_color_factor(const glm::vec4& value) noexcept;
+        const glm::vec4& get_base_color_factor() const noexcept;
 
-        const glm::vec3& get_base_color() const noexcept;
-        void set_base_color(const glm::vec3& value) noexcept;
+        void set_base_color_map(const std::shared_ptr<ice::Texture>& value) noexcept;
+        const std::shared_ptr<ice::Texture>& get_base_color_map() const noexcept;
 
         void set_emissive_factor(const glm::vec3& value) noexcept;
         const glm::vec3& get_emissive_factor() const noexcept;
@@ -45,11 +46,17 @@ namespace ice
         const std::shared_ptr<ice::Texture>& get_emissive_map() const noexcept;
 
     private:
-        glm::vec3 base_color = glm::vec3(1.0f);
-
-        glm::vec3                     emissive_factor = glm::vec3(0.0f);
+        glm::vec4                     base_color_factor = glm::vec4(1.0f);
+        std::shared_ptr<ice::Texture> base_color_map;
+        glm::vec3                     emissive_factor   = glm::vec3(0.0f);
         std::shared_ptr<ice::Texture> emissive_map;
     };
+
+    ICE_EXPORT std::shared_ptr<Material> make_simple_material(const glm::vec3& factor) noexcept;
+    ICE_EXPORT std::shared_ptr<Material> make_simple_material(const glm::vec3& factor, const std::shared_ptr<ice::Texture>& map) noexcept;
+    ICE_EXPORT std::shared_ptr<Material> make_simple_material(const glm::vec4& factor) noexcept;
+    ICE_EXPORT std::shared_ptr<Material> make_simple_material(const std::shared_ptr<ice::Texture>& map) noexcept;
+    ICE_EXPORT std::shared_ptr<Material> make_simple_material(const glm::vec4& factor, const std::shared_ptr<ice::Texture>& map) noexcept;
 
     ICE_EXPORT std::shared_ptr<Material> make_emissive_material(const glm::vec3& factor) noexcept;
     ICE_EXPORT std::shared_ptr<Material> make_emissive_material(const std::shared_ptr<ice::Texture>& map) noexcept;

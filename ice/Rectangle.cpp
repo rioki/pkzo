@@ -22,10 +22,20 @@
 #include "pch.h"
 #include "Rectangle.h"
 
+#include "glm_2d.h"
 #include "Screen.h"
+#include "Renderer.h"
+#include "Material.h"
+#include "Mesh.h"
 
 namespace ice
 {
+    Rectangle::Rectangle()
+    : Rectangle(glm::mat4(1.0f), glm::vec2(15.0f), glm::vec4(1.0f), nullptr) {}
+
+    Rectangle::Rectangle(const glm::mat3& transform)
+    : Rectangle(transform, glm::vec2(15.0f), glm::vec4(1.0f), nullptr) {}
+
     Rectangle::Rectangle(const glm::mat3& _transform, const glm::vec2& _size, const glm::vec4& _color) noexcept
     : Rectangle(_transform, _size, _color, nullptr) {}
 
@@ -36,9 +46,9 @@ namespace ice
     : ScreenNode(_transform), size(_size), color(_color), texture(_texture)
     {
         on_move([this] () {
-            if (render_handle)
+            if (renderer)
             {
-                render_handle->set_transform(get_world_transform());
+                renderer->update_geometry_transform(render_handle, glm::scale(to3d(get_world_transform()), glm::vec3(size, 1.0f)));
             }
         });
     }
@@ -46,9 +56,9 @@ namespace ice
     void Rectangle::set_size(const glm::vec2& value) noexcept
     {
         size = value;
-        if (render_handle)
+        if (renderer)
         {
-            render_handle->set_size(size);
+            renderer->update_geometry_transform(render_handle, glm::scale(to3d(get_world_transform()), glm::vec3(size, 1.0f)));
         }
     }
 
@@ -60,9 +70,9 @@ namespace ice
     void Rectangle::set_color(const glm::vec4& value) noexcept
     {
         color = value;
-        if (render_handle)
+        if (renderer)
         {
-            render_handle->set_color(color);
+            renderer->update_geometry_material(render_handle, make_simple_material(color, texture));
         }
     }
 
@@ -74,9 +84,9 @@ namespace ice
     void Rectangle::set_texture(const std::shared_ptr<Texture>& value) noexcept
     {
         texture = value;
-        if (render_handle)
+        if (renderer)
         {
-            render_handle->set_texture(texture);
+            renderer->update_geometry_material(render_handle, make_simple_material(color, texture));
         }
     }
 
@@ -85,28 +95,45 @@ namespace ice
         return texture;
     }
 
+    auto get_unit_rect()
+    {
+        static std::weak_ptr<Mesh> cache;
+
+        auto mesh = cache.lock();
+        if (mesh)
+        {
+            return mesh;
+        }
+
+        mesh = make_rectangle_mesh(glm::vec2(1.0f));
+        cache = mesh;
+        return mesh;
+    }
+
     void Rectangle::activate()
     {
-        assert(render_handle == nullptr);
-
-        auto screen = get_root();
-        assert(screen != nullptr);
-        if (auto renderer = screen->get_renderer())
+        assert(renderer == nullptr);
+        auto scene = get_root();
+        assert(scene != nullptr);
+        if (renderer = scene->get_renderer())
         {
-            render_handle = renderer->add_rectangle(get_world_transform(), size, color, texture);
+            const auto transform = glm::scale(to3d(get_world_transform()), glm::vec3(size, 1.0f));
+            const auto mesh      = get_unit_rect();
+            const auto material  = make_simple_material(color, texture);
+            render_handle = renderer->add_geometry(transform, mesh, material);
         }
     }
 
     void Rectangle::deactivate()
     {
-        if (render_handle != nullptr)
+        if (renderer != nullptr)
         {
             auto screen = get_root();
             assert(screen != nullptr);
             auto renderer = screen->get_renderer();
             assert(renderer != nullptr);
             renderer->remove_geometry(render_handle);
-            render_handle = nullptr;
+            renderer = nullptr;
         }
     }
 }
