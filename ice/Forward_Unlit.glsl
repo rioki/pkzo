@@ -19,40 +19,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#include "config.h"
+#ifdef GLOW_VERTEX
 
-#include "GraphicSystem.h"
+uniform mat4 glow_ProjectionMatrix;
+uniform mat4 glow_ViewMatrix;
+uniform mat4 glow_ModelMatrix;
 
-namespace ice
+in vec3 glow_Vertex;
+in vec2 glow_TexCoord;
+
+out vec2 var_TexCoord;
+
+void main()
 {
-    class SdlWindow;
-    class Texture;
-    class OpenGLRenderer;
-
-    class ICE_EXPORT SdlGraphicSystem : public GraphicSystem
-    {
-    public:
-        SdlGraphicSystem(Engine& e);
-        ~SdlGraphicSystem();
-
-        Window* get_window() noexcept override;
-        const Window* get_window() const noexcept override;
-
-        const glm::uvec2 get_window_size() const noexcept override;
-
-        std::shared_ptr<Texture> get_screenshot() const noexcept override;
-
-        Renderer* create_renderer(RendererType type) noexcept override;
-        void release_renderer(Renderer* renderer) noexcept override;
-
-        void tick() override;
-
-    private:
-        std::unique_ptr<SdlWindow> window;
-
-        std::vector<std::unique_ptr<OpenGLRenderer>> renderers;
-
-        void render_frame() noexcept;
-    };
+    var_TexCoord = glow_TexCoord;
+    gl_Position  = glow_ProjectionMatrix * glow_ViewMatrix * glow_ModelMatrix * vec4(glow_Vertex, 1.0);
 }
+
+#endif
+
+#ifdef GLOW_FRAGMENT
+
+uniform vec4      mat_BaseColorFactor;
+uniform sampler2D mat_BaseColorMap;
+
+in vec2 var_TexCoord;
+
+out vec4 glow_FragColor;
+
+void main()
+{
+    glow_FragColor = texture(mat_BaseColorMap, var_TexCoord) * mat_BaseColorFactor;
+}
+
+#endif

@@ -26,6 +26,7 @@
 
 #include "Renderer.h"
 #include "Texture.h"
+#include "GraphicSystem.h"
 
 namespace ice
 {
@@ -34,7 +35,7 @@ namespace ice
     class ICE_EXPORT OpenGLRenderer : public Renderer
     {
     public:
-        OpenGLRenderer() noexcept;
+        OpenGLRenderer(RendererType type) noexcept;
         ~OpenGLRenderer();
 
         unsigned int add_camera(const glm::mat4& transform, const glm::uvec2 resolution, const float fov) noexcept override;
@@ -62,7 +63,7 @@ namespace ice
 
     private:
         glm::vec2 size = {800.0f, 600.0f};
-        std::unique_ptr<glow::Pipeline> pipeline = create_pipeline();
+        std::unique_ptr<glow::Pipeline> pipeline;
 
         struct Camera
         {
@@ -74,7 +75,7 @@ namespace ice
         std::map<unsigned int, Camera>                            cameras;
         std::map<unsigned int, std::shared_ptr<glow::Parameters>> lights;
 
-        static std::unique_ptr<glow::Pipeline> create_pipeline();
+        static std::unique_ptr<glow::Pipeline> create_pipeline(RendererType type);
 
         enum class TextureFallback
         {

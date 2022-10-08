@@ -72,7 +72,7 @@ namespace ice
         color = value;
         if (renderer)
         {
-            renderer->update_geometry_material(render_handle, make_emissive_material(color, texture));
+            renderer->update_geometry_material(render_handle, make_simple_material(color, texture));
         }
     }
 
@@ -86,7 +86,7 @@ namespace ice
         texture = value;
         if (renderer)
         {
-            renderer->update_geometry_material(render_handle, make_emissive_material(color, texture));
+            renderer->update_geometry_material(render_handle, make_simple_material(color, texture));
         }
     }
 
@@ -119,7 +119,7 @@ namespace ice
         {
             const auto transform = glm::scale(to3d(get_world_transform()), glm::vec3(size, 1.0f));
             const auto mesh      = get_unit_rect();
-            const auto material  = make_emissive_material(color, texture);
+            const auto material  = make_simple_material(color, texture);
             render_handle = renderer->add_geometry(transform, mesh, material);
         }
     }

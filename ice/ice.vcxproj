@@ -215,6 +215,7 @@
   <ItemGroup>
     <None Include="Forward_Emissive.glsl" />
     <None Include="Forward_SolidGeometry.glsl" />
+    <None Include="Forward_Unlit.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

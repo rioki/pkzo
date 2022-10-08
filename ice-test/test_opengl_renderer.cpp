@@ -52,7 +52,7 @@ TEST(OpenGLRenderer, GRAPHICAL_shapes)
     scene->add_node(light2);
 
     // action
-    auto material = std::make_shared<ice::Material>(glm::vec3(0.75f));
+    auto material = ice::make_simple_material(glm::vec3(0.75f));
 
     auto box = std::make_shared<ice::BoxVisual>(glm::translate(glm::mat4{1.0f}, {0.0f, -1.0f, 0.0f}), glm::vec3(1.0f), material);
     scene->add_node(box);
@@ -101,9 +101,9 @@ TEST(OpenGLRenderer, GRAPHICAL_emissive)
     scene->add_node(light2);
 
     // action
-    auto opaque = std::make_shared<ice::Material>(glm::vec3(0.75f));
+    auto opaque   = ice::make_simple_material(glm::vec3(0.75f));
     auto emissive = ice::make_emissive_material(glm::vec3(1.0, 0.5, 0.5), engine.load_asset<ice::Texture>("rectangle.png"));
-    emissive->set_base_color(glm::vec3(0.75f));
+    emissive->set_base_color_factor(glm::vec4(0.75f, 0.75f, 0.75f, 1.0f));
 
     auto box = std::make_shared<ice::BoxVisual>(glm::translate(glm::mat4{1.0f}, {0.0f, -1.0f, 0.0f}), glm::vec3(1.0f), emissive);
     scene->add_node(box);

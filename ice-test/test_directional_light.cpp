@@ -55,7 +55,7 @@ TEST(DirectionalLight, registers_on_renderer)
 
     InSequence s;
 
-    EXPECT_CALL(*gs, create_renderer())
+    EXPECT_CALL(*gs, create_renderer(ice::RendererType::PHYSICAL))
         .WillOnce(Return(renderer.get()));
 
     EXPECT_CALL(*renderer, add_directional_light(transform, color))

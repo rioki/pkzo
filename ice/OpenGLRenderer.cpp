@@ -32,9 +32,10 @@
 
 namespace ice
 {
-    constexpr auto MATERIAL_BASE_COLOR       = "mat_BaseColor";
-    constexpr auto MATERIAL_EMISSIVE_FACTOR  = "mat_EmissiveFactor";
-    constexpr auto MATERIAL_EMISSIVE_MAP     = "mat_EmissiveMap";
+    constexpr auto MATERIAL_BASE_COLOR_FACTOR = "mat_BaseColorFactor";
+    constexpr auto MATERIAL_BASE_COLOR_MAP    = "mat_BaseColorMap";
+    constexpr auto MATERIAL_EMISSIVE_FACTOR   = "mat_EmissiveFactor";
+    constexpr auto MATERIAL_EMISSIVE_MAP      = "mat_EmissiveMap";
 
 
     constexpr auto LIGHT_TYPE          = "lgt_Type";
@@ -44,7 +45,9 @@ namespace ice
     constexpr auto LIGHT_INNER_ANGLE   = "lgt_InnerAngle";
     constexpr auto LIGHT_OPUTER_ANGLE  = "lgt_OuterAngle";
 
-    OpenGLRenderer::OpenGLRenderer() noexcept = default;
+    OpenGLRenderer::OpenGLRenderer(RendererType type) noexcept
+    : pipeline(create_pipeline(type)) {}
+
     OpenGLRenderer::~OpenGLRenderer() = default;
 
     auto create_projection_matrix(const glm::uvec2 resolution, const float hfov, const float distance)
@@ -233,7 +236,7 @@ namespace ice
         return std::make_shared<glow::Shader>(code);
     }
 
-    std::unique_ptr<glow::Pipeline> OpenGLRenderer::create_pipeline()
+    std::unique_ptr<glow::Pipeline> OpenGLRenderer::create_pipeline(RendererType type)
     {
         try
         {
@@ -242,8 +245,17 @@ namespace ice
 
             auto pipeline = std::make_unique<glow::Pipeline>();
 
-            pipeline->add_pass(glow::PassType::GEOMETRY_AND_LIGHTS, load_shader(hModule, IDR_GLSL_FORWARD_SOLID_GEOMETRY), glow::DepthTest::ON, glow::Blending::MULTIPASS);
-            pipeline->add_pass(glow::PassType::GEOMETRY,            load_shader(hModule, IDR_GLSL_FORWARD_EMISSIVE),       glow::DepthTest::ON, glow::Blending::MULTIPASS);
+            switch (type)
+            {
+                case RendererType::UNLIT:
+                    pipeline->add_pass(glow::PassType::GEOMETRY,            load_shader(hModule, IDR_GLSL_FORWARD_UNLIT),       glow::DepthTest::OFF, glow::Blending::ALPHA);
+                    break;
+
+                case RendererType::PHYSICAL:
+                    pipeline->add_pass(glow::PassType::GEOMETRY_AND_LIGHTS, load_shader(hModule, IDR_GLSL_FORWARD_SOLID_GEOMETRY), glow::DepthTest::ON, glow::Blending::MULTIPASS);
+                    pipeline->add_pass(glow::PassType::GEOMETRY,            load_shader(hModule, IDR_GLSL_FORWARD_EMISSIVE),       glow::DepthTest::ON, glow::Blending::MULTIPASS);
+                    break;
+            }
 
             return pipeline;
         }
@@ -299,9 +311,10 @@ namespace ice
         // TODO centralize video memory
 
         return glow::make_shared_parameters({
-            {MATERIAL_BASE_COLOR,       material->get_base_color()},
-            {MATERIAL_EMISSIVE_FACTOR,  material->get_emissive_factor()},
-            {MATERIAL_EMISSIVE_MAP,     upload(material->get_emissive_map(), TextureFallback::WHITE)},
+            {MATERIAL_BASE_COLOR_FACTOR, material->get_base_color_factor()},
+            {MATERIAL_BASE_COLOR_MAP,    upload(material->get_base_color_map(), TextureFallback::WHITE)},
+            {MATERIAL_EMISSIVE_FACTOR,   material->get_emissive_factor()},
+            {MATERIAL_EMISSIVE_MAP,      upload(material->get_emissive_map(), TextureFallback::WHITE)}
         });
     }
 }

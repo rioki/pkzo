@@ -39,7 +39,7 @@ namespace ice
             return mat;
         }
 
-        mat = std::make_shared<Material>(rgb(0xff00dc));
+        mat = make_simple_material(rgb(0xff00dc));
         cache = mat;
         return mat;
     }

@@ -82,9 +82,9 @@ namespace ice
         }
     }
 
-    Renderer* SdlGraphicSystem::create_renderer() noexcept
+    Renderer* SdlGraphicSystem::create_renderer(RendererType type) noexcept
     {
-        return add_unique_ptr<OpenGLRenderer>(renderers);
+        return add_unique_ptr<OpenGLRenderer>(renderers, type);
     }
 
     void SdlGraphicSystem::release_renderer(Renderer* renderer) noexcept

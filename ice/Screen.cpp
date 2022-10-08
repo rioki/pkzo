@@ -77,7 +77,7 @@ namespace ice
 
         if (auto gs = engine->get_system<GraphicSystem>())
         {
-            renderer = gs->create_renderer();
+            renderer = gs->create_renderer(RendererType::UNLIT);
             auto ct = glm::translate(glm::mat4(1.0), glm::vec3(0.0f, 0.0f, 1.0f));
             camera_handle = renderer->add_ortho_camera(ct, glm::vec2(size), size);
         }
