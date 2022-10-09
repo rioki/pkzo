@@ -1,7 +1,7 @@
 {
   "name": "ice",
   "version": "0.1.0",
-  "builtin-baseline": "24caf735d22bd0e5eb5fe0331ad55bece70f5938",
+  "builtin-baseline": "472e9f1a8bc5349ec21926fcfc6b2eb917cba01f",
   "dependencies": [
     "freeimage",
     "freetype",
