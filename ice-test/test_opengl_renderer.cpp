@@ -120,3 +120,48 @@ TEST(OpenGLRenderer, GRAPHICAL_emissive)
     auto screenshot = gs->get_screenshot();
     EXPECT_TEXTURE_REF_EQ(screenshot);
 }
+
+TEST(OpenGLRenderer, GRAPHICAL_point_light)
+{
+    auto engine = ice::Engine{};
+
+    engine.add_asset_folder(ice::test::get_test_input());
+
+    auto& settings = engine.get_settings();
+    settings.set_value("GraphicSystem", "resolution", glm::uvec2(800, 600));
+    settings.set_value("GraphicSystem", "mode",       ice::WindowMode::STATIC);
+
+    engine.start_system<ice::SdlGraphicSystem>();
+
+    auto scene = std::make_shared<ice::Scene>();
+
+    // camera
+    auto ct = ice::lookat({-5.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f});
+    auto camera = std::make_shared<ice::Camera>(ct, 90.0f, glm::uvec2(800, 600));
+    scene->add_node(camera);
+
+    // lights
+    auto light0 = std::make_shared<ice::AmbientLight>(glm::vec3{0.106, 0.161, 0.2});
+    scene->add_node(light0);
+
+    auto light1 = std::make_shared<ice::PointLight>(glm::translate(glm::mat4{1.0f}, {-0.5f, -0.6f, 1.0f}), glm::vec3(0.839, 0.718, 0.573));
+    scene->add_node(light1);
+
+    // action
+    auto opaque   = ice::make_simple_material(glm::vec3(0.75f));
+
+    auto ground = std::make_shared<ice::BoxVisual>(glm::translate(glm::mat4{1.0f}, {0.0f, 0.0f, -0.5f}), glm::vec3(10.0f, 10.0f, 1.0f), opaque);
+    scene->add_node(ground);
+
+    auto sphere = std::make_shared<ice::SphereVisual>(glm::translate(glm::mat4{1.0f}, {0.0f, 0.0f, 0.5f}), 0.25f, opaque);
+    scene->add_node(sphere);
+
+    engine.set_scene(scene);
+
+    engine.run(3);
+
+    const auto* gs = engine.get_system<ice::GraphicSystem>();
+    ASSERT_NE(nullptr, gs);
+    auto screenshot = gs->get_screenshot();
+    EXPECT_TEXTURE_REF_EQ(screenshot);
+}

@@ -19,47 +19,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#include "config.h"
-
-#include "AmbientLight.h"
-#include "Asset.h"
-#include "AssetLibrary.h"
-#include "BoxVisual.h"
-#include "Camera.h"
-#include "ConsoleSystem.h"
-#include "DirectionalLight.h"
-#include "Engine.h"
-#include "Font.h"
-#include "glm_2d.h"
-#include "glm_io.h"
-#include "glm_json.h"
-#include "GraphicSystem.h"
-#include "InputSystem.h"
-#include "Joystick.h"
-#include "Keyboard.h"
-#include "Material.h"
-#include "Material.h"
-#include "Mesh.h"
-#include "Mouse.h"
+#include "pch.h"
 #include "PointLight.h"
-#include "Rectangle.h"
+
 #include "Renderer.h"
-#include "Scene.h"
-#include "SceneNode.h"
-#include "SceneNodeGroup.h"
-#include "Screen.h"
-#include "ScreenNode.h"
-#include "ScreenNodeGroup.h"
-#include "SdlGraphicSystem.h"
-#include "SdlInputSystem.h"
-#include "SdlSentry.h"
-#include "Settings.h"
-#include "SphereVisual.h"
-#include "StatsSystem.h"
-#include "System.h"
-#include "Text.h"
-#include "Texture.h"
-#include "utils.h"
-#include "Visual.h"
-#include "Window.h"
+
+namespace ice
+{
+    PointLight::PointLight(const glm::mat4& transform, const glm::vec3& _color) noexcept
+    : Light(transform), color(_color) {}
+
+    void PointLight::set_color(const glm::vec3& value) noexcept
+    {
+        color = value;
+        if (renderer)
+        {
+            renderer->update_light_color(render_handle, color);
+        }
+    }
+
+    const glm::vec3& PointLight::get_color() const noexcept
+    {
+        return color;
+    }
+
+    unsigned int PointLight::register_light(Renderer& renderer) noexcept
+    {
+        return renderer.add_point_light(get_world_transform(), color);
+    }
+}

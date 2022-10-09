@@ -109,6 +109,11 @@ namespace ice
         return add_light(LightType::DIRECTIONAL, transform, color, 0.0f, 0.0f);
     }
 
+    unsigned int OpenGLRenderer::add_point_light(const glm::mat4& transform, const glm::vec3& color) noexcept
+    {
+        return add_light(LightType::POINT, transform, color, 0.0f, 0.0f);
+    }
+
     unsigned int OpenGLRenderer::add_light(LightType type, const glm::mat4& transform, const glm::vec3& color, const float inner_angle, const float outer_angle) noexcept
     {
         auto direction = glm::normalize(glm::mat3(transform) * glm::vec3(0.0f, 0.0f, -1.0f));
