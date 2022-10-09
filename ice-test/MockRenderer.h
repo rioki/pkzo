@@ -38,6 +38,7 @@ namespace ice::test
 
         MOCK_METHOD(unsigned int, add_ambient_light, (const glm::vec3& color), (noexcept));
         MOCK_METHOD(unsigned int, add_directional_light, (const glm::mat4& transform, const glm::vec3& color), (noexcept));
+        MOCK_METHOD(unsigned int, add_point_light, (const glm::mat4& transform, const glm::vec3& color), (noexcept));
         MOCK_METHOD(unsigned int, add_light, (LightType type, const glm::mat4& transform, const glm::vec3& color, const float inner_angle, const float outer_angle), (noexcept));
         MOCK_METHOD(void, update_light_transform, (unsigned int id, const glm::mat4& transform), (noexcept));
         MOCK_METHOD(void, update_light_color, (unsigned int id, const glm::vec3& color), (noexcept));

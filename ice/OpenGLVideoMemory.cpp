@@ -187,6 +187,8 @@ namespace ice
             case TextureFallback::NORMAL:
                 assert(normal_fallback_texture);
                 return normal_fallback_texture;
+            default:
+                std::terminate();
         }
     }
 }
