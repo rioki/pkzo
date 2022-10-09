@@ -22,45 +22,31 @@
 #pragma once
 #include "config.h"
 
-#include "AmbientLight.h"
-#include "Asset.h"
-#include "AssetLibrary.h"
-#include "BoxVisual.h"
-#include "Camera.h"
-#include "ConsoleSystem.h"
-#include "DirectionalLight.h"
-#include "Engine.h"
-#include "Font.h"
-#include "glm_2d.h"
-#include "glm_io.h"
-#include "glm_json.h"
-#include "GraphicSystem.h"
-#include "InputSystem.h"
-#include "Joystick.h"
-#include "Keyboard.h"
-#include "Material.h"
-#include "Material.h"
-#include "Mesh.h"
-#include "Mouse.h"
-#include "PointLight.h"
-#include "Rectangle.h"
-#include "Renderer.h"
-#include "Scene.h"
-#include "SceneNode.h"
-#include "SceneNodeGroup.h"
-#include "Screen.h"
-#include "ScreenNode.h"
-#include "ScreenNodeGroup.h"
-#include "SdlGraphicSystem.h"
-#include "SdlInputSystem.h"
-#include "SdlSentry.h"
-#include "Settings.h"
-#include "SphereVisual.h"
-#include "SpotLight.h"
-#include "StatsSystem.h"
-#include "System.h"
-#include "Text.h"
-#include "Texture.h"
-#include "utils.h"
-#include "Visual.h"
-#include "Window.h"
+#include "Light.h"
+
+namespace ice
+{
+    class ICE_EXPORT SpotLight : public Light
+    {
+    public:
+        SpotLight() noexcept = default;
+        SpotLight(const glm::mat4& transform, const glm::vec3& color, float inner_angle, float outer_angle) noexcept;
+
+        void set_color(const glm::vec3& value) noexcept;
+        const glm::vec3& get_color() const noexcept;
+
+        void set_inner_angle(float value) noexcept;
+        float get_inner_angle() const noexcept;
+
+        void set_outer_angle(float value) noexcept;
+        float get_outer_angle() const noexcept;
+
+    protected:
+        unsigned int register_light(Renderer& renderer) noexcept override;
+
+    private:
+        glm::vec3 color       = glm::vec3(1.0f);
+        float     inner_angle = 25.0f;
+        float     outer_angle = 30.0f;
+    };
+}

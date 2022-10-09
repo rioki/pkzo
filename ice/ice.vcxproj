@@ -161,6 +161,7 @@
     <ClInclude Include="SdlWindow.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="SphereVisual.h" />
+    <ClInclude Include="SpotLight.h" />
     <ClInclude Include="StatsSystem.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="Text.h" />
@@ -207,6 +208,7 @@
     <ClCompile Include="SdlWindow.cpp" />
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="SphereVisual.cpp" />
+    <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="StatsSystem.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Texture.cpp" />
