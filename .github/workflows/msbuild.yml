@@ -37,7 +37,6 @@ jobs:
       with:
         vcpkgGitCommitId: ${{ env.VCPKG_COMMIT }}
         appendedCacheKey: ${{ matrix.triplet }}
-        vcpkgGitURL: https://github.com/rioki/vcpkg
     - name: 'Setup NuGet/Vcpkg Credentials'
       shell: 'bash'
       run: >
