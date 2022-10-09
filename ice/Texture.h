@@ -109,5 +109,7 @@ namespace ice
     ICE_EXPORT float compare(const std::shared_ptr<Texture>& a, const std::shared_ptr<Texture>& b);
     ICE_EXPORT std::shared_ptr<Texture> diff(const std::shared_ptr<Texture>& a, const std::shared_ptr<Texture>& b);
 
+    ICE_EXPORT std::shared_ptr<Texture> make_black_texture();
     ICE_EXPORT std::shared_ptr<Texture> make_white_texture();
+    ICE_EXPORT std::shared_ptr<Texture> make_normal_texture();
 }

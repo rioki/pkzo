@@ -35,4 +35,14 @@ namespace ice
     {
         return id;
     }
+
+    unsigned int Asset::get_version() const noexcept
+    {
+        return version;
+    }
+
+    void Asset::increment_version() noexcept
+    {
+        version++;
+    }
 }

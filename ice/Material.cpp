@@ -27,6 +27,7 @@ namespace ice
     void Material::set_base_color_factor(const glm::vec4& value) noexcept
     {
         base_color_factor = value;
+        increment_version();
     }
 
     const glm::vec4& Material::get_base_color_factor() const noexcept
@@ -37,6 +38,7 @@ namespace ice
     void Material::set_base_color_map(const std::shared_ptr<ice::Texture>& value) noexcept
     {
         base_color_map = value;
+        increment_version();
     }
 
     const std::shared_ptr<ice::Texture>& Material::get_base_color_map() const noexcept
@@ -47,6 +49,7 @@ namespace ice
     void Material::set_emissive_factor(const glm::vec3& value) noexcept
     {
         emissive_factor = value;
+        increment_version();
     }
 
     const glm::vec3& Material::get_emissive_factor() const noexcept
@@ -57,6 +60,7 @@ namespace ice
     void Material::set_emissive_map(const std::shared_ptr<ice::Texture>& value) noexcept
     {
         emissive_map = value;
+        increment_version();
     }
 
     const std::shared_ptr<ice::Texture>& Material::get_emissive_map() const noexcept

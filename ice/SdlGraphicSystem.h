@@ -28,6 +28,7 @@ namespace ice
 {
     class SdlWindow;
     class Texture;
+    class OpenGLVideoMemory;
     class OpenGLRenderer;
 
     class ICE_EXPORT SdlGraphicSystem : public GraphicSystem
@@ -50,7 +51,7 @@ namespace ice
 
     private:
         std::unique_ptr<SdlWindow> window;
-
+        std::unique_ptr<OpenGLVideoMemory> vmem;
         std::vector<std::unique_ptr<OpenGLRenderer>> renderers;
 
         void render_frame() noexcept;

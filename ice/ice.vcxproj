@@ -140,6 +140,7 @@
     <ClInclude Include="NodeGroup.h" />
     <ClInclude Include="NodeRoot.h" />
     <ClInclude Include="OpenGLRenderer.h" />
+    <ClInclude Include="OpenGLVideoMemory.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Rectangle.h" />
     <ClInclude Include="resource.h" />
@@ -185,6 +186,7 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="OpenGLRenderer.cpp" />
+    <ClCompile Include="OpenGLVideoMemory.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
