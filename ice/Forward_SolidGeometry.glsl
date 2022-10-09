@@ -54,6 +54,7 @@ uniform sampler2D ice_BaseColorMap;
 #define AMBIENT_LIGHT     0
 #define DIRECTIONAL_LIGHT 1
 #define POINT_LIGHT       2
+#define SPOT_LIGHT        3
 
 uniform int       ice_LightType;
 uniform vec3      ice_LightColor;
@@ -102,6 +103,16 @@ void main()
             d = length(l);
             l       = normalize(l);
             a = 1.0/(1.0 + ATTENUATION_FACTOR_LIN * d + ATTENUATION_FACTOR_QUAD * pow(d, 2.0));
+            color = phong(n, l, baseColor.rgb, ice_LightColor, a);
+            break;
+        case SPOT_LIGHT:
+            n = normalize(var_Normal);
+            l = ice_LightPosition - var_Position;
+            d = length(l);
+            l       = normalize(l);
+            float da = 1.0/(1.0 + ATTENUATION_FACTOR_LIN * d + ATTENUATION_FACTOR_QUAD * pow(d, 2.0));
+            float phi  = acos(dot(l, normalize(-ice_LightDirection)));
+            a  = da * (1.0 - smoothstep(ice_LightInnerAngle, ice_LightOuterAngle, phi));
             color = phong(n, l, baseColor.rgb, ice_LightColor, a);
             break;
     }

@@ -114,6 +114,11 @@ namespace ice
         return add_light(LightType::POINT, transform, color, 0.0f, 0.0f);
     }
 
+    unsigned int OpenGLRenderer::add_spot_light(const glm::mat4& transform, const glm::vec3& color, const float inner_angle, const float outer_angle) noexcept
+    {
+        return add_light(LightType::SPOT, transform, color, inner_angle, outer_angle);
+    }
+
     unsigned int OpenGLRenderer::add_light(LightType type, const glm::mat4& transform, const glm::vec3& color, const float inner_angle, const float outer_angle) noexcept
     {
         auto direction = glm::normalize(glm::mat3(transform) * glm::vec3(0.0f, 0.0f, -1.0f));
@@ -123,8 +128,8 @@ namespace ice
             {"ice_LightColor",      color},
             {"ice_LightDirection",  direction},
             {"ice_LightPosition",   position},
-            {"ice_LightInnerAngle", inner_angle},
-            {"ice_LightOuterAngle", outer_angle}
+            {"ice_LightInnerAngle", glm::radians(inner_angle)},
+            {"ice_LightOuterAngle", glm::radians(outer_angle)}
         });
 
         assert(pipeline);
