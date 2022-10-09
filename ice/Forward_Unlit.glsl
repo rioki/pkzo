@@ -40,8 +40,8 @@ void main()
 
 #ifdef GLOW_FRAGMENT
 
-uniform vec4      mat_BaseColorFactor;
-uniform sampler2D mat_BaseColorMap;
+uniform vec4      ice_BaseColorFactor;
+uniform sampler2D ice_BaseColorMap;
 
 in vec2 var_TexCoord;
 
@@ -49,7 +49,7 @@ out vec4 glow_FragColor;
 
 void main()
 {
-    glow_FragColor = texture(mat_BaseColorMap, var_TexCoord) * mat_BaseColorFactor;
+    glow_FragColor = texture(ice_BaseColorMap, var_TexCoord) * ice_BaseColorFactor;
 }
 
 #endif

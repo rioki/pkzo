@@ -273,6 +273,7 @@ namespace ice
 
     void Texture::set_texel(const glm::uvec2& index, const glm::vec4& value) noexcept
     {
+        increment_version();
         auto type = FreeImage_GetImageType(bitmap);
         switch (type)
         {
@@ -370,6 +371,7 @@ namespace ice
 
     void Texture::set_filter_mode(FilterMode value) noexcept
     {
+        increment_version();
         filter_mode = value;
     }
 
@@ -380,6 +382,7 @@ namespace ice
 
     void Texture::set_wrap_mode(WrapMode value) noexcept
     {
+        increment_version();
         wrap_mode = value;
     }
 
@@ -506,9 +509,21 @@ namespace ice
         return result;
     }
 
+    std::shared_ptr<Texture> make_black_texture()
+    {
+        static unsigned char buffer[4] = {0u, 0u, 0u, 255u};
+        return std::make_shared<Texture>(glm::uvec2(1), ice::ColorMode::RGBA, ice::DataType::UINT8, buffer, "black");
+    }
+
     std::shared_ptr<Texture> make_white_texture()
     {
         static unsigned char buffer[4] = {255u, 255u, 255u, 255u};
         return std::make_shared<Texture>(glm::uvec2(1), ice::ColorMode::RGBA, ice::DataType::UINT8, buffer, "white");
+    }
+
+    std::shared_ptr<Texture> make_normal_texture()
+    {
+        static unsigned char buffer[4] = {127u, 127u, 255u, 255u};
+        return std::make_shared<Texture>(glm::uvec2(1), ice::ColorMode::RGBA, ice::DataType::UINT8, buffer, "normal");
     }
 }

@@ -29,24 +29,12 @@
 #include "Mesh.h"
 #include "Material.h"
 #include "Texture.h"
+#include "OpenGLVideoMemory.h"
 
 namespace ice
 {
-    constexpr auto MATERIAL_BASE_COLOR_FACTOR = "mat_BaseColorFactor";
-    constexpr auto MATERIAL_BASE_COLOR_MAP    = "mat_BaseColorMap";
-    constexpr auto MATERIAL_EMISSIVE_FACTOR   = "mat_EmissiveFactor";
-    constexpr auto MATERIAL_EMISSIVE_MAP      = "mat_EmissiveMap";
-
-
-    constexpr auto LIGHT_TYPE          = "lgt_Type";
-    constexpr auto LIGHT_COLOR         = "lgt_Color";
-    constexpr auto LIGHT_DIRECTION     = "lgt_Direction";
-    constexpr auto LIGHT_POSITION      = "lgt_Position";
-    constexpr auto LIGHT_INNER_ANGLE   = "lgt_InnerAngle";
-    constexpr auto LIGHT_OPUTER_ANGLE  = "lgt_OuterAngle";
-
-    OpenGLRenderer::OpenGLRenderer(RendererType type) noexcept
-    : pipeline(create_pipeline(type)) {}
+    OpenGLRenderer::OpenGLRenderer(OpenGLVideoMemory& _vmem, RendererType type) noexcept
+    : vmem(_vmem), pipeline(create_pipeline(type)) {}
 
     OpenGLRenderer::~OpenGLRenderer() = default;
 
@@ -126,12 +114,12 @@ namespace ice
         auto direction = glm::normalize(glm::mat3(transform) * glm::vec3(0.0f, 0.0f, -1.0f));
         auto position  = glm::transform(transform, glm::vec3(0.0f));
         auto param = glow::make_shared_parameters({
-            {LIGHT_TYPE        , static_cast<glm::uint>(type)},
-            {LIGHT_COLOR       , color},
-            {LIGHT_DIRECTION   , direction},
-            {LIGHT_POSITION    , position},
-            {LIGHT_INNER_ANGLE , inner_angle},
-            {LIGHT_OPUTER_ANGLE, outer_angle}
+            {"ice_LightType",       static_cast<glm::uint>(type)},
+            {"ice_LightColor",      color},
+            {"ice_LightDirection",  direction},
+            {"ice_LightPosition",   position},
+            {"ice_LightInnerAngle", inner_angle},
+            {"ice_LightOuterAngle", outer_angle}
         });
 
         assert(pipeline);
@@ -145,23 +133,23 @@ namespace ice
         assert(lights.find(id) != end(lights));
         auto direction = glm::normalize(glm::mat3(transform) * glm::vec3(0.0f, 0.0f, -1.0f));
         auto position  = glm::transform(transform, glm::vec3(0.0f));
-        lights[id]->set_value(LIGHT_DIRECTION, direction);
-        lights[id]->set_value(LIGHT_POSITION,  position);
+        lights[id]->set_value("ice_LightDirection", direction);
+        lights[id]->set_value("ice_LightPosition",  position);
         pipeline->update_light(id, lights[id]); // this may not be nessesary, but let glow know we changes something
     }
 
     void OpenGLRenderer::update_light_color(unsigned int id, const glm::vec3& color) noexcept
     {
         assert(lights.find(id) != end(lights));
-        lights[id]->set_value(LIGHT_COLOR, color);
+        lights[id]->set_value("ice_LightColor", color);
         pipeline->update_light(id, lights[id]);
     }
 
     void OpenGLRenderer::update_light_angles(unsigned int id, const float inner_angle, const float outer_angle) noexcept
     {
         assert(lights.find(id) != end(lights));
-        lights[id]->set_value(LIGHT_INNER_ANGLE, inner_angle);
-        lights[id]->set_value(LIGHT_OPUTER_ANGLE, outer_angle);
+        lights[id]->set_value("ice_LightInnerAngle", inner_angle);
+        lights[id]->set_value("ice_LightOuterAngle", outer_angle);
         pipeline->update_light(id, lights[id]);
     }
 
@@ -180,7 +168,7 @@ namespace ice
         assert(mesh);
         assert(material);
         assert(pipeline);
-        return pipeline->add_geometry(transform, upload(mesh), upload(material));
+        return pipeline->add_geometry(transform, vmem.upload(mesh), vmem.upload(material));
     }
 
     void OpenGLRenderer::update_geometry_transform(unsigned int id, const glm::mat4& transform) noexcept
@@ -192,13 +180,13 @@ namespace ice
     void OpenGLRenderer::update_geometry_mesh(unsigned int id, const std::shared_ptr<const Mesh>& mesh) noexcept
     {
         assert(pipeline);
-        return pipeline->update_geometry(id, upload(mesh));
+        return pipeline->update_geometry(id, vmem.upload(mesh));
     }
 
     void OpenGLRenderer::update_geometry_material(unsigned int id, const std::shared_ptr<const Material>& material) noexcept
     {
         assert(pipeline);
-        return pipeline->update_geometry(id, upload(material));
+        return pipeline->update_geometry(id, vmem.upload(material));
     }
 
     void OpenGLRenderer::remove_geometry(unsigned int id) noexcept
@@ -218,103 +206,22 @@ namespace ice
         pipeline->execute();
     }
 
-    // TODO Use AssetLibrary to dedup shaders
-    std::string LoadTextResource(HMODULE hModule, LPCWSTR lpName, LPCWSTR lpType)
+    std::unique_ptr<glow::Pipeline> OpenGLRenderer::create_pipeline(RendererType type) noexcept
     {
-        auto hRSrc = FindResourceW(hModule, lpName, lpType);
-        assert(hRSrc);
-        auto hGlobal = LoadResource(hModule, hRSrc);
-        assert(hGlobal);
-        auto nSize = SizeofResource(hModule, hRSrc);
-        auto psCode = reinterpret_cast<const char*>(LockResource(hGlobal));
-        return std::string(psCode, nSize);
-    }
+        auto pipeline = std::make_unique<glow::Pipeline>();
 
-    std::shared_ptr<glow::Shader> load_shader(HMODULE hModule, unsigned int rcid)
-    {
-        auto code = LoadTextResource(hModule, MAKEINTRESOURCE(rcid), L"GLSL");
-        return std::make_shared<glow::Shader>(code);
-    }
-
-    std::unique_ptr<glow::Pipeline> OpenGLRenderer::create_pipeline(RendererType type)
-    {
-        try
+        switch (type)
         {
-            HMODULE hModule = GetModuleHandleW(L"ice.dll");
-            assert(hModule);
+            case RendererType::UNLIT:
+                pipeline->add_pass(glow::PassType::GEOMETRY,            vmem.load_shader(IDR_GLSL_FORWARD_UNLIT),          glow::DepthTest::OFF, glow::Blending::ALPHA);
+                break;
 
-            auto pipeline = std::make_unique<glow::Pipeline>();
-
-            switch (type)
-            {
-                case RendererType::UNLIT:
-                    pipeline->add_pass(glow::PassType::GEOMETRY,            load_shader(hModule, IDR_GLSL_FORWARD_UNLIT),       glow::DepthTest::OFF, glow::Blending::ALPHA);
-                    break;
-
-                case RendererType::PHYSICAL:
-                    pipeline->add_pass(glow::PassType::GEOMETRY_AND_LIGHTS, load_shader(hModule, IDR_GLSL_FORWARD_SOLID_GEOMETRY), glow::DepthTest::ON, glow::Blending::MULTIPASS);
-                    pipeline->add_pass(glow::PassType::GEOMETRY,            load_shader(hModule, IDR_GLSL_FORWARD_EMISSIVE),       glow::DepthTest::ON, glow::Blending::MULTIPASS);
-                    break;
-            }
-
-            return pipeline;
-        }
-        // This should only happen in development
-        catch (const std::exception& ex)
-        {
-            show_message_box(MessageBoxIcon::ERROR, "GLSL Compile Error", ex.what());
-            std::abort();
-        }
-    }
-
-    std::shared_ptr<glow::VertexBuffer> OpenGLRenderer::upload(const std::shared_ptr<const Mesh>& mesh) noexcept
-    {
-        // TODO centralize video memory
-
-        auto buffer = std::make_shared<glow::VertexBuffer>();
-        buffer->upload_values(glow::VERTEX,   mesh->get_vertices());
-        buffer->upload_values(glow::NORMAL,   mesh->get_normals());
-        //buffer->upload_values(glow::TANGENT,   mesh->get_tangents());
-        buffer->upload_values(glow::TEXCOORD, mesh->get_texcoords());
-        buffer->upload_indexes(mesh->get_faces());
-
-        return buffer;
-    }
-
-    std::shared_ptr<glow::Texture> OpenGLRenderer::upload(const std::shared_ptr<const Texture>& texture, TextureFallback fallback) noexcept
-    {
-        // TODO centralize video memory
-        if (texture == nullptr)
-        {
-            switch (fallback)
-            {
-                case TextureFallback::WHITE:
-                    assert(white_fallback);
-                    return upload(white_fallback, fallback);
-            }
+            case RendererType::PHYSICAL:
+                pipeline->add_pass(glow::PassType::GEOMETRY_AND_LIGHTS, vmem.load_shader(IDR_GLSL_FORWARD_SOLID_GEOMETRY), glow::DepthTest::ON, glow::Blending::MULTIPASS);
+                pipeline->add_pass(glow::PassType::GEOMETRY,            vmem.load_shader(IDR_GLSL_FORWARD_EMISSIVE),       glow::DepthTest::ON, glow::Blending::MULTIPASS);
+                break;
         }
 
-        auto size   = texture->get_size();
-        auto color  = static_cast<glow::ColorMode>(texture->get_color_mode());
-        auto data   = static_cast<glow::DataType>(texture->get_data_type());
-        auto bits   = texture->get_data();
-        auto filter = static_cast<glow::FilterMode>(texture->get_filter_mode());
-        auto wrap   = static_cast<glow::WrapMode>(texture->get_wrap_mode());
-
-        auto gl_texture = std::make_shared<glow::Texture>();
-        gl_texture->upload_2d(size, color, data, bits, filter, wrap);
-        return gl_texture;
-    }
-
-    std::shared_ptr<glow::Parameters> OpenGLRenderer::upload(const std::shared_ptr<const Material>& material) noexcept
-    {
-        // TODO centralize video memory
-
-        return glow::make_shared_parameters({
-            {MATERIAL_BASE_COLOR_FACTOR, material->get_base_color_factor()},
-            {MATERIAL_BASE_COLOR_MAP,    upload(material->get_base_color_map(), TextureFallback::WHITE)},
-            {MATERIAL_EMISSIVE_FACTOR,   material->get_emissive_factor()},
-            {MATERIAL_EMISSIVE_MAP,      upload(material->get_emissive_map(), TextureFallback::WHITE)}
-        });
+        return pipeline;
     }
 }

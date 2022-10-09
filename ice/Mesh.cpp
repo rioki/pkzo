@@ -31,6 +31,7 @@ namespace ice
 
     glm::uint Mesh::add_vertex(const glm::vec3 position, const glm::vec3& normal, const glm::vec2& texcoord) noexcept
     {
+        increment_version();
         vertices.push_back(position);
         normals.push_back(normal);
         texcoords.push_back(texcoord);
@@ -39,6 +40,7 @@ namespace ice
 
     void Mesh::add_triangle(const glm::uvec3& face) noexcept
     {
+        increment_version();
         faces.push_back(face);
     }
 

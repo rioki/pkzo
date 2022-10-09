@@ -26,12 +26,13 @@
 #include "glm_json.h"
 
 #include "Engine.h"
-#include "Scene.h"
 #include "OpenGLRenderer.h"
+#include "OpenGLVideoMemory.h"
+#include "Scene.h"
 #include "Screen.h"
+#include "SdlWindow.h"
 #include "Settings.h"
 #include "Texture.h"
-#include "SdlWindow.h"
 
 namespace ice
 {
@@ -49,12 +50,15 @@ namespace ice
 
         window = std::make_unique<SdlWindow>(resolution, mode, "Ice Engine");
         window->on_draw(rsig::mem_fun(this, &SdlGraphicSystem::render_frame));
+
+        vmem = std::make_unique<OpenGLVideoMemory>();
     }
 
     SdlGraphicSystem::~SdlGraphicSystem()
     {
         soft_assert(renderers.empty());
         renderers.clear();
+        vmem   = nullptr;
         window = nullptr;
     }
 
@@ -84,7 +88,8 @@ namespace ice
 
     Renderer* SdlGraphicSystem::create_renderer(RendererType type) noexcept
     {
-        return add_unique_ptr<OpenGLRenderer>(renderers, type);
+        assert(vmem);
+        return add_unique_ptr<OpenGLRenderer>(renderers, *vmem, type);
     }
 
     void SdlGraphicSystem::release_renderer(Renderer* renderer) noexcept
@@ -96,6 +101,9 @@ namespace ice
     {
         assert(window);
         window->draw();
+
+        assert(vmem);
+        vmem->collect();
     }
 
     std::shared_ptr<Texture> SdlGraphicSystem::get_screenshot() const noexcept

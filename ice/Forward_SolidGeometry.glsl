@@ -43,18 +43,18 @@ void main()
 
 #ifdef GLOW_FRAGMENT
 
-uniform vec4      mat_BaseColorFactor;
-uniform sampler2D mat_BaseColorMap;
+uniform vec4      ice_BaseColorFactor;
+uniform sampler2D ice_BaseColorMap;
 
 #define AMBIENT_LIGHT     0
 #define DIRECTIONAL_LIGHT 1
 
-uniform int       lgt_Type;
-uniform vec3      lgt_Color;
-uniform vec3      lgt_Direction;
-uniform vec3      lgt_Position;
-uniform float     lgt_InnerAngle;
-uniform float     lgt_OuterAngle;
+uniform int       ice_LightType;
+uniform vec3      ice_LightColor;
+uniform vec3      ice_LightDirection;
+uniform vec3      ice_LightPosition;
+uniform float     ice_LightInnerAngle;
+uniform float     ice_LightOuterAngle;
 
 in vec3 var_Normal;
 in vec2 var_TexCoord;
@@ -72,17 +72,17 @@ void main()
 {
     vec3 color     = vec3(0.0, 0.0, 0.0);
 
-    vec4 baseColor = texture(mat_BaseColorMap, var_TexCoord) * mat_BaseColorFactor;
+    vec4 baseColor = texture(ice_BaseColorMap, var_TexCoord) * ice_BaseColorFactor;
 
-    switch (lgt_Type)
+    switch (ice_LightType)
     {
         case AMBIENT_LIGHT:
-            color = baseColor.rgb * lgt_Color;
+            color = baseColor.rgb * ice_LightColor;
             break;
         case DIRECTIONAL_LIGHT:
             vec3 n = normalize(var_Normal);
-            vec3 l = normalize(-lgt_Direction);
-            color = phong(n, l, baseColor.rgb, lgt_Color);
+            vec3 l = normalize(-ice_LightDirection);
+            color = phong(n, l, baseColor.rgb, ice_LightColor);
             break;
     }
 

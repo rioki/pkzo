@@ -34,11 +34,16 @@ namespace ice
         virtual ~Asset();
 
         unsigned int get_id() const noexcept;
+        unsigned int get_version() const noexcept;
+
+    protected:
+        void increment_version() noexcept;
 
     private:
         static std::atomic<unsigned int> last_id;
 
         const unsigned int id;
+        unsigned int version = 0;
 
         Asset(const Asset&) = delete;
         Asset& operator = (const Asset&) = delete;

@@ -31,11 +31,12 @@
 namespace ice
 {
     class Texture;
+    class OpenGLVideoMemory;
 
     class ICE_EXPORT OpenGLRenderer : public Renderer
     {
     public:
-        OpenGLRenderer(RendererType type) noexcept;
+        OpenGLRenderer(OpenGLVideoMemory& vmem, RendererType type) noexcept;
         ~OpenGLRenderer();
 
         unsigned int add_camera(const glm::mat4& transform, const glm::uvec2 resolution, const float fov) noexcept override;
@@ -62,6 +63,8 @@ namespace ice
         void render() const noexcept override;
 
     private:
+        OpenGLVideoMemory& vmem;
+
         glm::vec2 size = {800.0f, 600.0f};
         std::unique_ptr<glow::Pipeline> pipeline;
 
@@ -75,17 +78,6 @@ namespace ice
         std::map<unsigned int, Camera>                            cameras;
         std::map<unsigned int, std::shared_ptr<glow::Parameters>> lights;
 
-        static std::unique_ptr<glow::Pipeline> create_pipeline(RendererType type);
-
-        enum class TextureFallback
-        {
-            WHITE
-        };
-
-        std::shared_ptr<Texture> white_fallback = make_white_texture();
-
-        std::shared_ptr<glow::VertexBuffer> upload(const std::shared_ptr<const Mesh>& mesh) noexcept;
-        std::shared_ptr<glow::Texture>      upload(const std::shared_ptr<const Texture>& texture, TextureFallback) noexcept;
-        std::shared_ptr<glow::Parameters>   upload(const std::shared_ptr<const Material>& material) noexcept;
+        std::unique_ptr<glow::Pipeline> create_pipeline(RendererType type) noexcept;
     };
 }
