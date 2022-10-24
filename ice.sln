@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.2.32526.322
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32510.428
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ice", "ice\ice.vcxproj", "{DFE49305-947C-422D-8694-18B408FF399C}"
 EndProject
@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution 
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ice-lab", "ice-lab\ice-lab.vcxproj", "{465BD417-8BBA-4759-B23A-E2F2AB76BF16}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ice-ui", "ice-ui\ice-ui.vcxproj", "{0DA84179-36FA-45C5-9B16-9DE45D90BB64}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,6 +52,14 @@ Global
 		{465BD417-8BBA-4759-B23A-E2F2AB76BF16}.Release|x64.Build.0 = Release|x64
 		{465BD417-8BBA-4759-B23A-E2F2AB76BF16}.Release|x86.ActiveCfg = Release|Win32
 		{465BD417-8BBA-4759-B23A-E2F2AB76BF16}.Release|x86.Build.0 = Release|Win32
+		{0DA84179-36FA-45C5-9B16-9DE45D90BB64}.Debug|x64.ActiveCfg = Debug|x64
+		{0DA84179-36FA-45C5-9B16-9DE45D90BB64}.Debug|x64.Build.0 = Debug|x64
+		{0DA84179-36FA-45C5-9B16-9DE45D90BB64}.Debug|x86.ActiveCfg = Debug|Win32
+		{0DA84179-36FA-45C5-9B16-9DE45D90BB64}.Debug|x86.Build.0 = Debug|Win32
+		{0DA84179-36FA-45C5-9B16-9DE45D90BB64}.Release|x64.ActiveCfg = Release|x64
+		{0DA84179-36FA-45C5-9B16-9DE45D90BB64}.Release|x64.Build.0 = Release|x64
+		{0DA84179-36FA-45C5-9B16-9DE45D90BB64}.Release|x86.ActiveCfg = Release|Win32
+		{0DA84179-36FA-45C5-9B16-9DE45D90BB64}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

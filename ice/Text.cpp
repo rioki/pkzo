@@ -26,27 +26,32 @@
 
 namespace ice
 {
+    Text::Text() noexcept = default;
+
     Text::Text(const glm::mat3& tr, const std::string& te, const std::shared_ptr<Font>& f) noexcept
     : Text(tr, te, f, glm::vec4(1.0f)) {}
 
     Text::Text(const glm::mat3& transform, const std::string& t, const std::shared_ptr<Font>& f, const glm::vec4& c) noexcept
-    : Rectangle(transform), text(t), font(f), color(c)
+    : Rectangle(transform, glm::vec2(15.0f), c), text(t), font(f), color(c)
     {
-        assert(font);
-        texture = font->render(text);
-        set_size(glm::vec2(texture->get_size()));
-        set_color(color);
-        set_texture(texture);
+        if (font)
+        {
+            auto texture = font->render(text);
+            set_size(glm::vec2(texture->get_size()));
+            set_texture(texture);
+        }
     }
 
     void Text::set_text(const std::string& value) noexcept
     {
         text = value;
 
-        assert(font);
-        texture = font->render(text);
-        set_size(glm::vec2(texture->get_size()));
-        set_texture(texture);
+        if (font)
+        {
+            auto texture = font->render(text);
+            set_size(glm::vec2(texture->get_size()));
+            set_texture(texture);
+        }
     }
 
     const std::string& Text::get_text() const noexcept
@@ -58,10 +63,12 @@ namespace ice
     {
         font = value;
 
-        assert(font);
-        texture = font->render(text);
-        set_size(glm::vec2(texture->get_size()));
-        set_texture(texture);
+        if (font)
+        {
+            auto texture = font->render(text);
+            set_size(glm::vec2(texture->get_size()));
+            set_texture(texture);
+        }
     }
 
     const std::shared_ptr<Font>& Text::get_font() const noexcept

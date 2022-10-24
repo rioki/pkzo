@@ -27,6 +27,30 @@
 #include "Renderer.h"
 #include "Material.h"
 #include "Mesh.h"
+#include "Texture.h"
+
+// TODO move to glm-utils.h or something
+namespace glm
+{
+    template<length_t L, typename T, qualifier Q>
+    bool close(const glm::vec<L,T,Q>& a, const glm::vec<L,T,Q>& b, T eps)
+    {
+        return glm::all(glm::lessThan(glm::abs(a - b), glm::vec<L,T,Q>(eps)));
+    }
+
+    template<length_t M, length_t N, typename T, qualifier Q>
+    bool close(const glm::mat<M, N,T,Q>& a, const glm::mat<M, N, T, Q>& b, T eps)
+    {
+        for (auto i = 0u; i < M; i++)
+        {
+            if (! close(a[i], b[i], eps))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+}
 
 namespace ice
 {
@@ -48,7 +72,7 @@ namespace ice
         on_move([this] () {
             if (renderer)
             {
-                renderer->update_geometry_transform(render_handle, glm::scale(to3d(get_world_transform()), glm::vec3(size, 1.0f)));
+                renderer->update_geometry_transform(render_handle, glm::scale(to3d(get_aligned_transform()), glm::vec3(size, 1.0f)));
             }
         });
     }
@@ -58,7 +82,7 @@ namespace ice
         size = value;
         if (renderer)
         {
-            renderer->update_geometry_transform(render_handle, glm::scale(to3d(get_world_transform()), glm::vec3(size, 1.0f)));
+            renderer->update_geometry_transform(render_handle, glm::scale(to3d(get_aligned_transform()), glm::vec3(size, 1.0f)));
         }
     }
 
@@ -117,7 +141,7 @@ namespace ice
         assert(scene != nullptr);
         if (renderer = scene->get_renderer())
         {
-            const auto transform = glm::scale(to3d(get_world_transform()), glm::vec3(size, 1.0f));
+            const auto transform = glm::scale(to3d(get_aligned_transform()), glm::vec3(size, 1.0f));
             const auto mesh      = get_unit_rect();
             const auto material  = make_simple_material(color, texture);
             render_handle = renderer->add_geometry(transform, mesh, material);
@@ -135,5 +159,38 @@ namespace ice
             renderer->remove_geometry(render_handle);
             renderer = nullptr;
         }
+    }
+
+    // Special case handling; if the size is the texture size,
+    // and has no rotation, we assume a pefect pixel alignmen is desired.
+    // Nudge the transform by less than a pixel to match the texture to
+    // the pixel grid.
+    // Note we assume 1.0f is one pixel.
+    glm::mat3 Rectangle::get_aligned_transform() const noexcept
+    {
+        if (texture == nullptr)
+        {
+            return get_world_transform();
+        }
+
+        // size != texture->get_size()
+        if (!glm::close(glm::vec2(texture->get_size()), size, 1e-4f))
+        {
+            return get_world_transform();
+        }
+
+        auto transform = get_world_transform();
+
+        // no rotation
+        if (!glm::close(glm::mat2(transform), glm::mat2(1.0f), 1e-4f))
+        {
+            return get_world_transform();
+        }
+
+        auto half_size = size / 2.0f;
+        auto top_right = glm::transform(transform, half_size);
+        auto top_right_cor = glm::round(top_right);
+        auto diff = top_right - top_right_cor;
+        return glm::translate(transform, diff);
     }
 }

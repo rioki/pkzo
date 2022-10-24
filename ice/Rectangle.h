@@ -57,5 +57,7 @@ namespace ice
 
         Renderer* renderer = nullptr;
         unsigned int render_handle = 0;
+
+        glm::mat3 get_aligned_transform() const noexcept;
     };
 }

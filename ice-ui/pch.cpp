@@ -19,29 +19,4 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-
-#include "Rectangle.h"
-#include "Font.h"
-
-namespace ice
-{
-    class ICE_EXPORT Text : public Rectangle
-    {
-    public:
-        Text() noexcept;
-        Text(const glm::mat3& transform, const std::string& text, const std::shared_ptr<Font>& font) noexcept;
-        Text(const glm::mat3& transform, const std::string& text, const std::shared_ptr<Font>& font, const glm::vec4& color) noexcept;
-
-        void set_text(const std::string& value) noexcept;
-        const std::string& get_text() const noexcept;
-
-        void set_font(const std::shared_ptr<Font>& value) noexcept;
-        const std::shared_ptr<Font>& get_font() const noexcept;
-
-    private:
-        std::string                text;
-        std::shared_ptr<Font>      font;
-        glm::vec4                  color     = {1.0f, 1.0f, 1.0f, 1.0f};
-    };
-}
+#include "pch.h"

@@ -68,7 +68,7 @@ namespace ice
     {
         auto id = ++last_id;
         auto distance = 2.0f; // we assume a 2D rendering; TODO compute view distance.
-        cameras[id] = {create_ortho_matrix(size, distance), glm::inverse(transform)};
+        cameras[id] = {create_ortho_matrix(wisizendow, distance), glm::inverse(transform)};
         return id;
     }
 

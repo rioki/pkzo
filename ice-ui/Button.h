@@ -20,28 +20,31 @@
 // SOFTWARE.
 
 #pragma once
+#include "config.h"
 
-#include "Rectangle.h"
-#include "Font.h"
+#include <ice/ScreenNodeGroup.h>
+#include <ice/Rectangle.h>
+#include <ice/Text.h>
 
-namespace ice
+namespace ice::ui
 {
-    class ICE_EXPORT Text : public Rectangle
+    class ICE_EXPORT Button : public ScreenNodeGroup
     {
     public:
-        Text() noexcept;
-        Text(const glm::mat3& transform, const std::string& text, const std::shared_ptr<Font>& font) noexcept;
-        Text(const glm::mat3& transform, const std::string& text, const std::shared_ptr<Font>& font, const glm::vec4& color) noexcept;
+        Button();
+        Button(const glm::mat3& transform, const glm::vec2& size, const std::string& label_text, const std::shared_ptr<Font>& font, const glm::vec4& label_color, const std::shared_ptr<Texture> background_texture, const glm::vec4& background_color);
 
-        void set_text(const std::string& value) noexcept;
-        const std::string& get_text() const noexcept;
 
-        void set_font(const std::shared_ptr<Font>& value) noexcept;
-        const std::shared_ptr<Font>& get_font() const noexcept;
+        rsig::connection on_click(const std::function<void ()>& cb) noexcept;
+        rsig::signal<>& get_click_signal() noexcept;
 
     private:
-        std::string                text;
-        std::shared_ptr<Font>      font;
-        glm::vec4                  color     = {1.0f, 1.0f, 1.0f, 1.0f};
+        rsig::signal<> click_signal;
+
+        Rectangle background;
+        Text      label;
+        // HitArea hit_area;
+
+        void layout_items();
     };
 }

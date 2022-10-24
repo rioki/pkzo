@@ -19,29 +19,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
+#include "pch.h"
+#include "Button.h"
 
-#include "Rectangle.h"
-#include "Font.h"
-
-namespace ice
+namespace ice::ui
 {
-    class ICE_EXPORT Text : public Rectangle
+    Button::Button() = default;
+
+    Button::Button(const glm::mat3& transform, const glm::vec2& size, const std::string& label_text, const std::shared_ptr<Font>& font, const glm::vec4& label_color, const std::shared_ptr<Texture> background_texture, const glm::vec4& background_color)
+    : ScreenNodeGroup(transform),
+      background(glm::mat3(1.0f), size, background_color, background_texture),
+      label(glm::mat3(1.0f), label_text, font, label_color)
     {
-    public:
-        Text() noexcept;
-        Text(const glm::mat3& transform, const std::string& text, const std::shared_ptr<Font>& font) noexcept;
-        Text(const glm::mat3& transform, const std::string& text, const std::shared_ptr<Font>& font, const glm::vec4& color) noexcept;
+        add_node(background);
+        add_node(label);
+    }
 
-        void set_text(const std::string& value) noexcept;
-        const std::string& get_text() const noexcept;
+    rsig::connection Button::on_click(const std::function<void ()>& cb) noexcept
+    {
+        return click_signal.connect(cb);
+    }
 
-        void set_font(const std::shared_ptr<Font>& value) noexcept;
-        const std::shared_ptr<Font>& get_font() const noexcept;
+    rsig::signal<>& Button::get_click_signal() noexcept
+    {
+        return click_signal;
+    }
 
-    private:
-        std::string                text;
-        std::shared_ptr<Font>      font;
-        glm::vec4                  color     = {1.0f, 1.0f, 1.0f, 1.0f};
-    };
+    void Button::layout_items()
+    {
+        // To goal is to make evey item match a pixel grid 
+    }
 }

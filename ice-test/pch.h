@@ -30,6 +30,7 @@
 #include <gmock/gmock.h>
 
 #include <ice/ice.h>
+#include <ice-ui/ice-ui.h>
 
 #include "test_env.h"
 #include "glm_checks.h"
