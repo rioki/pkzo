@@ -126,3 +126,71 @@ TEST(Screen, GRAPHICAL_render_text)
     EXPECT_TEXTURE_REF_EQ(screenshot);
 }
 
+TEST(Screen, forward_to_hitarea)
+{
+    auto engine = ice::Engine{}; // only for activation
+    auto screen = ice::Screen(glm::vec2(640.0f, 480.0f));
+
+    auto hitarea = ice::HitArea(glm::mat3(1.0f), glm::vec2(150.0f, 50.0f));
+
+    auto mouse_down_count  = 0u;
+    auto mouse_down_inside = false;
+    auto mouse_down_button = ice::MouseButton::NONE;
+    auto mouse_down_pos    = glm::vec2(0.0f);
+    hitarea.on_mouse_down([&] (auto inside, auto button, auto pos) {
+        mouse_down_count++;
+        mouse_down_inside = inside;
+        mouse_down_button = button;
+        mouse_down_pos    = pos;
+    });
+    auto mouse_up_count  = 0u;
+    auto mouse_up_inside = false;
+    auto mouse_up_button = ice::MouseButton::NONE;
+    auto mouse_up_pos    = glm::vec2(0.0f);
+    hitarea.on_mouse_up([&] (auto inside, auto button, auto pos) {
+        mouse_up_count++;
+        mouse_up_inside = inside;
+        mouse_up_button = button;
+        mouse_up_pos    = pos;
+    });
+
+    auto click_count  = 0u;
+    hitarea.on_click([&] () {
+        click_count++;
+    });
+    auto right_click_count  = 0u;
+    hitarea.on_right_click([&] () {
+        right_click_count++;
+    });
+
+    screen.add_node(hitarea);
+
+    screen.set_engine(&engine);
+
+    auto pos1 = glm::vec2(12.0f, 14.0f);
+    screen.handle_mouse_down(ice::MouseButton::LEFT, pos1);
+
+    EXPECT_EQ(1u, mouse_down_count);
+    EXPECT_EQ(0u, mouse_up_count);
+    EXPECT_EQ(0u, click_count);
+    EXPECT_EQ(0u, right_click_count);
+
+    EXPECT_EQ(mouse_down_inside, true);
+    EXPECT_EQ(mouse_down_button, ice::MouseButton::LEFT);
+    EXPECT_GLM_NEAR(mouse_down_pos, glm::vec2(12.0f, 14.0f), 1e-4f);
+
+    auto pos2 = glm::vec2(16.0f, 18.0f);
+    screen.handle_mouse_up(ice::MouseButton::LEFT, pos2);
+
+    EXPECT_EQ(1u, mouse_down_count);
+    EXPECT_EQ(1u, mouse_up_count);
+    EXPECT_EQ(1u, click_count);
+    EXPECT_EQ(0u, right_click_count);
+
+    EXPECT_EQ(mouse_up_inside, true);
+    EXPECT_EQ(mouse_up_button, ice::MouseButton::LEFT);
+    EXPECT_GLM_NEAR(mouse_up_pos, glm::vec2(16.0f, 18.0f), 1e-4f);
+
+    screen.set_engine(nullptr);
+}
+

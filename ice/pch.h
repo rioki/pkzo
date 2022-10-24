@@ -56,3 +56,6 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+#include "glm_2d.h"
+#include "glm_io.h"
+#include "glm_json.h"

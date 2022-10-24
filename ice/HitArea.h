@@ -22,38 +22,33 @@
 #pragma once
 #include "config.h"
 
-#include <glm/glm.hpp>
+#include <rsig/rsig.h>
 
-#include "NodeRoot.h"
+#include "ScreenNode.h"
 #include "Mouse.h"
 
 namespace ice
 {
-    class Engine;
-    class Screen;
-    class Renderer;
-    class HitArea;
-
-    template <>
-    struct NodeTraits<Screen>
-    {
-        using Matrix = glm::mat3;
-    };
-
-    class ICE_EXPORT Screen : public NodeRoot<Screen>
+    class ICE_EXPORT HitArea : public ScreenNode
     {
     public:
-        Screen();
-        Screen(const glm::vec2& size);
-        ~Screen() = default;
+        HitArea();
+        HitArea(const glm::mat3& transform, const glm::vec2& size) noexcept;
 
+        void set_size(const glm::vec2& value) noexcept;
         const glm::vec2& get_size() const noexcept;
-        void resize(const glm::vec2& value) noexcept;
 
-        Renderer* get_renderer() noexcept;
-        const Renderer* get_renderer() const noexcept;
+        rsig::signal<bool, MouseButton, glm::vec2>& get_mouse_down_signal() noexcept;
+        rsig::connection on_mouse_down(const std::function<void (bool, MouseButton, glm::vec2)>& cb) noexcept;
 
-        void draw();
+        rsig::signal<bool, MouseButton, glm::vec2>& get_mouse_up_signal() noexcept;
+        rsig::connection on_mouse_up(const std::function<void (bool, MouseButton, glm::vec2)>& cb) noexcept;
+
+        rsig::signal<>& get_click_signal() noexcept;
+        rsig::connection on_click(const std::function<void ()>& cb) noexcept;
+
+        rsig::signal<>& get_right_click_signal() noexcept;
+        rsig::connection on_right_click(const std::function<void ()>& cb) noexcept;
 
         void activate() override;
         void deactivate() override;
@@ -62,16 +57,13 @@ namespace ice
         void handle_mouse_up(const MouseButton button, const glm::vec2& pos);
 
     private:
-        glm::vec2             size;
-        unsigned int          camera_handle = 0;
-        Renderer*             renderer      = nullptr;
-        std::vector<HitArea*> hitareas;
+        glm::vec2 size = {15.0f, 15.0f};
+        rsig::signal<bool, MouseButton, glm::vec2> mouse_down_signal;
+        rsig::signal<bool, MouseButton, glm::vec2> mouse_up_signal;
+        rsig::signal<> click_signal;
+        rsig::signal<> right_click_signal;
 
-        void add_hitarea(HitArea* ha);
-        void remove_hitarea(HitArea* ha);
-
-        friend class HitArea;
+        bool left_inside  = false;
+        bool right_inside = false;
     };
-
-    ICE_EXPORT glm::vec2 map_to_screen(glm::vec2 win_size, glm::vec2 screen_size, glm::vec2 pos);
 }

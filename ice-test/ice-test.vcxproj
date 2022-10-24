@@ -153,6 +153,7 @@
     <ClCompile Include="test_asset_library.cpp" />
     <ClCompile Include="test_font.cpp" />
     <ClCompile Include="test_graphic_system.cpp" />
+    <ClCompile Include="test_hit_area.cpp" />
     <ClCompile Include="test_input_system.cpp" />
     <ClCompile Include="test_material.cpp" />
     <ClCompile Include="test_mesh.cpp" />

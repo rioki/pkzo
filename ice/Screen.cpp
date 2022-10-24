@@ -25,6 +25,7 @@
 #include "Engine.h"
 #include "GraphicSystem.h"
 #include "Renderer.h"
+#include "HitArea.h"
 
 namespace ice
 {
@@ -97,6 +98,36 @@ namespace ice
             gs->release_renderer(renderer);
             renderer = nullptr;
         }
+    }
+
+    void Screen::handle_mouse_down(const MouseButton button, const glm::vec2& pos)
+    {
+        for (const auto& ha : hitareas)
+        {
+            assert(ha != nullptr);
+            ha->handle_mouse_down(button, pos);
+        }
+    }
+
+    void Screen::handle_mouse_up(const MouseButton button, const glm::vec2& pos)
+    {
+        for (const auto& ha : hitareas)
+        {
+            assert(ha != nullptr);
+            ha->handle_mouse_up(button, pos);
+        }
+    }
+
+    void Screen::add_hitarea(HitArea* ha)
+    {
+        hitareas.push_back(ha);
+    }
+
+    void Screen::remove_hitarea(HitArea* ha)
+    {
+        auto i = find(begin(hitareas), end(hitareas), ha);
+        assert(i != end(hitareas));
+        hitareas.erase(i);
     }
 
     template <typename T>

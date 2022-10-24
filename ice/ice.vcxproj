@@ -128,6 +128,7 @@
     <ClInclude Include="glm_io.h" />
     <ClInclude Include="glm_json.h" />
     <ClInclude Include="GraphicSystem.h" />
+    <ClInclude Include="HitArea.h" />
     <ClInclude Include="ice.h" />
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="Joystick.h" />
@@ -181,6 +182,7 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="GraphicSystem.cpp" />
+    <ClCompile Include="HitArea.cpp" />
     <ClCompile Include="Joystick.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Light.cpp" />
