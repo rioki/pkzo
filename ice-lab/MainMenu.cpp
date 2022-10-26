@@ -64,6 +64,10 @@ namespace lab
         position = glm::translate(position, glm::vec2(0.0f, - (button_size.y + button_padding)));
 
         auto exit_button = std::make_shared<ice::ui::Button>(position, button_size, "Exit", button_font, button_text_color, button_background_texture, button_background_color);
+        exit_button->on_click([this] () {
+            auto engine = get_engine();
+            engine->stop();
+        });
         add_node(exit_button);
     }
 }

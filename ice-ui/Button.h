@@ -34,17 +34,12 @@ namespace ice::ui
         Button();
         Button(const glm::mat3& transform, const glm::vec2& size, const std::string& label_text, const std::shared_ptr<Font>& font, const glm::vec4& label_color, const std::shared_ptr<Texture> background_texture, const glm::vec4& background_color);
 
-
         rsig::connection on_click(const std::function<void ()>& cb) noexcept;
         rsig::signal<>& get_click_signal() noexcept;
 
     private:
-        rsig::signal<> click_signal;
-
         Rectangle background;
         Text      label;
-        // HitArea hit_area;
-
-        void layout_items();
+        HitArea   hit_area;
     };
 }

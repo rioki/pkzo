@@ -29,24 +29,21 @@ namespace ice::ui
     Button::Button(const glm::mat3& transform, const glm::vec2& size, const std::string& label_text, const std::shared_ptr<Font>& font, const glm::vec4& label_color, const std::shared_ptr<Texture> background_texture, const glm::vec4& background_color)
     : ScreenNodeGroup(transform),
       background(glm::mat3(1.0f), size, background_color, background_texture),
-      label(glm::mat3(1.0f), label_text, font, label_color)
+      label(glm::mat3(1.0f), label_text, font, label_color),
+      hit_area(glm::mat3(1.0f), size)
     {
         add_node(background);
         add_node(label);
+        add_node(hit_area);
     }
 
     rsig::connection Button::on_click(const std::function<void ()>& cb) noexcept
     {
-        return click_signal.connect(cb);
+        return hit_area.on_click(cb);
     }
 
     rsig::signal<>& Button::get_click_signal() noexcept
     {
-        return click_signal;
-    }
-
-    void Button::layout_items()
-    {
-        // To goal is to make evey item match a pixel grid 
+        return hit_area.get_click_signal();
     }
 }
