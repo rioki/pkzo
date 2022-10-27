@@ -23,13 +23,16 @@
 #include "config.h"
 
 #include <glm/glm.hpp>
+
 #include "NodeRoot.h"
+#include "Mouse.h"
 
 namespace ice
 {
     class Engine;
     class Screen;
     class Renderer;
+    class HitArea;
 
     template <>
     struct NodeTraits<Screen>
@@ -55,10 +58,19 @@ namespace ice
         void activate() override;
         void deactivate() override;
 
+        void handle_mouse_down(const MouseButton button, const glm::vec2& pos);
+        void handle_mouse_up(const MouseButton button, const glm::vec2& pos);
+
     private:
-        glm::vec2 size;
-        unsigned int camera_handle = 0;
-        Renderer* renderer = nullptr;
+        glm::vec2             size;
+        unsigned int          camera_handle = 0;
+        Renderer*             renderer      = nullptr;
+        std::vector<HitArea*> hitareas;
+
+        void add_hitarea(HitArea* ha);
+        void remove_hitarea(HitArea* ha);
+
+        friend class HitArea;
     };
 
     ICE_EXPORT glm::vec2 map_to_screen(glm::vec2 win_size, glm::vec2 screen_size, glm::vec2 pos);

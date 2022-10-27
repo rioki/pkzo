@@ -138,6 +138,7 @@
   <ItemGroup>
     <ClCompile Include="test_ambient_light.cpp" />
     <ClCompile Include="test_box_visual.cpp" />
+    <ClCompile Include="test_button.cpp" />
     <ClCompile Include="test_camera.cpp" />
     <ClCompile Include="test_console.cpp" />
     <ClCompile Include="test_directional_light.cpp" />
@@ -152,6 +153,7 @@
     <ClCompile Include="test_asset_library.cpp" />
     <ClCompile Include="test_font.cpp" />
     <ClCompile Include="test_graphic_system.cpp" />
+    <ClCompile Include="test_hit_area.cpp" />
     <ClCompile Include="test_input_system.cpp" />
     <ClCompile Include="test_material.cpp" />
     <ClCompile Include="test_mesh.cpp" />
@@ -178,6 +180,9 @@
     <ClInclude Include="texture_checks.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ice-ui\ice-ui.vcxproj">
+      <Project>{0da84179-36fa-45c5-9b16-9de45d90bb64}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\ice\ice.vcxproj">
       <Project>{dfe49305-947c-422d-8694-18b408ff399c}</Project>
     </ProjectReference>

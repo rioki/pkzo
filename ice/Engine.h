@@ -114,6 +114,9 @@ namespace ice
         std::shared_ptr<Scene>               scene;
         std::shared_ptr<Screen>              overlay;
 
+        rsig::connection                     on_mouse_down_con;
+        rsig::connection                     on_mouse_up_con;
+
         Engine(const Engine&) = delete;
         Engine& operator = (const Engine&) = delete;
     };

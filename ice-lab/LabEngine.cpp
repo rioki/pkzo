@@ -25,6 +25,8 @@
 #include "StaticBox.h"
 #include "Pawn.h"
 
+#include "MainMenu.h"
+
 namespace lab
 {
     std::filesystem::path get_config_folder()
@@ -90,7 +92,8 @@ namespace lab
             console->write(line);
         });
 
-        set_scene(create_test_scene());
+        set_overlay(std::make_shared<MainMenu>(*this, get_window()->get_size()));
+        //set_scene(create_test_scene());
     }
 
     std::shared_ptr<ice::Scene> LabEngine::create_test_scene()

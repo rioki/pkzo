@@ -14,20 +14,6 @@
 namespace glm
 {
     template<typename T, qualifier Q>
-    vec<2, T, Q> transform(const mat<3, 3, T, Q>& matrix, const vec<2, T, Q>& value) noexcept
-    {
-        return vec<2, T, Q>(matrix * vec<3, T, Q>(value, 1.0f));
-    }
-
-    // This is not 2d, but it is "missing" in glm...
-    // (There is the quaternion version, but IMHO this should exist for mat4)
-    template<typename T, qualifier Q>
-    vec<3, T, Q> transform(const mat<4, 4, T, Q>& matrix, const vec<3, T, Q>& value) noexcept
-    {
-        return vec<3, T, Q>(matrix * vec<4, T, Q>(value, 1.0f));
-    }
-
-    template<typename T, qualifier Q>
     mat<3, 3, T, Q> translate(const vec<2, T, Q>& pos) noexcept
     {
         auto result = mat<3, 3, T, Q>(1.0f);

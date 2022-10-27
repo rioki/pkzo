@@ -35,6 +35,7 @@
 #include "glm_io.h"
 #include "glm_json.h"
 #include "GraphicSystem.h"
+#include "HitArea.h"
 #include "InputSystem.h"
 #include "Joystick.h"
 #include "Keyboard.h"

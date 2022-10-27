@@ -67,7 +67,6 @@ namespace ice
     private:
         OpenGLVideoMemory& vmem;
 
-        glm::vec2 size = {800.0f, 600.0f};
         std::unique_ptr<glow::Pipeline> pipeline;
 
         struct Camera

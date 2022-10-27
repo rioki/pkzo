@@ -28,7 +28,7 @@
 #include "Scene.h"
 #include "Screen.h"
 #include "System.h"
-#include "SdlWindow.h"
+#include "Window.h"
 
 namespace ice
 {
@@ -222,6 +222,30 @@ namespace ice
         {
             system->activate();
         }
+
+        // special handling for overlay input
+        if (auto mouse = get_mouse())
+        {
+            on_mouse_down_con = mouse->on_button_down([this] (auto button, auto pos) {
+                auto window = get_window();
+                assert(window);
+                if (overlay)
+                {
+                    auto spos = map_to_screen(window->get_size(), overlay->get_size(), pos);
+                    overlay->handle_mouse_down(button, spos);
+                }
+            });
+
+            on_mouse_up_con = mouse->on_button_up([this] (auto button, auto pos) {
+                auto window = get_window();
+                assert(window);
+                if (overlay)
+                {
+                    auto spos = map_to_screen(window->get_size(), overlay->get_size(), pos);
+                    overlay->handle_mouse_up(button, spos);
+                }
+            });
+        }
     }
 
     void Engine::tick()
@@ -249,6 +273,12 @@ namespace ice
         {
             overlay->set_engine(nullptr);
             overlay = nullptr;
+        }
+
+        if (auto mouse = get_mouse())
+        {
+            mouse->get_button_down_signal().disconnect(on_mouse_down_con);
+            mouse->get_button_up_signal().disconnect(on_mouse_up_con);
         }
 
         for (const auto& system : std::views::reverse(systems))

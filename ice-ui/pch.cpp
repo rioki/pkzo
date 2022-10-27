@@ -19,11 +19,4 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-
-#include <windows.h>
-#include <shlobj.h>
-
-#include <ice/ice.h>
-#include <ice/glm_2d.h>
-#include <ice/glm_utils.h>
+#include "pch.h"

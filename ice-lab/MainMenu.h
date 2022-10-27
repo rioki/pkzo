@@ -21,9 +21,14 @@
 
 #pragma once
 
-#include <windows.h>
-#include <shlobj.h>
-
 #include <ice/ice.h>
-#include <ice/glm_2d.h>
-#include <ice/glm_utils.h>
+#include <ice-ui/ice-ui.h>
+
+namespace lab
+{
+    class MainMenu : public ice::Screen
+    {
+    public:
+        MainMenu(ice::Engine& engine, const glm::uvec2 size);
+    };
+}

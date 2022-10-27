@@ -279,4 +279,84 @@ TEST(Engine, activate_systems)
     EXPECT_EQ(2u, activatable->get_count());
 }
 
+TEST(Engine, GRAPHICAL_forward_input_to_overlay)
+{
+    auto engine = ice::Engine{};
+
+    auto& settings = engine.get_settings();
+    settings.set_value("GraphicSystem", "resolution", glm::uvec2(800, 600));
+    settings.set_value("GraphicSystem", "mode",       ice::WindowMode::STATIC);
+
+    engine.start_system<ice::SdlGraphicSystem>();
+    auto input = engine.start_system<ice::SdlInputSystem>();
+
+    auto screen = std::make_shared<ice::Screen>(glm::vec2(400, 300.0f));
+
+    auto hitarea = std::make_shared<ice::HitArea>(glm::mat3(1.0f), glm::vec2(150.0f, 50.0f));
+
+    auto mouse_down_count  = 0u;
+    auto mouse_down_inside = false;
+    auto mouse_down_button = ice::MouseButton::NONE;
+    auto mouse_down_pos    = glm::vec2(0.0f);
+    hitarea->on_mouse_down([&] (auto inside, auto button, auto pos) {
+        mouse_down_count++;
+        mouse_down_inside = inside;
+        mouse_down_button = button;
+        mouse_down_pos    = pos;
+    });
+    auto mouse_up_count  = 0u;
+    auto mouse_up_inside = false;
+    auto mouse_up_button = ice::MouseButton::NONE;
+    auto mouse_up_pos    = glm::vec2(0.0f);
+    hitarea->on_mouse_up([&] (auto inside, auto button, auto pos) {
+        mouse_up_count++;
+        mouse_up_inside = inside;
+        mouse_up_button = button;
+        mouse_up_pos    = pos;
+    });
+
+    auto click_count  = 0u;
+    hitarea->on_click([&] () {
+        click_count++;
+    });
+    auto right_click_count  = 0u;
+    hitarea->on_right_click([&] () {
+        right_click_count++;
+    });
+
+    screen->add_node(hitarea);
+
+    engine.set_overlay(screen);
+
+    engine.activate();
+
+    input->inject_mouse_button_down(ice::MouseButton::LEFT, glm::vec2(424.0f, 328.0f));
+
+    engine.tick();
+
+    EXPECT_EQ(1u, mouse_down_count);
+    EXPECT_EQ(0u, mouse_up_count);
+    EXPECT_EQ(0u, click_count);
+    EXPECT_EQ(0u, right_click_count);
+
+    EXPECT_EQ(mouse_down_inside, true);
+    EXPECT_EQ(mouse_down_button, ice::MouseButton::LEFT);
+    EXPECT_GLM_NEAR(mouse_down_pos, glm::vec2(12.0f, -14.0f), 1e-4f);
+
+    input->inject_mouse_button_up(ice::MouseButton::LEFT, glm::vec2(432.0f, 336.0f));
+
+    engine.tick();
+
+    EXPECT_EQ(1u, mouse_down_count);
+    EXPECT_EQ(1u, mouse_up_count);
+    EXPECT_EQ(1u, click_count);
+    EXPECT_EQ(0u, right_click_count);
+
+    EXPECT_EQ(mouse_up_inside, true);
+    EXPECT_EQ(mouse_up_button, ice::MouseButton::LEFT);
+    EXPECT_GLM_NEAR(mouse_up_pos, glm::vec2(16.0f, -18.0f), 1e-4f);
+
+    engine.deactivate();
+}
+
 
