@@ -25,3 +25,5 @@
 #include <shlobj.h>
 
 #include <ice/ice.h>
+#include <ice/glm_2d.h>
+#include <ice/glm_utils.h>

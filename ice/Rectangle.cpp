@@ -23,34 +23,12 @@
 #include "Rectangle.h"
 
 #include "glm_2d.h"
+#include "glm_utils.h"
 #include "Screen.h"
 #include "Renderer.h"
 #include "Material.h"
 #include "Mesh.h"
 #include "Texture.h"
-
-// TODO move to glm-utils.h or something
-namespace glm
-{
-    template<length_t L, typename T, qualifier Q>
-    bool close(const glm::vec<L,T,Q>& a, const glm::vec<L,T,Q>& b, T eps)
-    {
-        return glm::all(glm::lessThan(glm::abs(a - b), glm::vec<L,T,Q>(eps)));
-    }
-
-    template<length_t M, length_t N, typename T, qualifier Q>
-    bool close(const glm::mat<M, N,T,Q>& a, const glm::mat<M, N, T, Q>& b, T eps)
-    {
-        for (auto i = 0u; i < M; i++)
-        {
-            if (! close(a[i], b[i], eps))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-}
 
 namespace ice
 {

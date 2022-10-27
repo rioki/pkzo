@@ -59,3 +59,4 @@
 #include "glm_2d.h"
 #include "glm_io.h"
 #include "glm_json.h"
+#include "glm_utils.h"

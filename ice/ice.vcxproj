@@ -127,6 +127,7 @@
     <ClInclude Include="Font.h" />
     <ClInclude Include="glm_io.h" />
     <ClInclude Include="glm_json.h" />
+    <ClInclude Include="glm_utils.h" />
     <ClInclude Include="GraphicSystem.h" />
     <ClInclude Include="HitArea.h" />
     <ClInclude Include="ice.h" />

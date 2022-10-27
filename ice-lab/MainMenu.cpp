@@ -24,12 +24,6 @@
 
 namespace lab
 {
-    float grid_round(float value)
-    {
-        //return std::round(value) + 0.5f;
-        return value;
-    }
-
     MainMenu::MainMenu(ice::Engine& engine, const glm::uvec2 size)
     : ice::Screen(size)
     {
@@ -46,7 +40,7 @@ namespace lab
 
         // TODO: Layout
         auto position = glm::mat3(1.0f);
-        position = glm::translate(position, glm::vec2(grid_round(static_cast<float>(size.x) * 0.125f), 0.5f));
+        position = glm::translate(position, glm::vec2(static_cast<float>(size.x) * 0.125f, 0.5f));
 
         auto new_world_button = std::make_shared<ice::ui::Button>(position, button_size, "New World", button_font, button_text_color, button_background_texture, button_background_color);
         add_node(new_world_button);

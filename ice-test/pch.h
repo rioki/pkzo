@@ -31,6 +31,8 @@
 
 #include <ice/ice.h>
 #include <ice-ui/ice-ui.h>
+#include <ice/glm_2d.h>
+#include <ice/glm_utils.h>
 
 #include "test_env.h"
 #include "glm_checks.h"

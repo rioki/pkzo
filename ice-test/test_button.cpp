@@ -26,3 +26,24 @@ TEST(Button, default_contruct)
     auto button = ice::ui::Button();
     EXPECT_GLM_NEAR(glm::mat3(1.0), button.get_transform(), 1e-4f);
 }
+
+TEST(Button, init)
+{
+    auto position           = glm::mat3(1.0f);
+    auto size               = glm::vec2(150, 36);
+    auto text_color         = ice::rgba(0x000000ff);
+    auto font               = std::shared_ptr<ice::Font>(); // TODO prelaoded and cached  test font
+    auto background_color   = ice::rgba(0x349eebff);
+    auto background_texture = std::shared_ptr<ice::Texture>(); // TODO preloaded and cached test image
+
+    auto button = ice::ui::Button(position, size, "Label", font, text_color, background_texture, background_color);
+
+    EXPECT_GLM_NEAR(position,       button.get_transform(), 1e-4f);
+    EXPECT_GLM_EQ(size,             button.get_size());
+    EXPECT_EQ("Label",              button.get_label_text());
+    EXPECT_EQ(font,                 button.get_label_font());
+    EXPECT_GLM_EQ(text_color,       button.get_label_color());
+    EXPECT_EQ(background_texture,   button.get_background_texture());
+    EXPECT_GLM_EQ(background_color, button.get_background_color());
+
+}

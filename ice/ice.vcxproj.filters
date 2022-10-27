@@ -186,6 +186,9 @@
     <ClInclude Include="HitArea.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="glm_utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
