@@ -164,6 +164,7 @@
     <ClCompile Include="test_screen.cpp" />
     <ClCompile Include="test_screen_node.cpp" />
     <ClCompile Include="test_screen_node_group.cpp" />
+    <ClCompile Include="test_state_machine.cpp" />
     <ClCompile Include="test_stats.cpp" />
     <ClCompile Include="test_texture.cpp" />
     <ClCompile Include="test_env.cpp" />
