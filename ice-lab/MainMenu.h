@@ -26,9 +26,11 @@
 
 namespace lab
 {
+    class LabEngine;
+
     class MainMenu : public ice::Screen
     {
     public:
-        MainMenu(ice::Engine& engine, const glm::uvec2 size);
+        MainMenu(LabEngine& engine, const glm::uvec2 size);
     };
 }

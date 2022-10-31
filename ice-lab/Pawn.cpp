@@ -23,6 +23,7 @@
 #include "Pawn.h"
 
 #include "StaticBox.h"
+#include "LabEngine.h"
 
 namespace lab
 {
@@ -130,6 +131,12 @@ namespace lab
             if (key == down_key)
             {
                 move_down = true;
+            }
+            if (key == exit_key)
+            {
+                auto engine = dynamic_cast<LabEngine*>(get_engine());
+                assert(engine);
+                engine->queue_state(EngineState::MAIN_MENU);
             }
         });
         key_up_con = keyboard->on_key_up([this] (auto /*mod*/, auto key) {

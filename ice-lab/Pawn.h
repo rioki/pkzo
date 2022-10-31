@@ -64,6 +64,7 @@ namespace lab
         ice::Key right_key = ice::Key::D;
         ice::Key up_key    = ice::Key::SPACE;
         ice::Key down_key  = ice::Key::LCTRL;
+        ice::Key exit_key  = ice::Key::ESCAPE;
 
         void place_box();
     };
