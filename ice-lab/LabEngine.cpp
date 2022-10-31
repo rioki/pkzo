@@ -72,28 +72,14 @@ namespace lab
 
         start_system<ice::SdlGraphicSystem>();
         start_system<ice::SdlInputSystem>();
-        start_system<ice::ConsoleSystem>();
 
-        auto* keyboard = get_keyboard();
-        assert(keyboard);
-        keyboard->on_key_up([this] (auto mod, auto key) {
-            if (key == ice::Key::ESCAPE)
-            {
-                stop();
-            }
-        });
+        setup_state_machine();
+        queue_state(EngineState::MAIN_MENU);
+    }
 
-        auto* console = get_system<ice::ConsoleSystem>();
-        console->define("exit", [this] (auto args) {
-            stop();
-        });
-        console->define("echo", [this, console] (auto args) {
-            auto line = ice::join({begin(args) + 1, end(args)}, " ");
-            console->write(line);
-        });
-
-        set_overlay(std::make_shared<MainMenu>(*this, get_window()->get_size()));
-        //set_scene(create_test_scene());
+    void LabEngine::queue_state(EngineState state)
+    {
+        state_machine.queue_state(state);
     }
 
     std::shared_ptr<ice::Scene> LabEngine::create_test_scene()
@@ -135,6 +121,30 @@ namespace lab
         scene->add_node(pawn);
 
         return scene;
+    }
+
+    void LabEngine::setup_state_machine() noexcept
+    {
+        // MAIN_MENU
+        state_machine.on_enter(EngineState::MAIN_MENU, [this] () {
+            set_overlay(std::make_shared<MainMenu>(*this, get_window()->get_size()));
+            set_scene(nullptr);
+        });
+
+        // PLAY
+        state_machine.on_enter(EngineState::PLAY, [this] () {
+            set_overlay(nullptr); // TODO play HUD
+            set_scene(create_test_scene());
+        });
+
+        // END
+        state_machine.on_enter(EngineState::END, [this] () {
+            stop();
+        });
+
+        on_tick([this] () {
+            state_machine.tick();
+        });
     }
 }
 

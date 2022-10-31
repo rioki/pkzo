@@ -22,20 +22,35 @@
 #pragma once
 
 #include <ice/Engine.h>
+#include <ice/StateMachine.h>
 
 namespace lab
 {
     class Pawn;
+
+    enum class EngineState
+    {
+        INIT,
+        MAIN_MENU,
+        PLAY,
+        END
+    };
 
     class LabEngine : public ice::Engine
     {
     public:
         LabEngine();
 
+        void queue_state(EngineState state);
+
     private:
+        sm::StateMachine<EngineState> state_machine;
+
         std::shared_ptr<Pawn> pawn;
 
         std::shared_ptr<ice::Scene> create_test_scene();
+
+        void setup_state_machine() noexcept;
     };
 }
 

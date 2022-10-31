@@ -49,7 +49,7 @@ namespace ice
     public:
         Engine();
 
-        ~Engine();
+        virtual ~Engine();
 
 
         Settings& get_settings() noexcept;
