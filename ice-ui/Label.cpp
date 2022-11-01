@@ -19,9 +19,51 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#include "config.h"
-
+#include "pch.h"
 #include "Label.h"
-#include "Button.h"
 
+namespace ice::ui
+{
+    Label::Label() noexcept = default;
+
+    Label::Label(const glm::mat3& transform, const std::string& text, const std::shared_ptr<Font>& font, const glm::vec4& color) noexcept
+    : ScreenNodeGroup(transform), label(glm::mat3(1.0f), text, font, color)
+    {
+        add_node(label);
+    }
+
+    const glm::vec2& Label::get_size() const noexcept
+    {
+        return label.get_size();
+    }
+
+    void Label::set_text(const std::string& value) noexcept
+    {
+        label.set_text(value);
+    }
+
+    const std::string& Label::get_text() const noexcept
+    {
+        return label.get_text();
+    }
+
+    void Label::set_font(const std::shared_ptr<Font>& value) noexcept
+    {
+        label.set_font(value);
+    }
+
+    const std::shared_ptr<Font>& Label::get_font() const noexcept
+    {
+        return label.get_font();
+    }
+
+    void Label::set_color(const glm::vec4& value) noexcept
+    {
+        label.set_color(value);
+    }
+
+    const glm::vec4& Label::get_color() const noexcept
+    {
+        return label.get_color();
+    }
+}

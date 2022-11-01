@@ -155,6 +155,7 @@
     <ClCompile Include="test_graphic_system.cpp" />
     <ClCompile Include="test_hit_area.cpp" />
     <ClCompile Include="test_input_system.cpp" />
+    <ClCompile Include="test_label.cpp" />
     <ClCompile Include="test_material.cpp" />
     <ClCompile Include="test_mesh.cpp" />
     <ClCompile Include="test_opengl_renderer.cpp" />
