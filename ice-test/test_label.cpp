@@ -19,9 +19,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#include "config.h"
+#include "pch.h"
 
-#include "Label.h"
-#include "Button.h"
+TEST(Label, default_contruct)
+{
+    auto label = ice::ui::Label();
+    EXPECT_GLM_NEAR(glm::mat3(1.0), label.get_transform(), 1e-4f);
+}
 
+TEST(Label, init)
+{
+    auto position = glm::mat3(1.0f);
+    auto color    = ice::rgba(0x000000ff);
+    auto font     = std::shared_ptr<ice::Font>(); // TODO prelaoded and cached  test font
+
+    auto label = ice::ui::Label(position, "Label", font, color);
+
+    EXPECT_GLM_NEAR(position, label.get_transform(), 1e-4f);
+    EXPECT_EQ("Label",        label.get_text());
+    EXPECT_EQ(font,           label.get_font());
+    EXPECT_GLM_EQ(color,      label.get_color());
+
+}

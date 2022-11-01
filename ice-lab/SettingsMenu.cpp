@@ -33,11 +33,16 @@ namespace lab
         auto button_size               = glm::vec2(150, 36);
         auto button_text_color         = ice::rgba(0x000000ff);
         auto button_font               = engine.load_asset<ice::Font>("fonts/DejaVuSans.ttf", 16);
+        auto title_font                = engine.load_asset<ice::Font>("fonts/DejaVuSans.ttf", 32);
         auto button_background_color   = ice::rgba(0x349eebff);
         auto button_background_texture = std::shared_ptr<ice::Texture>();
 
         auto bacground = std::make_shared<ice::Rectangle>(glm::mat3(1.0f), size, screen_background_color);
         add_node(bacground);
+
+        auto title_pos = glm::translate(glm::mat3(1.0f), glm::vec2(0.0f, static_cast<float>(size.y) * 0.4f));
+        auto title_label = std::make_shared<ice::ui::Label>(title_pos, "Settings", title_font, button_text_color);
+        add_node(title_label);
 
         auto position = glm::mat3(1.0f);
         position = glm::translate(position, glm::vec2(static_cast<float>(size.x) * 0.3f, -static_cast<float>(size.y) * 0.3f));
