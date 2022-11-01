@@ -40,7 +40,7 @@ namespace lab
         auto bacground = std::make_shared<ice::Rectangle>(glm::mat3(1.0f), size, screen_background_color);
         add_node(bacground);
 
-        auto title_pos = glm::translate(glm::mat3(1.0f), glm::vec2(0.0f, static_cast<float>(size.y) * 0.4f));
+        auto title_pos = glm::vec2(0.0f, static_cast<float>(size.y) * 0.4f);
         auto title_label = std::make_shared<ice::ui::Label>(title_pos, "Settings", title_font, button_text_color);
         add_node(title_label);
 

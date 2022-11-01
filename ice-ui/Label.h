@@ -22,18 +22,18 @@
 #pragma once
 #include "config.h"
 
-#include <ice/ScreenNodeGroup.h>
 #include <ice/Text.h>
+
+#include "Widget.h"
 
 namespace ice::ui
 {
-    class ICE_EXPORT Label : public ScreenNodeGroup
+    class ICE_EXPORT Label : public Widget
     {
     public:
         Label() noexcept;
-        Label(const glm::mat3& transform, const std::string& text, const std::shared_ptr<Font>& font, const glm::vec4& color) noexcept;
-
-        const glm::vec2& get_size() const noexcept;
+        Label(const std::string& text, const std::shared_ptr<Font>& font, const glm::vec4& color) noexcept;
+        Label(const glm::vec2& position, const std::string& text, const std::shared_ptr<Font>& font, const glm::vec4& color) noexcept;
 
         void set_text(const std::string& value) noexcept;
         const std::string& get_text() const noexcept;
@@ -43,6 +43,11 @@ namespace ice::ui
 
         void set_color(const glm::vec4& value) noexcept;
         const glm::vec4& get_color() const noexcept;
+
+        glm::vec2 get_min_size() const noexcept override;
+
+    protected:
+        glm::vec2 handle_size_request(const glm::vec2& value) noexcept override;
 
     private:
         Text label;
