@@ -40,8 +40,7 @@ namespace lab
         add_node(bacground);
 
         // TODO: Layout
-        auto position = glm::mat3(1.0f);
-        position = glm::translate(position, glm::vec2(static_cast<float>(size.x) * 0.125f, 0.5f));
+        auto position = glm::vec2(static_cast<float>(size.x) * 0.125f, 0.5f);
 
         auto new_world_button = std::make_shared<ice::ui::Button>(position, button_size, "New World", button_font, button_text_color, button_background_texture, button_background_color);
         new_world_button->on_click([&engine] () {
@@ -49,7 +48,7 @@ namespace lab
         });
         add_node(new_world_button);
 
-        position = glm::translate(position, glm::vec2(0.0f, - (button_size.y + button_padding)));
+        position += glm::vec2(0.0f, - (button_size.y + button_padding));
 
         auto load_world_button = std::make_shared<ice::ui::Button>(position, button_size, "Load World", button_font, button_text_color, button_background_texture, button_background_color);
         load_world_button->on_click([&engine] () {
@@ -57,7 +56,7 @@ namespace lab
         });
         add_node(load_world_button);
 
-        position = glm::translate(position, glm::vec2(0.0f, - (button_size.y + button_padding)));
+        position += glm::vec2(0.0f, - (button_size.y + button_padding));
 
         auto settings_button = std::make_shared<ice::ui::Button>(position, button_size, "Settings", button_font, button_text_color, button_background_texture, button_background_color);
         settings_button->on_click([&engine] () {
@@ -65,7 +64,7 @@ namespace lab
         });
         add_node(settings_button);
 
-        position = glm::translate(position, glm::vec2(0.0f, - (button_size.y + button_padding)));
+        position += glm::vec2(0.0f, - (button_size.y + button_padding));
 
         auto exit_button = std::make_shared<ice::ui::Button>(position, button_size, "Exit", button_font, button_text_color, button_background_texture, button_background_color);
         exit_button->on_click([&engine] () {

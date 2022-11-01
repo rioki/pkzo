@@ -22,20 +22,18 @@
 #pragma once
 #include "config.h"
 
-#include <ice/ScreenNodeGroup.h>
 #include <ice/Rectangle.h>
 #include <ice/Text.h>
 
+#include "Widget.h"
+
 namespace ice::ui
 {
-    class ICE_EXPORT Button : public ScreenNodeGroup
+    class ICE_EXPORT Button : public Widget
     {
     public:
         Button();
-        Button(const glm::mat3& transform, const glm::vec2& size, const std::string& label_text, const std::shared_ptr<Font>& font, const glm::vec4& label_color, const std::shared_ptr<Texture> background_texture, const glm::vec4& background_color);
-
-        void set_size(const glm::vec2& value) noexcept;
-        const glm::vec2& get_size() const noexcept;
+        Button(const glm::vec2& position, const glm::vec2& size, const std::string& label_text, const std::shared_ptr<Font>& font, const glm::vec4& label_color, const std::shared_ptr<Texture> background_texture, const glm::vec4& background_color);
 
         void set_label_text(const std::string& value) noexcept;
         const std::string& get_label_text() const noexcept;
@@ -54,6 +52,9 @@ namespace ice::ui
 
         rsig::connection on_click(const std::function<void ()>& cb) noexcept;
         rsig::signal<>& get_click_signal() noexcept;
+
+    protected:
+        glm::vec2 handle_size_request(const glm::vec2& value) noexcept override;
 
     private:
         Rectangle background;

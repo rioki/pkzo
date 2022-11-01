@@ -26,8 +26,8 @@ namespace ice::ui
 {
     Button::Button() = default;
 
-    Button::Button(const glm::mat3& transform, const glm::vec2& size, const std::string& label_text, const std::shared_ptr<Font>& font, const glm::vec4& label_color, const std::shared_ptr<Texture> background_texture, const glm::vec4& background_color)
-    : ScreenNodeGroup(transform),
+    Button::Button(const glm::vec2& position, const glm::vec2& size, const std::string& label_text, const std::shared_ptr<Font>& font, const glm::vec4& label_color, const std::shared_ptr<Texture> background_texture, const glm::vec4& background_color)
+    : Widget(position, size),
       background(glm::mat3(1.0f), size, background_color, background_texture),
       label(glm::mat3(1.0f), label_text, font, label_color),
       hit_area(glm::mat3(1.0f), size)
@@ -35,17 +35,6 @@ namespace ice::ui
         add_node(background);
         add_node(label);
         add_node(hit_area);
-    }
-
-    void Button::set_size(const glm::vec2& value) noexcept
-    {
-        background.set_size(value);
-        hit_area.set_size(value);
-    }
-
-    const glm::vec2& Button::get_size() const noexcept
-    {
-        return background.get_size();
     }
 
     void Button::set_label_text(const std::string& value) noexcept
@@ -106,5 +95,12 @@ namespace ice::ui
     rsig::signal<>& Button::get_click_signal() noexcept
     {
         return hit_area.get_click_signal();
+    }
+
+    glm::vec2 Button::handle_size_request(const glm::vec2& value) noexcept
+    {
+        background.set_size(value);
+        hit_area.set_size(value);
+        return value;
     }
 }

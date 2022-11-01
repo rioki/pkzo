@@ -44,8 +44,7 @@ namespace lab
         auto title_label = std::make_shared<ice::ui::Label>(title_pos, "Settings", title_font, button_text_color);
         add_node(title_label);
 
-        auto position = glm::mat3(1.0f);
-        position = glm::translate(position, glm::vec2(static_cast<float>(size.x) * 0.3f, -static_cast<float>(size.y) * 0.3f));
+        auto position = glm::vec2(static_cast<float>(size.x) * 0.3f, -static_cast<float>(size.y) * 0.3f);
 
         auto back_button = std::make_shared<ice::ui::Button>(position, button_size, "Back", button_font, button_text_color, button_background_texture, button_background_color);
         back_button->on_click([&engine] () {
@@ -53,7 +52,7 @@ namespace lab
         });
         add_node(back_button);
 
-        position = glm::translate(position, glm::vec2(200.0f, 0.0f));
+        position += glm::vec2(200.0f, 0.0f);
         auto apply_button = std::make_shared<ice::ui::Button>(position, button_size, "Apply", button_font, button_text_color, button_background_texture, button_background_color);
         apply_button->on_click([&engine] () {
             engine.queue_state(EngineState::MAIN_MENU);
