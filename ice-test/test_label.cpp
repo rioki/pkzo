@@ -24,20 +24,41 @@
 TEST(Label, default_contruct)
 {
     auto label = ice::ui::Label();
-    EXPECT_GLM_NEAR(glm::mat3(1.0), label.get_transform(), 1e-4f);
+    EXPECT_GLM_NEAR(glm::vec2(0.0f), label.get_position(), 1e-4f);
 }
 
 TEST(Label, init)
 {
-    auto position = glm::mat3(1.0f);
+    auto position = glm::vec2(42.0f);
     auto color    = ice::rgba(0x000000ff);
-    auto font     = std::shared_ptr<ice::Font>(); // TODO prelaoded and cached  test font
+    auto font     = std::make_shared<ice::Font>(ice::test::get_asset_folder() / "fonts/DejaVuSans.ttf", 16);
 
     auto label = ice::ui::Label(position, "Label", font, color);
 
-    EXPECT_GLM_NEAR(position, label.get_transform(), 1e-4f);
-    EXPECT_EQ("Label",        label.get_text());
-    EXPECT_EQ(font,           label.get_font());
-    EXPECT_GLM_EQ(color,      label.get_color());
+    EXPECT_GLM_NEAR(position,                           label.get_position(), 1e-4f);
+    EXPECT_GLM_NEAR(glm::vec2(font->estimate("Label")), label.get_size(), 1e-4f);
+    EXPECT_EQ("Label",                                  label.get_text());
+    EXPECT_EQ(font,                                     label.get_font());
+    EXPECT_GLM_EQ(color,                                label.get_color());
+}
 
+TEST(Label, cant_be_smaller_than_text)
+{
+    auto color    = ice::rgba(0x000000ff);
+    auto font     = std::make_shared<ice::Font>(ice::test::get_asset_folder() / "fonts/DejaVuSans.ttf", 16);
+
+    auto label = ice::ui::Label("Label", font, color);
+
+    auto min_size = glm::vec2(font->estimate("Label"));
+
+    EXPECT_GLM_NEAR(min_size, label.get_size(), 1e-4f);
+    EXPECT_GLM_NEAR(min_size, label.get_min_size(), 1e-4f);
+
+    // larger
+    label.set_size(glm::vec2(150.0f, 250.0f));
+    EXPECT_GLM_NEAR(glm::vec2(150.0f, 250.0f), label.get_size(), 1e-4f);
+
+    // smaller
+    label.set_size(glm::vec2(2.0f, 3.0f));
+    EXPECT_GLM_NEAR(min_size, label.get_size(), 1e-4f);
 }

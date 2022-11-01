@@ -24,17 +24,24 @@
 
 namespace ice::ui
 {
-    Label::Label() noexcept = default;
-
-    Label::Label(const glm::mat3& transform, const std::string& text, const std::shared_ptr<Font>& font, const glm::vec4& color) noexcept
-    : ScreenNodeGroup(transform), label(glm::mat3(1.0f), text, font, color)
+    glm::vec2 safe_estimate(const std::shared_ptr<Font>& font, const std::string& text)
     {
-        add_node(label);
+        if (!font)
+        {
+            return glm::vec2(0.0f);
+        }
+        return glm::vec2(font->estimate(text));
     }
 
-    const glm::vec2& Label::get_size() const noexcept
+    Label::Label() noexcept = default;
+
+    Label::Label(const std::string& text, const std::shared_ptr<Font>& font, const glm::vec4& color) noexcept
+    : Label(glm::vec2(0.0f), text, font, color) {}
+
+    Label::Label(const glm::vec2& position, const std::string& text, const std::shared_ptr<Font>& font, const glm::vec4& color) noexcept
+    : Widget(position, safe_estimate(font, text)), label(glm::mat3(1.0f), text, font, color)
     {
-        return label.get_size();
+        add_node(label);
     }
 
     void Label::set_text(const std::string& value) noexcept
@@ -65,5 +72,15 @@ namespace ice::ui
     const glm::vec4& Label::get_color() const noexcept
     {
         return label.get_color();
+    }
+
+    glm::vec2 Label::get_min_size() const noexcept
+    {
+        return label.get_size();
+    }
+
+    glm::vec2 Label::handle_size_request(const glm::vec2& value) noexcept
+    {
+        return glm::max(label.get_size(), value);
     }
 }

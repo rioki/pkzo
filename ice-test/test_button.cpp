@@ -32,9 +32,9 @@ TEST(Button, init)
     auto position           = glm::vec2(42.0f);
     auto size               = glm::vec2(150, 36);
     auto text_color         = ice::rgba(0x000000ff);
-    auto font               = std::shared_ptr<ice::Font>(); // TODO prelaoded and cached  test font
+    auto font               = std::make_shared<ice::Font>(ice::test::get_asset_folder() / "fonts/DejaVuSans.ttf", 16);
     auto background_color   = ice::rgba(0x349eebff);
-    auto background_texture = std::shared_ptr<ice::Texture>(); // TODO preloaded and cached test image
+    auto background_texture = std::make_shared<ice::Texture>(ice::test::get_test_input() / "AngryCat.jpg");
 
     auto button = ice::ui::Button(position, size, "Label", font, text_color, background_texture, background_color);
 
