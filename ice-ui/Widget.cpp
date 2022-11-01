@@ -19,10 +19,47 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#include "config.h"
-
+#include "pch.h"
 #include "Widget.h"
-#include "Label.h"
-#include "Button.h"
 
+namespace ice::ui
+{
+    Widget::Widget() noexcept = default;
+
+    Widget::Widget(const glm::vec2& _size) noexcept
+    : size(_size) {}
+
+    Widget::Widget(const glm::vec2& _position, const glm::vec2& _size) noexcept
+    : ScreenNodeGroup(glm::translate(_position)), size(_size) {}
+
+    void Widget::set_position(const glm::vec2& value) noexcept
+    {
+        set_transform(glm::translate(value));
+    }
+
+    glm::vec2 Widget::get_position() const noexcept
+    {
+        return glm::transform(get_transform(), glm::vec2(0.0f));
+    }
+
+    void Widget::set_size(const glm::vec2& value) noexcept
+    {
+        size = handle_size_request(value);
+    }
+
+    const glm::vec2& Widget::get_size() const noexcept
+    {
+        return size;
+    }
+
+    glm::vec2 Widget::get_min_size() const noexcept
+    {
+        return glm::vec2(1.0f);
+    }
+
+    glm::vec2 Widget::handle_size_request(const glm::vec2& value) noexcept
+    {
+        // by default just accept the given value
+        return value;
+    }
+}
