@@ -26,6 +26,7 @@
 #include "Pawn.h"
 
 #include "MainMenu.h"
+#include "SettingsMenu.h"
 
 namespace lab
 {
@@ -128,6 +129,12 @@ namespace lab
         // MAIN_MENU
         state_machine.on_enter(EngineState::MAIN_MENU, [this] () {
             set_overlay(std::make_shared<MainMenu>(*this, get_window()->get_size()));
+            set_scene(nullptr);
+        });
+
+        // SETTINGS_MENU
+        state_machine.on_enter(EngineState::SETTINGS_MENU, [this] () {
+            set_overlay(std::make_shared<SettingsMenu>(*this, get_window()->get_size()));
             set_scene(nullptr);
         });
 

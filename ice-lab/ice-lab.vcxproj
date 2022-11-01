@@ -122,6 +122,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="SettingsMenu.cpp" />
     <ClCompile Include="StaticBox.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -137,6 +138,7 @@
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Pawn.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="SettingsMenu.h" />
     <ClInclude Include="StaticBox.h" />
   </ItemGroup>
   <ItemGroup>

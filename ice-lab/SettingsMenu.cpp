@@ -20,12 +20,12 @@
 // SOFTWARE.
 
 #include "pch.h"
-#include "MainMenu.h"
+#include "SettingsMenu.h"
 #include "LabEngine.h"
 
 namespace lab
 {
-    MainMenu::MainMenu(LabEngine& engine, const glm::uvec2 size)
+    SettingsMenu::SettingsMenu(LabEngine& engine, const glm::uvec2 size)
     : ice::Screen(size)
     {
         auto screen_background_color   = ice::rgba(0xffffffff);
@@ -39,38 +39,20 @@ namespace lab
         auto bacground = std::make_shared<ice::Rectangle>(glm::mat3(1.0f), size, screen_background_color);
         add_node(bacground);
 
-        // TODO: Layout
         auto position = glm::mat3(1.0f);
-        position = glm::translate(position, glm::vec2(static_cast<float>(size.x) * 0.125f, 0.5f));
+        position = glm::translate(position, glm::vec2(static_cast<float>(size.x) * 0.3f, -static_cast<float>(size.y) * 0.3f));
 
-        auto new_world_button = std::make_shared<ice::ui::Button>(position, button_size, "New World", button_font, button_text_color, button_background_texture, button_background_color);
-        new_world_button->on_click([&engine] () {
-            engine.queue_state(EngineState::PLAY);
+        auto back_button = std::make_shared<ice::ui::Button>(position, button_size, "Back", button_font, button_text_color, button_background_texture, button_background_color);
+        back_button->on_click([&engine] () {
+            engine.queue_state(EngineState::MAIN_MENU);
         });
-        add_node(new_world_button);
+        add_node(back_button);
 
-        position = glm::translate(position, glm::vec2(0.0f, - (button_size.y + button_padding)));
-
-        auto load_world_button = std::make_shared<ice::ui::Button>(position, button_size, "Load World", button_font, button_text_color, button_background_texture, button_background_color);
-        load_world_button->on_click([&engine] () {
-            engine.queue_state(EngineState::PLAY);
+        position = glm::translate(position, glm::vec2(200.0f, 0.0f));
+        auto apply_button = std::make_shared<ice::ui::Button>(position, button_size, "Apply", button_font, button_text_color, button_background_texture, button_background_color);
+        apply_button->on_click([&engine] () {
+            engine.queue_state(EngineState::MAIN_MENU);
         });
-        add_node(load_world_button);
-
-        position = glm::translate(position, glm::vec2(0.0f, - (button_size.y + button_padding)));
-
-        auto settings_button = std::make_shared<ice::ui::Button>(position, button_size, "Settings", button_font, button_text_color, button_background_texture, button_background_color);
-        settings_button->on_click([&engine] () {
-            engine.queue_state(EngineState::SETTINGS_MENU);
-        });
-        add_node(settings_button);
-
-        position = glm::translate(position, glm::vec2(0.0f, - (button_size.y + button_padding)));
-
-        auto exit_button = std::make_shared<ice::ui::Button>(position, button_size, "Exit", button_font, button_text_color, button_background_texture, button_background_color);
-        exit_button->on_click([&engine] () {
-            engine.queue_state(EngineState::END);
-        });
-        add_node(exit_button);
+        add_node(apply_button);
     }
 }

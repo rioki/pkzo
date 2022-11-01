@@ -21,38 +21,16 @@
 
 #pragma once
 
-#include <ice/Engine.h>
-#include <ice/StateMachine.h>
+#include <ice/ice.h>
+#include <ice-ui/ice-ui.h>
 
 namespace lab
 {
-    class Pawn;
+    class LabEngine;
 
-    enum class EngineState
-    {
-        INIT,
-        MAIN_MENU,
-        SETTINGS_MENU,
-        PLAY,
-        END
-    };
-
-    class LabEngine : public ice::Engine
+    class SettingsMenu : public ice::Screen
     {
     public:
-        LabEngine();
-
-        void queue_state(EngineState state);
-
-    private:
-        sm::StateMachine<EngineState> state_machine;
-
-        std::shared_ptr<Pawn> pawn;
-
-        std::shared_ptr<ice::Scene> create_test_scene();
-
-        void setup_state_machine() noexcept;
+        SettingsMenu(LabEngine& engine, const glm::uvec2 size);
     };
 }
-
-
