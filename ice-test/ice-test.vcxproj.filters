@@ -108,6 +108,9 @@
     <ClCompile Include="test_label.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test_widget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">

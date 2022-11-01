@@ -22,3 +22,8 @@
 #pragma once
 
 #include <ice/ice.h>
+
+#include <ice/glm_2d.h>
+#include <ice/glm_io.h>
+#include <ice/glm_json.h>
+#include <ice/glm_utils.h>
