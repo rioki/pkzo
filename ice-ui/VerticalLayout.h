@@ -22,10 +22,41 @@
 #pragma once
 #include "config.h"
 
-#include "Widget.h"
-#include "Label.h"
-#include "Button.h"
-
 #include "Layout.h"
-#include "VerticalLayout.h"
-#include "HorizontalLayout.h"
+
+namespace ice::ui
+{
+    //! Vertial Layout
+    class ICE_EXPORT VerticalLayout : public Layout
+    {
+    public:
+        //! Construct Vertical Layout
+        //!
+        //! @param position initial position
+        //! @param margin the margin to use
+        //! @{
+        VerticalLayout();
+        VerticalLayout(float margin);
+        VerticalLayout(const glm::vec2& position);
+        VerticalLayout(const glm::vec2& position, float margin);
+        //! @}
+
+        //! Margin
+        //! @{
+        void set_margin(const float value) noexcept;
+        float get_margin() const noexcept;
+        //! @}
+
+        glm::vec2 get_min_size() const noexcept override;
+
+    protected:
+        glm::vec2 handle_size_request(const glm::vec2& value) noexcept override;
+        void handle_list_change() noexcept override;
+
+    private:
+        float margin = 5.0f;
+
+        glm::vec2 calc_size() const noexcept;
+        void place_elements() noexcept;
+    };
+}

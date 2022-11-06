@@ -19,13 +19,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#include "config.h"
-
-#include "Widget.h"
-#include "Label.h"
-#include "Button.h"
-
+#include "pch.h"
 #include "Layout.h"
-#include "VerticalLayout.h"
-#include "HorizontalLayout.h"
+
+namespace ice::ui
+{
+    Layout::Layout()
+    : Layout(glm::vec2(0.0f)) {}
+
+    Layout::Layout(const glm::vec2& position)
+    : Widget(position, glm::vec2(0.0f))
+    {
+        on_add_node([this] () {
+            handle_list_change();
+        });
+
+        on_remove_node([this] () {
+            handle_list_change();
+        });
+    }
+}

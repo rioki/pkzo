@@ -23,9 +23,16 @@
 #include "config.h"
 
 #include "Widget.h"
-#include "Label.h"
-#include "Button.h"
 
-#include "Layout.h"
-#include "VerticalLayout.h"
-#include "HorizontalLayout.h"
+namespace ice::ui
+{
+    class ICE_EXPORT Layout : public Widget
+    {
+    public:
+        Layout();
+        Layout(const glm::vec2& position);
+
+    protected:
+        virtual void handle_list_change() noexcept = 0;
+    };
+}
