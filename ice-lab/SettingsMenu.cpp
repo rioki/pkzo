@@ -44,19 +44,20 @@ namespace lab
         auto title_label = std::make_shared<ice::ui::Label>(title_pos, "Settings", title_font, button_text_color);
         add_node(title_label);
 
-        auto position = glm::vec2(static_cast<float>(size.x) * 0.3f, -static_cast<float>(size.y) * 0.3f);
+        auto buttons_layout = std::make_shared<ice::ui::HorizontalLayout>(glm::vec2(static_cast<float>(size.x) * 0.3f, -static_cast<float>(size.y) * 0.3f));
 
-        auto back_button = std::make_shared<ice::ui::Button>(position, button_size, "Back", button_font, button_text_color, button_background_texture, button_background_color);
+        auto back_button = std::make_shared<ice::ui::Button>(button_size, "Back", button_font, button_text_color, button_background_texture, button_background_color);
         back_button->on_click([&engine] () {
             engine.queue_state(EngineState::MAIN_MENU);
         });
-        add_node(back_button);
+        buttons_layout->add_node(back_button);
 
-        position += glm::vec2(200.0f, 0.0f);
-        auto apply_button = std::make_shared<ice::ui::Button>(position, button_size, "Apply", button_font, button_text_color, button_background_texture, button_background_color);
+        auto apply_button = std::make_shared<ice::ui::Button>(button_size, "Apply", button_font, button_text_color, button_background_texture, button_background_color);
         apply_button->on_click([&engine] () {
             engine.queue_state(EngineState::MAIN_MENU);
         });
-        add_node(apply_button);
+        buttons_layout->add_node(apply_button);
+
+        add_node(buttons_layout);
     }
 }

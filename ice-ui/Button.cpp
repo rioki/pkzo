@@ -26,6 +26,9 @@ namespace ice::ui
 {
     Button::Button() = default;
 
+    Button::Button(const glm::vec2& size, const std::string& label_text, const std::shared_ptr<Font>& font, const glm::vec4& label_color, const std::shared_ptr<Texture> background_texture, const glm::vec4& background_color)
+    : Button(glm::vec2(0.0f), size, label_text, font, label_color, background_texture, background_color) {}
+
     Button::Button(const glm::vec2& position, const glm::vec2& size, const std::string& label_text, const std::shared_ptr<Font>& font, const glm::vec4& label_color, const std::shared_ptr<Texture> background_texture, const glm::vec4& background_color)
     : Widget(position, size),
       background(glm::mat3(1.0f), size, background_color, background_texture),

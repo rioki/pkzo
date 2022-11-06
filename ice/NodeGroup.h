@@ -68,6 +68,8 @@ namespace ice
             {
                 node->activate();
             }
+
+            add_node_signal.emit();
         }
 
         void remove_node(Node<Type>& node) noexcept
@@ -88,6 +90,8 @@ namespace ice
 
             assert(i != end(nodes));
             nodes.erase(i);
+
+            remove_node_signal.emit();
         }
 
         void remove_node(const std::shared_ptr<Node<Type>>& node) noexcept
@@ -110,6 +114,60 @@ namespace ice
             }));
         }
 
+        template <typename NodeType>
+        std::vector<NodeType*> get_nodes() noexcept
+        {
+            std::vector<NodeType*> result;
+
+            for (const auto& node : nodes)
+            {
+                auto n = dynamic_cast<NodeType*>(node.get());
+                if (n)
+                {
+                    result.push_back(n);
+                }
+            }
+
+            return result;
+        }
+
+        template <typename NodeType>
+        std::vector<const NodeType*> get_nodes() const noexcept
+        {
+            std::vector<const NodeType*> result;
+
+            for (const auto& node : nodes)
+            {
+                auto n = dynamic_cast<const NodeType*>(node.get());
+                if (n)
+                {
+                    result.push_back(n);
+                }
+            }
+
+            return result;
+        }
+
+        rsig::connection on_add_node(const std::function<void ()>& cb) noexcept
+        {
+            return add_node_signal.connect(cb);
+        }
+
+        rsig::signal<>& get_add_node_signal() noexcept
+        {
+            return add_node_signal;
+        }
+
+        rsig::connection on_remove_node(const std::function<void ()>& cb) noexcept
+        {
+            return remove_node_signal.connect(cb);
+        }
+
+        rsig::signal<>& get_remove_node_signal() noexcept
+        {
+            return remove_node_signal;
+        }
+
         void activate() override
         {
             for (const auto& node : nodes)
@@ -128,5 +186,7 @@ namespace ice
 
     private:
         std::vector<std::shared_ptr<Node<Type>>> nodes;
+        rsig::signal<> add_node_signal;
+        rsig::signal<> remove_node_signal;
     };
 }

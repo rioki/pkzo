@@ -79,3 +79,30 @@ TEST(SceneNodeGroup, move_propagates_to_children)
 
     EXPECT_EQ(1u, count);
 }
+
+TEST(SceneNodeGroup, add_and_remove_signals)
+{
+    auto root = ice::SceneNodeGroup{};
+
+    auto count_add = 0u;
+    root.on_add_node([&] () {
+        count_add++;
+    });
+
+    auto count_remove = 0u;
+    root.on_remove_node([&] () {
+        count_remove++;
+    });
+
+    auto child = ice::SceneNode{};
+    root.add_node(child);
+
+    EXPECT_EQ(1u, count_add);
+    EXPECT_EQ(0u, count_remove);
+
+    root.remove_node(child);
+
+    EXPECT_EQ(1u, count_add);
+    EXPECT_EQ(1u, count_remove);
+}
+
