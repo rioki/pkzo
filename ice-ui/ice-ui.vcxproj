@@ -123,6 +123,7 @@
     <ClInclude Include="Label.h" />
     <ClInclude Include="Layout.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="TableLayout.h" />
     <ClInclude Include="VerticalLayout.h" />
     <ClInclude Include="Widget.h" />
   </ItemGroup>
@@ -137,6 +138,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TableLayout.cpp" />
     <ClCompile Include="VerticalLayout.cpp" />
     <ClCompile Include="Widget.cpp" />
   </ItemGroup>

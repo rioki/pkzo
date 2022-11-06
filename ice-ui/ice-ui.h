@@ -29,3 +29,4 @@
 #include "Layout.h"
 #include "VerticalLayout.h"
 #include "HorizontalLayout.h"
+#include "TableLayout.h"
