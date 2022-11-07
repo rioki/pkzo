@@ -21,6 +21,10 @@
 
 #pragma once
 
+#include <string_view>
+#include <filesystem>
+#include <fstream>
+
 #include <ice/ice.h>
 
 #include <ice/glm_2d.h>

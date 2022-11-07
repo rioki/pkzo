@@ -22,6 +22,8 @@
 #pragma once
 #include "config.h"
 
+#include "Style.h"
+
 #include "Widget.h"
 #include "Label.h"
 #include "Button.h"

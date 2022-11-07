@@ -170,6 +170,7 @@
     <ClCompile Include="test_texture.cpp" />
     <ClCompile Include="test_env.cpp" />
     <ClCompile Include="test_settings.cpp" />
+    <ClCompile Include="test_ui_style.cpp" />
     <ClCompile Include="test_utils.cpp" />
     <ClCompile Include="test_widget.cpp" />
     <ClCompile Include="texture_checks.cpp" />
