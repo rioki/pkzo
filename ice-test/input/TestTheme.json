@@ -1,0 +1,27 @@
+{
+  "default": {
+    "font": {
+      "file": "../../assets/fonts/DejaVuSans.ttf",
+      "size": 24
+    },
+    "background_color": [0.969, 0.953, 0.922, 1.0],
+    "text_color": [0.369, 0.357, 0.353, 1.0],
+    "background": "rectangle.png",
+    "forefround": {
+      "file": "Texture-diff-ref.png"
+    }
+  },
+  "Button": {
+    "background_color": [0.369, 0.357, 0.353, 0.5]  
+  },
+  "Title": {
+    "title_font": {
+      "file": "../../assets/fonts/DejaVuSansMono.ttf",
+      "size": 32
+    },
+    "title_background": "AngryCat.png",
+    "title_forefround": {
+      "file": "AngryCat.jpg"
+    } 
+  }
+}

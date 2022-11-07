@@ -45,6 +45,9 @@
     <ClInclude Include="TableLayout.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Style.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -69,6 +72,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TableLayout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Style.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
