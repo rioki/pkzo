@@ -32,24 +32,26 @@ namespace ice::ui
     class ICE_EXPORT Button : public Widget
     {
     public:
-        Button();
-        Button(const glm::vec2& size, const std::string& label_text, const std::shared_ptr<Font>& font, const glm::vec4& label_color, const std::shared_ptr<Texture> background_texture, const glm::vec4& background_color);
-        Button(const glm::vec2& position, const glm::vec2& size, const std::string& label_text, const std::shared_ptr<Font>& font, const glm::vec4& label_color, const std::shared_ptr<Texture> background_texture, const glm::vec4& background_color);
+        Button() noexcept;
+        Button(const std::shared_ptr<Style>& style, const std::string& caption);
+        Button(const glm::vec2& position, const std::shared_ptr<Style>& style, const std::string& caption);
+        Button(const glm::vec2& size, const std::string& caption, const std::shared_ptr<Font>& font, const glm::vec4& color, const glm::vec4& background_color, const std::shared_ptr<Texture> background_texture);
+        Button(const glm::vec2& position, const glm::vec2& size, const std::string& caption, const std::shared_ptr<Font>& font, const glm::vec4& color, const glm::vec4& background_color, const std::shared_ptr<Texture> background_texture);
 
-        void set_label_text(const std::string& value) noexcept;
-        const std::string& get_label_text() const noexcept;
+        void set_caption(const std::string& value) noexcept;
+        const std::string& get_caption() const noexcept;
 
-        void set_label_font(const std::shared_ptr<Font>& value) noexcept;
-        const std::shared_ptr<Font>& get_label_font() const noexcept;
+        void set_font(const std::shared_ptr<Font>& value) noexcept;
+        const std::shared_ptr<Font>& get_font() const noexcept;
 
-        void set_label_color(const glm::vec4& value) noexcept;
-        const glm::vec4& get_label_color() const noexcept;
-
-        void set_background_texture(const std::shared_ptr<Texture>& value) noexcept;
-        const std::shared_ptr<Texture>& get_background_texture() const noexcept;
+        void set_color(const glm::vec4& value) noexcept;
+        const glm::vec4& get_color() const noexcept;
 
         void set_background_color(const glm::vec4& value) noexcept;
         const glm::vec4& get_background_color() const noexcept;
+
+        void set_background_texture(const std::shared_ptr<Texture>& value) noexcept;
+        const std::shared_ptr<Texture>& get_background_texture() const noexcept;
 
         rsig::connection on_click(const std::function<void ()>& cb) noexcept;
         rsig::signal<>& get_click_signal() noexcept;

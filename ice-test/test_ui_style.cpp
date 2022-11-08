@@ -66,3 +66,27 @@ TEST(Style, get_texture)
     auto d = theme.get_texture("Title", "forefround");
     EXPECT_EQ("Texture-diff-ref.png", d->get_file().filename());
 }
+
+TEST(Style, get_null_texture)
+{
+    auto theme = ice::ui::Style(get_test_input() / "TestTheme.json");
+
+    auto a = theme.get_texture("None", "background_texture");
+    EXPECT_EQ(nullptr, a);
+}
+
+TEST(Style, get_null_font)
+{
+    auto theme = ice::ui::Style(get_test_input() / "TestTheme.json");
+
+    auto a = theme.get_font("None", "font");
+    EXPECT_EQ(nullptr, a);
+}
+
+TEST(Style, get_null_color)
+{
+    auto theme = ice::ui::Style(get_test_input() / "TestTheme.json");
+
+    auto a = theme.get_color("None", "color");
+    EXPECT_GLM_EQ(glm::vec4(0.0f), a);
+}

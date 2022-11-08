@@ -37,7 +37,7 @@ TEST(Label, init)
 
     EXPECT_GLM_NEAR(position,                           label.get_position(), 1e-4f);
     EXPECT_GLM_NEAR(glm::vec2(font->estimate("Label")), label.get_size(), 1e-4f);
-    EXPECT_EQ("Label",                                  label.get_text());
+    EXPECT_EQ("Label",                                  label.get_caption());
     EXPECT_EQ(font,                                     label.get_font());
     EXPECT_GLM_EQ(color,                                label.get_color());
 }

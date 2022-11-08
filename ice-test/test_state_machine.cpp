@@ -16,7 +16,8 @@ enum class State
     INIT,
     STATE1,
     STATE2,
-    END
+    END,
+    ERROR = sm::StateMachine<State>::ERROR_STATE
 };
 
 TEST(StateMachine, create)
@@ -221,3 +222,57 @@ TEST(StateMachine, pre_and_post_intructions_queue_state)
     EXPECT_EQ(1, state1_exit);
 }
 
+TEST(StateMachine, exception_handling_in_tick)
+{
+    auto sm = sm::StateMachine<State>(State::INIT);
+
+    sm.on_tick(State::STATE1, [&] () {
+        throw std::runtime_error("error in state 1");
+    });
+
+    sm.on_tick(State::STATE2, [&] () {
+        throw std::runtime_error("error in state 2");
+    });
+
+    sm.tick();
+
+    sm.change_state(State::STATE1);
+    EXPECT_THROW(sm.tick(), std::runtime_error);
+    EXPECT_EQ(State::STATE1, sm.get_state());
+
+    sm.change_state(State::STATE2);
+    EXPECT_THROW(sm.tick(), std::runtime_error);
+    EXPECT_EQ(State::STATE2, sm.get_state());
+
+    sm.change_state(State::END);
+    sm.tick();
+}
+
+TEST(StateMachine, exception_handling_in_enter)
+{
+    auto sm = sm::StateMachine<State>(State::INIT);
+
+    sm.on_enter(State::STATE2, [&] () {
+        throw std::runtime_error("error enter state 2");
+    });
+
+    sm.change_state(State::STATE1);
+    EXPECT_THROW(sm.change_state(State::STATE2), std::runtime_error);
+    EXPECT_EQ(State::ERROR, sm.get_state());
+    EXPECT_TRUE(sm.is_invalid());
+}
+
+
+TEST(StateMachine, exception_handling_in_exit)
+{
+    auto sm = sm::StateMachine<State>(State::INIT);
+
+    sm.on_exit(State::STATE1, [&] () {
+        throw std::runtime_error("error exit state 2");
+    });
+
+    sm.change_state(State::STATE1);
+    EXPECT_THROW(sm.change_state(State::STATE2), std::runtime_error);
+    EXPECT_EQ(State::ERROR, sm.get_state());
+    EXPECT_TRUE(sm.is_invalid());
+}

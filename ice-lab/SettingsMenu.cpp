@@ -28,45 +28,38 @@ namespace lab
     SettingsMenu::SettingsMenu(LabEngine& engine, const glm::uvec2 size)
     : ice::Screen(size)
     {
-        auto screen_background_color   = ice::rgba(0xffffffff);
-        auto button_padding            = 10.0f;
-        auto button_size               = glm::vec2(150, 36);
-        auto text_color         = ice::rgba(0x000000ff);
-        auto button_font               = engine.load_asset<ice::Font>("fonts/DejaVuSans.ttf", 16);
-        auto label_font                = button_font;
-        auto title_font                = engine.load_asset<ice::Font>("fonts/DejaVuSans.ttf", 32);
-        auto button_background_color   = ice::rgba(0x349eebff);
-        auto button_background_texture = std::shared_ptr<ice::Texture>();
+        auto style = engine.load_asset<ice::ui::Style>("ui/LightBlue.json");
+        assert(style);
 
-        auto bacground = std::make_shared<ice::Rectangle>(glm::mat3(1.0f), size, screen_background_color);
+        auto bacground = std::make_shared<ice::Rectangle>(glm::mat3(1.0f), size, style->get_color("Screen", "background_color"));
         add_node(bacground);
 
         auto top_layout = std::make_shared<ice::ui::VerticalLayout>(25.0f);
 
         auto title_pos = glm::vec2(0.0f, static_cast<float>(size.y) * 0.4f);
-        auto title_label = std::make_shared<ice::ui::Label>(title_pos, "Settings", title_font, text_color);
+        auto title_label = std::make_shared<ice::ui::Label>(title_pos, style, "Settings");
         top_layout->add_node(title_label);
 
         auto settings_matrix = std::make_shared<ice::ui::TableLayout>(2, 5.0f);
 
-        settings_matrix->add_node(std::make_shared<ice::ui::Label>("Resolution", label_font, text_color));
-        settings_matrix->add_node(std::make_shared<ice::ui::Label>("<Resolution>", label_font, text_color));
-        settings_matrix->add_node(std::make_shared<ice::ui::Label>("Fullscreen", label_font, text_color));
-        settings_matrix->add_node(std::make_shared<ice::ui::Label>("<Fullscreen>", label_font, text_color));
-        settings_matrix->add_node(std::make_shared<ice::ui::Label>("V-Sync", label_font, text_color));
-        settings_matrix->add_node(std::make_shared<ice::ui::Label>("<V-Sync>", label_font, text_color));
+        settings_matrix->add_node(std::make_shared<ice::ui::Label>(style, "Resolution"));
+        settings_matrix->add_node(std::make_shared<ice::ui::Label>(style, "<Resolution>"));
+        settings_matrix->add_node(std::make_shared<ice::ui::Label>(style, "Fullscreen"));
+        settings_matrix->add_node(std::make_shared<ice::ui::Label>(style, "<Fullscreen>"));
+        settings_matrix->add_node(std::make_shared<ice::ui::Label>(style, "V-Sync"));
+        settings_matrix->add_node(std::make_shared<ice::ui::Label>(style, "<V-Sync>"));
 
         top_layout->add_node(settings_matrix);
 
         auto buttons_layout = std::make_shared<ice::ui::HorizontalLayout>();
 
-        auto back_button = std::make_shared<ice::ui::Button>(button_size, "Back", button_font, text_color, button_background_texture, button_background_color);
+        auto back_button = std::make_shared<ice::ui::Button>(style, "Back");
         back_button->on_click([&engine] () {
             engine.queue_state(EngineState::MAIN_MENU);
         });
         buttons_layout->add_node(back_button);
 
-        auto apply_button = std::make_shared<ice::ui::Button>(button_size, "Apply", button_font, text_color, button_background_texture, button_background_color);
+        auto apply_button = std::make_shared<ice::ui::Button>(style, "Apply");
         apply_button->on_click([&engine] () {
             engine.queue_state(EngineState::MAIN_MENU);
         });

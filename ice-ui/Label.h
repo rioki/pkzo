@@ -32,11 +32,13 @@ namespace ice::ui
     {
     public:
         Label() noexcept;
+        Label(const std::shared_ptr<Style>& style, const std::string& caption);
+        Label(const glm::vec2& position, const std::shared_ptr<Style>& style, const std::string& caption);
         Label(const std::string& text, const std::shared_ptr<Font>& font, const glm::vec4& color) noexcept;
         Label(const glm::vec2& position, const std::string& text, const std::shared_ptr<Font>& font, const glm::vec4& color) noexcept;
 
-        void set_text(const std::string& value) noexcept;
-        const std::string& get_text() const noexcept;
+        void set_caption(const std::string& value) noexcept;
+        const std::string& get_caption() const noexcept;
 
         void set_font(const std::shared_ptr<Font>& value) noexcept;
         const std::shared_ptr<Font>& get_font() const noexcept;

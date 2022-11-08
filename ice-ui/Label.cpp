@@ -22,6 +22,8 @@
 #include "pch.h"
 #include "Label.h"
 
+#include "Style.h"
+
 namespace ice::ui
 {
     glm::vec2 safe_estimate(const std::shared_ptr<Font>& font, const std::string& text)
@@ -35,21 +37,30 @@ namespace ice::ui
 
     Label::Label() noexcept = default;
 
-    Label::Label(const std::string& text, const std::shared_ptr<Font>& font, const glm::vec4& color) noexcept
-    : Label(glm::vec2(0.0f), text, font, color) {}
+    Label::Label(const std::shared_ptr<Style>& style, const std::string& caption)
+    : Label(glm::vec2(0.0f), style, caption) {}
 
-    Label::Label(const glm::vec2& position, const std::string& text, const std::shared_ptr<Font>& font, const glm::vec4& color) noexcept
-    : Widget(position, safe_estimate(font, text)), label(glm::mat3(1.0f), text, font, color)
+    Label::Label(const glm::vec2& position, const std::shared_ptr<Style>& style, const std::string& caption)
+    : Label(position,
+            caption,
+            style->get_font("Button", "font"),
+            style->get_color("Button", "color")) {}
+
+    Label::Label(const std::string& caption, const std::shared_ptr<Font>& font, const glm::vec4& color) noexcept
+    : Label(glm::vec2(0.0f), caption, font, color) {}
+
+    Label::Label(const glm::vec2& position, const std::string& caption, const std::shared_ptr<Font>& font, const glm::vec4& color) noexcept
+    : Widget(position, safe_estimate(font, caption)), label(glm::mat3(1.0f), caption, font, color)
     {
         add_node(label);
     }
 
-    void Label::set_text(const std::string& value) noexcept
+    void Label::set_caption(const std::string& value) noexcept
     {
         label.set_text(value);
     }
 
-    const std::string& Label::get_text() const noexcept
+    const std::string& Label::get_caption() const noexcept
     {
         return label.get_text();
     }
