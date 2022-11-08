@@ -20,6 +20,8 @@ namespace sm
     class StateMachine
     {
     public:
+        static constexpr StateEnum ERROR_STATE = static_cast<StateEnum>(std::numeric_limits<std::underlying_type_t<StateEnum>>::max());
+
         StateMachine() noexcept = default;
 
         StateMachine(StateEnum initial_state) noexcept
@@ -30,24 +32,37 @@ namespace sm
             return state;
         }
 
-        void change_state(StateEnum new_state) noexcept
+        bool is_invalid() const noexcept
         {
-            auto i = exit_functions.find(state);
-            if (i != end(exit_functions))
+            return state == ERROR_STATE;
+        }
+
+        void change_state(StateEnum new_state)
+        {
+            try
             {
-                auto& func = i->second;
-                assert(func);
-                func();
+                auto i = exit_functions.find(state);
+                if (i != end(exit_functions))
+                {
+                    auto& func = i->second;
+                    assert(func);
+                    func();
+                }
+
+                state = new_state;
+
+                auto j = enter_functions.find(state);
+                if (j != end(enter_functions))
+                {
+                    auto& func = j->second;
+                    assert(func);
+                    func();
+                }
             }
-
-            state = new_state;
-
-            auto j = enter_functions.find(state);
-            if (j != end(enter_functions))
+            catch (...)
             {
-                auto& func = j->second;
-                assert(func);
-                func();
+                state = ERROR_STATE;
+                throw;
             }
         }
 
@@ -56,7 +71,7 @@ namespace sm
             next_state = new_state;
         }
 
-        void tick() noexcept
+        void tick()
         {
             if (next_state)
             {
@@ -95,8 +110,8 @@ namespace sm
         }
 
     private:
-        StateEnum                state      = static_cast<StateEnum>(0);
-        std::optional<StateEnum> next_state = std::nullopt;
+        StateEnum                state         = static_cast<StateEnum>(0);
+        std::optional<StateEnum> next_state    = std::nullopt;
 
         std::map<StateEnum, std::function<void ()>> tick_functions;
         std::map<StateEnum, std::function<void ()>> enter_functions;
