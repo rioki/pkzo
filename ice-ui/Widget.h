@@ -26,52 +26,25 @@
 
 namespace ice::ui
 {
-    //! User insterface base class.
+    class Style;
+
     class ICE_EXPORT Widget : public ScreenNodeGroup
     {
     public:
-        //! Construct user interface element.
-        //!
-        //! @param position the inital position
-        //! @param size the initial size
-        //! @{
+
         Widget() noexcept;
         Widget(const glm::vec2& size) noexcept;
         Widget(const glm::vec2& position, const glm::vec2& size) noexcept;
-        //! @}
 
-        //! Position
-        //!
-        //! The position is derived from the screen node's transform. If you access
-        //! the widget through the position property it will always work. If
-        //! you add rotation or saling to the transform this property fails
-        //! to work in a deterministic fasion.
-        //! @{
         void set_position(const glm::vec2& value) noexcept;
         glm::vec2 get_position() const noexcept;
-        //! @}
 
-        //! Size
-        //!
-        //! @{
         void set_size(const glm::vec2& value) noexcept;
         const glm::vec2& get_size() const noexcept;
-        //! @}
 
-        //! Minimum Size
-        //!
-        //! The minimum size is the size at which the widget can not get smaller.
-        //! This will be used by layout code to pack the widgets.
         virtual glm::vec2 get_min_size() const noexcept;
 
     protected:
-        //! Allow derived classes to control the size.
-        //!
-        //! Ths function allows derived classes to react to a new size request,
-        //! and override the request with the new value.
-        //!
-        //! @param value the new size as requested
-        //! @return the value accepted by the derived class
         virtual glm::vec2 handle_size_request(const glm::vec2& value) noexcept;
 
     private:

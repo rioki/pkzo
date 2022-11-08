@@ -23,5 +23,10 @@
     "title_forefround": {
       "file": "AngryCat.jpg"
     } 
+  },
+  "None": {
+    "font": null,
+    "color": null,
+    "background_texture": null
   }
 }

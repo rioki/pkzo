@@ -28,12 +28,13 @@
 #include <glm/glm.hpp>
 #include <nlohmann/json.hpp>
 
+#include <ice/Asset.h>
 #include <ice/Texture.h>
 #include <ice/Font.h>
 
 namespace ice::ui
 {
-    class ICE_EXPORT Style
+    class ICE_EXPORT Style : public ice::Asset
     {
     public:
         Style(const std::filesystem::path& file);
@@ -44,6 +45,13 @@ namespace ice::ui
         glm::vec2                get_vec2(const std::string_view widget, const std::string_view prop) const;
         glm::vec3                get_vec3(const std::string_view widget, const std::string_view prop) const;
         glm::vec4                get_vec4(const std::string_view widget, const std::string_view prop) const;
+
+        void set_texture(const std::string_view widget, const std::string_view prop, const std::shared_ptr<Texture>& value);
+        void set_font(const std::string_view widget, const std::string_view prop, const std::shared_ptr<Font>& value);
+        void set_color(const std::string_view widget, const std::string_view prop, const glm::vec4& value);
+        void set_vec2(const std::string_view widget, const std::string_view prop, const glm::vec2& value);
+        void set_vec3(const std::string_view widget, const std::string_view prop, const glm::vec3& value);
+        void set_vec4(const std::string_view widget, const std::string_view prop, const glm::vec4& value);
 
     private:
         using TextureCache = std::map<std::filesystem::path, std::shared_ptr<Texture>>;
@@ -56,6 +64,8 @@ namespace ice::ui
         mutable TextureCache  texture_cache;
         mutable FontCache     font_cache;
 
+        std::filesystem::path get_directory() const;
         const nlohmann::json& get_prop(const std::string_view widget, const std::string_view prop) const;
+        void set_prop(const std::string_view widget, const std::string_view prop, const nlohmann::json& jvalue);
     };
 }

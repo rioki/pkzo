@@ -31,19 +31,46 @@ TEST(Button, init)
 {
     auto position           = glm::vec2(42.0f);
     auto size               = glm::vec2(150, 36);
-    auto text_color         = ice::rgba(0x000000ff);
+    auto color              = ice::rgba(0x000000ff);
     auto font               = std::make_shared<ice::Font>(ice::test::get_asset_folder() / "fonts/DejaVuSans.ttf", 16);
     auto background_color   = ice::rgba(0x349eebff);
     auto background_texture = std::make_shared<ice::Texture>(ice::test::get_test_input() / "AngryCat.jpg");
 
-    auto button = ice::ui::Button(position, size, "Label", font, text_color, background_texture, background_color);
+    auto button = ice::ui::Button(position, size, "Label", font, color, background_color, background_texture);
 
     EXPECT_GLM_NEAR(position,       button.get_position(), 1e-4f);
     EXPECT_GLM_EQ(size,             button.get_size());
-    EXPECT_EQ("Label",              button.get_label_text());
-    EXPECT_EQ(font,                 button.get_label_font());
-    EXPECT_GLM_EQ(text_color,       button.get_label_color());
-    EXPECT_EQ(background_texture,   button.get_background_texture());
+    EXPECT_EQ("Label",              button.get_caption());
+    EXPECT_EQ(font,                 button.get_font());
+    EXPECT_GLM_EQ(color,            button.get_color());
     EXPECT_GLM_EQ(background_color, button.get_background_color());
+    EXPECT_EQ(background_texture,   button.get_background_texture());
 
+}
+
+TEST(Button, init_from_style)
+{
+    auto position           = glm::vec2(42.0f);
+    auto size               = glm::vec2(150, 36);
+    auto color              = ice::rgba(0x000000ff);
+    auto font               = std::make_shared<ice::Font>(ice::test::get_asset_folder() / "fonts/DejaVuSans.ttf", 16);
+    auto background_color   = ice::rgba(0x349eebff);
+    auto background_texture = std::make_shared<ice::Texture>(ice::test::get_test_input() / "AngryCat.jpg");
+
+    auto style = std::make_shared<ice::ui::Style>(ice::test::get_test_input());
+    style->set_vec2("Button", "size", size);
+    style->set_font("Button", "font", font);
+    style->set_color("Button", "color", color);
+    style->set_color("Button", "background_color", background_color);
+    style->set_texture("Button", "background_texture", background_texture);
+
+    auto button = ice::ui::Button(position, style, "Label");
+
+    EXPECT_GLM_NEAR(position,       button.get_position(), 1e-4f);
+    EXPECT_GLM_EQ(size,             button.get_size());
+    EXPECT_EQ("Label",              button.get_caption());
+    EXPECT_EQ(font,                 button.get_font());
+    EXPECT_GLM_EQ(color,            button.get_color());
+    EXPECT_GLM_EQ(background_color, button.get_background_color());
+    EXPECT_EQ(background_texture,   button.get_background_texture());
 }

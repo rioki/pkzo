@@ -24,7 +24,20 @@
 
 int main()
 {
-    auto engine = lab::LabEngine{};
-    engine.run();
-    return 0;
+    try
+    {
+        auto engine = lab::LabEngine{};
+        engine.run();
+        return 0;
+    }
+    catch (const std::exception& ex)
+    {
+        ice::show_message_box(ice::MessageBoxIcon::ERROR, "Unexpected Error", ex.what());
+        return -1;
+    }
+    catch (...)
+    {
+        ice::show_message_box(ice::MessageBoxIcon::ERROR, "Unexpected Error", "Unknown Error");
+        return -2;
+    }
 }

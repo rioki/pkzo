@@ -28,38 +28,34 @@ namespace lab
     MainMenu::MainMenu(LabEngine& engine, const glm::uvec2 size)
     : ice::Screen(size)
     {
-        auto screen_background_color   = ice::rgba(0xffffffff);
-        auto button_padding            = 10.0f;
-        auto button_size               = glm::vec2(150, 36);
-        auto button_text_color         = ice::rgba(0x000000ff);
-        auto button_font               = engine.load_asset<ice::Font>("fonts/DejaVuSans.ttf", 16);
-        auto button_background_color   = ice::rgba(0x349eebff);
-        auto button_background_texture = std::shared_ptr<ice::Texture>();
+        auto style = engine.load_asset<ice::ui::Style>("ui/LightBlue.json");
+        assert(style);
 
-        auto bacground = std::make_shared<ice::Rectangle>(glm::mat3(1.0f), size, screen_background_color);
-        add_node(bacground);
+        // Background
+        // TODO screen background as a property of screen?
+        add_node(std::make_shared<ice::Rectangle>(glm::mat3(1.0f), size, style->get_color("Screen", "background_color")));
 
         auto layout = std::make_shared<ice::ui::VerticalLayout>(glm::vec2(static_cast<float>(size.x) * 0.125f, 0.5f));
 
-        auto new_world_button = std::make_shared<ice::ui::Button>(button_size, "New World", button_font, button_text_color, button_background_texture, button_background_color);
+        auto new_world_button = std::make_shared<ice::ui::Button>(style, "New World");
         new_world_button->on_click([&engine] () {
             engine.queue_state(EngineState::PLAY);
         });
         layout->add_node(new_world_button);
 
-        auto load_world_button = std::make_shared<ice::ui::Button>(button_size, "Load World", button_font, button_text_color, button_background_texture, button_background_color);
+        auto load_world_button = std::make_shared<ice::ui::Button>(style, "Load World");
         load_world_button->on_click([&engine] () {
             engine.queue_state(EngineState::PLAY);
         });
         layout->add_node(load_world_button);
 
-        auto settings_button = std::make_shared<ice::ui::Button>(button_size, "Settings", button_font, button_text_color, button_background_texture, button_background_color);
+        auto settings_button = std::make_shared<ice::ui::Button>(style, "Settings");
         settings_button->on_click([&engine] () {
             engine.queue_state(EngineState::SETTINGS_MENU);
         });
         layout->add_node(settings_button);
 
-        auto exit_button = std::make_shared<ice::ui::Button>(button_size, "Exit", button_font, button_text_color, button_background_texture, button_background_color);
+        auto exit_button = std::make_shared<ice::ui::Button>(style, "Exit");
         exit_button->on_click([&engine] () {
             engine.queue_state(EngineState::END);
         });
