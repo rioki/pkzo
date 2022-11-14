@@ -24,6 +24,13 @@
       "file": "AngryCat.jpg"
     } 
   },
+  "BaseType": {
+    "value1": 12,
+    "value2": 24
+  },
+  "BaseType/Variant": {
+    "value1": 121 
+  },
   "None": {
     "font": null,
     "color": null,

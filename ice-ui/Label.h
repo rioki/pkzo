@@ -28,30 +28,59 @@
 
 namespace ice::ui
 {
+    using stdex::in;
+    using stdex::cref_t;
+
+    enum class TextStyle
+    {
+        DEFAULT,
+        TITLE,
+        SUBTITLE,
+        HEADING1,
+        HEADING2,
+        HEADING3,
+        HEADING4,
+        HEADING5,
+        BOLD,
+        ITALLIC,
+        BOLD_ITALIC,
+        CODE
+    };
+
     class ICE_EXPORT Label : public Widget
     {
     public:
         Label() noexcept;
-        Label(const std::shared_ptr<Style>& style, const std::string& caption);
-        Label(const glm::vec2& position, const std::shared_ptr<Style>& style, const std::string& caption);
-        Label(const std::string& text, const std::shared_ptr<Font>& font, const glm::vec4& color) noexcept;
-        Label(const glm::vec2& position, const std::string& text, const std::shared_ptr<Font>& font, const glm::vec4& color) noexcept;
+        Label(in<std::shared_ptr<Style>> style, in<std::string> caption);
+        Label(in<std::shared_ptr<Style>> style, in<TextStyle> variant, in<std::string> caption);
+        Label(in<glm::vec2> position, in<std::shared_ptr<Style>> style, in<std::string> caption);
+        Label(in<glm::vec2> position, in<std::shared_ptr<Style>> style, in<TextStyle> variant, in<std::string> caption);
+        Label(in<std::string> text, in<std::shared_ptr<Font>> font, in<glm::vec4> color) noexcept;
+        Label(in<glm::vec2> position, in<std::string> text, in<std::shared_ptr<Font>> font, in<glm::vec4> color) noexcept;
 
-        void set_caption(const std::string& value) noexcept;
-        const std::string& get_caption() const noexcept;
+        void set_caption(in<std::string> value) noexcept;
+        [[nodiscard]] in<std::string> get_caption() const noexcept;
 
-        void set_font(const std::shared_ptr<Font>& value) noexcept;
-        const std::shared_ptr<Font>& get_font() const noexcept;
+        void set_variant(in<TextStyle> value) noexcept;
+        [[nodiscard]] cref_t<TextStyle> get_variant() const noexcept;
 
-        void set_color(const glm::vec4& value) noexcept;
-        const glm::vec4& get_color() const noexcept;
+        void set_style(in<std::shared_ptr<Style>> value) noexcept;
+        [[nodiscard]] cref_t<std::shared_ptr<Style>> get_style() const noexcept;
 
-        glm::vec2 get_min_size() const noexcept override;
+        void set_font(in<std::shared_ptr<Font>> value) noexcept;
+        [[nodiscard]] cref_t<std::shared_ptr<Font>> get_font() const noexcept;
+
+        void set_color(in<glm::vec4> value) noexcept;
+        [[nodiscard]] cref_t<glm::vec4> get_color() const noexcept;
+
+        [[nodiscard]] glm::vec2 get_min_size() const noexcept override;
 
     protected:
-        glm::vec2 handle_size_request(const glm::vec2& value) noexcept override;
+        [[nodiscard]] glm::vec2 handle_size_request(const glm::vec2& value) noexcept override;
 
     private:
-        Text label;
+        std::shared_ptr<Style> style;
+        TextStyle            variant;
+        Text                   label;
     };
 }

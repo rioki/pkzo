@@ -13,6 +13,12 @@
   },
   "Label": {
   },
+  "Label/Heading1": {
+    "font": {
+      "file": "../fonts/DejaVuSans.ttf",
+      "size": 32
+    }
+  },
   "Button": {
     "size": [120, 35],
     "background_color": [0.2, 0.6, 0.9, 1.0]
