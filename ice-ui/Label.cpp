@@ -24,9 +24,11 @@
 
 #include "Style.h"
 
+using namespace std::string_view_literals;
+
 namespace ice::ui
 {
-    glm::vec2 safe_estimate(const std::shared_ptr<Font>& font, const std::string& text)
+    glm::vec2 safe_estimate(in<std::shared_ptr<Font>> font, in<std::string> text)
     {
         if (!font)
         {
@@ -35,52 +37,92 @@ namespace ice::ui
         return glm::vec2(font->estimate(text));
     }
 
+    constexpr std::string_view get_style_id(in<TextStyle> variant)
+    {
+        switch (variant)
+        {
+            using enum ice::ui::TextStyle;
+            case DEFAULT:
+                return "Label"sv;
+            case TITLE:
+                return "Label/Title"sv;
+            case SUBTITLE:
+                return "Label/Subtitle"sv;
+            case HEADING1:
+                return "Label/Heading1"sv;
+            case HEADING2:
+                return "Label/Heading2"sv;
+            case HEADING3:
+                return "Label/Heading3"sv;
+            case HEADING4:
+                return "Label/Heading4"sv;
+            case HEADING5:
+                return "Label/Heading5"sv;
+            case BOLD:
+                return "Label/Bold"sv;
+            case ITALLIC:
+                return "Label/Itallic"sv;
+            case BOLD_ITALIC:
+                return "Label/BoldItallic"sv;
+            case CODE:
+                return "Label/Code"sv;
+            default:
+                std::terminate();
+        }
+    }
+
     Label::Label() noexcept = default;
 
-    Label::Label(const std::shared_ptr<Style>& style, const std::string& caption)
-    : Label(glm::vec2(0.0f), style, caption) {}
+    Label::Label(in<std::shared_ptr<Style>> style, in<std::string> caption)
+    : Label(style, TextStyle::DEFAULT, caption) {}
 
-    Label::Label(const glm::vec2& position, const std::shared_ptr<Style>& style, const std::string& caption)
+    Label::Label(in<std::shared_ptr<Style>> style, in<TextStyle> variant, in<std::string> caption)
+    : Label(glm::vec2(0.0f), style, variant, caption) {}
+
+    Label::Label(in<glm::vec2> position, in<std::shared_ptr<Style>> style, in<std::string> caption)
+    : Label(position, style, TextStyle::DEFAULT, caption) {}
+
+    Label::Label(in<glm::vec2> position, in<std::shared_ptr<Style>> style, in<TextStyle> variant, in<std::string> caption)
     : Label(position,
             caption,
-            style->get_font("Button", "font"),
-            style->get_color("Button", "color")) {}
+            style->get_font(get_style_id(variant), "font"),
+            style->get_color(get_style_id(variant), "color")) {}
 
-    Label::Label(const std::string& caption, const std::shared_ptr<Font>& font, const glm::vec4& color) noexcept
+    Label::Label(in<std::string> caption, in<std::shared_ptr<Font>> font, in<glm::vec4> color) noexcept
     : Label(glm::vec2(0.0f), caption, font, color) {}
 
-    Label::Label(const glm::vec2& position, const std::string& caption, const std::shared_ptr<Font>& font, const glm::vec4& color) noexcept
+    Label::Label(in<glm::vec2> position, in<std::string> caption, in<std::shared_ptr<Font>> font, in<glm::vec4> color) noexcept
     : Widget(position, safe_estimate(font, caption)), label(glm::mat3(1.0f), caption, font, color)
     {
         add_node(label);
     }
 
-    void Label::set_caption(const std::string& value) noexcept
+    void Label::set_caption(in<std::string> value) noexcept
     {
         label.set_text(value);
     }
 
-    const std::string& Label::get_caption() const noexcept
+    cref_t<std::string> Label::get_caption() const noexcept
     {
         return label.get_text();
     }
 
-    void Label::set_font(const std::shared_ptr<Font>& value) noexcept
+    void Label::set_font(in<std::shared_ptr<Font>> value) noexcept
     {
         label.set_font(value);
     }
 
-    const std::shared_ptr<Font>& Label::get_font() const noexcept
+    cref_t<std::shared_ptr<Font>> Label::get_font() const noexcept
     {
         return label.get_font();
     }
 
-    void Label::set_color(const glm::vec4& value) noexcept
+    void Label::set_color(in<glm::vec4> value) noexcept
     {
         label.set_color(value);
     }
 
-    const glm::vec4& Label::get_color() const noexcept
+    cref_t<glm::vec4> Label::get_color() const noexcept
     {
         return label.get_color();
     }

@@ -166,6 +166,7 @@
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="StateMachine.h" />
     <ClInclude Include="StatsSystem.h" />
+    <ClInclude Include="stdex.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Texture.h" />

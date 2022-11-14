@@ -34,24 +34,31 @@
 
 namespace ice::ui
 {
+    using stdex::in;
+    using stdex::cref_t;
+
     class ICE_EXPORT Style : public ice::Asset
     {
     public:
-        Style(const std::filesystem::path& file);
+        Style(in<std::filesystem::path> file);
 
-        std::shared_ptr<Texture> get_texture(const std::string_view widget, const std::string_view prop) const;
-        std::shared_ptr<Font>    get_font(const std::string_view widget, const std::string_view prop) const;
-        glm::vec4                get_color(const std::string_view widget, const std::string_view prop) const;
-        glm::vec2                get_vec2(const std::string_view widget, const std::string_view prop) const;
-        glm::vec3                get_vec3(const std::string_view widget, const std::string_view prop) const;
-        glm::vec4                get_vec4(const std::string_view widget, const std::string_view prop) const;
+        [[nodiscard]] std::shared_ptr<Texture> get_texture(in<std::string_view> widget, in<std::string_view> prop) const;
+        [[nodiscard]] std::shared_ptr<Font>    get_font(in<std::string_view> widget, in<std::string_view> prop) const;
+        [[nodiscard]] glm::vec4                get_color(in<std::string_view> widget, in<std::string_view> prop) const;
+        [[nodiscard]] int                      get_int(in<std::string_view> widget, in<std::string_view> prop) const;
+        [[nodiscard]] float                    get_float(in<std::string_view> widget, in<std::string_view> prop) const;
+        [[nodiscard]] glm::vec2                get_vec2(in<std::string_view> widget, in<std::string_view> prop) const;
+        [[nodiscard]] glm::vec3                get_vec3(in<std::string_view> widget, in<std::string_view> prop) const;
+        [[nodiscard]] glm::vec4                get_vec4(in<std::string_view> widget, in<std::string_view> prop) const;
 
-        void set_texture(const std::string_view widget, const std::string_view prop, const std::shared_ptr<Texture>& value);
-        void set_font(const std::string_view widget, const std::string_view prop, const std::shared_ptr<Font>& value);
-        void set_color(const std::string_view widget, const std::string_view prop, const glm::vec4& value);
-        void set_vec2(const std::string_view widget, const std::string_view prop, const glm::vec2& value);
-        void set_vec3(const std::string_view widget, const std::string_view prop, const glm::vec3& value);
-        void set_vec4(const std::string_view widget, const std::string_view prop, const glm::vec4& value);
+        void set_texture(in<std::string_view> widget, in<std::string_view> prop, in<std::shared_ptr<Texture>> value);
+        void set_font(in<std::string_view> widget, in<std::string_view> prop, in<std::shared_ptr<Font>> value);
+        void set_color(in<std::string_view> widget, in<std::string_view> prop, in<glm::vec4> value);
+        void set_int(in<std::string_view> widget, in<std::string_view> prop, in<int> value);
+        void set_float(in<std::string_view> widget, in<std::string_view> prop, in<float> value);
+        void set_vec2(in<std::string_view> widget, in<std::string_view> prop, in<glm::vec2> value);
+        void set_vec3(in<std::string_view> widget, in<std::string_view> prop, in<glm::vec3> value);
+        void set_vec4(in<std::string_view> widget, in<std::string_view> prop, in<glm::vec4> value);
 
     private:
         using TextureCache = std::map<std::filesystem::path, std::shared_ptr<Texture>>;
@@ -64,8 +71,12 @@ namespace ice::ui
         mutable TextureCache  texture_cache;
         mutable FontCache     font_cache;
 
-        std::filesystem::path get_directory() const;
-        const nlohmann::json& get_prop(const std::string_view widget, const std::string_view prop) const;
-        void set_prop(const std::string_view widget, const std::string_view prop, const nlohmann::json& jvalue);
+        [[nodiscard]] std::filesystem::path get_directory() const;
+        [[nodiscard]] cref_t<nlohmann::json> get_prop(in<std::string_view> widget, in<std::string_view> prop) const;
+
+        template <typename T>
+        [[nodiscard]] T get_simple_prop(in<std::string_view> widget, in<std::string_view> prop) const;
+
+        void set_prop(in<std::string_view> widget, in<std::string_view> prop, in<nlohmann::json> jvalue);
     };
 }

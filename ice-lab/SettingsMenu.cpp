@@ -37,7 +37,7 @@ namespace lab
         auto top_layout = std::make_shared<ice::ui::VerticalLayout>(25.0f);
 
         auto title_pos = glm::vec2(0.0f, static_cast<float>(size.y) * 0.4f);
-        auto title_label = std::make_shared<ice::ui::Label>(title_pos, style, "Settings");
+        auto title_label = std::make_shared<ice::ui::Label>(title_pos, style, ice::ui::TextStyle::HEADING1, "Settings");
         top_layout->add_node(title_label);
 
         auto settings_matrix = std::make_shared<ice::ui::TableLayout>(2, 5.0f);

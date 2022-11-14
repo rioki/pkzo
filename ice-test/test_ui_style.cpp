@@ -90,3 +90,11 @@ TEST(Style, get_null_color)
     auto a = theme.get_color("None", "color");
     EXPECT_GLM_EQ(glm::vec4(0.0f), a);
 }
+
+TEST(Style, get_variant)
+{
+    auto theme = ice::ui::Style(get_test_input() / "TestTheme.json");
+
+    EXPECT_EQ(121, theme.get_int("BaseType/Variant", "value1"));
+    EXPECT_EQ(24, theme.get_int("BaseType/Variant", "value2"));
+}

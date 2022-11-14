@@ -24,6 +24,7 @@
 #include <string_view>
 #include <filesystem>
 #include <fstream>
+#include <regex>
 
 #include <ice/ice.h>
 
