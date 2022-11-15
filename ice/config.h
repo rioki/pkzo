@@ -27,3 +27,5 @@
 #ifndef _MSVC
 #pragma warning(disable: 4251 4275 26812)
 #endif
+
+#include "stdex.h"

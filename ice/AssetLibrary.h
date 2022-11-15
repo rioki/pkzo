@@ -26,11 +26,16 @@
 #include <memory>
 #include <map>
 #include <filesystem>
+#include <string_view>
 
 #include "utils.h"
 
 namespace ice
 {
+    using stdex::in;
+    using stdex::inref;
+    using stdex::cref_t;
+
     class Asset;
 
     class ICE_EXPORT AssetLibrary
@@ -39,8 +44,8 @@ namespace ice
         AssetLibrary() noexcept;
         ~AssetLibrary();
 
-        void add_directory(const std::filesystem::path& dir);
-        const std::vector<std::filesystem::path>& get_directories() const noexcept;
+        void add_directory(in<std::filesystem::path> dir);
+        cref_t<std::vector<std::filesystem::path>> get_directories() const noexcept;
 
         template <typename AssetT, typename ... Args>
         std::shared_ptr<AssetT> load(const Args& ... args);
@@ -49,10 +54,10 @@ namespace ice
         std::shared_ptr<AssetT> load(const char* path, const Args& ... args);
 
         template <typename AssetT, typename ... Args>
-        std::shared_ptr<AssetT> load(const std::string& path, const Args& ... args);
+        std::shared_ptr<AssetT> load(in<std::string> path, const Args& ... args);
 
         template <typename AssetT, typename ... Args>
-        std::shared_ptr<AssetT> load(const std::filesystem::path& path, const Args& ... args);
+        std::shared_ptr<AssetT> load(in<std::filesystem::path> path, const Args& ... args);
 
     private:
         std::vector<std::filesystem::path>                 directories;
@@ -78,12 +83,12 @@ namespace ice
     }
 
     template <typename AssetT, typename ... Args>
-    std::shared_ptr<AssetT> AssetLibrary::load(const std::string& path, const Args& ... args)
+    std::shared_ptr<AssetT> AssetLibrary::load(in<std::string> path, const Args& ... args)
     {
         return load<AssetT>(std::filesystem::path(path), args ...);
     }
 
-    inline std::filesystem::path _fix_path(const std::filesystem::path& path, const std::vector<std::filesystem::path>& dirs)
+    inline std::filesystem::path _fix_path(in<std::filesystem::path> path, in<std::vector<std::filesystem::path>> dirs)
     {
         if (path.is_absolute())
         {
@@ -104,7 +109,7 @@ namespace ice
     }
 
     template <typename AssetT, typename ... Args>
-    std::shared_ptr<AssetT> AssetLibrary::load(const std::filesystem::path& path, const Args& ... args)
+    std::shared_ptr<AssetT> AssetLibrary::load(in<std::filesystem::path> path, const Args& ... args)
     {
         auto fixed_path = _fix_path(path, directories);
         return do_load<AssetT>(fixed_path, args ...);
@@ -112,14 +117,14 @@ namespace ice
 
     template <typename AssetT, typename ... Args>
     requires std::constructible_from<AssetT, const Args&...>
-    std::shared_ptr<AssetT> make_asset_ptr(AssetLibrary& /*library*/, const Args& ... args)
+    inline std::shared_ptr<AssetT> make_asset_ptr(inref<AssetLibrary> /*library*/, const Args& ... args)
     {
         return std::make_shared<AssetT>(args...);
     }
 
     template <typename AssetT, typename ... Args>
     requires std::constructible_from<AssetT, AssetLibrary&, const Args&...>
-    std::shared_ptr<AssetT> make_asset_ptr(AssetLibrary& library, const Args& ... args)
+    inline std::shared_ptr<AssetT> make_asset_ptr(inref<AssetLibrary> library, const Args& ... args)
     {
         return std::make_shared<AssetT>(library, args...);
     }

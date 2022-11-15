@@ -29,13 +29,13 @@ namespace ice
     AssetLibrary::AssetLibrary() noexcept = default;
     AssetLibrary::~AssetLibrary() = default;
 
-    void AssetLibrary::add_directory(const std::filesystem::path& dir)
+    void AssetLibrary::add_directory(in<std::filesystem::path> dir)
     {
         assert(std::ranges::find(directories, dir) == end(directories));
         directories.push_back(std::filesystem::canonical(dir));
     }
 
-    const std::vector<std::filesystem::path>& AssetLibrary::get_directories() const noexcept
+    cref_t<std::vector<std::filesystem::path>> AssetLibrary::get_directories() const noexcept
     {
         return directories;
     }
