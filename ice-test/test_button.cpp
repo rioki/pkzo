@@ -50,14 +50,18 @@ TEST(Button, init)
 
 TEST(Button, init_from_style)
 {
+    auto lib = ice::AssetLibrary{};
+    lib.add_directory(ice::test::get_asset_folder());
+    lib.add_directory(ice::test::get_test_input());
+
     auto position           = glm::vec2(42.0f);
     auto size               = glm::vec2(150, 36);
     auto color              = ice::rgba(0x000000ff);
-    auto font               = std::make_shared<ice::Font>(ice::test::get_asset_folder() / "fonts/DejaVuSans.ttf", 16);
+    auto font               = lib.load<ice::Font>("fonts/DejaVuSans.ttf", 16);
     auto background_color   = ice::rgba(0x349eebff);
-    auto background_texture = std::make_shared<ice::Texture>(ice::test::get_test_input() / "AngryCat.jpg");
+    auto background_texture = lib.load<ice::Texture>("AngryCat.jpg");
 
-    auto style = std::make_shared<ice::ui::Style>(ice::test::get_test_input());
+    auto style = std::make_shared<ice::ui::Style>(lib, ice::test::get_test_input());
     style->set_vec2("Button", "size", size);
     style->set_font("Button", "font", font);
     style->set_color("Button", "color", color);

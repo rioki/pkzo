@@ -25,12 +25,18 @@ using ice::test::get_test_input;
 
 TEST(Style, load_empty_theme)
 {
-    EXPECT_NO_THROW(ice::ui::Style(get_test_input() / "EmptyTheme.json"));
+    auto lib = ice::AssetLibrary{};
+    lib.add_directory(ice::test::get_test_input());
+
+    EXPECT_NO_THROW(ice::ui::Style(lib, get_test_input() / "EmptyTheme.json"));
 }
 
 TEST(Style, get_color)
 {
-    auto theme = ice::ui::Style(get_test_input() / "TestTheme.json");
+    auto lib = ice::AssetLibrary{};
+    lib.add_directory(ice::test::get_test_input());
+
+    auto theme = ice::ui::Style(lib, get_test_input() / "TestTheme.json");
     // on Button
     EXPECT_EQ(glm::vec4(0.369, 0.357, 0.353, 0.5), theme.get_color("Button", "background_color"));
     // on default
@@ -39,7 +45,10 @@ TEST(Style, get_color)
 
 TEST(Style, get_font)
 {
-    auto theme = ice::ui::Style(get_test_input() / "TestTheme.json");
+    auto lib = ice::AssetLibrary{};
+    lib.add_directory(ice::test::get_test_input());
+
+    auto theme = ice::ui::Style(lib, get_test_input() / "TestTheme.json");
     // on Title
     auto a = theme.get_font("Title", "title_font");
     EXPECT_EQ("DejaVuSansMono.ttf", a->get_file().filename());
@@ -52,7 +61,10 @@ TEST(Style, get_font)
 
 TEST(Style, get_texture)
 {
-    auto theme = ice::ui::Style(get_test_input() / "TestTheme.json");
+    auto lib = ice::AssetLibrary{};
+    lib.add_directory(ice::test::get_test_input());
+
+    auto theme = ice::ui::Style(lib, get_test_input() / "TestTheme.json");
     // on Title as string
     auto a = theme.get_texture("Title", "title_background");
     EXPECT_EQ("AngryCat.png", a->get_file().filename());
@@ -69,7 +81,9 @@ TEST(Style, get_texture)
 
 TEST(Style, get_null_texture)
 {
-    auto theme = ice::ui::Style(get_test_input() / "TestTheme.json");
+    auto lib = ice::AssetLibrary{};
+
+    auto theme = ice::ui::Style(lib, get_test_input() / "TestTheme.json");
 
     auto a = theme.get_texture("None", "background_texture");
     EXPECT_EQ(nullptr, a);
@@ -77,7 +91,9 @@ TEST(Style, get_null_texture)
 
 TEST(Style, get_null_font)
 {
-    auto theme = ice::ui::Style(get_test_input() / "TestTheme.json");
+    auto lib = ice::AssetLibrary{};
+
+    auto theme = ice::ui::Style(lib, get_test_input() / "TestTheme.json");
 
     auto a = theme.get_font("None", "font");
     EXPECT_EQ(nullptr, a);
@@ -85,7 +101,9 @@ TEST(Style, get_null_font)
 
 TEST(Style, get_null_color)
 {
-    auto theme = ice::ui::Style(get_test_input() / "TestTheme.json");
+    auto lib = ice::AssetLibrary{};
+
+    auto theme = ice::ui::Style(lib, get_test_input() / "TestTheme.json");
 
     auto a = theme.get_color("None", "color");
     EXPECT_GLM_EQ(glm::vec4(0.0f), a);
@@ -93,7 +111,9 @@ TEST(Style, get_null_color)
 
 TEST(Style, get_variant)
 {
-    auto theme = ice::ui::Style(get_test_input() / "TestTheme.json");
+    auto lib = ice::AssetLibrary{};
+
+    auto theme = ice::ui::Style(lib, get_test_input() / "TestTheme.json");
 
     EXPECT_EQ(121, theme.get_int("BaseType/Variant", "value1"));
     EXPECT_EQ(24, theme.get_int("BaseType/Variant", "value2"));

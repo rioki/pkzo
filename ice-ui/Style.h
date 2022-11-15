@@ -35,12 +35,13 @@
 namespace ice::ui
 {
     using stdex::in;
+    using stdex::inref;
     using stdex::cref_t;
 
     class ICE_EXPORT Style : public ice::Asset
     {
     public:
-        Style(in<std::filesystem::path> file);
+        Style(inref<AssetLibrary> library, in<std::filesystem::path> file);
 
         [[nodiscard]] std::shared_ptr<Texture> get_texture(in<std::string_view> widget, in<std::string_view> prop) const;
         [[nodiscard]] std::shared_ptr<Font>    get_font(in<std::string_view> widget, in<std::string_view> prop) const;
@@ -61,15 +62,9 @@ namespace ice::ui
         void set_vec4(in<std::string_view> widget, in<std::string_view> prop, in<glm::vec4> value);
 
     private:
-        using TextureCache = std::map<std::filesystem::path, std::shared_ptr<Texture>>;
-
-        using FontId    = std::tuple<std::string, unsigned int>;
-        using FontCache = std::map<FontId, std::shared_ptr<Font>>;
-
+        AssetLibrary&         library;
         nlohmann::json        jtheme;
         std::filesystem::path file;
-        mutable TextureCache  texture_cache;
-        mutable FontCache     font_cache;
 
         [[nodiscard]] std::filesystem::path get_directory() const;
         [[nodiscard]] cref_t<nlohmann::json> get_prop(in<std::string_view> widget, in<std::string_view> prop) const;

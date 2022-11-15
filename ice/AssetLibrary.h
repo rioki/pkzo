@@ -111,6 +111,20 @@ namespace ice
     }
 
     template <typename AssetT, typename ... Args>
+    requires std::constructible_from<AssetT, const Args&...>
+    std::shared_ptr<AssetT> make_asset_ptr(AssetLibrary& /*library*/, const Args& ... args)
+    {
+        return std::make_shared<AssetT>(args...);
+    }
+
+    template <typename AssetT, typename ... Args>
+    requires std::constructible_from<AssetT, AssetLibrary&, const Args&...>
+    std::shared_ptr<AssetT> make_asset_ptr(AssetLibrary& library, const Args& ... args)
+    {
+        return std::make_shared<AssetT>(library, args...);
+    }
+
+    template <typename AssetT, typename ... Args>
     std::shared_ptr<AssetT> AssetLibrary::do_load(const Args& ... args)
     {
         auto key = hash(args...);
@@ -123,7 +137,7 @@ namespace ice
             return a;
         }
 
-        auto asset = std::make_shared<AssetT>(args...);
+        auto asset = make_asset_ptr<AssetT>(*this, args...);
         cache[key] = asset;
         return asset;
     }

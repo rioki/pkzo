@@ -34,6 +34,9 @@ namespace stdex
     //! Argument specifier for in/out values.
     template<typename T>
     using inout = T&;
+    //! Argument specifier for input references.
+    template<typename T>
+    using inref = inout<T>;
     //! Argument specifier for move values.
     template<typename T>
     using move = T&&;

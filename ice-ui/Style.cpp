@@ -26,8 +26,8 @@ namespace ice::ui
 {
     auto constexpr DEFAULT_PROP = "default";
 
-    Style::Style(in<std::filesystem::path> file)
-    : file(file)
+    Style::Style(inref<AssetLibrary> _library, in<std::filesystem::path> file)
+    : library(_library), file(file)
     {
         if (std::filesystem::is_regular_file(file))
         {
@@ -58,15 +58,7 @@ namespace ice::ui
         auto filename = jprop.is_object() ? jprop.at("file").get<std::string>() : jprop.get<std::string>();
         // TODO other parameters such as filter mode
 
-        auto ic = texture_cache.find(filename);
-        if (ic != end(texture_cache))
-        {
-            return std::get<std::shared_ptr<Texture>>(*ic);
-        }
-
-        auto texture = std::make_shared<Texture>(get_directory() / filename);
-        texture_cache[filename] = texture;
-        return texture;
+        return library.load<Texture>(get_directory() / filename);
     }
 
     std::shared_ptr<Font> Style::get_font(in<std::string_view> widget, in<std::string_view> prop) const
@@ -86,15 +78,7 @@ namespace ice::ui
         auto filename = jprop.at("file").get<std::string>();
         auto size = jprop.at("size").get<unsigned int>();
 
-        auto ic = font_cache.find({filename, size});
-        if (ic != end(font_cache))
-        {
-            return std::get<std::shared_ptr<Font>>(*ic);
-        }
-
-        auto font = std::make_shared<Font>(get_directory() / filename, size);
-        font_cache[{filename, size}] = font;
-        return font;
+        return library.load<Font>(get_directory() / filename, size);
     }
 
     glm::vec4 Style::get_color(in<std::string_view> widget, in<std::string_view> prop) const
@@ -131,7 +115,6 @@ namespace ice::ui
     {
         assert(value);
         auto filename = std::filesystem::relative(value->get_file(), get_directory());
-        texture_cache[filename] = value;
         set_prop(widget, prop, filename.string());
     }
 
@@ -140,7 +123,6 @@ namespace ice::ui
         assert(value);
         auto filename = std::filesystem::relative(value->get_file(), get_directory());
         auto size     = value->get_size();
-        font_cache[{filename.string(), size}] = value;
         set_prop(widget, prop, nlohmann::json{
             {"file", filename.string()},
             {"size", size},
