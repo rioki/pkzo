@@ -22,5 +22,10 @@
   "Button": {
     "size": [120, 35],
     "background_color": [0.2, 0.6, 0.9, 1.0]
+  },
+  "CheckBox": {
+    "checked_texture": "textures/CheckBox_Checked.png",
+    "unchecked_texture": "textures/CheckBox_Unchecked.png",
+    "checkbox_color": [0.0, 0.0, 0.0, 1.0]
   }
 }

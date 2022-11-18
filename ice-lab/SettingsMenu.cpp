@@ -44,10 +44,14 @@ namespace lab
 
         settings_matrix->add_node(std::make_shared<ice::ui::Label>(style, "Resolution"));
         settings_matrix->add_node(std::make_shared<ice::ui::Label>(style, "<Resolution>"));
+
         settings_matrix->add_node(std::make_shared<ice::ui::Label>(style, "Fullscreen"));
-        settings_matrix->add_node(std::make_shared<ice::ui::Label>(style, "<Fullscreen>"));
+        fullscreen_value = std::make_shared<ice::ui::CheckBox>(style, true, "ON");
+        settings_matrix->add_node(fullscreen_value);
+
         settings_matrix->add_node(std::make_shared<ice::ui::Label>(style, "V-Sync"));
-        settings_matrix->add_node(std::make_shared<ice::ui::Label>(style, "<V-Sync>"));
+        vsync_value = std::make_shared<ice::ui::CheckBox>(style, false, "ON");
+        settings_matrix->add_node(vsync_value);
 
         top_layout->add_node(settings_matrix);
 

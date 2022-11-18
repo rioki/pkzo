@@ -27,6 +27,7 @@
 #include "Widget.h"
 #include "Label.h"
 #include "Button.h"
+#include "CheckBox.h"
 
 #include "Layout.h"
 #include "VerticalLayout.h"
