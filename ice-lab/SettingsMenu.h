@@ -32,5 +32,9 @@ namespace lab
     {
     public:
         SettingsMenu(LabEngine& engine, const glm::uvec2 size);
+
+    private:
+        std::shared_ptr<ice::ui::CheckBox> fullscreen_value;
+        std::shared_ptr<ice::ui::CheckBox> vsync_value;
     };
 }

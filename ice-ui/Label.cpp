@@ -82,11 +82,14 @@ namespace ice::ui
     Label::Label(in<glm::vec2> position, in<std::shared_ptr<Style>> style, in<std::string> caption)
     : Label(position, style, TextStyle::DEFAULT, caption) {}
 
-    Label::Label(in<glm::vec2> position, in<std::shared_ptr<Style>> style, in<TextStyle> variant, in<std::string> caption)
-    : Label(position,
-            caption,
-            style->get_font(get_style_id(variant), "font"),
-            style->get_color(get_style_id(variant), "color")) {}
+    Label::Label(in<glm::vec2> _position, in<std::shared_ptr<Style>> _style, in<TextStyle> _variant, in<std::string> _caption)
+    : Label(_position,
+            _caption,
+            _style->get_font(get_style_id(_variant), "font"),
+            _style->get_color(get_style_id(_variant), "color"))
+    {
+        style = _style;
+    }
 
     Label::Label(in<std::string> caption, in<std::shared_ptr<Font>> font, in<glm::vec4> color) noexcept
     : Label(glm::vec2(0.0f), caption, font, color) {}
