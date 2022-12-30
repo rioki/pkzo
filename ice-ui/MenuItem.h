@@ -20,18 +20,35 @@
 // SOFTWARE.
 
 #pragma once
-
-#include <string_view>
-#include <filesystem>
-#include <fstream>
-#include <regex>
+#include "config.h"
 
 #include <c9y/c9y.h>
+#include <rsig/rsig.h>
+#include <ice/fwd.h>
+#include <ice/Text.h>
 
-#include <ice/ice.h>
+#include "Button.h"
 
-#include <ice/strex.h>
-#include <ice/glm_2d.h>
-#include <ice/glm_io.h>
-#include <ice/glm_json.h>
-#include <ice/glm_utils.h>
+namespace ice::ui
+{
+    class PopupMenu;
+
+    class ICE_EXPORT MenuItem : public Button
+    {
+    public:
+        MenuItem(const std::shared_ptr<Style>& style, const std::string& caption, const std::function<void ()>& cb);
+        MenuItem(const std::shared_ptr<Style>& style, const std::string& caption, const std::shared_ptr<PopupMenu>& menu);
+
+        ~MenuItem();
+
+    private:
+        std::shared_ptr<PopupMenu> submenu;
+        rsig::connection           click_out_conn;
+
+        bool just_closed = false;
+
+        void toggle_submenu();
+        void show_submenu();
+        void hide_submenu();
+    };
+}

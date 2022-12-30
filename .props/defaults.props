@@ -8,7 +8,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <PreprocessorDefinitions>SOLUTION_DIR=R"($(SolutionDir))";PROJECT_DIR=R"($(ProjectDir))";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SOLUTION_DIR=R"($(SolutionDir))";PROJECT_DIR=R"($(ProjectDir))";STREX_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)\glow;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>

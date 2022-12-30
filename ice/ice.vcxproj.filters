@@ -195,6 +195,12 @@
     <ClInclude Include="stdex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="fwd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="strex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -312,6 +318,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="HitArea.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="strex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

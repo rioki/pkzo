@@ -26,6 +26,8 @@
 
 namespace ice::ui
 {
+    constexpr auto BUTTON_PADDING = glm::vec2(4.0f); // TODO configurable padding.
+
     Button::Button() noexcept = default;
 
     Button::Button(const std::shared_ptr<Style>& style, const std::string& caption)
@@ -45,6 +47,7 @@ namespace ice::ui
 
     Button::Button(const glm::vec2& position, const glm::vec2& size, const std::string& caption, const std::shared_ptr<Font>& font, const glm::vec4& color, const glm::vec4& background_color, const std::shared_ptr<Texture> background_texture)
     : Widget(position, size),
+      min_size(size),
       background(glm::mat3(1.0f), size, background_color, background_texture),
       label(glm::mat3(1.0f), caption, font, color),
       hit_area(glm::mat3(1.0f), size)
@@ -52,6 +55,8 @@ namespace ice::ui
         add_node(background);
         add_node(label);
         add_node(hit_area);
+
+        set_size(get_min_size());
     }
 
     void Button::set_caption(const std::string& value) noexcept
@@ -114,9 +119,14 @@ namespace ice::ui
         return hit_area.get_click_signal();
     }
 
+    glm::vec2 Button::get_min_size() const noexcept
+    {
+        return glm::max(min_size, label.get_size() + BUTTON_PADDING);
+    }
+
     glm::vec2 Button::handle_size_request(const glm::vec2& value) noexcept
     {
-        auto new_size = glm::max(label.get_size(), value); // TODO padding?
+        auto new_size = glm::max(get_min_size(), value);
         background.set_size(new_size);
         hit_area.set_size(new_size);
         return new_size;

@@ -23,6 +23,7 @@
 #include "Font.h"
 
 #include "utils.h"
+#include "strex.h"
 #include "Texture.h"
 
 #define FT_FLOOR(X) ((X & -64) / 64)
@@ -84,7 +85,7 @@ namespace ice
 
     glm::uvec2 Font::estimate(const std::string& text) const noexcept
     {
-        auto u32text = utf32(text);
+        auto u32text = strex::utf32(text);
         auto [size, start] = estimate_impl(u32text);
         return size;
     }
@@ -108,7 +109,7 @@ namespace ice
 
     std::shared_ptr<Texture> Font::render(const std::string& text) const noexcept
     {
-        auto u32text = utf32(text);
+        auto u32text = strex::utf32(text);
         auto [size, start] = estimate_impl(u32text);
         auto texture = std::make_shared<Texture>(size, ColorMode::RGBA, DataType::UINT8, nullptr, text);
         auto pen = start;

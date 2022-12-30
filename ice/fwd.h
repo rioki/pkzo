@@ -20,18 +20,41 @@
 // SOFTWARE.
 
 #pragma once
+#include "config.h"
 
-#include <string_view>
-#include <filesystem>
-#include <fstream>
-#include <regex>
-
-#include <c9y/c9y.h>
-
-#include <ice/ice.h>
-
-#include <ice/strex.h>
-#include <ice/glm_2d.h>
-#include <ice/glm_io.h>
-#include <ice/glm_json.h>
-#include <ice/glm_utils.h>
+namespace ice
+{
+    class AmbientLight;
+    class Asset;
+    class AssetLibrary;
+    class BoxVisual;
+    class Camera;
+    class ConsoleSystem;
+    class DirectionalLight;
+    class Engine;
+    class Font;
+    class GraphicSystem;
+    class HitArea;
+    class InputSystem;
+    class Joystick;
+    class Keyboard;
+    class Material;
+    class Material;
+    class Mesh;
+    class Mouse;
+    class PointLight;
+    class Rectangle;
+    class Renderer;
+    class SdlGraphicSystem;
+    class SdlInputSystem;
+    class SdlSentry;
+    class Settings;
+    class SphereVisual;
+    class SpotLight;
+    class StatsSystem;
+    class System;
+    class Text;
+    class Texture;
+    class Visual;
+    class Window;
+}

@@ -32,5 +32,8 @@ namespace lab
     {
     public:
         MainMenu(LabEngine& engine, const glm::uvec2 size);
+
+    private:
+        std::shared_ptr<ice::ui::Menu> popup_menu;
     };
 }

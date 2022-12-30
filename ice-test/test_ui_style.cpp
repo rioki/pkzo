@@ -31,6 +31,14 @@ TEST(Style, load_empty_theme)
     EXPECT_NO_THROW(ice::ui::Style(lib, get_test_input() / "EmptyTheme.json"));
 }
 
+TEST(Style, invalid_file_throws)
+{
+    auto lib = ice::AssetLibrary{};
+    lib.add_directory(ice::test::get_test_input());
+
+    EXPECT_THROW(ice::ui::Style(lib, get_test_input() / "InvalidFile.json"), std::runtime_error);
+}
+
 TEST(Style, get_color)
 {
     auto lib = ice::AssetLibrary{};

@@ -130,12 +130,9 @@ namespace ice
     {
         if (renderer != nullptr)
         {
-            auto screen = get_root();
-            assert(screen != nullptr);
-            auto renderer = screen->get_renderer();
-            assert(renderer != nullptr);
             renderer->remove_geometry(render_handle);
-            renderer = nullptr;
+            renderer      = nullptr;
+            render_handle = 0;
         }
     }
 

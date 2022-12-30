@@ -93,9 +93,6 @@ namespace ice
     template <typename T>
     void no_delete(T*) {}
 
-    ICE_EXPORT std::u32string utf32(const std::string& buff);
-    ICE_EXPORT std::u32string utf32(const std::u8string& buff);
-
     ICE_EXPORT void trace(const std::string_view msg) noexcept;
 
 #ifndef NDEBUG

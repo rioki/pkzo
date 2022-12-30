@@ -33,6 +33,7 @@ namespace ice
     {
     public:
         HitArea();
+        HitArea(const glm::vec2& size) noexcept;
         HitArea(const glm::mat3& transform, const glm::vec2& size) noexcept;
 
         void set_size(const glm::vec2& value) noexcept;

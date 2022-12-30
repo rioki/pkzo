@@ -34,6 +34,7 @@ namespace lab
         MAIN_MENU,
         SETTINGS_MENU,
         PLAY,
+        EDITOR,
         END
     };
 

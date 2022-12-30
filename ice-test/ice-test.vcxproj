@@ -167,9 +167,12 @@
     <ClCompile Include="test_screen_node_group.cpp" />
     <ClCompile Include="test_state_machine.cpp" />
     <ClCompile Include="test_stats.cpp" />
+    <ClCompile Include="test_strex.cpp" />
+    <ClCompile Include="test_text.cpp" />
     <ClCompile Include="test_texture.cpp" />
     <ClCompile Include="test_env.cpp" />
     <ClCompile Include="test_settings.cpp" />
+    <ClCompile Include="test_ui_layout.cpp" />
     <ClCompile Include="test_ui_style.cpp" />
     <ClCompile Include="test_utils.cpp" />
     <ClCompile Include="test_widget.cpp" />

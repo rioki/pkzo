@@ -28,7 +28,7 @@ namespace lab
     MainMenu::MainMenu(LabEngine& engine, const glm::uvec2 size)
     : ice::Screen(size)
     {
-        auto style = engine.load_asset<ice::ui::Style>("ui/LightBlue.json");
+        auto style = engine.load_asset<ice::ui::Style>("ui/DarkBlue.json");
         assert(style);
 
         // Background
@@ -49,6 +49,12 @@ namespace lab
         });
         layout->add_node(load_world_button);
 
+        auto open_editor_button = std::make_shared<ice::ui::Button>(style, "Open Editor");
+        open_editor_button->on_click([&engine] () {
+            engine.queue_state(EngineState::EDITOR);
+        });
+        layout->add_node(open_editor_button);
+
         auto settings_button = std::make_shared<ice::ui::Button>(style, "Settings");
         settings_button->on_click([&engine] () {
             engine.queue_state(EngineState::SETTINGS_MENU);
@@ -62,5 +68,40 @@ namespace lab
         layout->add_node(exit_button);
 
         add_node(layout);
+
+        // TEST place to test right click menu
+        auto hit_area = std::make_shared<ice::HitArea>(glm::mat4(1.0f), size);
+        hit_area->on_mouse_down([this, style, &engine] (auto inside, auto button, auto pos) {
+            if (inside && button == ice::MouseButton::RIGHT)
+            {
+                if (popup_menu)
+                {
+                    popup_menu->set_position(pos);
+                }
+                else
+                {
+                    popup_menu = std::make_shared<ice::ui::Menu>(pos, style);
+                    popup_menu->add_item("Play", c9y::sync_fun([this, &engine] () {
+                        this->remove_node(popup_menu);
+                        engine.queue_state(EngineState::PLAY);
+                    }));
+                    popup_menu->add_item("Do Nothing", c9y::sync_fun([this, &engine] () {
+                        this->remove_node(popup_menu);
+                    }));
+                    popup_menu->add_item("Settings", c9y::sync_fun([this, &engine] () {
+                        this->remove_node(popup_menu);
+                        engine.queue_state(EngineState::SETTINGS_MENU);
+                    }));
+                    popup_menu->add_item("Exit", c9y::sync_fun([this, &engine] () {
+                        this->remove_node(popup_menu);
+                        engine.queue_state(EngineState::END);
+                    }));
+                    add_node(popup_menu);
+                }
+            }
+        });
+        add_node(hit_area);
+
+        // TEST
     }
 }

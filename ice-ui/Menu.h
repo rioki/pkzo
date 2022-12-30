@@ -20,18 +20,41 @@
 // SOFTWARE.
 
 #pragma once
+#include "config.h"
 
-#include <string_view>
-#include <filesystem>
-#include <fstream>
-#include <regex>
+#include <memory>
+#include <functional>
 
-#include <c9y/c9y.h>
+#include "Widget.h"
+#include "Style.h"
+#include "MenuItem.h"
+#include "Layout.h"
 
-#include <ice/ice.h>
+namespace ice::ui
+{
+    class PopupMenu;
 
-#include <ice/strex.h>
-#include <ice/glm_2d.h>
-#include <ice/glm_io.h>
-#include <ice/glm_json.h>
-#include <ice/glm_utils.h>
+    //! Menu Base
+    class ICE_EXPORT Menu : public Widget
+    {
+    public:
+        Menu(const std::shared_ptr<Style>& style);
+        Menu(const glm::vec2& position, const std::shared_ptr<Style>& style);
+
+        //! Add function item.
+        //!
+        //! @param caption the caption of the item
+        //! @param function the function to call when the menu item is clicked.
+        void add_item(const std::string& caption, const std::function<void ()>& function);
+
+        //! Add item with submenu
+        //!
+        //! @param caption the caption of the item
+        //! @param menu the menu to open when the menu item is clicked.
+        void add_item(const std::string& caption, const std::shared_ptr<PopupMenu> menu);
+
+    protected:
+        const std::shared_ptr<Style> style;
+        std::shared_ptr<Layout>      layout;
+    };
+}

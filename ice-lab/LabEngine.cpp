@@ -27,6 +27,7 @@
 
 #include "MainMenu.h"
 #include "SettingsMenu.h"
+#include "EditorScreen.h"
 
 namespace lab
 {
@@ -75,7 +76,7 @@ namespace lab
         start_system<ice::SdlInputSystem>();
 
         setup_state_machine();
-        queue_state(EngineState::MAIN_MENU);
+        queue_state(EngineState::EDITOR);
     }
 
     void LabEngine::queue_state(EngineState state)
@@ -142,6 +143,12 @@ namespace lab
         state_machine.on_enter(EngineState::PLAY, [this] () {
             set_overlay(nullptr); // TODO play HUD
             set_scene(create_test_scene());
+        });
+
+        // EDITOR
+        state_machine.on_enter(EngineState::EDITOR, [this] () {
+            set_overlay(std::make_shared<EditorScreen>(*this, get_window()->get_size()));
+            set_scene(nullptr);
         });
 
         // END

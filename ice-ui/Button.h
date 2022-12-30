@@ -56,10 +56,13 @@ namespace ice::ui
         rsig::connection on_click(const std::function<void ()>& cb) noexcept;
         rsig::signal<>& get_click_signal() noexcept;
 
+        glm::vec2 get_min_size() const noexcept override;
+
     protected:
         glm::vec2 handle_size_request(const glm::vec2& value) noexcept override;
 
     private:
+        glm::vec2 min_size;
         Rectangle background;
         Text      label;
         HitArea   hit_area;

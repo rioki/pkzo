@@ -26,22 +26,27 @@ namespace ice::ui
 {
     auto constexpr DEFAULT_PROP = "default";
 
-    Style::Style(inref<AssetLibrary> _library, in<std::filesystem::path> file)
+    Style::Style(AssetLibrary& _library, const std::filesystem::path& file)
     : library(_library), file(file)
     {
+        if (!std::filesystem::exists(file))
+        {
+            throw std::runtime_error(std::format("UI Style '{}' could not be found.", strex::narrow(file.native())));
+        }
+
         if (std::filesystem::is_regular_file(file))
         {
             auto input = std::ifstream(file);
             if (!input.is_open())
             {
-                throw std::runtime_error(std::format("Failed to open '{}' for reading.", file.string()));
+                throw std::runtime_error(std::format("Failed to open '{}' for reading.", strex::narrow(file.native())));
             }
 
             jtheme = nlohmann::json::parse(input);
         }
     }
 
-    std::shared_ptr<Texture> Style::get_texture(in<std::string_view> widget, in<std::string_view> prop) const
+    std::shared_ptr<Texture> Style::get_texture(const std::string_view widget, const std::string_view prop) const
     {
         const auto& jprop = get_prop(widget, prop);
 
@@ -61,7 +66,7 @@ namespace ice::ui
         return library.load<Texture>(get_directory() / filename);
     }
 
-    std::shared_ptr<Font> Style::get_font(in<std::string_view> widget, in<std::string_view> prop) const
+    std::shared_ptr<Font> Style::get_font(const std::string_view widget, const std::string_view prop) const
     {
         const auto& jprop = get_prop(widget, prop);
 
@@ -81,44 +86,44 @@ namespace ice::ui
         return library.load<Font>(get_directory() / filename, size);
     }
 
-    glm::vec4 Style::get_color(in<std::string_view> widget, in<std::string_view> prop) const
+    glm::vec4 Style::get_color(const std::string_view widget, const std::string_view prop) const
     {
         return get_vec4(widget, prop);
     }
 
-    int Style::get_int(in<std::string_view> widget, in<std::string_view> prop) const
+    int Style::get_int(const std::string_view widget, const std::string_view prop) const
     {
         return get_simple_prop<int>(widget, prop);
     }
 
-    float Style::get_float(in<std::string_view> widget, in<std::string_view> prop) const
+    float Style::get_float(const std::string_view widget, const std::string_view prop) const
     {
         return get_simple_prop<float>(widget, prop);
     }
 
-    glm::vec2 Style::get_vec2(in<std::string_view> widget, in<std::string_view> prop) const
+    glm::vec2 Style::get_vec2(const std::string_view widget, const std::string_view prop) const
     {
         return get_simple_prop<glm::vec2>(widget, prop);
     }
 
-    glm::vec3 Style::get_vec3(in<std::string_view> widget, in<std::string_view> prop) const
+    glm::vec3 Style::get_vec3(const std::string_view widget, const std::string_view prop) const
     {
         return get_simple_prop<glm::vec3>(widget, prop);
     }
 
-    glm::vec4 Style::get_vec4(in<std::string_view> widget, in<std::string_view> prop) const
+    glm::vec4 Style::get_vec4(const std::string_view widget, const std::string_view prop) const
     {
         return get_simple_prop<glm::vec4>(widget, prop);
     }
 
-    void Style::set_texture(in<std::string_view> widget, in<std::string_view> prop, in<std::shared_ptr<Texture>> value)
+    void Style::set_texture(const std::string_view widget, const std::string_view prop, const std::shared_ptr<Texture>& value)
     {
         assert(value);
         auto filename = std::filesystem::relative(value->get_file(), get_directory());
         set_prop(widget, prop, filename.string());
     }
 
-    void Style::set_font(in<std::string_view> widget, in<std::string_view> prop, in<std::shared_ptr<Font>> value)
+    void Style::set_font(const std::string_view widget, const std::string_view prop, const std::shared_ptr<Font>& value)
     {
         assert(value);
         auto filename = std::filesystem::relative(value->get_file(), get_directory());
@@ -129,32 +134,32 @@ namespace ice::ui
         });
     }
 
-    void Style::set_color(in<std::string_view> widget, in<std::string_view> prop, in<glm::vec4> value)
+    void Style::set_color(const std::string_view widget, const std::string_view prop, const glm::vec4& value)
     {
         set_vec4(widget, prop, value);
     }
 
-    void Style::set_int(in<std::string_view> widget, in<std::string_view> prop, in<int> value)
+    void Style::set_int(const std::string_view widget, const std::string_view prop, const int value)
     {
         set_prop(widget, prop, value);
     }
 
-    void Style::set_float(in<std::string_view> widget, in<std::string_view> prop, in<float> value)
+    void Style::set_float(const std::string_view widget, const std::string_view prop, const float value)
     {
         set_prop(widget, prop, value);
     }
 
-    void Style::set_vec2(in<std::string_view> widget, in<std::string_view> prop, in<glm::vec2> value)
+    void Style::set_vec2(const std::string_view widget, const std::string_view prop, const glm::vec2 value)
     {
         set_prop(widget, prop, value);
     }
 
-    void Style::set_vec3(in<std::string_view> widget, in<std::string_view> prop, in<glm::vec3> value)
+    void Style::set_vec3(const std::string_view widget, const std::string_view prop,const glm::vec3& value)
     {
         set_prop(widget, prop, value);
     }
 
-    void Style::set_vec4(in<std::string_view> widget, in<std::string_view> prop, in<glm::vec4> value)
+    void Style::set_vec4(const std::string_view widget, const std::string_view prop, const glm::vec4& value)
     {
         set_prop(widget, prop, value);
     }
@@ -171,7 +176,7 @@ namespace ice::ui
         }
     }
 
-    std::optional<std::string> get_variant_base(in<std::string> widget)
+    std::optional<std::string> get_variant_base(const std::string& widget)
     {
         static auto re_name_variant = std::regex("([a-zA-Z0-9_]+)/([a-zA-Z0-9_]+)");
         std::smatch result;
@@ -183,7 +188,7 @@ namespace ice::ui
         return std::nullopt;
     }
 
-    in<nlohmann::json> Style::get_prop(in<std::string_view> widget, in<std::string_view> prop) const
+    in<nlohmann::json> Style::get_prop(const std::string_view widget, const std::string_view prop) const
     {
         auto si = jtheme.find(widget);
         if (si != end(jtheme))
@@ -253,7 +258,7 @@ namespace ice::ui
     };
 
     template <typename T>
-    T Style::get_simple_prop(in<std::string_view> widget, in<std::string_view> prop) const
+    T Style::get_simple_prop(const std::string_view widget, const std::string_view prop) const
     {
         const auto& jprop = get_prop(widget, prop);
 
@@ -265,7 +270,7 @@ namespace ice::ui
         return jprop.get<T>();
     }
 
-    void Style::set_prop(in<std::string_view> widget, in<std::string_view> prop, in<nlohmann::json> jvalue)
+    void Style::set_prop(const std::string_view widget, const std::string_view prop, in<nlohmann::json> jvalue)
     {
         jtheme[widget][prop] = jvalue;
     }

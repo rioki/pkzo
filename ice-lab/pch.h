@@ -21,8 +21,11 @@
 
 #pragma once
 
+#define NOMINMAX
 #include <windows.h>
 #include <shlobj.h>
+
+#include <c9y/c9y.h>
 
 #include <ice/ice.h>
 #include <ice/glm_2d.h>
