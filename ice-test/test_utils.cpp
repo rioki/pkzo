@@ -23,14 +23,6 @@
 
 #include <ice/ice.h>
 
-TEST(utils, utf32)
-{
-    using namespace std::literals::string_literals;
-
-    EXPECT_EQ(U"Halöle"s, ice::utf32(u8"Halöle"s));
-    EXPECT_EQ(U"Hello"s,  ice::utf32("Hello"s));
-}
-
 TEST(utils, join)
 {
     EXPECT_EQ("1,2,3,4,5", ice::join({"1", "2", "3", "4", "5"}, ","));

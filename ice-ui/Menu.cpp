@@ -19,19 +19,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
+#include "pch.h"
+#include "Menu.h"
 
-#include <string_view>
-#include <filesystem>
-#include <fstream>
-#include <regex>
+namespace ice::ui
+{
+    Menu::Menu(const std::shared_ptr<Style>& _style)
+    : style(_style) {}
 
-#include <c9y/c9y.h>
+    Menu::Menu(const glm::vec2& position, const std::shared_ptr<Style>& _style)
+    : Widget(position), style(_style) {}
 
-#include <ice/ice.h>
+    void Menu::add_item(const std::string& caption, const std::function<void ()>& function)
+    {
+        assert(layout);
+        layout->add_node(std::make_shared<MenuItem>(style, caption, function));
+        set_size(layout->get_size());
+    }
 
-#include <ice/strex.h>
-#include <ice/glm_2d.h>
-#include <ice/glm_io.h>
-#include <ice/glm_json.h>
-#include <ice/glm_utils.h>
+    void Menu::add_item(const std::string& caption, const std::shared_ptr<PopupMenu> menu)
+    {
+        assert(layout);
+        layout->add_node(std::make_shared<MenuItem>(style, caption, menu));
+        set_size(layout->get_size());
+    }
+
+}

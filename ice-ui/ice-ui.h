@@ -33,3 +33,8 @@
 #include "VerticalLayout.h"
 #include "HorizontalLayout.h"
 #include "TableLayout.h"
+
+#include "Menu.h"
+#include "MenuItem.h"
+#include "MenuBar.h"
+#include "PopupMenu.h"

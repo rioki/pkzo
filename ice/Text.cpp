@@ -28,8 +28,8 @@ namespace ice
 {
     Text::Text() noexcept = default;
 
-    Text::Text(const glm::mat3& tr, const std::string& te, const std::shared_ptr<Font>& f) noexcept
-    : Text(tr, te, f, glm::vec4(1.0f)) {}
+    Text::Text(const std::string& _text, const std::shared_ptr<Font>& _font, const glm::vec4& _color) noexcept
+    : Text(glm::mat4(1.0f), _text, _font, _color) {}
 
     Text::Text(const glm::mat3& transform, const std::string& t, const std::shared_ptr<Font>& f, const glm::vec4& c) noexcept
     : Rectangle(transform, glm::vec2(15.0f), c), text(t), font(f), color(c)

@@ -22,32 +22,43 @@
 #pragma once
 #include "config.h"
 
-#include <ice/ScreenNodeGroup.h>
+#include <memory>
 
+#include "Menu.h"
 #include "Style.h"
 
 namespace ice::ui
 {
-    class ICE_EXPORT Widget : public ScreenNodeGroup
+    //! Pupup Menu
+    class ICE_EXPORT PopupMenu : public Menu
     {
     public:
+        //! Create a pop up menu
+        //!
+        //! @param position the position the pop up menu shall appear
+        //! @param style the style of the menu
+        //! @{
+        PopupMenu(const std::shared_ptr<Style>& style);
+        PopupMenu(const glm::vec2& position, const std::shared_ptr<Style>& style);
+        //! @}
 
-        Widget() noexcept;
-        Widget(const glm::vec2& size) noexcept;
-        Widget(const glm::vec2& position, const glm::vec2& size) noexcept;
+        //! Singal emitted when the user click outside of the pop up menu.
+        //!
+        //! This signal can be used to hide the menu again, if the user clicked somewhere else.
+        //!
+        //! @{
+        [[nodiscard]] rsig::signal<>& get_click_out_signal() noexcept;
+        rsig::connection on_click_out(const std::function<void ()>& cb) noexcept;
+        //! @}
 
-        void set_position(const glm::vec2& value) noexcept;
-        glm::vec2 get_position() const noexcept;
-
-        void set_size(const glm::vec2& value) noexcept;
-        const glm::vec2& get_size() const noexcept;
-
-        virtual glm::vec2 get_min_size() const noexcept;
+        [[nodiscard]] glm::vec2 get_min_size() const noexcept override;
 
     protected:
-        virtual glm::vec2 handle_size_request(const glm::vec2& value) noexcept;
+        [[nodiscard]] glm::vec2 handle_size_request(const glm::vec2& value) noexcept override;
 
     private:
-        glm::vec2 size = glm::vec2(0.0f);
+        rsig::signal<>             click_out_signal;
+        std::shared_ptr<Rectangle> background;
+        std::shared_ptr<HitArea>   hit_area;
     };
 }

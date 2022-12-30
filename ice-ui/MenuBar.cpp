@@ -19,19 +19,36 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
+#include "pch.h"
+#include "MenuBar.h"
 
-#include <string_view>
-#include <filesystem>
-#include <fstream>
-#include <regex>
+#include "HorizontalLayout.h"
 
-#include <c9y/c9y.h>
+namespace ice::ui
+{
+    MenuBar::MenuBar(const std::shared_ptr<Style>& style)
+    : Menu(style)
+    {
+        background = std::make_shared<Rectangle>(glm::mat3(1.0f), glm::vec2(15.0f, 15.0f), style->get_color("MainMenu", "background_color"), style->get_texture("MainMenu", "background_texture"));
+        add_node(background);
 
-#include <ice/ice.h>
+        layout = std::make_shared<HorizontalLayout>(5.0f);
+        add_node(layout);
+    }
 
-#include <ice/strex.h>
-#include <ice/glm_2d.h>
-#include <ice/glm_io.h>
-#include <ice/glm_json.h>
-#include <ice/glm_utils.h>
+    glm::vec2 MenuBar::get_min_size() const noexcept
+    {
+        // The size of the background is the size of the MainMenu, we can not size smaller.
+        // TODO: how do we handle resizing of the window?
+        return layout->get_size();
+    }
+
+    glm::vec2 MenuBar::handle_size_request(const glm::vec2& value) noexcept
+    {
+        // this feels like a new layout
+        auto size = glm::max(get_min_size(), value);
+        layout->set_position(glm::vec2((-size.x / 2.0f) + (layout->get_size().x / 2.0f), 0.0f));
+        background->set_size(size);
+        return size;
+    }
+}

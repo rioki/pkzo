@@ -30,7 +30,7 @@ namespace ice
     {
     public:
         Text() noexcept;
-        Text(const glm::mat3& transform, const std::string& text, const std::shared_ptr<Font>& font) noexcept;
+        Text(const std::string& text, const std::shared_ptr<Font>& font, const glm::vec4& color) noexcept;
         Text(const glm::mat3& transform, const std::string& text, const std::shared_ptr<Font>& font, const glm::vec4& color) noexcept;
 
         void set_text(const std::string& value) noexcept;

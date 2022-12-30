@@ -112,6 +112,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="EditorScreen.cpp" />
     <ClCompile Include="LabEngine.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
@@ -134,6 +135,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EditorScreen.h" />
     <ClInclude Include="LabEngine.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Pawn.h" />

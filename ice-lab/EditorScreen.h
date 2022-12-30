@@ -21,17 +21,19 @@
 
 #pragma once
 
-#include <string_view>
-#include <filesystem>
-#include <fstream>
-#include <regex>
-
-#include <c9y/c9y.h>
-
 #include <ice/ice.h>
+#include <ice-ui/ice-ui.h>
 
-#include <ice/strex.h>
-#include <ice/glm_2d.h>
-#include <ice/glm_io.h>
-#include <ice/glm_json.h>
-#include <ice/glm_utils.h>
+namespace lab
+{
+    class LabEngine;
+
+    class EditorScreen : public ice::Screen
+    {
+    public:
+        EditorScreen(LabEngine& engine, const glm::uvec2 size);
+
+    private:
+        std::shared_ptr<ice::ui::MenuBar> main_menu;
+    };
+}

@@ -102,7 +102,7 @@ namespace ice::ui
         }
 
         // remove last margin, as it was added to much
-        result.y -= margin;
+        result.x -= margin;
 
         return result;
     }
@@ -116,7 +116,7 @@ namespace ice::ui
         }
 
         const auto hs = get_size() * 0.5f;
-        auto position = glm::vec2(0.0f, hs.y);
+        auto position = glm::vec2(-hs.x, 0.0f);
 
         for (auto* widget : widgets)
         {

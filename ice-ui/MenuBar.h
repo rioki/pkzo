@@ -20,18 +20,24 @@
 // SOFTWARE.
 
 #pragma once
+#include "config.h"
 
-#include <string_view>
-#include <filesystem>
-#include <fstream>
-#include <regex>
+#include "Menu.h"
+#include "MenuItem.h"
 
-#include <c9y/c9y.h>
+namespace ice::ui
+{
+    class ICE_EXPORT MenuBar : public Menu
+    {
+    public:
+        MenuBar(const std::shared_ptr<Style>& style);
 
-#include <ice/ice.h>
+        [[nodiscard]] glm::vec2 get_min_size() const noexcept override;
 
-#include <ice/strex.h>
-#include <ice/glm_2d.h>
-#include <ice/glm_io.h>
-#include <ice/glm_json.h>
-#include <ice/glm_utils.h>
+    protected:
+        [[nodiscard]] glm::vec2 handle_size_request(const glm::vec2& value) noexcept override;
+
+    private:
+        std::shared_ptr<Rectangle> background;
+    };
+}

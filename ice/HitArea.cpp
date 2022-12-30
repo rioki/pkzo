@@ -26,6 +26,9 @@ namespace ice
 {
     HitArea::HitArea() = default;
 
+    HitArea::HitArea(const glm::vec2& _size) noexcept
+    : size(_size) {}
+
     HitArea::HitArea(const glm::mat3& transform, const glm::vec2& _size) noexcept
     : ScreenNode(transform), size(_size) {}
 
