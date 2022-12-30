@@ -48,7 +48,7 @@ namespace ice::ui
         });
     }
 
-    [[nodiscard]] rsig::signal<>& PopupMenu::get_click_out_signal() noexcept
+    rsig::signal<>& PopupMenu::get_click_out_signal() noexcept
     {
         return click_out_signal;
     }

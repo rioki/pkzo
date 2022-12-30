@@ -21,7 +21,6 @@ namespace strex
     struct CharTraits<char>
     {
         // Empty string is whatever the system uses as multibyte encoding
-        //static constexpr const char* encoding = "";
         static constexpr const char* encoding = "";
     };
 
