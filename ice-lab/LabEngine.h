@@ -30,11 +30,8 @@ namespace lab
 
     enum class EngineState
     {
-        INIT,
-        MAIN_MENU,
-        SETTINGS_MENU,
-        PLAY,
         EDITOR,
+        PLAY,
         END
     };
 

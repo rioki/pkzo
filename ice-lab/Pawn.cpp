@@ -136,7 +136,7 @@ namespace lab
             {
                 auto engine = dynamic_cast<LabEngine*>(get_engine());
                 assert(engine);
-                engine->queue_state(EngineState::MAIN_MENU);
+                engine->queue_state(EngineState::EDITOR);
             }
         });
         key_up_con = keyboard->on_key_up([this] (auto /*mod*/, auto key) {

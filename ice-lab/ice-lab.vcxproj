@@ -115,7 +115,6 @@
     <ClCompile Include="EditorScreen.cpp" />
     <ClCompile Include="LabEngine.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Pawn.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -123,7 +122,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="SettingsMenu.cpp" />
     <ClCompile Include="StaticBox.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -137,10 +135,8 @@
   <ItemGroup>
     <ClInclude Include="EditorScreen.h" />
     <ClInclude Include="LabEngine.h" />
-    <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Pawn.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="SettingsMenu.h" />
     <ClInclude Include="StaticBox.h" />
   </ItemGroup>
   <ItemGroup>
