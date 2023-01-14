@@ -42,7 +42,7 @@ namespace lab
         file_menu->add_item("Save Scene As", [this] () {});
         file_menu->add_item("New Scene", [this] () {});
         file_menu->add_item("Exit", [&engine] () {
-            engine.stop();
+            engine.queue_state(EngineState::END);
         });
 
         main_menu->add_item("File", file_menu);

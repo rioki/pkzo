@@ -25,8 +25,6 @@
 #include "StaticBox.h"
 #include "Pawn.h"
 
-#include "MainMenu.h"
-#include "SettingsMenu.h"
 #include "EditorScreen.h"
 
 namespace lab
@@ -127,18 +125,6 @@ namespace lab
 
     void LabEngine::setup_state_machine() noexcept
     {
-        // MAIN_MENU
-        state_machine.on_enter(EngineState::MAIN_MENU, [this] () {
-            set_overlay(std::make_shared<MainMenu>(*this, get_window()->get_size()));
-            set_scene(nullptr);
-        });
-
-        // SETTINGS_MENU
-        state_machine.on_enter(EngineState::SETTINGS_MENU, [this] () {
-            set_overlay(std::make_shared<SettingsMenu>(*this, get_window()->get_size()));
-            set_scene(nullptr);
-        });
-
         // PLAY
         state_machine.on_enter(EngineState::PLAY, [this] () {
             set_overlay(nullptr); // TODO play HUD
