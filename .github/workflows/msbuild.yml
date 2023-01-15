@@ -11,13 +11,14 @@ permissions:
   packages: write
 
 env:
-  VCPKG_COMMIT: 472ed329f5492e133028dd12a3b4758b0b676d00
+  VCPKG_COMMIT: d73cbb6a272ab4dd6e56b0a238a2b4dc7e082c7d
   VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
 
 jobs:
   build:
     strategy:
       matrix:
+        fail-fast: false
         platform: [x86, x64]
         include:
           - platform: x86
