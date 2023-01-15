@@ -19,7 +19,6 @@ jobs:
     strategy:
       matrix:
         platform: [x86, x64]
-        config: [Debug, Release]
         include:
           - platform: x86
             triplet: x86-windows
@@ -55,9 +54,15 @@ jobs:
       shell: 'bash'
       run: >
         ./vcpkg/vcpkg integrate install
-    - name: Build
+    - name: Build (Debug)
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: msbuild /m /p:Configuration=${{matrix.config}} /property:Platform=${{matrix.platform}} pkzo.sln
-    - name: Test
+      run: msbuild /m /p:Configuration=Debug /property:Platform=${{matrix.platform}} pkzo.sln
+    - name: Test (Debug)
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: bin/${{matrix.platform}}/${{matrix.config}}/pkzo-test.exe --gtest_filter=-*.GRAPHICAL_*:*.NOCI_*
+      run: bin/${{matrix.platform}}/Debug/pkzo-test.exe --gtest_filter=-*.GRAPHICAL_*:*.NOCI_*
+        - name: Build (Release)
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: msbuild /m /p:Configuration=Release /property:Platform=${{matrix.platform}} pkzo.sln
+    - name: Test Release)
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: bin/${{matrix.platform}}/Release/pkzo-test.exe --gtest_filter=-*.GRAPHICAL_*:*.NOCI_*
