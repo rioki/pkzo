@@ -60,7 +60,7 @@ jobs:
     - name: Test (Debug)
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: bin/${{matrix.platform}}/Debug/pkzo-test.exe --gtest_filter=-*.GRAPHICAL_*:*.NOCI_*
-        - name: Build (Release)
+    - name: Build (Release)
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: msbuild /m /p:Configuration=Release /property:Platform=${{matrix.platform}} pkzo.sln
     - name: Test Release)
