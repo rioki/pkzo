@@ -22,7 +22,7 @@
 #pragma once
 #include "config.h"
 
-#include <rioki/c9y/c9y.h>
+#include <c9y/c9y.h>
 #include <rsig/rsig.h>
 
 #include "Button.h"

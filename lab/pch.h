@@ -25,7 +25,7 @@
 #include <windows.h>
 #include <shlobj.h>
 
-#include <rioki/c9y/c9y.h>
+#include <c9y/c9y.h>
 
 #include <pkzo/pkzo.h>
 #include <pkzo/glm_2d.h>

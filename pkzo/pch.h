@@ -51,8 +51,8 @@
 #include <rioki/glow/fwd.h>
 #include <rioki/glow/glow.h>
 
-#include <rioki/c9y/sync.h>
-#include <rioki/c9y/async.h>
+#include <c9y/sync.h>
+#include <c9y/async.h>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H

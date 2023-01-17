@@ -21,10 +21,7 @@
 
 #pragma once
 
-#include <fstream>
-#include <regex>
-#include <string>
-#include <vector>
+#include <pkzo/pch.h>
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
