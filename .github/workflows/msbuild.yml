@@ -11,12 +11,13 @@ permissions:
   packages: write
 
 env:
-  VCPKG_COMMIT: 472e9f1a8bc5349ec21926fcfc6b2eb917cba01f
+  VCPKG_COMMIT: 877e3dc2323a4d4c3c75e7168c22a0c4e921d4db
   VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
 
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         platform: [x86, x64]
         include:
@@ -56,13 +57,13 @@ jobs:
         ./vcpkg/vcpkg integrate install
     - name: Build (Debug)
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: msbuild /m /p:Configuration=Debug /property:Platform=${{matrix.platform}} ice.sln
+      run: msbuild /m /p:Configuration=Debug /property:Platform=${{matrix.platform}} pkzo.sln
     - name: Test (Debug)
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: bin/${{matrix.platform}}/Debug/ice-test.exe --gtest_filter=-*.GRAPHICAL_*:*.NOCI_*
+      run: bin/${{matrix.platform}}/Debug/pkzo-test.exe --gtest_filter=-*.GRAPHICAL_*:*.NOCI_*
     - name: Build (Release)
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: msbuild /m /p:Configuration=Release /property:Platform=${{matrix.platform}} ice.sln
-    - name: Test (Release)
+      run: msbuild /m /p:Configuration=Release /property:Platform=${{matrix.platform}} pkzo.sln
+    - name: Test Release)
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: bin/${{matrix.platform}}/Release/ice-test.exe --gtest_filter=-*.GRAPHICAL_*:*.NOCI_*
+      run: bin/${{matrix.platform}}/Release/pkzo-test.exe --gtest_filter=-*.GRAPHICAL_*:*.NOCI_*

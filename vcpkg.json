@@ -1,7 +1,6 @@
 {
-  "name": "ice",
+  "name": "pkoz",
   "version": "0.1.0",
-  "builtin-baseline": "472e9f1a8bc5349ec21926fcfc6b2eb917cba01f",
   "dependencies": [
     "freeimage",
     "freetype",

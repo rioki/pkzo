@@ -6,6 +6,7 @@
 # Visual Studio Files
 /.vs
 *.user
+*.aps
 
 # vcpkg Output
 /vcpkg_installed

@@ -1,7 +1,7 @@
 
-# Ice Engine
+# pkoz
 
-The ice engine is a game engine built with a focus on code. 
+The pkzo is a game engine built with a focus on code. 
 
 **This project is early work in progress.**
 
