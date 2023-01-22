@@ -140,7 +140,6 @@
     <ClCompile Include="test_box_visual.cpp" />
     <ClCompile Include="test_button.cpp" />
     <ClCompile Include="test_camera.cpp" />
-    <ClCompile Include="test_console.cpp" />
     <ClCompile Include="test_directional_light.cpp" />
     <ClCompile Include="test_engine.cpp" />
     <ClCompile Include="main.cpp" />
@@ -166,7 +165,6 @@
     <ClCompile Include="test_screen_node.cpp" />
     <ClCompile Include="test_screen_node_group.cpp" />
     <ClCompile Include="test_state_machine.cpp" />
-    <ClCompile Include="test_stats.cpp" />
     <ClCompile Include="test_strex.cpp" />
     <ClCompile Include="test_text.cpp" />
     <ClCompile Include="test_texture.cpp" />

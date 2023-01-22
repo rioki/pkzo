@@ -122,7 +122,6 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CheckBox.h" />
     <ClInclude Include="config.h" />
-    <ClInclude Include="ConsoleSystem.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="glm_2d.h" />
@@ -174,7 +173,6 @@
     <ClInclude Include="SphereVisual.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="StateMachine.h" />
-    <ClInclude Include="StatsSystem.h" />
     <ClInclude Include="stdex.h" />
     <ClInclude Include="strex.h" />
     <ClInclude Include="Style.h" />
@@ -196,7 +194,6 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CheckBox.cpp" />
-    <ClCompile Include="ConsoleSystem.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Font.cpp" />
@@ -237,7 +234,6 @@
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="SphereVisual.cpp" />
     <ClCompile Include="SpotLight.cpp" />
-    <ClCompile Include="StatsSystem.cpp" />
     <ClCompile Include="stdex.cpp" />
     <ClCompile Include="strex.cpp" />
     <ClCompile Include="Style.cpp" />
