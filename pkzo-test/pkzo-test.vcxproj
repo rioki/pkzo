@@ -146,6 +146,7 @@
     <ClCompile Include="test_event_router.cpp" />
     <ClCompile Include="test_keyboard.cpp" />
     <ClCompile Include="test_mouse.cpp" />
+    <ClCompile Include="test_window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\pkzo\pkzo.vcxproj">
@@ -154,6 +155,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugMonitor.h" />
+    <ClInclude Include="glm_gtest.h" />
+    <ClInclude Include="glm_io.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

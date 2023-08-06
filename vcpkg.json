@@ -5,6 +5,7 @@
         "glm",
         "gtest",
         "rsig",
-        "sdl2"
+        "sdl2",
+        "glew"
     ]
 }

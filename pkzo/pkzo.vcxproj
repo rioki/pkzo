@@ -151,6 +151,7 @@
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="SdlInit.h" />
     <ClInclude Include="utils.h" />
+    <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="debug.cpp" />
@@ -158,6 +159,7 @@
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="SdlInit.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

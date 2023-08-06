@@ -21,6 +21,7 @@
 
 #include <pkzo/debug.h>
 #include <pkzo/EventRouter.h>
+#include <pkzo/Window.h>
 
 int main()
 {
@@ -33,10 +34,12 @@ int main()
         running = false;
     });
 
+    auto window = pkzo::Window(event_router, {800, 600}, "Pkzo Lab");
+
     while (running)
     {
         event_router.route_events();
-        // window.draw();
+        window.draw();
     }
 
     return EXIT_SUCCESS;

@@ -50,6 +50,7 @@ namespace pkzo
         void inject_mouse_button_press(MouseButton button, glm::ivec2 pos) noexcept;
         void inject_mouse_button_release(MouseButton button, glm::ivec2 pos) noexcept;
         void inject_mouse_wheel(glm::ivec2 rel) noexcept;
+        void inject_window_resize(glm::uvec2 size) noexcept;
 
         void route_events();
 

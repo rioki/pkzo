@@ -96,13 +96,28 @@ namespace pkzo
         SDL_PushEvent(&event);
     }
 
-    void EventRouter::inject_mouse_wheel( glm::ivec2 rel) noexcept
+    void EventRouter::inject_mouse_wheel(glm::ivec2 rel) noexcept
     {
         auto event = SDL_Event{SDL_MOUSEWHEEL};
         event.wheel.x          = rel.x;
         event.wheel.y          = rel.y;
         event.button.timestamp = SDL_GetTicks();
         SDL_PushEvent(&event);
+    }
+
+    void EventRouter::inject_window_resize(glm::uvec2 size) noexcept
+    {
+        auto event = SDL_Event{SDL_WINDOWEVENT};
+        event.window.event = SDL_WINDOWEVENT_SIZE_CHANGED;
+        event.window.data1 = size.x;
+        event.window.data2 = size.y;
+        SDL_PushEvent(&event);
+        // Mocking SDL's implementation.
+        auto event2 = SDL_Event{SDL_WINDOWEVENT};
+        event2.window.event = SDL_WINDOWEVENT_RESIZED;
+        event2.window.data1 = size.x;
+        event2.window.data2 = size.y;
+        SDL_PushEvent(&event2);
     }
 
     void EventRouter::route_events()
