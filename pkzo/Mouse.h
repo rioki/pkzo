@@ -1,5 +1,5 @@
 // pkzo
-// Copyright 2010-2023 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2023 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,12 +23,14 @@
 #include "config.h"
 
 #include <SDL2/SDL_mouse.h>
-
-#include "utils.h"
-
+#include <SDL2/SDL_events.h>
+#include <glm/glm.hpp>
+#include <rsig/rsig.h>
 
 namespace pkzo
 {
+    class EventRouter;
+
     enum class MouseButton
     {
         NONE    = 0,
@@ -37,5 +39,34 @@ namespace pkzo
         RIGHT   = SDL_BUTTON_RIGHT,
         BUTTON4 = SDL_BUTTON_X1,
         BUTTON5 = SDL_BUTTON_X2
+    };
+
+    class PKZO_EXPORT Mouse
+    {
+    public:
+        Mouse(EventRouter& router);
+        ~Mouse();
+
+        bool is_pressed(MouseButton button) const noexcept;
+
+        void set_cursor_visible(bool value) noexcept;
+        bool get_cursor_visible() const noexcept;
+        glm::ivec2 get_cursor_position() const noexcept;
+
+        rsig::signal<MouseButton, glm::ivec2>& get_button_press_signal() noexcept;
+        rsig::signal<MouseButton, glm::ivec2>& get_button_release_signal() noexcept;
+        rsig::signal<glm::ivec2, glm::ivec2>&  get_move_signal() noexcept;
+        rsig::signal<glm::ivec2>&              get_wheel_signal() noexcept;
+
+    private:
+        EventRouter&     router;
+        rsig::connection router_connection;
+
+        rsig::signal<MouseButton, glm::ivec2> button_press_signal;
+        rsig::signal<MouseButton, glm::ivec2> button_release_signal;
+        rsig::signal<glm::ivec2, glm::ivec2>  move_signal;
+        rsig::signal<glm::ivec2>              wheel_signal;
+
+        void handle_events(const SDL_Event& event);
     };
 }

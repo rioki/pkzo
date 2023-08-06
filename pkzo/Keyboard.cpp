@@ -21,4 +21,54 @@
 
 #include "Keyboard.h"
 
+#include "debug.h"
+#include "EventRouter.h"
 
+namespace pkzo
+{
+    Keyboard::Keyboard(EventRouter& _router)
+    : router(_router)
+    {
+        router_connection = router.get_event_signal().connect(rsig::mem_fun(this, &Keyboard::handle_events));
+    }
+
+    Keyboard::~Keyboard()
+    {
+        router.get_event_signal().disconnect(router_connection);
+    }
+
+    bool Keyboard::is_pressed(Key key) const noexcept
+    {
+        int numkeys = 0;
+        auto keys = SDL_GetKeyboardState(&numkeys);
+        check(keys != nullptr);
+        check(numkeys < static_cast<int>(key));
+        return keys[static_cast<int>(key)] == SDL_TRUE;
+    }
+
+    rsig::signal<KeyMod, Key>& Keyboard::get_key_press_signal() noexcept
+    {
+        return key_press_signal;
+    }
+
+    rsig::signal<KeyMod, Key>& Keyboard::get_key_release_signal() noexcept
+    {
+        return key_release_signal;
+    }
+
+    void Keyboard::handle_events(const SDL_Event& event)
+    {
+        switch (event.type)
+        {
+        case SDL_KEYDOWN:
+            key_press_signal.emit(static_cast<KeyMod>(event.key.keysym.mod), static_cast<Key>(event.key.keysym.scancode));
+            break;
+        case SDL_KEYUP:
+            key_release_signal.emit(static_cast<KeyMod>(event.key.keysym.mod), static_cast<Key>(event.key.keysym.scancode));
+            break;
+        default:
+            // don't care
+            break;
+        }
+    }
+}

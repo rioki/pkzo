@@ -19,45 +19,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#pragma once
-#include "config.h"
+#include <mutex>
+#include <sstream>
 
-#include <rsig/rsig.h>
-#include <glm/glm.hpp>
-#include <SDL2/SDL_events.h>
+#include <Windows.h>
 
-#include "SdlInit.h"
-#include "Keyboard.h"
-#include "Mouse.h"
-
-namespace pkzo
+namespace pkzo::test
 {
-    class PKZO_EXPORT EventRouter
+    class DebugMonitor
     {
     public:
-        EventRouter();
-        EventRouter(const EventRouter&) = delete;
-        ~EventRouter();
-        EventRouter& operator = (const EventRouter&) = delete;
+        DebugMonitor();
+        ~DebugMonitor();
 
-        rsig::signal<const SDL_Event&>& get_event_signal() noexcept;
-        rsig::signal<>& get_quit_signal() noexcept;
-
-        void inject_quit() noexcept;
-        void inject_key_press(KeyMod mod, Key key) noexcept;
-        void inject_key_release(KeyMod mod, Key key) noexcept;
-        void inject_mouse_move(glm::ivec2 pos, glm::ivec2 rel) noexcept;
-        void inject_mouse_button_press(MouseButton button, glm::ivec2 pos) noexcept;
-        void inject_mouse_button_release(MouseButton button, glm::ivec2 pos) noexcept;
-        void inject_mouse_wheel(glm::ivec2 rel) noexcept;
-
-        void route_events();
+        std::string get_output() const noexcept;
 
     private:
-        SdlInit sdl_init;
+        struct dbwin_buffer
+        {
+            DWORD dwProcessId;
+            char  data[4096-sizeof(DWORD)];
+        };
 
-        rsig::signal<const SDL_Event&> event_signal;
-        rsig::signal<>                 quit_signal;
+        mutable std::mutex mutex;
+        std::stringstream  output;
+        HANDLE             buffer_ready_event;
+        HANDLE             data_ready_event;
+        HANDLE             mapped_file;
+        dbwin_buffer*      buffer;
+        std::jthread       thread;
+
+        DebugMonitor(const DebugMonitor&) = delete;
+        DebugMonitor& operator = (const DebugMonitor&) = delete;
     };
 }
-

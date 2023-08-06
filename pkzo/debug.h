@@ -22,42 +22,33 @@
 #pragma once
 #include "config.h"
 
-#include <rsig/rsig.h>
-#include <glm/glm.hpp>
-#include <SDL2/SDL_events.h>
+#include <string_view>
+#include <source_location>
 
-#include "SdlInit.h"
-#include "Keyboard.h"
-#include "Mouse.h"
+#ifdef _WIN32
+#include <Windows.h>
+#endif
 
 namespace pkzo
 {
-    class PKZO_EXPORT EventRouter
+    PKZO_EXPORT
+    void trace(const std::string_view msg, const std::source_location location = std::source_location::current()) noexcept;
+
+    PKZO_EXPORT
+    void check(bool condition, const std::string_view msg = "Check failed.", const std::source_location location = std::source_location::current()) noexcept;
+
+    [[ noreturn ]] PKZO_EXPORT
+    void fail(const std::string_view msg = "Unexpected failure.", const std::source_location location = std::source_location::current()) noexcept;
+
+    class PKZO_EXPORT CrashHandler
     {
     public:
-        EventRouter();
-        EventRouter(const EventRouter&) = delete;
-        ~EventRouter();
-        EventRouter& operator = (const EventRouter&) = delete;
-
-        rsig::signal<const SDL_Event&>& get_event_signal() noexcept;
-        rsig::signal<>& get_quit_signal() noexcept;
-
-        void inject_quit() noexcept;
-        void inject_key_press(KeyMod mod, Key key) noexcept;
-        void inject_key_release(KeyMod mod, Key key) noexcept;
-        void inject_mouse_move(glm::ivec2 pos, glm::ivec2 rel) noexcept;
-        void inject_mouse_button_press(MouseButton button, glm::ivec2 pos) noexcept;
-        void inject_mouse_button_release(MouseButton button, glm::ivec2 pos) noexcept;
-        void inject_mouse_wheel(glm::ivec2 rel) noexcept;
-
-        void route_events();
-
+        CrashHandler();
+        CrashHandler(const CrashHandler&) = delete;
+        ~CrashHandler();
+        CrashHandler& operator = (const CrashHandler&) = delete;
     private:
-        SdlInit sdl_init;
-
-        rsig::signal<const SDL_Event&> event_signal;
-        rsig::signal<>                 quit_signal;
+        LPTOP_LEVEL_EXCEPTION_FILTER old_exception_filter;
     };
 }
 

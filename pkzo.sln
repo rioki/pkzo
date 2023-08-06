@@ -5,13 +5,16 @@ VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pkzo", "pkzo\pkzo.vcxproj", "{97787B2D-578E-4559-8072-649DF904A540}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pkoz-test", "pkoz-test\pkoz-test.vcxproj", "{B2027F29-6464-48D8-A99F-401AE617E7FD}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pkzo-test", "pkzo-test\pkzo-test.vcxproj", "{B2027F29-6464-48D8-A99F-401AE617E7FD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B3B92738-F9C4-4E09-A38A-06EC254C5B7B}"
 	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
 		Changelog.md = Changelog.md
 		vcpkg.json = vcpkg.json
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pkzo-lab", "pkzo-lab\pkzo-lab.vcxproj", "{C0E0767D-D5A7-4AF5-B037-A84F030B9FD0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +40,14 @@ Global
 		{B2027F29-6464-48D8-A99F-401AE617E7FD}.Release|x64.Build.0 = Release|x64
 		{B2027F29-6464-48D8-A99F-401AE617E7FD}.Release|x86.ActiveCfg = Release|Win32
 		{B2027F29-6464-48D8-A99F-401AE617E7FD}.Release|x86.Build.0 = Release|Win32
+		{C0E0767D-D5A7-4AF5-B037-A84F030B9FD0}.Debug|x64.ActiveCfg = Debug|x64
+		{C0E0767D-D5A7-4AF5-B037-A84F030B9FD0}.Debug|x64.Build.0 = Debug|x64
+		{C0E0767D-D5A7-4AF5-B037-A84F030B9FD0}.Debug|x86.ActiveCfg = Debug|Win32
+		{C0E0767D-D5A7-4AF5-B037-A84F030B9FD0}.Debug|x86.Build.0 = Debug|Win32
+		{C0E0767D-D5A7-4AF5-B037-A84F030B9FD0}.Release|x64.ActiveCfg = Release|x64
+		{C0E0767D-D5A7-4AF5-B037-A84F030B9FD0}.Release|x64.Build.0 = Release|x64
+		{C0E0767D-D5A7-4AF5-B037-A84F030B9FD0}.Release|x86.ActiveCfg = Release|Win32
+		{C0E0767D-D5A7-4AF5-B037-A84F030B9FD0}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

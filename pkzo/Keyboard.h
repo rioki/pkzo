@@ -24,6 +24,8 @@
 
 #include <iosfwd>
 #include <SDL2/SDL_keycode.h>
+#include <SDL2/SDL_events.h>
+#include <rsig/rsig.h>
 
 #include "utils.h"
 
@@ -37,9 +39,11 @@
 
 namespace pkzo
 {
+    class EventRouter;
+
     enum class Key
     {
-        UNKNOW             = SDL_SCANCODE_UNKNOWN,
+        UNKNOWN            = SDL_SCANCODE_UNKNOWN,
         A                  = SDL_SCANCODE_A,
         B                  = SDL_SCANCODE_B,
         C                  = SDL_SCANCODE_C,
@@ -304,7 +308,28 @@ namespace pkzo
     };
     PKZO_ENUM_OPERATORS(KeyMod);
 
-    PKZO_EXPORT
+    class PKZO_EXPORT Keyboard
+    {
+    public:
+        Keyboard(EventRouter& router);
+        ~Keyboard();
+
+        bool is_pressed(Key key) const noexcept;
+
+        rsig::signal<KeyMod, Key>& get_key_press_signal() noexcept;
+        rsig::signal<KeyMod, Key>& get_key_release_signal() noexcept;
+
+    private:
+        EventRouter&     router;
+        rsig::connection router_connection;
+
+        rsig::signal<KeyMod, Key> key_press_signal;
+        rsig::signal<KeyMod, Key> key_release_signal;
+
+        void handle_events(const SDL_Event& event);
+    };
+
+    /*PKZO_EXPORT
     std::ostream& operator << (std::ostream& os, Key key) noexcept;
 
     PKZO_EXPORT
@@ -314,5 +339,5 @@ namespace pkzo
     std::ostream& operator << (std::ostream& os, KeyMod mod) noexcept;
 
     PKZO_EXPORT
-    std::istream& operator >> (std::istream& is, KeyMod& mod);
+    std::istream& operator >> (std::istream& is, KeyMod& mod);*/
 }

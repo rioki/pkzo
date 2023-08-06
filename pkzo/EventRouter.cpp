@@ -33,6 +33,18 @@ namespace pkzo
         return event_signal;
     }
 
+    rsig::signal<>& EventRouter::get_quit_signal() noexcept
+    {
+        return quit_signal;
+    }
+
+    void EventRouter::inject_quit() noexcept
+    {
+        auto event = SDL_Event{SDL_QUIT};
+        event.key.timestamp = SDL_GetTicks();
+        SDL_PushEvent(&event);
+    }
+
     void EventRouter::inject_key_press(KeyMod mod, Key key) noexcept
     {
         auto event = SDL_Event{SDL_KEYDOWN};
@@ -99,6 +111,11 @@ namespace pkzo
         while (SDL_PollEvent(&event))
         {
             event_signal.emit(event);
+
+            if (event.type == SDL_QUIT)
+            {
+                quit_signal.emit();
+            }
         }
     }
 }

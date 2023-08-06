@@ -19,41 +19,54 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <gtest/gtest.h>
+#include <pkzo/Keyboard.h>
 
-#include <SDL2/SDL_timer.h>
 #include <pkzo/EventRouter.h>
 
-TEST(EventRouter, construct)
+#include <gtest/gtest.h>
+
+TEST(Keyboard, construct)
 {
     auto er = pkzo::EventRouter{};
+    auto kb = pkzo::Keyboard{er};
 }
 
-TEST(EventRouter, route_event)
+TEST(Keyboard, handle_keys)
 {
     auto er = pkzo::EventRouter{};
+    auto kb = pkzo::Keyboard{er};
 
-    {
-        auto event = SDL_Event{SDL_MOUSEMOTION};
-        event.motion.x          = 5;
-        event.motion.y          = 4;
-        event.motion.xrel       = 1;
-        event.motion.yrel       = 2;
-        event.motion.timestamp  = SDL_GetTicks();
-        SDL_PushEvent(&event);
-    }
+    auto count   = 0u;
+    auto mod     = pkzo::KeyMod::NONE;
+    auto key     = pkzo::Key::UNKNOWN;
+    auto pressed = false;
 
-    auto count = 0u;
-    er.get_event_signal().connect([&] (auto event) {
+    kb.get_key_press_signal().connect([&] (auto _mod, auto _key) {
         count++;
-        EXPECT_EQ(SDL_MOUSEMOTION, event.type);
-        EXPECT_EQ(5, event.motion.x);
-        EXPECT_EQ(4, event.motion.y);
-        EXPECT_EQ(1, event.motion.xrel);
-        EXPECT_EQ(2, event.motion.yrel);
+        mod = _mod;
+        key = _key;
+        pressed = true;
+    });
+    kb.get_key_release_signal().connect([&] (auto _mod, auto _key) {
+        count++;
+        mod = _mod;
+        key = _key;
+        pressed = false;
     });
 
+    er.inject_key_press(pkzo::KeyMod::CTRL, pkzo::Key::C);
     er.route_events();
 
     EXPECT_EQ(1, count);
+    EXPECT_EQ(pkzo::KeyMod::CTRL, mod);
+    EXPECT_EQ(pkzo::Key::C,       key);
+    EXPECT_TRUE(pressed);
+
+    er.inject_key_release(pkzo::KeyMod::ALT, pkzo::Key::V);
+    er.route_events();
+
+    EXPECT_EQ(2,                 count);
+    EXPECT_EQ(pkzo::KeyMod::ALT, mod);
+    EXPECT_EQ(pkzo::Key::V,      key);
+    EXPECT_FALSE(pressed);
 }

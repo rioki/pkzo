@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- add debug facilities
 - add input event handling
 
 [Unreleased]: https://github.com/rioki/pkzo/commits/master
