@@ -1,5 +1,5 @@
 // pkzo
-// Copyright 2010-2023 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2023 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +22,20 @@
 #pragma once
 #include "config.h"
 
-#include <SDL2/SDL_mouse.h>
-
-#include "utils.h"
-
+#include <atomic>
 
 namespace pkzo
 {
-    enum class MouseButton
+    class PKZO_EXPORT SdlInit
     {
-        NONE    = 0,
-        LEFT    = SDL_BUTTON_LEFT,
-        MIDDLE  = SDL_BUTTON_MIDDLE,
-        RIGHT   = SDL_BUTTON_RIGHT,
-        BUTTON4 = SDL_BUTTON_X1,
-        BUTTON5 = SDL_BUTTON_X2
+    public:
+        SdlInit();
+        ~SdlInit();
+
+    private:
+        static std::atomic<unsigned int> use_count;
+
+        SdlInit(const SdlInit&) = delete;
+        SdlInit& operator = (const SdlInit&) = delete;
     };
 }

@@ -1,9 +1,0 @@
-{
-  "GraphicSystem": {
-    "resolution": [ 1600, 900 ],
-    "mode": "STATIC"
-  },
-  "ConsoleSystem": {
-    "font": "fonts/DejaVuSansMono.ttf"
-  }
-}

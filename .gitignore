@@ -1,15 +1,11 @@
 
-# Build Outputs
-/.int
-/bin
+# Build Output
+x64
+x86
 
-# Visual Studio Files
+# Visual Studio Temp Files
 /.vs
-*.user
-*.aps
+*.vcxproj.user
 
-# vcpkg Output
+# vcpkg
 /vcpkg_installed
-
-# Merge Tmp Files
-*.orig

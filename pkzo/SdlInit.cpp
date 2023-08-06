@@ -1,5 +1,5 @@
 // pkzo
-// Copyright 2010-2023 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2023 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -19,23 +19,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#pragma once
-#include "config.h"
+#include "SdlInit.h"
 
-#include <SDL2/SDL_mouse.h>
-
-#include "utils.h"
-
+#include <stdexcept>
+#include <SDL2/SDL.h>
 
 namespace pkzo
 {
-    enum class MouseButton
+    std::atomic<unsigned int> SdlInit::use_count = 0;
+
+    SdlInit::SdlInit()
     {
-        NONE    = 0,
-        LEFT    = SDL_BUTTON_LEFT,
-        MIDDLE  = SDL_BUTTON_MIDDLE,
-        RIGHT   = SDL_BUTTON_RIGHT,
-        BUTTON4 = SDL_BUTTON_X1,
-        BUTTON5 = SDL_BUTTON_X2
-    };
+        if (use_count++ == 0u)
+        {
+            auto r = SDL_Init(SDL_INIT_EVENTS | SDL_INIT_VIDEO);
+            if (r < 0)
+            {
+                throw std::runtime_error(SDL_GetError());
+            }
+        }
+    }
+
+    SdlInit::~SdlInit()
+    {
+        if (--use_count == 0u)
+        {
+            SDL_Quit();
+        }
+    }
 }

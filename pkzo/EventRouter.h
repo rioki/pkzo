@@ -1,5 +1,5 @@
 // pkzo
-// Copyright 2010-2023 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2023 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +22,39 @@
 #pragma once
 #include "config.h"
 
-#include <SDL2/SDL_mouse.h>
+#include <rsig/rsig.h>
+#include <glm/glm.hpp>
+#include <SDL2/SDL_events.h>
 
-#include "utils.h"
-
+#include "SdlInit.h"
+#include "Keyboard.h"
+#include "Mouse.h"
 
 namespace pkzo
 {
-    enum class MouseButton
+    class PKZO_EXPORT EventRouter
     {
-        NONE    = 0,
-        LEFT    = SDL_BUTTON_LEFT,
-        MIDDLE  = SDL_BUTTON_MIDDLE,
-        RIGHT   = SDL_BUTTON_RIGHT,
-        BUTTON4 = SDL_BUTTON_X1,
-        BUTTON5 = SDL_BUTTON_X2
+    public:
+        EventRouter();
+        EventRouter(const EventRouter&) = delete;
+        ~EventRouter();
+        EventRouter& operator = (const EventRouter&) = delete;
+
+        rsig::signal<const SDL_Event&>& get_event_signal() noexcept;
+
+        void inject_key_press(KeyMod mod, Key key) noexcept;
+        void inject_key_release(KeyMod mod, Key key) noexcept;
+        void inject_mouse_move(glm::ivec2 pos, glm::ivec2 rel) noexcept;
+        void inject_mouse_button_press(MouseButton button, glm::ivec2 pos) noexcept;
+        void inject_mouse_button_release(MouseButton button, glm::ivec2 pos) noexcept;
+        void inject_mouse_wheel(glm::ivec2 rel) noexcept;
+
+        void route_events();
+
+    private:
+        SdlInit sdl_init;
+
+        rsig::signal<const SDL_Event&> event_signal;
     };
 }
+

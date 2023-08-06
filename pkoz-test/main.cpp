@@ -1,5 +1,5 @@
 // pkzo
-// Copyright 2010-2023 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2023 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -19,23 +19,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#pragma once
-#include "config.h"
+#include <gtest/gtest.h>
 
-#include <SDL2/SDL_mouse.h>
-
-#include "utils.h"
-
-
-namespace pkzo
+int main(int argc, char** argv)
 {
-    enum class MouseButton
-    {
-        NONE    = 0,
-        LEFT    = SDL_BUTTON_LEFT,
-        MIDDLE  = SDL_BUTTON_MIDDLE,
-        RIGHT   = SDL_BUTTON_RIGHT,
-        BUTTON4 = SDL_BUTTON_X1,
-        BUTTON5 = SDL_BUTTON_X2
-    };
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
