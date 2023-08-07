@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{dfe49305-947c-422d-8694-18b408ff399c}</ProjectGuid>
+    <ProjectGuid>{97787b2d-578e-4559-8072-649df904a540}</ProjectGuid>
     <RootNamespace>pkzo</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -59,23 +59,19 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\.props\defaults.props" />
-    <Import Project="..\.props\debug.props" />
+    <Import Project="..\defaults.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\.props\defaults.props" />
-    <Import Project="..\.props\release.props" />
+    <Import Project="..\defaults.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\.props\defaults.props" />
-    <Import Project="..\.props\debug.props" />
+    <Import Project="..\defaults.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\.props\defaults.props" />
-    <Import Project="..\.props\release.props" />
+    <Import Project="..\defaults.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Label="Vcpkg">
@@ -84,174 +80,84 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;PKZO_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>Dbghelp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;PKZO_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>Dbghelp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;PKZO_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>Dbghelp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;PKZO_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>Dbghelp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AmbientLight.h" />
-    <ClInclude Include="Asset.h" />
-    <ClInclude Include="AssetLibrary.h" />
-    <ClInclude Include="BoxVisual.h" />
-    <ClInclude Include="Button.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="CheckBox.h" />
     <ClInclude Include="config.h" />
-    <ClInclude Include="DirectionalLight.h" />
-    <ClInclude Include="Engine.h" />
-    <ClInclude Include="glm_2d.h" />
-    <ClInclude Include="Font.h" />
-    <ClInclude Include="glm_io.h" />
-    <ClInclude Include="glm_json.h" />
-    <ClInclude Include="glm_utils.h" />
-    <ClInclude Include="GraphicSystem.h" />
-    <ClInclude Include="HitArea.h" />
-    <ClInclude Include="HorizontalLayout.h" />
-    <ClInclude Include="Label.h" />
-    <ClInclude Include="Layout.h" />
-    <ClInclude Include="Menu.h" />
-    <ClInclude Include="MenuBar.h" />
-    <ClInclude Include="MenuItem.h" />
-    <ClInclude Include="pkzo.h" />
-    <ClInclude Include="InputSystem.h" />
-    <ClInclude Include="Joystick.h" />
+    <ClInclude Include="debug.h" />
+    <ClInclude Include="EventRouter.h" />
     <ClInclude Include="Keyboard.h" />
-    <ClInclude Include="Light.h" />
-    <ClInclude Include="Material.h" />
-    <ClInclude Include="Mesh.h" />
     <ClInclude Include="Mouse.h" />
-    <ClInclude Include="Node.h" />
-    <ClInclude Include="NodeGroup.h" />
-    <ClInclude Include="NodeRoot.h" />
-    <ClInclude Include="OpenGLRenderer.h" />
-    <ClInclude Include="OpenGLVideoMemory.h" />
-    <ClInclude Include="pch.h" />
-    <ClInclude Include="PointLight.h" />
-    <ClInclude Include="PopupMenu.h" />
-    <ClInclude Include="Rectangle.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="SceneNode.h" />
-    <ClInclude Include="SceneNodeGroup.h" />
-    <ClInclude Include="Renderer.h" />
-    <ClInclude Include="Screen.h" />
-    <ClInclude Include="ScreenNode.h" />
-    <ClInclude Include="ScreenNodeGroup.h" />
-    <ClInclude Include="SdlGraphicSystem.h" />
-    <ClInclude Include="SdlInputSystem.h" />
-    <ClInclude Include="SdlJoystick.h" />
-    <ClInclude Include="SdlKeyboard.h" />
-    <ClInclude Include="SdlMouse.h" />
-    <ClInclude Include="SdlSentry.h" />
-    <ClInclude Include="SdlWindow.h" />
-    <ClInclude Include="Settings.h" />
-    <ClInclude Include="SphereVisual.h" />
-    <ClInclude Include="SpotLight.h" />
-    <ClInclude Include="StateMachine.h" />
-    <ClInclude Include="stdex.h" />
-    <ClInclude Include="strex.h" />
-    <ClInclude Include="Style.h" />
-    <ClInclude Include="System.h" />
-    <ClInclude Include="TableLayout.h" />
-    <ClInclude Include="Text.h" />
-    <ClInclude Include="Texture.h" />
+    <ClInclude Include="SdlInit.h" />
     <ClInclude Include="utils.h" />
-    <ClInclude Include="VerticalLayout.h" />
-    <ClInclude Include="Visual.h" />
-    <ClInclude Include="Widget.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AmbientLight.cpp" />
-    <ClCompile Include="Asset.cpp" />
-    <ClCompile Include="AssetLibrary.cpp" />
-    <ClCompile Include="BoxVisual.cpp" />
-    <ClCompile Include="Button.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="CheckBox.cpp" />
-    <ClCompile Include="DirectionalLight.cpp" />
-    <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="Font.cpp" />
-    <ClCompile Include="GraphicSystem.cpp" />
-    <ClCompile Include="HitArea.cpp" />
-    <ClCompile Include="HorizontalLayout.cpp" />
-    <ClCompile Include="Joystick.cpp" />
+    <ClCompile Include="debug.cpp" />
+    <ClCompile Include="EventRouter.cpp" />
     <ClCompile Include="Keyboard.cpp" />
-    <ClCompile Include="Label.cpp" />
-    <ClCompile Include="Layout.cpp" />
-    <ClCompile Include="Light.cpp" />
-    <ClCompile Include="Material.cpp" />
-    <ClCompile Include="Menu.cpp" />
-    <ClCompile Include="MenuBar.cpp" />
-    <ClCompile Include="MenuItem.cpp" />
-    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Mouse.cpp" />
-    <ClCompile Include="OpenGLRenderer.cpp" />
-    <ClCompile Include="OpenGLVideoMemory.cpp" />
-    <ClCompile Include="pch.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="PointLight.cpp" />
-    <ClCompile Include="PopupMenu.cpp" />
-    <ClCompile Include="Rectangle.cpp" />
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="Screen.cpp" />
-    <ClCompile Include="SdlGraphicSystem.cpp" />
-    <ClCompile Include="SdlInputSystem.cpp" />
-    <ClCompile Include="SdlJoystick.cpp" />
-    <ClCompile Include="SdlKeyboard.cpp" />
-    <ClCompile Include="SdlMouse.cpp" />
-    <ClCompile Include="SdlSentry.cpp" />
-    <ClCompile Include="SdlWindow.cpp" />
-    <ClCompile Include="Settings.cpp" />
-    <ClCompile Include="SphereVisual.cpp" />
-    <ClCompile Include="SpotLight.cpp" />
-    <ClCompile Include="stdex.cpp" />
-    <ClCompile Include="strex.cpp" />
-    <ClCompile Include="Style.cpp" />
-    <ClCompile Include="TableLayout.cpp" />
-    <ClCompile Include="Text.cpp" />
-    <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="utils.cpp" />
-    <ClCompile Include="VerticalLayout.cpp" />
-    <ClCompile Include="Visual.cpp" />
-    <ClCompile Include="Widget.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Forward_Emissive.glsl" />
-    <None Include="Forward_SolidGeometry.glsl" />
-    <None Include="Forward_Unlit.glsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="pkzo.rc" />
+    <ClCompile Include="SdlInit.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

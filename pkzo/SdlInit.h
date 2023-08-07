@@ -20,13 +20,22 @@
 // THE SOFTWARE.
 
 #pragma once
+#include "config.h"
 
-#ifdef _WIN32
-#define PKZO_EXPORT __declspec(dllexport)
-#else
-#define PKZO_EXPORT
-#endif
+#include <atomic>
 
-#ifndef _MSVC
-#pragma warning(disable: 4251 4275 26812)
-#endif
+namespace pkzo
+{
+    class PKZO_EXPORT SdlInit
+    {
+    public:
+        SdlInit();
+        ~SdlInit();
+
+    private:
+        static std::atomic<unsigned int> use_count;
+
+        SdlInit(const SdlInit&) = delete;
+        SdlInit& operator = (const SdlInit&) = delete;
+    };
+}

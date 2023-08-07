@@ -1,17 +1,11 @@
 {
-  "name": "pkoz",
-  "version": "0.1.0",
-  "dependencies": [
-    "freeimage",
-    "freetype",
-    "glew",
-    "glm",
-    "gtest",
-    "libiconv",
-    "nlohmann-json",
-    "rsig",
-    "sdl2",
-    "c9y",
-    "rioki-glow"
-  ]
+    "name": "pkzo",
+    "version": "0.1.0",
+    "dependencies": [
+        "glm",
+        "gtest",
+        "rsig",
+        "sdl2",
+        "glew"
+    ]
 }

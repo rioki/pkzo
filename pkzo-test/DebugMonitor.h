@@ -19,14 +19,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#pragma once
+#include <mutex>
+#include <sstream>
 
-#ifdef _WIN32
-#define PKZO_EXPORT __declspec(dllexport)
-#else
-#define PKZO_EXPORT
-#endif
+#include <Windows.h>
 
-#ifndef _MSVC
-#pragma warning(disable: 4251 4275 26812)
-#endif
+namespace pkzo::test
+{
+    class DebugMonitor
+    {
+    public:
+        DebugMonitor();
+        ~DebugMonitor();
+
+        std::string get_output() const noexcept;
+
+    private:
+        struct dbwin_buffer
+        {
+            DWORD dwProcessId;
+            char  data[4096-sizeof(DWORD)];
+        };
+
+        mutable std::mutex mutex;
+        std::stringstream  output;
+        HANDLE             buffer_ready_event;
+        HANDLE             data_ready_event;
+        HANDLE             mapped_file;
+        dbwin_buffer*      buffer;
+        std::jthread       thread;
+
+        DebugMonitor(const DebugMonitor&) = delete;
+        DebugMonitor& operator = (const DebugMonitor&) = delete;
+    };
+}

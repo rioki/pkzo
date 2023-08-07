@@ -19,14 +19,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#pragma once
+#include "SdlInit.h"
 
-#ifdef _WIN32
-#define PKZO_EXPORT __declspec(dllexport)
-#else
-#define PKZO_EXPORT
-#endif
+#include <stdexcept>
+#include <SDL2/SDL.h>
 
-#ifndef _MSVC
-#pragma warning(disable: 4251 4275 26812)
-#endif
+namespace pkzo
+{
+    std::atomic<unsigned int> SdlInit::use_count = 0;
+
+    SdlInit::SdlInit()
+    {
+        if (use_count++ == 0u)
+        {
+            auto r = SDL_Init(SDL_INIT_EVENTS | SDL_INIT_VIDEO);
+            if (r < 0)
+            {
+                throw std::runtime_error(SDL_GetError());
+            }
+        }
+    }
+
+    SdlInit::~SdlInit()
+    {
+        if (--use_count == 0u)
+        {
+            SDL_Quit();
+        }
+    }
+}

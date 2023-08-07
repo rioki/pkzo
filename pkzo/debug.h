@@ -20,13 +20,35 @@
 // THE SOFTWARE.
 
 #pragma once
+#include "config.h"
+
+#include <string_view>
+#include <source_location>
 
 #ifdef _WIN32
-#define PKZO_EXPORT __declspec(dllexport)
-#else
-#define PKZO_EXPORT
+#include <Windows.h>
 #endif
 
-#ifndef _MSVC
-#pragma warning(disable: 4251 4275 26812)
-#endif
+namespace pkzo
+{
+    PKZO_EXPORT
+    void trace(const std::string_view msg, const std::source_location location = std::source_location::current()) noexcept;
+
+    PKZO_EXPORT
+    void check(bool condition, const std::string_view msg = "Check failed.", const std::source_location location = std::source_location::current()) noexcept;
+
+    [[ noreturn ]] PKZO_EXPORT
+    void fail(const std::string_view msg = "Unexpected failure.", const std::source_location location = std::source_location::current()) noexcept;
+
+    class PKZO_EXPORT CrashHandler
+    {
+    public:
+        CrashHandler();
+        CrashHandler(const CrashHandler&) = delete;
+        ~CrashHandler();
+        CrashHandler& operator = (const CrashHandler&) = delete;
+    private:
+        LPTOP_LEVEL_EXCEPTION_FILTER old_exception_filter;
+    };
+}
+

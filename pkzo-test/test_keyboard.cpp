@@ -19,10 +19,54 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#include <pkzo/Keyboard.h>
+
+#include <pkzo/EventRouter.h>
+
 #include <gtest/gtest.h>
 
-int main(int argc, char** argv)
+TEST(Keyboard, construct)
 {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+    auto er = pkzo::EventRouter{};
+    auto kb = pkzo::Keyboard{er};
+}
+
+TEST(Keyboard, handle_keys)
+{
+    auto er = pkzo::EventRouter{};
+    auto kb = pkzo::Keyboard{er};
+
+    auto count   = 0u;
+    auto mod     = pkzo::KeyMod::NONE;
+    auto key     = pkzo::Key::UNKNOWN;
+    auto pressed = false;
+
+    kb.get_key_press_signal().connect([&] (auto _mod, auto _key) {
+        count++;
+        mod = _mod;
+        key = _key;
+        pressed = true;
+    });
+    kb.get_key_release_signal().connect([&] (auto _mod, auto _key) {
+        count++;
+        mod = _mod;
+        key = _key;
+        pressed = false;
+    });
+
+    er.inject_key_press(pkzo::KeyMod::CTRL, pkzo::Key::C);
+    er.route_events();
+
+    EXPECT_EQ(1, count);
+    EXPECT_EQ(pkzo::KeyMod::CTRL, mod);
+    EXPECT_EQ(pkzo::Key::C,       key);
+    EXPECT_TRUE(pressed);
+
+    er.inject_key_release(pkzo::KeyMod::ALT, pkzo::Key::V);
+    er.route_events();
+
+    EXPECT_EQ(2,                 count);
+    EXPECT_EQ(pkzo::KeyMod::ALT, mod);
+    EXPECT_EQ(pkzo::Key::V,      key);
+    EXPECT_FALSE(pressed);
 }

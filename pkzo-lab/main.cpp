@@ -19,14 +19,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#pragma once
+#include <pkzo/debug.h>
+#include <pkzo/EventRouter.h>
+#include <pkzo/Window.h>
 
-#ifdef _WIN32
-#define PKZO_EXPORT __declspec(dllexport)
-#else
-#define PKZO_EXPORT
-#endif
+int main()
+{
+    auto crash_handler = pkzo::CrashHandler{};
 
-#ifndef _MSVC
-#pragma warning(disable: 4251 4275 26812)
-#endif
+    auto event_router = pkzo::EventRouter{};
+
+    bool running = true;
+    event_router.get_quit_signal().connect([&] () {
+        running = false;
+    });
+
+    auto window = pkzo::Window(event_router, {800, 600}, "Pkzo Lab");
+
+    while (running)
+    {
+        event_router.route_events();
+        window.draw();
+    }
+
+    return EXIT_SUCCESS;
+}

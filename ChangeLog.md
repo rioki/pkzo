@@ -9,15 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- add basic engine/system infrastructure
-- add system window handling with OpenGL 4.3 context
-- add keyboard, mouse and jeoystick input handling
-- add loading of textures
-- add loading of fonts
-- add loading and managing of settings
-- add basic 2D screen handling
-- add 2D screen rendering
-- add 2D screen text rendering
-- add console
+- add debug facilities
+- add input event handling
+- add OpenGL window handling
 
-[Unreleased]: https://github.com/rioki/ice/commits/master
+[Unreleased]: https://github.com/rioki/pkzo/commits/master
