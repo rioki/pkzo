@@ -144,6 +144,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="test_debug.cpp" />
     <ClCompile Include="test_event_router.cpp" />
+    <ClCompile Include="test_joystick.cpp" />
     <ClCompile Include="test_keyboard.cpp" />
     <ClCompile Include="test_mouse.cpp" />
     <ClCompile Include="test_window.cpp" />
