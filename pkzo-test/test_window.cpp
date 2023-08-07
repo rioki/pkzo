@@ -26,7 +26,7 @@
 #include <gtest/gtest.h>
 #include "glm_gtest.h"
 
-TEST(Window, create_windowed)
+TEST(Window, GRAPH_create_windowed)
 {
     auto window = pkzo::Window{{800,600}, "Test"};
 
@@ -34,7 +34,7 @@ TEST(Window, create_windowed)
     EXPECT_EQ("Test", window.get_caption());
 }
 
-TEST(Window, create_fullscreen)
+TEST(Window, GRAPH_create_fullscreen)
 {
     auto window = pkzo::Window{pkzo::fullscreen, "Test"};
 
@@ -42,7 +42,7 @@ TEST(Window, create_fullscreen)
     EXPECT_EQ("Test", window.get_caption());
 }
 
-TEST(Window, resize_windowed)
+TEST(Window, GRAPH_resize_windowed)
 {
     auto router = pkzo::EventRouter{};
     auto window = pkzo::Window{router, {800,600}, "Test"};
@@ -62,7 +62,7 @@ TEST(Window, resize_windowed)
 
 }
 
-TEST(Window, resize_fullscreen)
+TEST(Window, GRAPH_resize_fullscreen)
 {
     auto router = pkzo::EventRouter{};
     auto window = pkzo::Window{router, pkzo::fullscreen, "Test"};
