@@ -10,6 +10,7 @@
     <ClCompile>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SOLUTION_DIR=R"($(SolutionDir))";PROJECT_DIR=R"($(ProjectDir))";GLM_FORCE_SWIZZLE=1;GTEST_LINKED_AS_SHARED_LIBRARY=1;SDL_MAIN_HANDLED=1;STRCONV_DLL=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup />

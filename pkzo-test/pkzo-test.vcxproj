@@ -147,6 +147,9 @@
     <ClCompile Include="test_joystick.cpp" />
     <ClCompile Include="test_keyboard.cpp" />
     <ClCompile Include="test_mouse.cpp" />
+    <ClCompile Include="test_strconv.cpp" />
+    <ClCompile Include="test_texture.cpp" />
+    <ClCompile Include="test_utils.cpp" />
     <ClCompile Include="test_window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -158,6 +161,7 @@
     <ClInclude Include="DebugMonitor.h" />
     <ClInclude Include="glm_gtest.h" />
     <ClInclude Include="glm_io.h" />
+    <ClInclude Include="pkzo_test.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

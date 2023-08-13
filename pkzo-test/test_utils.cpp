@@ -19,15 +19,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+
+#include <pkzo/utils.h>
+
 #include <gtest/gtest.h>
 
-__declspec(dllexport) void testing::internal::PrintU8StringTo(const ::std::u8string& s, ::std::ostream* os)
+#include "pkzo_test.h"
+
+TEST(utils, load_binary_file)
 {
-	(*os) << std::string_view{ (const char*)s.data(), s.size() };
+    auto texture = pkzo::load_binary_file(pkzo::test::get_test_input() / "AngryCat.jpg");
+    EXPECT_EQ(std::byte(0xFF), texture[0]);
+    EXPECT_EQ(std::byte(0xD8), texture[1]);
+    EXPECT_EQ(std::byte(0xFF), texture[2]);
+    EXPECT_EQ(std::byte(0xE0), texture[3]);
+
+    EXPECT_EQ(std::byte('J'), texture[6]);
+    EXPECT_EQ(std::byte('F'), texture[7]);
+    EXPECT_EQ(std::byte('I'), texture[8]);
+    EXPECT_EQ(std::byte('F'), texture[9]);
 }
 
-int main(int argc, char** argv)
+TEST(utils, load_text_file)
 {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+    auto text = pkzo::load_text_file(pkzo::test::get_test_input() / "empty.json");
+    EXPECT_EQ("{}", text);
 }

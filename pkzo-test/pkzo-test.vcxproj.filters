@@ -39,6 +39,15 @@
     <ClCompile Include="test_joystick.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test_texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test_utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test_strconv.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugMonitor.h">
@@ -48,6 +57,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="glm_io.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pkzo_test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

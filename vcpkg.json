@@ -1,11 +1,14 @@
 {
-    "name": "pkzo",
-    "version": "0.1.0",
-    "dependencies": [
-        "glm",
-        "gtest",
-        "rsig",
-        "sdl2",
-        "glew"
-    ]
+  "name": "pkzo",
+  "version": "0.1.0",
+  "dependencies": [
+    "freeimage",
+    "freetype",
+    "glew",
+    "glm",
+    "gtest",
+    "libiconv",
+    "rsig",
+    "sdl2"
+  ]
 }
