@@ -25,6 +25,7 @@
 
 #include <gtest/gtest.h>
 #include "glm_gtest.h"
+#include "pkzo_test.h"
 
 TEST(Window, GRAPH_create_windowed)
 {
@@ -69,4 +70,15 @@ TEST(Window, GRAPH_resize_fullscreen)
 
     EXPECT_GLM_NE(glm::uvec2(800, 600), window.get_size());
     EXPECT_EQ("Test", window.get_caption());
+}
+
+TEST(Window, GRAPH_save_screenshot)
+{
+    auto window = pkzo::Window{{800,600}, "Test"};
+
+    window.draw();
+
+    auto screenshot = window.save_screen();
+    EXPECT_GLM_EQ(glm::uvec2(800, 600), screenshot->get_size());
+    EXPECT_TEXTURE_REF_EQ(screenshot);
 }
