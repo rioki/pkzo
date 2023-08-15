@@ -35,6 +35,7 @@
 namespace pkzo
 {
     class EventRouter;
+    class Texture;
 
     struct Fullscreen {};
     constexpr auto fullscreen = Fullscreen{};
@@ -63,6 +64,8 @@ namespace pkzo
         rsig::signal<glm::uvec2>& get_resize_signal() noexcept;
 
         void draw();
+
+        std::shared_ptr<Texture> save_screen() const;
 
     private:
         SdlInit sdl_init;

@@ -24,6 +24,7 @@
 #include <GL/glew.h>
 
 #include "EventRouter.h"
+#include "Texture.h"
 
 namespace pkzo
 {
@@ -123,6 +124,14 @@ namespace pkzo
         draw_signal.emit();
 
         SDL_GL_SwapWindow(window);
+    }
+
+    std::shared_ptr<Texture> Window::save_screen() const
+    {
+        auto size = get_drawable_size();
+        std::vector<uint8_t> buffer(size.x * size.y * 3);
+        glReadPixels(0, 0, size.x, size.y, GL_BGR, GL_UNSIGNED_BYTE, buffer.data());
+        return Texture::create_from_buffer(size, ColorMode::RGB, DataType::UINT8, buffer.data(), "screen");
     }
 
     Window::Window(EventRouter* _router, const glm::uvec2& size, unsigned int flags, const std::string_view caption)
