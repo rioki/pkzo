@@ -9,3 +9,6 @@ x86
 
 # vcpkg
 /vcpkg_installed
+
+# Temp Files
+imgui.ini

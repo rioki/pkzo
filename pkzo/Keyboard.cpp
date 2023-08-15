@@ -56,6 +56,11 @@ namespace pkzo
         return key_release_signal;
     }
 
+    rsig::signal<std::string>& Keyboard::get_text_signal() noexcept
+    {
+        return text_signal;
+    }
+
     void Keyboard::handle_events(const SDL_Event& event)
     {
         switch (event.type)
@@ -65,6 +70,9 @@ namespace pkzo
             break;
         case SDL_KEYUP:
             key_release_signal.emit(static_cast<KeyMod>(event.key.keysym.mod), static_cast<Key>(event.key.keysym.scancode));
+            break;
+        case SDL_TEXTINPUT:
+            text_signal.emit(event.text.text);
             break;
         default:
             // don't care
