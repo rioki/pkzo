@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pkzo-lab", "pkzo-lab\pkzo-lab.vcxproj", "{C0E0767D-D5A7-4AF5-B037-A84F030B9FD0}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pkzo-imgui", "pkzo-imgui\pkzo-imgui.vcxproj", "{0EEA0CE7-77F4-4984-A2F8-087B61D511D6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -50,6 +52,14 @@ Global
 		{C0E0767D-D5A7-4AF5-B037-A84F030B9FD0}.Release|x64.Build.0 = Release|x64
 		{C0E0767D-D5A7-4AF5-B037-A84F030B9FD0}.Release|x86.ActiveCfg = Release|Win32
 		{C0E0767D-D5A7-4AF5-B037-A84F030B9FD0}.Release|x86.Build.0 = Release|Win32
+		{0EEA0CE7-77F4-4984-A2F8-087B61D511D6}.Debug|x64.ActiveCfg = Debug|x64
+		{0EEA0CE7-77F4-4984-A2F8-087B61D511D6}.Debug|x64.Build.0 = Debug|x64
+		{0EEA0CE7-77F4-4984-A2F8-087B61D511D6}.Debug|x86.ActiveCfg = Debug|Win32
+		{0EEA0CE7-77F4-4984-A2F8-087B61D511D6}.Debug|x86.Build.0 = Debug|Win32
+		{0EEA0CE7-77F4-4984-A2F8-087B61D511D6}.Release|x64.ActiveCfg = Release|x64
+		{0EEA0CE7-77F4-4984-A2F8-087B61D511D6}.Release|x64.Build.0 = Release|x64
+		{0EEA0CE7-77F4-4984-A2F8-087B61D511D6}.Release|x86.ActiveCfg = Release|Win32
+		{0EEA0CE7-77F4-4984-A2F8-087B61D511D6}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

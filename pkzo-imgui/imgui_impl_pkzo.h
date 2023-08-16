@@ -19,10 +19,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Application.h"
+#pragma once
 
-int main()
-{
-    auto app = lab::Application{};
-    return app.run();
-}
+#include <imgui.h>
+
+#include <pkzo/Mouse.h>
+#include <pkzo/Keyboard.h>
+
+IMGUI_IMPL_API bool ImGui_ImplPkzo_Init();
+IMGUI_IMPL_API void ImGui_ImplPkzo_Shutdown();
+
+IMGUI_IMPL_API void ImGui_ImplPkzo_HandleMouseButtonDown(pkzo::MouseButton button, glm::ivec2 pos);
+IMGUI_IMPL_API void ImGui_ImplPkzo_HandleMouseButtonUp(pkzo::MouseButton button, glm::ivec2 pos);
+IMGUI_IMPL_API void ImGui_ImplPkzo_HandleMouseMove(glm::ivec2 pos, glm::ivec2 rel);
+IMGUI_IMPL_API void ImGui_ImplPkzo_HandleMouseWheel(glm::ivec2 rel);
+
+IMGUI_IMPL_API void ImGui_ImplPkzo_HandleKeyDown(pkzo::KeyMod mod, pkzo::Key key);
+IMGUI_IMPL_API void ImGui_ImplPkzo_HandleKeyUp(pkzo::KeyMod mod, pkzo::Key key);
+IMGUI_IMPL_API void ImGui_ImplPkzo_HandleText(const std::string_view text);
+
+IMGUI_IMPL_API void ImGui_ImplPkzo_NewFrame(glm::uvec2 size, glm::uvec2 draw_size);
+

@@ -308,16 +308,28 @@ namespace pkzo
     };
     PKZO_ENUM_OPERATORS(KeyMod);
 
+    //! Keyboard
     class PKZO_EXPORT Keyboard
     {
     public:
+        //! Create keyboard against event router.
         Keyboard(EventRouter& router);
         ~Keyboard();
 
+        //! Check if a given key is pressed.
         bool is_pressed(Key key) const noexcept;
 
+        //! Signal emitted when a key is pressed.
         rsig::signal<KeyMod, Key>& get_key_press_signal() noexcept;
+
+        //! Signal emitted when a key is relased.
         rsig::signal<KeyMod, Key>& get_key_release_signal() noexcept;
+
+        //! Signal emitted when text is generated.
+        //!
+        //! All key strokes that generate text (generally single letters)
+        //! this signal will emit with the text as string.
+        rsig::signal<std::string>& get_text_signal() noexcept;
 
     private:
         EventRouter&     router;
@@ -325,6 +337,7 @@ namespace pkzo
 
         rsig::signal<KeyMod, Key> key_press_signal;
         rsig::signal<KeyMod, Key> key_release_signal;
+        rsig::signal<std::string> text_signal;
 
         void handle_events(const SDL_Event& event);
     };

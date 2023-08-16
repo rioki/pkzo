@@ -19,10 +19,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Application.h"
+#pragma once
 
-int main()
+#include <atomic>
+#include <pkzo/debug.h>
+#include <pkzo/EventRouter.h>
+#include <pkzo/Window.h>
+#include <pkzo/Mouse.h>
+#include <pkzo/Keyboard.h>
+#include <pkzo-imgui/Interface.h>
+
+namespace lab
 {
-    auto app = lab::Application{};
-    return app.run();
+    class Application
+    {
+    public:
+        Application();
+
+        int run();
+
+        void stop();
+
+    private:
+        std::atomic<bool>  running       = false;
+        pkzo::CrashHandler crash_handler;
+        pkzo::EventRouter  event_router;
+        pkzo::Window       window        = {event_router, {800, 600}, "pkzo lab"};
+        pkzo::Mouse        mouse         = {event_router};
+        pkzo::Keyboard     keyboard      = {event_router};
+
+        pkzo::imgui::Interface debug_interface;
+
+        void tick();
+    };
 }
