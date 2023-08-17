@@ -32,24 +32,40 @@ namespace pkzo
 {
     class EventRouter;
 
+    //! Joystick
     class PKZO_EXPORT Joystick
     {
     public:
+        //! Get the number of attached joysticks.
         static unsigned int get_joystick_count();
 
+        //! Create a specific joystick against the event router.
+        //!
+        //! @param router the event rotuer
+        //! @param id the joystick id
         Joystick(EventRouter& router, int id);
         ~Joystick();
 
+        //! The joysticks name.
         std::string get_name() const noexcept;
+        //! The number of axes.
         uint8_t get_axis_count() const noexcept;
+        //! The number of balls.
         uint8_t get_ball_count() const noexcept;
+        //! The number of buttons.
         uint8_t get_button_count() const noexcept;
+        //! The number of hats.
         uint8_t get_hat_count() const noexcept;
 
+        //! Signal emitted on axis motion.
         rsig::signal<uint8_t, float>& get_axis_motion_signal() noexcept;
+        //! Signal emitted on ball motion.
         rsig::signal<uint8_t, glm::ivec2>& get_ball_motion_signal() noexcept;
+        //! Signal emitted on button down.
         rsig::signal<uint8_t>& get_button_down_signal() noexcept;
+        //! Signal emitted on button up.
         rsig::signal<uint8_t>& get_button_up_signal() noexcept;
+        //! Signal emitted on hat motion.
         rsig::signal<uint8_t, glm::ivec2>& get_hat_motion_signal() noexcept;
 
     private:

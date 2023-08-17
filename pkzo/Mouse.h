@@ -31,6 +31,7 @@ namespace pkzo
 {
     class EventRouter;
 
+    //! Mouse Button
     enum class MouseButton
     {
         NONE    = 0,
@@ -41,9 +42,11 @@ namespace pkzo
         BUTTON5 = SDL_BUTTON_X2
     };
 
+    //! Mouse
     class PKZO_EXPORT Mouse
     {
     public:
+        //! Create Mouse against the event router.
         Mouse(EventRouter& router);
         ~Mouse();
 

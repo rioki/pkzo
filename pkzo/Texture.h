@@ -121,8 +121,15 @@ namespace pkzo
     class PKZO_EXPORT Texture
     {
     public:
+        //! Load a texture from file.
         static TexturePtr load(const std::filesystem::path& file);
+        //! Load a texture from memory buffer
+        //!
+        //! This function loads a compressed image (i.e. jpeg format) from a memoy buffer.
         static TexturePtr load_memory(Format format, const void* data, size_t size);
+        //! Create an immage from a color buffer.
+        //!
+        //! This function loads an uncompressed image (i.e. raw RBGA data) for a buffer.
         static TexturePtr create_from_buffer(const glm::uvec2& size, ColorMode mode, DataType group, const void* memory, const std::string& label = "memory");
 
         explicit Texture(const std::filesystem::path& file);
@@ -130,27 +137,46 @@ namespace pkzo
         explicit Texture(Format format, const void* data, size_t size);
         ~Texture();
 
+        //! Get the debug label.
         const std::string& get_label() const noexcept;
 
+        //! Get the file, if any.
         const std::filesystem::path& get_file() const noexcept;
 
+        //! Get the size.
         glm::uvec2 get_size() const noexcept;
+        //! Get the color mode.
         ColorMode get_color_mode() const noexcept;
+        //! Get the data type.
         DataType get_data_type() const noexcept;
 
+        //! Read a texel.
         glm::vec4 get_texel(const glm::uvec2& index) const noexcept;
+        //! Set a texel.
         void set_texel(const glm::uvec2& index, const glm::vec4& value) noexcept;
 
+        //! Get a buffer to the raw bits.
         const void* get_bits() const noexcept;
 
+        //! Set the filter mode.
         void set_filter_mode(FilterMode value) noexcept;
+        //! Get the filter mode.
         FilterMode get_filter_mode() const noexcept;
 
+        //! Set the wrap mode.
         void set_wrap_mode(WrapMode value) noexcept;
+        //! Get the wrap mode.
         WrapMode get_wrap_mode() const noexcept;
 
+        //! Save to file in the fiven format.
+        //!
+        //! This function will save the texture to file. The file's
+        //! extention will determine the format it will be saved in.
         void save(const std::filesystem::path& file) const;
 
+        //! Get a deep hash of the image data.
+        //!
+        //! @note std::hash is implemented for Texture and shared_ptr<Texture> using get_hash
         size_t get_hash() const noexcept;
 
     private:
