@@ -41,6 +41,7 @@ namespace pkzo
 {
     class EventRouter;
 
+    //! Key
     enum class Key
     {
         UNKNOWN            = SDL_SCANCODE_UNKNOWN,
@@ -285,6 +286,8 @@ namespace pkzo
         APP2               = SDL_SCANCODE_APP2
     };
 
+
+    //! Key Modifier
     enum class KeyMod
     {
         NONE   = KMOD_NONE,
@@ -341,16 +344,4 @@ namespace pkzo
 
         void handle_events(const SDL_Event& event);
     };
-
-    /*PKZO_EXPORT
-    std::ostream& operator << (std::ostream& os, Key key) noexcept;
-
-    PKZO_EXPORT
-    std::istream& operator >> (std::istream& is, Key& key);
-
-    PKZO_EXPORT
-    std::ostream& operator << (std::ostream& os, KeyMod mod) noexcept;
-
-    PKZO_EXPORT
-    std::istream& operator >> (std::istream& is, KeyMod& mod);*/
 }

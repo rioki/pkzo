@@ -31,15 +31,31 @@
 
 namespace pkzo
 {
+    //! Output a diagnostic message.
     PKZO_EXPORT
     void trace(const std::string_view msg, const std::source_location location = std::source_location::current()) noexcept;
 
+    //! Check if a condiiton is true.
+    //!
+    //! Use this to check if a required condition is true. A violation of the
+    //! condition should be programming mistake, not false user input; use
+    //! an exception instead.
     PKZO_EXPORT
     void check(bool condition, const std::string_view msg = "Check failed.", const std::source_location location = std::source_location::current()) noexcept;
 
+    //! Signal that the code has reached a point of no return.
+    //!
+    //! If the code is in a position that has no possible sensible outcome,
+    //! for example a default case where all cases are handled, this function
+    //! will terminate exectution with tracing.
     [[ noreturn ]] PKZO_EXPORT
     void fail(const std::string_view msg = "Unexpected failure.", const std::source_location location = std::source_location::current()) noexcept;
 
+    //! Crash Handler
+    //!
+    //! The crash handler will install a callback into the OS and should a crash ocur,
+    //! it will pull a crash dump for later analysis. If it can detect a debugger it
+    //! will try to break into the debugger.
     class PKZO_EXPORT CrashHandler
     {
     public:

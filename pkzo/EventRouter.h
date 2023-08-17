@@ -32,6 +32,10 @@
 
 namespace pkzo
 {
+    //! Input Event Router
+    //!
+    //! The EventRouter captures the OS's input and routes it to input consumers
+    //! like Mouse, Keyboard or Joystick.
     class PKZO_EXPORT EventRouter
     {
     public:
@@ -40,9 +44,18 @@ namespace pkzo
         ~EventRouter();
         EventRouter& operator = (const EventRouter&) = delete;
 
+        // Implementation Defined
         rsig::signal<const SDL_Event&>& get_event_signal() noexcept;
+
+        //! Quit Signel
+        //!
+        //! Handle the event when the OS request the application to close
+        //! such as closing the primary window, ALT+F4 or program termination.
         rsig::signal<>& get_quit_signal() noexcept;
 
+        //! Inject input
+        //!
+        //! @{
         void inject_quit() noexcept;
         void inject_key_press(KeyMod mod, Key key) noexcept;
         void inject_key_release(KeyMod mod, Key key) noexcept;
@@ -51,7 +64,9 @@ namespace pkzo
         void inject_mouse_button_release(MouseButton button, glm::ivec2 pos) noexcept;
         void inject_mouse_wheel(glm::ivec2 rel) noexcept;
         void inject_window_resize(glm::uvec2 size) noexcept;
+        //! @}
 
+        //! Rotue the events.
         void route_events();
 
     private:
