@@ -48,34 +48,52 @@ namespace pkzo
     };
     constexpr auto buffer_count = to_underlying(BufferId::MAX);
 
+    //! 3D Mesh
     class PKZO_EXPORT Mesh
     {
     public:
-        static std::shared_ptr<Mesh> load_file(const std::filesystem::path& file);
+        //! Create a 2D plane in the X/Y plane.
         static std::shared_ptr<Mesh> create_plane(const glm::vec2& size);
 
         Mesh() = default;
-        Mesh(const std::filesystem::path& file);
         ~Mesh();
 
+        //! Add a vertex.
         void add_vertex(const glm::vec3& vertex, const glm::vec3& normal, const glm::vec3& tangent, const glm::vec2& texcoords);
+
+        //! Add a triangle
         void add_triangle(uint a, uint b, uint c);
 
+        //! Get the number of vertexes.
+        unsigned int get_vertex_count() const noexcept;
+        //! Get the number of triangles.
+        unsigned int get_triangle_count() const noexcept;
+
+        //! Upload to OpenGL
         void upload();
+        //! Check if uploaded.
         bool is_uploaded() const noexcept;
-        void free_videomemory();
+        //! Release video memory.
+        void release();
+        //! Bind to a shader.
         void bind(std::shared_ptr<Shader> shader);
+
+        //! Draw the mesh.
+        //!
+        //! @note The mesh needs to be bound first.
         void draw();
+
+        //! Draw the mesh.
         void draw(std::shared_ptr<Shader> shader);
 
     private:
         // TODO: check if glm::vec4 provides better performance
-        std::vector<glm::vec3>         vertices;
+        std::vector<glm::vec3>         vertexes;
         std::vector<glm::vec3>         normals;
         std::vector<glm::vec3>         tangents;
         std::vector<glm::vec2>         texcoords;
 
-        std::vector<glm::uvec3>        indexes;
+        std::vector<glm::uvec3>        triangles;
 
         uint                           vao = 0;
         std::array<uint, buffer_count> buffers;

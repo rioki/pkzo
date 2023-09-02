@@ -39,7 +39,7 @@ namespace pkzo
                                       ivec4, uvec4, vec4,
                                       mat2,  mat3,  mat4>;
 
-
+    //! GLSL Shader
     class PKZO_EXPORT Shader
     {
     public:

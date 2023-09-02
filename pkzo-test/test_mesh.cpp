@@ -19,35 +19,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "RenderTest.h"
+#include <pkzo/Mesh.h>
+
+#include <pkzo/Window.h>
 
 #include <glm/gtc/matrix_transform.hpp>
 
-namespace lab
+#include "glm_gtest.h"
+#include "pkzo_test.h"
+
+TEST(Mesh, create_empty_without_OpenGL)
 {
-    RenderTest::RenderTest()
-    {
-        shader  = pkzo::Shader::load_file(PROJECT_DIR "assets/shaders/Textured.glsl");
-        texture = pkzo::Texture::load(PROJECT_DIR "assets/textures/AngryCat.jpg");
-        mesh    = pkzo::Mesh::create_plane({100.0f, 100.0f});
-    }
+    auto mesh  = pkzo::Mesh{};
 
-    void RenderTest::draw(const glm::uvec2& size)
-    {
-        auto hs         = glm::vec2(size) * 0.5f;
-        auto projection = glm::ortho(-hs.x, hs.x, -hs.y, hs.y, -1.0f, 1.0f);
-        auto view       = glm::mat4(1.0f);
-        auto model      = glm::mat4(1.0f);
+    EXPECT_EQ(0u, mesh.get_vertex_count());
+    EXPECT_EQ(0u, mesh.get_triangle_count());
+}
 
-        shader->bind();
-        shader->set_uniform("pkzo_ProjectionMatrix", projection);
-        shader->set_uniform("pkzo_ViewMatrix",       view);
-        shader->set_uniform("pkzo_ModelMatrix",      model);
+TEST(Mesh, create_plane_without_OpenGL)
+{
+    auto mesh  = pkzo::Mesh::create_plane({150.0f, 150.0f});
 
-        texture->bind(0u);
-        shader->set_uniform("test_Texture", 0u);
-        shader->set_uniform("test_Color",   glm::vec3{1.0f, 1.0f, 1.0f});
-
-        mesh->draw(shader);
-    }
+    EXPECT_EQ(4u, mesh->get_vertex_count());
+    EXPECT_EQ(2u, mesh->get_triangle_count());
 }

@@ -12,7 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - add debug facilities
 - add input event handling
 - add OpenGL window handling
-- add Texture loading
+- add OpenGL resoruce handlign (Shader, Texture, Mesh)
 - add ImGui support
+
 
 [Unreleased]: https://github.com/rioki/pkzo/commits/master

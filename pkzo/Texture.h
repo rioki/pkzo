@@ -168,11 +168,15 @@ namespace pkzo
         //! Get the wrap mode.
         WrapMode get_wrap_mode() const noexcept;
 
+        //! Upload to OpenGL
         void upload();
-        void release();
-        bool is_uploaded() const noexcept;
-        void bind(glm::uint slot);
 
+        //! Free OpenGL resource
+        void release();
+        //! Check if the texture was uploaded.
+        bool is_uploaded() const noexcept;
+        //! Bind the texture to a given texture slot.
+        void bind(glm::uint slot);
 
         //! Save to file in the fiven format.
         //!

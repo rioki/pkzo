@@ -33,7 +33,6 @@
 TEST(Shader, load_without_OpenGL)
 {
     auto shader  = pkzo::Shader::load_file(pkzo::test::get_test_input() / "shaders/empty.glsl");
-    // and now?
 }
 
 TEST(Shader, throw_invalid_file)
@@ -66,7 +65,7 @@ TEST(Shader, GRAPH_compile_simple)
     }
     catch (...)
     {
-        EXPECT_EQ("", buffer.str());
+        EXPECT_EQ("", buffer.str()); // this is just so the error is visible in test output
         throw;
     }
 
