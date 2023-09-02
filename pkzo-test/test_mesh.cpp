@@ -19,40 +19,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#pragma once
+#include <pkzo/Mesh.h>
 
-#include <atomic>
-#include <pkzo/debug.h>
-#include <pkzo/EventRouter.h>
 #include <pkzo/Window.h>
-#include <pkzo/Mouse.h>
-#include <pkzo/Keyboard.h>
-#include <pkzo-imgui/Interface.h>
 
-#include "RenderTest.h"
+#include <glm/gtc/matrix_transform.hpp>
 
-namespace lab
+#include "glm_gtest.h"
+#include "pkzo_test.h"
+
+TEST(Mesh, create_empty_without_OpenGL)
 {
-    class Application
-    {
-    public:
-        Application();
+    auto mesh  = pkzo::Mesh{};
 
-        int run();
+    EXPECT_EQ(0u, mesh.get_vertex_count());
+    EXPECT_EQ(0u, mesh.get_triangle_count());
+}
 
-        void stop();
+TEST(Mesh, create_plane_without_OpenGL)
+{
+    auto mesh  = pkzo::Mesh::create_plane({150.0f, 150.0f});
 
-    private:
-        std::atomic<bool>  running       = false;
-        pkzo::CrashHandler crash_handler;
-        pkzo::EventRouter  event_router;
-        pkzo::Window       window        = {event_router, {800, 600}, "pkzo lab"};
-        pkzo::Mouse        mouse         = {event_router};
-        pkzo::Keyboard     keyboard      = {event_router};
-
-        pkzo::imgui::Interface debug_interface;
-        RenderTest render_test;
-
-        void tick();
-    };
+    EXPECT_EQ(4u, mesh->get_vertex_count());
+    EXPECT_EQ(2u, mesh->get_triangle_count());
 }

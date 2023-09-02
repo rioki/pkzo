@@ -99,6 +99,12 @@ namespace pkzo
         return seed;
     }
 
+    template <typename T>
+    constexpr auto to_underlying(T e)
+    {
+        return static_cast<std::underlying_type_t<T>>(e);
+    }
+
     PKZO_EXPORT
     std::string tolower(const std::string& str, const std::locale& loc = std::locale("C"));
 
@@ -110,6 +116,9 @@ namespace pkzo
 
     PKZO_EXPORT
     std::string load_text_file(const std::filesystem::path& file);
+
+    template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
+    template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
 }
 
 // needed for koenig lookup

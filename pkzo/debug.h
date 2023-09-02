@@ -43,6 +43,13 @@ namespace pkzo
     PKZO_EXPORT
     void check(bool condition, const std::string_view msg = "Check failed.", const std::source_location location = std::source_location::current()) noexcept;
 
+    void clear_glerrors() noexcept;
+
+    //! Check if an OpenGL error was raised.
+    PKZO_EXPORT
+    void check_glerror(const std::string_view msg = "Check failed.", const std::source_location location = std::source_location::current()) noexcept;
+
+
     //! Signal that the code has reached a point of no return.
     //!
     //! If the code is in a position that has no possible sensible outcome,
