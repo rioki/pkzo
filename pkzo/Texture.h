@@ -168,6 +168,12 @@ namespace pkzo
         //! Get the wrap mode.
         WrapMode get_wrap_mode() const noexcept;
 
+        void upload();
+        void release();
+        bool is_uploaded() const noexcept;
+        void bind(glm::uint slot);
+
+
         //! Save to file in the fiven format.
         //!
         //! This function will save the texture to file. The file's
@@ -185,6 +191,8 @@ namespace pkzo
         FIBITMAP*                      bitmap      = nullptr;
         FilterMode                     filter_mode = FilterMode::LINEAR;
         WrapMode                       wrap_mode   = WrapMode::REPEAT;
+
+        glm::uint                      glid        = 0u;
 
         Texture(const Texture&) = delete;
         Texture& operator = (const Texture&) = delete;

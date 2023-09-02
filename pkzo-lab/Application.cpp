@@ -34,7 +34,8 @@ namespace lab
         });
 
         window.get_draw_signal().connect([this] () {
-            debug_interface.draw(window.get_size(), window.get_drawable_size());
+            render_test.draw(window.get_drawable_size());
+            //debug_interface.draw(window.get_size(), window.get_drawable_size());
         });
 
         mouse.get_button_press_signal().connect([this] (auto button, auto pos) {

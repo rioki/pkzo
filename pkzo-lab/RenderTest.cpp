@@ -19,40 +19,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#pragma once
-
-#include <atomic>
-#include <pkzo/debug.h>
-#include <pkzo/EventRouter.h>
-#include <pkzo/Window.h>
-#include <pkzo/Mouse.h>
-#include <pkzo/Keyboard.h>
-#include <pkzo-imgui/Interface.h>
-
 #include "RenderTest.h"
+
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace lab
 {
-    class Application
+    RenderTest::RenderTest()
     {
-    public:
-        Application();
+        shader  = pkzo::Shader::load_file(PROJECT_DIR "assets/shaders/Textured.glsl");
+        texture = pkzo::Texture::load(PROJECT_DIR "assets/textures/AngryCat.jpg");
+        mesh    = pkzo::Mesh::create_plane({100.0f, 100.0f});
+    }
 
-        int run();
+    void RenderTest::draw(const glm::uvec2& size)
+    {
+        auto hs = glm::vec2(size) * 0.5f;
+        auto projection = glm::ortho(-hs.x, hs.x, -hs.y, hs.y, -1.0f, 1.0f);
+        auto view       = glm::mat4(1.0f);
+        auto model      = glm::mat4(1.0f);
 
-        void stop();
+        shader->bind();
+        shader->set_uniform("pkzo_ProjectionMatrix", projection);
+        shader->set_uniform("pkzo_ViewMatrix",       view);
+        shader->set_uniform("pkzo_ModelMatrix",      model);
 
-    private:
-        std::atomic<bool>  running       = false;
-        pkzo::CrashHandler crash_handler;
-        pkzo::EventRouter  event_router;
-        pkzo::Window       window        = {event_router, {800, 600}, "pkzo lab"};
-        pkzo::Mouse        mouse         = {event_router};
-        pkzo::Keyboard     keyboard      = {event_router};
+        texture->bind(0u);
+        shader->set_uniform("test_Texture", 0u);
+        shader->set_uniform("test_Color",   glm::vec3{1.0f, 1.0f, 1.0f});
 
-        pkzo::imgui::Interface debug_interface;
-        RenderTest render_test;
-
-        void tick();
-    };
+        mesh->draw(shader);
+    }
 }

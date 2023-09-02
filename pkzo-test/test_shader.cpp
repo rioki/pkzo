@@ -19,40 +19,56 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#pragma once
+#include <pkzo/Texture.h>
+#include <pkzo/Mesh.h>
+#include <pkzo/Shader.h>
 
-#include <atomic>
-#include <pkzo/debug.h>
-#include <pkzo/EventRouter.h>
 #include <pkzo/Window.h>
-#include <pkzo/Mouse.h>
-#include <pkzo/Keyboard.h>
-#include <pkzo-imgui/Interface.h>
 
-#include "RenderTest.h"
+#include <glm/gtc/matrix_transform.hpp>
 
-namespace lab
+#include "glm_gtest.h"
+#include "pkzo_test.h"
+
+TEST(Shader, load_without_OpenGL)
 {
-    class Application
+    auto shader  = pkzo::Shader::load_file(pkzo::test::get_test_input() / "shaders/empty.glsl");
+    // and now?
+}
+
+TEST(Shader, throw_invalid_file)
+{
+    EXPECT_THROW(pkzo::Shader::load_file(pkzo::test::get_test_input() / "UT6_Ubershader.glsl"), std::runtime_error);
+}
+
+TEST(Shader, GRAPH_compile_empty)
+{
+    auto window = pkzo::Window{{800,600}, "Test"};
+
+    auto shader  = pkzo::Shader::load_file(pkzo::test::get_test_input() / "shaders/empty.glsl");
+
+    std::stringstream buffer;
+    shader->compile(buffer);
+
+    EXPECT_EQ("", buffer.str());
+}
+
+TEST(Shader, GRAPH_compile_simple)
+{
+    auto window = pkzo::Window{{800,600}, "Test"};
+
+    auto shader  = pkzo::Shader::load_file(pkzo::test::get_test_input() / "shaders/textured.glsl");
+
+    std::stringstream buffer;
+    try
     {
-    public:
-        Application();
+        shader->compile(buffer);
+    }
+    catch (...)
+    {
+        EXPECT_EQ("", buffer.str());
+        throw;
+    }
 
-        int run();
-
-        void stop();
-
-    private:
-        std::atomic<bool>  running       = false;
-        pkzo::CrashHandler crash_handler;
-        pkzo::EventRouter  event_router;
-        pkzo::Window       window        = {event_router, {800, 600}, "pkzo lab"};
-        pkzo::Mouse        mouse         = {event_router};
-        pkzo::Keyboard     keyboard      = {event_router};
-
-        pkzo::imgui::Interface debug_interface;
-        RenderTest render_test;
-
-        void tick();
-    };
+    EXPECT_EQ("", buffer.str());
 }

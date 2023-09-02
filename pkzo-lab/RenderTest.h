@@ -21,38 +21,24 @@
 
 #pragma once
 
-#include <atomic>
-#include <pkzo/debug.h>
-#include <pkzo/EventRouter.h>
-#include <pkzo/Window.h>
-#include <pkzo/Mouse.h>
-#include <pkzo/Keyboard.h>
-#include <pkzo-imgui/Interface.h>
+#include <memory>
 
-#include "RenderTest.h"
+#include <pkzo/Shader.h>
+#include <pkzo/Texture.h>
+#include <pkzo/Mesh.h>
 
 namespace lab
 {
-    class Application
+    class RenderTest
     {
     public:
-        Application();
+        RenderTest();
 
-        int run();
-
-        void stop();
+        void draw(const glm::uvec2& size);
 
     private:
-        std::atomic<bool>  running       = false;
-        pkzo::CrashHandler crash_handler;
-        pkzo::EventRouter  event_router;
-        pkzo::Window       window        = {event_router, {800, 600}, "pkzo lab"};
-        pkzo::Mouse        mouse         = {event_router};
-        pkzo::Keyboard     keyboard      = {event_router};
-
-        pkzo::imgui::Interface debug_interface;
-        RenderTest render_test;
-
-        void tick();
+        std::shared_ptr<pkzo::Shader>  shader;
+        std::shared_ptr<pkzo::Texture> texture;
+        std::shared_ptr<pkzo::Mesh>    mesh;
     };
 }

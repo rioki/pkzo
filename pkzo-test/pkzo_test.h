@@ -27,6 +27,7 @@
 
 #include <string>
 
+#include <gtest/gtest.h>
 #include <pkzo/Texture.h>
 
 #include "glm_io.h"

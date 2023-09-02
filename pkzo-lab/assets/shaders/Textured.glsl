@@ -1,3 +1,4 @@
+/*
 // pkzo
 // Copyright 2023 Sean Farrell <sean.farrell@rioki.org>
 //
@@ -18,41 +19,28 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+*/
 
-#pragma once
+#ifdef PKZO_VERTEX
 
-#include <atomic>
-#include <pkzo/debug.h>
-#include <pkzo/EventRouter.h>
-#include <pkzo/Window.h>
-#include <pkzo/Mouse.h>
-#include <pkzo/Keyboard.h>
-#include <pkzo-imgui/Interface.h>
+out vec2 var_TexCoord;
 
-#include "RenderTest.h"
-
-namespace lab
+void main()
 {
-    class Application
-    {
-    public:
-        Application();
-
-        int run();
-
-        void stop();
-
-    private:
-        std::atomic<bool>  running       = false;
-        pkzo::CrashHandler crash_handler;
-        pkzo::EventRouter  event_router;
-        pkzo::Window       window        = {event_router, {800, 600}, "pkzo lab"};
-        pkzo::Mouse        mouse         = {event_router};
-        pkzo::Keyboard     keyboard      = {event_router};
-
-        pkzo::imgui::Interface debug_interface;
-        RenderTest render_test;
-
-        void tick();
-    };
+    var_TexCoord = pkzo_TexCoord;
+    gl_Position  = pkzo_ProjectionMatrix * pkzo_ViewMatrix * pkzo_ModelMatrix * vec4(pkzo_Vertex, 1.0);
 }
+#endif
+
+#ifdef PKZO_FRAGMENT
+
+uniform vec3      test_Color;
+uniform sampler2D test_Texture;
+
+in vec2 var_TexCoord;
+
+void main()
+{
+    pkzo_FragColor = texture(test_Texture, var_TexCoord) * vec4(test_Color, 1.0);
+}
+#endif
