@@ -23,21 +23,16 @@
 #include "config.h"
 
 #include <filesystem>
-#include <iostream>
-#include <memory>
-#include <variant>
 
 #include <glm/glm.hpp>
+
+#include "opengl.h"
 
 namespace pkzo
 {
     using namespace glm;
 
-    using UniformValue = std::variant<bool, int, uint, float,
-                                      ivec2, uvec2, vec2,
-                                      ivec3, uvec3, vec3,
-                                      ivec4, uvec4, vec4,
-                                      mat2,  mat3,  mat4>;
+    using opengl::UniformValue;
 
     //! GLSL Shader
     class PKZO_EXPORT Shader
@@ -62,13 +57,9 @@ namespace pkzo
 
         void set_uniform(const std::string_view name, const UniformValue& value) noexcept;
 
-        int get_attribute(const std::string_view name) noexcept;
-
-        void bind_output(const std::string_view name, uint channel) noexcept;
-
     private:
-        uint program_id = 0;
         std::string code;
+        std::unique_ptr<opengl::Shader> shader;
 
         Shader(const Shader&) = delete;
         const Shader& operator = (const Shader&) = delete;

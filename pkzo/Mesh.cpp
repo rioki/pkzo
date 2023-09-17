@@ -25,10 +25,13 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "debug.h"
+#include "opengl.h"
 #include "Shader.h"
 
 namespace pkzo
 {
+    using opengl::check_glerror;
+
     std::shared_ptr<Mesh> Mesh::create_plane(const glm::vec2& size)
     {
         const auto hs = size * 0.5f;
@@ -64,14 +67,14 @@ namespace pkzo
         triangles.push_back({a, b, c});
     }
 
-    unsigned int Mesh::get_vertex_count() const noexcept
+    uint Mesh::get_vertex_count() const noexcept
     {
-        return vertexes.size();
+        return static_cast<uint>(vertexes.size());
     }
 
-    unsigned int Mesh::get_triangle_count() const noexcept
+    uint Mesh::get_triangle_count() const noexcept
     {
-        return triangles.size();
+        return static_cast<uint>(triangles.size());
     }
 
     void Mesh::upload()
@@ -81,86 +84,33 @@ namespace pkzo
             return;
         }
 
-        glGenVertexArrays(1, &vao);
-        glCreateBuffers(static_cast<GLsizei>(buffers.size()), buffers.data());
-        glNamedBufferData(buffers[to_underlying(BufferId::VERTEX)], vertexes.size() * sizeof(glm::vec3), glm::value_ptr(vertexes.front()), GL_STATIC_DRAW);
-        glNamedBufferData(buffers[to_underlying(BufferId::NORMAL)], normals.size() * sizeof(glm::vec3), glm::value_ptr(normals[0]), GL_STATIC_DRAW);
-        glNamedBufferData(buffers[to_underlying(BufferId::TANGENT)], tangents.size() * sizeof(glm::vec3), glm::value_ptr(tangents[0]), GL_STATIC_DRAW);
-        glNamedBufferData(buffers[to_underlying(BufferId::TEXCOORD)], texcoords.size() * sizeof(glm::vec2), glm::value_ptr(texcoords[0]), GL_STATIC_DRAW);
-
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[to_underlying(BufferId::INDEX)]);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, triangles.size() * 3 * sizeof(unsigned int), glm::value_ptr(triangles[0]), GL_STATIC_DRAW);
-
-        check_glerror();
+        vertex_buffer = std::make_shared<opengl::VertexBuffer>();
+        vertex_buffer->upload_values(vertexes);
+        vertex_buffer->upload_values(normals);
+        vertex_buffer->upload_values(tangents);
+        vertex_buffer->upload_values(texcoords);
+        vertex_buffer->upload_indexes(triangles);
     }
 
     bool Mesh::is_uploaded() const noexcept
     {
-        return vao != 0;
+        return vertex_buffer != nullptr;
     }
 
     void Mesh::release()
     {
-        if (! is_uploaded())
-        {
-            return;
-        }
-
-        glDeleteBuffers(static_cast<GLsizei>(buffers.size()), buffers.data());
-        glDeleteVertexArrays(1, &vao);
-        check_glerror();
+        vertex_buffer = nullptr;
     }
 
-    struct BufferInfo
+    void Mesh::draw()
     {
-        BufferId    id;
-        std::string name;
-        uint        size;
-    };
-    const auto buffer_infos = std::array<BufferInfo, buffer_count - 1>{
-        BufferInfo{BufferId::VERTEX,   "pkzo_Vertex",   3},
-        BufferInfo{BufferId::NORMAL,   "pkzo_Normal",   3},
-        BufferInfo{BufferId::TANGENT,  "pkzo_Tangent",  3},
-        BufferInfo{BufferId::TEXCOORD, "pkzo_TexCoord", 2}
-    };
-
-    void Mesh::bind(std::shared_ptr<Shader> shader)
-    {
-        check(shader != nullptr);
-
         if (!is_uploaded())
         {
             upload();
         }
 
-        glBindVertexArray(vao);
-
-        for (const auto& [id, name, size] : buffer_infos)
-        {
-            auto adr = shader->get_attribute(name);
-            if (adr != -1)
-            {
-                glBindBuffer(GL_ARRAY_BUFFER, buffers[to_underlying(id)]);
-                glVertexAttribPointer(adr, size, GL_FLOAT, GL_FALSE, 0, nullptr);
-                glEnableVertexAttribArray(adr);
-                check_glerror();
-            }
-        }
-
-        check_glerror();
-    }
-
-    void Mesh::draw()
-    {
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[to_underlying(BufferId::INDEX)]);
-        glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(triangles.size() * 3u), GL_UNSIGNED_INT, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    }
-
-    void Mesh::draw(std::shared_ptr<Shader> shader)
-    {
-        bind(shader);
-        draw();
+        check(vertex_buffer != nullptr);
+        vertex_buffer->draw();
     }
 }
 

@@ -29,6 +29,11 @@
     <ClCompile Include="imgui_impl_pkzo.cpp" />
     <ClCompile Include="Interface.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\pkzo\pkzo.vcxproj">
+      <Project>{97787b2d-578e-4559-8072-649df904a540}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

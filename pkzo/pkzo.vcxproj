@@ -150,6 +150,7 @@
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="opengl.h" />
     <ClInclude Include="SdlInit.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="strconv.h" />
@@ -164,6 +165,7 @@
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="opengl.cpp" />
     <ClCompile Include="SdlInit.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="strconv.cpp" />

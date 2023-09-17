@@ -33,6 +33,10 @@
 #include <gtest/gtest.h>
 #include "pkzo_test.h"
 
+#ifdef interface
+#undef interface
+#endif
+
 using namespace std::chrono_literals;
 
 TEST(Imgui, GRAPH_render_demo_window)
