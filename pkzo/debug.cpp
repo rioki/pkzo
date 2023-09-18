@@ -59,7 +59,7 @@ namespace pkzo
         }
         if (e == std::string::npos)
         {
-            e = func.size() - 1;
+            e = func.size();
         }
         else
         {
