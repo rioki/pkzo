@@ -418,9 +418,10 @@ namespace pkzo::opengl
         check_glerror();
     }
 
-    VertexBuffer::VertexBuffer()
+    VertexBuffer::VertexBuffer(const std::string_view label)
     {
         glGenVertexArrays(1, &id);
+        glObjectLabel(GL_VERTEX_ARRAY, id, static_cast<GLsizei>(label.size()), label.data());
         check_glerror();
     }
 
