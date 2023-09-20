@@ -46,27 +46,24 @@ namespace pkzo
 
     std::string funcname(const std::string& func) noexcept
     {
-        auto s = func.find_last_of(":");
-        auto e = func.find_first_of("(");
+        auto start = func.find_last_of(":");
+        auto end = func.find_first_of("(");
 
-        if (s == std::string::npos)
+        if (start == std::string::npos)
         {
-            s = 0u;
+            start = 0u;
         }
         else
         {
-            s = s + 1;
-        }
-        if (e == std::string::npos)
-        {
-            e = func.size();
-        }
-        else
-        {
-            e = e;
+            start = start + 1;
         }
 
-        return func.substr(s, e - s);
+        if (end == std::string::npos)
+        {
+            end = func.size();
+        }
+
+        return func.substr(start, end - start);
     }
 
     void trace(const std::string_view message, const std::source_location location) noexcept
