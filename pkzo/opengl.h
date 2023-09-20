@@ -191,7 +191,7 @@ namespace pkzo::opengl
     class PKZO_EXPORT VertexBuffer
     {
     public:
-        VertexBuffer();
+        VertexBuffer(const std::string_view label = "unnamed");
         ~VertexBuffer();
 
         uint get_id() const noexcept;
