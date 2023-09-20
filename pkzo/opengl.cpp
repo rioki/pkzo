@@ -198,11 +198,12 @@ namespace pkzo::opengl
         }
     }
 
-    Buffer::Buffer(const void* data, const uint _size, BufferUsage usage)
+    Buffer::Buffer(const void* data, const uint _size, BufferUsage usage, const std::string_view label)
     : size(_size)
     {
          glCreateBuffers(1, &id);
          glNamedBufferData(id, size, data, to_underlying(usage));
+         //glObjectLabel(id, GL_BUFFER, label.size(), label.data());
          check_glerror();
     }
 
@@ -421,7 +422,7 @@ namespace pkzo::opengl
     VertexBuffer::VertexBuffer(const std::string_view label)
     {
         glGenVertexArrays(1, &id);
-        glObjectLabel(GL_VERTEX_ARRAY, id, static_cast<GLsizei>(label.size()), label.data());
+        //glObjectLabel(GL_VERTEX_ARRAY, id, static_cast<GLsizei>(label.size()), label.data());
         check_glerror();
     }
 
