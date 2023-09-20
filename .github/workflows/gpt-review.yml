@@ -19,7 +19,7 @@ jobs:
           LANGUAGE: English
           OPENAI_API_ENDPOINT: https://api.openai.com/v1
           MODEL: gpt-4 
-          PROMPT: Please review the code from the following code diff:
+          PROMPT: "Please review the code from the following code diff:"
           top_p: 1 
           temperature: 1 
           max_tokens: 10000
