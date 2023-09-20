@@ -26,6 +26,9 @@
 #include <filesystem>
 #include <glm/glm.hpp>
 
+#include "opengl.h"
+#include "utils.h"
+
 struct FIBITMAP;
 
 namespace pkzo
@@ -33,42 +36,31 @@ namespace pkzo
     //! Color Format
     enum class ColorMode
     {
-        UNKNOWN,
-        R,
-        RG,
-        RGB,
-        BGR,
-        RGBA,
-        BGRA
+        UNKNOWN = 0,
+        R       = to_underlying(opengl::ColorMode::R),
+        RG      = to_underlying(opengl::ColorMode::RG),
+        RGB     = to_underlying(opengl::ColorMode::RGB),
+        BGR     = to_underlying(opengl::ColorMode::BGR),
+        RGBA    = to_underlying(opengl::ColorMode::RGBA),
+        BGRA    = to_underlying(opengl::ColorMode::BGRA)
     };
 
     //! Data Type
     enum class DataType
     {
-        UNKNOWN,
-        INT8,
-        UINT8,
-        INT16,
-        UINT16,
-        UINT32,
-        INT32,
-        FLOAT,
-        DOUBLE
+        UNKNOWN = 0,
+        INT8    = to_underlying(opengl::DataType::BYTE),
+        UINT8   = to_underlying(opengl::DataType::UNSIGNED_BYTE),
+        INT16   = to_underlying(opengl::DataType::SHORT),
+        UINT16  = to_underlying(opengl::DataType::UNSIGNED_SHORT),
+        INT32   = to_underlying(opengl::DataType::INT),
+        UINT32  = to_underlying(opengl::DataType::UNSIGNED_INT),
+        FLOAT   = to_underlying(opengl::DataType::FLOAT),
+        DOUBLE  = to_underlying(opengl::DataType::DOUBLE)
     };
 
-    //! Filter Mode
-    enum class FilterMode
-    {
-        NEAREST,
-        LINEAR
-    };
-
-    //! Wrap Mode
-    enum class WrapMode
-    {
-        CLAMP,
-        REPEAT
-    };
+    using opengl::FilterMode;
+    using opengl::WrapMode;
 
     // Matches FREE_IMAGE_FORMAT
     enum class Format
@@ -196,7 +188,7 @@ namespace pkzo
         FilterMode                     filter_mode = FilterMode::LINEAR;
         WrapMode                       wrap_mode   = WrapMode::REPEAT;
 
-        glm::uint                      glid        = 0u;
+        std::unique_ptr<opengl::Texture> gl_texture;
 
         Texture(const Texture&) = delete;
         Texture& operator = (const Texture&) = delete;

@@ -22,6 +22,7 @@
 #include "RenderTest.h"
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <pkzo/opengl.h>
 
 namespace lab
 {
@@ -34,6 +35,8 @@ namespace lab
 
     void RenderTest::draw(const glm::uvec2& size)
     {
+        auto section = pkzo::opengl::Section{"Render Test"};
+
         auto hs         = glm::vec2(size) * 0.5f;
         auto projection = glm::ortho(-hs.x, hs.x, -hs.y, hs.y, -1.0f, 1.0f);
         auto view       = glm::mat4(1.0f);
@@ -48,6 +51,6 @@ namespace lab
         shader->set_uniform("test_Texture", 0u);
         shader->set_uniform("test_Color",   glm::vec3{1.0f, 1.0f, 1.0f});
 
-        mesh->draw(shader);
+        mesh->draw();
     }
 }

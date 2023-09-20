@@ -427,243 +427,26 @@ namespace pkzo
         return wrap_mode;
     }
 
-    GLenum glinternalformat(ColorMode color, DataType data) noexcept
-    {
-        switch (data)
-        {
-        case DataType::INT8:
-            switch (color)
-            {
-            case ColorMode::R:
-                return GL_R8I;
-            case ColorMode::RG:
-                return GL_RG8I;
-            case ColorMode::RGB:
-            case ColorMode::BGR:
-                return GL_RGB8I;
-            case ColorMode::RGBA:
-            case ColorMode::BGRA:
-                return GL_RGBA8I;
-            default:
-                fail("Unexpected color mode.");
-                return GL_RGBA8I;
-            }
-        case DataType::UINT8:
-            switch (color)
-            {
-            case ColorMode::R:
-                return GL_RED;
-            case ColorMode::RG:
-                return GL_RG;
-            case ColorMode::RGB:
-            case ColorMode::BGR:
-                return GL_RGB;
-            case ColorMode::RGBA:
-            case ColorMode::BGRA:
-                return GL_RGBA;
-            default:
-                fail("Unexpected color mode.");
-                return GL_RGBA;
-            }
-        case DataType::INT16:
-            switch (color)
-            {
-            case ColorMode::R:
-                return GL_R16I;
-            case ColorMode::RG:
-                return GL_RG16I;
-            case ColorMode::RGB:
-            case ColorMode::BGR:
-                return GL_RGB16I;
-            case ColorMode::RGBA:
-            case ColorMode::BGRA:
-                return GL_RGBA16I;
-            default:
-                fail("Unexpected color mode.");
-                return GL_RGBA16I;
-            }
-        case DataType::UINT16:
-            switch (color)
-            {
-            case ColorMode::R:
-                return GL_R16UI;
-            case ColorMode::RG:
-                return GL_RG16UI;
-            case ColorMode::RGB:
-            case ColorMode::BGR:
-                return GL_RGB16UI;
-            case ColorMode::RGBA:
-            case ColorMode::BGRA:
-                return GL_RGBA16UI;
-            default:
-                fail("Unexpected color mode.");
-                return GL_RGBA16UI;
-            }
-        case DataType::INT32:
-            switch (color)
-            {
-            case ColorMode::R:
-                return GL_R32I;
-            case ColorMode::RG:
-                return GL_RG32I;
-            case ColorMode::RGB:
-            case ColorMode::BGR:
-                return GL_RGB32I;
-            case ColorMode::RGBA:
-            case ColorMode::BGRA:
-                return GL_RGBA32I;
-            default:
-                fail("Unexpected color mode.");
-                return GL_RGBA32I;
-            }
-        case DataType::UINT32:
-            switch (color)
-            {
-            case ColorMode::R:
-                return GL_R32UI;
-            case ColorMode::RG:
-                return GL_RG32UI;
-            case ColorMode::RGB:
-            case ColorMode::BGR:
-                return GL_RGB32UI;
-            case ColorMode::RGBA:
-            case ColorMode::BGRA:
-                return GL_RGBA32UI;
-            default:
-                fail("Unexpected color mode.");
-                return GL_RGBA32UI;
-            }
-        case DataType::FLOAT:
-        case DataType::DOUBLE:
-            switch (color)
-            {
-            case ColorMode::R:
-                return GL_R32F;
-            case ColorMode::RG:
-                return GL_RG32F;
-            case ColorMode::RGB:
-            case ColorMode::BGR:
-                return GL_RGB32F;
-            case ColorMode::RGBA:
-            case ColorMode::BGRA:
-                return GL_RGBA32F;
-            default:
-                fail("Unexpected color mode.");
-                return GL_RGBA32F;
-            }
-        default:
-            fail("Unexpected type.");
-            return GL_RGB;
-        }
-    }
-
-    GLenum glformat(ColorMode color) noexcept
-    {
-        switch (color)
-        {
-        case ColorMode::R:
-            return GL_RED;
-        case ColorMode::RG:
-            return GL_RG;
-        case ColorMode::RGB:
-            return GL_RGB;
-        case ColorMode::BGR:
-            return GL_BGR;
-        case ColorMode::RGBA:
-            return GL_RGBA;
-        case ColorMode::BGRA:
-            return GL_BGRA;
-        default:
-            fail("Unexpected color mode.");
-            return GL_RGB;
-        }
-    }
-
-    GLenum gltype(DataType data) noexcept
-    {
-        switch (data)
-        {
-        case DataType::INT8:
-            return GL_BYTE;
-        case DataType::UINT8:
-            return GL_UNSIGNED_BYTE;
-        case DataType::INT16:
-            return GL_SHORT;
-        case DataType::UINT16:
-            return GL_UNSIGNED_SHORT;
-        case DataType::INT32:
-            return GL_INT;
-        case DataType::UINT32:
-            return GL_UNSIGNED_INT;
-        case DataType::FLOAT:
-            return GL_FLOAT;
-        case DataType::DOUBLE:
-            return GL_DOUBLE;
-        default:
-            fail("Unexpected type.");
-            return GL_RGB;
-        }
-    }
-
     void Texture::upload()
     {
-        glGenTextures(1, &glid);
-        glBindTexture(GL_TEXTURE_2D, glid);
-        glObjectLabel(GL_TEXTURE, glid, static_cast<GLsizei>(label.size()), label.data());
+        auto tmp = std::make_unique<opengl::Texture>(label);
 
-        switch (filter_mode)
-        {
-        case FilterMode::LINEAR:
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            break;
-        case FilterMode::NEAREST:
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            break;
-        default:
-            fail("Unknown filter mode.");
-            break;
-        }
+        auto color = static_cast<opengl::ColorMode>(get_color_mode());
+        auto type  = static_cast<opengl::DataType>(get_data_type());
 
-        switch (wrap_mode)
-        {
-        case WrapMode::CLAMP:
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            break;
-        case WrapMode::REPEAT:
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-            break;
-        default:
-            fail("Unknown wrap mode.");
-            break;
-        }
+        tmp->upload(get_size(), color, type, get_bits(), filter_mode, wrap_mode);
 
-        auto size              = get_size();
-        auto gl_internalformat = glinternalformat(get_color_mode(), get_data_type());
-        auto gl_format         = glformat(get_color_mode());
-        auto gl_type           = gltype(get_data_type());
-        glTexImage2D(GL_TEXTURE_2D, 0, gl_internalformat, size.x, size.y, 0, gl_format, gl_type, get_bits());
-
-        check_glerror();
+        gl_texture = std::move(tmp);
     }
 
     void Texture::release()
     {
-        if (glid != 0)
-        {
-            glDeleteTextures(1, &glid);
-            glid = 0;
-        }
+        gl_texture = nullptr;
     }
 
     bool Texture::is_uploaded() const noexcept
     {
-        return glid != 0;
+        return gl_texture != nullptr;
     }
 
     void Texture::bind(glm::uint slot)
@@ -673,9 +456,8 @@ namespace pkzo
             upload();
         }
 
-        check(glid != 0);
-        glBindTexture(GL_TEXTURE_2D, glid);
-        check_glerror();
+        check(gl_texture != nullptr);
+        gl_texture->bind(slot);
     }
 
     FREE_IMAGE_FORMAT get_file_type(const std::filesystem::path& file)

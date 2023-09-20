@@ -23,6 +23,8 @@
 
 #include <imgui.h>
 
+#include <pkzo/opengl.h>
+
 #include "imgui_impl_opengl3.h"
 #include "imgui_impl_pkzo.h"
 
@@ -106,6 +108,8 @@ namespace pkzo::imgui
 
     void Interface::draw(glm::uvec2 size, glm::uvec2 draw_size)
     {
+        auto section = opengl::Section{"ImGui"};
+
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplPkzo_NewFrame(size, draw_size);
         ImGui::NewFrame();

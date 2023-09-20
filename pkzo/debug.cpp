@@ -29,8 +29,6 @@
 #include <DbgHelp.h>
 #endif
 
-#include <GL/glew.h>
-
 namespace pkzo
 {
     std::string basename(const std::string& file) noexcept
@@ -61,7 +59,7 @@ namespace pkzo
         }
         if (e == std::string::npos)
         {
-            e = func.size() - 1;
+            e = func.size();
         }
         else
         {
@@ -244,47 +242,6 @@ namespace pkzo
         if (! condition)
         {
             fail(msg, location);
-        }
-    }
-
-    const char* gl_error_to_string(unsigned int glerror) noexcept
-    {
-        switch (glerror)
-        {
-        case GL_NO_ERROR:
-            return "GL_NO_ERROR";
-        case GL_INVALID_ENUM:
-            return "GL_INVALID_ENUM";
-        case GL_INVALID_VALUE:
-            return "GL_INVALID_VALUE";
-        case GL_INVALID_OPERATION:
-            return "GL_INVALID_OPERATION";
-        case GL_INVALID_FRAMEBUFFER_OPERATION:
-            return "GL_INVALID_FRAMEBUFFER_OPERATION";
-        case GL_OUT_OF_MEMORY:
-            return "GL_OUT_OF_MEMORY";
-        default:
-            fail("Unknown glerror type");
-            return "UNKNOWN";
-        }
-    }
-
-    void clear_glerrors() noexcept
-    {
-        auto e = GLenum{};
-        do
-        {
-            e = glGetError();
-        }
-        while (e != GL_NO_ERROR);
-    }
-
-    void check_glerror(const std::string_view msg, const std::source_location location) noexcept
-    {
-        auto error = glGetError();
-        if (error != GL_NO_ERROR)
-        {
-            fail(std::format("OpenGL Error: {}!", gl_error_to_string(error)));
         }
     }
 

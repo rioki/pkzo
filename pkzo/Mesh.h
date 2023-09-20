@@ -30,6 +30,7 @@
 #include <glm/glm.hpp>
 
 #include "utils.h"
+#include "opengl.h"
 
 namespace pkzo
 {
@@ -65,9 +66,9 @@ namespace pkzo
         void add_triangle(uint a, uint b, uint c);
 
         //! Get the number of vertexes.
-        unsigned int get_vertex_count() const noexcept;
+        uint get_vertex_count() const noexcept;
         //! Get the number of triangles.
-        unsigned int get_triangle_count() const noexcept;
+        uint get_triangle_count() const noexcept;
 
         //! Upload to OpenGL
         void upload();
@@ -75,16 +76,9 @@ namespace pkzo
         bool is_uploaded() const noexcept;
         //! Release video memory.
         void release();
-        //! Bind to a shader.
-        void bind(std::shared_ptr<Shader> shader);
 
         //! Draw the mesh.
-        //!
-        //! @note The mesh needs to be bound first.
         void draw();
-
-        //! Draw the mesh.
-        void draw(std::shared_ptr<Shader> shader);
 
     private:
         // TODO: check if glm::vec4 provides better performance
@@ -95,8 +89,7 @@ namespace pkzo
 
         std::vector<glm::uvec3>        triangles;
 
-        uint                           vao = 0;
-        std::array<uint, buffer_count> buffers;
+        std::shared_ptr<opengl::VertexBuffer> vertex_buffer;
     };
 }
 

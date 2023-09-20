@@ -53,7 +53,7 @@ TEST(OpenGL, GRAPH_render_textured_quad)
         shader->set_uniform("test_Texture", 0u);
         shader->set_uniform("test_Color",   glm::vec3{1.0f, 1.0f, 1.0f});
 
-        mesh->draw(shader);
+        mesh->draw();
     });
 
     window.draw();
