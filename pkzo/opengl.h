@@ -105,7 +105,7 @@ namespace pkzo::opengl
     class PKZO_EXPORT Buffer
     {
     public:
-        Buffer(const void* data, const uint size, BufferUsage usage = BufferUsage::STATIC_DRAW);
+        Buffer(const void* data, const uint size, BufferUsage usage = BufferUsage::STATIC_DRAW, const std::string_view label = "unnamed");
         ~Buffer();
 
         uint get_id() const noexcept;
