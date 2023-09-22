@@ -81,6 +81,90 @@ namespace pkzo::opengl
         check_glerror();
     }
 
+    constexpr const char* source_to_string(GLenum source) noexcept {
+      switch (source) {
+        case GL_DEBUG_SOURCE_API:
+          return "API";
+        case GL_DEBUG_SOURCE_WINDOW_SYSTEM:
+          return "Window System";
+        case GL_DEBUG_SOURCE_SHADER_COMPILER:
+          return "Shader Compiler";
+        case GL_DEBUG_SOURCE_THIRD_PARTY:
+          return "Third Party";
+        case GL_DEBUG_SOURCE_APPLICATION:
+          return "Application";
+        case GL_DEBUG_SOURCE_OTHER:
+          return "Other";
+        default:
+          return "Unknown";
+      }
+    }
+
+    constexpr const char* type_to_string(GLenum type) noexcept {
+      switch (type) {
+        case GL_DEBUG_TYPE_ERROR:
+          return "Error";
+        case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+          return "Deprecated Behavior";
+        case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+          return "Undefined Behavior";
+        case GL_DEBUG_TYPE_PORTABILITY:
+          return "Portability";
+        case GL_DEBUG_TYPE_PERFORMANCE:
+          return "Performance";
+        case GL_DEBUG_TYPE_OTHER:
+          return "Other";
+        case GL_DEBUG_TYPE_MARKER:
+          return "Marker";
+        case GL_DEBUG_TYPE_PUSH_GROUP:
+          return "Push Group";
+        case GL_DEBUG_TYPE_POP_GROUP:
+          return "Pop Group";
+        default:
+          return "Unknown";
+      }
+    }
+
+    constexpr const char* severity_to_string(GLenum severity) noexcept {
+      switch (severity) {
+        case GL_DEBUG_SEVERITY_HIGH:
+          return "High";
+        case GL_DEBUG_SEVERITY_MEDIUM:
+          return "Medium";
+        case GL_DEBUG_SEVERITY_LOW:
+          return "Low";
+        case GL_DEBUG_SEVERITY_NOTIFICATION:
+          return "Notification";
+        default:
+          return "Unknown";
+      }
+    }
+
+    void GLAPIENTRY trace_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+    {
+       const auto source_str   = source_to_string(source);
+       const auto type_str     = type_to_string(type);
+       const auto severity_str = severity_to_string(severity);
+
+        std::string formatted_message = std::format(
+            "OpenGL Debug [Source: {}, Type: {}, ID: {}, Severity: {}]: {}",
+            source_str, type_str, id, severity_str, message);
+
+        trace(formatted_message);
+    }
+
+    Trace::Trace()
+    {
+        glEnable(GL_DEBUG_OUTPUT);
+        glDebugMessageCallback(trace_callback, nullptr);
+    }
+
+    Trace::~Trace()
+    {
+        glDisable(GL_DEBUG_OUTPUT);
+        glDebugMessageCallback(nullptr, nullptr);
+    }
+
     Shader::Shader() = default;
 
     Shader::~Shader()
@@ -223,19 +307,10 @@ namespace pkzo::opengl
         return size;
     }
 
-    // TODO(rioki: 2024-09-17): Not sure if I am just missing something
-    // or the API/Driver is broken, but new Texture API just crashes without
-    // any good reason.
-    //#define _USE_NEW_TEXTURE_API_
-
     Texture::Texture(const std::string& _label)
     : label(_label)
     {
-        #ifdef _USE_NEW_TEXTURE_API_
-        glCreateTextures(GL_TEXTURE_2D, 1, & id);
-        #else
-        glGenTextures(1, &id);
-        #endif
+        glCreateTextures(GL_TEXTURE_2D, 1, &id);
         check_glerror();
     }
 
@@ -246,6 +321,7 @@ namespace pkzo::opengl
         check_glerror();
     }
 
+
     GLenum get_internal_format(ColorMode color, DataType data) noexcept
     {
         switch (data)
@@ -253,10 +329,8 @@ namespace pkzo::opengl
         case DataType::BYTE:
             switch (color)
             {
-            case ColorMode::R:
+            case ColorMode::GRAYSCALE:
                 return GL_R8I;
-            case ColorMode::RG:
-                return GL_RG8I;
             case ColorMode::RGB:
             case ColorMode::BGR:
                 return GL_RGB8I;
@@ -270,27 +344,23 @@ namespace pkzo::opengl
         case DataType::UNSIGNED_BYTE:
             switch (color)
             {
-            case ColorMode::R:
+            case ColorMode::GRAYSCALE:
                 return GL_RED;
-            case ColorMode::RG:
-                return GL_RG;
             case ColorMode::RGB:
             case ColorMode::BGR:
-                return GL_RGB;
+                return GL_RGB8;
             case ColorMode::RGBA:
             case ColorMode::BGRA:
-                return GL_RGBA;
+                return GL_RGBA8;
             default:
                 fail("Unexpected color mode.");
-                return GL_RGBA;
+                return GL_RGBA8UI;
             }
         case DataType::SHORT:
             switch (color)
             {
-            case ColorMode::R:
+            case ColorMode::GRAYSCALE:
                 return GL_R16I;
-            case ColorMode::RG:
-                return GL_RG16I;
             case ColorMode::RGB:
             case ColorMode::BGR:
                 return GL_RGB16I;
@@ -304,10 +374,8 @@ namespace pkzo::opengl
         case DataType::UNSIGNED_SHORT:
             switch (color)
             {
-            case ColorMode::R:
+            case ColorMode::GRAYSCALE:
                 return GL_R16UI;
-            case ColorMode::RG:
-                return GL_RG16UI;
             case ColorMode::RGB:
             case ColorMode::BGR:
                 return GL_RGB16UI;
@@ -321,10 +389,8 @@ namespace pkzo::opengl
         case DataType::INT:
             switch (color)
             {
-            case ColorMode::R:
+            case ColorMode::GRAYSCALE:
                 return GL_R32I;
-            case ColorMode::RG:
-                return GL_RG32I;
             case ColorMode::RGB:
             case ColorMode::BGR:
                 return GL_RGB32I;
@@ -338,10 +404,8 @@ namespace pkzo::opengl
         case DataType::UNSIGNED_INT:
             switch (color)
             {
-            case ColorMode::R:
+            case ColorMode::GRAYSCALE:
                 return GL_R32UI;
-            case ColorMode::RG:
-                return GL_RG32UI;
             case ColorMode::RGB:
             case ColorMode::BGR:
                 return GL_RGB32UI;
@@ -356,10 +420,8 @@ namespace pkzo::opengl
         case DataType::DOUBLE:
             switch (color)
             {
-            case ColorMode::R:
+            case ColorMode::GRAYSCALE:
                 return GL_R32F;
-            case ColorMode::RG:
-                return GL_RG32F;
             case ColorMode::RGB:
             case ColorMode::BGR:
                 return GL_RGB32F;
@@ -378,44 +440,26 @@ namespace pkzo::opengl
 
     void Texture::upload(uvec2 size, ColorMode color, DataType type, const void* bits, FilterMode filter, WrapMode wrap)
     {
-        #ifdef _USE_NEW_TEXTURE_API_
-        glTextureParameteri(id, GL_TEXTURE_MIN_FILTER, to_underlying(filter));
-        glTextureParameteri(id, GL_TEXTURE_MAG_FILTER, to_underlying(filter));
-        glTextureParameteri(id, GL_TEXTURE_WRAP_S, to_underlying(wrap));
-        glTextureParameteri(id, GL_TEXTURE_WRAP_T, to_underlying(wrap));
-
-        glTextureStorage2D(id, 1, get_internal_format(color, type), size.x, size.y);
-        if (bits != nullptr)
-        {
-            glTextureSubImage2D(id, 0, 0, 0, size.x, size.y, to_underlying(color), to_underlying(type), bits);
-        }
-        #else
-        glBindTexture(GL_TEXTURE_2D, id);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, to_underlying(filter));
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, to_underlying(filter));
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, to_underlying(wrap));
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, to_underlying(wrap));
-
         auto gl_internalformat = get_internal_format(color, type);
         auto gl_format         = to_underlying(color);
         auto gl_type           = to_underlying(type);
-        glTexImage2D(GL_TEXTURE_2D, 0, gl_internalformat, size.x, size.y, 0, gl_format, gl_type, bits);
-        #endif
 
-        glObjectLabel(GL_TEXTURE, id, static_cast<GLsizei>(label.size()), label.data());
+        glTextureStorage2D(id, 1, gl_internalformat, size.x, size.y);
         check_glerror();
 
-        // TODO mipmaps
+        glTextureSubImage2D(id, 0, 0, 0, size.x, size.y, gl_format, gl_type, bits);
+        check_glerror();
+
+        glTextureParameteri(id, GL_TEXTURE_MIN_FILTER, to_underlying(filter));
+        glTextureParameteri(id, GL_TEXTURE_MAG_FILTER, to_underlying(filter));
+        glTextureParameteri(id, GL_TEXTURE_WRAP_S,     to_underlying(wrap));
+        glTextureParameteri(id, GL_TEXTURE_WRAP_T,     to_underlying(wrap));
+        check_glerror();
     }
 
     void Texture::bind(uint slot)
     {
-        #ifdef _USE_NEW_TEXTURE_API_
-        glBindTextureUnit(slot, id);
-        #else
-        glActiveTexture(GL_TEXTURE0 + slot);
-        glBindTexture(GL_TEXTURE_2D, id);
-        #endif
+        glBindTextureUnit(slot, id);  // DSA
         check_glerror();
     }
 

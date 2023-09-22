@@ -52,6 +52,17 @@ namespace pkzo::opengl
         Section& operator = (const Section&) = delete;
     };
 
+    class PKZO_EXPORT Trace
+    {
+    public:
+        Trace();
+        ~Trace();
+
+    private:
+        Trace(const Trace&) = delete;
+        Trace& operator = (const Trace&) = delete;
+    };
+
     enum class ShaderType : GLenum
     {
         COMPUTE_SHADER         = GL_COMPUTE_SHADER,
@@ -121,14 +132,11 @@ namespace pkzo::opengl
 
     enum class ColorMode
     {
-        R               = GL_R,
-        RG              = GL_RG,
+        GRAYSCALE       = GL_RED,
         RGB             = GL_RGB,
         BGR             = GL_BGR,
         RGBA            = GL_RGBA,
-        BGRA            = GL_BGRA,
-        DEPTH_COMPONENT = GL_DEPTH_COMPONENT,
-        STENCIL_INDEX   = GL_STENCIL_INDEX
+        BGRA            = GL_BGRA
     };
 
     //! Data Type

@@ -34,6 +34,8 @@ TEST(OpenGL, GRAPH_render_textured_quad)
 {
     auto window = pkzo::Window{{800,600}, "Test"};
 
+    auto gl_trace = pkzo::opengl::Trace{};
+
     auto texture = pkzo::Texture::load(pkzo::test::get_test_input() / "AngryCat.jpg");
     auto shader  = pkzo::Shader::load_file(pkzo::test::get_test_input() / "shaders/textured.glsl");
     auto mesh    = pkzo::Mesh::create_plane({250.0f, 250.0f});
