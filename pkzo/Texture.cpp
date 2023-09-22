@@ -80,11 +80,8 @@ namespace pkzo
         auto components = 0u;
         switch (mode)
         {
-        case ColorMode::R:
+        case ColorMode::GRAYSCALE:
             components = 1u;
-            break;
-        case ColorMode::RG:
-            components = 2u;
             break;
         case ColorMode::RGB:
         case ColorMode::BGR:
@@ -145,8 +142,7 @@ namespace pkzo
     {
         switch (mode)
         {
-        case ColorMode::R:
-        case ColorMode::RG:
+        case ColorMode::GRAYSCALE:
         case ColorMode::RGB:
         case ColorMode::RGBA:
             return 0x0000FF;
@@ -162,9 +158,8 @@ namespace pkzo
     {
         switch (mode)
         {
-        case ColorMode::R:
+        case ColorMode::GRAYSCALE:
             return 0x00;
-        case ColorMode::RG:
         case ColorMode::RGB:
         case ColorMode::RGBA:
         case ColorMode::BGR:
@@ -179,8 +174,7 @@ namespace pkzo
     {
         switch (mode)
         {
-        case ColorMode::R:
-        case ColorMode::RG:
+        case ColorMode::GRAYSCALE:
             return 0x00;
         case ColorMode::RGB:
         case ColorMode::RGBA:
@@ -269,9 +263,7 @@ namespace pkzo
             switch (FreeImage_GetBPP(bitmap))
             {
             case 8:
-                return ColorMode::R;
-            case 16:
-                return ColorMode::RG;
+                return ColorMode::GRAYSCALE;
             case 24:
                 return ColorMode::BGR;
             case 32:
@@ -285,9 +277,7 @@ namespace pkzo
         case FIT_INT32:
         case FIT_FLOAT:
         case FIT_DOUBLE:
-            return ColorMode::R;
-        case FIT_COMPLEX:
-            return ColorMode::RG;
+            return ColorMode::GRAYSCALE;
         case FIT_RGB16:
         case FIT_RGBF:
             return ColorMode::RGB;

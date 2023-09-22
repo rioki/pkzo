@@ -36,13 +36,12 @@ namespace pkzo
     //! Color Format
     enum class ColorMode
     {
-        UNKNOWN = 0,
-        R       = to_underlying(opengl::ColorMode::R),
-        RG      = to_underlying(opengl::ColorMode::RG),
-        RGB     = to_underlying(opengl::ColorMode::RGB),
-        BGR     = to_underlying(opengl::ColorMode::BGR),
-        RGBA    = to_underlying(opengl::ColorMode::RGBA),
-        BGRA    = to_underlying(opengl::ColorMode::BGRA)
+        UNKNOWN   = 0,
+        GRAYSCALE = to_underlying(opengl::ColorMode::GRAYSCALE),
+        RGB       = to_underlying(opengl::ColorMode::RGB),
+        BGR       = to_underlying(opengl::ColorMode::BGR),
+        RGBA      = to_underlying(opengl::ColorMode::RGBA),
+        BGRA      = to_underlying(opengl::ColorMode::BGRA)
     };
 
     //! Data Type
