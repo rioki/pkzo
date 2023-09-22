@@ -161,6 +161,7 @@ namespace pkzo::opengl
 
     Trace::~Trace()
     {
+        glDisable(GL_DEBUG_OUTPUT);
         glDebugMessageCallback(nullptr, nullptr);
     }
 
