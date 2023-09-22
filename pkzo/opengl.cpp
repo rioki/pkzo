@@ -140,7 +140,7 @@ namespace pkzo::opengl
       }
     }
 
-    void trace_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+    void GLAPIENTRY trace_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
     {
        const auto source_str   = source_to_string(source);
        const auto type_str     = type_to_string(type);
