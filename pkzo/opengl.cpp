@@ -167,7 +167,10 @@ namespace pkzo::opengl
     }
 
     Shader::Shader(const std::string& _label)
-    : label(_label) {}
+    : label(_label)
+    {
+        check(!label.empty());
+    }
 
     Shader::~Shader()
     {
@@ -290,10 +293,11 @@ namespace pkzo::opengl
     Buffer::Buffer(const void* data, const uint _size, BufferUsage usage, const std::string_view label)
     : size(_size)
     {
-         glCreateBuffers(1, &id);
-         glNamedBufferData(id, size, data, to_underlying(usage));
-         glObjectLabel(GL_BUFFER, id, label.size(), label.data());
-         check_glerror();
+        check(!label.empty());
+        glCreateBuffers(1, &id);
+        glNamedBufferData(id, size, data, to_underlying(usage));
+        glObjectLabel(GL_BUFFER, id, label.size(), label.data());
+        check_glerror();
     }
 
     Buffer::~Buffer()
@@ -315,6 +319,7 @@ namespace pkzo::opengl
     Texture::Texture(const std::string& _label)
     : label(_label)
     {
+        check(!label.empty());
         glCreateTextures(GL_TEXTURE_2D, 1, &id);
         check_glerror();
     }
@@ -474,6 +479,7 @@ namespace pkzo::opengl
     VertexBuffer::VertexBuffer(const std::string& _label)
     : label(_label)
     {
+        check(!label.empty());
         glGenVertexArrays(1, &id);
         check_glerror();
     }
