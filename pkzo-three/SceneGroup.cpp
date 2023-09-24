@@ -26,6 +26,11 @@ namespace pkzo::three
     template <typename T>
     static void no_delete(T*) noexcept {}
 
+    SceneGroup::SceneGroup() noexcept = default;
+
+    SceneGroup::SceneGroup(const glm::mat4& init_transform) noexcept
+    : SceneNode(init_transform) {}
+
     SceneGroup::~SceneGroup()
     {
         for (auto& node : nodes)

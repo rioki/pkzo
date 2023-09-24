@@ -25,9 +25,9 @@
 
 namespace pkzo::three
 {
-    SceneNode::SceneNode() = default;
+    SceneNode::SceneNode() noexcept = default;
 
-    SceneNode::SceneNode(const glm::mat4& init_transform)
+    SceneNode::SceneNode(const glm::mat4& init_transform) noexcept
     : transform(init_transform) {}
 
     glm::mat4 SceneNode::get_transform() const noexcept

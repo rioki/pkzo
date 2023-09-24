@@ -35,12 +35,12 @@ namespace pkzo::three
         //! Default constructor initializes the node with identity transform and no parent.
         SceneNode() noexcept;
 
-        virtual ~SceneNode() = default;
-
-        //! Constructs a node with an initial transform and an optional parent node.
+        //! Constructs a node with an initial transform.
         //!
         //! @param init_transform Initial transformation matrix for the node.
         SceneNode(const glm::mat4& init_transform) noexcept;
+
+        virtual ~SceneNode() = default;
 
         //! Gets the transformation matrix of the node.
         //!

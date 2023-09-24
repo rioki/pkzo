@@ -33,6 +33,14 @@ namespace pkzo::three
     class PKZO_EXPORT SceneGroup : public SceneNode
     {
     public:
+        //! Default constructor initializes the node with identity transform and no parent.
+        SceneGroup() noexcept;
+
+        //! Constructs a node group with an initial transform.
+        //!
+        //! @param init_transform Initial transformation matrix for the node.
+        SceneGroup(const glm::mat4& init_transform) noexcept;
+
         ~SceneGroup();
 
         //! Adds a node to the group with ownership.

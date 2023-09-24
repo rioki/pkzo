@@ -20,6 +20,7 @@
 // THE SOFTWARE.
 
 #include <pkzo-three/SceneNode.h>
+#include <pkzo-three/SceneGroup.h>
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <gtest/gtest.h>
@@ -29,16 +30,6 @@ TEST(SceneNode, default_constructor)
     pkzo::three::SceneNode node;
     EXPECT_EQ(node.get_transform(), glm::mat4(1.0f));
     EXPECT_EQ(node.get_parent(), nullptr);
-}
-
-TEST(SceneNode, parameterized_constructor)
-{
-    glm::mat4 init_transform = glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 2.0f, 3.0f));
-    pkzo::three::SceneNode parent;
-    pkzo::three::SceneNode node(init_transform, &parent);
-
-    EXPECT_EQ(node.get_transform(), init_transform);
-    EXPECT_EQ(node.get_parent(), &parent);
 }
 
 TEST(SceneNode, set_transform)
@@ -56,8 +47,9 @@ TEST(SceneNode, get_global_transform)
     glm::mat4 child_transform = glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 0.0f, 0.0f));
     glm::mat4 expected_global_transform = root_transform * child_transform;
 
-    pkzo::three::SceneNode root(root_transform);
-    pkzo::three::SceneNode child(child_transform, &root);
+    pkzo::three::SceneGroup root(root_transform);
+    pkzo::three::SceneNode child(child_transform);
+    root.add_node(child);
 
     EXPECT_EQ(child.get_global_transform(), expected_global_transform);
 }
