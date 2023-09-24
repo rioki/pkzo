@@ -81,13 +81,15 @@ namespace pkzo
         void draw();
 
     private:
-        // TODO: check if glm::vec4 provides better performance
-        std::vector<glm::vec3>         vertexes;
-        std::vector<glm::vec3>         normals;
-        std::vector<glm::vec3>         tangents;
-        std::vector<glm::vec2>         texcoords;
-
-        std::vector<glm::uvec3>        triangles;
+        struct Vertex
+        {
+            glm::vec3 vertex;
+            glm::vec3 normal;
+            glm::vec3 tangent;
+            glm::vec2 texcoord;
+        };
+        std::vector<Vertex>     vertices;
+        std::vector<glm::uvec3> triangles;
 
         std::shared_ptr<opengl::VertexBuffer> vertex_buffer;
     };

@@ -22,6 +22,7 @@
 #include "opengl.h"
 
 #include <array>
+#include <numeric>
 
 #include "debug.h"
 #include "utils.h"
@@ -501,6 +502,25 @@ namespace pkzo::opengl
         glVertexAttribPointer(static_cast<GLuint>(buffers.size()), stride, GL_FLOAT, GL_FALSE, 0, nullptr);
         check_glerror();
 
+        buffers.push_back(buffer);
+    }
+
+    void VertexBuffer::upload_values(std::vector<glm::uint> elements, glm::uint count, const float* data) noexcept
+    {
+        glm::uint total_size = std::accumulate(elements.begin(), elements.end(), 0u);
+        auto buffer = std::make_shared<Buffer>(data, static_cast<uint>(count * total_size * sizeof(float)));
+
+        glBindVertexArray(id);
+        glBindBuffer(GL_ARRAY_BUFFER, buffer->get_id());
+
+        uint offset = 0;
+        for (uint i = 0; i < elements.size(); ++i)
+        {
+            glEnableVertexAttribArray(static_cast<GLuint>(buffers.size() + i));
+            glVertexAttribPointer(static_cast<GLuint>(buffers.size() + i), elements[i], GL_FLOAT, GL_FALSE, total_size * sizeof(float), reinterpret_cast<void*>(offset * sizeof(float)));
+            offset += elements[i];
+        }
+        check_glerror();
         buffers.push_back(buffer);
     }
 

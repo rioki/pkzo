@@ -205,7 +205,8 @@ namespace pkzo::opengl
         uint get_id() const noexcept;
         uint get_size() const noexcept;
 
-        void upload_values(uint stride, uint count, const float* data) noexcept;
+        void upload_values(uint elements, uint count, const float* data) noexcept;
+        void upload_values(std::vector<glm::uint> elements, glm::uint count, const float* data) noexcept;
 
         template <int N, qualifier Q>
         void upload_values(const std::vector<vec<N, float, Q>>& values) noexcept;
