@@ -38,32 +38,32 @@ namespace pkzo::three
         //! Adds a node to the group with ownership.
         //!
         //! @param node Shared pointer to the node.
-        void add_node(std::shared_ptr<SceneNode> node);
+        void add_node(std::shared_ptr<SceneNode> node) noexcept;
 
         //! Adds a node to the group as a non-owning shared reference.
         //!
         //! @param node Reference to the node.
-        void add_node(SceneNode& node);
+        void add_node(SceneNode& node) noexcept;
 
         //! Removes a node from the group.
         //!
         //! @param node Shared pointer to the node to remove.
-        void remove_node(const std::shared_ptr<SceneNode>& node);
+        void remove_node(const std::shared_ptr<SceneNode>& node) noexcept;
 
         //! Removes a node from the group by reference.
         //!
         //! @param node Reference to the node to remove.
-        void remove_node(SceneNode& node);
+        void remove_node(SceneNode& node) noexcept;
 
         //! Gets the nodes within the group.
         //!
         //! @return Constant reference to the vector of shared pointers to the child nodes.
-        const std::vector<std::shared_ptr<SceneNode>>& get_nodes();
+        const std::vector<std::shared_ptr<SceneNode>>& get_nodes() noexcept;
 
         //! Gets the nodes within the group.
         //!
         //! @return Vector of shared pointers to the const child nodes.
-        std::vector<std::shared_ptr<const SceneNode>> get_nodes() const;
+        std::vector<std::shared_ptr<const SceneNode>> get_nodes() const noexcept;
 
     private:
         std::vector<std::shared_ptr<SceneNode>> nodes;

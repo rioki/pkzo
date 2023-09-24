@@ -24,7 +24,7 @@
 namespace pkzo::three
 {
     template <typename T>
-    static void no_delete(T*) {}
+    static void no_delete(T*) noexcept {}
 
     SceneGroup::~SceneGroup()
     {
@@ -37,19 +37,19 @@ namespace pkzo::three
         }
     }
 
-    void SceneGroup::add_node(std::shared_ptr<SceneNode> node)
+    void SceneGroup::add_node(std::shared_ptr<SceneNode> node) noexcept
     {
         node->set_parent(this);
         nodes.push_back(std::move(node));
     }
 
-    void SceneGroup::add_node(SceneNode& node)
+    void SceneGroup::add_node(SceneNode& node) noexcept
     {
         node.set_parent(this);
         nodes.emplace_back(&node, no_delete<SceneNode>);
     }
 
-    void SceneGroup::remove_node(const std::shared_ptr<SceneNode>& node)
+    void SceneGroup::remove_node(const std::shared_ptr<SceneNode>& node) noexcept
     {
         node->set_parent(nullptr);
         auto it = std::ranges::find(nodes, node);
@@ -59,7 +59,7 @@ namespace pkzo::three
         }
     }
 
-    void SceneGroup::remove_node(SceneNode& node)
+    void SceneGroup::remove_node(SceneNode& node) noexcept
     {
         node.set_parent(nullptr);
         auto it = std::ranges::find_if(nodes, [&node](const auto& n) { return n.get() == &node; });
@@ -69,12 +69,12 @@ namespace pkzo::three
         }
     }
 
-    const std::vector<std::shared_ptr<SceneNode>>& SceneGroup::get_nodes()
+    const std::vector<std::shared_ptr<SceneNode>>& SceneGroup::get_nodes() noexcept
     {
         return nodes;
     }
 
-    std::vector<std::shared_ptr<const SceneNode>> SceneGroup::get_nodes() const
+    std::vector<std::shared_ptr<const SceneNode>> SceneGroup::get_nodes() const noexcept
     {
         return std::vector<std::shared_ptr<const SceneNode>>(nodes.begin(), nodes.end());
     }
