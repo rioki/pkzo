@@ -56,10 +56,7 @@ namespace pkzo
 
     void Mesh::add_vertex(const glm::vec3& vertex, const glm::vec3& normal, const glm::vec3& tangent, const glm::vec2& texcoord)
     {
-        vertexes.push_back(vertex);
-        normals.push_back(normal);
-        tangents.push_back(tangent);
-        texcoords.push_back(texcoord);
+        vertices.emplace_back(vertex, normal, tangent, texcoord);
     }
 
     void Mesh::add_triangle(uint a, uint b, uint c)
@@ -69,7 +66,7 @@ namespace pkzo
 
     uint Mesh::get_vertex_count() const noexcept
     {
-        return static_cast<uint>(vertexes.size());
+        return static_cast<uint>(vertices.size());
     }
 
     uint Mesh::get_triangle_count() const noexcept
@@ -85,10 +82,7 @@ namespace pkzo
         }
 
         vertex_buffer = std::make_shared<opengl::VertexBuffer>();
-        vertex_buffer->upload_values(vertexes);
-        vertex_buffer->upload_values(normals);
-        vertex_buffer->upload_values(tangents);
-        vertex_buffer->upload_values(texcoords);
+        vertex_buffer->upload_values({3, 3, 3, 2}, static_cast<uint>(vertices.size()), glm::value_ptr(vertices[0].vertex));
         vertex_buffer->upload_indexes(triangles);
     }
 
