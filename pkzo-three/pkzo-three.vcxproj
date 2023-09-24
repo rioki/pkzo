@@ -19,9 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SceneGroup.h" />
     <ClInclude Include="SceneNode.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="SceneGroup.cpp" />
     <ClCompile Include="SceneNode.cpp" />
   </ItemGroup>
   <ItemGroup>

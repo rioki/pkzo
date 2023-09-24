@@ -150,6 +150,7 @@
     <ClCompile Include="test_mesh.cpp" />
     <ClCompile Include="test_mouse.cpp" />
     <ClCompile Include="test_opengl.cpp" />
+    <ClCompile Include="test_scene_group.cpp" />
     <ClCompile Include="test_scene_node.cpp" />
     <ClCompile Include="test_shader.cpp" />
     <ClCompile Include="test_strconv.cpp" />

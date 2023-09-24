@@ -18,9 +18,15 @@
     <ClInclude Include="SceneNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SceneGroup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneGroup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
