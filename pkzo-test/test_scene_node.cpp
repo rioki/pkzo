@@ -70,5 +70,3 @@ TEST(SceneNode, set_parent)
     node.set_parent(&new_parent);
     EXPECT_EQ(node.get_parent(), &new_parent);
 }
-
-

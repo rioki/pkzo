@@ -26,6 +26,8 @@
 
 namespace pkzo::three
 {
+    class Scene;
+
     //! The SceneNode class represents a basic node in a scene graph.
     class PKZO_EXPORT SceneNode
     {
@@ -66,9 +68,19 @@ namespace pkzo::three
         //! @param new_parent New parent node for this node.
         void set_parent(SceneNode* new_parent) noexcept;
 
+        //! Retrieve the parent Scene of this SceneNode.
+        //!
+        //! @return Pointer to the parent Scene object or nullptr.
+        Scene* get_scene() noexcept;
+
+        //! Retrieve the parent Scene of this const SceneNode.
+        //!
+        //! @return Pointer to the const parent Scene object or nullptr.
+        const Scene* get_scene() const noexcept;
+
     private:
-        glm::mat4  transform   = glm::mat4{1.0f};
-        SceneNode* parent_node = nullptr;
+        glm::mat4  transform = glm::mat4{1.0f};
+        SceneNode* parent    = nullptr;
 
         SceneNode(const SceneNode&) = delete;
         SceneNode& operator = (const SceneNode&) = delete;

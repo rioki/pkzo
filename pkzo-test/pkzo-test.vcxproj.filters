@@ -66,6 +66,9 @@
     <ClCompile Include="test_scene_group.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test_scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugMonitor.h">

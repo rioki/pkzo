@@ -21,12 +21,14 @@
 
 #include "SceneNode.h"
 
+#include "Scene.h"
+
 namespace pkzo::three
 {
     SceneNode::SceneNode() = default;
 
     SceneNode::SceneNode(const glm::mat4& init_transform, SceneNode* parent)
-    : transform(init_transform), parent_node(parent) {}
+    : transform(init_transform), parent(parent) {}
 
     glm::mat4 SceneNode::get_transform() const noexcept
     {
@@ -35,9 +37,9 @@ namespace pkzo::three
 
     glm::mat4 SceneNode::get_global_transform() const noexcept
     {
-        if (parent_node)
+        if (parent)
         {
-            return parent_node->get_global_transform() * transform;
+            return parent->get_global_transform() * transform;
         }
         return transform;
     }
@@ -49,11 +51,32 @@ namespace pkzo::three
 
     SceneNode* SceneNode::get_parent() const noexcept
     {
-        return parent_node;
+        return parent;
     }
 
     void SceneNode::set_parent(SceneNode* new_parent) noexcept
     {
-        parent_node = new_parent;
+        parent = new_parent;
+    }
+
+    Scene* SceneNode::get_scene() noexcept
+    {
+        auto this_scene = dynamic_cast<Scene*>(this);
+        if (this_scene)
+        {
+            return this_scene;
+        }
+
+        if (parent)
+        {
+            return parent->get_scene();
+        }
+
+        return nullptr;
+    }
+
+    const Scene* SceneNode::get_scene() const noexcept
+    {
+        return const_cast<SceneNode*>(this)->get_scene();
     }
 }
