@@ -82,7 +82,7 @@ namespace pkzo::opengl
     class PKZO_EXPORT Shader
     {
     public:
-        Shader();
+        Shader(const std::string& label = "unnamed");
         ~Shader();
 
         void compile(ShaderType type, const std::vector<const char*>& code, std::ostream& log);
@@ -95,6 +95,7 @@ namespace pkzo::opengl
     private:
         uint program_id = 0;
         std::vector<uint> shader_ids;
+        std::string label;
 
         Shader(const Shader&) = delete;
         Shader& operator = (const Shader&) = delete;
@@ -199,7 +200,7 @@ namespace pkzo::opengl
     class PKZO_EXPORT VertexBuffer
     {
     public:
-        VertexBuffer(const std::string_view label = "unnamed");
+        VertexBuffer(const std::string& label = "unnamed");
         ~VertexBuffer();
 
         uint get_id() const noexcept;
@@ -227,6 +228,7 @@ namespace pkzo::opengl
         std::shared_ptr<Buffer>              indexes;
         FacesType                            face_type;
         uint                                 index_count;
+        std::string                          label;
     };
 
     template <int N, glm::qualifier Q>

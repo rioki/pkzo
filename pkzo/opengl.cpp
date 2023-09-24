@@ -166,7 +166,11 @@ namespace pkzo::opengl
         glDebugMessageCallback(nullptr, nullptr);
     }
 
-    Shader::Shader() = default;
+    Shader::Shader(const std::string& _label)
+    : label(_label)
+    {
+        check(!label.empty());
+    }
 
     Shader::~Shader()
     {
@@ -244,6 +248,9 @@ namespace pkzo::opengl
         }
         check_glerror();
         shader_ids.clear();
+
+        glObjectLabel(GL_PROGRAM, program_id, static_cast<GLsizei>(label.size()), label.data());
+        check_glerror();
     }
 
     void Shader::bind()
@@ -286,10 +293,11 @@ namespace pkzo::opengl
     Buffer::Buffer(const void* data, const uint _size, BufferUsage usage, const std::string_view label)
     : size(_size)
     {
-         glCreateBuffers(1, &id);
-         glNamedBufferData(id, size, data, to_underlying(usage));
-         //glObjectLabel(id, GL_BUFFER, label.size(), label.data());
-         check_glerror();
+        check(!label.empty());
+        glCreateBuffers(1, &id);
+        glNamedBufferData(id, size, data, to_underlying(usage));
+        glObjectLabel(GL_BUFFER, id, label.size(), label.data());
+        check_glerror();
     }
 
     Buffer::~Buffer()
@@ -311,6 +319,7 @@ namespace pkzo::opengl
     Texture::Texture(const std::string& _label)
     : label(_label)
     {
+        check(!label.empty());
         glCreateTextures(GL_TEXTURE_2D, 1, &id);
         check_glerror();
     }
@@ -456,6 +465,9 @@ namespace pkzo::opengl
         glTextureParameteri(id, GL_TEXTURE_WRAP_S,     to_underlying(wrap));
         glTextureParameteri(id, GL_TEXTURE_WRAP_T,     to_underlying(wrap));
         check_glerror();
+
+        glObjectLabel(GL_TEXTURE, id, static_cast<GLsizei>(label.size()), label.data());
+        check_glerror();
     }
 
     void Texture::bind(uint slot)
@@ -464,10 +476,11 @@ namespace pkzo::opengl
         check_glerror();
     }
 
-    VertexBuffer::VertexBuffer(const std::string_view label)
+    VertexBuffer::VertexBuffer(const std::string& _label)
+    : label(_label)
     {
+        check(!label.empty());
         glGenVertexArrays(1, &id);
-        //glObjectLabel(GL_VERTEX_ARRAY, id, static_cast<GLsizei>(label.size()), label.data());
         check_glerror();
     }
 
@@ -521,6 +534,7 @@ namespace pkzo::opengl
             offset += elements[i];
         }
         check_glerror();
+
         buffers.push_back(buffer);
     }
 
@@ -546,6 +560,9 @@ namespace pkzo::opengl
 
         glBindVertexArray(id);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexes->get_id());
+        check_glerror();
+
+        glObjectLabel(GL_VERTEX_ARRAY, id, static_cast<GLsizei>(label.size()), label.data());
         check_glerror();
     }
 
