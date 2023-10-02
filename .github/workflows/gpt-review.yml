@@ -38,7 +38,6 @@ jobs:
 
             // Request GPT-4 review
             const payload = {
-              prompt: `${customPrompt} ${diff}`,
               model: 'gpt-4',
               max_tokens: 5000,
               messages: [
