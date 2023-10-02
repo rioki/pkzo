@@ -60,7 +60,7 @@ jobs:
 
               if (response.ok) {
                 const responseData = await response.json();
-                const review = responseData.choices[0].text;
+                const review = "charGPT: " + responseData.choices[0].text;
               
                 // Create GitHub comment
                 await github.rest.pulls.createReview({
