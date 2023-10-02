@@ -79,4 +79,32 @@ namespace pkzo::three
     {
         return const_cast<SceneNode*>(this)->get_scene();
     }
+
+    glm::mat4 look_at(const glm::vec3& eye, const glm::vec3& center, const glm::vec3 up)
+    {
+        if (glm::length(center - eye) < 1e-4f)
+        {
+            return glm::mat4(1.0f);
+        }
+
+        auto f = glm::normalize(center - eye);
+        auto s = glm::normalize(glm::cross(f, up));
+        auto u = glm::cross(s, f);
+
+        auto world = glm::mat4(1.0f);
+        world[0][0] = s.x;
+        world[1][0] = s.y;
+        world[2][0] = s.z;
+        world[0][1] = u.x;
+        world[1][1] = u.y;
+        world[2][1] = u.z;
+        world[0][2] = -f.x;
+        world[1][2] = -f.y;
+        world[2][2] = -f.z;
+        world[3][0] = eye.x;
+        world[3][1] = eye.y;
+        world[3][2] = eye.z;
+
+        return world;
+    }
 }

@@ -86,6 +86,19 @@ namespace pkzo::three
         SceneNode& operator = (const SceneNode&) = delete;
         SceneNode& operator = (SceneNode&&) = delete;
     };
+
+
+    //! Compute the world transformation matrix to orient an object.
+    //!
+    //! Given the eye (source) position, center (target) position, and up vector, this function
+    //! calculates the world transformation matrix that can be used to orient an object or light.
+    //! Works in a right-handed coordinate system.
+    //!
+    //! @param eye The position of the object or light in world coordinates.
+    //! @param center The target position the object or light should look at.
+    //! @param up The up vector to define the vertical orientation.
+    //! @return The world transformation matrix as a 4x4 array of floats.
+    PKZO_EXPORT glm::mat4 look_at(const glm::vec3& eye, const glm::vec3& center, const glm::vec3 up);
 }
 
 

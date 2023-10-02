@@ -24,6 +24,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <gtest/gtest.h>
+#include "glm_gtest.h"
 
 TEST(SceneNode, default_constructor)
 {
@@ -61,4 +62,29 @@ TEST(SceneNode, set_parent)
 
     node.set_parent(&new_parent);
     EXPECT_EQ(node.get_parent(), &new_parent);
+}
+
+
+TEST(SceneNode, look_at)
+{
+    glm::vec3 eye(0.0f, 0.0f, 5.0f);
+    glm::vec3 center(0.0f, 0.0f, 0.0f);
+    glm::vec3 up(0.0f, 1.0f, 0.0f);
+
+    glm::mat4 expected = glm::inverse(glm::lookAt(eye, center, up));
+    glm::mat4 result   = pkzo::three::look_at(eye, center, up);
+
+    EXPECT_GLM_NEAR(expected, result, 1e-4f);
+}
+
+TEST(SceneNode, look_at_eye_and_center_are_same)
+{
+    glm::vec3 eye(1.0f, 1.0f, 1.0f);
+    glm::vec3 center(1.0f, 1.0f, 1.0f);
+    glm::vec3 up(0.0f, 1.0f, 0.0f);
+
+    glm::mat4 result = pkzo::three::look_at(eye, center, up);
+
+    // This should produce an identity matrix, but it's an edge case to be avoided in practice.
+    EXPECT_GLM_NEAR(glm::mat4(1.0f), result, 1e-4f);
 }
