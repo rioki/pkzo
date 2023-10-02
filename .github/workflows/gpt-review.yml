@@ -14,10 +14,13 @@ jobs:
     name: GPT-4 Code Review
     
     steps:
+      - name: 'Set PR Fetch Depth'
+        run: echo "PR_FETCH_DEPTH=$(( ${{ github.event.pull_request.commits }} + 1 ))" >> "${GITHUB_ENV}"
+
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 2
+          fetch-depth: ${{ env.PR_FETCH_DEPTH }}
 
       - name: Custom Code Review and Comment
         uses: actions/github-script@v6
@@ -35,7 +38,7 @@ jobs:
               const customPrompt = process.env.CUSTOM_PROMPT;
 
               // Fetch diff based on the file pattern
-              const diff = execSync(`git diff HEAD^ HEAD -- ${filePattern}`).toString();
+              const diff = execSync(`git diff ${{ github.event.pull_request.base.sha }} HEAD -- ${filePattern}`).toString();
 
               // Request GPT-4 review
               const payload = {
@@ -69,7 +72,7 @@ jobs:
                     repo: context.repo.repo,
                     pull_number: context.issue.number,
                     review_id: 1,
-                    event: 'REQUEST_CHANGES',
+                    event: 'COMMENT',
                     body: review
                   })
                 } else {
