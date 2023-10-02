@@ -27,10 +27,8 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         with:
           script: |
-            const axios = require('axios');
-            const { GitHub } = require("@actions/github");
             const { execSync } = require('child_process');
-            
+
             const prNumber = context.payload.pull_request.number;
             const filePattern = process.env.FILE_PATTERN;
             const customPrompt = process.env.CUSTOM_PROMPT;
@@ -46,25 +44,23 @@ jobs:
               // ... other options
             };
 
-            axios.post('https://api.openai.com/v1/engines/davinci-codex/completions', payload, {
+            const response = await fetch('https://api.openai.com/v1/engines/davinci-codex/completions', {
+              method: 'POST',
               headers: {
-                'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
-              }
-            })
-            .then((response) => {
-              const review = response.data.choices[0].text;
+                'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+                'Content-Type': 'application/json'
+              },
+              body: payload
+            });
 
-              // Create GitHub comment
-              const comment = {
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: prNumber,
-                body: review
-              };
-              
-              github.issues.createComment(comment);
-            })
-            .catch((error) => {
-              console.error(error);
+            const responseData = await response.json();
+            const review = responseData.choices[0].text;
+            
+            // Create GitHub comment
+            await github.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: review
             });
         
