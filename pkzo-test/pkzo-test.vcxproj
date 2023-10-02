@@ -153,6 +153,7 @@
     <ClCompile Include="test_scene.cpp" />
     <ClCompile Include="test_scene_group.cpp" />
     <ClCompile Include="test_scene_node.cpp" />
+    <ClCompile Include="test_scene_rendering_cpp.cpp" />
     <ClCompile Include="test_shader.cpp" />
     <ClCompile Include="test_strconv.cpp" />
     <ClCompile Include="test_texture.cpp" />
