@@ -147,6 +147,7 @@
     <ClCompile Include="test_imgui.cpp" />
     <ClCompile Include="test_joystick.cpp" />
     <ClCompile Include="test_keyboard.cpp" />
+    <ClCompile Include="test_material.cpp" />
     <ClCompile Include="test_mesh.cpp" />
     <ClCompile Include="test_mouse.cpp" />
     <ClCompile Include="test_opengl.cpp" />

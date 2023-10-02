@@ -64,27 +64,46 @@ TEST(SceneNode, set_parent)
     EXPECT_EQ(node.get_parent(), &new_parent);
 }
 
-
 TEST(SceneNode, look_at)
 {
-    glm::vec3 eye(0.0f, 0.0f, 5.0f);
-    glm::vec3 center(0.0f, 0.0f, 0.0f);
-    glm::vec3 up(0.0f, 1.0f, 0.0f);
+    auto eye = glm::vec3(0.0f, 0.0f, 5.0f);
+    auto center = glm::vec3(0.0f, 0.0f, 0.0f);
+    auto up = glm::vec3(0.0f, 1.0f, 0.0f);
 
-    glm::mat4 expected = glm::inverse(glm::lookAt(eye, center, up));
-    glm::mat4 result   = pkzo::three::look_at(eye, center, up);
+    auto expected = glm::inverse(glm::lookAt(eye, center, up));
+    auto result = pkzo::three::look_at(eye, center, up);
 
     EXPECT_GLM_NEAR(expected, result, 1e-4f);
 }
 
 TEST(SceneNode, look_at_eye_and_center_are_same)
 {
-    glm::vec3 eye(1.0f, 1.0f, 1.0f);
-    glm::vec3 center(1.0f, 1.0f, 1.0f);
-    glm::vec3 up(0.0f, 1.0f, 0.0f);
+    auto eye = glm::vec3(1.0f, 1.0f, 1.0f);
+    auto center = glm::vec3(1.0f, 1.0f, 1.0f);
+    auto up = glm::vec3(0.0f, 1.0f, 0.0f);
 
-    glm::mat4 result = pkzo::three::look_at(eye, center, up);
+    auto result = pkzo::three::look_at(eye, center, up);
 
-    // This should produce an identity matrix, but it's an edge case to be avoided in practice.
     EXPECT_GLM_NEAR(glm::mat4(1.0f), result, 1e-4f);
+}
+
+TEST(SceneNode, look_at_applied_transform)
+{
+    auto eye = glm::vec3(0.0f, 0.0f, 5.0f);
+    auto center = glm::vec3(0.0f, 0.0f, 0.0f);
+    auto up = glm::vec3(0.0f, 1.0f, 0.0f);
+
+    auto world_transform = pkzo::three::look_at(eye, center, up);
+
+    auto local_point = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+    auto world_point = world_transform * local_point;
+
+    auto expected_world_point = glm::vec4(eye, 1.0f);
+    EXPECT_GLM_NEAR(expected_world_point, world_point, 1e-4f);
+
+    auto local_front_point = glm::vec4(0.0f, 0.0f, -1.0f, 1.0f);
+    auto world_front_point = world_transform * local_front_point;
+
+    auto expected_world_front_point = glm::vec4(0.0f, 0.0f, 4.0f, 1.0f);
+    EXPECT_GLM_NEAR(expected_world_front_point, world_front_point, 1e-4f);
 }
