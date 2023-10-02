@@ -3,7 +3,7 @@ name: Automated Code Review
 on:
   pull_request:
     types: [opened, synchronize]
-    
+
 permissions:
   contents: read
   pull-requests: write
@@ -12,17 +12,59 @@ jobs:
   review:
     runs-on: ubuntu-latest
     name: GPT-4 Code Review
+    env:
+      FILE_PATTERN: '*.cpp *.h *.txt *.md *.glsl *.yml *.json'
+      CUSTOM_PROMPT: 'Please review the code from the following code diff:'
     steps:
-      - uses: anc95/ChatGPT-CodeReview@main
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - name: Custom Code Review and Comment
+        run: |
+          const axios = require('axios');
+          const { GitHub } = require("@actions/github");
+          const { execSync } = require('child_process');
+
+          const github = new GitHub(process.env.GITHUB_TOKEN);
+          const context = github.context;
+          const prNumber = context.payload.pull_request.number;
+          const filePattern = process.env.FILE_PATTERN;
+          const customPrompt = process.env.CUSTOM_PROMPT;
+
+          // Fetch diff based on the file pattern
+          const diff = execSync(`git diff HEAD^ HEAD -- ${filePattern}`).toString();
+
+          // Request GPT-4 review
+          const payload = {
+            prompt: `${customPrompt} ${diff}`,
+            model: 'gpt-4',
+            max_tokens: 5000,
+            // ... other options
+          };
+
+          axios.post('https://api.openai.com/v1/engines/davinci-codex/completions', payload, {
+            headers: {
+              'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
+            }
+          })
+          .then((response) => {
+            const review = response.data.choices[0].text;
+
+            // Create GitHub comment
+            const comment = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: review
+            };
+            
+            github.issues.createComment(comment);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          # Optional
-          LANGUAGE: English
-          OPENAI_API_ENDPOINT: https://api.openai.com/v1
-          MODEL: gpt-4 
-          PROMPT: "Please review the code from the following code diff:"
-          top_p: 1 
-          temperature: 1 
-          max_tokens: 5000
-          MAX_PATCH_LENGTH: 10000 
