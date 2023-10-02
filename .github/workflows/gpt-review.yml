@@ -30,8 +30,7 @@ jobs:
             const axios = require('axios');
             const { GitHub } = require("@actions/github");
             const { execSync } = require('child_process');
-
-            const context = github.context;
+            
             const prNumber = context.payload.pull_request.number;
             const filePattern = process.env.FILE_PATTERN;
             const customPrompt = process.env.CUSTOM_PROMPT;
