@@ -63,12 +63,14 @@ jobs:
                 const review = responseData.choices[0].text;
               
                 // Create GitHub comment
-                await github.issues.createComment({
+                await github.rest.pulls.createReview({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
-                  issue_number: context.issue.number,
+                  pull_number: context.issue.number,
+                  review_id: 1,
+                  event: 'REQUEST_CHANGES',
                   body: review
-                });
+                })
               } else {
                 console.error('Failed to get review:', await response.text());
               }
