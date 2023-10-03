@@ -26,33 +26,35 @@ jobs:
         uses: actions/github-script@v6
         env:
           FILE_PATTERN: '*.cpp *.h *.txt *.md *.glsl *.yml *.json'
-          CUSTOM_PROMPT: 'Please review the code from the following code diff:'
+          CUSTOM_PROMPT: 'Line-by-line review of the following code diff:'
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         with:
           script: |
             (async () => {
               const { execSync } = require('child_process');
-
+              
               const prNumber = context.payload.pull_request.number;
-              const filePattern = process.env.FILE_PATTERN;
               const customPrompt = process.env.CUSTOM_PROMPT;
-
-              // Fetch diff based on the file pattern
-              const diff = execSync(`git diff ${{ github.event.pull_request.base.sha }} HEAD -- ${filePattern}`).toString();
-
-              // Request GPT-4 review
-              const payload = {
-                model: 'gpt-4',
-                max_tokens: 5000,
-                messages: [
-                  {
-                    role: 'user',
-                    content: `${customPrompt} ${diff}`
-                  }
-                ]
-              };
-
-              try {
+              
+              // Get list of modified files in the PR
+              const modifiedFiles = execSync(`git diff --name-only ${{ github.event.pull_request.base.sha }} HEAD`).toString().trim().split('\n');
+              
+              for (const file of modifiedFiles) {
+                const diff = execSync(`git diff ${{ github.event.pull_request.base.sha }} HEAD -- ${file}`).toString();
+              
+                // GPT-4 review payload
+                const payload = {
+                  model: 'gpt-4',
+                  max_tokens: 5000,
+                  messages: [
+                    {
+                      role: 'user',
+                      content: `${customPrompt} ${diff}`
+                    }
+                  ]
+                };
+              
+                // Send to GPT-4 and get review
                 const response = await fetch('https://api.openai.com/v1/chat/completions', {
                   method: 'POST',
                   headers: {
@@ -61,25 +63,28 @@ jobs:
                   },
                   body: JSON.stringify(payload)
                 });
-
+              
                 if (response.ok) {
                   const responseData = await response.json();
-                  const review = responseData.choices[0].message.content;
-                
-                  // Create GitHub comment
+                  const reviewText = responseData.choices[0].message.content;
+                  
+                  const comments = [{
+                    {
+                      path: file,
+                      position: 1,
+                      body: reviewText
+                    } 
+                  }];
+                                
                   await github.rest.pulls.createReview({
                     owner: context.repo.owner,
                     repo: context.repo.repo,
-                    pull_number: context.issue.number,
-                    review_id: 1,
-                    event: 'COMMENT',
-                    body: review
-                  })
+                    pull_number: prNumber,
+                    comments: comments
+                  });
                 } else {
                   console.error('Failed to get review:', await response.text());
                 }
-              } catch (error) {
-                console.error('An error occurred:', error);
               }
             })();
         
