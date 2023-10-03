@@ -26,7 +26,7 @@ jobs:
         uses: actions/github-script@v6
         env:
           FILE_PATTERN: '*.cpp *.h *.txt *.md *.glsl *.yml *.json'
-          CUSTOM_PROMPT: 'Line-by-line review of the following code diff:'
+          CUSTOM_PROMPT: 'Please review the code from the following code diff:'
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         with:
           script: |
@@ -38,6 +38,8 @@ jobs:
               
               // Get list of modified files in the PR
               const modifiedFiles = execSync(`git diff --name-only ${{ github.event.pull_request.base.sha }} HEAD`).toString().trim().split('\n');
+
+              const comments = [];
               
               for (const file of modifiedFiles) {
                 const diff = execSync(`git diff ${{ github.event.pull_request.base.sha }} HEAD -- ${file}`).toString();
@@ -68,21 +70,20 @@ jobs:
                   const responseData = await response.json();
                   const reviewText = responseData.choices[0].message.content;
                   
-                  const comments = [{
+                  comments.push{
                       path: file,
                       position: 1,
                       body: reviewText
                   }];
-
-                  await github.rest.pulls.createReview({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    pull_number: prNumber,
-                    comments: comments
-                  });
-                } else {
-                  console.error('Failed to get review:', await response.text());
                 }
               }
+
+              await github.rest.pulls.createReview({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber,
+                event: 'COMMENT',
+                comments: comments
+              });
             })();
         
