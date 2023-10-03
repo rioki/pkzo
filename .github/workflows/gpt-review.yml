@@ -70,11 +70,11 @@ jobs:
                   const responseData = await response.json();
                   const reviewText = responseData.choices[0].message.content;
                   
-                  comments.push{
+                  comments.push({
                       path: file,
                       position: 1,
                       body: reviewText
-                  }];
+                  });
                 }
               }
 
