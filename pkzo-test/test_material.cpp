@@ -25,6 +25,7 @@
 
 #include <gtest/gtest.h>
 #include "glm_gtest.h"
+#include "pkzo_test.h"
 
 TEST(Material, rbg_hex)
 {
@@ -66,4 +67,73 @@ TEST(Material, rgba_passthrough)
     glm::vec4 expected(0.1f, 0.2f, 0.3f, 0.5f);
     glm::vec4 result = pkzo::three::rgba(0.1f, 0.2f, 0.3f, 0.5f);
     EXPECT_GLM_NEAR(result, expected, 1e-4f);
+}
+
+TEST(Material, constructor_defaults)
+{
+    pkzo::three::Material material;
+    EXPECT_GLM_EQ(material.get_base_color_factor(), glm::vec3(1.0f, 1.0f, 1.0f));
+    EXPECT_GLM_EQ(material.get_emissive_factor(),   glm::vec3(0.0f, 0.0f, 0.0f));
+
+    EXPECT_TEXTURE_EQ(material.get_base_color_map(),         pkzo::three::get_white_texture());
+    EXPECT_TEXTURE_EQ(material.get_metallic_roughness_map(), pkzo::three::get_black_texture());
+    EXPECT_TEXTURE_EQ(material.get_normal_map(),             pkzo::three::get_normal_texture());
+    EXPECT_TEXTURE_EQ(material.get_occlusion_map(),          pkzo::three::get_black_texture());
+    EXPECT_TEXTURE_EQ(material.get_emissive_map(),           pkzo::three::get_black_texture());
+}
+
+TEST(Material, base_color_factor)
+{
+    pkzo::three::Material material;
+    glm::vec3 color(0.5f, 0.5f, 0.5f);
+    material.set_base_color_factor(color);
+    EXPECT_GLM_EQ(material.get_base_color_factor(), color);
+}
+
+TEST(Material, emissive_factor)
+{
+    pkzo::three::Material material;
+    glm::vec3 factor(1.0f, 0.0f, 0.0f);
+    material.set_emissive_factor(factor);
+    EXPECT_GLM_EQ(material.get_emissive_factor(), factor);
+}
+
+TEST(Material, base_color_texture)
+{
+    pkzo::three::Material material;
+    auto texture = pkzo::three::get_orange_texture();
+    material.set_base_color_map(texture);
+    EXPECT_EQ(material.get_base_color_map(), texture);
+}
+
+TEST(Material, metallic_roughness_texture)
+{
+    pkzo::three::Material material;
+    auto texture = pkzo::three::get_orange_texture();
+    material.set_metallic_roughness_map(texture);
+    EXPECT_EQ(material.get_metallic_roughness_map(), texture);
+}
+
+TEST(Material, normal_texture)
+{
+    pkzo::three::Material material;
+    auto texture = pkzo::three::get_orange_texture();
+    material.set_normal_map(texture);
+    EXPECT_EQ(material.get_normal_map(), texture);
+}
+
+TEST(Material, occlusion_texture)
+{
+    pkzo::three::Material material;
+    auto texture = pkzo::three::get_orange_texture();
+    material.set_occlusion_map(texture);
+    EXPECT_EQ(material.get_occlusion_map(), texture);
+}
+
+TEST(Material, emissive_texture)
+{
+    pkzo::three::Material material;
+    auto texture = pkzo::three::get_orange_texture();
+    material.set_emissive_map(texture);
+    EXPECT_EQ(material.get_emissive_map(), texture);
 }

@@ -83,6 +83,11 @@ namespace pkzo::test
     inline
     testing::AssertionResult compare_textures(const char* lhs_expression, const char* rhs_expression, const char* abs_error_expr, const std::shared_ptr<Texture>& lhs_value, const std::shared_ptr<Texture>& rhs_value, float abs_error)
     {
+        if (lhs_value == rhs_value)
+        {
+            return testing::AssertionSuccess();
+        }
+
         if (lhs_value == nullptr)
         {
             return testing::AssertionFailure()
@@ -107,7 +112,8 @@ namespace pkzo::test
         }
 
         auto diff_error = pkzo::compare(lhs_value, rhs_value);
-        if (diff_error <= abs_error) {
+        if (diff_error <= abs_error)
+        {
             return testing::AssertionSuccess();
         }
 
