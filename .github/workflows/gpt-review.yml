@@ -82,7 +82,8 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 pull_number: prNumber,
-                event: 'COMMENT',
+                review_id: 1,
+                event: 'REQUEST_CHANGES',
                 comments: comments
               });
             })();
