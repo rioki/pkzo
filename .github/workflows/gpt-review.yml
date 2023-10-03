@@ -69,13 +69,11 @@ jobs:
                   const reviewText = responseData.choices[0].message.content;
                   
                   const comments = [{
-                    {
                       path: file,
                       position: 1,
                       body: reviewText
-                    } 
                   }];
-                                
+
                   await github.rest.pulls.createReview({
                     owner: context.repo.owner,
                     repo: context.repo.repo,
