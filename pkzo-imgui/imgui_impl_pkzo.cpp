@@ -61,7 +61,6 @@ bool ImGui_ImplPkzo_Init()
     io.KeyMap[ImGuiKey_Space]       = static_cast<int>(pkzo::Key::SPACE);
     io.KeyMap[ImGuiKey_Enter]       = static_cast<int>(pkzo::Key::RETURN);
     io.KeyMap[ImGuiKey_Escape]      = static_cast<int>(pkzo::Key::ESCAPE);
-    io.KeyMap[ImGuiKey_KeyPadEnter] = static_cast<int>(pkzo::Key::KP_ENTER);
     io.KeyMap[ImGuiKey_A]           = static_cast<int>(pkzo::Key::A);
     io.KeyMap[ImGuiKey_C]           = static_cast<int>(pkzo::Key::C);
     io.KeyMap[ImGuiKey_V]           = static_cast<int>(pkzo::Key::V);
