@@ -24,10 +24,11 @@
 #include "ScreenNode.h"
 
 #include "Image.h"
+#include "InputHandler.h"
 
 namespace pkzo
 {
-    class PKZO_EXPORT HitArea : public ScreenNode
+    class PKZO_EXPORT HitArea : public ScreenNode, public InputHandler
     {
     public:
         rex::signal<> on_click;
@@ -39,7 +40,14 @@ namespace pkzo
         void set_size(const glm::vec2& value) noexcept;
         const glm::vec2& get_size() const noexcept;
 
+        void activate() override;
+        void deactivate() override;
+
+        void handle_mouse_button_down(pkzo::MouseButton button, glm::ivec2 pos) override;
+        void handle_mouse_button_up(pkzo::MouseButton button, glm::ivec2 pos) override;
+
     private:
         glm::vec2 size = {15, 15};
+        bool click_inside = false;
     };
 }

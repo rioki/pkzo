@@ -56,6 +56,7 @@ TEST(Screen, GRAPH_render_empty)
 
     auto screen = pkzo::Screen{window.get_drawable_size()};
     screen.set_background_color(pkzo::rgba(0x212121FF));
+    screen.activate();
 
     window.on_draw([&] () {
         screen.draw();
@@ -78,6 +79,7 @@ TEST(Screen, GRAPH_render_orange_rectnagle)
     auto transform = glm::translate(glm::mat3(1.0f), glm::vec2{200, 150});
     auto rectnagle = pkzo::Rectangle{transform, {400u, 300u}, pkzo::rgba(0xFFA500FF)};
     screen.add_node(rectnagle);
+    screen.activate();
 
     window.on_draw([&] () {
         screen.draw();
@@ -102,6 +104,7 @@ TEST(Screen, GRAPH_render_angley_cat)
     auto transform = glm::translate(glm::mat3(1.0f), glm::vec2{200, 150});
     auto rectnagle = pkzo::Rectangle{transform, {400u, 300u}, pkzo::rgba(0xFFC0CBFF), cat};
     screen.add_node(rectnagle);
+    screen.activate();
 
     window.on_draw([&] () {
         screen.draw();
@@ -125,6 +128,7 @@ TEST(Screen, GRAPH_render_text)
     auto transform = glm::translate(glm::mat3(1.0f), glm::vec2{200, 150});
     auto text = pkzo::Text{transform, u8"The quick brown fox jumps over the lazy dog", font, pkzo::rgba(0xFFFFFFFF)};
     screen.add_node(text);
+    screen.activate();
 
     window.on_draw([&] () {
         screen.draw();

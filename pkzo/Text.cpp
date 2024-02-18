@@ -71,19 +71,31 @@ namespace pkzo
         return color;
     }
 
-    /*void Text::draw(ScreenRenderer& renderer) const
+    void Text::activate()
     {
-        if (font == nullptr)
-        {
-            return;
-        }
+        check(font);
+        auto screen = get_root();
+        check(screen);
+        auto renderer = screen->get_renderer();
+        check(renderer);
 
         if (text_image == nullptr)
         {
             text_image = std::make_unique<Image>(font->render(text));
         }
 
-        renderer.draw_rectangle(get_transform(), glm::vec2(text_image->get_size()), color, *text_image);
-    }*/
+        render_id = renderer->add_rectangle(get_transform(), glm::vec2(text_image->get_size()), color, *text_image);
+
+        // TODO: update the texture on text or font change
+    }
+
+    void Text::deactivate()
+    {
+        auto screen = get_root();
+        check(screen);
+        auto renderer = screen->get_renderer();
+        check(renderer);
+        renderer->remove_rectangle(render_id);
+    }
 
 }

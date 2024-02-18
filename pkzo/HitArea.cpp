@@ -41,4 +41,47 @@ namespace pkzo
     {
         return size;
     }
+
+    void HitArea::activate()
+    {
+        ScreenNode::activate();
+
+        auto screen = get_root();
+        check(screen);
+        screen->add_input_handler(this);
+    }
+
+    void HitArea::deactivate()
+    {
+        auto screen = get_root();
+        check(screen);
+        screen->remove_input_handler(this);
+
+        ScreenNode::deactivate();
+    }
+
+    void HitArea::handle_mouse_button_down(pkzo::MouseButton button, glm::ivec2 pos)
+    {
+        auto position = glm::inverse(get_world_transform()) * glm::vec3(pos, 1.0f);
+        if (position.x >= 0 && position.x <= size.x && position.y >= 0 && position.y <= size.y)
+        {
+            click_inside = true;
+        }
+        else
+        {
+            click_inside = false;
+        }
+    }
+
+    void HitArea::handle_mouse_button_up(pkzo::MouseButton button, glm::ivec2 pos)
+    {
+        if (click_inside)
+        {
+            auto position = glm::inverse(get_world_transform()) * glm::vec3(pos, 1.0f);
+            if (position.x >= 0 && position.x <= size.x && position.y >= 0 && position.y <= size.y)
+            {
+                on_click();
+            }
+        }
+    }
 }

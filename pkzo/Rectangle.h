@@ -49,11 +49,13 @@ namespace pkzo
         void set_image(const std::shared_ptr<Image>& value) noexcept;
         const std::shared_ptr<Image>& get_image() const noexcept;
 
-        //void draw(ScreenRenderer& renderer) const override;
+        void activate() override;
+        void deactivate() override;
 
     private:
         glm::vec2              size = glm::vec2(15.0f);
         glm::vec4              color = glm::vec4(1.0f);
         std::shared_ptr<Image> image;
+        unsigned int           render_id = 0;
     };
 }

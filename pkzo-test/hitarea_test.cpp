@@ -23,9 +23,14 @@
 
 #include <pkzo/HitArea.h>
 #include <pkzo/Screen.h>
+#include <pkzo/EventRouter.h>
+#include <pkzo/Window.h>
 
-TEST(HitAreaTest, clicks)
+TEST(HitAreaTest, GRAPH_clicks)
 {
+    auto er     = pkzo::EventRouter{};
+    auto window = pkzo::Window{er, testing::get_test_name(), {800u, 600u}};
+
     auto screen = pkzo::Screen{{800u, 600u}};
 
     auto transform = glm::translate(glm::mat3(1.0f), glm::vec2{200, 150});

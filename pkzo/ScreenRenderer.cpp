@@ -64,74 +64,72 @@ namespace pkzo
             {0, 1, 2},
             {0, 2, 3}
         });
-
-        model_stack.push(glm::mat3(1.0f));
     }
 
     ScreenRenderer::~ScreenRenderer() = default;
 
-    void ScreenRenderer::start_frame(glm::vec2 size) noexcept
+    void ScreenRenderer::set_size(glm::uvec2 value)
+    {
+        size = value;
+    }
+
+    glm::uvec2 ScreenRenderer::get_size() const
+    {
+        return size;
+    }
+
+    unsigned int ScreenRenderer::add_rectangle(const glm::mat3& transform, glm::vec2 size, glm::vec4 color)
+    {
+        auto id = next_id++;
+        geometries[id] = {transform, size, color, nullptr};
+        return id;
+    }
+
+    unsigned int ScreenRenderer::add_rectangle(const glm::mat3& transform, glm::vec2 size, glm::vec4 color, const Image& image)
+    {
+        auto id = next_id++;
+        geometries[id] = {transform, size, color, texture_cache.get(image)};
+        return id;
+    }
+
+    void ScreenRenderer::remove_rectangle(unsigned int id)
+    {
+        geometries.erase(id);
+    }
+
+    void ScreenRenderer::render()
     {
         glDisable(GL_DEPTH_TEST);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(GL_BLEND);
 
-        auto projection = glm::ortho(0.0f, size.x, size.y, 0.0f, -1.0f, 1.0f);
+        auto projection = glm::ortho(0.0f, static_cast<float>(size.x), static_cast<float>(size.y), 0.0f, -1.0f, 1.0f);
         auto view       = glm::mat4(1.0f);
 
         shader.bind();
         shader.set_uniform("uProjection", projection);
         shader.set_uniform("uView", view);
-        check(model_stack.size() == 1);
-
 
         rectangle.bind(shader);
-    }
 
-    void ScreenRenderer::finish_frame() noexcept
-    {
-        check(model_stack.size() == 1);
+        for (auto& [id, geometry] : geometries)
+        {
+            shader.set_uniform("uColor", geometry.color);
+            shader.set_uniform("uHasTexture", geometry.texture != nullptr);
+
+            if (geometry.texture)
+            {
+                geometry.texture->bind(0);
+                shader.set_uniform("uTexture", 0);
+            }
+
+            auto model = geometry.transform;
+            model = glm::scale(model, geometry.size);
+            shader.set_uniform("uModel", glm::to3d(model));
+
+            rectangle.draw();
+        }
 
         texture_cache.collect();
-    }
-
-    void ScreenRenderer::push_model(const glm::mat3& model) noexcept
-    {
-        check(!model_stack.empty());
-        auto final_model = model_stack.top() * model;
-        model_stack.push(final_model);
-    }
-
-    void ScreenRenderer::pop_model() noexcept
-    {
-        model_stack.pop();
-    }
-
-    void ScreenRenderer::draw_rectangle(const glm::mat3& transform, glm::vec2 size, glm::vec4 color)
-    {
-        shader.set_uniform("uColor", color);
-        shader.set_uniform("uHasTexture", false);
-
-        auto model = model_stack.top() * transform;
-        model = glm::scale(model, size);
-        shader.set_uniform("uModel", glm::to3d(model));
-
-        rectangle.draw();
-    }
-
-    void ScreenRenderer::draw_rectangle(const glm::mat3& transform, glm::vec2 size, glm::vec4 color, const Image& image)
-    {
-        shader.set_uniform("uColor", color);
-
-        auto texture = texture_cache.get(image);
-        texture->bind(0);
-        shader.set_uniform("uTexture", 0);
-        shader.set_uniform("uHasTexture", true);
-
-        auto model = model_stack.top() * transform;
-        model = glm::scale(model, size);
-        shader.set_uniform("uModel", glm::to3d(model));
-
-        rectangle.draw();
     }
 }

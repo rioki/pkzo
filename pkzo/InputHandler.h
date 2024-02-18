@@ -34,13 +34,13 @@ namespace pkzo
     public:
         virtual ~InputHandler() = default;
 
-        virtual void handle_mouse_button_down(pkzo::MouseButton button, glm::ivec2 pos) = 0;
-        virtual void handle_mouse_button_up(pkzo::MouseButton button, glm::ivec2 pos)  = 0;
-        virtual void handle_mouse_move(glm::ivec2 pos, glm::ivec2 rel)  = 0;
-        virtual void handle_mouse_wheel(glm::ivec2 rel)  = 0;
+        virtual void handle_mouse_button_down(pkzo::MouseButton button, glm::ivec2 pos) {};
+        virtual void handle_mouse_button_up(pkzo::MouseButton button, glm::ivec2 pos) {};
+        virtual void handle_mouse_move(glm::ivec2 pos, glm::ivec2 rel) {};
+        virtual void handle_mouse_wheel(glm::ivec2 rel) {};
 
-        virtual void handle_keboard_down(pkzo::KeyMod mod, pkzo::Key key) = 0;
-        virtual void handle_keboard_up(pkzo::KeyMod mod, pkzo::Key key) = 0;
-        virtual void handle_keboard_text(const std::string_view text) = 0;
+        virtual void handle_keboard_down(pkzo::KeyMod mod, pkzo::Key key) {};
+        virtual void handle_keboard_up(pkzo::KeyMod mod, pkzo::Key key) {};
+        virtual void handle_keboard_text(const std::string_view text) {};
     };
 }

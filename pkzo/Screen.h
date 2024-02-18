@@ -31,6 +31,7 @@
 namespace pkzo
 {
     class Screen;
+    class Rectangle;
 
     template <>
     struct NodeTraits<Screen>
@@ -43,7 +44,7 @@ namespace pkzo
     {
     public:
         explicit Screen(glm::uvec2 size) noexcept;
-        ~Screen() = default;
+        ~Screen();
 
         glm::uvec2 get_size() const noexcept;
         void resize(glm::uvec2 size) noexcept;
@@ -65,9 +66,14 @@ namespace pkzo
         void handle_keboard_up(pkzo::KeyMod mod, pkzo::Key key) override;
         void handle_keboard_text(const std::string_view text) override;
 
+        void activate() override;
+        void deactivate() override;
+
+        ScreenRenderer* get_renderer() noexcept;
+
     private:
         glm::uvec2 size;
-        glm::vec4  background_color = glm::vec4(0.0f);
+        std::unique_ptr<Rectangle> background;
 
         std::vector<InputHandler*> input_handlers;
 

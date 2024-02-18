@@ -75,20 +75,33 @@ namespace pkzo
         image = value;
     }
 
-    const std::shared_ptr<Image>&Rectangle:: get_image() const noexcept
+    const std::shared_ptr<Image>& Rectangle::get_image() const noexcept
     {
         return image;
     }
 
-    /*void Rectangle::draw(ScreenRenderer& renderer) const
+    void Rectangle::activate()
     {
+        auto screen = get_root();
+        check(screen);
+        auto renderer = screen->get_renderer();
+        check(renderer);
         if (image)
         {
-            renderer.draw_rectangle(get_transform(), size, color, *image);
+            render_id = renderer->add_rectangle(get_transform(), size, color, *image);
         }
         else
         {
-            renderer.draw_rectangle(get_transform(), size, color);
+            render_id = renderer->add_rectangle(get_transform(), size, color);
         }
-    }*/
+    }
+
+    void Rectangle::deactivate()
+    {
+        auto screen = get_root();
+        check(screen);
+        auto renderer = screen->get_renderer();
+        check(renderer);
+        renderer->remove_rectangle(render_id);
+    }
 }

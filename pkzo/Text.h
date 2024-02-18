@@ -44,13 +44,15 @@ namespace pkzo
         void set_color(const glm::vec4& value) noexcept;
         const glm::vec4& get_color() const noexcept;
 
-        //void draw(ScreenRenderer& renderer) const override;
+        void activate() override;
+        void deactivate() override;
 
     private:
         std::u8string         text;
         std::shared_ptr<Font> font;
         glm::vec4             color = {1.0f, 1.0f, 1.0f, 1.0f};
 
-        mutable std::unique_ptr<Image> text_image;
+        std::unique_ptr<Image> text_image;
+        unsigned int           render_id = 0;
     };
 }

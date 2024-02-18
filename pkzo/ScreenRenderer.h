@@ -39,20 +39,31 @@ namespace pkzo
         ScreenRenderer();
         ~ScreenRenderer();
 
-        void start_frame(glm::vec2 size) noexcept;
-        void finish_frame() noexcept;
+        void set_size(glm::uvec2 value);
+        glm::uvec2 get_size() const;
 
-        void push_model(const glm::mat3& model) noexcept;
-        void pop_model() noexcept;
+        unsigned int add_rectangle(const glm::mat3& transform, glm::vec2 size, glm::vec4 color);
+        unsigned int add_rectangle(const glm::mat3& transform, glm::vec2 size, glm::vec4 color, const Image& image);
+        void remove_rectangle(unsigned int id);
 
-        void draw_rectangle(const glm::mat3& transform, glm::vec2 size, glm::vec4 color);
-        void draw_rectangle(const glm::mat3& transform, glm::vec2 size, glm::vec4 color, const Image& image);
+        void render();
 
     private:
-        std::stack<glm::mat3> model_stack;
+        struct Geometry
+        {
+            glm::mat3                      transform;
+            glm::vec2                      size;
+            glm::vec4                      color;
+            std::shared_ptr<glow::Texture> texture;
+        };
 
         glow::Shader          shader;
         glow::VertexBuffer    rectangle;
+
+        glm::uvec2 size;
+
+        unsigned int next_id = 0;
+        std::map<unsigned int, Geometry> geometries;
 
         rex::cache<Image, std::shared_ptr<glow::Texture>> texture_cache;
     };

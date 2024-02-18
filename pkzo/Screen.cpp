@@ -22,10 +22,19 @@
 #include "pch.h"
 #include "Screen.h"
 
+#include "Rectangle.h"
+
 namespace pkzo
 {
     Screen::Screen(glm::uvec2 s) noexcept
-    : size(s) {}
+    : size(s)
+    {
+        background = std::make_unique<Rectangle>();
+        background->set_size(glm::vec2(s));
+        add_node(*background);
+    }
+
+    Screen::~Screen() = default;
 
     glm::uvec2 Screen::get_size() const noexcept
     {
@@ -35,28 +44,24 @@ namespace pkzo
     void Screen::resize(glm::uvec2 s) noexcept
     {
         size = s;
+        background->set_size(glm::vec2(s));
     }
 
     void Screen::set_background_color(glm::vec4 color) noexcept
     {
-        background_color = color;
+        background->set_color(color);
     }
 
     glm::vec4 Screen::get_background_color() const noexcept
     {
-        return background_color;
+        return background->get_color();
     }
 
     void Screen::draw()
     {
-        renderer = std::make_unique<ScreenRenderer>();
-        renderer->start_frame(glm::vec2(size));
-
-        renderer->draw_rectangle(glm::mat3(1.0f), glm::vec2(size), background_color);
-
-        //ScreenNodeGroup::draw(*renderer);
-
-        renderer->finish_frame();
+        check(renderer != nullptr);
+        renderer->set_size(size);
+        renderer->render();
     }
 
     void Screen::add_input_handler(InputHandler* handler)
@@ -129,4 +134,23 @@ namespace pkzo
         }
     }
 
+    void Screen::activate()
+    {
+        check(renderer == nullptr);
+        renderer = std::make_unique<ScreenRenderer>();
+
+        NodeRoot<Screen>::activate();
+    }
+
+    void Screen::deactivate()
+    {
+        NodeRoot<Screen>::deactivate();
+
+        renderer = nullptr;
+    }
+
+    ScreenRenderer* Screen::get_renderer() noexcept
+    {
+        return renderer.get();
+    }
 }
