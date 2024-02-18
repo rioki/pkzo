@@ -1,5 +1,5 @@
 // pkzo
-// Copyright 2023 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2011-2024 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,18 +20,19 @@
 // THE SOFTWARE.
 
 #pragma once
-#include "config.h"
 
-#include <SDL2/SDL_mouse.h>
-#include <SDL2/SDL_events.h>
+#include <iostream>
+#include <functional>
+
 #include <glm/glm.hpp>
-#include <rsig/rsig.h>
+#include <SDL2/SDL.h>
+#include <rex/signal.h>
+
+#include "defines.h"
+#include "EventRouter.h"
 
 namespace pkzo
 {
-    class EventRouter;
-
-    //! Mouse Button
     enum class MouseButton
     {
         NONE    = 0,
@@ -42,12 +43,12 @@ namespace pkzo
         BUTTON5 = SDL_BUTTON_X2
     };
 
-    //! Mouse
+    PKZO_EXPORT std::ostream& operator << (std::ostream& os, MouseButton button);
+
     class PKZO_EXPORT Mouse
     {
     public:
-        //! Create Mouse against the event router.
-        Mouse(EventRouter& router);
+        Mouse(EventRouter& er);
         ~Mouse();
 
         bool is_pressed(MouseButton button) const noexcept;
@@ -56,20 +57,29 @@ namespace pkzo
         bool get_cursor_visible() const noexcept;
         glm::ivec2 get_cursor_position() const noexcept;
 
-        rsig::signal<MouseButton, glm::ivec2>& get_button_press_signal() noexcept;
-        rsig::signal<MouseButton, glm::ivec2>& get_button_release_signal() noexcept;
-        rsig::signal<glm::ivec2, glm::ivec2>&  get_move_signal() noexcept;
-        rsig::signal<glm::ivec2>&              get_wheel_signal() noexcept;
+        rex::connection on_button_press(const std::function<void (MouseButton, glm::ivec2)>& cb) noexcept;
+        rex::signal<MouseButton, glm::ivec2>& get_button_press_signal() noexcept;
+
+        rex::connection on_button_release(const std::function<void (MouseButton, glm::ivec2)>& cb) noexcept;
+        rex::signal<MouseButton, glm::ivec2>& get_button_release_signal() noexcept;
+
+        rex::connection on_move(const std::function<void (glm::ivec2, glm::ivec2)>& cb) noexcept;
+        rex::signal<glm::ivec2, glm::ivec2>& get_move_signal() noexcept;
+
+        rex::connection on_wheel(const std::function<void (glm::ivec2)>& cb) noexcept;
+        rex::signal<glm::ivec2>& get_wheel_signal() noexcept;
 
     private:
-        EventRouter&     router;
-        rsig::connection router_connection;
+        EventRouter&                         event_router;
+        rex::connection                      event_conn;
+        rex::signal<MouseButton, glm::ivec2> button_press_signal;
+        rex::signal<MouseButton, glm::ivec2> button_release_signal;
+        rex::signal<glm::ivec2, glm::ivec2>  move_signal;
+        rex::signal<glm::ivec2>              wheel_signal;
 
-        rsig::signal<MouseButton, glm::ivec2> button_press_signal;
-        rsig::signal<MouseButton, glm::ivec2> button_release_signal;
-        rsig::signal<glm::ivec2, glm::ivec2>  move_signal;
-        rsig::signal<glm::ivec2>              wheel_signal;
+        void handle_event(const SDL_Event& event);
 
-        void handle_events(const SDL_Event& event);
+        Mouse(const Mouse&) = delete;
+        Mouse& operator = (const Mouse&) = delete;
     };
 }

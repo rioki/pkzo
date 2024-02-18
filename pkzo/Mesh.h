@@ -1,5 +1,5 @@
 // pkzo
-// Copyright 2023 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2011-2024 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,78 +20,52 @@
 // THE SOFTWARE.
 
 #pragma once
-#include "config.h"
 
-#include <array>
-#include <filesystem>
-#include <memory>
 #include <vector>
 
 #include <glm/glm.hpp>
 
-#include "utils.h"
-#include "opengl.h"
+#include "defines.h"
 
 namespace pkzo
 {
-    using namespace glm;
-
-    class Shader;
-
-    enum class BufferId : uint
-    {
-        VERTEX,
-        NORMAL,
-        TANGENT,
-        TEXCOORD,
-        INDEX,
-        MAX
-    };
-    constexpr auto buffer_count = to_underlying(BufferId::MAX);
-
-    //! 3D Mesh
     class PKZO_EXPORT Mesh
     {
     public:
-        //! Create a 2D plane in the X/Y plane.
-        static std::shared_ptr<Mesh> create_plane(const glm::vec2& size);
+        Mesh() noexcept = default;
+        ~Mesh() noexcept = default;
 
-        Mesh() = default;
-        ~Mesh();
+        Mesh(const Mesh&) = default;
+        Mesh& operator = (const Mesh&) = default;
 
-        //! Add a vertex.
-        void add_vertex(const glm::vec3& vertex, const glm::vec3& normal, const glm::vec3& tangent, const glm::vec2& texcoords);
+        Mesh(Mesh&&) = default;
+        Mesh& operator = (Mesh&&) = default;
 
-        //! Add a triangle
-        void add_triangle(uint a, uint b, uint c);
+        unsigned int add_vertex(const glm::vec3& position, const glm::vec2& tex_coord) noexcept;
+        unsigned int add_vertex(const glm::vec3& position, const glm::vec3& normal, const glm::vec2& tex_coord) noexcept;
+        unsigned int add_vertex(const glm::vec3& position, const glm::vec3& normal, const glm::vec3& tangent, const glm::vec2& tex_coord) noexcept;
 
-        //! Get the number of vertexes.
-        uint get_vertex_count() const noexcept;
-        //! Get the number of triangles.
-        uint get_triangle_count() const noexcept;
+        void add_triangle(unsigned int a, unsigned int b, unsigned int c) noexcept;
 
-        //! Upload to OpenGL
-        void upload();
-        //! Check if uploaded.
-        bool is_uploaded() const noexcept;
-        //! Release video memory.
-        void release();
+        const std::vector<glm::vec3>& get_positions() const noexcept;
+        const std::vector<glm::vec3>& get_normals() const noexcept;
+        const std::vector<glm::vec3>& get_tangents() const noexcept;
+        const std::vector<glm::vec2>& get_texcoords() const noexcept;
 
-        //! Draw the mesh.
-        void draw();
+        const std::vector<glm::uvec3>& get_triangles() const noexcept;
+
+        void calculate_normals() noexcept;
+        void calculate_tangents() noexcept;
 
     private:
-        struct Vertex
-        {
-            glm::vec3 vertex;
-            glm::vec3 normal;
-            glm::vec3 tangent;
-            glm::vec2 texcoord;
-        };
-        std::vector<Vertex>     vertices;
+        std::vector<glm::vec3> positions;
+        std::vector<glm::vec3> normals;
+        std::vector<glm::vec3> tangents;
+        std::vector<glm::vec2> texcoords;
+
         std::vector<glm::uvec3> triangles;
-
-        std::shared_ptr<opengl::VertexBuffer> vertex_buffer;
     };
-}
 
+    Mesh create_rectangle(glm::vec2 size) noexcept;
+    Mesh create_screen_rectangle() noexcept;
+}

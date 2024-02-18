@@ -1,5 +1,5 @@
 // pkzo
-// Copyright 2023 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2011-2024 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,6 +21,7 @@
 
 #include "imgui_impl_pkzo.h"
 
+#include <chrono>
 #include <SDL2/SDL.h>
 
 char* g_clipboard_data = nullptr;
@@ -55,12 +56,11 @@ bool ImGui_ImplPkzo_Init()
     io.KeyMap[ImGuiKey_Home]        = static_cast<int>(pkzo::Key::HOME);
     io.KeyMap[ImGuiKey_End]         = static_cast<int>(pkzo::Key::END);
     io.KeyMap[ImGuiKey_Insert]      = static_cast<int>(pkzo::Key::INSERT);
-    io.KeyMap[ImGuiKey_Delete]      = static_cast<int>(pkzo::Key::DELETE);
+    io.KeyMap[ImGuiKey_Delete]      = static_cast<int>(pkzo::Key::DEL);
     io.KeyMap[ImGuiKey_Backspace]   = static_cast<int>(pkzo::Key::BACKSPACE);
     io.KeyMap[ImGuiKey_Space]       = static_cast<int>(pkzo::Key::SPACE);
     io.KeyMap[ImGuiKey_Enter]       = static_cast<int>(pkzo::Key::RETURN);
     io.KeyMap[ImGuiKey_Escape]      = static_cast<int>(pkzo::Key::ESCAPE);
-    io.KeyMap[ImGuiKey_KeyPadEnter] = static_cast<int>(pkzo::Key::KP_ENTER);
     io.KeyMap[ImGuiKey_A]           = static_cast<int>(pkzo::Key::A);
     io.KeyMap[ImGuiKey_C]           = static_cast<int>(pkzo::Key::C);
     io.KeyMap[ImGuiKey_V]           = static_cast<int>(pkzo::Key::V);

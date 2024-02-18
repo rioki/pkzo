@@ -1,5 +1,5 @@
 // pkzo
-// Copyright 2023 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2011-2024 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,21 +20,21 @@
 // THE SOFTWARE.
 
 #pragma once
-#include <pkzo/config.h>
 
 #include <string>
 #include <functional>
 #include <vector>
 
-#include <pkzo/Mouse.h>
-#include <pkzo/Keyboard.h>
+#include <pkzo/pkzo.h>
+
+#include "defines.h"
 
 struct ImGuiContext;
 
 namespace pkzo::imgui
 {
     //! User Interface using ImGui
-    class PKZO_EXPORT Interface
+    class PKZO_IMGUI_EXPORT Interface
     {
     public:
         Interface();
@@ -75,8 +75,8 @@ namespace pkzo::imgui
         //! Froward input to ImGui
         //!
         //! @{
-        void handle_mouse_button_down(MouseButton button, glm::ivec2 pos);
-        void handle_mouse_button_up(MouseButton button, glm::ivec2 pos);
+        void handle_mouse_button_down(pkzo::MouseButton button, glm::ivec2 pos);
+        void handle_mouse_button_up(pkzo::MouseButton button, glm::ivec2 pos);
         void handle_mouse_move(glm::ivec2 pos, glm::ivec2 rel);
         void handle_mouse_wheel(glm::ivec2 rel);
 

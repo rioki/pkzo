@@ -1,14 +1,6 @@
-
-# Build Output
-x64
-x86
-
-# Visual Studio Temp Files
-/.vs
-*.vcxproj.user
-
-# vcpkg
+/.int
+/bin
 /vcpkg_installed
+/.vs
 
-# Temp Files
 imgui.ini

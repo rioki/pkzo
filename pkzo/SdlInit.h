@@ -1,5 +1,5 @@
 // pkzo
-// Copyright 2023 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2011-2024 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,9 +20,8 @@
 // THE SOFTWARE.
 
 #pragma once
-#include "config.h"
 
-#include <atomic>
+#include "defines.h"
 
 namespace pkzo
 {
@@ -33,7 +32,7 @@ namespace pkzo
         ~SdlInit();
 
     private:
-        static std::atomic<unsigned int> use_count;
+        static unsigned int ref_count;
 
         SdlInit(const SdlInit&) = delete;
         SdlInit& operator = (const SdlInit&) = delete;

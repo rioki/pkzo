@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <VCProjectVersion>16.0</VCProjectVersion>
+    <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{97787b2d-578e-4559-8072-649df904a540}</ProjectGuid>
+    <ProjectGuid>{7194d79e-30ef-4e1d-ac06-d8bc0ec5af0d}</ProjectGuid>
     <RootNamespace>pkzo</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -59,119 +59,153 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\defaults.props" />
+    <Import Project="..\.props\defaults.props" />
+    <Import Project="..\.props\debug.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\defaults.props" />
+    <Import Project="..\.props\defaults.props" />
+    <Import Project="..\.props\release.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\defaults.props" />
+    <Import Project="..\.props\defaults.props" />
+    <Import Project="..\.props\debug.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\defaults.props" />
+    <Import Project="..\.props\defaults.props" />
+    <Import Project="..\.props\release.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Label="Vcpkg">
     <VcpkgEnableManifest>true</VcpkgEnableManifest>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile />
+    <Link />
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;PKZO_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>PKZO_BUILD_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>Dbghelp.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;PKZO_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-    </ClCompile>
+    <ClCompile />
     <Link>
-      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>Dbghelp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <ClCompile>
+      <PreprocessorDefinitions>PKZO_BUILD_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile />
+    <Link />
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;PKZO_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>PKZO_BUILD_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>Dbghelp.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;PKZO_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-    </ClCompile>
+    <ClCompile />
     <Link>
-      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>Dbghelp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <ClCompile>
+      <PreprocessorDefinitions>PKZO_BUILD_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="array_view.h" />
-    <ClInclude Include="config.h" />
-    <ClInclude Include="debug.h" />
+    <ClInclude Include="AmbientLight.h" />
+    <ClInclude Include="Bounds.h" />
+    <ClInclude Include="BoxGeometry.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="color.h" />
+    <ClInclude Include="defines.h" />
+    <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="EventRouter.h" />
-    <ClInclude Include="Joystick.h" />
+    <ClInclude Include="Font.h" />
+    <ClInclude Include="Geometry.h" />
+    <ClInclude Include="Group.h" />
+    <ClInclude Include="HitArea.h" />
+    <ClInclude Include="Image.h" />
+    <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="Light.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Mouse.h" />
-    <ClInclude Include="opengl.h" />
+    <ClInclude Include="Node.h" />
+    <ClInclude Include="NodeGroup.h" />
+    <ClInclude Include="NodeRoot.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="pkzo.h" />
+    <ClInclude Include="Rectangle.h" />
+    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="ScreenNode.h" />
+    <ClInclude Include="ScreenNodeGroup.h" />
+    <ClInclude Include="ScreenRenderer.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneNode.h" />
+    <ClInclude Include="Screen.h" />
     <ClInclude Include="SdlInit.h" />
-    <ClInclude Include="Shader.h" />
-    <ClInclude Include="strconv.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="utils.h" />
+    <ClInclude Include="SphereGeometry.h" />
+    <ClInclude Include="Text.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="debug.cpp" />
+    <ClCompile Include="AmbientLight.cpp" />
+    <ClCompile Include="BoxGeometry.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="color.cpp" />
+    <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="EventRouter.cpp" />
-    <ClCompile Include="Joystick.cpp" />
+    <ClCompile Include="Font.cpp" />
+    <ClCompile Include="Geometry.cpp" />
+    <ClCompile Include="Group.cpp" />
+    <ClCompile Include="HitArea.cpp" />
+    <ClCompile Include="Image.cpp" />
     <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Mouse.cpp" />
-    <ClCompile Include="opengl.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Rectangle.cpp" />
+    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="ScreenRenderer.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneNode.cpp" />
+    <ClCompile Include="Screen.cpp" />
     <ClCompile Include="SdlInit.cpp" />
-    <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="strconv.cpp" />
-    <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="utils.cpp" />
+    <ClCompile Include="SphereGeometry.cpp" />
+    <ClCompile Include="Text.cpp" />
     <ClCompile Include="Window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\glow\glow.vcxproj">
+      <Project>{55948456-9416-4ffd-aa49-7e9665157ea4}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\rex\rex.vcxproj">
+      <Project>{653aff5b-cbd9-48db-8270-51dcd5399e5a}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Debug.frag.glsl" />
+    <None Include="Debug.vert.glsl" />
+    <None Include="Geometry.frag.glsl" />
+    <None Include="Geometry.vert.glsl" />
+    <None Include="Lighting.frag.glsl" />
+    <None Include="Lighting.vert.glsl" />
+    <None Include="Screen.frag.glsl" />
+    <None Include="Screen.vert.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="pkzo.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
