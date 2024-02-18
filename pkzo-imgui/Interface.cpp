@@ -1,5 +1,5 @@
 // pkzo
-// Copyright 2023 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2011-2024 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -17,13 +17,10 @@
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
+// THE SOFTWARE..
 
+#include "pch.h"
 #include "Interface.h"
-
-#include <imgui.h>
-
-#include <pkzo/opengl.h>
 
 #include "imgui_impl_opengl3.h"
 #include "imgui_impl_pkzo.h"
@@ -71,12 +68,12 @@ namespace pkzo::imgui
         return ImGui::GetCurrentContext();
     }
 
-    void Interface::handle_mouse_button_down(MouseButton button, glm::ivec2 pos)
+    void Interface::handle_mouse_button_down(pkzo::MouseButton button, glm::ivec2 pos)
     {
         ImGui_ImplPkzo_HandleMouseButtonDown(button, pos);
     }
 
-    void Interface::handle_mouse_button_up(MouseButton button, glm::ivec2 pos)
+    void Interface::handle_mouse_button_up(pkzo::MouseButton button, glm::ivec2 pos)
     {
         ImGui_ImplPkzo_HandleMouseButtonUp(button, pos);
     }
@@ -108,7 +105,7 @@ namespace pkzo::imgui
 
     void Interface::draw(glm::uvec2 size, glm::uvec2 draw_size)
     {
-        auto section = opengl::Section{"ImGui"};
+        auto sec = glow::Section{"ImGui"};
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplPkzo_NewFrame(size, draw_size);

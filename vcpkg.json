@@ -1,5 +1,5 @@
 {
-  "name": "pkzo",
+  "name": "nbeon-skirmish",
   "version": "0.1.0",
   "dependencies": [
     "freeimage",
@@ -7,9 +7,9 @@
     "glew",
     "glm",
     "gtest",
-    "imgui",
     "libiconv",
-    "rsig",
-    "sdl2"
+    "sdl2",
+    "imgui",
+    "nlohmann-json"
   ]
 }

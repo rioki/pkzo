@@ -1,0 +1,5 @@
+{
+    "baseColorMap": "../textures/TestOrange_albedo.png",
+    "metallicRoughnessMap": "../textures/TestOrange_orm.png",
+    "normalMap": "../textures/TestOrange_normal.png"
+}

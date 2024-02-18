@@ -1,5 +1,5 @@
 // pkzo
-// Copyright 2023 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2011-2024 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -19,30 +19,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#include "pch.h"
 #include "SdlInit.h"
-
-#include <stdexcept>
-#include <SDL2/SDL.h>
 
 namespace pkzo
 {
-    std::atomic<unsigned int> SdlInit::use_count = 0;
+    unsigned int SdlInit::ref_count = 0;
 
     SdlInit::SdlInit()
     {
-        if (use_count++ == 0u)
+        if (ref_count == 0)
         {
-            auto r = SDL_Init(SDL_INIT_EVENTS | SDL_INIT_VIDEO);
-            if (r < 0)
+            if (SDL_Init(SDL_INIT_VIDEO) < 0)
             {
                 throw std::runtime_error(SDL_GetError());
             }
         }
+        ref_count++;
     }
 
     SdlInit::~SdlInit()
     {
-        if (--use_count == 0u)
+        ref_count--;
+        if (ref_count == 0)
         {
             SDL_Quit();
         }

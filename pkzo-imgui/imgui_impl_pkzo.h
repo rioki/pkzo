@@ -1,5 +1,5 @@
 // pkzo
-// Copyright 2023 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2011-2024 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -39,4 +39,3 @@ IMGUI_IMPL_API void ImGui_ImplPkzo_HandleKeyUp(pkzo::KeyMod mod, pkzo::Key key);
 IMGUI_IMPL_API void ImGui_ImplPkzo_HandleText(const std::string_view text);
 
 IMGUI_IMPL_API void ImGui_ImplPkzo_NewFrame(glm::uvec2 size, glm::uvec2 draw_size);
-

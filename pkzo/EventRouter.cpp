@@ -1,5 +1,5 @@
 // pkzo
-// Copyright 2023 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2011-2024 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -19,105 +19,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#include "pch.h"
 #include "EventRouter.h"
-
-#include <SDL2/SDL_timer.h>
 
 namespace pkzo
 {
-    EventRouter::EventRouter() = default;
-    EventRouter::~EventRouter() = default;
+    rex::connection EventRouter::on_event(const std::function<void(const SDL_Event&)>& cb)
+    {
+        return event_signal.connect(cb);
+    }
 
-    rsig::signal<const SDL_Event&>& EventRouter::get_event_signal() noexcept
+    rex::signal<const SDL_Event&>& EventRouter::get_event_signal()
     {
         return event_signal;
     }
 
-    rsig::signal<>& EventRouter::get_quit_signal() noexcept
+    rex::connection EventRouter::on_quit(const std::function<void()>& cb)
+    {
+        return quit_signal.connect(cb);
+    }
+
+    rex::signal<>& EventRouter::get_quit_signal()
     {
         return quit_signal;
-    }
-
-    void EventRouter::inject_quit() noexcept
-    {
-        auto event = SDL_Event{SDL_QUIT};
-        event.key.timestamp = SDL_GetTicks();
-        SDL_PushEvent(&event);
-    }
-
-    void EventRouter::inject_key_press(KeyMod mod, Key key) noexcept
-    {
-        auto event = SDL_Event{SDL_KEYDOWN};
-        event.key.keysym.mod      = static_cast<Uint16>(mod);
-        event.key.keysym.scancode = static_cast<SDL_Scancode>(key);
-        event.key.keysym.sym      = SDL_GetKeyFromScancode(event.key.keysym.scancode);
-        event.key.timestamp       = SDL_GetTicks();
-        SDL_PushEvent(&event);
-    }
-
-    void EventRouter::inject_key_release(KeyMod mod, Key key) noexcept
-    {
-        auto event = SDL_Event{SDL_KEYUP};
-        event.key.keysym.mod      = static_cast<Uint16>(mod);
-        event.key.keysym.scancode = static_cast<SDL_Scancode>(key);
-        event.key.keysym.sym      = SDL_GetKeyFromScancode(event.key.keysym.scancode);
-        event.key.timestamp       = SDL_GetTicks();
-        SDL_PushEvent(&event);
-    }
-
-    void EventRouter::inject_mouse_move(glm::ivec2 pos, glm::ivec2 rel) noexcept
-    {
-        auto event = SDL_Event{SDL_MOUSEMOTION};
-        event.motion.x            = pos.x;
-        event.motion.y            = pos.y;
-        event.motion.xrel         = rel.x;
-        event.motion.yrel         = rel.y;
-        event.button.timestamp    = SDL_GetTicks();
-        SDL_PushEvent(&event);
-    }
-
-    void EventRouter::inject_mouse_button_press(MouseButton button, glm::ivec2 pos) noexcept
-    {
-        auto event = SDL_Event{SDL_MOUSEBUTTONDOWN};
-        event.button.button       = static_cast<Uint8>(button);
-        event.button.x            = pos.x;
-        event.button.y            = pos.y;
-        event.button.timestamp    = SDL_GetTicks();
-        SDL_PushEvent(&event);
-    }
-
-    void EventRouter::inject_mouse_button_release(MouseButton button, glm::ivec2 pos) noexcept
-    {
-        auto event = SDL_Event{SDL_MOUSEBUTTONUP};
-        event.button.button       = static_cast<Uint8>(button);
-        event.button.x            = pos.x;
-        event.button.y            = pos.y;
-        event.button.timestamp    = SDL_GetTicks();
-        SDL_PushEvent(&event);
-    }
-
-    void EventRouter::inject_mouse_wheel(glm::ivec2 rel) noexcept
-    {
-        auto event = SDL_Event{SDL_MOUSEWHEEL};
-        event.wheel.x          = rel.x;
-        event.wheel.y          = rel.y;
-        event.button.timestamp = SDL_GetTicks();
-        SDL_PushEvent(&event);
-    }
-
-    void EventRouter::inject_window_resize(glm::uvec2 size) noexcept
-    {
-        auto event = SDL_Event{SDL_WINDOWEVENT};
-        event.window.event = SDL_WINDOWEVENT_SIZE_CHANGED;
-        event.window.data1 = size.x;
-        event.window.data2 = size.y;
-        SDL_PushEvent(&event);
-        // Mocking SDL's implementation.
-        auto event2 = SDL_Event{SDL_WINDOWEVENT};
-        event2.window.event = SDL_WINDOWEVENT_RESIZED;
-        event2.window.data1 = size.x;
-        event2.window.data2 = size.y;
-        SDL_PushEvent(&event2);
     }
 
     void EventRouter::route_events()
@@ -125,11 +49,14 @@ namespace pkzo
         SDL_Event event;
         while (SDL_PollEvent(&event))
         {
-            event_signal.emit(event);
-
-            if (event.type == SDL_QUIT)
+            switch (event.type)
             {
+            case SDL_QUIT:
                 quit_signal.emit();
+                break;
+            default:
+                event_signal.emit(event);
+                break;
             }
         }
     }

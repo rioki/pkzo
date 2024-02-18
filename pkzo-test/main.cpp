@@ -19,15 +19,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <gtest/gtest.h>
+#include "pch.h"
 
-__declspec(dllexport) void testing::internal::PrintU8StringTo(const ::std::u8string& s, ::std::ostream* os)
+int main(int argc, char* argv[])
 {
-	(*os) << std::string_view{ (const char*)s.data(), s.size() };
-}
+    rex::set_trace_handler([](const std::string_view& message)
+    {
+        std::cout << message << std::endl;
+    });
+    rex::set_fail_handler([]()
+    {
+        FAIL() << "ICE_CHECK failed or ICE_FAIL was called.";
+    });
 
-int main(int argc, char** argv)
-{
-    ::testing::InitGoogleTest(&argc, argv);
+    testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
+

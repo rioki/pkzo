@@ -1,5 +1,5 @@
 // pkzo
-// Copyright 2023 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2011-2024 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,28 +20,18 @@
 // THE SOFTWARE.
 
 #pragma once
-#include "config.h"
 
-#include <iosfwd>
-#include <SDL2/SDL_keycode.h>
-#include <SDL2/SDL_events.h>
-#include <rsig/rsig.h>
+#include <iostream>
+#include <functional>
 
-#include "utils.h"
+#include <SDL2/SDL.h>
+#include <rex/signal.h>
 
-#ifdef DELETE
-#undef DELETE
-#endif
-
-#ifdef OUT
-#undef OUT
-#endif
+#include "defines.h"
+#include "EventRouter.h"
 
 namespace pkzo
 {
-    class EventRouter;
-
-    //! Key
     enum class Key
     {
         UNKNOWN            = SDL_SCANCODE_UNKNOWN,
@@ -116,7 +106,7 @@ namespace pkzo
         INSERT             = SDL_SCANCODE_INSERT,
         HOME               = SDL_SCANCODE_HOME,
         PAGEUP             = SDL_SCANCODE_PAGEUP,
-        DELETE             = SDL_SCANCODE_DELETE,
+        DEL                = SDL_SCANCODE_DELETE,
         END                = SDL_SCANCODE_END,
         PAGEDOWN           = SDL_SCANCODE_PAGEDOWN,
         RIGHT              = SDL_SCANCODE_RIGHT,
@@ -197,7 +187,7 @@ namespace pkzo
         PRIOR              = SDL_SCANCODE_PRIOR,
         RETURN2            = SDL_SCANCODE_RETURN2,
         SEPARATOR          = SDL_SCANCODE_SEPARATOR,
-        OUT                = SDL_SCANCODE_OUT,
+        OUT_               = SDL_SCANCODE_OUT,
         OPER               = SDL_SCANCODE_OPER,
         CLEARAGAIN         = SDL_SCANCODE_CLEARAGAIN,
         CRSEL              = SDL_SCANCODE_CRSEL,
@@ -286,8 +276,6 @@ namespace pkzo
         APP2               = SDL_SCANCODE_APP2
     };
 
-
-    //! Key Modifier
     enum class KeyMod
     {
         NONE   = KMOD_NONE,
@@ -309,39 +297,52 @@ namespace pkzo
         ALT    = KMOD_ALT,
         GUI    = KMOD_GUI
     };
-    PKZO_ENUM_OPERATORS(KeyMod);
 
-    //! Keyboard
+    PKZO_EXPORT std::ostream& operator << (std::ostream& os, Key key);
+    PKZO_EXPORT std::ostream& operator << (std::ostream& os, KeyMod mod);
+
+    inline KeyMod operator | (KeyMod lhs, KeyMod rhs) noexcept
+    {
+        return static_cast<KeyMod>(static_cast<int>(lhs) | static_cast<int>(rhs));
+    }
+
+    inline KeyMod operator & (KeyMod lhs, KeyMod rhs) noexcept
+    {
+        return static_cast<KeyMod>(static_cast<int>(lhs) & static_cast<int>(rhs));
+    }
+
+    inline KeyMod operator ^ (KeyMod lhs, KeyMod rhs) noexcept
+    {
+        return static_cast<KeyMod>(static_cast<int>(lhs) ^ static_cast<int>(rhs));
+    }
+
     class PKZO_EXPORT Keyboard
     {
     public:
-        //! Create keyboard against event router.
-        Keyboard(EventRouter& router);
+        Keyboard(EventRouter& er);
         ~Keyboard();
 
-        //! Check if a given key is pressed.
         bool is_pressed(Key key) const noexcept;
 
-        //! Signal emitted when a key is pressed.
-        rsig::signal<KeyMod, Key>& get_key_press_signal() noexcept;
+        rex::connection on_key_press(const std::function<void (KeyMod, Key)>& cb) noexcept;
+        rex::signal<KeyMod, Key>& get_key_press_signal() noexcept;
 
-        //! Signal emitted when a key is relased.
-        rsig::signal<KeyMod, Key>& get_key_release_signal() noexcept;
+        rex::connection on_key_release(const std::function<void (KeyMod, Key)>& cb) noexcept;
+        rex::signal<KeyMod, Key>& get_key_release_signal() noexcept;
 
-        //! Signal emitted when text is generated.
-        //!
-        //! All key strokes that generate text (generally single letters)
-        //! this signal will emit with the text as string.
-        rsig::signal<std::string>& get_text_signal() noexcept;
+        rex::connection on_text(const std::function<void (std::string)>& cb) noexcept;
+        rex::signal<std::string>& get_text_signal() noexcept;
 
     private:
-        EventRouter&     router;
-        rsig::connection router_connection;
+        EventRouter&             event_router;
+        rex::connection          event_conn;
+        rex::signal<KeyMod, Key> key_press_signal;
+        rex::signal<KeyMod, Key> key_release_signal;
+        rex::signal<std::string> text_signal;
 
-        rsig::signal<KeyMod, Key> key_press_signal;
-        rsig::signal<KeyMod, Key> key_release_signal;
-        rsig::signal<std::string> text_signal;
+        void handle_event(const SDL_Event& event);
 
-        void handle_events(const SDL_Event& event);
+        Keyboard(const Keyboard&) = delete;
+        Keyboard& operator = (const Keyboard&) = delete;
     };
 }
