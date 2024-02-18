@@ -49,7 +49,7 @@ TEST(Screen, resize)
     EXPECT_GLM_EQ(screen.get_size(), glm::uvec2(1024, 768));
 }
 
-TEST(Screen, render_empty)
+TEST(Screen, GRAPH_render_empty)
 {
     auto er     = pkzo::EventRouter{};
     auto window = pkzo::Window{er, get_test_name(), {800u, 600u}};
@@ -67,7 +67,7 @@ TEST(Screen, render_empty)
     EXPECT_IMAGE_REF_EQ(window.get_screenshot());
 }
 
-TEST(Screen, render_orange_rectnagle)
+TEST(Screen, GRAPH_render_orange_rectnagle)
 {
     auto er     = pkzo::EventRouter{};
     auto window = pkzo::Window{er, get_test_name(), {800u, 600u}};
@@ -89,7 +89,7 @@ TEST(Screen, render_orange_rectnagle)
     EXPECT_IMAGE_REF_EQ(window.get_screenshot());
 }
 
-TEST(Screen, render_angley_cat)
+TEST(Screen, GRAPH_render_angley_cat)
 {
     auto er     = pkzo::EventRouter{};
     auto window = pkzo::Window{er, get_test_name(), {800u, 600u}};
@@ -113,7 +113,7 @@ TEST(Screen, render_angley_cat)
     EXPECT_IMAGE_REF_EQ(window.get_screenshot());
 }
 
-TEST(Screen, render_text)
+TEST(Screen, GRAPH_render_text)
 {
     auto er     = pkzo::EventRouter{};
     auto window = pkzo::Window{er, get_test_name(), {800u, 600u}};

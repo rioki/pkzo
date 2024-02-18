@@ -34,7 +34,7 @@ glm::uvec2 get_desktop_size()
     return {mode.w, mode.h};
 }
 
-TEST(Window, create)
+TEST(Window, GRAPH_create)
 {
     auto event_router = pkzo::EventRouter{};
     auto window = pkzo::Window{event_router, "Test", {640, 480}, pkzo::WindowMode::WINDOWED};
@@ -44,7 +44,7 @@ TEST(Window, create)
     EXPECT_EQ(window.get_window_mode(), pkzo::WindowMode::WINDOWED);
 }
 
-TEST(Window, create_simple)
+TEST(Window, GRAPH_create_simple)
 {
     auto event_router = pkzo::EventRouter{};
     auto window = pkzo::Window{event_router, "Test", {640, 480}};
@@ -54,7 +54,7 @@ TEST(Window, create_simple)
     EXPECT_EQ(window.get_window_mode(), pkzo::WindowMode::WINDOWED);
 }
 
-TEST(Window, create_fullscreen)
+TEST(Window, GRAPH_create_fullscreen)
 {
     auto event_router = pkzo::EventRouter{};
     auto window = pkzo::Window{event_router, "Test", {640, 480}, pkzo::WindowMode::FULLSCREEN_DESKTOP};
@@ -64,7 +64,7 @@ TEST(Window, create_fullscreen)
     EXPECT_EQ(window.get_window_mode(), pkzo::WindowMode::FULLSCREEN_DESKTOP);
 }
 
-TEST(Window, resize)
+TEST(Window, GRAPH_resize)
 {
     auto event_router = pkzo::EventRouter{};
     auto window = pkzo::Window{event_router, "Test", {640, 480}, pkzo::WindowMode::WINDOWED};
@@ -75,7 +75,7 @@ TEST(Window, resize)
     EXPECT_EQ(window.get_window_mode(), pkzo::WindowMode::FULLSCREEN_DESKTOP);
 }
 
-TEST(Window, init_position)
+TEST(Window, GRAPH_init_position)
 {
     auto event_router = pkzo::EventRouter{};
     auto window = pkzo::Window{event_router, "Test", {100, 101}, {640, 480}, pkzo::WindowMode::WINDOWED};
@@ -83,7 +83,7 @@ TEST(Window, init_position)
     EXPECT_EQ(window.get_position(), glm::ivec2(100, 101));
 }
 
-TEST(Window, use_gl_context)
+TEST(Window, GRAPH_use_gl_context)
 {
     auto event_router = pkzo::EventRouter{};
     auto window = pkzo::Window{event_router, "Test", {640, 480}, pkzo::WindowMode::WINDOWED};

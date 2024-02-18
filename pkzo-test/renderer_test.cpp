@@ -29,7 +29,7 @@
 #include <pkzo/BoxGeometry.h>
 #include <pkzo/SphereGeometry.h>
 
-TEST(Renderer, render_shapes)
+TEST(Renderer, GRAPH_render_shapes)
 {
     auto event_router = pkzo::EventRouter{};
     auto window = pkzo::Window{event_router, "Pkzo Test", {800, 600}};
@@ -68,7 +68,7 @@ TEST(Renderer, render_shapes)
     EXPECT_IMAGE_REF_NEAR(window.get_screenshot(), 200.0f);
 }
 
-TEST(Renderer, materials)
+TEST(Renderer, GRAPH_materials)
 {
     auto event_router = pkzo::EventRouter{};
     auto window = pkzo::Window{event_router, "Pkzo Test", {800, 600}};
