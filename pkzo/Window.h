@@ -68,7 +68,6 @@ namespace pkzo
 
     private:
         EventRouter&          event_router;
-        rex::connection       event_conn;
         SDL_Window*           window    = nullptr;
         SDL_GLContext         glcontext = nullptr;
         std::function<void()> draw_cb;

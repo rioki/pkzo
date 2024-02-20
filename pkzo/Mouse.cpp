@@ -22,42 +22,19 @@
 #include "pch.h"
 #include "Mouse.h"
 
+#include "EventRouter.h"
+
 namespace pkzo
 {
-    std::ostream& operator << (std::ostream& os, MouseButton button)
-    {
-        switch (button)
-        {
-            case MouseButton::LEFT:
-                os << "LEFT";
-                break;
-            case MouseButton::MIDDLE:
-                os << "MIDDLE";
-                break;
-            case MouseButton::RIGHT:
-                os << "RIGHT";
-                break;
-            case MouseButton::BUTTON4:
-                os << "BUTTON4";
-                break;
-            case MouseButton::BUTTON5:
-                os << "BUTTON5";
-                break;
-            default:
-                os << "MouseButton(0x" << std::hex << static_cast<unsigned int>(button) << ")";
-        }
-        return os;
-    }
-
     Mouse::Mouse(EventRouter& er)
     : event_router(er)
     {
-        event_conn = event_router.on_event(rex::mem_fun(this, &Mouse::handle_event));
+        event_router.add_handler(this);
     }
 
     Mouse::~Mouse()
     {
-        event_router.get_event_signal().disconnect(event_conn);
+        event_router.remove_handler(this);
     }
 
     bool Mouse::is_pressed(MouseButton button) const noexcept
@@ -123,22 +100,23 @@ namespace pkzo
         return wheel_signal;
     }
 
-    void Mouse::handle_event(const SDL_Event& event)
+    void Mouse::handle_mouse_button_down(pkzo::MouseButton button, glm::ivec2 pos)
     {
-        switch (event.type)
-        {
-            case SDL_MOUSEBUTTONDOWN:
-                button_press_signal.emit(static_cast<MouseButton>(event.button.button), glm::ivec2(event.button.x, event.button.y));
-                break;
-            case SDL_MOUSEBUTTONUP:
-                button_release_signal.emit(static_cast<MouseButton>(event.button.button), glm::ivec2(event.button.x, event.button.y));
-                break;
-            case SDL_MOUSEMOTION:
-                move_signal.emit(glm::ivec2(event.motion.x, event.motion.y), glm::ivec2(event.motion.xrel, event.motion.yrel));
-                break;
-            case SDL_MOUSEWHEEL:
-                wheel_signal.emit(glm::ivec2(event.wheel.x, event.wheel.y));
-                break;
-        }
+        button_press_signal.emit(button, pos);
+    }
+
+    void Mouse::handle_mouse_button_up(pkzo::MouseButton button, glm::ivec2 pos)
+    {
+        button_release_signal.emit(button, pos);
+    }
+
+    void Mouse::handle_mouse_move(glm::ivec2 pos, glm::ivec2 rel)
+    {
+        move_signal.emit(pos, rel);
+    }
+
+    void Mouse::handle_mouse_wheel(glm::ivec2 rel)
+    {
+        wheel_signal.emit(rel);
     }
 }

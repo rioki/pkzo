@@ -66,8 +66,6 @@ namespace pkzo
     Window::Window(EventRouter& er, const std::string_view& title, glm::ivec2 position, glm::uvec2 size, WindowMode mode)
     : event_router(er)
     {
-        event_conn = event_router.on_event(rex::mem_fun(this, &Window::handle_event));
-
         auto flags = get_sdl_window_flags(mode) | SDL_WINDOW_OPENGL;
         window = SDL_CreateWindow(title.data(), position.x, position.y, size.x, size.y, flags);
         if (window == nullptr)
@@ -92,8 +90,6 @@ namespace pkzo
         check(window != nullptr);
         SDL_GL_DeleteContext(glcontext);
         SDL_DestroyWindow(window);
-
-        event_router.get_event_signal().disconnect(event_conn);
     }
 
     std::string_view Window::get_title() const noexcept

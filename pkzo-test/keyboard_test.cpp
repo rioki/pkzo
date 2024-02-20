@@ -22,6 +22,7 @@
 #include "pch.h"
 
 #include <pkzo/Keyboard.h>
+#include <pkzo/EventRouter.h>
 
 TEST(Keyboard, handle_keys)
 {

@@ -25,27 +25,16 @@
 #include <functional>
 
 #include <glm/glm.hpp>
-#include <SDL2/SDL.h>
 #include <rex/signal.h>
 
 #include "defines.h"
-#include "EventRouter.h"
+#include "InputHandler.h"
 
 namespace pkzo
 {
-    enum class MouseButton
-    {
-        NONE    = 0,
-        LEFT    = SDL_BUTTON_LEFT,
-        MIDDLE  = SDL_BUTTON_MIDDLE,
-        RIGHT   = SDL_BUTTON_RIGHT,
-        BUTTON4 = SDL_BUTTON_X1,
-        BUTTON5 = SDL_BUTTON_X2
-    };
+    class EventRouter;
 
-    PKZO_EXPORT std::ostream& operator << (std::ostream& os, MouseButton button);
-
-    class PKZO_EXPORT Mouse
+    class PKZO_EXPORT Mouse : public InputHandler
     {
     public:
         Mouse(EventRouter& er);
@@ -69,15 +58,17 @@ namespace pkzo
         rex::connection on_wheel(const std::function<void (glm::ivec2)>& cb) noexcept;
         rex::signal<glm::ivec2>& get_wheel_signal() noexcept;
 
+        void handle_mouse_button_down(pkzo::MouseButton button, glm::ivec2 pos) override;
+        void handle_mouse_button_up(pkzo::MouseButton button, glm::ivec2 pos) override;
+        void handle_mouse_move(glm::ivec2 pos, glm::ivec2 rel) override;
+        void handle_mouse_wheel(glm::ivec2 rel) override;
+
     private:
         EventRouter&                         event_router;
-        rex::connection                      event_conn;
         rex::signal<MouseButton, glm::ivec2> button_press_signal;
         rex::signal<MouseButton, glm::ivec2> button_release_signal;
         rex::signal<glm::ivec2, glm::ivec2>  move_signal;
         rex::signal<glm::ivec2>              wheel_signal;
-
-        void handle_event(const SDL_Event& event);
 
         Mouse(const Mouse&) = delete;
         Mouse& operator = (const Mouse&) = delete;
