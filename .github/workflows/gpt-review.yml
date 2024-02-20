@@ -40,7 +40,7 @@ jobs:
               // Get list of modified files in the PR
               const modifiedFiles = execSync(`git diff --name-only ${{ github.event.pull_request.base.sha }} HEAD`).toString().trim().split('\n');
 
-              const comments = [];
+              let comments = [];
               
               for (const file of modifiedFiles) {
                 const diff = execSync(`git diff ${{ github.event.pull_request.base.sha }} HEAD -- ${file}`).toString();
