@@ -63,9 +63,15 @@ jobs:
                 if (response.ok) {
                   const responseData = await response.json();
                   try {
-                    const review = JSON.parse(responseData.choices[0].message.content);
+                    const regex = /```json\n([\s\S]*?)\n```/;
+
+                    const review = responseData.choices[0].message.content;
+
+                    // Extract JSON
+                    const match = review.match(regex);
+                    const json = JSON.parse(match[1]);
                     let comments = [];
-                    for (let reviewItem of review) {
+                    for (let reviewItem of json) {
                       comments.push({
                         path: reviewItem.file,
                         position: reviewItem.line,
@@ -93,10 +99,7 @@ jobs:
                       event: 'COMMENT',
                       body: responseData.choices[0].message.content
                     })
-                  }
-                    
-                
-                  
+                  }                 
                 } else {
                   console.error('Failed to get review:', await response.text());
                 }
