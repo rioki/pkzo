@@ -32,7 +32,6 @@ jobs:
           script: |
             (async () => {
               const { execSync } = require('child_process');
-              const prNumber = context.payload.pull_request.number;
               const filePattern = process.env.FILE_PATTERN;
               const customPrompt = process.env.CUSTOM_PROMPT;
               // Fetch diff based on the file pattern
