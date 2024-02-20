@@ -50,7 +50,7 @@ jobs:
               
                 // GPT-4 review payload
                 const payload = {
-                  model: 'gpt-4-0125-preview',
+                  model: 'gpt-4-turbo-preview',
                   max_tokens: max_tokens,
                   messages: [
                     {
@@ -87,7 +87,7 @@ jobs:
                       };
                     });
                     
-                    comments = comments.conctat(fileComments);
+                    comments = comments.concat(fileComments);
                   }
                   else {
                     const errorResponse = await response.text();
