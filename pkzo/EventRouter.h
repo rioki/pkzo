@@ -21,32 +21,32 @@
 
 #pragma once
 
-#include <SDL2/SDL.h>
+#include <functional>
+#include <memory>
 
 #include <rex/signal.h>
 
 #include "defines.h"
-#include "SdlInit.h"
+#include "InputHandler.h"
 
 namespace pkzo
 {
     class PKZO_EXPORT EventRouter
     {
     public:
-        EventRouter() noexcept = default;
-        ~EventRouter() = default;
-
-        rex::connection on_event(const std::function<void(const SDL_Event&)>& cb);
-        rex::signal<const SDL_Event&>& get_event_signal();
+        EventRouter() noexcept;
+        ~EventRouter();
 
         rex::connection on_quit(const std::function<void()>& cb);
         rex::signal<>& get_quit_signal();
 
+        void add_handler(InputHandler* handler);
+        void remove_handler(InputHandler* handler);
+
         void route_events();
 
     private:
-        SdlInit sdl_init;
-        rex::signal<const SDL_Event&> event_signal;
-        rex::signal<>                 quit_signal;
+        class EventRouterImpl;
+        std::unique_ptr<EventRouterImpl> impl;
     };
 }

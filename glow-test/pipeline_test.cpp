@@ -53,131 +53,126 @@ TEST(Pipeline, render_to_framebuffer)
 
     std::unique_ptr<glow::Pipeline> pipeline;
 
-    window.init([&](){
-        glow::init();
+pipeline = std::make_unique<glow::Pipeline>();
 
-        pipeline = std::make_unique<glow::Pipeline>();
+    pipeline->set_parameters(glow::make_shared_parameters({
+        {"uProjection", glm::ortho(-400.0f, 400.0f, -300.0f, 300.0f, -1.0f, 1.0f)},
+        {"uView",       glm::mat4(1.0f)}
+    }));
 
-        pipeline->set_parameters(glow::make_shared_parameters({
-            {"uProjection", glm::ortho(-400.0f, 400.0f, -300.0f, 300.0f, -1.0f, 1.0f)},
-            {"uView",       glm::mat4(1.0f)}
-        }));
+    auto config = std::vector<glow::BufferConfig>{
+        {"uColor", "oFragColor", glow::ColorMode::RGB,  glow::DataType::UINT8}
+    };
 
-        auto config = std::vector<glow::BufferConfig>{
-            {"uColor", "oFragColor", glow::ColorMode::RGB,  glow::DataType::UINT8}
-        };
+    auto frame_buffer = std::make_shared<glow::FrameBuffer>(window.get_size(), config);
 
-        auto frame_buffer = std::make_shared<glow::FrameBuffer>(window.get_size(), config);
+    // first pass: render angry cat to frame buffer
+    auto pass1_vertex_code = R"(
+        #version 430
 
-        // first pass: render angry cat to frame buffer
-        auto pass1_vertex_code = R"(
-            #version 430
+        in vec3 aPosition;
+        in vec2 aTexCoord;
 
-            in vec3 aPosition;
-            in vec2 aTexCoord;
+        out vec2 vTexCoord;
 
-            out vec2 vTexCoord;
+        uniform mat4 uProjection;
+        uniform mat4 uView;
+        uniform mat4 uModel;
 
-            uniform mat4 uProjection;
-            uniform mat4 uView;
-            uniform mat4 uModel;
+        void main()
+        {
+            gl_Position = uProjection * uView * uModel * vec4(aPosition, 1.0);
+            vTexCoord = aTexCoord;
+        }
+    )";
+    auto pass1_fragment_code = R"(
+        #version 430
 
-            void main()
-            {
-                gl_Position = uProjection * uView * uModel * vec4(aPosition, 1.0);
-                vTexCoord = aTexCoord;
-            }
-        )";
-        auto pass1_fragment_code = R"(
-            #version 430
+        in vec2 vTexCoord;
 
-            in vec2 vTexCoord;
+        out vec4 oFragColor;
 
-            out vec4 oFragColor;
+        uniform sampler2D uTexture;
 
-            uniform sampler2D uTexture;
+        void main()
+        {
+            oFragColor = texture(uTexture, vTexCoord);
+        }
+    )";
 
-            void main()
-            {
-                oFragColor = texture(uTexture, vTexCoord);
-            }
-        )";
+    auto pass1_shader = std::make_shared<glow::Shader>("color");
+    pass1_shader->compile(glow::ShaderType::VERTEX, pass1_vertex_code);
+    pass1_shader->compile(glow::ShaderType::FRAGMENT, pass1_fragment_code);
+    pass1_shader->link();
 
-        auto pass1_shader = std::make_shared<glow::Shader>("color");
-        pass1_shader->compile(glow::ShaderType::VERTEX, pass1_vertex_code);
-        pass1_shader->compile(glow::ShaderType::FRAGMENT, pass1_fragment_code);
-        pass1_shader->link();
+    pipeline->add_pass("color", glow::PassType::GEOMETRY, frame_buffer, pass1_shader);
 
-        pipeline->add_pass("color", glow::PassType::GEOMETRY, frame_buffer, pass1_shader);
+    // second pass: apply blur to frame buffer
+    auto pass2_vertex_code = R"(
+        #version 430
 
-        // second pass: apply blur to frame buffer
-        auto pass2_vertex_code = R"(
-            #version 430
+        in vec3 aPosition;
+        in vec2 aTexCoord;
 
-            in vec3 aPosition;
-            in vec2 aTexCoord;
+        out vec2 vTexCoord;
 
-            out vec2 vTexCoord;
+        void main()
+        {
+            gl_Position = vec4(aPosition, 1.0);
+            vTexCoord = aTexCoord;
+        }
+    )";
 
-            void main()
-            {
-                gl_Position = vec4(aPosition, 1.0);
-                vTexCoord = aTexCoord;
-            }
-        )";
+    auto pass2_fragment_code = R"(
+        #version 430
 
-        auto pass2_fragment_code = R"(
-            #version 430
+        in vec2 vTexCoord;
 
-            in vec2 vTexCoord;
+        out vec4 oFragColor;
 
-            out vec4 oFragColor;
+        uniform sampler2D uColor;
+        uniform ivec2 uFrameBufferSize;
 
-            uniform sampler2D uColor;
-            uniform ivec2 uFrameBufferSize;
+        float radius = 3.0;
 
-            float radius = 3.0;
+        void main()
+        {
+            vec4 sum = vec4(0.0);
 
-            void main()
-            {
-                vec4 sum = vec4(0.0);
+            vec2 tc = vTexCoord;
 
-                vec2 tc = vTexCoord;
+            vec2 blur = vec2(radius)/uFrameBufferSize;
 
-                vec2 blur = vec2(radius)/uFrameBufferSize;
+            sum += texture2D(uColor, vec2(vTexCoord.x - 4.0 * blur.x, vTexCoord.y - 4.0 * blur.y)) * 0.0162162162;
+            sum += texture2D(uColor, vec2(vTexCoord.x - 3.0 * blur.x, vTexCoord.y - 3.0 * blur.y)) * 0.0540540541;
+            sum += texture2D(uColor, vec2(vTexCoord.x - 2.0 * blur.x, vTexCoord.y - 2.0 * blur.y)) * 0.1216216216;
+            sum += texture2D(uColor, vec2(vTexCoord.x - 1.0 * blur.x, vTexCoord.y - 1.0 * blur.y)) * 0.1945945946;
 
-                sum += texture2D(uColor, vec2(vTexCoord.x - 4.0 * blur.x, vTexCoord.y - 4.0 * blur.y)) * 0.0162162162;
-                sum += texture2D(uColor, vec2(vTexCoord.x - 3.0 * blur.x, vTexCoord.y - 3.0 * blur.y)) * 0.0540540541;
-                sum += texture2D(uColor, vec2(vTexCoord.x - 2.0 * blur.x, vTexCoord.y - 2.0 * blur.y)) * 0.1216216216;
-                sum += texture2D(uColor, vec2(vTexCoord.x - 1.0 * blur.x, vTexCoord.y - 1.0 * blur.y)) * 0.1945945946;
+            sum += texture2D(uColor, vec2(vTexCoord.x, vTexCoord.y)) * 0.2270270270;
 
-                sum += texture2D(uColor, vec2(vTexCoord.x, vTexCoord.y)) * 0.2270270270;
+            sum += texture2D(uColor, vec2(vTexCoord.x + 1.0 * blur.x, vTexCoord.y + 1.0 * blur.y)) * 0.1945945946;
+            sum += texture2D(uColor, vec2(vTexCoord.x + 2.0 * blur.x, vTexCoord.y + 2.0 * blur.y)) * 0.1216216216;
+            sum += texture2D(uColor, vec2(vTexCoord.x + 3.0 * blur.x, vTexCoord.y + 3.0 * blur.y)) * 0.0540540541;
+            sum += texture2D(uColor, vec2(vTexCoord.x + 4.0 * blur.x, vTexCoord.y + 4.0 * blur.y)) * 0.0162162162;
 
-                sum += texture2D(uColor, vec2(vTexCoord.x + 1.0 * blur.x, vTexCoord.y + 1.0 * blur.y)) * 0.1945945946;
-                sum += texture2D(uColor, vec2(vTexCoord.x + 2.0 * blur.x, vTexCoord.y + 2.0 * blur.y)) * 0.1216216216;
-                sum += texture2D(uColor, vec2(vTexCoord.x + 3.0 * blur.x, vTexCoord.y + 3.0 * blur.y)) * 0.0540540541;
-                sum += texture2D(uColor, vec2(vTexCoord.x + 4.0 * blur.x, vTexCoord.y + 4.0 * blur.y)) * 0.0162162162;
+            oFragColor = sum;
+        }
+    )";
 
-                oFragColor = sum;
-            }
-        )";
+    auto pass2_shader = std::make_shared<glow::Shader>("blur");
+    pass2_shader->compile(glow::ShaderType::VERTEX, pass2_vertex_code);
+    pass2_shader->compile(glow::ShaderType::FRAGMENT, pass2_fragment_code);
+    pass2_shader->link();
 
-        auto pass2_shader = std::make_shared<glow::Shader>("blur");
-        pass2_shader->compile(glow::ShaderType::VERTEX, pass2_vertex_code);
-        pass2_shader->compile(glow::ShaderType::FRAGMENT, pass2_fragment_code);
-        pass2_shader->link();
-
-        pipeline->add_pass("blur", glow::PassType::FULLSCREEN, pass2_shader, glow::DepthTest::OFF, glow::Blending::OFF, frame_buffer->get_input_parameters());
+    pipeline->add_pass("blur", glow::PassType::FULLSCREEN, pass2_shader, glow::DepthTest::OFF, glow::Blending::OFF, frame_buffer->get_input_parameters());
 
 
-        auto vertex_buffer = create_rectangle(glm::vec2(300, 200));
-        auto geom_parameters = glow::make_shared_parameters({
-            {"uModel", glm::mat4(1.0f)},
-            {"uTexture", load_texture(testing::get_test_input() / "textures/AngryCat.png")}
-        });
-        pipeline->add_geometry(vertex_buffer, geom_parameters);
-
+    auto vertex_buffer = create_rectangle(glm::vec2(300, 200));
+    auto geom_parameters = glow::make_shared_parameters({
+        {"uModel", glm::mat4(1.0f)},
+        {"uTexture", load_texture(testing::get_test_input() / "textures/AngryCat.png")}
     });
+    pipeline->add_geometry(vertex_buffer, geom_parameters);
 
     window.on_draw([&](){
         pipeline->execute();

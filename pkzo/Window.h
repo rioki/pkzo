@@ -26,7 +26,6 @@
 #include <functional>
 
 #include <glm/glm.hpp>
-#include <SDL2/SDL.h>
 
 #include "defines.h"
 #include "Image.h"
@@ -50,30 +49,27 @@ namespace pkzo
         Window(EventRouter& er, const std::string_view& title, glm::ivec2 position, glm::uvec2 size, WindowMode mode = pkzo::WindowMode::WINDOWED);
         ~Window();
 
-        std::string_view get_title() const noexcept;
+        std::string get_title() const noexcept;
+        void set_title(const std::string_view& title) noexcept;
+
         glm::uvec2 get_size() const noexcept;
         glm::uvec2 get_drawable_size() const noexcept;
         glm::ivec2 get_position() const noexcept;
         WindowMode get_window_mode() const noexcept;
 
-        void set_video_mode(glm::uvec2 size, WindowMode mode);
-        void set_position(glm::ivec2 position);
+        void set_video_mode(glm::uvec2 size, WindowMode mode) noexcept;
+        void set_position(glm::ivec2 position) noexcept;
 
-        void init(const std::function<void()>& cb);
-
-        void on_draw(const std::function<void()>& cb);
+        rex::connection on_draw(const std::function<void()>& cb) noexcept;
+        rex::signal<>& get_draw_signal() noexcept;
         void draw();
 
         Image get_screenshot() const;
 
     private:
-        EventRouter&          event_router;
-        rex::connection       event_conn;
-        SDL_Window*           window    = nullptr;
-        SDL_GLContext         glcontext = nullptr;
-        std::function<void()> draw_cb;
-
-        void handle_event(const SDL_Event& event);
+        class WindowImpl;
+        EventRouter& event_router;
+        std::unique_ptr<WindowImpl> impl;
 
         Window(const Window&) = delete;
         Window& operator = (const Window&) = delete;

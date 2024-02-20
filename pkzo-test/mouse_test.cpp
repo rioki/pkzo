@@ -22,6 +22,7 @@
 #include "pch.h"
 
 #include <pkzo/Mouse.h>
+#include <pkzo/EventRouter.h>
 
 TEST(Mouse, handle_buttons)
 {
