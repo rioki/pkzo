@@ -82,7 +82,7 @@ jobs:
                     await github.rest.pulls.createReview({
                       owner: context.repo.owner,
                       repo: context.repo.repo,
-                      pull_number: context.payload.pull_request.number,
+                      pull_number: context.issue.number,
                       review_id: 1,
                       event: 'REQUEST_CHANGES',
                       comments: comments
