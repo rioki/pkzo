@@ -76,14 +76,14 @@ jobs:
                     const reviewTexts =  responseData.choices[0].message.content.split('\n').filter(line => line.trim() !== '');
                     const fileComments = reviewTexts.map(reviewText => {
                       // Assuming the reviewText format is "filename:line: issue description"
-                      const parts = reviewText.split(':');
-                      const file = parts[0].trim();
-                      const line = parseInt(parts[1], 10) || 0; // Default to 0 if line number is not clear
-                      const body = parts.slice(2).join(':').trim();
+                      //const parts = reviewText.split(':');
+                      //const file = parts[0].trim();
+                      //const line = parseInt(parts[1], 10) || 0;
+                      //const body = parts.slice(2).join(':').trim();
                       return {
                         path: file,
-                        position: line,
-                        body: body
+                        position: 1,
+                        body: reviewText
                       };
                     });
                     
