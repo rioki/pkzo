@@ -62,17 +62,40 @@ jobs:
                 });
                 if (response.ok) {
                   const responseData = await response.json();
-                  const review = responseData.choices[0].message.content;
+                  try {
+                    const review = JSON.parse(responseData.choices[0].message.content);
+                    let comments = [];
+                    for (let reviewItem of review) {
+                      comments.push({
+                        path: reviewItem.file,
+                        position: reviewItem.line,
+                        body: reviewItem.comment
+                      });
+                    }
+                    // Create GitHub review
+                    await github.rest.pulls.createReview({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      pull_number: context.payload.pull_request.number,
+                      review_id: 1,
+                      event: 'REQUEST_CHANGES',
+                      comments: comments
+                    });
+                  } 
+                  catch (error) {
+                    // Create GitHub comment
+                    await github.rest.pulls.createReview({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      pull_number: context.issue.number,
+                      review_id: 1,
+                      event: 'COMMENT',
+                      body: responseData.choices[0].message.content
+                    })
+                  }
+                    
                 
-                  // Create GitHub comment
-                  await github.rest.pulls.createReview({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    pull_number: context.issue.number,
-                    review_id: 1,
-                    event: 'COMMENT',
-                    body: review
-                  })
+                  
                 } else {
                   console.error('Failed to get review:', await response.text());
                 }
