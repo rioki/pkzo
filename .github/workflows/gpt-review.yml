@@ -57,24 +57,35 @@ jobs:
                 };
               
                 // Send to GPT-4 and get review
-                const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                  method: 'POST',
-                  headers: {
-                    'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify(payload)
-                });
-              
-                if (response.ok) {
-                  const responseData = await response.json();
-                  const reviewText = responseData.choices[0].message.content;
-                  
-                  comments.push({
-                      path: file,
-                      position: 1,
-                      body: reviewText
+                try {
+                  const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                      'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
                   });
+
+                  if (response.ok) {
+                    const responseData = await response.json();
+                    const reviewText = responseData.choices[0].message.content;
+
+                    comments.push({
+                        path: file,
+                        position: 1,
+                        body: reviewText
+                    });
+                  } 
+                  else {
+                    // Log error response
+                    const errorResponse = await response.text();
+                    console.log(`Error from OpenAI API: HTTP status ${response.status}: ${errorResponse}`);
+                  }
+                } 
+                catch (error) {
+                  // Catch and log any error that occurs during the fetch operation
+                  console.log(`Error while calling OpenAI API: ${error.message}`);
                 }
               }
 
