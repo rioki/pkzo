@@ -73,7 +73,7 @@ jobs:
                 
                   if (response.ok) {
                     const responseData = await response.json();
-                    const reviewTexts = responseData.choices[0].text.split('\n').filter(line => line.trim() !== '');
+                    const reviewTexts =  responseData.choices[0].message.content.split('\n').filter(line => line.trim() !== '');
                     const fileComments = reviewTexts.map(reviewText => {
                       // Assuming the reviewText format is "filename:line: issue description"
                       const parts = reviewText.split(':');
