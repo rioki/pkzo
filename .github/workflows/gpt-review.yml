@@ -83,7 +83,7 @@ jobs:
                       };
                     });
                     
-                    comments.conctat(fileComments);
+                    comments = comments.conctat(fileComments);
                   }
                   else {
                     const errorResponse = await response.text();
