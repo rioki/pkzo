@@ -55,7 +55,7 @@ jobs:
                   messages: [
                     {
                       role: 'user',
-                      content: `prompt`
+                      content: prompt
                     }
                   ]
                 };
