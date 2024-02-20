@@ -38,7 +38,7 @@ jobs:
               const filePattern = process.env.FILE_PATTERN;
               
               // Get list of modified files in the PR
-              const modifiedFiles = execSync(`git diff --name-only ${{ github.event.pull_request.base.sha }} HEAD -- ${filePattern}`).toString().trim().split('\n');
+              const modifiedFiles = execSync(`git diff --name-only ${{ github.event.pull_request.base.sha }} HEAD`).toString().trim().split('\n');
 
               const comments = [];
               
