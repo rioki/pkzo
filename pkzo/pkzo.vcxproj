@@ -157,6 +157,7 @@
     <ClInclude Include="defines.h" />
     <ClInclude Include="EventRouter.h" />
     <ClInclude Include="pkzo.h" />
+    <ClInclude Include="stdex.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>

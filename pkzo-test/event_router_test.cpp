@@ -22,7 +22,7 @@
 #include <pkzo/pkzo.h>
 #include <gtest/gtest.h>
 
-TEST(EventRouterTest, quit_event_trigger)
+TEST(EventRouter, quit_event_trigger)
 {
     auto event_router   = pkzo::EventRouter{};
     auto quit_triggered = false;
@@ -39,7 +39,7 @@ TEST(EventRouterTest, quit_event_trigger)
     EXPECT_TRUE(quit_triggered);
 }
 
-TEST(EventRouterTest, custom_event_trigger)
+TEST(EventRouter, custom_event_trigger)
 {
     auto event_router    = pkzo::EventRouter{};
     auto event_triggered = false;
@@ -61,7 +61,7 @@ TEST(EventRouterTest, custom_event_trigger)
     EXPECT_EQ(received_event.user.code, 123);
 }
 
-TEST(EventRouterTest, quit_event_disconected)
+TEST(EventRouter, quit_event_disconected)
 {
     auto event_router = pkzo::EventRouter{};
     auto quit_triggered = false;
@@ -80,7 +80,7 @@ TEST(EventRouterTest, quit_event_disconected)
     EXPECT_FALSE(quit_triggered);
 }
 
-TEST(EventRouterTest, custom_event_disconnected)
+TEST(EventRouter, custom_event_disconnected)
 {
     auto event_router = pkzo::EventRouter{};
     auto event_triggered = false;

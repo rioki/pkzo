@@ -22,10 +22,58 @@
 #include <pkzo/pkzo.h>
 #include <gtest/gtest.h>
 
-TEST(Window, construct)
+TEST(Window, window_creation)
 {
     auto event_router = pkzo::EventRouter{};
-    auto window = pkzo::Window{event_router, {800, 600}, pkzo::WindowStyle::STATIC, "pkzo test - window construct"};
+    auto size = glm::uvec2{800, 600};
 
-    //EXPECT_EQ(glm::uvec2(800, 600), window.get_size());
+    auto window = pkzo::Window{event_router, size, pkzo::WindowMode::STATIC, "Test Window"};
+}
+
+TEST(Window, window_get_set_size)
+{
+    auto event_router = pkzo::EventRouter{};
+    auto size = glm::uvec2{800, 600};
+    auto window = pkzo::Window{event_router, size, pkzo::WindowMode::STATIC, "Test Window"};
+
+    auto actual_size = window.get_size();
+    EXPECT_EQ(size.x, actual_size.x);
+    EXPECT_EQ(size.y, actual_size.y);
+
+    auto new_size = glm::uvec2{1024, 768};
+    window.set_size(new_size);
+
+    actual_size = window.get_size();
+    EXPECT_EQ(new_size.x, actual_size.x);
+    EXPECT_EQ(new_size.y, actual_size.y);
+}
+
+TEST(Window, window_mode_switch)
+{
+    auto event_router = pkzo::EventRouter{};
+    auto size = glm::uvec2{800, 600};
+    auto window = pkzo::Window{event_router, size, pkzo::WindowMode::STATIC, "Test Window"};
+
+    EXPECT_EQ(window.get_mode(), pkzo::WindowMode::STATIC);
+
+    window.set_mode(pkzo::WindowMode::FULLSCREEN);
+    EXPECT_EQ(window.get_mode(), pkzo::WindowMode::FULLSCREEN);
+
+    window.set_mode(pkzo::WindowMode::STATIC);
+    EXPECT_EQ(window.get_mode(), pkzo::WindowMode::STATIC);
+}
+
+TEST(Window, window_get_set_title)
+{
+    auto event_router = pkzo::EventRouter{};
+    auto size = glm::uvec2{800, 600};
+    auto window = pkzo::Window{event_router, size, pkzo::WindowMode::STATIC, "Test Window"};
+
+    EXPECT_EQ(window.get_title(), "Test Window");
+
+
+    auto new_title = std::string{"New Title"};
+    window.set_title(new_title);
+
+    EXPECT_EQ(window.get_title(), new_title);
 }
