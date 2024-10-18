@@ -1,1 +1,0 @@
-{"children":[{"diameter":0.5,"material":"..\\input\\materials\\TestOrange.json","transform":[[1.0,0.0,0.0,0.0],[0.0,1.0,0.0,0.0],[0.0,0.0,1.0,0.0],[0.0,-1.0,0.0,1.0]],"type":"SphereGeometry"}],"transform":[[1.0,0.0,0.0,0.0],[0.0,1.0,0.0,0.0],[0.0,0.0,1.0,0.0],[0.0,0.0,0.0,1.0]],"type":"Scene"}

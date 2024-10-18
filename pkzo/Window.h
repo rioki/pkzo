@@ -21,56 +21,27 @@
 
 #pragma once
 
-#include <string_view>
-#include <iostream>
-#include <functional>
+#include <string>
 
 #include <glm/glm.hpp>
 
 #include "defines.h"
-#include "Image.h"
 #include "EventRouter.h"
 
 namespace pkzo
 {
-    enum class WindowMode
+    enum class WindowStyle
     {
-        WINDOWED,
-        FULLSCREEN,
-        FULLSCREEN_DESKTOP
+        STATIC
     };
 
-    PKZO_EXPORT std::ostream& operator << (std::ostream& os, WindowMode mode );
-
-    class PKZO_EXPORT Window
+    class PKZO_API Window
     {
     public:
-        Window(EventRouter& er, const std::string_view& title, glm::uvec2 size, WindowMode mode = pkzo::WindowMode::WINDOWED);
-        Window(EventRouter& er, const std::string_view& title, glm::ivec2 position, glm::uvec2 size, WindowMode mode = pkzo::WindowMode::WINDOWED);
+        Window(EventRouter& er, glm::uvec2 size, WindowStyle style, const std::string& caption) noexcept;
         ~Window();
 
-        std::string get_title() const noexcept;
-        void set_title(const std::string_view& title) noexcept;
-
-        glm::uvec2 get_size() const noexcept;
-        glm::uvec2 get_drawable_size() const noexcept;
-        glm::ivec2 get_position() const noexcept;
-        WindowMode get_window_mode() const noexcept;
-
-        void set_video_mode(glm::uvec2 size, WindowMode mode) noexcept;
-        void set_position(glm::ivec2 position) noexcept;
-
-        rex::connection on_draw(const std::function<void()>& cb) noexcept;
-        rex::signal<>& get_draw_signal() noexcept;
-        void draw();
-
-        Image get_screenshot() const;
-
     private:
-        class WindowImpl;
-        EventRouter& event_router;
-        std::unique_ptr<WindowImpl> impl;
-
         Window(const Window&) = delete;
         Window& operator = (const Window&) = delete;
     };

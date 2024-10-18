@@ -1,5 +1,5 @@
 // pkzo
-// Copyright 2023 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2011-2024 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -19,20 +19,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "pch.h"
+#include <gtest/gtest.h>
 
 int main(int argc, char* argv[])
 {
-    rex::set_trace_handler([](const std::string_view& message)
-    {
-        std::cout << message << std::endl;
-    });
-    rex::set_fail_handler([]()
-    {
-        FAIL() << "ICE_CHECK failed or ICE_FAIL was called.";
-    });
-
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
-

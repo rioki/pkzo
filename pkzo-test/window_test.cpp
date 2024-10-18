@@ -1,5 +1,5 @@
 // pkzo
-// Copyright 2023 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2011-2024 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -19,81 +19,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "pch.h"
+#include <pkzo/pkzo.h>
+#include <gtest/gtest.h>
 
-#include <SDL2/SDL_opengl.h>
-#include <pkzo/Window.h>
-
-glm::uvec2 get_desktop_size()
-{
-    SDL_DisplayMode mode;
-    if (SDL_GetDesktopDisplayMode(0, &mode) != 0)
-    {
-        throw std::runtime_error(SDL_GetError());
-    }
-    return {mode.w, mode.h};
-}
-
-TEST(Window, GRAPH_create)
+TEST(Window, construct)
 {
     auto event_router = pkzo::EventRouter{};
-    auto window = pkzo::Window{event_router, "Test", {640, 480}, pkzo::WindowMode::WINDOWED};
+    auto window = pkzo::Window{event_router, {800, 600}, pkzo::WindowStyle::STATIC, "pkzo test - window construct"};
 
-    EXPECT_EQ(window.get_title(), "Test");
-    EXPECT_EQ(window.get_size(), glm::uvec2(640, 480));
-    EXPECT_EQ(window.get_window_mode(), pkzo::WindowMode::WINDOWED);
-}
-
-TEST(Window, GRAPH_create_simple)
-{
-    auto event_router = pkzo::EventRouter{};
-    auto window = pkzo::Window{event_router, "Test", {640, 480}};
-
-    EXPECT_EQ(window.get_title(), "Test");
-    EXPECT_EQ(window.get_size(), glm::uvec2(640, 480));
-    EXPECT_EQ(window.get_window_mode(), pkzo::WindowMode::WINDOWED);
-}
-
-TEST(Window, GRAPH_create_fullscreen)
-{
-    auto event_router = pkzo::EventRouter{};
-    auto window = pkzo::Window{event_router, "Test", {640, 480}, pkzo::WindowMode::FULLSCREEN_DESKTOP};
-
-    EXPECT_EQ(window.get_title(), "Test");
-    EXPECT_EQ(window.get_size(), get_desktop_size());
-    EXPECT_EQ(window.get_window_mode(), pkzo::WindowMode::FULLSCREEN_DESKTOP);
-}
-
-TEST(Window, GRAPH_resize)
-{
-    auto event_router = pkzo::EventRouter{};
-    auto window = pkzo::Window{event_router, "Test", {640, 480}, pkzo::WindowMode::WINDOWED};
-
-    window.set_video_mode({800, 600}, pkzo::WindowMode::FULLSCREEN_DESKTOP);
-
-    EXPECT_EQ(window.get_size(), get_desktop_size());
-    EXPECT_EQ(window.get_window_mode(), pkzo::WindowMode::FULLSCREEN_DESKTOP);
-}
-
-TEST(Window, GRAPH_init_position)
-{
-    auto event_router = pkzo::EventRouter{};
-    auto window = pkzo::Window{event_router, "Test", {100, 101}, {640, 480}, pkzo::WindowMode::WINDOWED};
-
-    EXPECT_EQ(window.get_position(), glm::ivec2(100, 101));
-}
-
-TEST(Window, GRAPH_use_gl_context)
-{
-    auto event_router = pkzo::EventRouter{};
-    auto window = pkzo::Window{event_router, "Test", {640, 480}, pkzo::WindowMode::WINDOWED};
-
-    window.on_draw([](){
-        glClearColor(1.0f, 0.5f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-    });
-    window.draw();
-    window.draw();
-
-    EXPECT_IMAGE_REF_EQ(window.get_screenshot());
+    //EXPECT_EQ(glm::uvec2(800, 600), window.get_size());
 }

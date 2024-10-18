@@ -21,32 +21,18 @@
 
 #pragma once
 
-#include <functional>
-#include <memory>
-
-#include <rex/signal.h>
-
 #include "defines.h"
-#include "InputHandler.h"
 
 namespace pkzo
 {
-    class PKZO_EXPORT EventRouter
+    class PKZO_API EventRouter
     {
     public:
         EventRouter() noexcept;
         ~EventRouter();
 
-        rex::connection on_quit(const std::function<void()>& cb);
-        rex::signal<>& get_quit_signal();
-
-        void add_handler(InputHandler* handler);
-        void remove_handler(InputHandler* handler);
-
-        void route_events();
-
     private:
-        class EventRouterImpl;
-        std::unique_ptr<EventRouterImpl> impl;
+        EventRouter(const EventRouter&) = delete;
+        EventRouter& operator = (const EventRouter&) = delete;
     };
 }
