@@ -21,6 +21,11 @@
 
 #pragma once
 
+namespace pkzo
+{
+    constexpr auto VERSION = "0.1.0";
+}
+
 #ifdef _WIN32
     #ifdef BUILD_PKZO
         #define PKZO_API __declspec(dllexport)
@@ -29,4 +34,9 @@
     #endif
 #else
     #define PKZO_API
+#endif
+
+#ifdef _MSC_VER
+    //disable silly warnings
+    #pragma warning(disable: 4251) // 'identifier' : class 'type' needs to have dll-interface to be used by clients of class 'type2'
 #endif

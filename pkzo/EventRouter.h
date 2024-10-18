@@ -21,6 +21,11 @@
 
 #pragma once
 
+#include <functional>
+
+#include <SDL2/SDL.h>
+#include <rsig/rsig.h>
+
 #include "defines.h"
 
 namespace pkzo
@@ -31,7 +36,18 @@ namespace pkzo
         EventRouter() noexcept;
         ~EventRouter();
 
+        rsig::connection on_quit(const std::function<void ()>& cb);
+        void disconnect_quit(const rsig::connection& con);
+
+        rsig::connection on_event(const std::function<void (const SDL_Event&)>& cb);
+        void disconnect_event(const rsig::connection& con);
+
+        void tick();
+
     private:
+        rsig::signal<> quit_signal;
+        rsig::signal<const SDL_Event&> event_signal;
+
         EventRouter(const EventRouter&) = delete;
         EventRouter& operator = (const EventRouter&) = delete;
     };

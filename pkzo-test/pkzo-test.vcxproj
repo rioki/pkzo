@@ -71,20 +71,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)bin\$(PlatformTarget)\$(Configuration)</OutDir>
-    <IntDir>$(SolutionDir).int\$(ProjectName)\$(PlatformTarget)\$(Configuration)</IntDir>
+    <OutDir>$(SolutionDir)bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir).int\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)bin\$(PlatformTarget)\$(Configuration)</OutDir>
-    <IntDir>$(SolutionDir).int\$(ProjectName)\$(PlatformTarget)\$(Configuration)</IntDir>
+    <OutDir>$(SolutionDir)bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir).int\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)bin\$(PlatformTarget)\$(Configuration)</OutDir>
-    <IntDir>$(SolutionDir).int\$(ProjectName)\$(PlatformTarget)\$(Configuration)</IntDir>
+    <OutDir>$(SolutionDir)bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir).int\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)bin\$(PlatformTarget)\$(Configuration)</OutDir>
-    <IntDir>$(SolutionDir).int\$(ProjectName)\$(PlatformTarget)\$(Configuration)</IntDir>
+    <OutDir>$(SolutionDir)bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir).int\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg">
     <VcpkgEnableManifest>true</VcpkgEnableManifest>
@@ -166,6 +166,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="event_router_test.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="window_test.cpp" />
   </ItemGroup>

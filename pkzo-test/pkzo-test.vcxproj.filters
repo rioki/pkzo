@@ -21,5 +21,8 @@
     <ClCompile Include="window_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="event_router_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
