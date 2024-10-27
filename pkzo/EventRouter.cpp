@@ -19,130 +19,135 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "pch.h"
 #include "EventRouter.h"
-
-#include "SdlInit.h"
 
 namespace pkzo
 {
-    class EventRouter::EventRouterImpl
+    EventRouter::EventRouter()
     {
-    public:
-        EventRouterImpl() noexcept = default;
-        ~EventRouterImpl() = default;
-
-        rex::signal<>& get_quit_signal()
+        auto r = SDL_Init(SDL_INIT_VIDEO);
+        if (r < 0)
         {
-            return quit_signal;
+            throw std::runtime_error(SDL_GetError());
         }
+    }
 
-        void add_handler(InputHandler* handler)
-        {
-            assert(handler != nullptr);
-            handlers.push_back(handler);
-        }
+    EventRouter::~EventRouter()
+    {
+        SDL_Quit();
+    }
 
-        void remove_handler(InputHandler* handler)
-        {
-            assert(handler != nullptr);
-            auto it = std::find(handlers.begin(), handlers.end(), handler);
-            assert(it != handlers.end());
-            handlers.erase(it);
-        }
+    rsig::connection EventRouter::on_quit(const std::function<void ()>& cb)
+    {
+        return quit_signal.connect(cb);
+    }
 
-        // DESIGN: The types KeyMod, Key and MouseButton are specifically designed to match the SDL2 types.
-        void route_events()
+    void EventRouter::disconnect_quit(const rsig::connection& con)
+    {
+        quit_signal.disconnect(con);
+    }
+
+    rsig::connection EventRouter::on_event(const std::function<void (const SDL_Event&)>& cb)
+    {
+        return event_signal.connect(cb);
+    }
+
+    void EventRouter::disconnect_event(const rsig::connection& con)
+    {
+        event_signal.disconnect(con);
+    }
+
+    void EventRouter::inject_quit()
+    {
+        auto sdl_event = SDL_Event{};
+        sdl_event.type = SDL_QUIT;
+        sdl_event.quit.timestamp = SDL_GetTicks();
+        SDL_PushEvent(&sdl_event);
+    }
+
+    void EventRouter::inject_key_down(KeyMod mod, Key key)
+    {
+        auto sdl_event = SDL_Event{};
+        sdl_event.type = SDL_KEYDOWN;
+        sdl_event.key.timestamp = SDL_GetTicks();
+        sdl_event.key.state = SDL_PRESSED;
+        sdl_event.key.repeat = 0;
+        sdl_event.key.keysym.scancode = static_cast<SDL_Scancode>(key);
+        sdl_event.key.keysym.sym = SDL_GetKeyFromScancode(static_cast<SDL_Scancode>(key));
+        sdl_event.key.keysym.mod = static_cast<Uint16>(mod);
+        SDL_PushEvent(&sdl_event);
+    }
+
+    void EventRouter::inject_key_up(KeyMod mod, Key key)
+    {
+        auto sdl_event = SDL_Event{};
+        sdl_event.type = SDL_KEYUP;
+        sdl_event.key.timestamp = SDL_GetTicks();
+        sdl_event.key.state = SDL_RELEASED;
+        sdl_event.key.repeat = 0;
+        sdl_event.key.keysym.scancode = static_cast<SDL_Scancode>(key);
+        sdl_event.key.keysym.sym = SDL_GetKeyFromScancode(static_cast<SDL_Scancode>(key));
+        sdl_event.key.keysym.mod = static_cast<Uint16>(mod);
+        SDL_PushEvent(&sdl_event);
+    }
+
+    void EventRouter::inject_button_press(const glm::uvec2& position, MouseButton button)
+    {
+        auto sdl_event = SDL_Event{};
+        sdl_event.type = SDL_MOUSEBUTTONDOWN;
+        sdl_event.button.button = static_cast<Uint8>(button);
+        sdl_event.button.state = SDL_PRESSED;
+        sdl_event.button.x = position.x;
+        sdl_event.button.y = position.y;
+        sdl_event.button.timestamp = SDL_GetTicks();
+        SDL_PushEvent(&sdl_event);
+    }
+
+    void EventRouter::inject_button_release(const glm::uvec2& position, MouseButton button)
+    {
+        auto sdl_event = SDL_Event{};
+        sdl_event.type = SDL_MOUSEBUTTONUP;
+        sdl_event.button.button = static_cast<Uint8>(button);
+        sdl_event.button.state = SDL_RELEASED;
+        sdl_event.button.x = position.x;
+        sdl_event.button.y = position.y;
+        sdl_event.button.timestamp = SDL_GetTicks();
+        SDL_PushEvent(&sdl_event);
+    }
+
+    void EventRouter::inject_mouse_move(const glm::uvec2& position, const glm::ivec2& delta)
+    {
+        auto sdl_event = SDL_Event{};
+        sdl_event.type = SDL_MOUSEMOTION;
+        sdl_event.motion.x = position.x;
+        sdl_event.motion.y = position.y;
+        sdl_event.motion.xrel = delta.x;
+        sdl_event.motion.yrel = delta.y;
+        sdl_event.motion.timestamp = SDL_GetTicks();
+        SDL_PushEvent(&sdl_event);
+    }
+
+    void EventRouter::inject_mouse_wheel(const glm::ivec2& scroll)
+    {
+        auto sdl_event = SDL_Event{};
+        sdl_event.type = SDL_MOUSEWHEEL;
+        sdl_event.wheel.x = scroll.x;
+        sdl_event.wheel.y = scroll.y;
+        sdl_event.wheel.timestamp = SDL_GetTicks();
+        SDL_PushEvent(&sdl_event);
+    }
+
+    void EventRouter::tick()
+    {
+        SDL_Event e;
+        while (SDL_PollEvent(&e))
         {
-            SDL_Event event;
-            while (SDL_PollEvent(&event))
+            if (e.type == SDL_QUIT)
             {
-                switch (event.type)
-                {
-                case SDL_QUIT:
-                    quit_signal.emit();
-                    break;
-                case SDL_KEYDOWN:
-                    for (auto handler : handlers)
-                    {
-                        handler->handle_keboard_down(static_cast<KeyMod>(event.key.keysym.mod), static_cast<Key>(event.key.keysym.scancode));
-                    }
-                    break;
-                case SDL_KEYUP:
-                    for (auto handler : handlers)
-                    {
-                        handler->handle_keboard_up(static_cast<KeyMod>(event.key.keysym.mod), static_cast<Key>(event.key.keysym.scancode));
-                    }
-                    break;
-                case SDL_TEXTINPUT:
-                    for (auto handler : handlers)
-                    {
-                        handler->handle_keboard_text(event.text.text);
-                    }
-                    break;
-                case SDL_MOUSEBUTTONDOWN:
-                    for (auto handler : handlers)
-                    {
-                        handler->handle_mouse_button_down(static_cast<MouseButton>(event.button.button), { event.button.x, event.button.y });
-                    }
-                    break;
-                case SDL_MOUSEBUTTONUP:
-                    for (auto handler : handlers)
-                    {
-                        handler->handle_mouse_button_up(static_cast<MouseButton>(event.button.button), { event.button.x, event.button.y });
-                    }
-                    break;
-                case SDL_MOUSEMOTION:
-                    for (auto handler : handlers)
-                    {
-                        handler->handle_mouse_move({ event.motion.x, event.motion.y }, { event.motion.xrel, event.motion.yrel });
-                    }
-                    break;
-                case SDL_MOUSEWHEEL:
-                    for (auto handler : handlers)
-                    {
-                        handler->handle_mouse_wheel({ event.wheel.x, event.wheel.y });
-                    }
-                    break;
-                default:
-                    break;
-                }
+                quit_signal.emit();
             }
+
+            event_signal.emit(e);
         }
-
-    private:
-        SdlInit                    sdl_init;
-        rex::signal<>              quit_signal;
-        std::vector<InputHandler*> handlers;
-    };
-
-    EventRouter::EventRouter() noexcept
-    : impl(std::make_unique<EventRouterImpl>()) {}
-
-    EventRouter::~EventRouter() = default;
-
-    rex::connection EventRouter::on_quit(const std::function<void()>& cb)
-    {
-        return impl->get_quit_signal().connect(cb);
-    }
-
-    rex::signal<>& EventRouter::get_quit_signal()
-    {
-        return impl->get_quit_signal();
-    }
-
-    void EventRouter::add_handler(InputHandler* handler)
-    {
-        impl->add_handler(handler);
-    }
-
-    void EventRouter::remove_handler(InputHandler* handler)
-    {
-        impl->remove_handler(handler);
-    }
-
-    void EventRouter::route_events()
-    {
-        impl->route_events();
     }
 }

@@ -21,57 +21,73 @@
 
 #pragma once
 
-#include <string_view>
-#include <iostream>
 #include <functional>
+#include <type_traits>
+#include <memory>
 
 #include <glm/glm.hpp>
+#include <rsig/rsig.h>
+#include <SDL2/SDL.h>
 
 #include "defines.h"
-#include "Image.h"
 #include "EventRouter.h"
 
 namespace pkzo
 {
-    enum class WindowMode
+    enum class WindowMode : Uint32
     {
-        WINDOWED,
-        FULLSCREEN,
-        FULLSCREEN_DESKTOP
+        STATIC     = 0,
+        FULLSCREEN = SDL_WINDOW_FULLSCREEN
     };
 
-    PKZO_EXPORT std::ostream& operator << (std::ostream& os, WindowMode mode );
+    enum class MessageBoxFlags : Uint32
+    {
+        ERROR       = SDL_MESSAGEBOX_ERROR,
+        WARNING     = SDL_MESSAGEBOX_WARNING,
+        INFORMATION = SDL_MESSAGEBOX_INFORMATION
+    };
 
     class PKZO_EXPORT Window
     {
     public:
-        Window(EventRouter& er, const std::string_view& title, glm::uvec2 size, WindowMode mode = pkzo::WindowMode::WINDOWED);
-        Window(EventRouter& er, const std::string_view& title, glm::ivec2 position, glm::uvec2 size, WindowMode mode = pkzo::WindowMode::WINDOWED);
+        Window(EventRouter& event_router, const glm::uvec2& size, WindowMode mode, const std::string& title);
         ~Window();
 
-        std::string get_title() const noexcept;
-        void set_title(const std::string_view& title) noexcept;
+        glm::uvec2 get_size() const;
+        glm::uvec2 get_drawable_size() const;
+        void set_size(const glm::uvec2& value);
 
-        glm::uvec2 get_size() const noexcept;
-        glm::uvec2 get_drawable_size() const noexcept;
-        glm::ivec2 get_position() const noexcept;
-        WindowMode get_window_mode() const noexcept;
+        WindowMode get_mode() const;
+        void set_mode(WindowMode mode);
 
-        void set_video_mode(glm::uvec2 size, WindowMode mode) noexcept;
-        void set_position(glm::ivec2 position) noexcept;
+        std::string get_title() const;
+        void set_title(const std::string& value);
 
-        rex::connection on_draw(const std::function<void()>& cb) noexcept;
-        rex::signal<>& get_draw_signal() noexcept;
+        rsig::connection on_draw(const std::function<void ()>& cb);
+        void disconnect_draw(const rsig::connection& con);
+
+        rsig::connection on_resize(const std::function<void ()>& cb);
+        void disconnect_resize(const rsig::connection& con);
+
         void draw();
 
-        Image get_screenshot() const;
-
     private:
-        class WindowImpl;
-        EventRouter& event_router;
-        std::unique_ptr<WindowImpl> impl;
+        EventRouter&     event_router;
+        rsig::connection event_con;
+        SDL_Window*      window    = nullptr;
+
+        rsig::signal<> draw_signal;
+        rsig::signal<>  resize_signal;
+
+        void handle_events(const SDL_Event& ev);
 
         Window(const Window&) = delete;
         Window& operator = (const Window&) = delete;
+
+        friend PKZO_EXPORT void show_message_box(Window& window, MessageBoxFlags flags, const std::string& title, const std::string& text);
     };
+
+    PKZO_EXPORT void show_message_box(MessageBoxFlags flags, const std::string& title, const std::string& text);
+    PKZO_EXPORT void show_message_box(Window& window, MessageBoxFlags flags, const std::string& title, const std::string& text);
 }
+

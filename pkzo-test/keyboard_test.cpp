@@ -1,5 +1,5 @@
 // pkzo
-// Copyright 2023 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2011-2024 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -19,60 +19,48 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "pch.h"
+#include <pkzo/pkzo.h>
+#include <gtest/gtest.h>
 
-#include <pkzo/Keyboard.h>
-#include <pkzo/EventRouter.h>
-
-TEST(Keyboard, handle_keys)
+TEST(Keyboard, key_press_event_triggers_signal)
 {
     auto event_router = pkzo::EventRouter{};
-    auto kb = pkzo::Keyboard{event_router};
+    auto keyboard     = pkzo::Keyboard{event_router};
 
-    auto count   = 0u;
-    auto mod     = pkzo::KeyMod::NONE;
-    auto key     = pkzo::Key::UNKNOWN;
-    auto pressed = false;
+    auto expected_mod = pkzo::KeyMod::CTRL;
+    auto expected_key = pkzo::Key::A;
+    auto callback_called = false;
 
-    kb.on_key_press([&] (auto _mod, auto _key) {
-        count++;
-        mod = _mod;
-        key = _key;
-        pressed = true;
-    });
-    kb.on_key_release([&] (auto _mod, auto _key) {
-        count++;
-        mod = _mod;
-        key = _key;
-        pressed = false;
+    keyboard.on_key_press([&](pkzo::KeyMod mod, pkzo::Key key) {
+        callback_called = true;
+        EXPECT_EQ(mod, expected_mod);
+        EXPECT_EQ(key, expected_key);
     });
 
-    auto event1 = SDL_Event{SDL_KEYDOWN};
-    event1.key.keysym.mod      = KMOD_LCTRL;
-    event1.key.keysym.scancode = SDL_SCANCODE_C;
-    event1.key.keysym.sym      = SDL_GetKeyFromScancode(event1.key.keysym.scancode);
-    event1.key.timestamp       = SDL_GetTicks();
-    SDL_PushEvent(&event1);
+    event_router.inject_key_down(expected_mod, expected_key);
+    event_router.tick();
 
-    event_router.route_events();
-
-    EXPECT_EQ(1,                   count);
-    EXPECT_EQ(pkzo::KeyMod::LCTRL, mod);
-    EXPECT_EQ(pkzo::Key::C,        key);
-    EXPECT_TRUE(pressed);
-
-    auto event2 = SDL_Event{SDL_KEYUP};
-    event2.key.keysym.mod      = KMOD_LALT;
-    event2.key.keysym.scancode = SDL_SCANCODE_V;
-    event2.key.keysym.sym      = SDL_GetKeyFromScancode(event2.key.keysym.scancode);
-    event2.key.timestamp       = SDL_GetTicks();
-
-    SDL_PushEvent(&event2);
-
-    event_router.route_events();
-
-    EXPECT_EQ(2,                  count);
-    EXPECT_EQ(pkzo::KeyMod::LALT, mod);
-    EXPECT_EQ(pkzo::Key::V,       key);
-    EXPECT_FALSE(pressed);
+    EXPECT_TRUE(callback_called);
 }
+
+TEST(Keyboard, key_release_event_triggers_signal)
+{
+    auto event_router = pkzo::EventRouter{};
+    auto keyboard     = pkzo::Keyboard{event_router};
+
+    auto expected_mod = pkzo::KeyMod::ALT;
+    auto expected_key = pkzo::Key::B;
+    auto callback_called = false;
+
+    keyboard.on_key_release([&](pkzo::KeyMod mod, pkzo::Key key) {
+        callback_called = true;
+        EXPECT_EQ(mod, expected_mod);
+        EXPECT_EQ(key, expected_key);
+    });
+
+    event_router.inject_key_up(expected_mod, expected_key);
+    event_router.tick();
+
+    EXPECT_TRUE(callback_called);
+}
+

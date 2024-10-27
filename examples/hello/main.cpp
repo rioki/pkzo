@@ -19,10 +19,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <gtest/gtest.h>
+#include <pkzo/pkzo.h>
 
-int main(int argc, char* argv[])
+int main(int argc, const char* argv[])
 {
-    testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+    auto running = true;
+
+    auto event_router = pkzo::EventRouter{};
+
+    event_router.on_quit([&] () {
+        running = false;
+    });
+
+    auto window = pkzo::Window{event_router, {800, 600}, pkzo::WindowMode::STATIC, "Hello pkzo!"};
+    window.on_draw([&] () {
+        // Put rendering code here.
+    });
+
+    auto keyboard = pkzo::Keyboard{event_router};
+    keyboard.on_key_press([&] (auto mod, auto key) {
+        if (key == pkzo::Key::ESCAPE)
+        {
+            running = false;
+        }
+    });
+
+    while (running)
+    {
+        event_router.tick();
+        window.draw();
+    }
 }

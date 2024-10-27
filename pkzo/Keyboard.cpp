@@ -19,75 +19,83 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "pch.h"
 #include "Keyboard.h"
 
+#include <array>
+
+#include "stdex.h"
 #include "EventRouter.h"
 
 namespace pkzo
 {
-    Keyboard::Keyboard(EventRouter& er)
-    : event_router(er)
+    Keyboard::Keyboard(EventRouter& event_router)
+    : event_router(event_router)
     {
-        event_router.add_handler(this);
+        event_con = event_router.on_event(rsig::mem_fun(this, &Keyboard::handle_events));
     }
 
     Keyboard::~Keyboard()
     {
-        event_router.remove_handler(this);
+        event_router.disconnect_event(event_con);
     }
 
-    bool Keyboard::is_pressed(Key key) const noexcept
+    bool Keyboard::is_pressed(Key key) const
     {
-        int numkeys = 0;
+        auto numkeys = 0;
         auto keys = SDL_GetKeyboardState(&numkeys);
-        check(keys != nullptr);
-        check(numkeys < static_cast<int>(key));
-        return keys[static_cast<int>(key)] == SDL_TRUE;
+        return keys[static_cast<size_t>(key)] == SDL_TRUE;
     }
 
-    rex::connection Keyboard::on_key_press(const std::function<void (KeyMod, Key)>& cb) noexcept
+    rsig::connection Keyboard::on_key_press(const std::function<void (KeyMod, Key)>& cb)
     {
         return key_press_signal.connect(cb);
     }
 
-    rex::signal<KeyMod, Key>& Keyboard::get_key_press_signal() noexcept
+    void Keyboard::disconnect_key_press(const rsig::connection& con)
     {
-        return key_press_signal;
+        return key_press_signal.disconnect(con);
     }
 
-    rex::connection Keyboard::on_key_release(const std::function<void (KeyMod, Key)>& cb) noexcept
+    rsig::connection Keyboard::on_key_release(const std::function<void (KeyMod, Key)>& cb)
     {
         return key_release_signal.connect(cb);
     }
 
-    rex::signal<KeyMod, Key>& Keyboard::get_key_release_signal() noexcept
+    void Keyboard::disconnect_key_release(const rsig::connection& con)
     {
-        return key_release_signal;
+        return key_release_signal.disconnect(con);
     }
 
-    rex::connection Keyboard::on_text(const std::function<void (const std::string_view)>& cb) noexcept
+    KeyMod to_keymod(Uint16 sdl_mod) noexcept
     {
-        return text_signal.connect(cb);
+        static const auto mods = std::array<KeyMod, 4>{KeyMod::SHIFT, KeyMod::CTRL, KeyMod::ALT, KeyMod::GUI};
+
+        auto result = KeyMod::NONE;
+        for (auto mod : mods)
+        {
+            if ((static_cast<Uint16>(mod) & sdl_mod) != KMOD_NONE)
+            {
+                result = result | mod;
+            }
+        }
+        return result;
     }
 
-    rex::signal<const std::string_view>& Keyboard::get_text_signal() noexcept
+    Key to_key(SDL_Scancode sdl_scancode) noexcept
     {
-        return text_signal;
+        return static_cast<Key>(sdl_scancode);
     }
 
-    void Keyboard::handle_keboard_down(pkzo::KeyMod mod, pkzo::Key key)
+    void Keyboard::handle_events(const SDL_Event& ev)
     {
-        key_press_signal.emit(mod, key);
-    }
-
-    void Keyboard::handle_keboard_up(pkzo::KeyMod mod, pkzo::Key key)
-    {
-        key_release_signal.emit(mod, key);
-    }
-
-    void Keyboard::handle_keboard_text(const std::string_view text)
-    {
-        text_signal.emit(text);
+        switch (ev.type)
+        {
+            case SDL_KEYDOWN:
+                key_press_signal.emit(to_keymod(ev.key.keysym.mod), to_key(ev.key.keysym.scancode));
+                break;
+            case SDL_KEYUP:
+                key_release_signal.emit(to_keymod(ev.key.keysym.mod), to_key(ev.key.keysym.scancode));
+                break;
+        }
     }
 }

@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{35b604e3-a260-42bd-8e7e-708d955eb71d}</ProjectGuid>
-    <RootNamespace>pkzotest</RootNamespace>
+    <ProjectGuid>{1857f600-a7b5-458d-8674-9c8524e46bfe}</ProjectGuid>
+    <RootNamespace>hello</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -102,9 +102,6 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <PostBuildEvent>
-      <Command>echo 1 &gt; $(TargetPath).is_google_test</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -123,9 +120,6 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <PostBuildEvent>
-      <Command>echo 1 &gt; $(TargetPath).is_google_test</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -140,9 +134,6 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <PostBuildEvent>
-      <Command>echo 1 &gt; $(TargetPath).is_google_test</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -161,20 +152,12 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <PostBuildEvent>
-      <Command>echo 1 &gt; $(TargetPath).is_google_test</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="enum_tests.cpp" />
-    <ClCompile Include="event_router_test.cpp" />
-    <ClCompile Include="keyboard_test.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="mouse_test.cpp" />
-    <ClCompile Include="window_test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\pkzo\pkzo.vcxproj">
+    <ProjectReference Include="..\..\pkzo\pkzo.vcxproj">
       <Project>{605fe3a6-be67-4907-a56a-25f43f1eb688}</Project>
     </ProjectReference>
   </ItemGroup>

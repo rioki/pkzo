@@ -1,5 +1,5 @@
 // pkzo
-// Copyright 2023 Sean Farrell <sean.farrell@rioki.org>
+// Copyright 2011-2024 Sean Farrell <sean.farrell@rioki.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -19,81 +19,61 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "pch.h"
+#include <pkzo/pkzo.h>
+#include <gtest/gtest.h>
 
-#include <SDL2/SDL_opengl.h>
-#include <pkzo/Window.h>
-
-glm::uvec2 get_desktop_size()
-{
-    SDL_DisplayMode mode;
-    if (SDL_GetDesktopDisplayMode(0, &mode) != 0)
-    {
-        throw std::runtime_error(SDL_GetError());
-    }
-    return {mode.w, mode.h};
-}
-
-TEST(Window, GRAPH_create)
+TEST(Window, window_creation)
 {
     auto event_router = pkzo::EventRouter{};
-    auto window = pkzo::Window{event_router, "Test", {640, 480}, pkzo::WindowMode::WINDOWED};
+    auto size = glm::uvec2{800, 600};
 
-    EXPECT_EQ(window.get_title(), "Test");
-    EXPECT_EQ(window.get_size(), glm::uvec2(640, 480));
-    EXPECT_EQ(window.get_window_mode(), pkzo::WindowMode::WINDOWED);
+    auto window = pkzo::Window{event_router, size, pkzo::WindowMode::STATIC, "Test Window"};
 }
 
-TEST(Window, GRAPH_create_simple)
+TEST(Window, window_get_set_size)
 {
     auto event_router = pkzo::EventRouter{};
-    auto window = pkzo::Window{event_router, "Test", {640, 480}};
+    auto size = glm::uvec2{800, 600};
+    auto window = pkzo::Window{event_router, size, pkzo::WindowMode::STATIC, "Test Window"};
 
-    EXPECT_EQ(window.get_title(), "Test");
-    EXPECT_EQ(window.get_size(), glm::uvec2(640, 480));
-    EXPECT_EQ(window.get_window_mode(), pkzo::WindowMode::WINDOWED);
+    auto actual_size = window.get_size();
+    EXPECT_EQ(size.x, actual_size.x);
+    EXPECT_EQ(size.y, actual_size.y);
+
+    auto new_size = glm::uvec2{1024, 768};
+    window.set_size(new_size);
+
+    actual_size = window.get_size();
+    EXPECT_EQ(new_size.x, actual_size.x);
+    EXPECT_EQ(new_size.y, actual_size.y);
 }
 
-TEST(Window, GRAPH_create_fullscreen)
+TEST(Window, window_mode_switch)
 {
     auto event_router = pkzo::EventRouter{};
-    auto window = pkzo::Window{event_router, "Test", {640, 480}, pkzo::WindowMode::FULLSCREEN_DESKTOP};
+    auto size = glm::uvec2{800, 600};
+    auto window = pkzo::Window{event_router, size, pkzo::WindowMode::STATIC, "Test Window"};
 
-    EXPECT_EQ(window.get_title(), "Test");
-    EXPECT_EQ(window.get_size(), get_desktop_size());
-    EXPECT_EQ(window.get_window_mode(), pkzo::WindowMode::FULLSCREEN_DESKTOP);
+    EXPECT_EQ(window.get_mode(), pkzo::WindowMode::STATIC);
+
+    window.set_mode(pkzo::WindowMode::FULLSCREEN);
+    EXPECT_EQ(window.get_mode(), pkzo::WindowMode::FULLSCREEN);
+
+    window.set_mode(pkzo::WindowMode::STATIC);
+    EXPECT_EQ(window.get_mode(), pkzo::WindowMode::STATIC);
 }
 
-TEST(Window, GRAPH_resize)
+TEST(Window, window_get_set_title)
 {
     auto event_router = pkzo::EventRouter{};
-    auto window = pkzo::Window{event_router, "Test", {640, 480}, pkzo::WindowMode::WINDOWED};
+    auto size = glm::uvec2{800, 600};
+    auto window = pkzo::Window{event_router, size, pkzo::WindowMode::STATIC, "Test Window"};
 
-    window.set_video_mode({800, 600}, pkzo::WindowMode::FULLSCREEN_DESKTOP);
+    EXPECT_EQ(window.get_title(), "Test Window");
 
-    EXPECT_EQ(window.get_size(), get_desktop_size());
-    EXPECT_EQ(window.get_window_mode(), pkzo::WindowMode::FULLSCREEN_DESKTOP);
-}
 
-TEST(Window, GRAPH_init_position)
-{
-    auto event_router = pkzo::EventRouter{};
-    auto window = pkzo::Window{event_router, "Test", {100, 101}, {640, 480}, pkzo::WindowMode::WINDOWED};
+    auto new_title = std::string{"New Title"};
+    window.set_title(new_title);
 
-    EXPECT_EQ(window.get_position(), glm::ivec2(100, 101));
-}
-
-TEST(Window, GRAPH_use_gl_context)
-{
-    auto event_router = pkzo::EventRouter{};
-    auto window = pkzo::Window{event_router, "Test", {640, 480}, pkzo::WindowMode::WINDOWED};
-
-    window.on_draw([](){
-        glClearColor(1.0f, 0.5f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-    });
-    window.draw();
-    window.draw();
-
-    EXPECT_IMAGE_REF_EQ(window.get_screenshot());
+    EXPECT_EQ(window.get_title(), new_title);
 }

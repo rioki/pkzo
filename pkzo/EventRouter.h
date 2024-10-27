@@ -22,31 +22,45 @@
 #pragma once
 
 #include <functional>
-#include <memory>
 
-#include <rex/signal.h>
+#include <SDL2/SDL.h>
+#include <rsig/rsig.h>
+#include <glm/glm.hpp>
 
 #include "defines.h"
-#include "InputHandler.h"
+#include "enums.h"
 
 namespace pkzo
 {
+    enum class Key;
+
     class PKZO_EXPORT EventRouter
     {
     public:
-        EventRouter() noexcept;
+        EventRouter();
         ~EventRouter();
 
-        rex::connection on_quit(const std::function<void()>& cb);
-        rex::signal<>& get_quit_signal();
+        rsig::connection on_quit(const std::function<void ()>& cb);
+        void disconnect_quit(const rsig::connection& con);
 
-        void add_handler(InputHandler* handler);
-        void remove_handler(InputHandler* handler);
+        rsig::connection on_event(const std::function<void (const SDL_Event&)>& cb);
+        void disconnect_event(const rsig::connection& con);
 
-        void route_events();
+        void tick();
+
+        void inject_quit();
+        void inject_key_down(KeyMod mod, Key key);
+        void inject_key_up(KeyMod mod, Key key);
+        void inject_button_press(const glm::uvec2& position, MouseButton button);
+        void inject_button_release(const glm::uvec2& position, MouseButton button);
+        void inject_mouse_move(const glm::uvec2& position, const glm::ivec2& delta);
+        void inject_mouse_wheel(const glm::ivec2& scroll);
 
     private:
-        class EventRouterImpl;
-        std::unique_ptr<EventRouterImpl> impl;
+        rsig::signal<> quit_signal;
+        rsig::signal<const SDL_Event&> event_signal;
+
+        EventRouter(const EventRouter&) = delete;
+        EventRouter& operator = (const EventRouter&) = delete;
     };
 }

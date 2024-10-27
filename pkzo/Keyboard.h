@@ -22,42 +22,40 @@
 #pragma once
 
 #include <functional>
+#include <type_traits>
 
-#include <rex/signal.h>
+#include <glm/glm.hpp>
+#include <rsig/rsig.h>
+#include <SDL2/SDL.h>
 
 #include "defines.h"
-#include "InputHandler.h"
+#include "enums.h"
 
 namespace pkzo
 {
     class EventRouter;
 
-    class PKZO_EXPORT Keyboard : public InputHandler
+    class PKZO_EXPORT Keyboard
     {
     public:
-        Keyboard(EventRouter& er);
+        Keyboard(EventRouter& event_router);
         ~Keyboard();
 
-        bool is_pressed(Key key) const noexcept;
+        bool is_pressed(Key key) const;
 
-        rex::connection on_key_press(const std::function<void (KeyMod, Key)>& cb) noexcept;
-        rex::signal<KeyMod, Key>& get_key_press_signal() noexcept;
+        rsig::connection on_key_press(const std::function<void (KeyMod, Key)>& cb);
+        void disconnect_key_press(const rsig::connection& con);
 
-        rex::connection on_key_release(const std::function<void (KeyMod, Key)>& cb) noexcept;
-        rex::signal<KeyMod, Key>& get_key_release_signal() noexcept;
-
-        rex::connection on_text(const std::function<void (const std::string_view)>& cb) noexcept;
-        rex::signal<const std::string_view>& get_text_signal() noexcept;
-
-        void handle_keboard_down(pkzo::KeyMod mod, pkzo::Key key) override;
-        void handle_keboard_up(pkzo::KeyMod mod, pkzo::Key key) override;
-        void handle_keboard_text(const std::string_view text) override;
+        rsig::connection on_key_release(const std::function<void (KeyMod, Key)>& cb);
+        void disconnect_key_release(const rsig::connection& con);
 
     private:
-        EventRouter&             event_router;
-        rex::signal<KeyMod, Key> key_press_signal;
-        rex::signal<KeyMod, Key> key_release_signal;
-        rex::signal<const std::string_view> text_signal;
+        EventRouter&      event_router;
+        rsig::connection  event_con;
+        rsig::signal<KeyMod, Key> key_press_signal;
+        rsig::signal<KeyMod, Key> key_release_signal;
+
+        void handle_events(const SDL_Event& ev);
 
         Keyboard(const Keyboard&) = delete;
         Keyboard& operator = (const Keyboard&) = delete;

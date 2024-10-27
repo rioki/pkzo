@@ -19,10 +19,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#include <pkzo/pkzo.h>
 #include <gtest/gtest.h>
 
-int main(int argc, char* argv[])
+TEST(EventRouter, quit_event_trigger)
 {
-    testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+    auto event_router   = pkzo::EventRouter{};
+    auto quit_triggered = false;
+
+    event_router.on_quit([&]() {
+        quit_triggered = true;
+    });
+
+    event_router.inject_quit();
+
+    event_router.tick();
+    EXPECT_TRUE(quit_triggered);
+}
+
+TEST(EventRouter, quit_event_disconected)
+{
+    auto event_router = pkzo::EventRouter{};
+    auto quit_triggered = false;
+
+    auto connection = event_router.on_quit([&]() {
+        quit_triggered = true;
+    });
+
+    event_router.disconnect_quit(connection);
+
+    event_router.inject_quit();
+
+    event_router.tick();
+    EXPECT_FALSE(quit_triggered);
 }

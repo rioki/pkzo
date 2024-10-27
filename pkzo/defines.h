@@ -21,10 +21,13 @@
 
 #pragma once
 
-#define PKZO_VERSION "0.3.0"
+namespace pkzo
+{
+    constexpr auto VERSION = "0.1.0";
+}
 
 #ifdef _WIN32
-    #ifdef PKZO_BUILD_DLL
+    #ifdef BUILD_PKZO
         #define PKZO_EXPORT __declspec(dllexport)
     #else
         #define PKZO_EXPORT __declspec(dllimport)
@@ -35,6 +38,5 @@
 
 #ifdef _MSC_VER
     //disable silly warnings
-    #pragma warning(disable: 4273) // 'object': inconsistent dll linkage
     #pragma warning(disable: 4251) // 'identifier' : class 'type' needs to have dll-interface to be used by clients of class 'type2'
 #endif
