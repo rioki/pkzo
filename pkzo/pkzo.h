@@ -21,6 +21,7 @@
 
 #pragma once
 
-#include "Window.h"
 #include "EventRouter.h"
 #include "Keyboard.h"
+#include "Mouse.h"
+#include "Window.h"

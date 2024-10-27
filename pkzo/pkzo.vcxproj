@@ -158,6 +158,7 @@
     <ClInclude Include="enums.h" />
     <ClInclude Include="EventRouter.h" />
     <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="Mouse.h" />
     <ClInclude Include="pkzo.h" />
     <ClInclude Include="stdex.h" />
     <ClInclude Include="Window.h" />
@@ -166,6 +167,7 @@
     <ClCompile Include="enums.cpp" />
     <ClCompile Include="EventRouter.cpp" />
     <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

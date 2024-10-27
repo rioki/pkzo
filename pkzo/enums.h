@@ -312,6 +312,17 @@ namespace pkzo
     ENUM_BIT_OPERATORS(KeyMod)
 
     PKZO_EXPORT std::ostream& operator << (std::ostream& os, const KeyMod& mod) noexcept;
+
+    enum class MouseButton : Uint32
+    {
+        LEFT    = SDL_BUTTON_LEFT,
+        MIDDLE  = SDL_BUTTON_MIDDLE,
+        RIGHT   = SDL_BUTTON_RIGHT,
+        BUTTON4 = SDL_BUTTON_X1,
+        BUTTON5 = SDL_BUTTON_X2
+    };
+
+    PKZO_EXPORT std::ostream& operator << (std::ostream& os, const MouseButton& button) noexcept;
 }
 
 #undef ENUM_BIT_OPERATORS

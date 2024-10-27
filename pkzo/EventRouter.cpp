@@ -59,36 +59,82 @@ namespace pkzo
 
     void EventRouter::inject_quit()
     {
-        auto quit_event = SDL_Event{};
-        quit_event.type = SDL_QUIT;
-        quit_event.quit.timestamp = SDL_GetTicks();
-        SDL_PushEvent(&quit_event);
+        auto sdl_event = SDL_Event{};
+        sdl_event.type = SDL_QUIT;
+        sdl_event.quit.timestamp = SDL_GetTicks();
+        SDL_PushEvent(&sdl_event);
     }
 
     void EventRouter::inject_key_down(KeyMod mod, Key key)
     {
-        auto key_down_event = SDL_Event{};
-        key_down_event.type = SDL_KEYDOWN;
-        key_down_event.key.timestamp = SDL_GetTicks();
-        key_down_event.key.state = SDL_PRESSED;
-        key_down_event.key.repeat = 0;
-        key_down_event.key.keysym.scancode = static_cast<SDL_Scancode>(key);
-        key_down_event.key.keysym.sym = SDL_GetKeyFromScancode(static_cast<SDL_Scancode>(key));
-        key_down_event.key.keysym.mod = static_cast<Uint16>(mod);
-        SDL_PushEvent(&key_down_event);
+        auto sdl_event = SDL_Event{};
+        sdl_event.type = SDL_KEYDOWN;
+        sdl_event.key.timestamp = SDL_GetTicks();
+        sdl_event.key.state = SDL_PRESSED;
+        sdl_event.key.repeat = 0;
+        sdl_event.key.keysym.scancode = static_cast<SDL_Scancode>(key);
+        sdl_event.key.keysym.sym = SDL_GetKeyFromScancode(static_cast<SDL_Scancode>(key));
+        sdl_event.key.keysym.mod = static_cast<Uint16>(mod);
+        SDL_PushEvent(&sdl_event);
     }
 
     void EventRouter::inject_key_up(KeyMod mod, Key key)
     {
-        auto key_up_event = SDL_Event{};
-        key_up_event.type = SDL_KEYUP;
-        key_up_event.key.timestamp = SDL_GetTicks();
-        key_up_event.key.state = SDL_RELEASED;
-        key_up_event.key.repeat = 0;
-        key_up_event.key.keysym.scancode = static_cast<SDL_Scancode>(key);
-        key_up_event.key.keysym.sym = SDL_GetKeyFromScancode(static_cast<SDL_Scancode>(key));
-        key_up_event.key.keysym.mod = static_cast<Uint16>(mod);
-        SDL_PushEvent(&key_up_event);
+        auto sdl_event = SDL_Event{};
+        sdl_event.type = SDL_KEYUP;
+        sdl_event.key.timestamp = SDL_GetTicks();
+        sdl_event.key.state = SDL_RELEASED;
+        sdl_event.key.repeat = 0;
+        sdl_event.key.keysym.scancode = static_cast<SDL_Scancode>(key);
+        sdl_event.key.keysym.sym = SDL_GetKeyFromScancode(static_cast<SDL_Scancode>(key));
+        sdl_event.key.keysym.mod = static_cast<Uint16>(mod);
+        SDL_PushEvent(&sdl_event);
+    }
+
+    void EventRouter::inject_button_press(const glm::uvec2& position, MouseButton button)
+    {
+        auto sdl_event = SDL_Event{};
+        sdl_event.type = SDL_MOUSEBUTTONDOWN;
+        sdl_event.button.button = static_cast<Uint8>(button);
+        sdl_event.button.state = SDL_PRESSED;
+        sdl_event.button.x = position.x;
+        sdl_event.button.y = position.y;
+        sdl_event.button.timestamp = SDL_GetTicks();
+        SDL_PushEvent(&sdl_event);
+    }
+
+    void EventRouter::inject_button_release(const glm::uvec2& position, MouseButton button)
+    {
+        auto sdl_event = SDL_Event{};
+        sdl_event.type = SDL_MOUSEBUTTONUP;
+        sdl_event.button.button = static_cast<Uint8>(button);
+        sdl_event.button.state = SDL_RELEASED;
+        sdl_event.button.x = position.x;
+        sdl_event.button.y = position.y;
+        sdl_event.button.timestamp = SDL_GetTicks();
+        SDL_PushEvent(&sdl_event);
+    }
+
+    void EventRouter::inject_mouse_move(const glm::uvec2& position, const glm::ivec2& delta)
+    {
+        auto sdl_event = SDL_Event{};
+        sdl_event.type = SDL_MOUSEMOTION;
+        sdl_event.motion.x = position.x;
+        sdl_event.motion.y = position.y;
+        sdl_event.motion.xrel = delta.x;
+        sdl_event.motion.yrel = delta.y;
+        sdl_event.motion.timestamp = SDL_GetTicks();
+        SDL_PushEvent(&sdl_event);
+    }
+
+    void EventRouter::inject_mouse_wheel(const glm::ivec2& scroll)
+    {
+        auto sdl_event = SDL_Event{};
+        sdl_event.type = SDL_MOUSEWHEEL;
+        sdl_event.wheel.x = scroll.x;
+        sdl_event.wheel.y = scroll.y;
+        sdl_event.wheel.timestamp = SDL_GetTicks();
+        SDL_PushEvent(&sdl_event);
     }
 
     void EventRouter::tick()

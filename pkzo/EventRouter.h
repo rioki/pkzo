@@ -25,6 +25,7 @@
 
 #include <SDL2/SDL.h>
 #include <rsig/rsig.h>
+#include <glm/glm.hpp>
 
 #include "defines.h"
 #include "enums.h"
@@ -50,6 +51,10 @@ namespace pkzo
         void inject_quit();
         void inject_key_down(KeyMod mod, Key key);
         void inject_key_up(KeyMod mod, Key key);
+        void inject_button_press(const glm::uvec2& position, MouseButton button);
+        void inject_button_release(const glm::uvec2& position, MouseButton button);
+        void inject_mouse_move(const glm::uvec2& position, const glm::ivec2& delta);
+        void inject_mouse_wheel(const glm::ivec2& scroll);
 
     private:
         rsig::signal<> quit_signal;
