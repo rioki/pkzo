@@ -11,8 +11,7 @@ permissions:
   packages: write
 
 env:
-  VCPKG_COMMIT: 13bde2ff13192e1b2fdd37bd9b475c7665ae6ae5
-  VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
+  VCPKG_COMMIT: d567b667adba0e72c5c3931ddbe745b66aa34b73
 
 jobs:
   build:
@@ -34,23 +33,9 @@ jobs:
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.0.2
     - name: Restore from cache and install vcpkg
-      uses: lukka/run-vcpkg@v10
+      uses: lukka/run-vcpkg@v11
       with:
         vcpkgGitCommitId: ${{ env.VCPKG_COMMIT }}
-        appendedCacheKey: ${{ matrix.triplet }}
-    - name: 'Setup NuGet/Vcpkg Credentials'
-      shell: 'bash'
-      run: >
-        `./vcpkg/vcpkg fetch nuget | tail -n 1` \
-          sources add \
-          -source "https://nuget.pkg.github.com/rioki/index.json" \
-          -storepasswordincleartext \
-          -name "GitHub" \
-          -username "rioki" \
-          -password "${{ secrets.GITHUB_TOKEN }}"
-        `./vcpkg/vcpkg fetch nuget | tail -n 1` \
-          setapikey "${{ secrets.GITHUB_TOKEN }}" \
-          -source "https://nuget.pkg.github.com/rioki/index.json"
     - name: Integrate vcpkg in MSBuild
       shell: 'bash'
       run: >
@@ -64,6 +49,6 @@ jobs:
     - name: Build (Release)
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: msbuild /m /p:Configuration=Release /property:Platform=${{matrix.platform}} pkzo.sln
-    - name: Test Release)
+    - name: Test (Release)
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: bin/${{matrix.platform}}/Release/pkzo-test.exe --gtest_filter=-*.GRAPH_*:*.NOCI_*
