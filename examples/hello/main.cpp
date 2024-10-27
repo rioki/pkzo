@@ -19,14 +19,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#pragma once
+#include <pkzo/pkzo.h>
 
-#include "EventRouter.h"
-#include "Keyboard.h"
-#include "Mouse.h"
-#include "Window.h"
+int main(int argc, const char* argv[])
+{
+    auto running = true;
 
-// Fix SDL's main macro
-#ifdef main
-#undef main
-#endif
+    auto event_router = pkzo::EventRouter{};
+
+    event_router.on_quit([&] () {
+        running = false;
+    });
+
+    auto window = pkzo::Window{event_router, {800, 600}, pkzo::WindowMode::STATIC, "Hello pkzo!"};
+    window.on_draw([&] () {
+        // Put rendering code here.
+    });
+
+    auto keyboard = pkzo::Keyboard{event_router};
+    keyboard.on_key_press([&] (auto mod, auto key) {
+        if (key == pkzo::Key::ESCAPE)
+        {
+            running = false;
+        }
+    });
+
+    while (running)
+    {
+        event_router.tick();
+        window.draw();
+    }
+}
