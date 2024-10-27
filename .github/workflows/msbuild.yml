@@ -12,6 +12,7 @@ permissions:
 
 env:
   VCPKG_COMMIT: d567b667adba0e72c5c3931ddbe745b66aa34b73
+  VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
 
 jobs:
   build:
@@ -36,6 +37,19 @@ jobs:
       uses: lukka/run-vcpkg@v11
       with:
         vcpkgGitCommitId: ${{ env.VCPKG_COMMIT }}
+    - name: 'Setup NuGet/Vcpkg Credentials'
+        shell: 'bash'
+        run: >
+          `./vcpkg/vcpkg fetch nuget | tail -n 1` \
+            sources add \
+            -source "https://nuget.pkg.github.com/rioki/index.json" \
+            -storepasswordincleartext \
+            -name "GitHub" \
+            -username "rioki" \
+            -password "${{ secrets.GITHUB_TOKEN }}"
+          `./vcpkg/vcpkg fetch nuget | tail -n 1` \
+            setapikey "${{ secrets.GITHUB_TOKEN }}" \
+            -source "https://nuget.pkg.github.com/rioki/index.json"
     - name: Integrate vcpkg in MSBuild
       shell: 'bash'
       run: >
