@@ -21,6 +21,43 @@
 
 #pragma once
 
-#include "Window.h"
-#include "EventRouter.h"
-#include "Keyboard.h"
+#include <functional>
+#include <type_traits>
+
+#include <glm/glm.hpp>
+#include <rsig/rsig.h>
+#include <SDL2/SDL.h>
+
+#include "defines.h"
+#include "enums.h"
+
+namespace pkzo
+{
+    class EventRouter;
+
+    class PKZO_EXPORT Keyboard
+    {
+    public:
+        Keyboard(EventRouter& event_router);
+        ~Keyboard();
+
+        bool is_pressed(Key key) const;
+
+        rsig::connection on_key_press(const std::function<void (KeyMod, Key)>& cb);
+        void disconnect_key_press(const rsig::connection& con);
+
+        rsig::connection on_key_release(const std::function<void (KeyMod, Key)>& cb);
+        void disconnect_key_release(const rsig::connection& con);
+
+    private:
+        EventRouter&      event_router;
+        rsig::connection  event_con;
+        rsig::signal<KeyMod, Key> key_press_signal;
+        rsig::signal<KeyMod, Key> key_release_signal;
+
+        void handle_events(const SDL_Event& ev);
+
+        Keyboard(const Keyboard&) = delete;
+        Keyboard& operator = (const Keyboard&) = delete;
+    };
+}

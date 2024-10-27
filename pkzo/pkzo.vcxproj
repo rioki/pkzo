@@ -155,13 +155,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="defines.h" />
+    <ClInclude Include="enums.h" />
     <ClInclude Include="EventRouter.h" />
+    <ClInclude Include="Keyboard.h" />
     <ClInclude Include="pkzo.h" />
     <ClInclude Include="stdex.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="enums.cpp" />
     <ClCompile Include="EventRouter.cpp" />
+    <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

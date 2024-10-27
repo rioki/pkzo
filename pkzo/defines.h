@@ -28,12 +28,12 @@ namespace pkzo
 
 #ifdef _WIN32
     #ifdef BUILD_PKZO
-        #define PKZO_API __declspec(dllexport)
+        #define PKZO_EXPORT __declspec(dllexport)
     #else
-        #define PKZO_API __declspec(dllimport)
+        #define PKZO_EXPORT __declspec(dllimport)
     #endif
 #else
-    #define PKZO_API
+    #define PKZO_EXPORT
 #endif
 
 #ifdef _MSC_VER

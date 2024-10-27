@@ -22,34 +22,45 @@
 #include <pkzo/pkzo.h>
 #include <gtest/gtest.h>
 
-TEST(EventRouter, quit_event_trigger)
-{
-    auto event_router   = pkzo::EventRouter{};
-    auto quit_triggered = false;
-
-    event_router.on_quit([&]() {
-        quit_triggered = true;
-    });
-
-    event_router.inject_quit();
-
-    event_router.tick();
-    EXPECT_TRUE(quit_triggered);
-}
-
-TEST(EventRouter, quit_event_disconected)
+TEST(Keyboard, key_press_event_triggers_signal)
 {
     auto event_router = pkzo::EventRouter{};
-    auto quit_triggered = false;
+    auto keyboard     = pkzo::Keyboard{event_router};
 
-    auto connection = event_router.on_quit([&]() {
-        quit_triggered = true;
+    auto expected_mod = pkzo::KeyMod::CTRL;
+    auto expected_key = pkzo::Key::A;
+    auto callback_called = false;
+
+    keyboard.on_key_press([&](pkzo::KeyMod mod, pkzo::Key key) {
+        callback_called = true;
+        EXPECT_EQ(mod, expected_mod);
+        EXPECT_EQ(key, expected_key);
     });
 
-    event_router.disconnect_quit(connection);
-
-    event_router.inject_quit();
-
+    event_router.inject_key_down(expected_mod, expected_key);
     event_router.tick();
-    EXPECT_FALSE(quit_triggered);
+
+    EXPECT_TRUE(callback_called);
 }
+
+TEST(Keyboard, key_release_event_triggers_signal)
+{
+    auto event_router = pkzo::EventRouter{};
+    auto keyboard     = pkzo::Keyboard{event_router};
+
+    auto expected_mod = pkzo::KeyMod::ALT;
+    auto expected_key = pkzo::Key::B;
+    auto callback_called = false;
+
+    keyboard.on_key_release([&](pkzo::KeyMod mod, pkzo::Key key) {
+        callback_called = true;
+        EXPECT_EQ(mod, expected_mod);
+        EXPECT_EQ(key, expected_key);
+    });
+
+    event_router.inject_key_up(expected_mod, expected_key);
+    event_router.tick();
+
+    EXPECT_TRUE(callback_called);
+}
+

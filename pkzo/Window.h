@@ -47,7 +47,7 @@ namespace pkzo
         INFORMATION = SDL_MESSAGEBOX_INFORMATION
     };
 
-    class PKZO_API Window
+    class PKZO_EXPORT Window
     {
     public:
         Window(EventRouter& event_router, const glm::uvec2& size, WindowMode mode, const std::string& title);
@@ -84,10 +84,10 @@ namespace pkzo
         Window(const Window&) = delete;
         Window& operator = (const Window&) = delete;
 
-        friend PKZO_API void show_message_box(Window& window, MessageBoxFlags flags, const std::string& title, const std::string& text);
+        friend PKZO_EXPORT void show_message_box(Window& window, MessageBoxFlags flags, const std::string& title, const std::string& text);
     };
 
-    PKZO_API void show_message_box(MessageBoxFlags flags, const std::string& title, const std::string& text);
-    PKZO_API void show_message_box(Window& window, MessageBoxFlags flags, const std::string& title, const std::string& text);
+    PKZO_EXPORT void show_message_box(MessageBoxFlags flags, const std::string& title, const std::string& text);
+    PKZO_EXPORT void show_message_box(Window& window, MessageBoxFlags flags, const std::string& title, const std::string& text);
 }
 

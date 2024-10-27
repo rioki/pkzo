@@ -23,7 +23,7 @@
 
 namespace pkzo
 {
-    EventRouter::EventRouter() noexcept
+    EventRouter::EventRouter()
     {
         auto r = SDL_Init(SDL_INIT_VIDEO);
         if (r < 0)
@@ -55,6 +55,40 @@ namespace pkzo
     void EventRouter::disconnect_event(const rsig::connection& con)
     {
         event_signal.disconnect(con);
+    }
+
+    void EventRouter::inject_quit()
+    {
+        auto quit_event = SDL_Event{};
+        quit_event.type = SDL_QUIT;
+        quit_event.quit.timestamp = SDL_GetTicks();
+        SDL_PushEvent(&quit_event);
+    }
+
+    void EventRouter::inject_key_down(KeyMod mod, Key key)
+    {
+        auto key_down_event = SDL_Event{};
+        key_down_event.type = SDL_KEYDOWN;
+        key_down_event.key.timestamp = SDL_GetTicks();
+        key_down_event.key.state = SDL_PRESSED;
+        key_down_event.key.repeat = 0;
+        key_down_event.key.keysym.scancode = static_cast<SDL_Scancode>(key);
+        key_down_event.key.keysym.sym = SDL_GetKeyFromScancode(static_cast<SDL_Scancode>(key));
+        key_down_event.key.keysym.mod = static_cast<Uint16>(mod);
+        SDL_PushEvent(&key_down_event);
+    }
+
+    void EventRouter::inject_key_up(KeyMod mod, Key key)
+    {
+        auto key_up_event = SDL_Event{};
+        key_up_event.type = SDL_KEYUP;
+        key_up_event.key.timestamp = SDL_GetTicks();
+        key_up_event.key.state = SDL_RELEASED;
+        key_up_event.key.repeat = 0;
+        key_up_event.key.keysym.scancode = static_cast<SDL_Scancode>(key);
+        key_up_event.key.keysym.sym = SDL_GetKeyFromScancode(static_cast<SDL_Scancode>(key));
+        key_up_event.key.keysym.mod = static_cast<Uint16>(mod);
+        SDL_PushEvent(&key_up_event);
     }
 
     void EventRouter::tick()

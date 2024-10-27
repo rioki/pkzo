@@ -27,13 +27,16 @@
 #include <rsig/rsig.h>
 
 #include "defines.h"
+#include "enums.h"
 
 namespace pkzo
 {
-    class PKZO_API EventRouter
+    enum class Key;
+
+    class PKZO_EXPORT EventRouter
     {
     public:
-        EventRouter() noexcept;
+        EventRouter();
         ~EventRouter();
 
         rsig::connection on_quit(const std::function<void ()>& cb);
@@ -43,6 +46,10 @@ namespace pkzo
         void disconnect_event(const rsig::connection& con);
 
         void tick();
+
+        void inject_quit();
+        void inject_key_down(KeyMod mod, Key key);
+        void inject_key_up(KeyMod mod, Key key);
 
     private:
         rsig::signal<> quit_signal;
