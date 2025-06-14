@@ -1,0 +1,11 @@
+
+# Build Outputs
+/bin
+/.int
+
+# VCPKG
+/vcpkg_installed
+
+# VS Junk
+*.vcxproj.user
+/.vs

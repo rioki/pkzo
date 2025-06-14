@@ -1,0 +1,15 @@
+{
+  "name": "pkzo",
+  "version": "0.1.0",
+  "dependencies": [
+    "assimp",
+    "freeimage",
+    "freetype",
+    "glm",
+    "glew",
+    "libiconv",
+    "magic-enum",
+    "rsig",
+    "sdl3"
+  ]
+}
