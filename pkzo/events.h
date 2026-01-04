@@ -1,5 +1,5 @@
 // pkzo
-// Copyright 2025 Sean Farrell
+// Copyright 2010-2026 Sean Farrell
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files(the "Software"), to deal
@@ -19,32 +19,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "pch.h"
-#include "Settings.h"
+#pragma once
+#include "config.h"
+
+#include <functional>
+
+#include <rsig/rsig.h>
 
 namespace pkzo
 {
-    void Settings::load(const std::filesystem::path& file)
-    {
-        auto input = std::ifstream(file);
-        if (!input)
-        {
-            throw std::runtime_error(tfm::format("Failed to open %s for reading.", file));
-        }
+    //! Install an observer for the quit event.
+    //!
+    //! The quit event is issued when either the last window is closed or
+    //! the operating system requests the application to terminate.
+    PKZO_API rsig::connection on_quit(const std::function<void ()>& handler);
 
-        data = fkyaml::node::deserialize(input);
-    }
-
-    void Settings::save(const std::filesystem::path& file)
-    {
-        std::filesystem::create_directories(file.parent_path());
-
-        auto output = std::ofstream(file);
-        if (!output)
-        {
-            throw std::runtime_error(tfm::format("Failed to open %s for writing.", file));
-        }
-
-        output << data;
-    }
+    //! Distribute all pending OS events to the different consumers.
+    PKZO_API void rotue_events();
 }

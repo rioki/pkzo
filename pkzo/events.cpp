@@ -1,5 +1,5 @@
 // pkzo
-// Copyright 2025 Sean Farrell
+// Copyright 2010-2026 Sean Farrell
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files(the "Software"), to deal
@@ -19,27 +19,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
-#include "config.h"
-
-#include <cassert>
-#include <cstdlib>
-
-#include <filesystem>
-#include <fstream>
-#include <iostream>
-#include <optional>
-#include <string_view>
-#include <string>
+#include "events.h"
 
 #include <SDL3/SDL.h>
-#include <glm/glm.hpp>
 
-#include "tinyformat.h"
-#include "fkyaml.hpp"
-#include "glm_fkyaml.h"
+namespace pkzo
+{
+    auto quit_signal = rsig::signal<>{};
 
-#ifdef _WIN32
-#include <Windows.h>
-#include <Shlobj.h>
-#endif
+    rsig::connection on_quit(const std::function<void ()>& handler)
+    {
+        return quit_signal.connect(handler);
+    }
+
+    void rotue_events()
+    {
+        auto event = SDL_Event{};
+        while (SDL_PollEvent(&event))
+        {
+            switch (event.type)
+            {
+                case SDL_EVENT_QUIT:
+                    quit_signal.emit();
+                    break;
+            }
+        }
+    }
+}

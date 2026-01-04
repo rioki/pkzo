@@ -1,5 +1,7 @@
+
+
 // pkzo
-// Copyright 2025 Sean Farrell
+// Copyright 2010-2026 Sean Farrell
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files(the "Software"), to deal
@@ -19,39 +21,42 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
+#include "SdlSentry.h"
 
-#ifdef _WIN32
-    #ifdef BUILD_PKZO
-        #define PKZO_API __declspec(dllexport)
-    #else
-        #define PKZO_API __declspec(dllimport)
-    #endif
-#else
-    #define PKZO_API
-#endif
-
-#ifdef _MSC_VER
-    //disable silly warnings
-    #pragma warning(disable: 4251) // 'identifier' : class 'type' needs to have dll-interface to be used by clients of class 'type2'
-    #pragma warning(disable: 4275) // non - DLL-interface class 'class_1' used as base for DLL-interface class 'class_2'
-#endif
-
-#define NOMINMAX
-
-#include <magic_enum/magic_enum.hpp>
-#include <magic_enum/magic_enum_iostream.hpp>
+#include <stdexcept>
+#include <SDL3/SDL.h>
 
 namespace pkzo
 {
-    using namespace magic_enum::iostream_operators;
-    using namespace magic_enum::bitwise_operators;
-
-    constexpr auto VERSION = "0.1.0";
-
-    template <typename INT = size_t>
-    constexpr INT bit(INT offset)
+    SDL_InitFlags to_sdl_flags(SdlSubsystem s)
     {
-        return 1u << offset;
+        using enum SdlSubsystem;
+
+        auto out = SDL_InitFlags{0};
+        if ((s & AUDIO)    == AUDIO)    out |= SDL_INIT_AUDIO;
+        if ((s & VIDEO)    == VIDEO)    out |= SDL_INIT_VIDEO;
+        if ((s & JOYSTICK) == JOYSTICK) out |= SDL_INIT_JOYSTICK;
+        if ((s & HAPTIC)   == HAPTIC)   out |= SDL_INIT_HAPTIC;
+        if ((s & GAMEPAD)  == GAMEPAD)  out |= SDL_INIT_GAMEPAD;
+        if ((s & EVENTS)   == EVENTS)   out |= SDL_INIT_EVENTS;
+        if ((s & SENSOR)   == SENSOR)   out |= SDL_INIT_SENSOR;
+        if ((s & CAMERA)   == CAMERA)   out |= SDL_INIT_CAMERA;
+
+        return out;
+    }
+
+    SdlSentry::SdlSentry(SdlSubsystem s)
+    : subsystem(s)
+    {
+        auto result = SDL_InitSubSystem(std::to_underlying(subsystem));
+        if (result == false)
+        {
+            throw std::runtime_error(SDL_GetError());
+        }
+    }
+
+    SdlSentry::~SdlSentry()
+    {
+        SDL_QuitSubSystem(std::to_underlying(subsystem));
     }
 }

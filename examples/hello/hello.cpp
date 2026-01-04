@@ -1,5 +1,5 @@
 // pkzo
-// Copyright 2025 Sean Farrell
+// Copyright 2010-2026 Sean Farrell
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files(the "Software"), to deal
@@ -21,12 +21,26 @@
 
 #include <pkzo/pkzo.h>
 
-int main()
+int main(int argc, char* argv[])
 {
-    auto engine = pkzo::Engine({
-        .id      = "pkzo-example-hello",
-        .version = pkzo::VERSION
+    // Track when the application was requested to close.
+    // This can either be the window closing or the operating system
+    // requesting you to terminate.
+    auto running = true;
+    pkzo::on_quit([&] () {
+        running = false;
     });
 
-    engine.run();
+    auto window = pkzo::Window({
+        .title = "Hello Pkzo",
+        .size  = glm::uvec2(800u, 600u)
+    });
+
+    while (running)
+    {
+        pkzo::rotue_events();
+        window.draw();
+    }
+
+    return 0;
 }

@@ -20,7 +20,9 @@
 // SOFTWARE.
 
 #pragma once
-
 #include "config.h"
 
-#include "Engine.h"
+#include "events.h"
+#include "Mouse.h"
+#include "Keyboard.h"
+#include "Window.h"
