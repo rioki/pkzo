@@ -27,7 +27,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-#include <stdng.h>
+#include <pkzo/stdng.h>
 #include <pkzo/debug.h>
 
 #include "Group.h"

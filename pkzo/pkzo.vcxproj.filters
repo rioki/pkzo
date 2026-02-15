@@ -99,6 +99,15 @@
     <ClInclude Include="OpenGLBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="stdng.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="glm_fkyaml.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="glm_njson.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="events.cpp">
@@ -134,9 +143,6 @@
     <ClCompile Include="MemoryMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="OpenGLShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -162,9 +168,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CubeMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FrameBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="OpenGLFrameBuffer.cpp">

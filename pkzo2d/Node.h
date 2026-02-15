@@ -24,11 +24,11 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <rsig/rsig.h>
-#include <glm_2d.h>
 
 #include <pkzo/Mouse.h>
 
 #include "api.h"
+#include "glm_2d.h"
 
 namespace pkzo2d
 {
