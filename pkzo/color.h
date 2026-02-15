@@ -95,7 +95,7 @@ namespace pkzo
     {
         if (node.is_integer())
         {
-            v.value = rgba(static_cast<unsigned int>(node.get_value<int>()));
+            v.value = rgba(node.get_value<unsigned int>());
         }
         else if (node.is_sequence() && node.size() == 4)
         {
@@ -111,7 +111,7 @@ namespace pkzo
     {
         if (node.is_integer())
         {
-            v.value = rgb(static_cast<unsigned int>(node.get_value<int>()));
+            v.value = rgb(node.get_value<unsigned int>());
         }
         else if (node.is_sequence() && node.size() == 3)
         {
