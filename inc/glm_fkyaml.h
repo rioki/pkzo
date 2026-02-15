@@ -12,13 +12,14 @@
 #include <glm/glm.hpp>
 #include <fkYAML/node.hpp>
 #include <tinyformat.h>
+#include <vector>
 
 namespace glm
 {
     template<glm::length_t N, typename T, qualifier Q>
     void from_node(const fkyaml::node& node, vec<N, T, Q>& v)
     {
-        const auto& seq = node.as_seq();
+        const auto& seq = node.get_value<std::vector<fkyaml::node>>();
         if (seq.size() != N)
         {
             throw std::runtime_error(tfm::format("Expected %d elements, got %d.", N, seq.size()));

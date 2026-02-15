@@ -95,9 +95,9 @@ namespace pkzo
     {
         if (node.is_integer())
         {
-            v.value = rgba(static_cast<unsigned int>(node.as_int()));
+            v.value = rgba(node.get_value<unsigned int>());
         }
-        else if (node.is_sequence() && node.as_seq().size() == 4)
+        else if (node.is_sequence() && node.size() == 4)
         {
             v.value = node.get_value<glm::vec4>();
         }
@@ -111,9 +111,9 @@ namespace pkzo
     {
         if (node.is_integer())
         {
-            v.value = rgb(static_cast<unsigned int>(node.as_int()));
+            v.value = rgb(node.get_value<unsigned int>());
         }
-        else if (node.is_sequence() && node.as_seq().size() == 3)
+        else if (node.is_sequence() && node.size() == 3)
         {
             v.value = node.get_value<glm::vec3>();
         }

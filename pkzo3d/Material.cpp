@@ -42,7 +42,7 @@ namespace pkzo3d
     {
         if (yaml.contains(id))
         {
-            return static_cast<float>(yaml[id].as_float());
+            return static_cast<float>(yaml[id].get_value<float>());
         }
         return fallback;
     }
@@ -52,7 +52,7 @@ namespace pkzo3d
         if (yaml.contains(id))
         {
             return Texture::load_file({
-                .file = base / yaml[id].as_str()
+                .file = base / yaml[id].get_value<std::string>()
             });
         }
         return fallback;

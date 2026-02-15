@@ -29,9 +29,10 @@ jobs:
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.0.2
     - name: Restore from cache and install vcpkg
-      uses: lukka/run-vcpkg@v10
+      uses: lukka/run-vcpkg@v11
       with:
-        vcpkgGitCommitId: e7d7451462697d77ef319ddf2da8ff7320a82662
+        vcpkgGitURL: https://github.com/rioki/vcpkg.git
+        vcpkgGitCommitId: a23f2d7dd1e8af66a04f686599e297a594d21f56
     - name: Integrate vcpkg 
       working-directory: ${{steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT}}
       run: vcpkg.exe integrate install
