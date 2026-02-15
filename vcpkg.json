@@ -3,13 +3,18 @@
   "version": "0.1.0",
   "dependencies": [
     "assimp",
+    {
+      "name": "bullet3",
+      "features": [ "multithreading" ]
+    },
     "freeimage",
     "freetype",
     "glm",
     "glew",
+    "rsig",
     "libiconv",
     "magic-enum",
-    "rsig",
+    "nlohmann-json",
     "sdl3"
   ]
 }

@@ -23,6 +23,10 @@
 
 #include <SDL3/SDL.h>
 
+#include "Window.h"
+#include "Keyboard.h"
+#include "Mouse.h"
+
 namespace pkzo
 {
     auto quit_signal = rsig::signal<>{};
@@ -34,15 +38,19 @@ namespace pkzo
 
     void rotue_events()
     {
+        // We assume that some other object pulled up SDL, e.g. Window.
+        // Else a call to route_events is meaningless.
+
         auto event = SDL_Event{};
         while (SDL_PollEvent(&event))
         {
-            switch (event.type)
+            if (event.type == SDL_EVENT_QUIT)
             {
-                case SDL_EVENT_QUIT:
-                    quit_signal.emit();
-                    break;
+                quit_signal.emit();
             }
+            Window::route_event(event);
+            Keyboard::route_event(event);
+            Mouse::route_event(event);
         }
     }
 }

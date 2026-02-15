@@ -20,11 +20,12 @@
 // SOFTWARE.
 
 #pragma once
-#include "config.h"
 
 #include <functional>
 
 #include <rsig/rsig.h>
+
+#include "api.h"
 
 namespace pkzo
 {
@@ -32,8 +33,8 @@ namespace pkzo
     //!
     //! The quit event is issued when either the last window is closed or
     //! the operating system requests the application to terminate.
-    PKZO_API rsig::connection on_quit(const std::function<void ()>& handler);
+    PKZO_EXPORT rsig::connection on_quit(const std::function<void ()>& handler);
 
     //! Distribute all pending OS events to the different consumers.
-    PKZO_API void rotue_events();
+    PKZO_EXPORT void rotue_events();
 }

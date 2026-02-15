@@ -9,3 +9,4 @@
 # VS Junk
 *.vcxproj.user
 /.vs
+*.aps

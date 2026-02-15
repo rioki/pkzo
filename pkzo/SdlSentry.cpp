@@ -1,5 +1,3 @@
-
-
 // pkzo
 // Copyright 2010-2026 Sean Farrell
 //
@@ -24,27 +22,9 @@
 #include "SdlSentry.h"
 
 #include <stdexcept>
-#include <SDL3/SDL.h>
 
 namespace pkzo
 {
-    SDL_InitFlags to_sdl_flags(SdlSubsystem s)
-    {
-        using enum SdlSubsystem;
-
-        auto out = SDL_InitFlags{0};
-        if ((s & AUDIO)    == AUDIO)    out |= SDL_INIT_AUDIO;
-        if ((s & VIDEO)    == VIDEO)    out |= SDL_INIT_VIDEO;
-        if ((s & JOYSTICK) == JOYSTICK) out |= SDL_INIT_JOYSTICK;
-        if ((s & HAPTIC)   == HAPTIC)   out |= SDL_INIT_HAPTIC;
-        if ((s & GAMEPAD)  == GAMEPAD)  out |= SDL_INIT_GAMEPAD;
-        if ((s & EVENTS)   == EVENTS)   out |= SDL_INIT_EVENTS;
-        if ((s & SENSOR)   == SENSOR)   out |= SDL_INIT_SENSOR;
-        if ((s & CAMERA)   == CAMERA)   out |= SDL_INIT_CAMERA;
-
-        return out;
-    }
-
     SdlSentry::SdlSentry(SdlSubsystem s)
     : subsystem(s)
     {

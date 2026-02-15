@@ -1,5 +1,5 @@
 // pkzo
-// Copyright 2025 Sean Farrell
+// Copyright 2010-2026 Sean Farrell
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files(the "Software"), to deal
@@ -20,9 +20,11 @@
 // SOFTWARE.
 
 #pragma once
-#include "config.h"
 
 #include "events.h"
-#include "Mouse.h"
-#include "Keyboard.h"
 #include "Window.h"
+#include "Keyboard.h"
+#include "Mouse.h"
+#include "GraphicContext.h"
+
+#include "Texture.h"

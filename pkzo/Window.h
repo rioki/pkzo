@@ -20,81 +20,73 @@
 // SOFTWARE.
 
 #pragma once
-#include "config.h"
 
 #include <functional>
 
 #include <glm/glm.hpp>
 #include <rsig/rsig.h>
+#include <SDL3/SDL.h>
 
+#include "api.h"
 #include "SdlSentry.h"
-
-struct SDL_Window;
-struct SDL_GLContextState;
-typedef SDL_GLContextState* SDL_GLContext;
+#include "GraphicContext.h"
 
 namespace pkzo
 {
-    enum class Api
+    enum class WindowState : Uint64
     {
-        OPENGL,
-        // VULKAN,
-        // METAL
+        WINDOW     = 0ULL,
+        FULLSCREEN = SDL_WINDOW_FULLSCREEN,
+        MINIMIZED  = SDL_WINDOW_MINIMIZED,
+        MAXIMIZED  = SDL_WINDOW_MAXIMIZED
     };
 
-    enum class WidnowState
-    {
-        WINDOW,
-        FULLSCREEN,
-        MINIMIZED,
-        MAXIMIZED
-    };
-
-    enum class WindowMode
-    {
-        NORMAL        = 0,
-        RESIZABLE     = bit(0),
-        BORDERLESS    = bit(1),
-        TRANSPARENT   = bit(2),
-        MODAL         = bit(3),
-        ALWAYS_ON_TOP = bit(4),
-        HIDDEN        = bit(5),
-        UTILITY       = bit(6),
-        TOOLTIP       = bit(7),
-        POPUP_MENU    = bit(8),
-    };
-
-    class PKZO_API Window
+    class PKZO_EXPORT Window
     {
     public:
+        static void route_event(const SDL_Event& event);
+
         struct Init
         {
-            std::string title       = "Pkzo";
-            glm::uvec2  size        = glm::uvec2(800u, 600u);
-            WidnowState state       = WidnowState::WINDOW;
-            WindowMode  mode        = WindowMode::NORMAL;
-            Api         api         = Api::OPENGL;
-            glm::uvec3  api_version = glm::uvec3(4,3,0);
-            std::string api_profile = "core";
+            std::string title = "Pkzo";
+            glm::uvec2  size  = glm::uvec2(800u, 600u);
+            WindowState state = WindowState::WINDOW;
+            Api         api   = Api::OPENGL;
         };
 
         Window(Init init);
 
         ~Window();
 
+        glm::uvec2 get_size() const;
+
+        void set_size(const glm::uvec2& value);
+
+        glm::uvec2 get_resolution() const;
+
+        WindowState get_state() const;
+
+        bool get_fullscreen() const;
+
+        void set_fullscreen(bool value);
+
+        void capture_mouse();
+        void release_mouse();
+
+        rsig::connection on_draw(const std::function<void (GraphicContext&)>& handler);
+
         void draw();
 
     private:
         static std::vector<Window*> instances;
 
-        SdlSentry     sdl_sentry = SdlSentry{SdlSubsystem::VIDEO | SdlSubsystem::EVENTS};
-        Api           api;
-        SDL_Window*   window     = nullptr;
-        SDL_GLContext glcontext  = nullptr;
+        SdlSentry                       sdl_sentry = SdlSentry{SdlSubsystem::VIDEO | SdlSubsystem::EVENTS};
+        SDL_Window*                     window     = nullptr;
+        std::unique_ptr<GraphicContext> graphic_context;
+
+        rsig::signal<GraphicContext&> draw_signal;
 
         Window(const Window&) = delete;
         Window& operator = (const Window&) = delete;
-
-    friend void rotue_events();
     };
 }

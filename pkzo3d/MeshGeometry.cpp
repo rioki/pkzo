@@ -1,5 +1,5 @@
 // pkzo
-// Copyright 2025 Sean Farrell
+// Copyright 2010-2026 Sean Farrell
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files(the "Software"), to deal
@@ -19,39 +19,42 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
+#include "MeshGeometry.h"
 
-#ifdef _WIN32
-    #ifdef BUILD_PKZO
-        #define PKZO_API __declspec(dllexport)
-    #else
-        #define PKZO_API __declspec(dllimport)
-    #endif
-#else
-    #define PKZO_API
-#endif
+#include <pkzo/debug.h>
 
-#ifdef _MSC_VER
-    //disable silly warnings
-    #pragma warning(disable: 4251) // 'identifier' : class 'type' needs to have dll-interface to be used by clients of class 'type2'
-    #pragma warning(disable: 4275) // non - DLL-interface class 'class_1' used as base for DLL-interface class 'class_2'
-#endif
-
-#define NOMINMAX
-
-#include <magic_enum/magic_enum.hpp>
-#include <magic_enum/magic_enum_iostream.hpp>
-
-namespace pkzo
+namespace pkzo3d
 {
-    using namespace magic_enum::iostream_operators;
-    using namespace magic_enum::bitwise_operators;
+    using pkzo::check;
 
-    constexpr auto VERSION = "0.1.0";
-
-    template <typename INT = size_t>
-    constexpr INT bit(INT offset)
+    MeshGeometry::MeshGeometry(Specs specs)
+    : Geometry({
+        .parent     = specs.parent,
+        .transform  = specs.transform,
+        .visible    = specs.visible,
+        .collidable = specs.collidable,
+        .material   = specs.material}),
+      mesh(specs.mesh)
     {
-        return 1u << offset;
+        check(mesh);
+    }
+
+    MeshGeometry::~MeshGeometry() = default;
+
+    void MeshGeometry::set_mesh(const std::shared_ptr<Mesh>& value)
+    {
+        check(mesh);
+        mesh = value;
+    }
+
+    std::shared_ptr<Mesh> MeshGeometry::get_mesh() const
+    {
+        return mesh;
+    }
+
+    Bounds MeshGeometry::get_bounds() const
+    {
+        check(mesh);
+        return mesh->get_bounds();
     }
 }

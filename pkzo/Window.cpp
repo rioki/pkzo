@@ -23,133 +23,114 @@
 
 #include <SDL3/SDL.h>
 
-#include "tinyformat.h"
+#include <tinyformat.h>
 
 namespace pkzo
 {
     std::vector<Window*> Window::instances;
 
-    auto get_window_flags(Api api)
+    void Window::route_event(const SDL_Event& event)
     {
-        using enum Api;
-
-        switch (api)
-        {
-            case OPENGL:
-                return SDL_WINDOW_OPENGL;
-            default:
-                std::unreachable();
-        }
-    }
-
-    auto get_window_flags(WidnowState state)
-    {
-        using enum WidnowState;
-
-        switch (state)
-        {
-            case WINDOW:
-                return 0ULL;
-            case FULLSCREEN:
-                return SDL_WINDOW_FULLSCREEN;
-            case MINIMIZED:
-                return SDL_WINDOW_MINIMIZED;
-            case MAXIMIZED:
-                return SDL_WINDOW_MAXIMIZED;
-            default:
-                std::unreachable();
-        }
-    }
-
-
-    auto get_window_flags(WindowMode mode)
-    {
-        using enum WindowMode;
-
-        auto result = 0ULL;
-
-        if ((mode & RESIZABLE)     == RESIZABLE)     result |= SDL_WINDOW_RESIZABLE;
-        if ((mode & BORDERLESS)    == BORDERLESS)    result |= SDL_WINDOW_BORDERLESS;
-        if ((mode & TRANSPARENT)   == TRANSPARENT)   result |= SDL_WINDOW_TRANSPARENT;
-        if ((mode & MODAL)         == MODAL)         result |= SDL_WINDOW_MODAL;
-        if ((mode & ALWAYS_ON_TOP) == ALWAYS_ON_TOP) result |= SDL_WINDOW_ALWAYS_ON_TOP;
-        if ((mode & HIDDEN)        == HIDDEN)        result |= SDL_WINDOW_HIDDEN;
-        if ((mode & UTILITY)       == UTILITY)       result |= SDL_WINDOW_UTILITY;
-        if ((mode & TOOLTIP)       == TOOLTIP)       result |= SDL_WINDOW_TOOLTIP;
-        if ((mode & POPUP_MENU)    == POPUP_MENU)    result |= SDL_WINDOW_POPUP_MENU;
-
-        return result;
-    }
-
-    int get_opengl_profile(const std::string& id)
-    {
-        if (id == "core")
-        {
-            return SDL_GL_CONTEXT_PROFILE_CORE;
-        }
-        else if (id == "compatibility")
-        {
-            return SDL_GL_CONTEXT_PROFILE_COMPATIBILITY;
-        }
-        else if (id == "es")
-        {
-            return SDL_GL_CONTEXT_PROFILE_ES;
-        }
-        else
-        {
-            throw std::invalid_argument(tfm::format("Unknown OpenGL profile: %s.", id));
-        }
+        // TODO
     }
 
     Window::Window(Init init)
-    : api(init.api)
     {
         instances.push_back(this);
 
-        auto flags = get_window_flags(init.api)
-                   | get_window_flags(init.state)
-                   | get_window_flags(init.mode);
+        auto flags = std::to_underlying(init.api)
+                   | std::to_underlying(init.state);
         window = SDL_CreateWindow(init.title.data(), init.size.x, init.size.y, flags);
         if (window == nullptr)
         {
             throw std::runtime_error(SDL_GetError());
         }
 
-        switch (init.api)
-        {
-            case Api::OPENGL:
-                SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, init.api_version.x);
-                SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, init.api_version.y);
-                SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-                glcontext = SDL_GL_CreateContext(window);
-                if (glcontext == nullptr)
-                {
-                    throw std::runtime_error(SDL_GetError());
-                }
-            break;
-        }
+        graphic_context = GraphicContext::create(init.api, window);
     }
 
     Window::~Window()
     {
-        switch (api)
-        {
-            case Api::OPENGL:
-                SDL_GL_DestroyContext(glcontext);
-            break;
-        }
+        graphic_context = nullptr;
         SDL_DestroyWindow(window);
 
         std::erase(instances, this);
     }
 
+    glm::uvec2 Window::get_size() const
+    {
+        int w, h;
+        SDL_GetWindowSize(window, &w, &h);
+        return {static_cast<unsigned int>(w), static_cast<unsigned int>(h)};
+    }
+
+    void Window::set_size(const glm::uvec2& value)
+    {
+        SDL_SetWindowSize(window, value.x, value.y);
+    }
+
+    glm::uvec2 Window::get_resolution() const
+    {
+        int w, h;
+        SDL_GetWindowSizeInPixels(window, &w, &h);
+        return {static_cast<unsigned int>(w), static_cast<unsigned int>(h)};
+    }
+
+    WindowState Window::get_state() const
+    {
+        auto flags = SDL_GetWindowFlags(window);
+        if (flags & SDL_WINDOW_FULLSCREEN)
+        {
+            return WindowState::FULLSCREEN;
+        }
+        else if (flags & SDL_WINDOW_MINIMIZED)
+        {
+            return WindowState::MINIMIZED;
+        }
+        else if (flags & SDL_WINDOW_MAXIMIZED)
+        {
+            return WindowState::MAXIMIZED;
+        }
+        else
+        {
+            return WindowState::WINDOW;
+        }
+    }
+
+    bool Window::get_fullscreen() const
+    {
+        return get_state() == WindowState::FULLSCREEN;
+    }
+
+    void Window::set_fullscreen(bool value)
+    {
+        SDL_SetWindowFullscreen(window, value);
+    }
+
+    void Window::capture_mouse()
+    {
+        SDL_SetWindowRelativeMouseMode(window, true);
+    }
+
+    void Window::release_mouse()
+    {
+        SDL_SetWindowRelativeMouseMode(window, false);
+    }
+
+    rsig::connection Window::on_draw(const std::function<void (GraphicContext&)>& handler)
+    {
+        return draw_signal.connect(handler);
+    }
+
     void Window::draw()
     {
-        switch (api)
-        {
-            case Api::OPENGL:
-                SDL_GL_SwapWindow(window);
-            break;
-        }
+        graphic_context->set_viewport({
+            .size = get_resolution()
+        });
+        graphic_context->clear_screen();
+
+        draw_signal.emit(*graphic_context);
+
+        graphic_context->swap_buffers();
     }
 }

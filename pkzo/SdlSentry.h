@@ -20,30 +20,36 @@
 // SOFTWARE.
 
 #pragma once
-#include "config.h"
+
+#include <SDL3/SDL.h>
+#include <magic_enum/magic_enum.hpp>
+
+#include "api.h"
 
 namespace pkzo
 {
+    using namespace magic_enum::bitwise_operators;
+
     //! Subsystem
     //!
     //! @note Bitwise operators are defined for this enum, you may
     //! combine systems with the | operator.
-    enum class SdlSubsystem
+    enum class SdlSubsystem : SDL_InitFlags
     {
-        AUDIO     = bit(0),
-        VIDEO     = bit(1),
-        JOYSTICK  = bit(2),
-        HAPTIC    = bit(3),
-        GAMEPAD   = bit(4),
-        EVENTS    = bit(5),
-        SENSOR    = bit(6),
-        CAMERA    = bit(7)
+        AUDIO     = SDL_INIT_AUDIO,
+        VIDEO     = SDL_INIT_VIDEO,
+        JOYSTICK  = SDL_INIT_JOYSTICK,
+        HAPTIC    = SDL_INIT_HAPTIC,
+        GAMEPAD   = SDL_INIT_GAMEPAD,
+        EVENTS    = SDL_INIT_EVENTS,
+        SENSOR    = SDL_INIT_SENSOR,
+        CAMERA    = SDL_INIT_CAMERA
     };
 
     //! Utility to initialize and cleanup SDL systems.
     //!
     //! SDL's subsytems are reference counted so use in an RAII way.
-    class PKZO_API SdlSentry
+    class PKZO_EXPORT SdlSentry
     {
     public:
         //! Initialize the given SDL subsystems.
