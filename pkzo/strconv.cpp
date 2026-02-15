@@ -13,7 +13,7 @@
 #include <vector>
 #include <iconv.h>
 
-#include <stdng.h>
+#include "stdng.h"
 
 namespace strconv
 {

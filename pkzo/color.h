@@ -23,7 +23,8 @@
 
 #include <glm/glm.hpp>
 #include <fkYAML/node.hpp>
-#include <glm_fkyaml.h>
+
+#include "glm_fkyaml.h"
 
 namespace pkzo
 {
