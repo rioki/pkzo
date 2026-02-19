@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pkzo2d", "pkzo2d\pkzo2d.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pkzo3d", "pkzo3d\pkzo3d.vcxproj", "{C9A88B50-E086-4E3C-9F07-9C5CD3EFBD4D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lab", "examples\lab\lab.vcxproj", "{D2B8DE94-1284-4457-85BA-4CB47F3A8B2C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -53,12 +55,21 @@ Global
 		{C9A88B50-E086-4E3C-9F07-9C5CD3EFBD4D}.Release|x64.Build.0 = Release|x64
 		{C9A88B50-E086-4E3C-9F07-9C5CD3EFBD4D}.Release|x86.ActiveCfg = Release|Win32
 		{C9A88B50-E086-4E3C-9F07-9C5CD3EFBD4D}.Release|x86.Build.0 = Release|Win32
+		{D2B8DE94-1284-4457-85BA-4CB47F3A8B2C}.Debug|x64.ActiveCfg = Debug|x64
+		{D2B8DE94-1284-4457-85BA-4CB47F3A8B2C}.Debug|x64.Build.0 = Debug|x64
+		{D2B8DE94-1284-4457-85BA-4CB47F3A8B2C}.Debug|x86.ActiveCfg = Debug|Win32
+		{D2B8DE94-1284-4457-85BA-4CB47F3A8B2C}.Debug|x86.Build.0 = Debug|Win32
+		{D2B8DE94-1284-4457-85BA-4CB47F3A8B2C}.Release|x64.ActiveCfg = Release|x64
+		{D2B8DE94-1284-4457-85BA-4CB47F3A8B2C}.Release|x64.Build.0 = Release|x64
+		{D2B8DE94-1284-4457-85BA-4CB47F3A8B2C}.Release|x86.ActiveCfg = Release|Win32
+		{D2B8DE94-1284-4457-85BA-4CB47F3A8B2C}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3B577CAF-585D-4131-904C-5690572A1B60} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{D2B8DE94-1284-4457-85BA-4CB47F3A8B2C} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DF467B4D-71CE-421C-8883-5EED61A0790C}
