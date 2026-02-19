@@ -75,25 +75,25 @@ namespace lab
 
         add<Prop>({
             .transform = pkzo3d::position(0.0f, 0.2f, 1.0f),
-            .model     = "polyhaven/models/Barrel_01_2k/Barrel_01_2k.gltf",
+            .model     = "polyhaven/models/barrel_01_2k/barrel_01_2k.gltf",
             .collision = Prop::Collision::BOUNDING_CYLINER_Z
         });
 
         add<Prop>({
             .transform = pkzo3d::position(0.2f, 0.0f, 2.0f),
-            .model     = "polyhaven/models/Barrel_01_2k/Barrel_01_2k.gltf",
+            .model     = "polyhaven/models/barrel_01_2k/barrel_01_2k.gltf",
             .collision = Prop::Collision::BOUNDING_CYLINER_Z
         });
 
         add<Prop>({
             .transform = pkzo3d::position(0.0f, -0.2f, 3.0f),
-            .model     = "polyhaven/models/Barrel_01_2k/Barrel_01_2k.gltf",
+            .model     = "polyhaven/models/barrel_01_2k/barrel_01_2k.gltf",
             .collision = Prop::Collision::BOUNDING_CYLINER_Z
         });
 
         add<Prop>({
             .transform = pkzo3d::position(0.0f, 0.0f, 4.0f),
-            .model     = "polyhaven/models/Barrel_01_2k/Barrel_01_2k.gltf",
+            .model     = "polyhaven/models/barrel_01_2k/barrel_01_2k.gltf",
             .collision = Prop::Collision::BOUNDING_CYLINER_Z
         });
 
