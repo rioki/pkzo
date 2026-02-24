@@ -130,7 +130,7 @@ namespace pkzo
         return depth_attachment;
     }
 
-    const std::vector<std::shared_ptr<Texture>>& OpenGLFrameBuffer::get_colors() const
+    std::vector<std::shared_ptr<Texture>> OpenGLFrameBuffer::get_colors() const
     {
         return {begin(color_attachement), end(color_attachement)};
     }

@@ -42,7 +42,7 @@ namespace pkzo
 
         std::shared_ptr<Texture> get_depth() const override;
 
-        const std::vector<std::shared_ptr<Texture>>& get_colors() const override;
+        std::vector<std::shared_ptr<Texture>> get_colors() const override;
         std::shared_ptr<Texture> get_color(unsigned int slot) const override;
 
         void attach_depth(const std::shared_ptr<OpenGLTexture>& texture);

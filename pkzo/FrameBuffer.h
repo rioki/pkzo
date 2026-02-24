@@ -54,7 +54,7 @@ namespace pkzo
 
         virtual std::shared_ptr<Texture> get_depth() const = 0;
 
-        virtual const std::vector<std::shared_ptr<Texture>>& get_colors() const = 0;
+        virtual std::vector<std::shared_ptr<Texture>> get_colors() const = 0;
         virtual std::shared_ptr<Texture> get_color(unsigned int slot) const = 0;
 
     private:
