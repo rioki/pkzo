@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.21)
 
 project(pkzo VERSION 0.1.0 LANGUAGES CXX)
 
-include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
+include(GNUInstallDirs)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -23,7 +23,6 @@ find_package(fkYAML CONFIG REQUIRED)
 find_package(rsig CONFIG REQUIRED)
 find_package(FreeImage CONFIG REQUIRED)
 
-
 function(pkzo_link_first_available target)
   set(options)
   set(one_value_args)
@@ -40,10 +39,10 @@ function(pkzo_link_first_available target)
   message(FATAL_ERROR "Could not find any usable target for ${target}. Tried: ${ARG_CANDIDATES}")
 endfunction()
 
-function(pkzo_install_headers target source_dir)
+function(pkzo_install_headers source_dir install_subdir)
   install(
     DIRECTORY "${source_dir}/"
-    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${target}"
+    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${install_subdir}"
     FILES_MATCHING
       PATTERN "*.h"
   )
@@ -79,6 +78,7 @@ add_library(pkzo ${PKZO_SOURCES})
 add_library(pkzo::pkzo ALIAS pkzo)
 
 target_compile_definitions(pkzo PRIVATE BUILD_PKZO STRCONV_DLL BUILD_STRCONV)
+
 target_include_directories(pkzo
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
@@ -94,12 +94,16 @@ target_link_libraries(pkzo
 
 pkzo_link_first_available(pkzo CANDIDATES magic_enum::magic_enum magic_enum::magic_enum-header-only)
 pkzo_link_first_available(pkzo CANDIDATES tinyformat::tinyformat tinyformat::tinyformat-header-only)
-pkzo_link_first_available(pkzo CANDIDATES fkYAML::fkYAML fkYAML::fkYAML-header-only)
+pkzo_link_first_available(pkzo CANDIDATES fkYAML::fkYAML fkyaml::fkyaml fkYAML::fkYAML-header-only)
 pkzo_link_first_available(pkzo CANDIDATES rsig::rsig unofficial::rsig::rsig)
 pkzo_link_first_available(pkzo CANDIDATES FreeImage::FreeImage freeimage::FreeImage unofficial::freeimage::FreeImage)
 pkzo_link_first_available(pkzo CANDIDATES Freetype::Freetype freetype)
 pkzo_link_first_available(pkzo CANDIDATES GLEW::GLEW GLEW::glew unofficial::glew::glew)
 pkzo_link_first_available(pkzo CANDIDATES SDL3::SDL3 SDL3::SDL3-static)
+
+if(WIN32)
+  target_link_libraries(pkzo PRIVATE dbghelp)
+endif()
 
 set(PKZO2D_SOURCES
   pkzo2d/Group.cpp
@@ -182,11 +186,8 @@ pkzo_link_first_available(pkzo3d CANDIDATES Bullet::BulletDynamics BulletDynamic
 pkzo_link_first_available(pkzo3d CANDIDATES Bullet::BulletCollision BulletCollision)
 pkzo_link_first_available(pkzo3d CANDIDATES Bullet::LinearMath LinearMath)
 
-if(WIN32)
-  target_link_libraries(pkzo PRIVATE dbghelp)
-endif()
-
-install(TARGETS pkzo pkzo2d pkzo3d
+install(
+  TARGETS pkzo pkzo2d pkzo3d
   EXPORT pkzoTargets
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
