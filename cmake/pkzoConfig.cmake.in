@@ -1,0 +1,19 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+
+find_dependency(assimp CONFIG)
+find_dependency(Bullet CONFIG)
+find_dependency(freetype CONFIG)
+find_dependency(glm CONFIG)
+find_dependency(GLEW CONFIG)
+find_dependency(nlohmann_json CONFIG)
+find_dependency(SDL3 CONFIG)
+find_dependency(Iconv)
+find_dependency(magic_enum CONFIG)
+find_dependency(tinyformat CONFIG)
+find_dependency(fkYAML CONFIG)
+find_dependency(rsig CONFIG)
+find_dependency(FreeImage CONFIG)
+
+include("${CMAKE_CURRENT_LIST_DIR}/pkzoTargets.cmake")
