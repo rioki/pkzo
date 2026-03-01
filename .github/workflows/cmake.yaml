@@ -1,0 +1,45 @@
+name: CMake
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        configuration: [Release, Debug]
+        triplet: [x64-windows]
+    runs-on: windows-latest
+
+    env:
+      VCPKG_DEFAULT_TRIPLET: ${{ matrix.triplet }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Restore from cache and install vcpkg
+        id: runvcpkg
+        uses: lukka/run-vcpkg@v11
+        with:
+          vcpkgGitURL: https://github.com/rioki/vcpkg.git
+          vcpkgGitCommitId: 62159a45e18f3a9ac0548628dcaf74fcb60c6ff9
+
+      - name: Configure
+        run: >-
+          cmake -S . -B build
+          -DCMAKE_BUILD_TYPE=${{ matrix.configuration }}
+          -DCMAKE_TOOLCHAIN_FILE=${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}/scripts/buildsystems/vcpkg.cmake
+          -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }}
+
+      - name: Build
+        run: cmake --build build --config ${{ matrix.configuration }}
+
+      - name: Install
+        run: cmake --install build --config ${{ matrix.configuration }} --prefix install
