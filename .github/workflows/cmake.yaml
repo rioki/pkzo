@@ -35,16 +35,17 @@ jobs:
           vcpkgGitURL: https://github.com/rioki/vcpkg.git
           vcpkgGitCommitId: 62159a45e18f3a9ac0548628dcaf74fcb60c6ff9
 
-      - name: Configure
-        run: >-
-          cmake -S . -B build
-          -DCMAKE_BUILD_TYPE=${{ matrix.configuration }}
-          -DCMAKE_TOOLCHAIN_FILE=${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}/scripts/buildsystems/vcpkg.cmake
-          -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }}
-          -A ${{ matrix.platform }}
-
-      - name: Build
-        run: cmake --build build --config ${{ matrix.configuration }}
-
-      - name: Install
-        run: cmake --install build --config ${{ matrix.configuration }} --prefix install
+      - name: Configure + Build + Install
+        uses: lukka/run-cmake@v10
+        with:
+          cmakeListsTxtPath: ${{ github.workspace }}
+          cmakeBuildDirectory: ${{ github.workspace }}/build
+          cmakeAppendedArgs: >-
+            -A ${{ matrix.platform }}
+            -DCMAKE_BUILD_TYPE=${{ matrix.configuration }}
+            -DCMAKE_TOOLCHAIN_FILE=${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}/scripts/buildsystems/vcpkg.cmake
+            -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }}
+          buildWithCMakeArgs: >-
+            --config ${{ matrix.configuration }}
+            --target install
+            --prefix install
