@@ -14,7 +14,11 @@ jobs:
     strategy:
       matrix:
         configuration: [Release, Debug]
-        triplet: [x64-windows]
+        include:
+          - triplet: x86-windows
+            platform: Win32
+          - triplet: x64-windows
+            platform: x64
     runs-on: windows-latest
 
     env:
@@ -37,6 +41,7 @@ jobs:
           -DCMAKE_BUILD_TYPE=${{ matrix.configuration }}
           -DCMAKE_TOOLCHAIN_FILE=${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}/scripts/buildsystems/vcpkg.cmake
           -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }}
+          -A ${{ matrix.platform }}
 
       - name: Build
         run: cmake --build build --config ${{ matrix.configuration }}
