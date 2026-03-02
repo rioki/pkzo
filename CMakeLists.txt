@@ -31,7 +31,7 @@ file(GLOB PKZO_SOURCES CONFIGURE_DEPENDS
 
 add_library(pkzo ${PKZO_SOURCES})
 target_compile_definitions(pkzo PRIVATE BUILD_PKZO STRCONV_DLL BUILD_STRCONV)
-target_include_directories(main PUBLIC ${RSIG_INCLUDE_DIRS} ${TINYFORMAT_INCLUDE_DIRS})
+target_include_directories(pkzo PUBLIC ${RSIG_INCLUDE_DIRS} ${TINYFORMAT_INCLUDE_DIRS})
 target_link_libraries(pkzo PRIVATE freetype::freetype)
 target_link_libraries(pkzo PRIVATE GLEW::GLEW)
 target_link_libraries(pkzo PUBLIC glm::glm)
