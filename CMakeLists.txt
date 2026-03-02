@@ -36,7 +36,7 @@ target_link_libraries(pkzo PRIVATE freetype::freetype)
 target_link_libraries(pkzo PRIVATE GLEW::GLEW)
 target_link_libraries(pkzo PUBLIC glm::glm)
 target_link_libraries(pkzo PRIVATE Iconv::Iconv)
-target_link_libraries(main PUBLIC magic_enum::magic_enum)
+target_link_libraries(pkzo PUBLIC magic_enum::magic_enum)
 target_link_libraries(pkzo PUBLIC rsig::rsig)
 target_link_libraries(pkzo PRIVATE sdl3::sdl3)
 
