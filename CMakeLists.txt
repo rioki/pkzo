@@ -16,8 +16,8 @@ find_package(freetype CONFIG REQUIRED)
 find_package(GLEW CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 find_package(Iconv REQUIRED)
-find_package(magic-enum CONFIG REQUIRED)
-find_package(nlohmann-json CONFIG REQUIRED)
+find_package(magic_enum CONFIG REQUIRED)
+find_package(nlohmann_json CONFIG REQUIRED)
 find_package(rsig CONFIG REQUIRED)
 find_package(SDL3 CONFIG REQUIRED)
 find_package(tinyformat CONFIG REQUIRED)
@@ -30,16 +30,13 @@ file(GLOB PKZO_SOURCES CONFIGURE_DEPENDS
 
 add_library(pkzo ${PKZO_SOURCES})
 target_compile_definitions(pkzo PRIVATE BUILD_PKZO STRCONV_DLL BUILD_STRCONV)
-target_link_libraries(pkzo PUBLIC fkyaml::fkyaml)
-target_link_libraries(pkzo PUBLIC freeimage::freeimage)
-target_link_libraries(pkzo PUBLIC freetype::freetype)
-target_link_libraries(pkzo PUBLIC GLEW::GLEW)
+target_link_libraries(pkzo PRIVATE freetype::freetype)
+target_link_libraries(pkzo PRIVATE GLEW::GLEW)
 target_link_libraries(pkzo PUBLIC glm::glm)
 target_link_libraries(pkzo PRIVATE Iconv::Iconv)
-target_link_libraries(pkzo PUBLIC magic-enum::magic-enum)
-target_link_libraries(pkzo PUBLIC nlohmann-json::nlohmann-json)
+target_link_libraries(main PUBLIC magic_enum::magic_enum)
 target_link_libraries(pkzo PUBLIC rsig::rsig)
-target_link_libraries(pkzo PUBLIC sdl3::sdl3)
+target_link_libraries(pkzo PRIVATE sdl3::sdl3)
 target_link_libraries(pkzo PUBLIC tinyformat::tinyformat)
 
 # pkzo2d
@@ -49,11 +46,8 @@ file(GLOB PKZO2D_SOURCES CONFIGURE_DEPENDS
 )
 
 add_library(pkzo2d ${PKZO2D_SOURCES})
+target_compile_definitions(pkzo PRIVATE BUILD_PKZO2D)
 target_link_libraries(pkzo2d PUBLIC pkzo)
-target_link_libraries(pkzo2d PUBLIC glm::glm)
-target_link_libraries(pkzo2d PUBLIC magic-enum::magic-enum)
-target_link_libraries(pkzo2d PUBLIC rsig::rsig)
-target_link_libraries(pkzo2d PUBLIC tinyformat::tinyformat)
 
 # pkzo3d
 
@@ -62,14 +56,12 @@ file(GLOB PKZO3D_SOURCES CONFIGURE_DEPENDS
 )
 
 add_library(pkzo3d ${PKZO3D_SOURCES})
+target_compile_definitions(pkzo PRIVATE BUILD_PKZO3D)
+target_link_libraries(pkzo2d PUBLIC pkzo)
 target_link_libraries(pkzo3d PRIVATE assimp::assimp)
 target_link_libraries(pkzo3d PRIVATE ${BULLET_LIBRARIES})
-target_link_libraries(pkzo3d PUBLIC fkyaml::fkyaml)
-target_link_libraries(pkzo3d PUBLIC glm::glm)
-target_link_libraries(pkzo3d PUBLIC magic-enum::magic-enum)
-target_link_libraries(pkzo3d PUBLIC nlohmann-json::nlohmann-json)
-target_link_libraries(pkzo3d PUBLIC rsig::rsig)
-target_link_libraries(pkzo3d PUBLIC tinyformat::tinyformat)
+target_link_libraries(pkzo3d PUBLIC fkYAML::fkYAML )
+target_link_libraries(pkzo3d PUBLIC nlohmann_json::nlohmann_json)
 
 # build config 
 
