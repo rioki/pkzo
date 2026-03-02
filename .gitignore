@@ -2,6 +2,7 @@
 # Build Outputs
 /bin
 /.int
+/builds
 
 # VCPKG
 /vcpkg_installed
