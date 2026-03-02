@@ -8,6 +8,9 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_SHARED_LIBRARY_PREFIX)
 set(CMAKE_STATIC_LIBRARY_PREFIX)
 
+find_path(RSIG_INCLUDE_DIRS "rsig/rsig.h")
+find_path(RSIG_INCLUDE_DIRS "tinyformat.h")
+
 find_package(assimp CONFIG REQUIRED)
 find_package(Bullet CONFIG REQUIRED)
 find_package(fkYAML CONFIG REQUIRED)
@@ -18,7 +21,6 @@ find_package(glm CONFIG REQUIRED)
 find_package(Iconv REQUIRED)
 find_package(magic_enum CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
-find_package(rsig CONFIG REQUIRED)
 find_package(SDL3 CONFIG REQUIRED)
 find_package(tinyformat CONFIG REQUIRED)
 
@@ -30,6 +32,7 @@ file(GLOB PKZO_SOURCES CONFIGURE_DEPENDS
 
 add_library(pkzo ${PKZO_SOURCES})
 target_compile_definitions(pkzo PRIVATE BUILD_PKZO STRCONV_DLL BUILD_STRCONV)
+target_include_directories(main PUBLIC ${RSIG_INCLUDE_DIRS} ${TINYFORMAT_INCLUDE_DIRS})
 target_link_libraries(pkzo PRIVATE freetype::freetype)
 target_link_libraries(pkzo PRIVATE GLEW::GLEW)
 target_link_libraries(pkzo PUBLIC glm::glm)
@@ -37,7 +40,6 @@ target_link_libraries(pkzo PRIVATE Iconv::Iconv)
 target_link_libraries(main PUBLIC magic_enum::magic_enum)
 target_link_libraries(pkzo PUBLIC rsig::rsig)
 target_link_libraries(pkzo PRIVATE sdl3::sdl3)
-target_link_libraries(pkzo PUBLIC tinyformat::tinyformat)
 
 # pkzo2d
 
