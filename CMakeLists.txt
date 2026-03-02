@@ -22,7 +22,6 @@ find_package(Iconv REQUIRED)
 find_package(magic_enum CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
 find_package(SDL3 CONFIG REQUIRED)
-find_package(tinyformat CONFIG REQUIRED)
 
 # pkzo
 
