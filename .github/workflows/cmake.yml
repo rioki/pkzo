@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: read
+  packages: write
 
 jobs:
   build:
@@ -22,6 +23,7 @@ jobs:
     runs-on: ${{ matrix.system }}
     env:
       VCPKG_DEFAULT_TRIPLET: ${{ matrix.triplet }}
+      VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -31,6 +33,20 @@ jobs:
       uses: lukka/run-vcpkg@v10
       with:
         vcpkgGitCommitId: 62159a45e18f3a9ac0548628dcaf74fcb60c6ff9
+    - name: 'Setup NuGet/Vcpkg Credentials'
+      working-directory: ${{steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT}}
+      shell: 'bash'
+      run: >
+        `vcpkg fetch nuget | tail -n 1` \
+          sources add \
+          -source "https://nuget.pkg.github.com/rioki/index.json" \
+          -storepasswordincleartext \
+          -name "GitHub" \
+          -username "rioki" \
+          -password "${{ secrets.VCPKG_PAT_TOKEN }}"
+        `vcpkg fetch nuget | tail -n 1` \
+          setapikey "${{ secrets.VCPKG_PAT_TOKEN }}" \
+          -source "https://nuget.pkg.github.com/rioki/index.json"
     - name: Build
       uses: lukka/run-cmake@v10
       with:

@@ -23,8 +23,6 @@ jobs:
     runs-on: windows-latest
     env:
       VCPKG_DEFAULT_TRIPLET: ${{ matrix.triplet }}
-      USERNAME: rioki
-      FEED_URL: https://nuget.pkg.github.com/rioki/index.json
       VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
     steps:
     - name: Checkout
