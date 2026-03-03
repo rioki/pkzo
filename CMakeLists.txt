@@ -17,7 +17,7 @@ find_path(TINYFORMAT_INCLUDE_DIRS "tinyformat.h")
 find_package(assimp CONFIG REQUIRED)
 find_package(Bullet CONFIG REQUIRED)
 find_package(fkYAML CONFIG REQUIRED)
-find_package(FreeImage CONFIG REQUIRED)
+find_package(freeimage CONFIG REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(GLEW CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
@@ -36,38 +36,38 @@ endif()
 # pkzo
 
 file(GLOB PKZO_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/pkzo/*.cpp")
-add_library(pkzo ${PKZO_SOURCES})
+add_library(pkzo SHARED ${PKZO_SOURCES})
 
 target_compile_definitions(pkzo PRIVATE BUILD_PKZO STRCONV_DLL BUILD_STRCONV)
 
 target_include_directories(pkzo
   PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/pkzo>
-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/pkzo>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
-target_include_directories(pkzo PUBLIC ${RSIG_INCLUDE_DIRS} ${TINYFORMAT_INCLUDE_DIRS})
+target_include_directories(pkzo PRIVATE ${RSIG_INCLUDE_DIRS} ${TINYFORMAT_INCLUDE_DIRS})
 
 target_link_libraries(pkzo PUBLIC glm::glm)
 target_link_libraries(pkzo PUBLIC magic_enum::magic_enum)
-target_link_libraries(pkzo PUBLIC rsig::rsig)
 
 target_link_libraries(pkzo PRIVATE Freetype::Freetype)
+target_link_libraries(pkzo PRIVATE freeimage::FreeImage freeimage::FreeImagePlus)
 target_link_libraries(pkzo PRIVATE GLEW::GLEW)
 target_link_libraries(pkzo PRIVATE Iconv::Iconv)
-target_link_libraries(pkzo PRIVATE sdl3::sdl3)
+target_link_libraries(pkzo PRIVATE SDL3::SDL3)
 
 # pkzo2d
 
 file(GLOB PKZO2D_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/pkzo2d/*.cpp" )
-add_library(pkzo2d ${PKZO2D_SOURCES})
+add_library(pkzo2d SHARED ${PKZO2D_SOURCES})
 
 target_compile_definitions(pkzo2d PRIVATE BUILD_PKZO2D)
 
 target_include_directories(pkzo2d
   PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/pkzo2d>
-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/pkzo2d>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
 target_link_libraries(pkzo2d PUBLIC pkzo)
@@ -75,20 +75,20 @@ target_link_libraries(pkzo2d PUBLIC pkzo)
 # pkzo3d
 
 file(GLOB PKZO3D_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/pkzo3d/*.cpp")
-add_library(pkzo3d ${PKZO3D_SOURCES})
+add_library(pkzo3d SHARED ${PKZO3D_SOURCES})
 
 target_compile_definitions(pkzo3d PRIVATE BUILD_PKZO3D)
 
 target_include_directories(pkzo3d
   PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/pkzo3d>
-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/pkzo3d>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
-target_link_libraries(pkzo2d PUBLIC pkzo)
+target_link_libraries(pkzo3d PUBLIC pkzo)
 
 target_link_libraries(pkzo3d PRIVATE assimp::assimp)
-target_link_libraries(pkzo3d PRIVATE Bullet::BulletDynamics Bullet::BulletCollision Bullet::LinearMath)
+target_link_libraries(pkzo3d PRIVATE ${BULLET_LIBRARIES})
 target_link_libraries(pkzo3d PRIVATE fkYAML::fkYAML)
 target_link_libraries(pkzo3d PRIVATE nlohmann_json::nlohmann_json)
 
