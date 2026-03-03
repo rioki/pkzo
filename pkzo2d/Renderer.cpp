@@ -101,7 +101,7 @@ namespace pkzo2d
         {UniformLocation::COLOR_MAP,         "sampler2D",    "uni_ColorMap"},
     };
 
-    #ifndef NDEBUG
+    #ifdef DEV_BUILD
     // DESIGN: Writing the include files from the lib is a bit nasty, but it does the trick.
     // Internally these files are not used, just for IDE's libter.
     void write_include_file(const std::string& filename, const std::string& contents)
@@ -133,7 +133,7 @@ namespace pkzo2d
             }
         }
 
-        #ifndef NDEBUG
+        #ifdef DEV_BUILD
         write_include_file("uniforms.glsl", result.str());
         #endif
 
@@ -151,7 +151,7 @@ namespace pkzo2d
             result << tfm::format("layout(location = %d) in %s %s;\n", std::to_underlying(attribute.location), attribute.type, attribute.id);
         }
 
-        #ifndef NDEBUG
+        #ifdef DEV_BUILD
         write_include_file("attributes.glsl", result.str());
         #endif
 
@@ -169,7 +169,7 @@ namespace pkzo2d
             result << tfm::format("layout(location = %d) out vec4 out_FragColor%d;\n", i, i);
         }
 
-        #ifndef NDEBUG
+        #ifdef DEV_BUILD
         write_include_file("outputs.glsl", result.str());
         #endif
 
