@@ -47,9 +47,9 @@ jobs:
           -storepasswordincleartext \
           -name "GitHub" \
           -username "rioki" \
-          -password "${{ secrets.GITHUB_TOKEN }}"
+          -password "${{ secrets.VCPKG_PAT_TOKEN }}"
         `vcpkg fetch nuget | tail -n 1` \
-          setapikey "${{ secrets.GITHUB_TOKEN }}" \
+          setapikey "${{ secrets.VCPKG_PAT_TOKEN }}" \
           -source "https://nuget.pkg.github.com/rioki/index.json"
     - name: Integrate vcpkg 
       working-directory: ${{steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT}}
