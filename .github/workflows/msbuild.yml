@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: read
+  packages: write
 
 jobs:
   build:
@@ -23,6 +24,9 @@ jobs:
     runs-on: windows-latest
     env:
       VCPKG_DEFAULT_TRIPLET: ${{ matrix.triplet }}
+      USERNAME: rioki
+      FEED_URL: https://nuget.pkg.github.com/rioki/index.json
+      VCPKG_BINARY_SOURCES: "clear;nuget,https://nuget.pkg.github.com/rioki/index.json,readwrite"
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -33,9 +37,22 @@ jobs:
       with:
         vcpkgGitURL: https://github.com/rioki/vcpkg.git
         vcpkgGitCommitId: 62159a45e18f3a9ac0548628dcaf74fcb60c6ff9
+    - name: Setup Package Caching
+      working-directory: ${{steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT}}
+      run: |
+        .$(vcpkg fetch nuget) `
+          sources add `
+          -Source "${{ env.FEED_URL }}" `
+          -StorePasswordInClearText `
+          -Name GitHubPackages `
+          -UserName "${{ env.USERNAME }}" `
+          -Password "${{ secrets.GITHUB_TOKEN }}"
+        .$(vcpkg fetch nuget) `
+          setapikey "${{ secrets.GITHUB_TOKEN }}" `
+          -Source "${{ env.FEED_URL }}"
     - name: Integrate vcpkg 
       working-directory: ${{steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT}}
-      run: vcpkg.exe integrate install
+      run: vcpkg integrate install
     - name: Build
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: msbuild /m /p:Configuration=${{matrix.configuration}} /property:Platform=${{matrix.platform}} pkzo.sln
