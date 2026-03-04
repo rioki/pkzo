@@ -1,17 +1,27 @@
 {
   "version": 6,
-  "cmakeMinimumRequired": {
+    "cmakeMinimumRequired": {
     "major": 3,
     "minor": 21,
     "patch": 0
   },
   "configurePresets": [
     {
-      "name": "ninja",
-      "displayName": "Ninja Multi-Config Configure Settings",
-      "description": "Configure toolchain",
-      "binaryDir": "${sourceDir}/builds/${presetName}",
-      "generator": "Ninja Multi-Config",
+      "name": "ninja-debug",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build-debug",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": {
+          "type": "FILEPATH",
+          "value": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+        },
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "ninja-release",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build-release",
       "cacheVariables": {
         "CMAKE_TOOLCHAIN_FILE": {
           "type": "FILEPATH",
@@ -22,11 +32,13 @@
     }
   ],
   "buildPresets": [
-    {
-      "name": "ninja",
-      "configurePreset": "ninja",
-      "displayName": "Build with Ninja",
-      "description": "Build with Ninja"
+    { 
+      "name": "ninja-debug", 
+      "configurePreset": "ninja-debug" 
+    },
+    { 
+      "name": "ninja-release", 
+      "configurePreset": "ninja-release" 
     }
   ]
 }

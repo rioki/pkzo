@@ -50,16 +50,14 @@ jobs:
     - name: Build Debug
       uses: lukka/run-cmake@v10
       with:
-        configurePreset: 'ninja'
-        buildPreset: 'ninja'
+        configurePreset: 'ninja-debug'
+        buildPreset: 'ninja-debug'
         buildPresetAdditionalArgs: "['-DCMAKE_BUILD_TYPE=Debug']"
-        buildDirectory: ${{env.GITHUB_WORKSPACE}}/build-debug
     - name: Build Release
       uses: lukka/run-cmake@v10
       with:
-        configurePreset: 'ninja'
-        buildPreset: 'ninja'
+        configurePreset: 'ninja-release'
+        buildPreset: 'ninja-release'
         buildPresetAdditionalArgs: "['-DCMAKE_BUILD_TYPE=Release']"
-        buildDirectory: ${{env.GITHUB_WORKSPACE}}/build-release
 
     
