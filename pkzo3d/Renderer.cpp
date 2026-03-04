@@ -313,7 +313,7 @@ namespace pkzo3d
             result << tfm::format("layout(location = %d) out vec4 out_FragColor%d;\n", i, i);
         }
 
-        #ifdef NDEBUG
+        #ifdef DEV_BUILD
         write_include_file("outputs.glsl", result.str());
         #endif
 
