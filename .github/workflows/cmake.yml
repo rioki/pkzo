@@ -52,12 +52,10 @@ jobs:
       with:
         configurePreset: 'ninja-debug'
         buildPreset: 'ninja-debug'
-        buildPresetAdditionalArgs: "['-DCMAKE_BUILD_TYPE=Debug']"
     - name: Build Release
       uses: lukka/run-cmake@v10
       with:
         configurePreset: 'ninja-release'
         buildPreset: 'ninja-release'
-        buildPresetAdditionalArgs: "['-DCMAKE_BUILD_TYPE=Release']"
 
     
