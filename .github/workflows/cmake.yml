@@ -47,8 +47,19 @@ jobs:
         `vcpkg fetch nuget | tail -n 1` \
           setapikey "${{ secrets.VCPKG_PAT_TOKEN }}" \
           -source "https://nuget.pkg.github.com/rioki/index.json"
-    - name: Build
+    - name: Build Debug
       uses: lukka/run-cmake@v10
       with:
         configurePreset: 'ninja'
         buildPreset: 'ninja'
+        buildPresetAdditionalArgs: "['-DCMAKE_BUILD_TYPE=Debug']"
+        buildDirectory: ${{env.GITHUB_WORKSPACE}}/build-debug
+    - name: Build Release
+      uses: lukka/run-cmake@v10
+      with:
+        configurePreset: 'ninja'
+        buildPreset: 'ninja'
+        buildPresetAdditionalArgs: "['-DCMAKE_BUILD_TYPE=Release']"
+        buildDirectory: ${{env.GITHUB_WORKSPACE}}/build-release
+
+    

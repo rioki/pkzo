@@ -56,4 +56,4 @@ jobs:
       run: msbuild /m /p:Configuration=Debug /property:Platform=${{matrix.platform}} pkzo.sln
     - name: Build Release
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: msbuild /m /p:Configuration=Debug /property:Platform=${{matrix.platform}} pkzo.sln
+      run: msbuild /m /p:Configuration=Release /property:Platform=${{matrix.platform}} pkzo.sln
