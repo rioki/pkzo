@@ -47,8 +47,15 @@ jobs:
         `vcpkg fetch nuget | tail -n 1` \
           setapikey "${{ secrets.VCPKG_PAT_TOKEN }}" \
           -source "https://nuget.pkg.github.com/rioki/index.json"
-    - name: Build
+    - name: Build Debug
       uses: lukka/run-cmake@v10
       with:
-        configurePreset: 'ninja'
-        buildPreset: 'ninja'
+        configurePreset: 'ninja-debug'
+        buildPreset: 'ninja-debug'
+    - name: Build Release
+      uses: lukka/run-cmake@v10
+      with:
+        configurePreset: 'ninja-release'
+        buildPreset: 'ninja-release'
+
+    
