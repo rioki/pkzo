@@ -33,7 +33,7 @@ jobs:
       uses: lukka/run-vcpkg@v11
       with:
         vcpkgGitURL: https://github.com/rioki/vcpkg.git
-        vcpkgGitCommitId: 62159a45e18f3a9ac0548628dcaf74fcb60c6ff9
+        vcpkgGitCommitId: adf9ccae4b8ff29351de3c966100f7d327c0da96
     - name: 'Setup NuGet/Vcpkg Credentials'
       working-directory: ${{steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT}}
       shell: 'bash'
