@@ -183,19 +183,19 @@
     <None Include="outputs.glsl" />
     <CustomBuild Include="resources.yml">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VCPKG_ROOT)\installed\x64-windows\tools\ezrc\ezrc.exe %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VcpkgManifestRoot)\vcpkg_installed\$(VcpkgTriplet)\$(VcpkgTriplet)\tools\ezrc\ezrc.exe %(FullPath)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ezrc resource compiler</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">resources.h;resources.cpp</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">attributes.glsl;outputs.glsl;uniforms.glsl;Screen.frag;Screen.vert;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VCPKG_ROOT)\installed\x64-windows\tools\ezrc\ezrc.exe %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VcpkgManifestRoot)\vcpkg_installed\$(VcpkgTriplet)\$(VcpkgTriplet)\tools\ezrc\ezrc.exe %(FullPath)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ezrc resource compiler</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">resources.h;resources.cpp</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">attributes.glsl;outputs.glsl;uniforms.glsl;Screen.frag;Screen.vert;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VCPKG_ROOT)\installed\x64-windows\tools\ezrc\ezrc.exe %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VcpkgManifestRoot)\vcpkg_installed\$(VcpkgTriplet)\$(VcpkgTriplet)\tools\ezrc\ezrc.exe %(FullPath)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ezrc resource compiler</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">resources.h;resources.cpp</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">attributes.glsl;outputs.glsl;uniforms.glsl;Screen.frag;Screen.vert;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VCPKG_ROOT)\installed\x64-windows\tools\ezrc\ezrc.exe %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VcpkgManifestRoot)\vcpkg_installed\$(VcpkgTriplet)\$(VcpkgTriplet)\tools\ezrc\ezrc.exe %(FullPath)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ezrc resource compiler</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">resources.h;resources.cpp</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">attributes.glsl;outputs.glsl;uniforms.glsl;Screen.frag;Screen.vert;%(AdditionalInputs)</AdditionalInputs>

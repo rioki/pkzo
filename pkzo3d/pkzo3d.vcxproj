@@ -226,10 +226,10 @@
     <None Include="outputs.glsl" />
     <CustomBuild Include="resources.yml">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VCPKG_ROOT)\installed\x64-windows\tools\ezrc\ezrc.exe %(FullPath)</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VCPKG_ROOT)\installed\x64-windows\tools\ezrc\ezrc.exe %(FullPath)</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VCPKG_ROOT)\installed\x64-windows\tools\ezrc\ezrc.exe %(FullPath)</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VCPKG_ROOT)\installed\x64-windows\tools\ezrc\ezrc.exe %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VcpkgManifestRoot)\vcpkg_installed\$(VcpkgTriplet)\$(VcpkgTriplet)\tools\ezrc\ezrc.exe %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VcpkgManifestRoot)\vcpkg_installed\$(VcpkgTriplet)\$(VcpkgTriplet)\tools\ezrc\ezrc.exe %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VcpkgManifestRoot)\vcpkg_installed\$(VcpkgTriplet)\$(VcpkgTriplet)\tools\ezrc\ezrc.exe %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VcpkgManifestRoot)\vcpkg_installed\$(VcpkgTriplet)\$(VcpkgTriplet)\tools\ezrc\ezrc.exe %(FullPath)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ezrc resource compiler</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ezrc resource compiler</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ezrc resource compiler</Message>
