@@ -51,9 +51,10 @@ jobs:
     - name: Integrate vcpkg 
       working-directory: ${{steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT}}
       run: vcpkg integrate install
-    - name: Build Debug
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: msbuild /m /p:Configuration=Debug /property:Platform=${{matrix.platform}} pkzo.sln
     - name: Build Release
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: msbuild /m /p:Configuration=Release /property:Platform=${{matrix.platform}} pkzo.sln
+    - name: Build Debug
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: msbuild /m /p:Configuration=Debug /property:Platform=${{matrix.platform}} pkzo.sln
+    

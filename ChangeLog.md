@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased]
 
+## [0.1.2]
+
+## Changed
+
+- Changes resource compiler to ezrc for portability. 
+
 ## [0.1.1]
 
 ### Fixed
