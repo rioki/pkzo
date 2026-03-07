@@ -17,6 +17,7 @@
     "libiconv",
     "magic-enum",
     "nlohmann-json",
-    "sdl3"
+    "sdl3",
+    "ezrc"
   ]
 }

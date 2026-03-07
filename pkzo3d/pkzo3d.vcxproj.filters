@@ -45,9 +45,6 @@
     <ClInclude Include="BoxGeometry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -91,6 +88,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CylinderGeometry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resources.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -164,6 +164,9 @@
     <ClCompile Include="CylinderGeometry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="resources.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="attributes.glsl">
@@ -210,8 +213,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="pkzo3d.rc">
+    <CustomBuild Include="resources.yml">
       <Filter>Resource Files</Filter>
-    </ResourceCompile>
+    </CustomBuild>
   </ItemGroup>
 </Project>

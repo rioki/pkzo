@@ -1,0 +1,7 @@
+namespace: pkzo2d
+files:
+    - attributes.glsl
+    - outputs.glsl
+    - uniforms.glsl
+    - Screen.frag
+    - Screen.vert

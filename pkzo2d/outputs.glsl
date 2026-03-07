@@ -22,3 +22,4 @@
 // This file is generated, do not edit.
 
 layout(location = 0) out vec4 out_FragColor0;
+
