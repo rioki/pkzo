@@ -1,0 +1,16 @@
+namespace: pkzo3d
+files:
+    - attributes.glsl
+    - math.glsl
+    - outputs.glsl
+    - uniforms.glsl
+    - Forward.vert
+    - Forward.frag
+    - GenerateCubemap.vert
+    - GenerateCubemap.frag
+    - FilterCubemapDiffuse.frag
+    - FilterCubemapSpecular.frag
+    - Skybox.vert
+    - Skybox.frag
+    - DebugLine.vert
+    - DebugLine.frag

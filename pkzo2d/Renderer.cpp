@@ -26,14 +26,10 @@
 #include <map>
 #include <string>
 
-#ifdef _WIN32
-#include <Windows.h>
-#endif
-
 #include <magic_enum/magic_enum.hpp>
 #include <tinyformat.h>
 
-#include "resource.h"
+#include "resources.h"
 #include <pkzo/OpenGLMesh.h>
 #include "Shape.h"
 
@@ -239,30 +235,6 @@ namespace pkzo2d
         return result.str();
     }
 
-    #ifdef _WIN32
-    std::string LoadTextResource(HMODULE hModule, LPCWSTR lpName, LPCWSTR lpType) noexcept
-    {
-        auto hRSrc = FindResourceW(hModule, lpName, lpType);
-        assert(hRSrc);
-        auto hGlobal = LoadResource(hModule, hRSrc);
-        assert(hGlobal);
-        auto nSize = SizeofResource(hModule, hRSrc);
-        auto psCode = reinterpret_cast<const char*>(LockResource(hGlobal));
-        return std::string(psCode, nSize);
-    }
-    #endif
-
-    std::string load_glsl_resource(unsigned int id)
-    {
-        auto handle = GetModuleHandleW(L"pkzo2d.dll");
-        assert(handle);
-
-        auto code = LoadTextResource(handle, MAKEINTRESOURCEW(id), L"GLSL");
-        assert(!code.empty());
-
-        return expand_includes(code);
-    }
-
     Renderer::Renderer(const glm::vec2& size)
     {
         auto hs = size * 0.5f;
@@ -299,8 +271,8 @@ namespace pkzo2d
         if (!screen_shader)
         {
             screen_shader = gc.compile({
-                .vertex   = load_glsl_resource(IDR_GLSL_SCREEN_VERT),
-                .fragment = load_glsl_resource(IDR_GLSL_SCREEN_FRAG),
+                .vertex   = expand_includes(get_resource("Screen.vert")),
+                .fragment = expand_includes(get_resource("Screen.frag")),
             });
         }
 

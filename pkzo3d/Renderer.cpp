@@ -31,13 +31,9 @@
 #include <magic_enum/magic_enum.hpp>
 #include <tinyformat.h>
 
-#ifdef _WIN32
-#include <Windows.h>
-#endif
-
 #include <pkzo/debug.h>
 
-#include "resource.h"
+#include "resources.h"
 #include "SkyBox.h"
 #include "Camera.h"
 #include "Geometry.h"
@@ -53,36 +49,6 @@ namespace pkzo3d
 
     constexpr int MAX_LIGHTS = 4;
     constexpr int MAX_LIGHT_PROBES = 1;
-
-    #ifdef _WIN32
-    std::string LoadTextResource(HMODULE hModule, LPCWSTR lpName, LPCWSTR lpType) noexcept
-    {
-        auto hRSrc = FindResourceW(hModule, lpName, lpType);
-        check(hRSrc);
-
-        auto hGlobal = LoadResource(hModule, hRSrc);
-        check(hGlobal);
-
-        auto nSize = SizeofResource(hModule, hRSrc);
-        auto psCode = reinterpret_cast<const char*>(LockResource(hGlobal));
-        return std::string(psCode, nSize);
-    }
-    #endif
-
-    std::string load_glsl_source(unsigned int id)
-    {
-        #ifdef _WIN32
-        auto handle = GetModuleHandleW(L"pkzo3d.dll");
-        check(handle);
-
-        auto code = LoadTextResource(handle, MAKEINTRESOURCEW(id), L"GLSL");
-        check(!code.empty());
-
-        return code;
-        #else
-        #error Port Me
-        #endif
-    }
 
     enum class UniformLocation : int
     {
@@ -324,7 +290,7 @@ namespace pkzo3d
         {"attributes.glsl", make_attribute_include()},
         {"uniforms.glsl", make_uniforms_include()},
         {"outputs.glsl", make_outputs_include()},
-        {"math.glsl", load_glsl_source(IDR_GLSL_MATH)},
+        {"math.glsl", std::string(get_resource("math.glsl"))},
     };
 
     std::string expand_includes(const std::string_view src, int depth = 0)
@@ -384,9 +350,9 @@ namespace pkzo3d
         return result.str();
     }
 
-    std::string load_glsl_resource(unsigned int id)
+    std::string load_glsl_resource(const std::string_view file)
     {
-        auto code = load_glsl_source(id);
+        auto code = get_resource(file);
         return expand_includes(code);
     }
 
@@ -477,28 +443,28 @@ namespace pkzo3d
         }
 
         forward_shader = gc.compile({
-            .vertex   = load_glsl_resource(IDR_GLSL_FORWARD_VERT),
-            .fragment = load_glsl_resource(IDR_GLSL_FORWARD_FRAG),
+            .vertex   = load_glsl_resource("Forward.vert"),
+            .fragment = load_glsl_resource("Forward.frag"),
         });
 
         skybox_shader = gc.compile({
-            .vertex   = load_glsl_resource(IDR_GLSL_SKYBOX_VERT),
-            .fragment = load_glsl_resource(IDR_GLSL_SKYBOX_FRAG),
+            .vertex   = load_glsl_resource("Skybox.vert"),
+            .fragment = load_glsl_resource("Skybox.frag"),
         });
 
         cubemap_generator_shader = gc.compile({
-            .vertex   = load_glsl_resource(IDR_GLSL_GENERATE_CUBEMAP_VERT),
-            .fragment = load_glsl_resource(IDR_GLSL_GENERATE_CUBEMAP_FRAG),
+            .vertex   = load_glsl_resource("GenerateCubemap.vert"),
+            .fragment = load_glsl_resource("GenerateCubemap.frag"),
         });
 
         cubemap_diffuse_filter_shader = gc.compile({
-            .vertex   = load_glsl_resource(IDR_GLSL_GENERATE_CUBEMAP_VERT),
-            .fragment = load_glsl_resource(IDR_GLSL_FILTER_CUBEMAP_DIFFUSE_FRAG),
+            .vertex   = load_glsl_resource("GenerateCubemap.vert"),
+            .fragment = load_glsl_resource("FilterCubemapDiffuse.frag"),
         });
 
         cubemap_specular_filter_shader = gc.compile({
-            .vertex   = load_glsl_resource(IDR_GLSL_GENERATE_CUBEMAP_VERT),
-            .fragment = load_glsl_resource(IDR_GLSL_FILTER_CUBEMAP_SPECULAR_FRAG),
+            .vertex   = load_glsl_resource("GenerateCubemap.vert"),
+            .fragment = load_glsl_resource("FilterCubemapSpecular.frag"),
         });
     }
 
@@ -725,8 +691,8 @@ namespace pkzo3d
         if (line_shader == nullptr)
         {
             line_shader = gc.compile({
-                .vertex   = load_glsl_resource(IDR_GLSL_DEBUG_LINE_VERT),
-                .fragment = load_glsl_resource(IDR_GLSL_DEBUG_LINE_FRAG),
+                .vertex   = load_glsl_resource("DebugLine.vert"),
+                .fragment = load_glsl_resource("DebugLine.frag"),
             });
             check(line_shader);
         }
