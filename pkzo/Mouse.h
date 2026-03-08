@@ -41,29 +41,54 @@ namespace pkzo
         BUTTON5 = SDL_BUTTON_X2
     };
 
+    struct MouseMoveEvent
+    {
+        glm::uvec2 position;
+        glm::ivec2 releative;
+    };
+
+    struct MouseButtonDownEvent
+    {
+        glm::uvec2 position;
+        MouseButton button;
+    };
+
+    struct MouseButtonUpEvent
+    {
+        glm::uvec2 position;
+        MouseButton button;
+    };
+
+    struct MouseWheelEvent
+    {
+        glm::ivec2 releative;
+    };
+
     class PKZO_EXPORT Mouse
     {
     public:
+
+
         static void route_event(const SDL_Event& event);
 
         Mouse();
 
         ~Mouse();
 
-        rsig::connection on_move(const std::function<void (glm::uvec2, glm::ivec2)>& handler);
-        rsig::connection on_button_down(const std::function<void (glm::uvec2, MouseButton)>& handler);
-        rsig::connection on_button_up(const std::function<void (glm::uvec2, MouseButton)>& handler);
-        rsig::connection on_wheel(const std::function<void (glm::ivec2)>& handler);
+        rsig::connection on_move(const std::function<void (MouseMoveEvent)>& handler);
+        rsig::connection on_button_down(const std::function<void (MouseButtonDownEvent)>& handler);
+        rsig::connection on_button_up(const std::function<void (MouseButtonUpEvent)>& handler);
+        rsig::connection on_wheel(const std::function<void (MouseWheelEvent)>& handler);
 
     private:
         static std::vector<Mouse*> instances;
 
         SdlSentry sdl_sentry = SdlSentry{SdlSubsystem::EVENTS};
 
-        rsig::signal<glm::uvec2, glm::ivec2>  move_signal;
-        rsig::signal<glm::uvec2, MouseButton> button_down_signal;
-        rsig::signal<glm::uvec2, MouseButton> button_up_signal;
-        rsig::signal<glm::ivec2>              wheel_signal;
+        rsig::signal<MouseMoveEvent>       move_signal;
+        rsig::signal<MouseButtonDownEvent> button_down_signal;
+        rsig::signal<MouseButtonUpEvent>   button_up_signal;
+        rsig::signal<MouseWheelEvent>      wheel_signal;
 
         void handle_event(const SDL_Event& event);
 

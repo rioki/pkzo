@@ -50,7 +50,7 @@ namespace pkzo2d
         return click_signal.connect(handler);
     }
 
-    void HitArea::handle_mouse_button_down(glm::vec2& pos, MouseButton button)
+    void HitArea::handle_mouse_button_down(glm::vec2 pos, MouseButton button)
     {
         if (button == MouseButton::LEFT)
         {

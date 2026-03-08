@@ -130,6 +130,13 @@ namespace stdng
     template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
     template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
 
+    template <typename... Ts>
+    auto loose_overloaded(Ts... handlers)
+    {
+        return stdng::overloaded{handlers..., [](auto&&) {}};
+    }
+
+
     template <class T>
     inline void hash_combine(std::size_t& seed, T const& v)
     {

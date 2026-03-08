@@ -21,47 +21,29 @@
 
 #pragma once
 
-#include <vector>
-#include <memory>
+#include <string_view>
 
-#include "Node.h"
+#include "api.h"
+#include "enum_helpers.h"
 
-namespace pkzo2d
+namespace pkzo
 {
-    class Scene;
-
-    class PKZO2D_EXPORT Group : public Node
+    enum class Icon
     {
-    public:
-        using Node::Specs;
-
-        Group(Specs specs);
-
-        ~Group();
-
-        template <typename NodeT>
-        NodeT* add(NodeT::Specs specs);
-
-        void remove(Node* node);
-
-        std::vector<Node*> get_nodes();
-
-        void handle_mouse_button_down(glm::vec2 pos, MouseButton button) override;
-        void handle_mouse_button_up(glm::vec2 pos, MouseButton button) override;
-
-        void update(float dt) override;
-
-    private:
-        std::vector<std::shared_ptr<Node>> nodes;
+        INFORMATION,
+        WARNING,
+        ERROR
     };
 
-    template <typename NodeT>
-    NodeT* Group::add(NodeT::Specs specs)
+    enum class Button
     {
-        specs.parent = this;
-        auto node = std::make_unique<NodeT>(std::move(specs));
-        auto ptr = node.get();
-        nodes.push_back(std::move(node));
-        return ptr;
-    }
+        OK          = bit(0),
+        YES         = bit(1),
+        NO          = bit(2),
+        CONTINUE    = bit(3),
+        TRY_AGAIN   = bit(4),
+        ABORT       = bit(5)
+    };
+
+    PKZO_EXPORT Button show_message_box(const std::string_view title, const std::string_view message, Icon icon = Icon::ERROR, Button buttons = Button::OK);
 }

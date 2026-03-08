@@ -93,8 +93,8 @@ namespace pkzo2d
         return move_signal.connect(handler);
     }
 
-    void Node::handle_mouse_button_down(glm::vec2& pos, MouseButton button) {}
-    void Node::handle_mouse_button_up(glm::vec2& pos, MouseButton button) {}
+    void Node::handle_mouse_button_down(glm::vec2 pos, MouseButton button) {}
+    void Node::handle_mouse_button_up(glm::vec2 pos, MouseButton button) {}
 
     void Node::update(float dt) {}
 }

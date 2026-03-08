@@ -21,47 +21,47 @@
 
 #pragma once
 
-#include <vector>
-#include <memory>
+#include <chrono>
+#include <source_location>
+#include <deque>
 
-#include "Node.h"
+#include <pkzo2d/pkzo2d.h>
 
-namespace pkzo2d
+namespace island
 {
-    class Scene;
-
-    class PKZO2D_EXPORT Group : public Node
+    class DebugOverlay : public pkzo2d::Screen
     {
     public:
-        using Node::Specs;
+        struct Init
+        {
+            glm::vec2 size = glm::vec2(0.0f);
+        };
 
-        Group(Specs specs);
-
-        ~Group();
-
-        template <typename NodeT>
-        NodeT* add(NodeT::Specs specs);
-
-        void remove(Node* node);
-
-        std::vector<Node*> get_nodes();
-
-        void handle_mouse_button_down(glm::vec2 pos, MouseButton button) override;
-        void handle_mouse_button_up(glm::vec2 pos, MouseButton button) override;
+        DebugOverlay(Init init);
 
         void update(float dt) override;
 
     private:
-        std::vector<std::shared_ptr<Node>> nodes;
-    };
+        using time_point = std::chrono::steady_clock::time_point;
 
-    template <typename NodeT>
-    NodeT* Group::add(NodeT::Specs specs)
-    {
-        specs.parent = this;
-        auto node = std::make_unique<NodeT>(std::move(specs));
-        auto ptr = node.get();
-        nodes.push_back(std::move(node));
-        return ptr;
-    }
+        pkzo2d::Text* fps_counter;
+        time_point    last_fps_count;
+        size_t        frame_count = 0;
+
+        struct LogLine
+        {
+            time_point    time;
+            pkzo2d::Text* widget = nullptr;
+        };
+        std::deque<LogLine>         log_lines;
+        rsig::connection            trace_connection;
+        std::shared_ptr<pkzo::Font> log_font;
+        unsigned int                log_font_size;
+        glm::vec4                   log_color;
+
+        void update_fps();
+
+        void handle_trace(const std::source_location& loc, const std::string_view msg);
+        void prune_log_lines(bool inserting = false);
+    };
 }

@@ -1,0 +1,9 @@
+text:
+  font:             fonts/DejaVuSansMono.ttf
+  font_size:        16
+  text_color:       0xFFFFFFFF
+
+log:
+  font:             fonts/DejaVuSansMono.ttf
+  font_size:        16
+  text_color:       0xFFFFFFFF

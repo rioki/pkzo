@@ -21,47 +21,34 @@
 
 #pragma once
 
-#include <vector>
-#include <memory>
+#include <filesystem>
 
-#include "Node.h"
-
-namespace pkzo2d
+namespace island
 {
-    class Scene;
+    //! Get the user folder.
+    //!
+    //! This function return the user folder, for example %LOCALAPPDATA%/rioki/garden
+    //! or $HOME/.rioki/garden.
+    //!
+    //! @return the user folder
+    [[nodiscard]]
+    std::filesystem::path get_user_folder();
 
-    class PKZO2D_EXPORT Group : public Node
-    {
-    public:
-        using Node::Specs;
+    //! Get the save folder.
+    //!
+    //! This function returns the save folder, generally get_user_folder()/saves.
+    //!
+    //! @return the save folder
+    [[nodiscard]]
+    std::filesystem::path get_save_folder();
 
-        Group(Specs specs);
-
-        ~Group();
-
-        template <typename NodeT>
-        NodeT* add(NodeT::Specs specs);
-
-        void remove(Node* node);
-
-        std::vector<Node*> get_nodes();
-
-        void handle_mouse_button_down(glm::vec2 pos, MouseButton button) override;
-        void handle_mouse_button_up(glm::vec2 pos, MouseButton button) override;
-
-        void update(float dt) override;
-
-    private:
-        std::vector<std::shared_ptr<Node>> nodes;
-    };
-
-    template <typename NodeT>
-    NodeT* Group::add(NodeT::Specs specs)
-    {
-        specs.parent = this;
-        auto node = std::make_unique<NodeT>(std::move(specs));
-        auto ptr = node.get();
-        nodes.push_back(std::move(node));
-        return ptr;
-    }
+    //! Get the asset folder.
+    //!
+    //! This function return the asset folder. If the game was launched inside
+    //! a debugger the function tries to find the asset folder relative to CWD,
+    //! else it tries to get it from the installation params.
+    //!
+    //! @return the asset folder
+    [[nodiscard]]
+    std::filesystem::path get_asset_folder();
 }

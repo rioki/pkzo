@@ -21,47 +21,37 @@
 
 #pragma once
 
-#include <vector>
-#include <memory>
+#include <cstdlib>
+#include <pkzo/debug.h>
+#include <pkzo/dialogs.h>
 
-#include "Node.h"
+#include "App.h"
 
-namespace pkzo2d
+int main(int argc, char* argv[])
 {
-    class Scene;
+    pkzo::on_trace([] (const std::source_location& loc, const std::string_view msg) {
+        tfm::printf("%s(%d): %s\n", pkzo::basename(loc.file_name()), loc.line(), msg);
+    });
+    #ifndef NDEBUG
+    pkzo::on_trace([] (const std::source_location& loc, const std::string_view msg) {
+        pkzo::debug_output(tfm::format("%s(%d): %s\n", pkzo::basename(loc.file_name()), loc.line(), msg));
+    });
+    #endif
 
-    class PKZO2D_EXPORT Group : public Node
+    try
     {
-    public:
-        using Node::Specs;
-
-        Group(Specs specs);
-
-        ~Group();
-
-        template <typename NodeT>
-        NodeT* add(NodeT::Specs specs);
-
-        void remove(Node* node);
-
-        std::vector<Node*> get_nodes();
-
-        void handle_mouse_button_down(glm::vec2 pos, MouseButton button) override;
-        void handle_mouse_button_up(glm::vec2 pos, MouseButton button) override;
-
-        void update(float dt) override;
-
-    private:
-        std::vector<std::shared_ptr<Node>> nodes;
-    };
-
-    template <typename NodeT>
-    NodeT* Group::add(NodeT::Specs specs)
+        auto app = island::App(argc, argv);
+        app.run();
+        return EXIT_SUCCESS;
+    }
+    catch (const std::exception& ex)
     {
-        specs.parent = this;
-        auto node = std::make_unique<NodeT>(std::move(specs));
-        auto ptr = node.get();
-        nodes.push_back(std::move(node));
-        return ptr;
+        pkzo::show_message_box("Unexpected Error", ex.what());
+        return EXIT_FAILURE;
+    }
+    catch (...)
+    {
+        pkzo::show_message_box("Unexpected Error", "Unknown error.");
+        return EXIT_FAILURE;
     }
 }

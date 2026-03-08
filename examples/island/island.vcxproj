@@ -21,33 +21,32 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{7EFC4E42-412F-471A-B538-12937E8BECA8}</ProjectGuid>
-    <RootNamespace>pkzo</RootNamespace>
+    <ProjectGuid>{89253f9e-c00c-48df-a61e-9e628e729500}</ProjectGuid>
+    <RootNamespace>island</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>pkzo</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -94,15 +93,14 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>BUILD_PKZO;STRCONV_DLL;BUILD_STRCONV;WIN32;_DEBUG;ICE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp23</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableUAC>false</EnableUAC>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -111,30 +109,28 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>BUILD_PKZO;STRCONV_DLL;BUILD_STRCONV;WIN32;NDEBUG;ICE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp23</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableUAC>false</EnableUAC>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>BUILD_PKZO;STRCONV_DLL;BUILD_STRCONV;_DEBUG;ICE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp23</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableUAC>false</EnableUAC>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -143,77 +139,44 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>BUILD_PKZO;STRCONV_DLL;BUILD_STRCONV;NDEBUG;ICE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp23</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableUAC>false</EnableUAC>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="api.h" />
-    <ClInclude Include="Bounds.h" />
-    <ClInclude Include="color.h" />
-    <ClInclude Include="CubeMap.h" />
-    <ClInclude Include="debug.h" />
-    <ClInclude Include="dialogs.h" />
-    <ClInclude Include="enum_helpers.h" />
-    <ClInclude Include="events.h" />
-    <ClInclude Include="Font.h" />
-    <ClInclude Include="FrameBuffer.h" />
-    <ClInclude Include="FreeImageTexture.h" />
-    <ClInclude Include="FreeTypeFont.h" />
-    <ClInclude Include="glm_fkyaml.h" />
-    <ClInclude Include="glm_njson.h" />
-    <ClInclude Include="GraphicContext.h" />
-    <ClInclude Include="Keyboard.h" />
-    <ClInclude Include="MemoryMesh.h" />
-    <ClInclude Include="Mesh.h" />
-    <ClInclude Include="Mouse.h" />
-    <ClInclude Include="OpenGLBuffer.h" />
-    <ClInclude Include="OpenGLCubeMap.h" />
-    <ClInclude Include="OpenGLFrameBuffer.h" />
-    <ClInclude Include="OpenGLGraphicContext.h" />
-    <ClInclude Include="OpenGLMesh.h" />
-    <ClInclude Include="OpenGLShader.h" />
-    <ClInclude Include="OpenGLTexture.h" />
-    <ClInclude Include="pkzo.h" />
-    <ClInclude Include="SdlSentry.h" />
-    <ClInclude Include="Shader.h" />
-    <ClInclude Include="stdng.h" />
-    <ClInclude Include="strconv.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="Window.h" />
+    <ClCompile Include="App.cpp" />
+    <ClCompile Include="DebugOverlay.cpp" />
+    <ClCompile Include="env.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="Settings.cpp" />
+    <ClCompile Include="SettingsMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Bounds.cpp" />
-    <ClCompile Include="CubeMap.cpp" />
-    <ClCompile Include="debug.cpp" />
-    <ClCompile Include="dialogs.cpp" />
-    <ClCompile Include="events.cpp" />
-    <ClCompile Include="Font.cpp" />
-    <ClCompile Include="FreeImageTexture.cpp" />
-    <ClCompile Include="FreeTypeFont.cpp" />
-    <ClCompile Include="GraphicContext.cpp" />
-    <ClCompile Include="Keyboard.cpp" />
-    <ClCompile Include="MemoryMesh.cpp" />
-    <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="Mouse.cpp" />
-    <ClCompile Include="OpenGLBuffer.cpp" />
-    <ClCompile Include="OpenGLCubeMap.cpp" />
-    <ClCompile Include="OpenGLFrameBuffer.cpp" />
-    <ClCompile Include="OpenGLGraphicContext.cpp" />
-    <ClCompile Include="OpenGLMesh.cpp" />
-    <ClCompile Include="OpenGLShader.cpp" />
-    <ClCompile Include="OpenGLTexture.cpp" />
-    <ClCompile Include="SdlSentry.cpp" />
-    <ClCompile Include="strconv.cpp" />
-    <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="Window.cpp" />
+    <ClInclude Include="App.h" />
+    <ClInclude Include="DebugOverlay.h" />
+    <ClInclude Include="env.h" />
+    <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="Settings.h" />
+    <ClInclude Include="SettingsMenu.h" />
+    <ClInclude Include="StateMachine.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\pkzo2d\pkzo2d.vcxproj">
+      <Project>{895cbc02-f6a2-4d08-b940-42568bce9a91}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\pkzo3d\pkzo3d.vcxproj">
+      <Project>{c9a88b50-e086-4e3c-9f07-9c5cd3efbd4d}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\pkzo\pkzo.vcxproj">
+      <Project>{7efc4e42-412f-471a-b538-12937e8beca8}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

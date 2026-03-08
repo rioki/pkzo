@@ -1,0 +1,25 @@
+
+screen:
+  background_color: 0x202020FF
+
+logo:
+  font:             fonts/DejaVuSerif.ttf
+  font_size:        72
+  text_color:       0xFFFFFFFF
+
+text:
+  font:             fonts/DejaVuSerif.ttf
+  font_size:        32
+  text_color:       0xFFFFFFFF
+
+footer:
+  font:             fonts/DejaVuSerif.ttf
+  font_size:        24
+  text_color:       0xFFFFFFFF
+
+button:
+  size:             [240, 46]
+  font:             fonts/DejaVuSerif.ttf
+  font_size:        32
+  text_color:       0xFFFFFFFF
+  background_color: 0x222222FF
