@@ -60,8 +60,8 @@ namespace pkzo2d
 
         rsig::connection on_move(const std::function<void ()>& handler);
 
-        virtual void handle_mouse_button_down(glm::vec2& pos, MouseButton button);
-        virtual void handle_mouse_button_up(glm::vec2& pos, MouseButton button);
+        virtual void handle_mouse_button_down(glm::vec2 pos, MouseButton button);
+        virtual void handle_mouse_button_up(glm::vec2 pos, MouseButton button);
 
         virtual void update(float dt);
 

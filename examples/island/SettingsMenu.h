@@ -21,47 +21,22 @@
 
 #pragma once
 
-#include <vector>
-#include <memory>
+#include <pkzo2d/pkzo2d.h>
 
-#include "Node.h"
-
-namespace pkzo2d
+namespace island
 {
-    class Scene;
-
-    class PKZO2D_EXPORT Group : public Node
+    class SettingsMenu : public pkzo2d::Screen
     {
     public:
-        using Node::Specs;
+        struct Init
+        {
+            glm::vec2              size;
+            std::function<void ()> back_action;
+        };
 
-        Group(Specs specs);
-
-        ~Group();
-
-        template <typename NodeT>
-        NodeT* add(NodeT::Specs specs);
-
-        void remove(Node* node);
-
-        std::vector<Node*> get_nodes();
-
-        void handle_mouse_button_down(glm::vec2 pos, MouseButton button) override;
-        void handle_mouse_button_up(glm::vec2 pos, MouseButton button) override;
-
-        void update(float dt) override;
+        SettingsMenu(Init init);
 
     private:
-        std::vector<std::shared_ptr<Node>> nodes;
-    };
 
-    template <typename NodeT>
-    NodeT* Group::add(NodeT::Specs specs)
-    {
-        specs.parent = this;
-        auto node = std::make_unique<NodeT>(std::move(specs));
-        auto ptr = node.get();
-        nodes.push_back(std::move(node));
-        return ptr;
-    }
+    };
 }

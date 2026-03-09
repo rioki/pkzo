@@ -49,9 +49,9 @@ namespace lab
         window->on_draw([this] (auto& gc) { handle_draw(gc); });
 
         mouse = std::make_unique<pkzo::Mouse>();
-        mouse->on_move([this] (auto abs, auto rel)            { handle_mouse_move(rel); } );
-        mouse->on_button_down([this] (auto pos, auto button)  { handle_mouse_button_down(pos, button); });
-        mouse->on_button_up([this] (auto pos, auto button)    { handle_mouse_button_up(pos, button); });
+        mouse->on_move([this] (auto ev)            { handle_mouse_move(ev.releative); } );
+        mouse->on_button_down([this] (auto ev)  { handle_mouse_button_down(ev.position, ev.button); });
+        mouse->on_button_up([this] (auto ev)    { handle_mouse_button_up(ev.position, ev.button); });
 
         keyboard = std::make_unique<pkzo::Keyboard>();
         keyboard->on_key_down([this] (auto mod, auto key, auto scan) { handle_key_down(scan); } );

@@ -45,7 +45,7 @@ namespace pkzo2d
         return result;
     }
 
-    void Group::handle_mouse_button_down(glm::vec2& pos, MouseButton button)
+    void Group::handle_mouse_button_down(glm::vec2 pos, MouseButton button)
     {
         for (const auto& ptr : nodes)
         {
@@ -53,7 +53,7 @@ namespace pkzo2d
         }
     }
 
-    void Group::handle_mouse_button_up(glm::vec2& pos, MouseButton button)
+    void Group::handle_mouse_button_up(glm::vec2 pos, MouseButton button)
     {
         for (const auto& ptr : nodes)
         {

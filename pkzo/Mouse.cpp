@@ -49,22 +49,22 @@ namespace pkzo
         std::erase(instances, this);
     }
 
-    rsig::connection Mouse::on_move(const std::function<void (glm::uvec2, glm::ivec2)>& handler)
+    rsig::connection Mouse::on_move(const std::function<void (MouseMoveEvent)>& handler)
     {
         return move_signal.connect(handler);
     }
 
-    rsig::connection Mouse::on_button_down(const std::function<void (glm::uvec2, MouseButton)>& handler)
+    rsig::connection Mouse::on_button_down(const std::function<void (MouseButtonDownEvent)>& handler)
     {
         return button_down_signal.connect(handler);
     }
 
-    rsig::connection Mouse::on_button_up(const std::function<void (glm::uvec2, MouseButton)>& handler)
+    rsig::connection Mouse::on_button_up(const std::function<void (MouseButtonUpEvent)>& handler)
     {
         return button_up_signal.connect(handler);
     }
 
-    rsig::connection Mouse::on_wheel(const std::function<void (glm::ivec2)>& handler)
+    rsig::connection Mouse::on_wheel(const std::function<void (MouseWheelEvent)>& handler)
     {
         return wheel_signal.connect(handler);
     }
@@ -74,32 +74,28 @@ namespace pkzo
         switch (event.type)
         {
             case SDL_EVENT_MOUSE_MOTION:
-            {
-                auto pos    = glm::uvec2(event.motion.x, event.motion.y);
-                auto rel    = glm::ivec2(event.motion.xrel, event.motion.yrel);
-                move_signal.emit(pos, rel);
+                move_signal.emit({
+                    .position  = glm::uvec2(event.motion.x, event.motion.y),
+                    .releative = glm::ivec2(event.motion.xrel, event.motion.yrel)
+                });
                 break;
-            }
             case SDL_EVENT_MOUSE_BUTTON_DOWN:
-            {
-                auto button = static_cast<MouseButton>(event.button.button);
-                auto pos    = glm::uvec2(event.button.x, event.button.y);
-                button_down_signal.emit(pos, button);
+                button_down_signal.emit({
+                    .position = glm::uvec2(event.button.x, event.button.y),
+                    .button   = static_cast<MouseButton>(event.button.button)
+                });
                 break;
-            }
             case SDL_EVENT_MOUSE_BUTTON_UP:
-            {
-                auto button = static_cast<MouseButton>(event.button.button);
-                auto pos    = glm::uvec2(event.button.x, event.button.y);
-                button_up_signal.emit(pos, button);
+                button_up_signal.emit({
+                    .position = glm::uvec2(event.button.x, event.button.y),
+                    .button   = static_cast<MouseButton>(event.button.button)
+                });
                 break;
-            }
             case SDL_EVENT_MOUSE_WHEEL:
-            {
-                auto rel = glm::ivec2(event.wheel.x, event.wheel.y);
-                wheel_signal.emit(rel);
+                wheel_signal.emit({
+                    .releative = glm::ivec2(event.wheel.x, event.wheel.y)
+                });
                 break;
-            }
             default:
                 std::unreachable();
         }

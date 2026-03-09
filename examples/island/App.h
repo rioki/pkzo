@@ -21,38 +21,54 @@
 
 #pragma once
 
-#include "Node.h"
+#include <pkzo/pkzo.h>
+#include <pkzo2d/pkzo2d.h>
+#include <pkzo3d/pkzo3d.h>
 
-#include <rsig/rsig.h>
+#include "StateMachine.h"
 
-namespace pkzo2d
+namespace island
 {
-    class Scene;
+    class Settings;
+    class DebugOverlay;
 
-    class PKZO2D_EXPORT HitArea : public Node
+    class App
     {
     public:
-        struct Specs
-        {
-            Node*                    parent    = nullptr;
-            glm::mat3                transform = glm::mat3(1.0f);
-            glm::vec2                size      = glm::vec2(15.0f);
-            std::function<void ()>   action;
-        };
+        App(int argc, char* argv[]);
+        ~App();
 
-        HitArea(Specs specs);
-
-        ~HitArea();
-
-        void set_size(const glm::vec2& value);
-        const glm::vec2& get_size() const;
-
-        rsig::connection on_click(const std::function<void ()>& handler);
-
-        void handle_mouse_button_down(glm::vec2 pos, MouseButton button) override;
+        void run();
 
     private:
-        glm::vec2      size;
-        rsig::signal<> click_signal;
+        using time_point = std::chrono::steady_clock::time_point;
+        enum class State
+        {
+            INIT,
+            MAIN_MENU,
+            SETTINGS_MENU,
+            PLAY,
+            PAUSE_MENU,
+            END,
+            ERROR
+        };
+
+        using InputEvent = std::variant<pkzo::MouseMoveEvent, pkzo::MouseButtonDownEvent, pkzo::MouseButtonUpEvent, pkzo::MouseWheelEvent>;
+
+        time_point                      last_tick = std::chrono::steady_clock::now();
+
+        std::unique_ptr<Settings>       settings;
+        std::unique_ptr<pkzo::Window>   window;
+        std::unique_ptr<pkzo::Mouse>    mouse;
+        std::unique_ptr<pkzo::Keyboard> keyboard;
+
+        std::unique_ptr<pkzo2d::Screen> screen;
+        std::unique_ptr<pkzo3d::Scene>  scene;
+        std::unique_ptr<DebugOverlay>   debug_overlay;
+
+        rex::StateMachine<State, InputEvent> state_machine;
+
+        void handle_draw(pkzo::GraphicContext& gc);
     };
 }
+
