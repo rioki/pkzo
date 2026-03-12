@@ -57,6 +57,12 @@ namespace pkzo
         std::erase(instances, this);
     }
 
+    std::string Window::get_title() const
+    {
+        auto title = SDL_GetWindowTitle(window);
+        return title != nullptr ? std::string(title) : std::string{};
+    }
+
     glm::uvec2 Window::get_size() const
     {
         int w, h;
@@ -97,6 +103,11 @@ namespace pkzo
         }
     }
 
+    Api Window::get_api() const
+    {
+        return graphic_context->get_api();
+    }
+
     bool Window::get_fullscreen() const
     {
         return get_state() == WindowState::FULLSCREEN;
@@ -115,6 +126,14 @@ namespace pkzo
     void Window::release_mouse()
     {
         SDL_SetWindowRelativeMouseMode(window, false);
+    }
+
+    std::shared_ptr<MemoryTexture> Window::screenshot() const
+    {
+        graphic_context->set_viewport({
+            .size = get_resolution()
+        });
+        return graphic_context->screenshot();
     }
 
     rsig::connection Window::on_draw(const std::function<void (GraphicContext&)>& handler)

@@ -108,6 +108,9 @@
     <ClInclude Include="glm_njson.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MemoryTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="enum_helpers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -185,6 +188,9 @@
     <ClCompile Include="OpenGLBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MemoryTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile
     <ClCompile Include="dialogs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

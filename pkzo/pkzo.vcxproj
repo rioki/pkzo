@@ -172,6 +172,7 @@
     <ClInclude Include="GraphicContext.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="MemoryMesh.h" />
+    <ClInclude Include="MemoryTexture.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="OpenGLBuffer.h" />
@@ -201,6 +202,7 @@
     <ClCompile Include="GraphicContext.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="MemoryMesh.cpp" />
+    <ClCompile Include="MemoryTexture.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="OpenGLBuffer.cpp" />

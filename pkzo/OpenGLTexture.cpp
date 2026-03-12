@@ -24,6 +24,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "debug.h"
+#include "MemoryTexture.h"
 
 namespace pkzo
 {
@@ -272,6 +273,34 @@ namespace pkzo
     Clamp OpenGLTexture::get_clamp() const
     {
         return clamp;
+    }
+
+    size_t get_mem_size(ColorMode cm, DataType dt)
+    {
+        auto type_size = dt == DataType::FLOAT ? sizeof(float) : sizeof(uint8_t);
+        switch (cm)
+        {
+            case ColorMode::MONO: return type_size * 1;
+            case ColorMode::RGB:  return type_size * 3;
+            case ColorMode::BGR:  return type_size * 3;
+            case ColorMode::RGBA: return type_size * 4;
+            case ColorMode::BGRA: return type_size * 4;
+            default:              throw std::runtime_error("Unexpected texture type");
+        }
+    }
+
+    std::shared_ptr<MemoryTexture> OpenGLTexture::download()
+    {
+        auto buffer = std::vector<uint8_t>(size.x * size.y * get_mem_size(color_mode, data_type));
+
+        glGetTextureImage(handle, 0, gl_format(color_mode), gl_type(data_type), static_cast<GLsizei>(buffer.size()), reinterpret_cast<void*>(buffer.data()));
+
+        return MemoryTexture::create({
+            .size       = size,
+            .data_type  = data_type,
+            .color_mode = color_mode,
+            .memory     = buffer.data()
+        });
     }
 
     GLuint OpenGLTexture::get_handle() const

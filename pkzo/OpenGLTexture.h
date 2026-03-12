@@ -46,17 +46,19 @@ namespace pkzo
         TextureFilter get_filter() const override;
         Clamp get_clamp() const override;
 
+        std::shared_ptr<MemoryTexture> download() override;
+
         GLuint get_handle() const;
 
         void bind(int slot);
 
     private:
-        std::string id;
-        glm::uvec2  size;
-        ColorMode   color_mode;
-        DataType    data_type;
+        std::string   id;
+        glm::uvec2    size;
+        ColorMode     color_mode;
+        DataType      data_type;
         TextureFilter filter;
         Clamp         clamp;
-        GLuint      handle;
+        GLuint        handle;
     };
 }

@@ -12,6 +12,7 @@
     "fkyaml",
     "glm",
     "glew",
+	"gtest",
     "rsig",
     "tinyformat",
     "libiconv",

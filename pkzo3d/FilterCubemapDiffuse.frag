@@ -33,7 +33,7 @@ void main()
 {
     vec3 normal = normalize(var_Direction);
 
-    vec3 up = vec3(0,0,1);
+    vec3 up = abs(normal.z) < 0.999 ? vec3(0,0,1) : vec3(1,0,0);
     vec3 right = normalize(cross(up,normal));
     up = cross(normal,right);
 
@@ -48,7 +48,17 @@ void main()
         vec3 l = hemisphereSample_cos(s.x, s.y);
         l = tbn * l;
         float NxL = dot(normal, l);
-        color += texture(uni_CubeMap, l).rgb * NxL;
+
+        vec3 smp = texture(uni_CubeMap, l).rgb;
+        float lum = dot(smp, vec3(0.2126, 0.7152, 0.0722));
+        float limit = 10.0;
+
+        if (lum > limit)
+        {
+            float compressed = limit + log(1.0 + lum - limit);
+            smp *= compressed / lum;
+        }
+        color += smp * NxL;
         power += NxL;
     }
 

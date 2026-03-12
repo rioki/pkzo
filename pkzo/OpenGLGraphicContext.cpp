@@ -27,6 +27,7 @@
 #include <tinyformat.h>
 
 #include "debug.h"
+#include "MemoryTexture.h"
 #include "OpenGLShader.h"
 #include "OpenGLTexture.h"
 #include "OpenGLMesh.h"
@@ -132,6 +133,24 @@ namespace pkzo
     {
         SDL_GL_DestroyContext(glcontext);
         glcontext = nullptr;
+    }
+
+    Api OpenGLGraphicContext::get_api() const
+    {
+        return Api::OPENGL;
+    }
+
+    std::shared_ptr<MemoryTexture> OpenGLGraphicContext::screenshot() const
+    {
+        auto viewport = get_viewport();
+        auto buffer = std::vector<uint8_t>(viewport.size.x * viewport.size.y * 3);
+        glReadPixels(viewport.position.x, viewport.position.y, viewport.size.x, viewport.size.y, GL_BGR, GL_UNSIGNED_BYTE, buffer.data());
+        return MemoryTexture::create({
+            .size       = viewport.size,
+            .data_type  = DataType::UNSIGNED_BYTE,
+            .color_mode = ColorMode::BGR,
+            .memory     = buffer.data()
+        });
     }
 
     std::shared_ptr<Shader> OpenGLGraphicContext::compile(const Shader::Source& source)
