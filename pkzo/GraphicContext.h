@@ -37,6 +37,8 @@
 
 namespace pkzo
 {
+    class MemoryTexture;
+
     enum class Api : Uint64
     {
         OPENGL = SDL_WINDOW_OPENGL,
@@ -102,6 +104,12 @@ namespace pkzo
         static std::unique_ptr<GraphicContext> create(Api api, SDL_Window* window);
 
         virtual ~GraphicContext() = default;
+
+        //! Get the API fo the Graphic context.
+        [[nodiscard]]
+        virtual Api get_api() const = 0;
+
+        virtual std::shared_ptr<MemoryTexture> screenshot() const = 0;
 
         virtual std::shared_ptr<Shader> compile(const Shader::Source& source) = 0;
 

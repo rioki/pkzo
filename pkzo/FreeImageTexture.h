@@ -27,7 +27,7 @@
 #include <glm/glm.hpp>
 #include <freeimage.h>
 
-#include "Texture.h"
+#include "MemoryTexture.h"
 
 namespace pkzo
 {
@@ -41,7 +41,7 @@ namespace pkzo
         static std::atomic<unsigned int> use_count;
     };
 
-    class PKZO_EXPORT FreeImageTexture : public Texture
+    class PKZO_EXPORT FreeImageTexture : public MemoryTexture, public std::enable_shared_from_this<FreeImageTexture>
     {
     public:
         FreeImageTexture(const FileLoadSpecs& specs);
@@ -57,6 +57,13 @@ namespace pkzo
         const void* get_memory() const override;
         TextureFilter get_filter() const override;
         Clamp get_clamp() const override;
+
+        std::shared_ptr<MemoryTexture> download() override;
+
+        glm::vec4 get_pixel(const glm::uvec2& pos) const override;
+        void set_pixel(const glm::uvec2& pos, const glm::vec4& value) override;
+
+        void save(const std::filesystem::path& file) const override;
 
     private:
         FreeImageSentry sentry;

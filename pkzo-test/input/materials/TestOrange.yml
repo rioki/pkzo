@@ -1,0 +1,3 @@
+base_color_map: TestOrange_albedo.png
+metallic_roughness_map: TestOrange_metallicRoughness.png
+normal_map: TestOrange_normal.png

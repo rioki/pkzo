@@ -28,3 +28,4 @@
 #include "GraphicContext.h"
 
 #include "Texture.h"
+#include "MemoryTexture.h"

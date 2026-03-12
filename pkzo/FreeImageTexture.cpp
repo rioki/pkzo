@@ -232,7 +232,7 @@ namespace pkzo
 
     FreeImageTexture::~FreeImageTexture()
     {
-        assert(bitmap != nullptr);
+        check(bitmap != nullptr);
         FreeImage_Unload(bitmap);
         bitmap = nullptr;
     }
@@ -244,13 +244,13 @@ namespace pkzo
 
     glm::uvec2 FreeImageTexture::get_size() const
     {
-        assert(bitmap != nullptr);
+        check(bitmap != nullptr);
         return glm::uvec2(FreeImage_GetWidth(bitmap), FreeImage_GetHeight(bitmap));
     }
 
     ColorMode FreeImageTexture::get_color_mode() const
     {
-        assert(bitmap != nullptr);
+        check(bitmap != nullptr);
         switch (FreeImage_GetImageType(bitmap))
         {
             case FIT_BITMAP:
@@ -276,7 +276,7 @@ namespace pkzo
 
     DataType FreeImageTexture::get_data_type() const
     {
-        assert(bitmap != nullptr);
+        check(bitmap != nullptr);
         switch (FreeImage_GetImageType(bitmap))
         {
             case FIT_BITMAP:
@@ -292,7 +292,7 @@ namespace pkzo
 
     const void* FreeImageTexture::get_memory() const
     {
-        assert(bitmap != nullptr);
+        check(bitmap != nullptr);
         return FreeImage_GetBits(bitmap);
     }
 
@@ -304,5 +304,47 @@ namespace pkzo
     Clamp FreeImageTexture::get_clamp() const
     {
         return clamp;
+    }
+
+    std::shared_ptr<MemoryTexture> FreeImageTexture::download()
+    {
+        return shared_from_this();
+    }
+
+    glm::vec4 FreeImageTexture::get_pixel(const glm::uvec2& pos) const
+    {
+        check(bitmap != nullptr);
+        check(FreeImage_GetImageType(bitmap) == FIT_BITMAP);
+        auto color = RGBQUAD{};
+        FreeImage_GetPixelColor(bitmap, pos.x, pos.y, &color);
+        return glm::vec4(color.rgbRed, color.rgbGreen, color.rgbBlue, color.rgbReserved) / 255.0f;
+    }
+
+    void FreeImageTexture::set_pixel(const glm::uvec2& pos, const glm::vec4& value)
+    {
+        check(bitmap != nullptr);
+        check(FreeImage_GetImageType(bitmap) == FIT_BITMAP);
+
+        RGBQUAD color;
+        color.rgbRed      = static_cast<BYTE>(value.r * 255.0f);
+        color.rgbGreen    = static_cast<BYTE>(value.g * 255.0f);
+        color.rgbBlue     = static_cast<BYTE>(value.b * 255.0f);
+        color.rgbReserved = static_cast<BYTE>(value.a * 255.0f);
+        FreeImage_SetPixelColor(bitmap, pos.x, pos.y, &color);
+    }
+
+    void FreeImageTexture::save(const std::filesystem::path& file) const
+    {
+        check(bitmap != nullptr);
+
+        std::filesystem::create_directories(file.parent_path());
+
+        #ifdef _WIN32
+        auto fif = FreeImage_GetFIFFromFilenameU(file.c_str());
+        FreeImage_SaveU(fif, bitmap, file.c_str());
+        #else
+        auto fif = FreeImage_GetFIFFromFilename(file.c_str());
+        FreeImage_Save(fif, bitmap, file.c_str());
+        #endif
     }
 }

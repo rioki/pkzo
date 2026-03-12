@@ -40,6 +40,10 @@ namespace pkzo
         OpenGLGraphicContext(SDL_Window* window);
         ~OpenGLGraphicContext();
 
+        Api get_api() const override;
+
+        std::shared_ptr<MemoryTexture> screenshot() const override;
+
         std::shared_ptr<Shader> compile(const Shader::Source& source) override;
         std::shared_ptr<FrameBuffer> create_frame_buffer(const FrameBuffer::BufferConfig& config) override;
 

@@ -23,7 +23,9 @@
 
 #include <map>
 #include <glm/gtc/type_ptr.hpp>
+#include <tinyformat.h>
 
+#include "MemoryTexture.h"
 #include "FreeImageTexture.h"
 
 namespace pkzo

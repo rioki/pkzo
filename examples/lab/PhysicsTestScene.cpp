@@ -110,7 +110,7 @@ namespace lab
                     add<Prop>({
                         .transform = pkzo3d::position(ball_start + glm::vec3(i, j, k) * ball_spacing),
                         .model     = "polyhaven/models/baseball_01_2k/baseball_01_2k.gltf",
-                        .mass      = 0.150,
+                        .mass      = 0.150f,
                         .collision = Prop::Collision::BOUNDING_SPHERE
                     });
                 }

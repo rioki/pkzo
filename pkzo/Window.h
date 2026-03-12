@@ -33,48 +33,107 @@
 
 namespace pkzo
 {
+    class MemoryTexture;
+
+    //! Window display state.
     enum class WindowState : Uint64
     {
-        WINDOW     = 0ULL,
-        FULLSCREEN = SDL_WINDOW_FULLSCREEN,
-        MINIMIZED  = SDL_WINDOW_MINIMIZED,
-        MAXIMIZED  = SDL_WINDOW_MAXIMIZED
+        WINDOW     = 0ULL,                    //!< Normal windowed mode.
+        FULLSCREEN = SDL_WINDOW_FULLSCREEN,   //!< Exclusive fullscreen mode.
+        MINIMIZED  = SDL_WINDOW_MINIMIZED,    //!< Minimized to taskbar.
+        MAXIMIZED  = SDL_WINDOW_MAXIMIZED     //!< Maximized to fill the desktop.
     };
 
+    //! Application window.
+    //!
+    //! Window manages an OS window with an associated graphics context.
     class PKZO_EXPORT Window
     {
     public:
         static void route_event(const SDL_Event& event);
 
+        //! Window initialization parameters.
         struct Init
         {
-            std::string title = "Pkzo";
-            glm::uvec2  size  = glm::uvec2(800u, 600u);
-            WindowState state = WindowState::WINDOW;
-            Api         api   = Api::OPENGL;
+            std::string title = "Pkzo";                 //!< Window title bar text.
+            glm::uvec2  size  = glm::uvec2(800u, 600u); //!< Initial window size in pixels.
+            WindowState state = WindowState::WINDOW;    //!< Initial display state.
+            Api         api   = Api::OPENGL;            //!< Graphics API to use.
         };
 
+        //! Construct and open a window.
+        //!
+        //! @param init  Initialization parameters.
         Window(Init init);
 
+        //! Close the window and release all associated resources.
         ~Window();
 
+        //! Get the window title.
+        //!
+        //! @returns The window title bar text.
+        [[nodiscard]]
+        std::string get_title() const;
+
+        //! Get the current window size in pixels.
+        //!
+        //! @returns The window size as (width, height).
+        [[nodiscard]]
         glm::uvec2 get_size() const;
 
+        //! Set the window size in pixels.
+        //!
+        //! @param value  The desired size as (width, height).
         void set_size(const glm::uvec2& value);
 
+        //! Get the drawable resolution of the window.
+        //!
+        //! This may differ from get_size() on high-DPI displays where
+        //! the framebuffer is larger than the logical window size.
+        //!
+        //! @returns The framebuffer resolution as (width, height).
+        [[nodiscard]]
         glm::uvec2 get_resolution() const;
 
+        //! Get the current display state of the window.
+        //!
+        //! @returns The current WindowState.
+        [[nodiscard]]
         WindowState get_state() const;
 
+        //! Get the API this window uses.
+        Api get_api() const;
+
+        //! Check whether the window is in fullscreen mode.
+        //!
+        //! @returns True if the window is fullscreen, false otherwise.
+        [[nodiscard]]
         bool get_fullscreen() const;
 
+        //! Set fullscreen mode.
+        //!
+        //! @param value  True to enter fullscreen, false to return to windowed mode.
         void set_fullscreen(bool value);
 
+        //! Capture the mouse, confining it to this window.
+        //!
+        //! While captured, the cursor is hidden and mouse motion is delivered
+        //! as relative events. Call release_mouse() to restore normal behavior.
         void capture_mouse();
+
+        //! Release a previously captured mouse.
         void release_mouse();
 
+        //! Register a callback to be invoked each frame when the window is drawn.
+        //!
+        //! @param handler  Callback receiving the window's GraphicContext.
+        //! @returns A connection object representing the registered handler.
         rsig::connection on_draw(const std::function<void (GraphicContext&)>& handler);
 
+        //! Take a screenshot of the window.
+        std::shared_ptr<MemoryTexture> screenshot() const;
+
+        //! Render a frame, invoking all registered draw callbacks.
         void draw();
 
     private:

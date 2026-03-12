@@ -80,6 +80,8 @@ namespace pkzo
         WEBP
     };
 
+    class MemoryTexture;
+
     class PKZO_EXPORT Texture
     {
     public:
@@ -125,6 +127,8 @@ namespace pkzo
         virtual const void* get_memory() const = 0;
         virtual TextureFilter get_filter() const = 0;
         virtual Clamp get_clamp() const = 0;
+
+        virtual std::shared_ptr<MemoryTexture> download() = 0;
 
     private:
         Texture(const Texture&) = delete;

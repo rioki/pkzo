@@ -627,8 +627,14 @@ namespace pkzo3d
 
         for (auto i = 0u; i < MAX_LIGHT_PROBES; i++)
         {
-            auto skybox = i < skyboxes.size() ? skyboxes[i] : nullptr;
-            apply_light_probe(gc, i, skybox->get_cubemap());
+            if (i < skyboxes.size())
+            {
+                apply_light_probe(gc, i, skyboxes[i]->get_cubemap());
+            }
+            else
+            {
+                apply_light_probe(gc, i, nullptr);
+            }
         }
 
         // TODO select the most relevant lights.

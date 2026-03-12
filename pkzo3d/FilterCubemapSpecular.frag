@@ -37,6 +37,9 @@ void main()
         discard;
     }
 
+    out_FragColor0 = vec4(0, 0, 0, 1);
+    return;
+
     float s[7];
     s[0] = 1024.0;
     s[1] = 512.0;
