@@ -7,11 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased]
 
+## Added
+
+- added a proper README.md
+
+## Fixes
+
+- fixes the crash with no skybox
+- fixes fireflies on high intensity HDRI maps
+
 ## [0.1.2]
 
 ## Changed
 
-- Changes resource compiler to ezrc for portability. 
+- changes resource compiler to ezrc for portability
 
 ## [0.1.1]
 
