@@ -19,7 +19,49 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-// This file is generated, do not edit.
+#include "Screen.h"
 
-layout(location = 0) out vec4 out_FragColor0;
+#include "Renderer.h"
 
+namespace pkzo
+{
+    Screen::Screen(Specs specs)
+    : size(specs.size) {}
+
+    Screen::~Screen()
+    {
+        // delete all children, before removing services
+        remove_all_children();
+    }
+
+    Renderer* Screen::get_renderer()
+    {
+        if (!renderer)
+        {
+            renderer = std::make_unique<Renderer>(size);
+        }
+        return renderer.get();
+    }
+
+    void Screen::set_size(const glm::vec2& value)
+    {
+        size = value;
+        if (renderer)
+        {
+            renderer->resize(value);
+        }
+    }
+
+    const glm::vec2& Screen::get_size() const
+    {
+        return size;
+    }
+
+    void Screen::draw(pkzo::GraphicContext& gc)
+    {
+        if (renderer)
+        {
+            renderer->render(gc);
+        }
+    }
+}

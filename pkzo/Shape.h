@@ -26,44 +26,27 @@
 #include <pkzo/Texture.h>
 #include <pkzo/Mesh.h>
 
-#include "Shape.h"
+#include "Screen.h"
 
-namespace pkzo2d
+namespace pkzo
 {
-    class Scene;
-    using pkzo::Texture;
-
-    class PKZO2D_EXPORT Rectangle : public Shape
+    class PKZO_EXPORT Shape : public Screen::Node
     {
     public:
-        struct Specs
-        {
-            Node*                    parent    = nullptr;
-            glm::mat3                transform = glm::mat3(1.0f);
-            glm::vec2                size      = glm::vec2(15.0f);
-            glm::vec4                color     = glm::vec4(1.0f);
-            std::shared_ptr<Texture> texture   = nullptr;
-        };
+        using Node::Init;
 
-        Rectangle(Specs specs);
+        Shape(Init init);
 
-        ~Rectangle();
+        ~Shape();
 
-        void set_size(const glm::vec2& value);
-        const glm::vec2& get_size() const;
-        void set_color(const glm::vec4& value);
-        void set_texture(const std::shared_ptr<Texture>& value);
+        virtual glm::mat4 get_model_matrix() const;
 
-        glm::mat4 get_model_matrix() const override;
-        std::shared_ptr<Mesh> get_mesh() const override;
-        glm::vec4 get_color() const override;
-        std::shared_ptr<Texture> get_texture() const override;
+        virtual std::shared_ptr<Mesh> get_mesh() const = 0;
+
+        virtual glm::vec4 get_color() const = 0;
+
+        virtual std::shared_ptr<Texture> get_texture() const = 0;
 
     private:
-        glm::vec2                size;
-        glm::vec4                color;
-        std::shared_ptr<Texture> texture;
-
-        mutable std::shared_ptr<Mesh> mesh;
     };
 }

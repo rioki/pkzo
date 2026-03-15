@@ -1,4 +1,4 @@
-namespace: pkzo2d
+namespace: pkzo
 files:
     - attributes.glsl
     - outputs.glsl

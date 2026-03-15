@@ -19,53 +19,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "Group.h"
+#include "Shape.h"
 
-namespace pkzo2d
+#include "Screen.h"
+#include "Renderer.h"
+
+namespace pkzo
 {
-    Group::Group(Specs specs)
-    : Node(std::move(specs)) {}
-
-    Group::~Group() = default;
-
-    void Group::remove(Node* node)
+    Shape::Shape(Init init)
+    : Node(std::move(init))
     {
-        std::erase_if(nodes, [node] (const auto& ptr) { return node == ptr.get(); } );
+        auto renderer = get_root()->get_renderer();
+        renderer->add(this);
     }
 
-    std::vector<Node*> Group::get_nodes()
+    Shape::~Shape()
     {
-        auto result = std::vector<Node*>{};
-
-        for (const auto& ptr : nodes)
-        {
-            result.push_back(ptr.get());
-        }
-
-        return result;
+        auto renderer = get_root()->get_renderer();
+        renderer->remove(this);
     }
 
-    void Group::handle_mouse_button_down(glm::vec2 pos, MouseButton button)
+    glm::mat4 Shape::get_model_matrix() const
     {
-        for (const auto& ptr : nodes)
-        {
-            ptr->handle_mouse_button_down(pos, button);
-        }
-    }
-
-    void Group::handle_mouse_button_up(glm::vec2 pos, MouseButton button)
-    {
-        for (const auto& ptr : nodes)
-        {
-            ptr->handle_mouse_button_up(pos, button);
-        }
-    }
-
-    void Group::update(float dt)
-    {
-        for (const auto& ptr : nodes)
-        {
-            ptr->update(dt);
-        }
+        return glm::to3d(get_world_transform());
     }
 }

@@ -22,7 +22,6 @@
 #pragma once
 
 #include <pkzo/pkzo.h>
-#include <pkzo2d/pkzo2d.h>
 #include <pkzo3d/pkzo3d.h>
 
 #include "StateMachine.h"
@@ -53,7 +52,7 @@ namespace island
             ERROR
         };
 
-        using InputEvent = std::variant<pkzo::MouseMoveEvent, pkzo::MouseButtonDownEvent, pkzo::MouseButtonUpEvent, pkzo::MouseWheelEvent>;
+        using InputEvent = pkzo::InputEvent;
 
         time_point                      last_tick = std::chrono::steady_clock::now();
 
@@ -62,7 +61,7 @@ namespace island
         std::unique_ptr<pkzo::Mouse>    mouse;
         std::unique_ptr<pkzo::Keyboard> keyboard;
 
-        std::unique_ptr<pkzo2d::Screen> screen;
+        std::unique_ptr<pkzo::Screen>   screen;
         std::unique_ptr<pkzo3d::Scene>  scene;
         std::unique_ptr<DebugOverlay>   debug_overlay;
 

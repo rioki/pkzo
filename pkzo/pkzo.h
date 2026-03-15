@@ -21,11 +21,21 @@
 
 #pragma once
 
+// OS Wrappers
 #include "events.h"
 #include "Window.h"
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "GraphicContext.h"
 
+// Assets
 #include "Texture.h"
 #include "MemoryTexture.h"
+
+// Screen
+#include "Screen.h"
+#include "Rectangle.h"
+#include "Text.h"
+#include "HitArea.h"
+
+// Scene

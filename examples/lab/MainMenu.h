@@ -21,13 +21,13 @@
 
 #pragma once
 
-#include <pkzo2d/pkzo2d.h>
+#include <pkzo/pkzo.h>
 
 namespace lab
 {
     class App;
 
-    class MainMenu : public pkzo2d::Screen
+    class MainMenu : public pkzo::Screen
     {
     public:
         MainMenu(App& app, const glm::vec2& size);

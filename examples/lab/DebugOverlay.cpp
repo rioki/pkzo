@@ -32,7 +32,7 @@ using namespace std::chrono_literals;
 namespace lab
 {
     using fsec = std::chrono::duration<float>;
-    using namespace pkzo2d;
+    using namespace pkzo;
 
     constexpr auto PRIMARY_COLOR    = glm::vec4(1.0f);
     constexpr auto FONT             = "fonts/DejaVuSansMono.ttf";

@@ -24,7 +24,7 @@
 #include "Screen.h"
 #include "Renderer.h"
 
-namespace pkzo2d
+namespace pkzo
 {
     std::shared_ptr<Mesh> create_unit_rectangle()
     {
@@ -48,19 +48,19 @@ namespace pkzo2d
         });
     }
 
-    Rectangle::Rectangle(Specs specs)
-    : Shape({specs.parent, specs.transform}),
-      size(specs.size),
-      color(specs.color),
-      texture(specs.texture)
+    Rectangle::Rectangle(Init init)
+    : Shape({init.parent, init.transform}),
+      size(init.size),
+      color(init.color),
+      texture(init.texture)
     {
-        auto renderer = get_screen()->get_renderer();
+        auto renderer = get_root()->get_renderer();
         renderer->add(this);
     }
 
     Rectangle::~Rectangle()
     {
-        auto renderer = get_screen()->get_renderer();
+        auto renderer = get_root()->get_renderer();
         renderer->remove(this);
     }
 

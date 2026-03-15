@@ -19,22 +19,50 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
+#include "HitArea.h"
 
-#ifdef _WIN32
-    #ifdef BUILD_PKZO2D
-        #define PKZO2D_EXPORT __declspec(dllexport)
-    #else
-        #define PKZO2D_EXPORT __declspec(dllimport)
-    #endif
-#else
-    #define PKZO2D_EXPORT
-#endif
+namespace pkzo
+{
+    HitArea::HitArea(Init init)
+    : Node({init.parent, init.transform}),
+      size(init.size)
+    {
+        if (init.action)
+        {
+            click_signal.connect(init.action);
+        }
+    }
 
-#ifdef _MSC_VER
-    //disable silly warnings
-    #pragma warning(disable: 4251) // 'identifier' : class 'type' needs to have dll-interface to be used by clients of class 'type2'
-    #pragma warning(disable: 4275) // non - DLL-interface class 'class_1' used as base for DLL-interface class 'class_2'
-#endif
+    HitArea::~HitArea() = default;
 
-#define NOMINMAX
+    void HitArea::set_size(const glm::vec2& value)
+    {
+        size = value;
+    }
+
+    const glm::vec2& HitArea::get_size() const
+    {
+        return size;
+    }
+
+    rsig::connection HitArea::on_click(const std::function<void ()>& handler)
+    {
+        return click_signal.connect(handler);
+    }
+
+    /*void HitArea::handle_mouse_button_down(glm::vec2 pos, MouseButton button)
+    {
+        if (button == MouseButton::LEFT)
+        {
+            auto gt        = get_global_transform();
+            auto invgt     = glm::inverse(gt);
+            auto local_pos = glm::vec2(invgt * glm::vec3(pos, 1.0f));
+
+            auto hs = size * 0.5f;
+            if (glm::all(glm::lessThanEqual(glm::abs(local_pos), hs)))
+            {
+                click_signal.emit();
+            }
+        }
+    }*/
+}

@@ -69,11 +69,11 @@ namespace island
         state_machine.on_event(State::MAIN_MENU, [this] (auto event) {
             std::visit(stdng::loose_overloaded(
                 [this](pkzo::MouseButtonDownEvent ev)      {
-                    auto spos = pkzo2d::map_to_screen(window->get_resolution(), screen->get_size(), glm::vec2(ev.position));
+                    auto spos = pkzo::map_to_screen(window->get_resolution(), screen->get_size(), glm::vec2(ev.position));
                     screen->handle_mouse_button_down(spos, ev.button);
                 },
                 [this](pkzo::MouseButtonUpEvent ev)        {
-                    auto spos = pkzo2d::map_to_screen(window->get_resolution(), screen->get_size(), glm::vec2(ev.position));
+                    auto spos = pkzo::map_to_screen(window->get_resolution(), screen->get_size(), glm::vec2(ev.position));
                     screen->handle_mouse_button_up(spos, ev.button);
                 }
             ), event);
@@ -95,12 +95,12 @@ namespace island
         state_machine.on_event(State::SETTINGS_MENU, [this] (auto event) {
             std::visit(stdng::loose_overloaded(
                 [this](pkzo::MouseButtonDownEvent ev)      {
-                    auto spos = pkzo2d::map_to_screen(window->get_resolution(), screen->get_size(), glm::vec2(ev.position));
-                    screen->handle_mouse_button_down(spos, ev.button);
+                    //auto spos = pkzo2d::map_to_screen(window->get_resolution(), screen->get_size(), glm::vec2(ev.position));
+                    //screen->handle_mouse_button_down(spos, ev.button);
                 },
                 [this](pkzo::MouseButtonUpEvent ev)        {
-                    auto spos = pkzo2d::map_to_screen(window->get_resolution(), screen->get_size(), glm::vec2(ev.position));
-                    screen->handle_mouse_button_up(spos, ev.button);
+                    //auto spos = pkzo2d::map_to_screen(window->get_resolution(), screen->get_size(), glm::vec2(ev.position));
+                    //screen->handle_mouse_button_up(spos, ev.button);
                 }
             ), event);
         });

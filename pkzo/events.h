@@ -24,11 +24,48 @@
 #include <functional>
 
 #include <rsig/rsig.h>
+#include <SDL3/SDL.h>
+#include <glm/glm.hpp>
+#include <pkzo/pkzo.h>
 
 #include "api.h"
 
 namespace pkzo
 {
+    enum class MouseButton : Uint8
+    {
+        LEFT    = SDL_BUTTON_LEFT,
+        MIDDLE  = SDL_BUTTON_MIDDLE,
+        RIGHT   = SDL_BUTTON_RIGHT,
+        BUTTON4 = SDL_BUTTON_X1,
+        BUTTON5 = SDL_BUTTON_X2
+    };
+
+    struct MouseMoveEvent
+    {
+        glm::uvec2 position;
+        glm::ivec2 releative;
+    };
+
+    struct MouseButtonDownEvent
+    {
+        glm::uvec2 position;
+        MouseButton button;
+    };
+
+    struct MouseButtonUpEvent
+    {
+        glm::uvec2 position;
+        MouseButton button;
+    };
+
+    struct MouseWheelEvent
+    {
+        glm::ivec2 releative;
+    };
+
+    using InputEvent = pkzo::InputEvent;
+
     //! Install an observer for the quit event.
     //!
     //! The quit event is issued when either the last window is closed or

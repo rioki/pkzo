@@ -33,7 +33,7 @@
 #include <pkzo/OpenGLMesh.h>
 #include "Shape.h"
 
-namespace pkzo2d
+namespace pkzo
 {
     using pkzo::AttributeLocation;
 
@@ -102,7 +102,7 @@ namespace pkzo2d
     // Internally these files are not used, just for IDE's libter.
     void write_include_file(const std::string& filename, const std::string& contents)
     {
-        auto inc_file = std::filesystem::path(SOLUTION_DIR) / "pkzo2d" / filename;
+        auto inc_file = std::filesystem::path(SOLUTION_DIR) / "pkzo" / filename;
         if (std::filesystem::exists(inc_file))
         {
             auto output = std::ofstream(inc_file);

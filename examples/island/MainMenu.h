@@ -21,13 +21,13 @@
 
 #pragma once
 
-#include <pkzo2d/pkzo2d.h>
+#include <pkzo/pkzo.h>
 
 namespace island
 {
     class App;
 
-    class MainMenu : public pkzo2d::Screen
+    class MainMenu : public pkzo::Screen
     {
     public:
         struct Init

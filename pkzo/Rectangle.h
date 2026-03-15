@@ -21,47 +21,49 @@
 
 #pragma once
 
-#include <vector>
 #include <memory>
 
-#include "Node.h"
+#include <pkzo/Texture.h>
+#include <pkzo/Mesh.h>
 
-namespace pkzo2d
+#include "Shape.h"
+
+namespace pkzo
 {
     class Scene;
+    using pkzo::Texture;
 
-    class PKZO2D_EXPORT Group : public Node
+    class PKZO_EXPORT Rectangle : public Shape
     {
     public:
-        using Node::Specs;
+        struct Init
+        {
+            Node*                    parent    = nullptr;
+            glm::mat3                transform = glm::mat3(1.0f);
+            glm::vec2                size      = glm::vec2(15.0f);
+            glm::vec4                color     = glm::vec4(1.0f);
+            std::shared_ptr<Texture> texture   = nullptr;
+        };
 
-        Group(Specs specs);
+        Rectangle(Init init);
 
-        ~Group();
+        ~Rectangle();
 
-        template <typename NodeT>
-        NodeT* add(NodeT::Specs specs);
+        void set_size(const glm::vec2& value);
+        const glm::vec2& get_size() const;
+        void set_color(const glm::vec4& value);
+        void set_texture(const std::shared_ptr<Texture>& value);
 
-        void remove(Node* node);
-
-        std::vector<Node*> get_nodes();
-
-        void handle_mouse_button_down(glm::vec2 pos, MouseButton button) override;
-        void handle_mouse_button_up(glm::vec2 pos, MouseButton button) override;
-
-        void update(float dt) override;
+        glm::mat4 get_model_matrix() const override;
+        std::shared_ptr<Mesh> get_mesh() const override;
+        glm::vec4 get_color() const override;
+        std::shared_ptr<Texture> get_texture() const override;
 
     private:
-        std::vector<std::shared_ptr<Node>> nodes;
-    };
+        glm::vec2                size;
+        glm::vec4                color;
+        std::shared_ptr<Texture> texture;
 
-    template <typename NodeT>
-    NodeT* Group::add(NodeT::Specs specs)
-    {
-        specs.parent = this;
-        auto node = std::make_unique<NodeT>(std::move(specs));
-        auto ptr = node.get();
-        nodes.push_back(std::move(node));
-        return ptr;
-    }
+        mutable std::shared_ptr<Mesh> mesh;
+    };
 }

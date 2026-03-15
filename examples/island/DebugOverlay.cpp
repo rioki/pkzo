@@ -17,7 +17,7 @@ namespace island
 {
     using fsec = std::chrono::duration<float>;
 
-    using namespace pkzo2d;
+    using namespace pkzo;
     constexpr auto FPS_INTERVALL = 1s;
     constexpr auto LOG_OFFSET    = 30.0f;
     constexpr auto LOG_MAX_LINES = 5u;

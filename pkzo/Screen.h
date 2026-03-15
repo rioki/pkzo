@@ -23,13 +23,25 @@
 
 #include <pkzo/GraphicContext.h>
 
+#include "events.h"
 #include "Group.h"
 
-namespace pkzo2d
+namespace pkzo
 {
     class Renderer;
 
-    class PKZO2D_EXPORT Screen : public Group
+    class Screen;
+
+    template <>
+    struct NodeTraits<Screen>
+    {
+        using Matrix = glm::mat3;
+    };
+
+    using ScreenNode  = Node<Screen>;
+    using ScreenGroup = Group<Screen>;
+
+    class PKZO_EXPORT Screen : public ScreenGroup
     {
     public:
         struct Specs
@@ -48,10 +60,25 @@ namespace pkzo2d
 
         void draw(pkzo::GraphicContext& gc);
 
+        rsig::connection on_event(const std::function<void ()>& handler)
+        {
+            return move_signal.connect(handler);
+        }
+
     private:
         glm::vec2                 size;
         std::unique_ptr<Renderer> renderer;
     };
+
+    constexpr glm::mat3 position(const glm::vec2& value)
+    {
+        return glm::translate(glm::mat3(1.0f), value);
+    }
+
+    constexpr glm::mat3 position(float x, float y)
+    {
+        return position(glm::vec2(x, y));
+    }
 
     template <typename T>
     inline T map(T source_left, T source_right, T target_left, T target_right, T value)

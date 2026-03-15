@@ -21,14 +21,14 @@
 
 #include "Text.h"
 
-namespace pkzo2d
+namespace pkzo
 {
-    Text::Text(Specs specs)
-    : Shape({specs.parent, specs.transform}),
-      color(specs.color),
-      text(specs.text),
-      font(specs.font),
-      font_size(specs.font_size)
+    Text::Text(Init init)
+    : Shape({init.parent, init.transform}),
+      color(init.color),
+      text(init.text),
+      font(init.font),
+      font_size(init.font_size)
     {
         if (!font)
         {

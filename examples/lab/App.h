@@ -24,7 +24,6 @@
 #include <memory>
 
 #include <pkzo/pkzo.h>
-#include <pkzo2d/pkzo2d.h>
 #include <pkzo3d/pkzo3d.h>
 
 namespace lab
@@ -58,8 +57,8 @@ namespace lab
         std::unique_ptr<pkzo::Mouse>    mouse;
         std::unique_ptr<pkzo::Keyboard> keyboard;
 
-        std::unique_ptr<pkzo2d::Screen>                screen;
-        std::optional<std::unique_ptr<pkzo2d::Screen>> next_screen;
+        std::unique_ptr<pkzo::Screen>                screen;
+        std::optional<std::unique_ptr<pkzo::Screen>> next_screen;
         std::unique_ptr<pkzo3d::Scene>                 scene;
         std::optional<std::unique_ptr<pkzo3d::Scene>>  next_scene;
         Pawn*                                          pawn = nullptr;

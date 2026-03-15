@@ -21,10 +21,38 @@
 
 #pragma once
 
-#include "Group.h"
-#include "HitArea.h"
-#include "Node.h"
-#include "Rectangle.h"
 #include "Screen.h"
-#include "Shape.h"
-#include "Text.h"
+
+#include <rsig/rsig.h>
+
+namespace pkzo
+{
+    class Scene;
+
+    class PKZO_EXPORT HitArea : public ScreenNode
+    {
+    public:
+        struct Init
+        {
+            Node*                    parent    = nullptr;
+            glm::mat3                transform = glm::mat3(1.0f);
+            glm::vec2                size      = glm::vec2(15.0f);
+            std::function<void ()>   action;
+        };
+
+        HitArea(Init init);
+
+        ~HitArea();
+
+        void set_size(const glm::vec2& value);
+        const glm::vec2& get_size() const;
+
+        rsig::connection on_click(const std::function<void ()>& handler);
+
+        //void handle_mouse_button_down(glm::vec2 pos, MouseButton button) override;
+
+    private:
+        glm::vec2      size;
+        rsig::signal<> click_signal;
+    };
+}

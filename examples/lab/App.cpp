@@ -71,13 +71,13 @@ namespace lab
 
     void App::start_material_test()
     {
-        next_screen = std::unique_ptr<pkzo2d::Screen>();
+        next_screen = std::unique_ptr<pkzo::Screen>();
         next_scene  = std::make_unique<MaterialTestScene>();
     }
 
     void App::start_physics_test()
     {
-        next_screen = std::unique_ptr<pkzo2d::Screen>();
+        next_screen = std::unique_ptr<pkzo::Screen>();
         next_scene  = std::make_unique<PhysicsTestScene>();
     }
 
@@ -161,8 +161,8 @@ namespace lab
     {
         if (screen)
         {
-            auto spos = pkzo2d::map_to_screen(window->get_resolution(), screen->get_size(), glm::vec2(pos));
-            screen->handle_mouse_button_down(spos, button);
+            auto spos = pkzo::map_to_screen(window->get_resolution(), screen->get_size(), glm::vec2(pos));
+            //screen->handle_mouse_button_down(spos, button);
         }
     }
 
@@ -170,8 +170,8 @@ namespace lab
     {
         if (screen)
         {
-            auto spos = pkzo2d::map_to_screen(window->get_resolution(), screen->get_size(), glm::vec2(pos));
-            screen->handle_mouse_button_up(spos, button);
+            auto spos = pkzo::map_to_screen(window->get_resolution(), screen->get_size(), glm::vec2(pos));
+            //screen->handle_mouse_button_up(spos, button);
         }
     }
 

@@ -28,7 +28,7 @@
 
 namespace island
 {
-    using namespace pkzo2d;
+    using namespace pkzo;
 
     MainMenu::MainMenu(Init init)
     : Screen({

@@ -4,7 +4,7 @@
 
 #include <string_view>
 
-namespace pkzo2d 
+namespace pkzo 
 {
     //! Retrieves the content of an embedded resource file as a string view.
     //!

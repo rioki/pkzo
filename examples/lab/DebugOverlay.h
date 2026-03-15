@@ -25,13 +25,13 @@
 #include <source_location>
 #include <deque>
 
-#include <pkzo2d/pkzo2d.h>
+#include <pkzo/pkzo.h>
 
 namespace lab
 {
     class Pawn;
 
-    class DebugOverlay : public pkzo2d::Screen
+    class DebugOverlay : public pkzo::Screen
     {
     public:
         DebugOverlay(const glm::vec2& size);
@@ -41,14 +41,14 @@ namespace lab
     private:
         using time_point = std::chrono::steady_clock::time_point;
 
-        pkzo2d::Text* fps_counter;
-        time_point    last_fps_count;
-        size_t        frame_count = 0;
+        pkzo::Text* fps_counter;
+        time_point  last_fps_count;
+        size_t      frame_count = 0;
 
         struct LogLine
         {
-            time_point    time;
-            pkzo2d::Text* widget = nullptr;
+            time_point  time;
+            pkzo::Text* widget = nullptr;
         };
         std::deque<LogLine> log_lines;
         rsig::connection trace_connection;

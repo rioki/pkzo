@@ -25,14 +25,14 @@
 
 #include <pkzo/Font.h>
 
-namespace pkzo2d
+namespace pkzo
 {
     using pkzo::Font;
 
-    class PKZO2D_EXPORT Text : public Shape
+    class PKZO_EXPORT Text : public Shape
     {
     public:
-        struct Specs
+        struct Init
         {
             Node*                    parent    = nullptr;
             glm::mat3                transform = glm::mat3(1.0f);
@@ -42,7 +42,7 @@ namespace pkzo2d
             unsigned int             font_size = 12;
         };
 
-        Text(Specs specs);
+        Text(Init init);
 
         ~Text();
 

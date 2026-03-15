@@ -19,53 +19,45 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "Screen.h"
+#pragma once
 
-#include "Renderer.h"
+#include <memory>
 
-namespace pkzo2d
+#include <pkzo/GraphicContext.h>
+#include <pkzo/Shader.h>
+#include <pkzo/Mesh.h>
+
+#include "api.h"
+
+namespace pkzo
 {
-    Screen::Screen(Specs specs)
-    : Group({}),
-      size(specs.size) {}
+    class Shape;
+    using pkzo::Shader;
+    using pkzo::Mesh;
 
-    Screen::~Screen()
+    class PKZO_EXPORT Renderer
     {
-        // delete all children, before removing services
-        for (auto* node : get_nodes())
-        {
-            remove(node);
-        }
-    }
+    public:
+        Renderer(const glm::vec2& size);
 
-    Renderer* Screen::get_renderer()
-    {
-        if (!renderer)
-        {
-            renderer = std::make_unique<Renderer>(size);
-        }
-        return renderer.get();
-    }
+        ~Renderer();
 
-    void Screen::set_size(const glm::vec2& value)
-    {
-        size = value;
-        if (renderer)
-        {
-            renderer->resize(value);
-        }
-    }
+        void resize(const glm::vec2& size);
 
-    const glm::vec2& Screen::get_size() const
-    {
-        return size;
-    }
+        void add(Shape* shape);
+        void remove(Shape* shape);
 
-    void Screen::draw(pkzo::GraphicContext& gc)
-    {
-        if (renderer)
-        {
-            renderer->render(gc);
-        }
-    }
+        void render(pkzo::GraphicContext& gc);
+
+    private:
+        glm::mat4 projection_matrix;
+        glm::mat4 view_matrix       = glm::mat4(1.0f);
+
+        std::vector<Shape*>     shapes;
+
+        std::shared_ptr<Shader> screen_shader;
+
+        Renderer(const Renderer&) = delete;
+        Renderer& operator = (const Renderer&) = delete;
+    };
 }

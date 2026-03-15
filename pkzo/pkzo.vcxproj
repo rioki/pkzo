@@ -167,14 +167,18 @@
     <ClInclude Include="FrameBuffer.h" />
     <ClInclude Include="FreeImageTexture.h" />
     <ClInclude Include="FreeTypeFont.h" />
+    <ClInclude Include="glm_2d.h" />
     <ClInclude Include="glm_fkyaml.h" />
     <ClInclude Include="glm_njson.h" />
     <ClInclude Include="GraphicContext.h" />
+    <ClInclude Include="Group.h" />
+    <ClInclude Include="HitArea.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="MemoryMesh.h" />
     <ClInclude Include="MemoryTexture.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="Node.h" />
     <ClInclude Include="OpenGLBuffer.h" />
     <ClInclude Include="OpenGLCubeMap.h" />
     <ClInclude Include="OpenGLFrameBuffer.h" />
@@ -183,10 +187,16 @@
     <ClInclude Include="OpenGLShader.h" />
     <ClInclude Include="OpenGLTexture.h" />
     <ClInclude Include="pkzo.h" />
+    <ClInclude Include="Rectangle.h" />
+    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="resources.h" />
+    <ClInclude Include="Screen.h" />
     <ClInclude Include="SdlSentry.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Shape.h" />
     <ClInclude Include="stdng.h" />
     <ClInclude Include="strconv.h" />
+    <ClInclude Include="Text.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
@@ -200,6 +210,7 @@
     <ClCompile Include="FreeImageTexture.cpp" />
     <ClCompile Include="FreeTypeFont.cpp" />
     <ClCompile Include="GraphicContext.cpp" />
+    <ClCompile Include="HitArea.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="MemoryMesh.cpp" />
     <ClCompile Include="MemoryTexture.cpp" />
@@ -212,10 +223,42 @@
     <ClCompile Include="OpenGLMesh.cpp" />
     <ClCompile Include="OpenGLShader.cpp" />
     <ClCompile Include="OpenGLTexture.cpp" />
+    <ClCompile Include="Rectangle.cpp" />
+    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="resources.cpp" />
+    <ClCompile Include="Screen.cpp" />
     <ClCompile Include="SdlSentry.cpp" />
+    <ClCompile Include="Shape.cpp" />
     <ClCompile Include="strconv.cpp" />
+    <ClCompile Include="Text.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="attributes.glsl" />
+    <None Include="outputs.glsl" />
+    <CustomBuild Include="resources.yml">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VcpkgManifestRoot)\vcpkg_installed\$(VcpkgTriplet)\$(VcpkgTriplet)\tools\ezrc\ezrc.exe %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VcpkgManifestRoot)\vcpkg_installed\$(VcpkgTriplet)\$(VcpkgTriplet)\tools\ezrc\ezrc.exe %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VcpkgManifestRoot)\vcpkg_installed\$(VcpkgTriplet)\$(VcpkgTriplet)\tools\ezrc\ezrc.exe %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VcpkgManifestRoot)\vcpkg_installed\$(VcpkgTriplet)\$(VcpkgTriplet)\tools\ezrc\ezrc.exe %(FullPath)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ezrc resource compiler</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ezrc resource compiler</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ezrc resource compiler</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ezrc resource compiler</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">resources.h;resources.cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">resources.h;resources.cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">resources.h;resources.cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">resources.h;resources.cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">attributes.glsl;outputs.glsl;uniforms.glsl;Screen.frag;Screen.vert;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">attributes.glsl;outputs.glsl;uniforms.glsl;Screen.frag;Screen.vert;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">attributes.glsl;outputs.glsl;uniforms.glsl;Screen.frag;Screen.vert;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">attributes.glsl;outputs.glsl;uniforms.glsl;Screen.frag;Screen.vert;%(AdditionalInputs)</AdditionalInputs>
+    </CustomBuild>
+    <None Include="Screen.frag" />
+    <None Include="Screen.vert" />
+    <None Include="uniforms.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
