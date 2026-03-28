@@ -31,7 +31,7 @@
 #include "MeshGeometry.h"
 #include "SphereGeometry.h"
 #include "CylinderGeometry.h"
-#include "Renderer.h"
+#include "SceneRenderer.h"
 
 namespace pkzo3d
 {
@@ -270,7 +270,7 @@ namespace pkzo3d
     class BulletDebugDraw : public btIDebugDraw
     {
     public:
-        BulletDebugDraw(Renderer& renderer)
+        BulletDebugDraw(SceneRenderer& renderer)
         : renderer(renderer) {}
 
         void drawLine(const btVector3& a, const btVector3& b, const btVector3& color) override
@@ -303,11 +303,11 @@ namespace pkzo3d
         }
 
     private:
-         Renderer& renderer;
+         SceneRenderer& renderer;
          int mode = 0;
     };
 
-    void BulletPhysicsSimulation::enable_debug_render(Renderer& renderer)
+    void BulletPhysicsSimulation::enable_debug_render(SceneRenderer& renderer)
     {
         check(world);
 

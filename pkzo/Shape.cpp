@@ -22,7 +22,7 @@
 #include "Shape.h"
 
 #include "Screen.h"
-#include "Renderer.h"
+#include "ScreenRenderer.h"
 
 namespace pkzo
 {

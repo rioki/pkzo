@@ -34,7 +34,7 @@ namespace pkzo3d
     class Body;
     class Ghost;
     class Geometry;
-    class Renderer;
+    class SceneRenderer;
 
     struct TestResult
     {
@@ -67,7 +67,7 @@ namespace pkzo3d
 
         virtual void update(float dt) = 0;
 
-        virtual void enable_debug_render(Renderer& renderer) = 0;
+        virtual void enable_debug_render(SceneRenderer& renderer) = 0;
         virtual void disable_debug_render() = 0;
 
     private:

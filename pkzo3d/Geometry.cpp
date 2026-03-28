@@ -24,7 +24,7 @@
 #include <pkzo/debug.h>
 
 #include "Scene.h"
-#include "Renderer.h"
+#include "SceneRenderer.h"
 #include "PhysicsSimulation.h"
 
 namespace pkzo3d

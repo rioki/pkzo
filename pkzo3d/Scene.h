@@ -28,7 +28,7 @@
 
 namespace pkzo3d
 {
-    class Renderer;
+    class SceneRenderer;
 
     class PKZO3D_EXPORT Scene : public Group
     {
@@ -37,8 +37,8 @@ namespace pkzo3d
 
         ~Scene();
 
-        Renderer* get_renderer();
-        const Renderer* get_renderer() const;
+        SceneRenderer* get_renderer();
+        const SceneRenderer* get_renderer() const;
 
         PhysicsSimulation* get_physics_simulation();
         const PhysicsSimulation* get_physics_simulation() const;
@@ -56,7 +56,7 @@ namespace pkzo3d
         void draw(pkzo::GraphicContext& gc);
 
     private:
-        std::unique_ptr<Renderer>          renderer;
+        std::unique_ptr<SceneRenderer>          renderer;
         std::unique_ptr<PhysicsSimulation> physics_simulation;
     };
 }

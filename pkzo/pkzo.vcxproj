@@ -188,7 +188,7 @@
     <ClInclude Include="OpenGLTexture.h" />
     <ClInclude Include="pkzo.h" />
     <ClInclude Include="Rectangle.h" />
-    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="ScreenRenderer.h" />
     <ClInclude Include="resources.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="SdlSentry.h" />
@@ -224,7 +224,7 @@
     <ClCompile Include="OpenGLShader.cpp" />
     <ClCompile Include="OpenGLTexture.cpp" />
     <ClCompile Include="Rectangle.cpp" />
-    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="ScreenRenderer.cpp" />
     <ClCompile Include="resources.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="SdlSentry.cpp" />

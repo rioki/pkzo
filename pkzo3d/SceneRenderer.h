@@ -44,12 +44,12 @@ namespace pkzo3d
     using pkzo::CubeMap;
     using pkzo::Mesh;
 
-    class PKZO3D_EXPORT Renderer
+    class PKZO3D_EXPORT SceneRenderer
     {
     public:
-        Renderer();
+        SceneRenderer();
 
-        ~Renderer();
+        ~SceneRenderer();
 
         void add_debug_line(const glm::vec3& start, const glm::vec3& end, const glm::vec4& color);
         void add_debug_line(const glm::vec3& start, const glm::vec3& end, const glm::vec4& start_color, const glm::vec4& end_color);
@@ -110,7 +110,7 @@ namespace pkzo3d
         void render_skybox(GraphicContext& gc);
         void render_forward(GraphicContext& gc);
 
-        Renderer(const Renderer&) = delete;
-        Renderer& operator = (const Renderer&) = delete;
+        SceneRenderer(const SceneRenderer&) = delete;
+        SceneRenderer& operator = (const SceneRenderer&) = delete;
     };
 }

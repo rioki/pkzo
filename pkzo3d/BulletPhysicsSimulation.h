@@ -62,7 +62,7 @@ namespace pkzo3d
 
         void update(float dt) override;
 
-        void enable_debug_render(Renderer& renderer) override;
+        void enable_debug_render(SceneRenderer& renderer) override;
         void disable_debug_render() override;
 
     private:

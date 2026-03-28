@@ -28,7 +28,7 @@
 
 namespace pkzo
 {
-    class Renderer;
+    class ScreenRenderer;
 
     class Screen;
 
@@ -56,7 +56,7 @@ namespace pkzo
         void set_size(const glm::vec2& value);
         const glm::vec2& get_size() const;
 
-        Renderer* get_renderer();
+        ScreenRenderer* get_renderer();
 
         void draw(pkzo::GraphicContext& gc);
 
@@ -70,7 +70,7 @@ namespace pkzo
 
     private:
         glm::vec2                 size;
-        std::unique_ptr<Renderer> renderer;
+        std::unique_ptr<ScreenRenderer> renderer;
         rsig::signal<const InputEvent&> input_signal;
     };
 

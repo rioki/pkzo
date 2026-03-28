@@ -35,12 +35,12 @@ namespace pkzo
     using pkzo::Shader;
     using pkzo::Mesh;
 
-    class PKZO_EXPORT Renderer
+    class PKZO_EXPORT ScreenRenderer
     {
     public:
-        Renderer(const glm::vec2& size);
+        ScreenRenderer(const glm::vec2& size);
 
-        ~Renderer();
+        ~ScreenRenderer();
 
         void resize(const glm::vec2& size);
 
@@ -57,7 +57,7 @@ namespace pkzo
 
         std::shared_ptr<Shader> screen_shader;
 
-        Renderer(const Renderer&) = delete;
-        Renderer& operator = (const Renderer&) = delete;
+        ScreenRenderer(const ScreenRenderer&) = delete;
+        ScreenRenderer& operator = (const ScreenRenderer&) = delete;
     };
 }

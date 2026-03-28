@@ -19,7 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "Renderer.h"
+#include "SceneRenderer.h"
 
 #include <string>
 #include <sstream>
@@ -356,61 +356,61 @@ namespace pkzo3d
         return expand_includes(code);
     }
 
-    Renderer::Renderer() = default;
+    SceneRenderer::SceneRenderer() = default;
 
-    Renderer::~Renderer() = default;
+    SceneRenderer::~SceneRenderer() = default;
 
-    void Renderer::add_debug_line(const glm::vec3& start, const glm::vec3& end, const glm::vec4& color)
+    void SceneRenderer::add_debug_line(const glm::vec3& start, const glm::vec3& end, const glm::vec4& color)
     {
         debug_line_renderer.add_line(start, end, color, color);
     }
 
-    void Renderer::add_debug_line(const glm::vec3& start, const glm::vec3& end, const glm::vec4& start_color, const glm::vec4& end_color)
+    void SceneRenderer::add_debug_line(const glm::vec3& start, const glm::vec3& end, const glm::vec4& start_color, const glm::vec4& end_color)
     {
         debug_line_renderer.add_line(start, end, start_color, end_color);
     }
 
-    void Renderer::add(Camera* camera)
+    void SceneRenderer::add(Camera* camera)
     {
         cameras.push_back(camera);
     }
 
-    void Renderer::remove(Camera* camera)
+    void SceneRenderer::remove(Camera* camera)
     {
         std::erase(cameras, camera);
     }
 
-    void Renderer::add(SkyBox* sky_box)
+    void SceneRenderer::add(SkyBox* sky_box)
     {
         skyboxes.push_back(sky_box);
     }
 
-    void Renderer::remove(SkyBox* sky_box)
+    void SceneRenderer::remove(SkyBox* sky_box)
     {
         std::erase(skyboxes, sky_box);
     }
 
-    void Renderer::add(Geometry* geometry)
+    void SceneRenderer::add(Geometry* geometry)
     {
         geometries.push_back(geometry);
     }
 
-    void Renderer::remove(Geometry* geometry)
+    void SceneRenderer::remove(Geometry* geometry)
     {
         std::erase(geometries, geometry);
     }
 
-    void Renderer::add(Light* light)
+    void SceneRenderer::add(Light* light)
     {
         lights.push_back(light);
     }
 
-    void Renderer::remove(Light* light)
+    void SceneRenderer::remove(Light* light)
     {
         std::erase(lights, light);
     }
 
-    void Renderer::render(pkzo::GraphicContext& gc)
+    void SceneRenderer::render(pkzo::GraphicContext& gc)
     {
         if (!cameras.empty() && !geometries.empty())
         {
@@ -435,7 +435,7 @@ namespace pkzo3d
         }
     }
 
-    void Renderer::load_shaders(GraphicContext& gc)
+    void SceneRenderer::load_shaders(GraphicContext& gc)
     {
         if (forward_shader)
         {
@@ -493,7 +493,7 @@ namespace pkzo3d
         });
     }
 
-    Renderer::IblMaps Renderer::genrate_ibl_maps(GraphicContext& gc, const std::shared_ptr<CubeMap>& light_probe)
+    SceneRenderer::IblMaps SceneRenderer::genrate_ibl_maps(GraphicContext& gc, const std::shared_ptr<CubeMap>& light_probe)
     {
         constexpr auto MIPS = 7;
         check(light_probe);
@@ -517,7 +517,7 @@ namespace pkzo3d
         return static_cast<int>(base) + offset;
     }
 
-    void Renderer::apply_light(GraphicContext& gc, int i, const Light* light)
+    void SceneRenderer::apply_light(GraphicContext& gc, int i, const Light* light)
     {
         check(i < MAX_LIGHTS);
 
@@ -536,7 +536,7 @@ namespace pkzo3d
         }
     }
 
-    void Renderer::apply_light_probe(GraphicContext& gc, int i, const std::shared_ptr<CubeMap>& probe)
+    void SceneRenderer::apply_light_probe(GraphicContext& gc, int i, const std::shared_ptr<CubeMap>& probe)
     {
         check(i < MAX_LIGHT_PROBES);
 
@@ -564,7 +564,7 @@ namespace pkzo3d
         }
     }
 
-    void Renderer::apply_material(GraphicContext& gc, const std::shared_ptr<Material>& material)
+    void SceneRenderer::apply_material(GraphicContext& gc, const std::shared_ptr<Material>& material)
     {
         constexpr auto BASE_COLOR_SLOT          = 0;
         constexpr auto METALLIC_ROUGHNESS_SLOT  = 1;
@@ -588,7 +588,7 @@ namespace pkzo3d
         gc.bind_texture(EMISSIVE_SLOT,           material->get_emissive_map());
     }
 
-    void Renderer::render_skybox(pkzo::GraphicContext& gc)
+    void SceneRenderer::render_skybox(pkzo::GraphicContext& gc)
     {
         constexpr auto SKYBOX_SLOT = 0;
 
@@ -617,7 +617,7 @@ namespace pkzo3d
 
     }
 
-    void Renderer::render_forward(pkzo::GraphicContext& gc)
+    void SceneRenderer::render_forward(pkzo::GraphicContext& gc)
     {
         gc.start_pass("Forward", forward_shader);
         gc.set_blend_mode(pkzo::BlendMode::ALPHA);
@@ -654,7 +654,7 @@ namespace pkzo3d
         gc.end_pass();
     }
 
-    void Renderer::LineRenderer::add_line(const glm::vec3& start, const glm::vec3& end, const glm::vec4& start_color, const glm::vec4& end_color)
+    void SceneRenderer::LineRenderer::add_line(const glm::vec3& start, const glm::vec3& end, const glm::vec4& start_color, const glm::vec4& end_color)
     {
         line_vertexes.push_back(start);
         line_vertexes.push_back(end);
@@ -665,7 +665,7 @@ namespace pkzo3d
         line_indexes.push_back({line_indexes.size() * 2u, line_indexes.size() * 2u + 1u});
     }
 
-    void Renderer::LineRenderer::render(GraphicContext& gc, const Camera* camera)
+    void SceneRenderer::LineRenderer::render(GraphicContext& gc, const Camera* camera)
     {
         if (line_vertexes.empty())
         {

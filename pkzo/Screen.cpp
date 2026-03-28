@@ -21,7 +21,7 @@
 
 #include "Screen.h"
 
-#include "Renderer.h"
+#include "ScreenRenderer.h"
 
 namespace pkzo
 {
@@ -34,11 +34,11 @@ namespace pkzo
         remove_all_children();
     }
 
-    Renderer* Screen::get_renderer()
+    ScreenRenderer* Screen::get_renderer()
     {
         if (!renderer)
         {
-            renderer = std::make_unique<Renderer>(size);
+            renderer = std::make_unique<ScreenRenderer>(size);
         }
         return renderer.get();
     }

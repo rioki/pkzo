@@ -23,7 +23,7 @@
 
 #include <pkzo/debug.h>
 
-#include "Renderer.h"
+#include "SceneRenderer.h"
 #include "PhysicsSimulation.h"
 
 namespace pkzo3d
@@ -42,16 +42,16 @@ namespace pkzo3d
         }
     }
 
-    Renderer* Scene::get_renderer()
+    SceneRenderer* Scene::get_renderer()
     {
         if (!renderer)
         {
-            renderer = std::make_unique<Renderer>();
+            renderer = std::make_unique<SceneRenderer>();
         }
         return renderer.get();
     }
 
-    const Renderer* Scene::get_renderer() const
+    const SceneRenderer* Scene::get_renderer() const
     {
         return renderer.get();
     }

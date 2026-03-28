@@ -22,7 +22,7 @@
 #include "Light.h"
 
 #include "Scene.h"
-#include "Renderer.h"
+#include "SceneRenderer.h"
 
 namespace pkzo3d
 {

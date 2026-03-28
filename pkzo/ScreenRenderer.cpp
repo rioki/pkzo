@@ -19,7 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "Renderer.h"
+#include "ScreenRenderer.h"
 
 #include <fstream>
 #include <sstream>
@@ -226,31 +226,31 @@ namespace pkzo
         return result.str();
     }
 
-    Renderer::Renderer(const glm::vec2& size)
+    ScreenRenderer::ScreenRenderer(const glm::vec2& size)
     {
         auto hs = size * 0.5f;
         projection_matrix = glm::ortho(-hs.x, hs.x, -hs.y, hs.y, -1.0f, 1.0f);
     }
 
-    Renderer::~Renderer() = default;
+    ScreenRenderer::~ScreenRenderer() = default;
 
-    void Renderer::resize(const glm::vec2& size)
+    void ScreenRenderer::resize(const glm::vec2& size)
     {
         auto hs = size * 0.5f;
         projection_matrix = glm::ortho(-hs.x, hs.x, -hs.y, hs.y, -1.0f, 1.0f);
     }
 
-    void Renderer::add(Shape* shape)
+    void ScreenRenderer::add(Shape* shape)
     {
         shapes.push_back(shape);
     }
 
-    void Renderer::remove(Shape* shape)
+    void ScreenRenderer::remove(Shape* shape)
     {
         std::erase(shapes, shape);
     }
 
-    void Renderer::render(pkzo::GraphicContext& gc)
+    void ScreenRenderer::render(pkzo::GraphicContext& gc)
     {
         if (shapes.empty())
         {

@@ -173,7 +173,7 @@
     <ClInclude Include="pkzo3d.h" />
     <ClInclude Include="api.h" />
     <ClInclude Include="PointLight.h" />
-    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="SceneRenderer.h" />
     <ClInclude Include="resources.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Node.h" />
@@ -199,7 +199,7 @@
     <ClCompile Include="ModelInstance.cpp" />
     <ClCompile Include="PhysicsSimulation.cpp" />
     <ClCompile Include="PointLight.cpp" />
-    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="SceneRenderer.cpp" />
     <ClCompile Include="resources.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Node.cpp" />
