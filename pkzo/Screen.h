@@ -60,14 +60,18 @@ namespace pkzo
 
         void draw(pkzo::GraphicContext& gc);
 
-        rsig::connection on_event(const std::function<void ()>& handler)
-        {
-            return move_signal.connect(handler);
-        }
+        //! Register an input handler on the screen.
+        //!
+        //! @note This singal is primarily intended for nodes to observe input.
+        rsig::connection on_input(const std::function<void (const InputEvent&)>& handler);
+
+        //! Forward an input event to a Screen for processing.
+        void handle_input(const InputEvent& event);
 
     private:
         glm::vec2                 size;
         std::unique_ptr<Renderer> renderer;
+        rsig::signal<const InputEvent&> input_signal;
     };
 
     constexpr glm::mat3 position(const glm::vec2& value)

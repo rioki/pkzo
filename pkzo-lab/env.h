@@ -21,34 +21,34 @@
 
 #pragma once
 
-#include <string>
-#include <string_view>
+#include <filesystem>
 
-#include "api.h"
-
-namespace pkzo
+namespace lab
 {
-    enum class UniformLocation : int
-    {
-        PROJECTION_MATRIX,
-        VIEW_MATRIX,
-        MODEL_MATRIX,
-        COLOR_FACTOR,
-        COLOR_MAP
-    };
+    //! Get the user folder.
+    //!
+    //! This function return the user folder, for example %LOCALAPPDATA%/rioki/garden
+    //! or $HOME/.rioki/garden.
+    //!
+    //! @return the user folder
+    [[nodiscard]]
+    std::filesystem::path get_user_folder();
 
-    class PKZO_EXPORT Shader
-    {
-    public:
-        struct Source
-        {
-            std::string vertex;
-            std::string fragment;
-        };
+    //! Get the save folder.
+    //!
+    //! This function returns the save folder, generally get_user_folder()/saves.
+    //!
+    //! @return the save folder
+    [[nodiscard]]
+    std::filesystem::path get_save_folder();
 
-        virtual ~Shader() = default;
-
-        virtual int get_uniform_location(const std::string_view name) const = 0;
-        virtual int get_attribute_location(const std::string_view name) const = 0;
-    };
+    //! Get the asset folder.
+    //!
+    //! This function return the asset folder. If the game was launched inside
+    //! a debugger the function tries to find the asset folder relative to CWD,
+    //! else it tries to get it from the installation params.
+    //!
+    //! @return the asset folder
+    [[nodiscard]]
+    std::filesystem::path get_asset_folder();
 }

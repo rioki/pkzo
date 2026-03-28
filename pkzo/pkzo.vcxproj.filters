@@ -247,19 +247,19 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="attributes.glsl">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="Screen.frag">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="Screen.vert">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="uniforms.glsl">
+    <None Include="attributes.glsl">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="outputs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="uniforms.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

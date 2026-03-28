@@ -235,14 +235,58 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="attributes.glsl" />
-    <None Include="outputs.glsl" />
+    <None Include="attributes.glsl">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)glslgen.exe %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)glslgen.exe %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)glslgen.exe %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)glslgen.exe %(FullPath)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating GLSL Source attributes.glsl</Message>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">OpenGLMesh.h</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating GLSL Source attributes.glsl</Message>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">OpenGLMesh.h</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating GLSL Source attributes.glsl</Message>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">OpenGLMesh.h</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating GLSL Source attributes.glsl</Message>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">OpenGLMesh.h</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">attributes.glsl</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">attributes.glsl</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">attributes.glsl</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">attributes.glsl</Outputs>
+    </None>
+    <None Include="outputs.glsl">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)glslgen.exe %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)glslgen.exe %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)glslgen.exe %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)glslgen.exe %(FullPath)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating GLSL Source outputs.glsl</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating GLSL Source outputs.glsl</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating GLSL Source outputs.glsl</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating GLSL Source outputs.glsl</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">outputs.glsl</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">outputs.glsl</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">outputs.glsl</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">outputs.glsl</Outputs>
+    </None>
     <CustomBuild Include="resources.yml">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VcpkgManifestRoot)\vcpkg_installed\$(VcpkgTriplet)\$(VcpkgTriplet)\tools\ezrc\ezrc.exe %(FullPath)</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VcpkgManifestRoot)\vcpkg_installed\$(VcpkgTriplet)\$(VcpkgTriplet)\tools\ezrc\ezrc.exe %(FullPath)</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VcpkgManifestRoot)\vcpkg_installed\$(VcpkgTriplet)\$(VcpkgTriplet)\tools\ezrc\ezrc.exe %(FullPath)</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VcpkgManifestRoot)\vcpkg_installed\$(VcpkgTriplet)\$(VcpkgTriplet)\tools\ezrc\ezrc.exe %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)glslgen.exe attributes.glsl
+$(OutDir)glslgen.exe outputs.glsl
+$(OutDir)glslgen.exe uniforms.glsl
+$(VcpkgManifestRoot)\vcpkg_installed\$(VcpkgTriplet)\$(VcpkgTriplet)\tools\ezrc\ezrc.exe %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)glslgen.exe attributes.glsl
+$(OutDir)glslgen.exe outputs.glsl
+$(OutDir)glslgen.exe uniforms.glsl
+$(VcpkgManifestRoot)\vcpkg_installed\$(VcpkgTriplet)\$(VcpkgTriplet)\tools\ezrc\ezrc.exe %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)glslgen.exe attributes.glsl
+$(OutDir)glslgen.exe outputs.glsl
+$(OutDir)glslgen.exe uniforms.glsl
+$(VcpkgManifestRoot)\vcpkg_installed\$(VcpkgTriplet)\$(VcpkgTriplet)\tools\ezrc\ezrc.exe %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)glslgen.exe attributes.glsl
+$(OutDir)glslgen.exe outputs.glsl
+$(OutDir)glslgen.exe uniforms.glsl
+$(VcpkgManifestRoot)\vcpkg_installed\$(VcpkgTriplet)\$(VcpkgTriplet)\tools\ezrc\ezrc.exe %(FullPath)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ezrc resource compiler</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ezrc resource compiler</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ezrc resource compiler</Message>
@@ -258,7 +302,30 @@
     </CustomBuild>
     <None Include="Screen.frag" />
     <None Include="Screen.vert" />
-    <None Include="uniforms.glsl" />
+    <None Include="uniforms.glsl">
+      <FileType>Document</FileType>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating GLSL Source uniforms.glsl</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating GLSL Source uniforms.glsl</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating GLSL Source uniforms.glsl</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating GLSL Source uniforms.glsl</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)glslgen.exe %(FullPath)</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Shader.h</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)glslgen.exe %(FullPath)</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Shader.h</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)glslgen.exe %(FullPath)</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Shader.h</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)glslgen.exe %(FullPath)</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Shader.h</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">uniforms.glsl</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">uniforms.glsl</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">uniforms.glsl</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">uniforms.glsl</Outputs>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\glslgen\glslgen.vcxproj">
+      <Project>{02d48836-49fd-4efd-bb27-e4d5e6403083}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

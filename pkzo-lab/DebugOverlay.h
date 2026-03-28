@@ -21,34 +21,47 @@
 
 #pragma once
 
-#include <string>
-#include <string_view>
+#include <chrono>
+#include <source_location>
+#include <deque>
 
-#include "api.h"
+#include <pkzo/pkzo.h>
 
-namespace pkzo
+namespace lab
 {
-    enum class UniformLocation : int
-    {
-        PROJECTION_MATRIX,
-        VIEW_MATRIX,
-        MODEL_MATRIX,
-        COLOR_FACTOR,
-        COLOR_MAP
-    };
-
-    class PKZO_EXPORT Shader
+    class DebugOverlay : public pkzo::Screen
     {
     public:
-        struct Source
+        struct Init
         {
-            std::string vertex;
-            std::string fragment;
+            glm::vec2 size = glm::vec2(0.0f);
         };
 
-        virtual ~Shader() = default;
+        DebugOverlay(Init init);
 
-        virtual int get_uniform_location(const std::string_view name) const = 0;
-        virtual int get_attribute_location(const std::string_view name) const = 0;
+        void update(float dt) override;
+
+    private:
+        using time_point = std::chrono::steady_clock::time_point;
+
+        pkzo::Text* fps_counter;
+        time_point  last_fps_count;
+        size_t      frame_count = 0;
+
+        struct LogLine
+        {
+            time_point  time;
+            pkzo::Text* widget = nullptr;
+        };
+        std::deque<LogLine>         log_lines;
+        rsig::connection            trace_connection;
+        std::shared_ptr<pkzo::Font> log_font;
+        unsigned int                log_font_size;
+        glm::vec4                   log_color;
+
+        void update_fps();
+
+        void handle_trace(const std::source_location& loc, const std::string_view msg);
+        void prune_log_lines(bool inserting = false);
     };
 }

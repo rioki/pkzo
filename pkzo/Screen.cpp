@@ -64,4 +64,14 @@ namespace pkzo
             renderer->render(gc);
         }
     }
+
+    rsig::connection Screen::on_input(const std::function<void (const InputEvent&)>& handler)
+    {
+        return input_signal.connect(handler);
+    }
+
+    void Screen::handle_input(const InputEvent& event)
+    {
+        input_signal.emit(event);
+    }
 }

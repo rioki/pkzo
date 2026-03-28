@@ -31,6 +31,17 @@ namespace pkzo
         {
             click_signal.connect(init.action);
         }
+
+        auto* screen = get_root();
+        check(screen);
+        input_slot = screen->on_input([this] (const auto& event) {
+            std::visit(stdng::overloaded{
+                [&](const pkzo::MouseButtonDownEvent& e) {
+                    handle_mouse_button_down(e.position, e.button);
+                },
+                [](const auto& e) {}
+            }, event);
+        });
     }
 
     HitArea::~HitArea() = default;
@@ -50,11 +61,11 @@ namespace pkzo
         return click_signal.connect(handler);
     }
 
-    /*void HitArea::handle_mouse_button_down(glm::vec2 pos, MouseButton button)
+    void HitArea::handle_mouse_button_down(glm::vec2 pos, MouseButton button)
     {
         if (button == MouseButton::LEFT)
         {
-            auto gt        = get_global_transform();
+            auto gt        = get_world_transform();
             auto invgt     = glm::inverse(gt);
             auto local_pos = glm::vec2(invgt * glm::vec3(pos, 1.0f));
 
@@ -64,5 +75,5 @@ namespace pkzo
                 click_signal.emit();
             }
         }
-    }*/
+    }
 }

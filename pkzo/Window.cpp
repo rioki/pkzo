@@ -27,17 +27,8 @@
 
 namespace pkzo
 {
-    std::vector<Window*> Window::instances;
-
-    void Window::route_event(const SDL_Event& event)
-    {
-        // TODO
-    }
-
     Window::Window(Init init)
     {
-        instances.push_back(this);
-
         auto flags = std::to_underlying(init.api)
                    | std::to_underlying(init.state);
         window = SDL_CreateWindow(init.title.data(), init.size.x, init.size.y, flags);
@@ -53,8 +44,6 @@ namespace pkzo
     {
         graphic_context = nullptr;
         SDL_DestroyWindow(window);
-
-        std::erase(instances, this);
     }
 
     std::string Window::get_title() const

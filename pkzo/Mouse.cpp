@@ -21,33 +21,33 @@
 
 #include "Mouse.h"
 
+#include "stdng.h"
+#include "events.h"
+
 namespace pkzo
 {
-    std::vector<Mouse*> Mouse::instances;
-
-    void Mouse::route_event(const SDL_Event& event)
-    {
-        if (event.type == SDL_EVENT_MOUSE_MOTION      ||
-            event.type == SDL_EVENT_MOUSE_BUTTON_DOWN ||
-            event.type == SDL_EVENT_MOUSE_BUTTON_UP   ||
-            event.type == SDL_EVENT_MOUSE_WHEEL   )
-        {
-            for (auto& instance : instances)
-            {
-                instance->handle_event(event);
-            }
-        }
-    }
-
     Mouse::Mouse()
     {
-         instances.push_back(this);
+         input_slot = on_input([this] (const InputEvent& event) {
+             std::visit(stdng::overloaded{
+                 [this] (const MouseMoveEvent& e) {
+                     move_signal.emit(e);
+                 },
+                 [this] (const MouseButtonDownEvent& e) {
+                     button_down_signal.emit(e);
+                 },
+                 [this] (const MouseButtonUpEvent& e) {
+                     button_up_signal.emit(e);
+                 },
+                 [this] (const MouseWheelEvent& e) {
+                     wheel_signal.emit(e);
+                 },
+                 [] (const auto&) {}
+             }, event);
+         });
     }
 
-    Mouse::~Mouse()
-    {
-        std::erase(instances, this);
-    }
+    Mouse::~Mouse() = default;
 
     rsig::connection Mouse::on_move(const std::function<void (MouseMoveEvent)>& handler)
     {
@@ -67,37 +67,5 @@ namespace pkzo
     rsig::connection Mouse::on_wheel(const std::function<void (MouseWheelEvent)>& handler)
     {
         return wheel_signal.connect(handler);
-    }
-
-    void Mouse::handle_event(const SDL_Event& event)
-    {
-        switch (event.type)
-        {
-            case SDL_EVENT_MOUSE_MOTION:
-                move_signal.emit({
-                    .position  = glm::uvec2(event.motion.x, event.motion.y),
-                    .releative = glm::ivec2(event.motion.xrel, event.motion.yrel)
-                });
-                break;
-            case SDL_EVENT_MOUSE_BUTTON_DOWN:
-                button_down_signal.emit({
-                    .position = glm::uvec2(event.button.x, event.button.y),
-                    .button   = static_cast<MouseButton>(event.button.button)
-                });
-                break;
-            case SDL_EVENT_MOUSE_BUTTON_UP:
-                button_up_signal.emit({
-                    .position = glm::uvec2(event.button.x, event.button.y),
-                    .button   = static_cast<MouseButton>(event.button.button)
-                });
-                break;
-            case SDL_EVENT_MOUSE_WHEEL:
-                wheel_signal.emit({
-                    .releative = glm::ivec2(event.wheel.x, event.wheel.y)
-                });
-                break;
-            default:
-                std::unreachable();
-        }
     }
 }

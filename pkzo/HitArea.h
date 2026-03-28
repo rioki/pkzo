@@ -49,10 +49,11 @@ namespace pkzo
 
         rsig::connection on_click(const std::function<void ()>& handler);
 
-        //void handle_mouse_button_down(glm::vec2 pos, MouseButton button) override;
-
     private:
         glm::vec2      size;
+        rsig::slot     input_slot;
         rsig::signal<> click_signal;
+
+        void handle_mouse_button_down(glm::vec2 pos, MouseButton button);
     };
 }

@@ -21,34 +21,52 @@
 
 #pragma once
 
-#include <string>
-#include <string_view>
+#include <pkzo/pkzo.h>
+#include <pkzo3d/pkzo3d.h>
 
-#include "api.h"
+#include "StateMachine.h"
 
-namespace pkzo
+namespace lab
 {
-    enum class UniformLocation : int
-    {
-        PROJECTION_MATRIX,
-        VIEW_MATRIX,
-        MODEL_MATRIX,
-        COLOR_FACTOR,
-        COLOR_MAP
-    };
+    class Pawn;
+    class Settings;
+    class DebugOverlay;
 
-    class PKZO_EXPORT Shader
+    class App
     {
     public:
-        struct Source
+        App(int argc, char* argv[]);
+        ~App();
+
+        void run();
+
+    private:
+        using time_point = std::chrono::steady_clock::time_point;
+        enum class State
         {
-            std::string vertex;
-            std::string fragment;
+            INIT,
+            MAIN_MENU,
+            SETTINGS_MENU,
+            PLAY,
+            PAUSE_MENU,
+            END,
+            ERROR
         };
 
-        virtual ~Shader() = default;
+        using InputEvent = pkzo::InputEvent;
 
-        virtual int get_uniform_location(const std::string_view name) const = 0;
-        virtual int get_attribute_location(const std::string_view name) const = 0;
+        time_point                      last_tick = std::chrono::steady_clock::now();
+
+        std::unique_ptr<Settings>       settings;
+        std::unique_ptr<pkzo::Window>   window;
+
+        std::unique_ptr<pkzo::Screen>   screen;
+        std::unique_ptr<pkzo3d::Scene>  scene;
+        Pawn*                           pawn = nullptr;
+        std::unique_ptr<DebugOverlay>   debug_overlay;
+
+        rex::StateMachine<State, InputEvent> state_machine;
+
+        void handle_draw(pkzo::GraphicContext& gc);
     };
 }

@@ -19,36 +19,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
+#include <cstdlib>
+#include <pkzo/debug.h>
+#include <pkzo/dialogs.h>
 
-#include <string>
-#include <string_view>
+#include "App.h"
 
-#include "api.h"
-
-namespace pkzo
+int main(int argc, char* argv[])
 {
-    enum class UniformLocation : int
+    pkzo::on_trace([] (const std::source_location& loc, const std::string_view msg) {
+        tfm::printf("%s(%d): %s\n", pkzo::basename(loc.file_name()), loc.line(), msg);
+    });
+    #ifndef NDEBUG
+    pkzo::on_trace([] (const std::source_location& loc, const std::string_view msg) {
+        pkzo::debug_output(tfm::format("%s(%d): %s\n", pkzo::basename(loc.file_name()), loc.line(), msg));
+    });
+    #endif
+
+    try
     {
-        PROJECTION_MATRIX,
-        VIEW_MATRIX,
-        MODEL_MATRIX,
-        COLOR_FACTOR,
-        COLOR_MAP
-    };
-
-    class PKZO_EXPORT Shader
+        auto app = lab::App(argc, argv);
+        app.run();
+        return EXIT_SUCCESS;
+    }
+    catch (const std::exception& ex)
     {
-    public:
-        struct Source
-        {
-            std::string vertex;
-            std::string fragment;
-        };
-
-        virtual ~Shader() = default;
-
-        virtual int get_uniform_location(const std::string_view name) const = 0;
-        virtual int get_attribute_location(const std::string_view name) const = 0;
-    };
+        pkzo::show_message_box("Unexpected Error", ex.what());
+        return EXIT_FAILURE;
+    }
+    catch (...)
+    {
+        pkzo::show_message_box("Unexpected Error", "Unknown error.");
+        return EXIT_FAILURE;
+    }
 }

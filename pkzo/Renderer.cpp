@@ -61,15 +61,6 @@ namespace pkzo
                        "// This file is generated, do not edit.\n"
                        "\n";
 
-    enum class UniformLocation : int
-    {
-        PROJECTION_MATRIX,
-        VIEW_MATRIX,
-        MODEL_MATRIX,
-        COLOR_FACTOR,
-        COLOR_MAP
-    };
-
     struct AttribSpec
     {
         pkzo::AttributeLocation location;

@@ -21,34 +21,26 @@
 
 #pragma once
 
-#include <string>
-#include <string_view>
+#include <pkzo/pkzo.h>
 
-#include "api.h"
-
-namespace pkzo
+namespace lab
 {
-    enum class UniformLocation : int
-    {
-        PROJECTION_MATRIX,
-        VIEW_MATRIX,
-        MODEL_MATRIX,
-        COLOR_FACTOR,
-        COLOR_MAP
-    };
+    class App;
 
-    class PKZO_EXPORT Shader
+    class MainMenu : public pkzo::Screen
     {
     public:
-        struct Source
+        struct Init
         {
-            std::string vertex;
-            std::string fragment;
+            glm::vec2              size;
+            std::function<void (const std::string& id)> start_action;
+            std::function<void ()> settings_action;
+            std::function<void ()> exit_action;
         };
 
-        virtual ~Shader() = default;
+        MainMenu(Init init);
 
-        virtual int get_uniform_location(const std::string_view name) const = 0;
-        virtual int get_attribute_location(const std::string_view name) const = 0;
+    private:
+
     };
 }

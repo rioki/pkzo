@@ -22,3 +22,10 @@
 // This file is generated, do not edit.
 
 layout(location = 0) out vec4 out_FragColor0;
+layout(location = 1) out vec4 out_FragColor1;
+layout(location = 2) out vec4 out_FragColor2;
+layout(location = 3) out vec4 out_FragColor3;
+layout(location = 4) out vec4 out_FragColor4;
+layout(location = 5) out vec4 out_FragColor5;
+layout(location = 6) out vec4 out_FragColor6;
+layout(location = 7) out vec4 out_FragColor7;

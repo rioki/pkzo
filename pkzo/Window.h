@@ -50,8 +50,6 @@ namespace pkzo
     class PKZO_EXPORT Window
     {
     public:
-        static void route_event(const SDL_Event& event);
-
         //! Window initialization parameters.
         struct Init
         {
@@ -137,8 +135,6 @@ namespace pkzo
         void draw();
 
     private:
-        static std::vector<Window*> instances;
-
         SdlSentry                       sdl_sentry = SdlSentry{SdlSubsystem::VIDEO | SdlSubsystem::EVENTS};
         SDL_Window*                     window     = nullptr;
         std::unique_ptr<GraphicContext> graphic_context;
