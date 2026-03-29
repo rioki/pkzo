@@ -44,7 +44,7 @@ namespace pkzo
         const std::vector<glm::uvec3>& get_faces() const override;
         const std::vector<glm::uvec2>& get_lines() const override;
 
-        Bounds get_bounds() const override;
+        Bounds3 get_bounds() const override;
 
         void update(MeshData new_data) override;
 

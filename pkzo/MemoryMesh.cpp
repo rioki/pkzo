@@ -66,7 +66,7 @@ namespace pkzo
         return data->lines;
     }
 
-    Bounds MemoryMesh::get_bounds() const
+    Bounds3 MemoryMesh::get_bounds() const
     {
         if (data->bounds.get_size() == glm::vec3(0.0f))
         {

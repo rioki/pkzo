@@ -26,13 +26,6 @@ find_package(magic_enum CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
 find_package(SDL3 CONFIG REQUIRED)
 
-# Workaround for broken fkYAML natvis reference (if present)
-get_target_property(_fkyaml_isrc fkYAML::fkYAML INTERFACE_SOURCES)
-if(_fkyaml_isrc)
-  list(FILTER _fkyaml_isrc EXCLUDE REGEX ".*\\.natvis$")
-  set_property(TARGET fkYAML::fkYAML PROPERTY INTERFACE_SOURCES "${_fkyaml_isrc}")
-endif()
-
 # pkzo
 
 file(GLOB PKZO_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/pkzo/*.cpp")
@@ -56,41 +49,10 @@ target_link_libraries(pkzo PRIVATE freeimage::FreeImage freeimage::FreeImagePlus
 target_link_libraries(pkzo PRIVATE GLEW::GLEW)
 target_link_libraries(pkzo PRIVATE Iconv::Iconv)
 target_link_libraries(pkzo PRIVATE SDL3::SDL3)
-
-# pkzo2d
-
-file(GLOB PKZO2D_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/pkzo2d/*.cpp" )
-add_library(pkzo2d SHARED ${PKZO2D_SOURCES})
-
-target_compile_definitions(pkzo2d PRIVATE BUILD_PKZO2D)
-
-target_include_directories(pkzo2d
-  PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-)
-
-target_link_libraries(pkzo2d PUBLIC pkzo)
-
-# pkzo3d
-
-file(GLOB PKZO3D_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/pkzo3d/*.cpp")
-add_library(pkzo3d SHARED ${PKZO3D_SOURCES})
-
-target_compile_definitions(pkzo3d PRIVATE BUILD_PKZO3D)
-
-target_include_directories(pkzo3d
-  PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-)
-
-target_link_libraries(pkzo3d PUBLIC pkzo)
-
-target_link_libraries(pkzo3d PRIVATE assimp::assimp)
-target_link_libraries(pkzo3d PRIVATE ${BULLET_LIBRARIES})
-target_link_libraries(pkzo3d PRIVATE fkYAML::fkYAML)
-target_link_libraries(pkzo3d PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(pkzo PRIVATE assimp::assimp)
+target_link_libraries(pkzo PRIVATE ${BULLET_LIBRARIES})
+target_link_libraries(pkzo PRIVATE fkYAML::fkYAML)
+target_link_libraries(pkzo PRIVATE nlohmann_json::nlohmann_json)
 
 # package config
 write_basic_package_version_file(
@@ -105,7 +67,7 @@ configure_package_config_file(
 )
 
 # install
-install(TARGETS pkzo pkzo2d pkzo3d
+install(TARGETS pkzo
   EXPORT pkzoTargets
   RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
   LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
@@ -113,8 +75,6 @@ install(TARGETS pkzo pkzo2d pkzo3d
 )
 
 install(DIRECTORY pkzo/   DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/pkzo"   FILES_MATCHING PATTERN "*.h")
-install(DIRECTORY pkzo2d/ DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/pkzo2d" FILES_MATCHING PATTERN "*.h")
-install(DIRECTORY pkzo3d/ DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/pkzo3d" FILES_MATCHING PATTERN "*.h")
 
 install(FILES
   "${PROJECT_BINARY_DIR}/pkzoConfig.cmake"

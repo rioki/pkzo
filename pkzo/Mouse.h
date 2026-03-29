@@ -23,54 +23,17 @@
 
 #include <functional>
 
-#include <glm/glm.hpp>
 #include <rsig/rsig.h>
-#include <SDL3/SDL.h>
 
 #include "api.h"
+#include "events.h"
 #include "SdlSentry.h"
 
 namespace pkzo
 {
-    enum class MouseButton : Uint8
-    {
-        LEFT    = SDL_BUTTON_LEFT,
-        MIDDLE  = SDL_BUTTON_MIDDLE,
-        RIGHT   = SDL_BUTTON_RIGHT,
-        BUTTON4 = SDL_BUTTON_X1,
-        BUTTON5 = SDL_BUTTON_X2
-    };
-
-    struct MouseMoveEvent
-    {
-        glm::uvec2 position;
-        glm::ivec2 releative;
-    };
-
-    struct MouseButtonDownEvent
-    {
-        glm::uvec2 position;
-        MouseButton button;
-    };
-
-    struct MouseButtonUpEvent
-    {
-        glm::uvec2 position;
-        MouseButton button;
-    };
-
-    struct MouseWheelEvent
-    {
-        glm::ivec2 releative;
-    };
-
     class PKZO_EXPORT Mouse
     {
     public:
-
-
-        static void route_event(const SDL_Event& event);
-
         Mouse();
 
         ~Mouse();
@@ -81,16 +44,14 @@ namespace pkzo
         rsig::connection on_wheel(const std::function<void (MouseWheelEvent)>& handler);
 
     private:
-        static std::vector<Mouse*> instances;
-
         SdlSentry sdl_sentry = SdlSentry{SdlSubsystem::EVENTS};
+
+        rsig::slot                         input_slot;
 
         rsig::signal<MouseMoveEvent>       move_signal;
         rsig::signal<MouseButtonDownEvent> button_down_signal;
         rsig::signal<MouseButtonUpEvent>   button_up_signal;
         rsig::signal<MouseWheelEvent>      wheel_signal;
-
-        void handle_event(const SDL_Event& event);
 
         Mouse(const Mouse&) = delete;
         Mouse& operator = (const Mouse&) = delete;

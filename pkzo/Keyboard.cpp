@@ -21,66 +21,34 @@
 
 #include "Keyboard.h"
 
+#include "stdng.h"
+
 namespace pkzo
 {
-    std::vector<Keyboard*> Keyboard::instances;
-
-    void Keyboard::route_event(const SDL_Event& event)
-    {
-        if (event.type == SDL_EVENT_KEY_DOWN || event.type == SDL_EVENT_KEY_UP)
-        {
-            for (auto& instance : instances)
-            {
-                instance->handle_event(event);
-            }
-        }
-    }
-
     Keyboard::Keyboard()
     {
-         instances.push_back(this);
+         input_slot = on_input([this] (const InputEvent& event) {
+             std::visit(stdng::overloaded{
+                 [this] (const KeyDownEvent& e) {
+                     key_down_signal.emit(e);
+                 },
+                 [this] (const KeyUpEvent& e) {
+                     key_up_signal.emit(e);
+                 },
+                 [] (const auto&) {}
+             }, event);
+         });
     }
 
-    Keyboard::~Keyboard()
-    {
-        std::erase(instances, this);
-    }
+    Keyboard::~Keyboard() =default;
 
-    rsig::connection Keyboard::on_key_down(const std::function<void (KeyMod, KeyCode, ScanCode)>& handler)
+    rsig::connection Keyboard::on_key_down(const std::function<void (const KeyDownEvent&)>& handler)
     {
         return key_down_signal.connect(handler);
     }
 
-    rsig::connection Keyboard::on_key_up(const std::function<void (KeyMod, KeyCode, ScanCode)>& handler)
+    rsig::connection Keyboard::on_key_up(const std::function<void (const KeyUpEvent&)>& handler)
     {
         return key_up_signal.connect(handler);
-    }
-
-    void Keyboard::handle_event(const SDL_Event& event)
-    {
-        switch (event.type)
-        {
-            case SDL_EVENT_KEY_DOWN:
-            {
-                if (event.key.repeat == false)
-                {
-                    auto mod  = static_cast<KeyMod>(event.key.mod);
-                    auto key  = static_cast<KeyCode>(event.key.key);
-                    auto scan = static_cast<ScanCode>(event.key.scancode);
-                    key_down_signal.emit(mod, key, scan);
-                }
-                break;
-            }
-            case SDL_EVENT_KEY_UP:
-            {
-                auto mod  = static_cast<KeyMod>(event.key.mod);
-                auto key  = static_cast<KeyCode>(event.key.key);
-                auto scan = static_cast<ScanCode>(event.key.scancode);
-                key_up_signal.emit(mod, key, scan);
-                break;
-            }
-            default:
-                std::unreachable();
-        }
     }
 }

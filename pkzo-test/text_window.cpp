@@ -21,7 +21,6 @@
 
 #include <gtest/gtest.h>
 #include <pkzo/pkzo.h>
-#include <pkzo3d/pkzo3d.h>
 
 #include "glm_gtest.h"
 #include "pkzo_gtest.h"

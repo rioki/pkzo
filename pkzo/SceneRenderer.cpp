@@ -1,0 +1,477 @@
+// pkzo
+// Copyright 2010-2026 Sean Farrell
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files(the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions :
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+#include "SceneRenderer.h"
+
+#include <string>
+#include <sstream>
+#include <fstream>
+#include <filesystem>
+#include <map>
+#include <numbers>
+
+#include <magic_enum/magic_enum.hpp>
+#include <tinyformat.h>
+
+#include <pkzo/debug.h>
+
+#include "resources.h"
+#include "SkyBox.h"
+#include "Camera.h"
+#include "Geometry.h"
+#include "Light.h"
+#include "Material.h"
+#include <pkzo/OpenGLMesh.h>
+
+namespace pkzo
+{
+    using pkzo::check;
+    using pkzo::trace;
+    using pkzo::GraphicContext;
+
+    const auto virtual_files = std::map<std::string, std::string>{
+        {"attributes.glsl", std::string(get_resource("attributes.glsl"))},
+        {"uniforms.glsl", std::string(get_resource("uniforms.glsl"))},
+        {"outputs.glsl", std::string(get_resource("outputs.glsl"))},
+        {"math.glsl", std::string(get_resource("math.glsl"))},
+    };
+
+    std::string expand_includes(const std::string_view src, int depth = 0)
+    {
+        if (depth > 32)
+        {
+            throw std::runtime_error("include recursion too deep");
+        }
+
+        auto result = std::stringstream{};
+
+        size_t pos = 0;
+        size_t line_num = 1;
+        while (pos < src.size())
+        {
+            auto line_end = src.find('\n', pos);
+            if (line_end == std::string_view::npos) line_end = src.size();
+
+            std::string_view line = src.substr(pos, line_end - pos);
+
+            auto inc = line.find("#include");
+            if (inc != std::string_view::npos)
+            {
+                auto q1 = line.find('"', inc);
+                auto q2 = (q1 == std::string_view::npos) ? q1 : line.find('"', q1 + 1);
+                if (q1 != std::string_view::npos && q2 != std::string_view::npos && q2 > q1 + 1)
+                {
+                    std::string name(line.substr(q1 + 1, q2 - (q1 + 1)));
+                    auto it = virtual_files.find(name);
+                    if (it == virtual_files.end())
+                    {
+                        throw std::runtime_error("Unknown include: " + name);
+                    }
+
+                    result << "\n#line 1\n";
+                    result << expand_includes(it->second, depth + 1);
+                    result << "\n#line " << line_num << "\n";
+                }
+                else
+                {
+                    result.write(line.data(), line.size());
+                }
+            }
+            else
+            {
+                result.write(line.data(), line.size());
+            }
+
+            if (line_end < src.size())
+            {
+                result << '\n';
+            }
+            pos = line_end + 1;
+            line_num++;
+        }
+
+        return result.str();
+    }
+
+    std::string load_glsl_resource(const std::string_view file)
+    {
+        auto code = get_resource(file);
+        return expand_includes(code);
+    }
+
+    SceneRenderer::SceneRenderer() = default;
+
+    SceneRenderer::~SceneRenderer() = default;
+
+    void SceneRenderer::add_debug_line(const glm::vec3& start, const glm::vec3& end, const glm::vec4& color)
+    {
+        debug_line_renderer.add_line(start, end, color, color);
+    }
+
+    void SceneRenderer::add_debug_line(const glm::vec3& start, const glm::vec3& end, const glm::vec4& start_color, const glm::vec4& end_color)
+    {
+        debug_line_renderer.add_line(start, end, start_color, end_color);
+    }
+
+    void SceneRenderer::add(Camera* camera)
+    {
+        cameras.push_back(camera);
+    }
+
+    void SceneRenderer::remove(Camera* camera)
+    {
+        std::erase(cameras, camera);
+    }
+
+    void SceneRenderer::add(SkyBox* sky_box)
+    {
+        skyboxes.push_back(sky_box);
+    }
+
+    void SceneRenderer::remove(SkyBox* sky_box)
+    {
+        std::erase(skyboxes, sky_box);
+    }
+
+    void SceneRenderer::add(Geometry* geometry)
+    {
+        geometries.push_back(geometry);
+    }
+
+    void SceneRenderer::remove(Geometry* geometry)
+    {
+        std::erase(geometries, geometry);
+    }
+
+    void SceneRenderer::add(Light* light)
+    {
+        lights.push_back(light);
+    }
+
+    void SceneRenderer::remove(Light* light)
+    {
+        std::erase(lights, light);
+    }
+
+    void SceneRenderer::render(pkzo::GraphicContext& gc)
+    {
+        if (!cameras.empty() && !geometries.empty())
+        {
+            load_shaders(gc);
+
+            auto viewport = gc.get_viewport();
+            check(cameras.size() == 1);
+            auto* camera = cameras[0];
+            camera->set_resolution({viewport.size.x, viewport.size.y});
+
+            if (!skyboxes.empty())
+            {
+                render_skybox(gc);
+            }
+
+            render_forward(gc);
+        }
+
+        if (!cameras.empty())
+        {
+            debug_line_renderer.render(gc, cameras[0]);
+        }
+    }
+
+    void SceneRenderer::load_shaders(GraphicContext& gc)
+    {
+        if (forward_shader)
+        {
+            return;
+        }
+
+        forward_shader = gc.compile({
+            .vertex   = load_glsl_resource("Forward.vert"),
+            .fragment = load_glsl_resource("Forward.frag"),
+        });
+
+        skybox_shader = gc.compile({
+            .vertex   = load_glsl_resource("Skybox.vert"),
+            .fragment = load_glsl_resource("Skybox.frag"),
+        });
+
+        cubemap_generator_shader = gc.compile({
+            .vertex   = load_glsl_resource("GenerateCubemap.vert"),
+            .fragment = load_glsl_resource("GenerateCubemap.frag"),
+        });
+
+        cubemap_diffuse_filter_shader = gc.compile({
+            .vertex   = load_glsl_resource("GenerateCubemap.vert"),
+            .fragment = load_glsl_resource("FilterCubemapDiffuse.frag"),
+        });
+
+        cubemap_specular_filter_shader = gc.compile({
+            .vertex   = load_glsl_resource("GenerateCubemap.vert"),
+            .fragment = load_glsl_resource("FilterCubemapSpecular.frag"),
+        });
+    }
+
+    void apply_camera(GraphicContext& gc, const Camera* camera)
+    {
+        check(camera);
+        gc.set_uniform(std::to_underlying(UniformLocation::PROJECTION_MATRIX), camera->get_projection_matrix());
+        gc.set_uniform(std::to_underlying(UniformLocation::VIEW_MATRIX),       camera->get_view_matrix());
+    }
+
+    auto generate_cubemap(pkzo::GraphicContext& gc, const std::shared_ptr<Shader>& shader, const pkzo::TextureOrCubeMap& texture, unsigned int mips = 1u)
+    {
+        constexpr auto TEXTURE0_SLOT = 0;
+
+        return gc.generate_cubemap({
+            .size      = 1024,
+            .data_type = pkzo::DataType::FLOAT,
+            .shader    = shader,
+            .uniforms  = {
+                {std::to_underlying(UniformLocation::TEXTURE), TEXTURE0_SLOT}
+            },
+            .textures  = {
+                {TEXTURE0_SLOT, texture}
+            },
+            .miplevels = mips
+        });
+    }
+
+    SceneRenderer::IblMaps SceneRenderer::genrate_ibl_maps(GraphicContext& gc, const std::shared_ptr<CubeMap>& light_probe)
+    {
+        constexpr auto MIPS = 7;
+        check(light_probe);
+
+        auto i = ibl_cache.find(light_probe);
+        if (i != end(ibl_cache))
+        {
+            return i->second;
+        }
+
+        auto diffuse  = generate_cubemap(gc, cubemap_diffuse_filter_shader, light_probe);
+        auto specular = generate_cubemap(gc, cubemap_specular_filter_shader, light_probe, MIPS);
+
+        ibl_cache.try_emplace(light_probe, diffuse, specular);
+
+        return {diffuse, specular};
+    }
+
+    int uniform_location_offset(UniformLocation base, int offset)
+    {
+        return static_cast<int>(base) + offset;
+    }
+
+    void SceneRenderer::apply_light(GraphicContext& gc, int i, const Light* light)
+    {
+        check(i < MAX_LIGHTS);
+
+        constexpr auto LIGHT_COMPONENTS = 5;
+        if (light)
+        {
+            gc.set_uniform(uniform_location_offset(UniformLocation::LIGHT0_TYPE,      i * LIGHT_COMPONENTS),  std::to_underlying(light->get_type()));
+            gc.set_uniform(uniform_location_offset(UniformLocation::LIGHT0_COLOR,     i * LIGHT_COMPONENTS),  light->get_color());
+            gc.set_uniform(uniform_location_offset(UniformLocation::LIGHT0_DIRECTION, i * LIGHT_COMPONENTS),  light->get_direction());
+            gc.set_uniform(uniform_location_offset(UniformLocation::LIGHT0_POSITION,  i * LIGHT_COMPONENTS),  light->get_position());
+            gc.set_uniform(uniform_location_offset(UniformLocation::LIGHT0_ANGLES,    i * LIGHT_COMPONENTS),  light->get_angles());
+        }
+        else
+        {
+            gc.set_uniform(uniform_location_offset(UniformLocation::LIGHT0_TYPE, i * LIGHT_COMPONENTS),   std::to_underlying(LightType::NONE));
+        }
+    }
+
+    void SceneRenderer::apply_light_probe(GraphicContext& gc, int i, const std::shared_ptr<CubeMap>& probe)
+    {
+        check(i < MAX_LIGHT_PROBES);
+
+        constexpr auto LIGHT_PROBE_COMPONENTS = 4;
+        constexpr auto LIGHT_PROBE_SLOTS      = 3;
+        constexpr auto LIGHT_ENVIRONMENT_SLOT = 4;
+        constexpr auto LIGHT_DIFFUSE_SLOT     = 5;
+        constexpr auto LIGHT_SPECULAR_SLOT    = 6;
+        if (probe)
+        {
+            auto maps = genrate_ibl_maps(gc, probe);
+
+            gc.set_uniform(uniform_location_offset(UniformLocation::LIGHT_PROBE0_ENABLED,     i * LIGHT_PROBE_COMPONENTS), 1);
+            gc.set_uniform(uniform_location_offset(UniformLocation::LIGHT_PROBE0_ENVIRONMENT, i * LIGHT_PROBE_COMPONENTS), LIGHT_ENVIRONMENT_SLOT + i * LIGHT_PROBE_SLOTS);
+            gc.set_uniform(uniform_location_offset(UniformLocation::LIGHT_PROBE0_DIFFUSE,     i * LIGHT_PROBE_COMPONENTS), LIGHT_DIFFUSE_SLOT     + i * LIGHT_PROBE_SLOTS);
+            gc.set_uniform(uniform_location_offset(UniformLocation::LIGHT_PROBE0_SPECULAR,    i * LIGHT_PROBE_COMPONENTS), LIGHT_SPECULAR_SLOT    + i * LIGHT_PROBE_SLOTS);
+
+            gc.bind_texture(LIGHT_ENVIRONMENT_SLOT, probe);
+            gc.bind_texture(LIGHT_DIFFUSE_SLOT,     maps.diffuse);
+            gc.bind_texture(LIGHT_SPECULAR_SLOT,    maps.specular);
+        }
+        else
+        {
+            gc.set_uniform(uniform_location_offset(UniformLocation::LIGHT_PROBE0_ENABLED, i* LIGHT_PROBE_COMPONENTS), 0);
+        }
+    }
+
+    void SceneRenderer::apply_material(GraphicContext& gc, const std::shared_ptr<Material>& material)
+    {
+        constexpr auto BASE_COLOR_SLOT          = 0;
+        constexpr auto METALLIC_ROUGHNESS_SLOT  = 1;
+        constexpr auto NORMAL_SLOT              = 2;
+        constexpr auto EMISSIVE_SLOT            = 3;
+
+        check(material);
+
+        gc.set_uniform(std::to_underlying(UniformLocation::BASE_COLOR_FACTOR),      glm::vec4(material->get_base_color_factor(), material->get_opacity_factor()));
+        gc.set_uniform(std::to_underlying(UniformLocation::BASE_COLOR_MAP),         BASE_COLOR_SLOT);
+        gc.set_uniform(std::to_underlying(UniformLocation::METALLIC_FACTOR),        material->get_metallic_factor());
+        gc.set_uniform(std::to_underlying(UniformLocation::ROUGHNESS_FACTOR),       material->get_roughness_factor());
+        gc.set_uniform(std::to_underlying(UniformLocation::METALLIC_ROUGHNESS_MAP), METALLIC_ROUGHNESS_SLOT);
+        gc.set_uniform(std::to_underlying(UniformLocation::NORMAL_MAP),             NORMAL_SLOT);
+        gc.set_uniform(std::to_underlying(UniformLocation::EMISSIVE_FACTOR),        material->get_emissive_factor());
+        gc.set_uniform(std::to_underlying(UniformLocation::EMISSIVE_MAP),           EMISSIVE_SLOT);
+
+        gc.bind_texture(BASE_COLOR_SLOT,         material->get_base_color_map());
+        gc.bind_texture(METALLIC_ROUGHNESS_SLOT, material->get_metallic_roughness_map());
+        gc.bind_texture(NORMAL_SLOT,             material->get_normal_map(), pkzo::FallbackTexture::NORMAL);
+        gc.bind_texture(EMISSIVE_SLOT,           material->get_emissive_map());
+    }
+
+    void SceneRenderer::render_skybox(pkzo::GraphicContext& gc)
+    {
+        constexpr auto SKYBOX_SLOT = 0;
+
+        check(!skyboxes.empty());
+        auto skybox = skyboxes[0];
+
+        if (skybox->get_cubemap() == nullptr)
+        {
+            auto cubemap = generate_cubemap(gc, cubemap_generator_shader, skybox->get_texture());
+            skybox->set_cubemap(cubemap);
+        }
+
+        gc.start_pass("Skybox", skybox_shader);
+        gc.set_blend_mode(pkzo::BlendMode::DISABLED);
+        gc.set_depth_test(pkzo::DepthTest::DISABLED);
+
+        apply_camera(gc, cameras.at(0));
+
+        gc.set_uniform(std::to_underlying(UniformLocation::ENVIRONMENT), SKYBOX_SLOT);
+
+        gc.bind_texture(SKYBOX_SLOT, skybox->get_cubemap());
+
+        gc.draw_fullscreen();
+
+        gc.end_pass();
+
+    }
+
+    void SceneRenderer::render_forward(pkzo::GraphicContext& gc)
+    {
+        gc.start_pass("Forward", forward_shader);
+        gc.set_blend_mode(pkzo::BlendMode::ALPHA);
+        gc.set_depth_test(pkzo::DepthTest::ENABLED);
+
+        apply_camera(gc, cameras.at(0));
+
+        for (auto i = 0u; i < MAX_LIGHT_PROBES; i++)
+        {
+            if (i < skyboxes.size())
+            {
+                apply_light_probe(gc, i, skyboxes[i]->get_cubemap());
+            }
+            else
+            {
+                apply_light_probe(gc, i, nullptr);
+            }
+        }
+
+        // TODO select the most relevant lights.
+        for (unsigned int i = 0u; i < MAX_LIGHTS; i++)
+        {
+            auto light = i < lights.size() ? lights[i] : nullptr;
+            apply_light(gc, i, light);
+        }
+
+        for (const auto* geometry : geometries)
+        {
+            gc.set_uniform(std::to_underlying(UniformLocation::MODEL_MATRIX),  geometry->get_world_transform());
+            apply_material(gc, geometry->get_material());
+            gc.draw(geometry->get_mesh());
+        }
+
+        gc.end_pass();
+    }
+
+    void SceneRenderer::LineRenderer::add_line(const glm::vec3& start, const glm::vec3& end, const glm::vec4& start_color, const glm::vec4& end_color)
+    {
+        line_vertexes.push_back(start);
+        line_vertexes.push_back(end);
+
+        line_colors.push_back(start_color);
+        line_colors.push_back(end_color);
+
+        line_indexes.push_back({line_indexes.size() * 2u, line_indexes.size() * 2u + 1u});
+    }
+
+    void SceneRenderer::LineRenderer::render(GraphicContext& gc, const Camera* camera)
+    {
+        if (line_vertexes.empty())
+        {
+            return;
+        }
+
+        if (line_vertex_buffer == nullptr)
+        {
+            line_vertex_buffer = gc.upload_mesh({
+                .vertexes = std::move(line_vertexes),
+                .colors   = std::move(line_colors),
+                .lines    = std::move(line_indexes)
+            }, true);
+            check(line_vertex_buffer);
+        }
+        else
+        {
+            line_vertex_buffer->update({
+                .vertexes = std::move(line_vertexes),
+                .colors   = std::move(line_colors),
+                .lines    = std::move(line_indexes)
+            });
+        }
+
+        line_vertexes.clear();
+        line_colors.clear();
+        line_indexes.clear();
+
+        if (line_shader == nullptr)
+        {
+            line_shader = gc.compile({
+                .vertex   = load_glsl_resource("DebugLine.vert"),
+                .fragment = load_glsl_resource("DebugLine.frag"),
+            });
+            check(line_shader);
+        }
+
+        gc.start_pass("Debug Lines", line_shader);
+        gc.set_blend_mode(pkzo::BlendMode::ALPHA);
+        gc.set_depth_test(pkzo::DepthTest::DISABLED);
+
+        apply_camera(gc, camera);
+
+        gc.draw(line_vertex_buffer);
+
+        gc.end_pass();
+    }
+}

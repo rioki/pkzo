@@ -42,7 +42,7 @@ namespace pkzo
     template <typename Node, typename Enum, typename = std::enable_if_t<std::is_enum_v<Enum>>>
     void from_node(const Node& node, Enum& value)
     {
-        auto str = node.as_str();
+        auto str = node.get_value<std::string>();
         auto v = magic_enum::enum_cast<Enum>(str, magic_enum::case_insensitive);
         if (v.has_value())
         {
