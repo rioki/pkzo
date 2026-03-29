@@ -1,0 +1,172 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  VCPKG_GIT_URL: https://github.com/rioki/vcpkg.git
+  VCPKG_GIT_COMMIT_ID: 97193d0ad69adfdb8c672c711bbf8a03888ff166
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  vcpkg-warm:
+    name: Warm vcpkg (${{ matrix.triplet }})
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        triplet: [x86-windows, x64-windows]
+    env:
+      VCPKG_DEFAULT_TRIPLET: ${{ matrix.triplet }}
+      VCPKG_BINARY_SOURCES: clear;nuget,GitHub,readwrite
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Restore from cache and install vcpkg
+        id: runvcpkg
+        uses: lukka/run-vcpkg@v11
+        with:
+          vcpkgGitURL: ${{ env.VCPKG_GIT_URL }}
+          vcpkgGitCommitId: ${{ env.VCPKG_GIT_COMMIT_ID }}
+
+      - name: Setup NuGet/vcpkg credentials
+        shell: bash
+        working-directory: ${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}
+        run: >
+          `vcpkg fetch nuget | tail -n 1` sources add
+          -source "https://nuget.pkg.github.com/rioki/index.json"
+          -storepasswordincleartext
+          -name "GitHub"
+          -username "rioki"
+          -password "${{ secrets.VCPKG_PAT_TOKEN }}" &&
+          `vcpkg fetch nuget | tail -n 1` setapikey "${{ secrets.VCPKG_PAT_TOKEN }}"
+          -source "https://nuget.pkg.github.com/rioki/index.json"
+
+      - name: Warm manifest dependencies
+        working-directory: ${{ github.workspace }}
+        shell: pwsh
+        run: >
+          & "${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}\vcpkg.exe"
+          install --triplet "${{ matrix.triplet }}"
+
+  msbuild:
+    name: MSBuild (${{ matrix.platform }} / ${{ matrix.configuration }})
+    needs: vcpkg-warm
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: x86
+            triplet: x86-windows
+            configuration: Debug
+          - platform: x86
+            triplet: x86-windows
+            configuration: Release
+          - platform: x64
+            triplet: x64-windows
+            configuration: Debug
+          - platform: x64
+            triplet: x64-windows
+            configuration: Release
+    env:
+      VCPKG_DEFAULT_TRIPLET: ${{ matrix.triplet }}
+      VCPKG_BINARY_SOURCES: clear;nuget,GitHub,read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Restore from cache and install vcpkg
+        id: runvcpkg
+        uses: lukka/run-vcpkg@v11
+        with:
+          vcpkgGitURL: ${{ env.VCPKG_GIT_URL }}
+          vcpkgGitCommitId: ${{ env.VCPKG_GIT_COMMIT_ID }}
+
+      - name: Setup NuGet/vcpkg credentials
+        shell: bash
+        working-directory: ${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}
+        run: >
+          `vcpkg fetch nuget | tail -n 1` sources add
+          -source "https://nuget.pkg.github.com/rioki/index.json"
+          -storepasswordincleartext
+          -name "GitHub"
+          -username "rioki"
+          -password "${{ secrets.VCPKG_PAT_TOKEN }}" &&
+          `vcpkg fetch nuget | tail -n 1` setapikey "${{ secrets.VCPKG_PAT_TOKEN }}"
+          -source "https://nuget.pkg.github.com/rioki/index.json"
+
+      - name: Integrate vcpkg
+        working-directory: ${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}
+        run: vcpkg integrate install
+
+      - name: Build
+        working-directory: ${{ github.workspace }}
+        run: msbuild /m /p:Configuration=${{ matrix.configuration }} /property:Platform=${{ matrix.platform }} pkzo.sln
+
+  cmake:
+    name: CMake (${{ matrix.triplet }} / ${{ matrix.preset }})
+    needs: vcpkg-warm
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - triplet: x86-windows
+            preset: ninja-debug
+          - triplet: x86-windows
+            preset: ninja-release
+          - triplet: x64-windows
+            preset: ninja-debug
+          - triplet: x64-windows
+            preset: ninja-release
+    env:
+      VCPKG_DEFAULT_TRIPLET: ${{ matrix.triplet }}
+      VCPKG_BINARY_SOURCES: clear;nuget,GitHub,read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install CMake
+        uses: lukka/get-cmake@latest
+
+      - name: Restore from cache and install vcpkg
+        id: runvcpkg
+        uses: lukka/run-vcpkg@v11
+        with:
+          vcpkgGitURL: ${{ env.VCPKG_GIT_URL }}
+          vcpkgGitCommitId: ${{ env.VCPKG_GIT_COMMIT_ID }}
+
+      - name: Setup NuGet/vcpkg credentials
+        shell: bash
+        working-directory: ${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}
+        run: >
+          `vcpkg fetch nuget | tail -n 1` sources add
+          -source "https://nuget.pkg.github.com/rioki/index.json"
+          -storepasswordincleartext
+          -name "GitHub"
+          -username "rioki"
+          -password "${{ secrets.VCPKG_PAT_TOKEN }}" &&
+          `vcpkg fetch nuget | tail -n 1` setapikey "${{ secrets.VCPKG_PAT_TOKEN }}"
+          -source "https://nuget.pkg.github.com/rioki/index.json"
+
+      - name: Build
+        uses: lukka/run-cmake@v10
+        with:
+          configurePreset: ${{ matrix.preset }}
+          buildPreset: ${{ matrix.preset }}
