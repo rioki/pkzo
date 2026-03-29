@@ -11,6 +11,7 @@ permissions:
   packages: write
 
 env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
   VCPKG_GIT_URL: https://github.com/rioki/vcpkg.git
   VCPKG_GIT_COMMIT_ID: 97193d0ad69adfdb8c672c711bbf8a03888ff166
 
@@ -31,7 +32,7 @@ jobs:
       VCPKG_BINARY_SOURCES: clear;nuget,GitHub,readwrite
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Restore from cache and install vcpkg
         id: runvcpkg
@@ -85,7 +86,7 @@ jobs:
       VCPKG_BINARY_SOURCES: clear;nuget,GitHub,read
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v2
@@ -139,7 +140,7 @@ jobs:
       VCPKG_BINARY_SOURCES: clear;nuget,GitHub,read
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install CMake
         uses: lukka/get-cmake@latest
