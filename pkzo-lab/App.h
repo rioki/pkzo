@@ -22,7 +22,6 @@
 #pragma once
 
 #include <pkzo/pkzo.h>
-#include <pkzo3d/pkzo3d.h>
 
 #include "StateMachine.h"
 
@@ -61,7 +60,7 @@ namespace lab
         std::unique_ptr<pkzo::Window>   window;
 
         std::unique_ptr<pkzo::Screen>   screen;
-        std::unique_ptr<pkzo3d::Scene>  scene;
+        std::unique_ptr<pkzo::Scene>    scene;
         Pawn*                           pawn = nullptr;
         std::unique_ptr<DebugOverlay>   debug_overlay;
 

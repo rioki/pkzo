@@ -28,13 +28,57 @@
 
 namespace pkzo
 {
+    constexpr int MAX_LIGHTS = 4;
+    constexpr int MAX_LIGHT_PROBES = 1;
+
     enum class UniformLocation : int
     {
+        // Tansforms
         PROJECTION_MATRIX,
         VIEW_MATRIX,
         MODEL_MATRIX,
-        COLOR_FACTOR,
-        COLOR_MAP
+        // Material
+        BASE_COLOR_FACTOR,
+        BASE_COLOR_MAP,
+        METALLIC_FACTOR,
+        ROUGHNESS_FACTOR,
+        METALLIC_ROUGHNESS_MAP,
+        NORMAL_MAP,
+        EMISSIVE_FACTOR,
+        EMISSIVE_MAP,
+        // Light
+        LIGHT0_TYPE,
+        LIGHT0_DIRECTION,
+        LIGHT0_POSITION,
+        LIGHT0_COLOR,
+        LIGHT0_ANGLES,
+        LIGHT1_TYPE,
+        LIGHT1_DIRECTION,
+        LIGHT1_POSITION,
+        LIGHT1_COLOR,
+        LIGHT1_ANGLES,
+        LIGHT2_TYPE,
+        LIGHT2_DIRECTION,
+        LIGHT2_POSITION,
+        LIGHT2_COLOR,
+        LIGHT2_ANGLES,
+        LIGHT3_TYPE,
+        LIGHT3_DIRECTION,
+        LIGHT3_POSITION,
+        LIGHT3_COLOR,
+        LIGHT3_ANGLES,
+        SHADOW_MAP,
+        // SkyBox & Light Probes
+        ENVIRONMENT,
+        LIGHT_PROBE0_ENABLED,
+        LIGHT_PROBE0_ENVIRONMENT,
+        LIGHT_PROBE0_DIFFUSE,
+        LIGHT_PROBE0_SPECULAR,
+        // Cubemap/Texture Generator & Filter
+        MIPLEVEL,
+        TEXTURE,
+        CUBEMAP,
+        CUBEMAP_TBN
     };
 
     class PKZO_EXPORT Shader

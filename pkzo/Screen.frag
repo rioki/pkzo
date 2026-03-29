@@ -28,5 +28,5 @@ in vec2 var_TexCoord;
 
 void main()
 {
-    out_FragColor0 = texture(uni_ColorMap, var_TexCoord) * uni_ColorFactor;
+    out_FragColor0 = texture(uni_BaseColorMap, var_TexCoord) * uni_BaseColorFactor;
 }

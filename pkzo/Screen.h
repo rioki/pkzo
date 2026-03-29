@@ -24,6 +24,7 @@
 #include <pkzo/GraphicContext.h>
 
 #include "events.h"
+#include "glm_2d.h"
 #include "Group.h"
 
 namespace pkzo
@@ -35,7 +36,9 @@ namespace pkzo
     template <>
     struct NodeTraits<Screen>
     {
+        using Vector = glm::vec2;
         using Matrix = glm::mat3;
+        using Bounds = Bounds2;
     };
 
     using ScreenNode  = Node<Screen>;

@@ -1,7 +1,18 @@
 namespace: pkzo
 files:
-    - attributes.glsl
-    - outputs.glsl
-    - uniforms.glsl
-    - Screen.frag
-    - Screen.vert
+- attributes.glsl
+- math.glsl
+- outputs.glsl
+- uniforms.glsl
+- Screen.vert
+- Screen.frag
+- Forward.vert
+- Forward.frag
+- GenerateCubemap.vert
+- GenerateCubemap.frag
+- FilterCubemapDiffuse.frag
+- FilterCubemapSpecular.frag
+- Skybox.vert
+- Skybox.frag
+- DebugLine.vert
+- DebugLine.frag

@@ -21,7 +21,6 @@
 
 #include <gtest/gtest.h>
 #include <pkzo/pkzo.h>
-#include <pkzo3d/pkzo3d.h>
 
 #include "glm_gtest.h"
 #include "pkzo_gtest.h"
@@ -35,7 +34,7 @@ TEST(render3d, empty)
         .api   = pkzo::Api::OPENGL
     });
 
-    auto scene = pkzo3d::Scene();
+    auto scene = pkzo::Scene();
 
     window.on_draw([&] (auto& gc) {
         scene.draw(gc);
@@ -50,8 +49,8 @@ TEST(render3d, empty)
 TEST(render3d, ambient_light)
 {
     auto base = pkzo::test::get_test_input();
-    auto test_gray   = pkzo3d::Material::load(base / "materials/TestGray.yml");
-    auto test_orange = pkzo3d::Material::load(base / "materials/TestOrange.yml");
+    auto test_gray   = pkzo::Material::load(base / "materials/TestGray.yml");
+    auto test_orange = pkzo::Material::load(base / "materials/TestOrange.yml");
 
     auto window = pkzo::Window({
         .title = "test",
@@ -60,28 +59,28 @@ TEST(render3d, ambient_light)
         .api   = pkzo::Api::OPENGL
     });
 
-    auto scene = pkzo3d::Scene();
+    auto scene = pkzo::Scene();
 
-    scene.add<pkzo3d::AmbientLight>({
+    scene.add<pkzo::AmbientLight>({
         .color = glm::vec3(0.55, 0.58, 0.65) * 0.1f
     });
 
-    scene.add<pkzo3d::BoxGeometry>({
-        .transform     = pkzo3d::position(0.0f, 0.0f, -0.5f),
+    scene.add<pkzo::BoxGeometry>({
+        .transform     = pkzo::position(0.0f, 0.0f, -0.5f),
         .size          = glm::vec3(10.0f, 10.0f, 1.0f),
         .texture_scale = glm::vec3(10.0f, 10.0f, 1.0f),
         .material      = test_gray
     });
 
-    scene.add<pkzo3d::BoxGeometry>({
-        .transform     = pkzo3d::position(0.0f, 0.0f, 0.5f),
+    scene.add<pkzo::BoxGeometry>({
+        .transform     = pkzo::position(0.0f, 0.0f, 0.5f),
         .size          = glm::vec3(1.0f),
         .texture_scale = glm::vec3(1.0f),
         .material      = test_orange
     });
 
-    scene.add<pkzo3d::Camera>({
-        .transform = pkzo3d::lookat(glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(0.0), glm::vec3(0.0f, 0.0f, 1.0f))
+    scene.add<pkzo::Camera>({
+        .transform = pkzo::lookat(glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(0.0), glm::vec3(0.0f, 0.0f, 1.0f))
     });
 
     window.on_draw([&] (auto& gc) {
@@ -97,8 +96,8 @@ TEST(render3d, ambient_light)
 TEST(render3d, directional_light)
 {
     auto base = pkzo::test::get_test_input();
-    auto test_gray   = pkzo3d::Material::load(base / "materials/TestGray.yml");
-    auto test_orange = pkzo3d::Material::load(base / "materials/TestOrange.yml");
+    auto test_gray   = pkzo::Material::load(base / "materials/TestGray.yml");
+    auto test_orange = pkzo::Material::load(base / "materials/TestOrange.yml");
 
     auto window = pkzo::Window({
         .title = "test",
@@ -107,29 +106,29 @@ TEST(render3d, directional_light)
         .api   = pkzo::Api::OPENGL
     });
 
-    auto scene = pkzo3d::Scene();
+    auto scene = pkzo::Scene();
 
-    scene.add<pkzo3d::DirectionalLight>({
-        .transform = pkzo3d::lookat(glm::vec3(1.4f, 1.5f, 2.0f), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f)),
+    scene.add<pkzo::DirectionalLight>({
+        .transform = pkzo::lookat(glm::vec3(1.4f, 1.5f, 2.0f), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f)),
         .color     = glm::vec3(0.55, 0.58, 0.65)
     });
 
-    scene.add<pkzo3d::BoxGeometry>({
-        .transform     = pkzo3d::position(0.0f, 0.0f, -0.5f),
+    scene.add<pkzo::BoxGeometry>({
+        .transform     = pkzo::position(0.0f, 0.0f, -0.5f),
         .size          = glm::vec3(10.0f, 10.0f, 1.0f),
         .texture_scale = glm::vec3(10.0f, 10.0f, 1.0f),
         .material      = test_gray
     });
 
-    scene.add<pkzo3d::BoxGeometry>({
-        .transform     = pkzo3d::position(0.0f, 0.0f, 0.5f),
+    scene.add<pkzo::BoxGeometry>({
+        .transform     = pkzo::position(0.0f, 0.0f, 0.5f),
         .size          = glm::vec3(1.0f),
         .texture_scale = glm::vec3(1.0f),
         .material      = test_orange
     });
 
-    scene.add<pkzo3d::Camera>({
-        .transform = pkzo3d::lookat(glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(0.0), glm::vec3(0.0f, 0.0f, 1.0f))
+    scene.add<pkzo::Camera>({
+        .transform = pkzo::lookat(glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(0.0), glm::vec3(0.0f, 0.0f, 1.0f))
     });
 
     window.on_draw([&] (auto& gc) {
@@ -145,8 +144,8 @@ TEST(render3d, directional_light)
 TEST(render3d, point_light)
 {
     auto base = pkzo::test::get_test_input();
-    auto test_gray   = pkzo3d::Material::load(base / "materials/TestGray.yml");
-    auto test_orange = pkzo3d::Material::load(base / "materials/TestOrange.yml");
+    auto test_gray   = pkzo::Material::load(base / "materials/TestGray.yml");
+    auto test_orange = pkzo::Material::load(base / "materials/TestOrange.yml");
 
     auto window = pkzo::Window({
         .title = "test",
@@ -155,29 +154,29 @@ TEST(render3d, point_light)
         .api   = pkzo::Api::OPENGL
     });
 
-    auto scene = pkzo3d::Scene();
+    auto scene = pkzo::Scene();
 
-    scene.add<pkzo3d::PointLight>({
-        .transform  = pkzo3d::lookat(glm::vec3(1.4f, 1.5f, 2.0f), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f)),
+    scene.add<pkzo::PointLight>({
+        .transform  = pkzo::lookat(glm::vec3(1.4f, 1.5f, 2.0f), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f)),
         .color      = glm::vec3(0.55, 0.58, 0.65)
     });
 
-    scene.add<pkzo3d::BoxGeometry>({
-        .transform     = pkzo3d::position(0.0f, 0.0f, -0.5f),
+    scene.add<pkzo::BoxGeometry>({
+        .transform     = pkzo::position(0.0f, 0.0f, -0.5f),
         .size          = glm::vec3(10.0f, 10.0f, 1.0f),
         .texture_scale = glm::vec3(10.0f, 10.0f, 1.0f),
         .material      = test_gray
     });
 
-    scene.add<pkzo3d::BoxGeometry>({
-        .transform     = pkzo3d::position(0.0f, 0.0f, 0.5f),
+    scene.add<pkzo::BoxGeometry>({
+        .transform     = pkzo::position(0.0f, 0.0f, 0.5f),
         .size          = glm::vec3(1.0f),
         .texture_scale = glm::vec3(1.0f),
         .material      = test_orange
     });
 
-    scene.add<pkzo3d::Camera>({
-        .transform = pkzo3d::lookat(glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(0.0), glm::vec3(0.0f, 0.0f, 1.0f))
+    scene.add<pkzo::Camera>({
+        .transform = pkzo::lookat(glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(0.0), glm::vec3(0.0f, 0.0f, 1.0f))
     });
 
     window.on_draw([&] (auto& gc) {
@@ -193,8 +192,8 @@ TEST(render3d, point_light)
 TEST(render3d, spot_light)
 {
     auto base = pkzo::test::get_test_input();
-    auto test_gray   = pkzo3d::Material::load(base / "materials/TestGray.yml");
-    auto test_orange = pkzo3d::Material::load(base / "materials/TestOrange.yml");
+    auto test_gray   = pkzo::Material::load(base / "materials/TestGray.yml");
+    auto test_orange = pkzo::Material::load(base / "materials/TestOrange.yml");
 
     auto window = pkzo::Window({
         .title = "test",
@@ -203,29 +202,29 @@ TEST(render3d, spot_light)
         .api   = pkzo::Api::OPENGL
     });
 
-    auto scene = pkzo3d::Scene();
+    auto scene = pkzo::Scene();
 
-    scene.add<pkzo3d::SpotLight>({
-        .transform  = pkzo3d::lookat(glm::vec3(1.4f, 1.5f, 2.0f), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f)),
+    scene.add<pkzo::SpotLight>({
+        .transform  = pkzo::lookat(glm::vec3(1.4f, 1.5f, 2.0f), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f)),
         .color      = glm::vec3(0.55, 0.58, 0.65)
     });
 
-    scene.add<pkzo3d::BoxGeometry>({
-        .transform     = pkzo3d::position(0.0f, 0.0f, -0.5f),
+    scene.add<pkzo::BoxGeometry>({
+        .transform     = pkzo::position(0.0f, 0.0f, -0.5f),
         .size          = glm::vec3(10.0f, 10.0f, 1.0f),
         .texture_scale = glm::vec3(10.0f, 10.0f, 1.0f),
         .material      = test_gray
     });
 
-    scene.add<pkzo3d::BoxGeometry>({
-        .transform     = pkzo3d::position(0.0f, 0.0f, 0.5f),
+    scene.add<pkzo::BoxGeometry>({
+        .transform     = pkzo::position(0.0f, 0.0f, 0.5f),
         .size          = glm::vec3(1.0f),
         .texture_scale = glm::vec3(1.0f),
         .material      = test_orange
     });
 
-    scene.add<pkzo3d::Camera>({
-        .transform = pkzo3d::lookat(glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(0.0), glm::vec3(0.0f, 0.0f, 1.0f))
+    scene.add<pkzo::Camera>({
+        .transform = pkzo::lookat(glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(0.0), glm::vec3(0.0f, 0.0f, 1.0f))
     });
 
     window.on_draw([&] (auto& gc) {
@@ -241,10 +240,10 @@ TEST(render3d, spot_light)
 TEST(render3d, skybox_chinease_garden)
 {
     auto base = pkzo::test::get_test_input();
-    auto test_gray   = pkzo3d::Material::load(base / "materials/TestGray.yml");
-    auto test_orange = pkzo3d::Material::load(base / "materials/TestOrange.yml");
-    auto plain_gray  = pkzo3d::Material::load(base / "materials/PlainGray.yml");
-    auto hdri        = pkzo3d::Texture::load_file({
+    auto test_gray   = pkzo::Material::load(base / "materials/TestGray.yml");
+    auto test_orange = pkzo::Material::load(base / "materials/TestOrange.yml");
+    auto plain_gray  = pkzo::Material::load(base / "materials/PlainGray.yml");
+    auto hdri        = pkzo::Texture::load_file({
         .file  = base / "polyhaven/hdri/chinese_garden_1k.exr",
         .clamp = pkzo::Clamp::CLAMP_HORIZONTAL
     });
@@ -256,34 +255,34 @@ TEST(render3d, skybox_chinease_garden)
         .api   = pkzo::Api::OPENGL
     });
 
-    auto scene = pkzo3d::Scene();
+    auto scene = pkzo::Scene();
 
-    scene.add<pkzo3d::SkyBox>({
+    scene.add<pkzo::SkyBox>({
         .texture  = hdri
     });
 
-    scene.add<pkzo3d::BoxGeometry>({
-        .transform     = pkzo3d::position(0.0f, 0.0f, -0.5f),
+    scene.add<pkzo::BoxGeometry>({
+        .transform     = pkzo::position(0.0f, 0.0f, -0.5f),
         .size          = glm::vec3(10.0f, 10.0f, 1.0f),
         .texture_scale = glm::vec3(10.0f, 10.0f, 1.0f),
         .material      = test_gray
     });
 
-    scene.add<pkzo3d::BoxGeometry>({
-        .transform     = pkzo3d::position(0.0f, 0.0f, 0.5f),
+    scene.add<pkzo::BoxGeometry>({
+        .transform     = pkzo::position(0.0f, 0.0f, 0.5f),
         .size          = glm::vec3(1.0f),
         .texture_scale = glm::vec3(1.0f),
         .material      = test_orange
     });
 
-    scene.add<pkzo3d::SphereGeometry>({
-        .transform     = pkzo3d::position(0.0f, 2.0f, 0.5f),
+    scene.add<pkzo::SphereGeometry>({
+        .transform     = pkzo::position(0.0f, 2.0f, 0.5f),
         .diameter      = 1.0f,
         .material      = plain_gray
     });
 
-    scene.add<pkzo3d::Camera>({
-        .transform = pkzo3d::lookat(glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(0.0), glm::vec3(0.0f, 0.0f, 1.0f))
+    scene.add<pkzo::Camera>({
+        .transform = pkzo::lookat(glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(0.0), glm::vec3(0.0f, 0.0f, 1.0f))
     });
 
     window.on_draw([&] (auto& gc) {
@@ -301,9 +300,9 @@ TEST(render3d, skybox_chinease_garden)
 TEST(render3d, skybox_qwantani_dusk)
 {
     auto base = pkzo::test::get_test_input();
-    auto test_gray   = pkzo3d::Material::load(base / "materials/TestGray.yml");
-    auto test_orange = pkzo3d::Material::load(base / "materials/TestOrange.yml");
-    auto hdri        = pkzo3d::Texture::load_file({
+    auto test_gray   = pkzo::Material::load(base / "materials/TestGray.yml");
+    auto test_orange = pkzo::Material::load(base / "materials/TestOrange.yml");
+    auto hdri        = pkzo::Texture::load_file({
         .file  = base / "polyhaven/hdri/qwantani_dusk_2_puresky_1k.exr",
         .clamp = pkzo::Clamp::CLAMP_HORIZONTAL
     });
@@ -315,28 +314,28 @@ TEST(render3d, skybox_qwantani_dusk)
         .api   = pkzo::Api::OPENGL
     });
 
-    auto scene = pkzo3d::Scene();
+    auto scene = pkzo::Scene();
 
-    scene.add<pkzo3d::SkyBox>({
+    scene.add<pkzo::SkyBox>({
         .texture  = hdri
     });
 
-    scene.add<pkzo3d::BoxGeometry>({
-        .transform     = pkzo3d::position(0.0f, 0.0f, -0.5f),
+    scene.add<pkzo::BoxGeometry>({
+        .transform     = pkzo::position(0.0f, 0.0f, -0.5f),
         .size          = glm::vec3(10.0f, 10.0f, 1.0f),
         .texture_scale = glm::vec3(10.0f, 10.0f, 1.0f),
         .material      = test_gray
     });
 
-    scene.add<pkzo3d::BoxGeometry>({
-        .transform     = pkzo3d::position(0.0f, 0.0f, 0.5f),
+    scene.add<pkzo::BoxGeometry>({
+        .transform     = pkzo::position(0.0f, 0.0f, 0.5f),
         .size          = glm::vec3(1.0f),
         .texture_scale = glm::vec3(1.0f),
         .material      = test_orange
     });
 
-    scene.add<pkzo3d::Camera>({
-        .transform = pkzo3d::lookat(glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(0.0), glm::vec3(0.0f, 0.0f, 1.0f))
+    scene.add<pkzo::Camera>({
+        .transform = pkzo::lookat(glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(0.0), glm::vec3(0.0f, 0.0f, 1.0f))
     });
 
     window.on_draw([&] (auto& gc) {

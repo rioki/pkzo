@@ -157,7 +157,7 @@ namespace pkzo
         return data->lines;
     }
 
-    Bounds OpenGLMesh::get_bounds() const
+    Bounds3 OpenGLMesh::get_bounds() const
     {
         if (data->bounds.get_size() == glm::vec3(0.0f))
         {

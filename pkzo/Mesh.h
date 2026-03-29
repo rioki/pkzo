@@ -40,7 +40,7 @@ namespace pkzo
         std::vector<glm::vec4>  colors;
         std::vector<glm::uvec3> faces;
         std::vector<glm::uvec2> lines;
-        Bounds                  bounds;
+        Bounds3                 bounds;
 
         void compute_bounds();
     };
@@ -61,7 +61,7 @@ namespace pkzo
         virtual const std::vector<glm::uvec3>& get_faces() const = 0;
         virtual const std::vector<glm::uvec2>& get_lines() const = 0;
 
-        virtual Bounds get_bounds() const = 0;
+        virtual Bounds3 get_bounds() const = 0;
 
         virtual void update(MeshData new_data) = 0;
 

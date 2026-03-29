@@ -29,20 +29,20 @@ namespace lab
     using pkzo::check;
     using pkzo::trace;
 
-    Pawn::Pawn(Specs specs)
-    : Group({specs.parent, specs.transform}),
-      speed(specs.speed),
-      fore_key(specs.fore_key),
-      back_key(specs.back_key),
-      left_key(specs.left_key),
-      right_key(specs.right_key),
-      up_key(specs.up_key),
-      down_key(specs.down_key),
-      mouse_accel(specs.mouse_accel),
-      invert_mouse(specs.invert_mouse)
+    Pawn::Pawn(Init init)
+    : Group({init.parent, init.transform}),
+      speed(init.speed),
+      fore_key(init.fore_key),
+      back_key(init.back_key),
+      left_key(init.left_key),
+      right_key(init.right_key),
+      up_key(init.up_key),
+      down_key(init.down_key),
+      mouse_accel(init.mouse_accel),
+      invert_mouse(init.invert_mouse)
     {
-        add<pkzo3d::Camera>({
-             .transform = pkzo3d::lookat(glm::vec3(0.0), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f))
+        add<pkzo::Camera>({
+             .transform = pkzo::lookat(glm::vec3(0.0), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f))
         });
     }
 

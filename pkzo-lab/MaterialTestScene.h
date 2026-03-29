@@ -21,11 +21,11 @@
 
 #pragma once
 
-#include <pkzo3d/pkzo3d.h>
+#include <pkzo/pkzo.h>
 
 namespace lab
 {
-    class MaterialTestScene : public pkzo3d::Scene
+    class MaterialTestScene : public pkzo::Scene
     {
     public:
         MaterialTestScene();

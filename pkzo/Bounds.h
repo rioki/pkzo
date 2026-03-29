@@ -28,26 +28,94 @@
 
 namespace pkzo
 {
-    class PKZO_EXPORT Bounds
+    template <glm::length_t D>
+    class Bounds
     {
     public:
-        Bounds();
-        Bounds(const glm::vec3& min, const glm::vec3& max);
+        using vec_t = glm::vec<D, float, glm::packed_highp>;
 
-        const glm::vec3 get_min() const;
-        const glm::vec3 get_max() const;
+        Bounds()
+        : min(0.0f), max(0.0f) {}
 
-        glm::vec3 get_size() const;
-        glm::vec3 get_center() const;
+        Bounds(const vec_t& min, const vec_t& max)
+        : min(min), max(max) {}
 
-        std::array<glm::vec3, 8> get_points() const;
+        const vec_t& get_min() const
+        {
+            return min;
+        }
+
+        const vec_t& get_max() const
+        {
+            return max;
+        }
+
+        vec_t get_size() const
+        {
+            return max - min;
+        }
+
+        vec_t get_center() const
+        {
+            return min + (get_size() * 0.5f);
+        }
+
+        vec_t get_extents() const
+        {
+            return get_size() * 0.5f;
+        }
 
     private:
-        glm::vec3 min;
-        glm::vec3 max;
+        vec_t min;
+        vec_t max;
     };
 
-    PKZO_EXPORT Bounds merge(const Bounds& lhs, const Bounds& rhs);
+    template <glm::length_t D>
+    Bounds<D> merge(const Bounds<D>& lhs, const Bounds<D>& rhs)
+    {
+        auto min = glm::min(lhs.get_min(), rhs.get_min());
+        auto max = glm::max(lhs.get_max(), rhs.get_max());
+        return Bounds(min, max);
+    }
 
-    PKZO_EXPORT Bounds operator * (const glm::mat4& lhs, const Bounds& rhs);
+    template <glm::length_t D, typename M = glm::mat<D + 1, D + 1, float, glm::packed_highp>>
+    Bounds<D> transform(const M& m, const Bounds<D>& b)
+    {
+        using vec_t  = typename Bounds<D>::vec_t;
+        using hvec_t = glm::vec<D + 1, float, glm::packed_highp>;
+        using mat_t  = glm::mat<D, D, float, glm::packed_highp>;
+
+        const auto center  = b.get_center();
+        const auto extents = b.get_extents();
+
+        const auto transformed_center_h = m * hvec_t(center, 1.0f);
+        const vec_t transformed_center(transformed_center_h);
+
+        mat_t linear(1.0f);
+        for (glm::length_t c = 0; c < D; ++c)
+        {
+            for (glm::length_t r = 0; r < D; ++r)
+            {
+                linear[c][r] = m[c][r];
+            }
+        }
+
+        mat_t abs_linear(1.0f);
+        for (glm::length_t c = 0; c < D; ++c)
+        {
+            for (glm::length_t r = 0; r < D; ++r)
+            {
+                abs_linear[c][r] = glm::abs(linear[c][r]);
+            }
+        }
+
+        const auto transformed_extents = abs_linear * extents;
+
+        return Bounds<D>(
+            transformed_center - transformed_extents,
+            transformed_center + transformed_extents);
+    }
+
+    using Bounds2 = Bounds<2>;
+    using Bounds3 = Bounds<3>;
 }

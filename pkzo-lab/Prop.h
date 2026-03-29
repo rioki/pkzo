@@ -21,16 +21,16 @@
 
 #pragma once
 
-#include <pkzo3d/pkzo3d.h>
+#include <pkzo/pkzo.h>
 
 namespace lab
 {
-    class Prop : public pkzo3d::Body
+    class Prop : public pkzo::Body
     {
     public:
-        using Collision = pkzo3d::ModelInstance::Collision;
+        using Collision = pkzo::ModelInstance::Collision;
 
-        struct Specs
+        struct Init
         {
             Node*       parent    = nullptr;
             glm::mat4   transform = glm::mat4(1.0f);
@@ -39,7 +39,7 @@ namespace lab
             Collision   collision = Collision::BOUNDING_BOX;
         };
 
-        Prop(Specs specs);
+        Prop(Init init);
 
     private:
 

@@ -35,8 +35,9 @@ namespace pkzo
     {
     public:
 
-        using NodeT = Node<Type>;
-        using Init  = Node<Type>::Init;
+        using NodeT  = Node<Type>;
+        using Init   = Node<Type>::Init;
+        using Bounds = Node<Type>::Bounds;
 
         Group(Init init = {}) noexcept
         : Node<Type>(std::move(init)) {}
@@ -146,6 +147,16 @@ namespace pkzo
             {
                 child->update(dt);
             }
+        }
+
+        Bounds get_bounds() const override
+        {
+            Bounds bounds;
+            for (const auto& child : children)
+            {
+                bounds = merge(bounds, transform(child->get_transform(), child->get_bounds()));
+            }
+            return bounds;
         }
 
     private:

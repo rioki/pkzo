@@ -212,8 +212,8 @@ namespace pkzo
             {
                 framebuffer->attach_color(0, cubemap, static_cast<CubeFace>(face), mip);
 
-                set_uniform(std::to_underlying(GeneratorUniformLocation::MIPLEVEL),    static_cast<int>(mip));
-                set_uniform(std::to_underlying(GeneratorUniformLocation::CUBEMAP_TBN), cube_tbn[face]);
+                set_uniform(std::to_underlying(UniformLocation::MIPLEVEL),    static_cast<int>(mip));
+                set_uniform(std::to_underlying(UniformLocation::CUBEMAP_TBN), cube_tbn[face]);
 
                 draw_fullscreen();
             }

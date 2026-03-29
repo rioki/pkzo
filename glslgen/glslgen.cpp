@@ -23,9 +23,12 @@
 #include <fstream>
 #include <filesystem>
 #include <tinyformat.h>
+#include <magic_enum/magic_enum.hpp>
 
 #include <pkzo/stdng.h>
 #include <pkzo/Shader.h>
+#include <pkzo/Light.h>
+#include <pkzo/CubeMap.h>
 #include <pkzo/OpenGLMesh.h>
 
 const auto legal = "// pkzo\n"
@@ -51,6 +54,25 @@ const auto legal = "// pkzo\n"
                    "\n"
                    "// This file is generated, do not edit.\n"
                    "\n";
+
+const auto light_struct = "struct Light\n"
+                          "{\n"
+                          "    int type;\n"
+                          "    vec3 direction;\n"
+                          "    vec3 position;\n"
+                          "    vec3 color;\n"
+                          "    vec2 angles;\n"
+                          "};\n";
+
+const auto light_probe_struct = "struct LightProbe\n"
+                                "{\n"
+                                "    int enabled;\n"
+                                "    samplerCube environment;\n"
+                                "    samplerCube diffuse;\n"
+                                "    samplerCube specular;\n"
+                                "};\n";
+
+
 struct AttribSpec
 {
     pkzo::AttributeLocation location;
@@ -58,9 +80,12 @@ struct AttribSpec
     std::string             id;
 };
 const auto attributes = std::vector<AttribSpec>{
-    {pkzo::AttributeLocation::VERTEX,   "vec3", "atr_Vertex"},
-    {pkzo::AttributeLocation::TEXCOORD, "vec2", "atr_TexCoord"}
-};
+        {pkzo::AttributeLocation::VERTEX,   "vec3", "atr_Vertex"},
+        {pkzo::AttributeLocation::NORMAL,   "vec3", "atr_Normal"},
+        {pkzo::AttributeLocation::TANGENT,  "vec3", "atr_Tangent"},
+        {pkzo::AttributeLocation::TEXCOORD, "vec2", "atr_TexCoord"},
+        {pkzo::AttributeLocation::COLOR,    "vec4", "atr_Color"}
+    };
 
 struct UniformSpec
 {
@@ -71,13 +96,30 @@ struct UniformSpec
 };
 const auto uniforms = std::vector<UniformSpec>{
     // Tansforms
-    {pkzo::UniformLocation::PROJECTION_MATRIX, "mat4",         "uni_ProjectionMatrix"},
-    {pkzo::UniformLocation::VIEW_MATRIX,       "mat4",         "uni_ViewMatrix"},
-    {pkzo::UniformLocation::MODEL_MATRIX,      "mat4",         "uni_ModelMatrix"},
-    {pkzo::UniformLocation::COLOR_FACTOR,      "vec4",         "uni_ColorFactor"},
-    {pkzo::UniformLocation::COLOR_MAP,         "sampler2D",    "uni_ColorMap"},
+    {pkzo::UniformLocation::PROJECTION_MATRIX,      "mat4",        "uni_ProjectionMatrix"},
+    {pkzo::UniformLocation::VIEW_MATRIX,            "mat4",        "uni_ViewMatrix"},
+    {pkzo::UniformLocation::MODEL_MATRIX,           "mat4",        "uni_ModelMatrix"},
+    // Material
+    {pkzo::UniformLocation::BASE_COLOR_FACTOR,      "vec4",        "uni_BaseColorFactor"},
+    {pkzo::UniformLocation::BASE_COLOR_MAP,         "sampler2D",   "uni_BaseColorMap"},
+    {pkzo::UniformLocation::METALLIC_FACTOR,        "float",       "uni_MetallicFactor"},
+    {pkzo::UniformLocation::ROUGHNESS_FACTOR,       "float",       "uni_RoughnessFactor"},
+    {pkzo::UniformLocation::METALLIC_ROUGHNESS_MAP, "sampler2D",   "uni_MetallicRoughnessMap"},
+    {pkzo::UniformLocation::NORMAL_MAP,             "sampler2D",   "uni_NormalMap"},
+    {pkzo::UniformLocation::EMISSIVE_FACTOR,        "vec3",        "uni_EmissiveFactor"},
+    {pkzo::UniformLocation::EMISSIVE_MAP,           "sampler2D",   "uni_EmissiveMap"},
+    // Light
+    {pkzo::UniformLocation::LIGHT0_TYPE,            "Light",       "uni_Light", pkzo::MAX_LIGHTS},
+    {pkzo::UniformLocation::SHADOW_MAP,             "sampler2D",   "uni_ShadowMap"},
+    // Skybox / Environment Lighting
+    {pkzo::UniformLocation::ENVIRONMENT,            "samplerCube", "uni_Environment"},
+    {pkzo::UniformLocation::LIGHT_PROBE0_ENABLED,   "LightProbe",  "uni_LightProbes", pkzo::MAX_LIGHT_PROBES},
+    // Texture / Cubemap Generation & Filter
+    {pkzo::UniformLocation::MIPLEVEL,               "int",         "uni_MipLevel"},
+    {pkzo::UniformLocation::TEXTURE,                "sampler2D",   "uni_Texture"},
+    {pkzo::UniformLocation::CUBEMAP,                "samplerCube", "uni_CubeMap"},
+    {pkzo::UniformLocation::CUBEMAP_TBN,            "mat3",        "uni_CubemapTBN"}
 };
-
 
 void write_file(const std::filesystem::path& filename, const std::string& contents)
 {
@@ -102,6 +144,27 @@ void make_uniforms_glsl(const std::filesystem::path& filename)
     auto output = std::ofstream(filename);
 
     output << legal;
+
+    output << tfm::format("#define MAX_LIGHTS %d\n", pkzo::MAX_LIGHTS);
+    for (auto lt : magic_enum::enum_values<pkzo::LightType>())
+    {
+        output << tfm::format("#define %s_LIGHT %d\n", magic_enum::enum_name(lt), std::to_underlying(lt));
+    }
+    output << "\n";
+    output << tfm::format("#define MAX_LIGHT_PROBES %d\n", pkzo::MAX_LIGHT_PROBES);
+    output << "\n";
+    for (auto lt : magic_enum::enum_values<pkzo::CubeFace>())
+    {
+        output << tfm::format("#define %s %d\n", magic_enum::enum_name(lt), std::to_underlying(lt));
+    }
+    output << "\n";
+
+    output << light_struct;
+    output << "\n";
+
+    output << light_probe_struct;
+    output << "\n";
+
 
     for (const auto& uniform : uniforms)
     {
@@ -134,7 +197,7 @@ int main(int argc, const char* argv[])
     {
         if (argc != 2)
         {
-            tfm::printf("Please specify the file to generate.");
+            tfm::printf("Please specify the file to generate.\n");
             return EXIT_FAILURE;
         }
 
@@ -143,19 +206,19 @@ int main(int argc, const char* argv[])
         switch (stdng::hash(filename))
         {
             case stdng::hash("attributes.glsl"):
-                tfm::printf("Generating %s", filename);
+                tfm::printf("Generating %s\n", filename);
                 make_attribute_glsl(path);
                 break;
             case stdng::hash("uniforms.glsl"):
-                tfm::printf("Generating %s", filename);
+                tfm::printf("Generating %s\n", filename);
                 make_uniforms_glsl(path);
                 break;
             case stdng::hash("outputs.glsl"):
-                tfm::printf("Generating %s", filename);
+                tfm::printf("Generating %s\n", filename);
                 make_outputs_glsl(path);
                 break;
             default:
-                tfm::printf("Unknown GLSL source %s", filename);
+                tfm::printf("Unknown GLSL source %s\n", filename);
                 return EXIT_FAILURE;
         }
 
@@ -163,7 +226,7 @@ int main(int argc, const char* argv[])
     }
     catch (const std::exception& ex)
     {
-        tfm::printf("Unexpected error: %s", ex.what());
+        tfm::printf("Unexpected error: %s\n", ex.what());
         return EXIT_FAILURE;
     }
 }

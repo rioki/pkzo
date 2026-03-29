@@ -22,30 +22,29 @@
 #pragma once
 
 #include <pkzo/pkzo.h>
-#include <pkzo3d/pkzo3d.h>
 
 namespace lab
 {
-    class Pawn : public pkzo3d::Group
+    class Pawn : public pkzo::SceneGroup
     {
     public:
-        struct Specs
+        struct Init
         {
-            pkzo3d::Node*  parent       = nullptr;
-            glm::mat4      transform    = glm::mat4(1.0f);
-            float          speed        = 2.0f;
-            pkzo::ScanCode fore_key     = pkzo::ScanCode::W;
-            pkzo::ScanCode back_key     = pkzo::ScanCode::S;
-            pkzo::ScanCode left_key     = pkzo::ScanCode::A;
-            pkzo::ScanCode right_key    = pkzo::ScanCode::D;
-            pkzo::ScanCode up_key       = pkzo::ScanCode::SPACE;
-            pkzo::ScanCode down_key     = pkzo::ScanCode::LCTRL;
-            float          mouse_accel  = 0.25f;
-            bool           invert_mouse = true;
+            pkzo::SceneNode* parent       = nullptr;
+            glm::mat4        transform    = glm::mat4(1.0f);
+            float            speed        = 2.0f;
+            pkzo::ScanCode   fore_key     = pkzo::ScanCode::W;
+            pkzo::ScanCode   back_key     = pkzo::ScanCode::S;
+            pkzo::ScanCode   left_key     = pkzo::ScanCode::A;
+            pkzo::ScanCode   right_key    = pkzo::ScanCode::D;
+            pkzo::ScanCode   up_key       = pkzo::ScanCode::SPACE;
+            pkzo::ScanCode   down_key     = pkzo::ScanCode::LCTRL;
+            float            mouse_accel  = 0.25f;
+            bool             invert_mouse = true;
 
         };
 
-        Pawn(Specs specs);
+        Pawn(Init init);
 
         void set_move_input(glm::vec3 value);
         void add_move_input(glm::vec3 value);

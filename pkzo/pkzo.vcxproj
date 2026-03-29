@@ -97,7 +97,7 @@
       <PreprocessorDefinitions>BUILD_PKZO;STRCONV_DLL;BUILD_STRCONV;WIN32;_DEBUG;ICE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp23</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(VcpkgManifestRoot)\vcpkg_installed\$(VcpkgTriplet)\$(VcpkgTriplet)\include\bullet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -114,7 +114,7 @@
       <PreprocessorDefinitions>BUILD_PKZO;STRCONV_DLL;BUILD_STRCONV;WIN32;NDEBUG;ICE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp23</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(VcpkgManifestRoot)\vcpkg_installed\$(VcpkgTriplet)\$(VcpkgTriplet)\include\bullet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -129,7 +129,7 @@
       <PreprocessorDefinitions>BUILD_PKZO;STRCONV_DLL;BUILD_STRCONV;_DEBUG;ICE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp23</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(VcpkgManifestRoot)\vcpkg_installed\$(VcpkgTriplet)\$(VcpkgTriplet)\include\bullet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -146,7 +146,7 @@
       <PreprocessorDefinitions>BUILD_PKZO;STRCONV_DLL;BUILD_STRCONV;NDEBUG;ICE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp23</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(VcpkgManifestRoot)\vcpkg_installed\$(VcpkgTriplet)\$(VcpkgTriplet)\include\bullet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -157,16 +157,22 @@
   <ItemGroup>
     <ClInclude Include="api.h" />
     <ClInclude Include="Bounds.h" />
+    <ClInclude Include="BulletPhysicsSimulation.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="color.h" />
     <ClInclude Include="CubeMap.h" />
+    <ClInclude Include="CylinderGeometry.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="dialogs.h" />
+    <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="enum_helpers.h" />
     <ClInclude Include="events.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FrameBuffer.h" />
     <ClInclude Include="FreeImageTexture.h" />
     <ClInclude Include="FreeTypeFont.h" />
+    <ClInclude Include="Geometry.h" />
+    <ClInclude Include="Ghost.h" />
     <ClInclude Include="glm_2d.h" />
     <ClInclude Include="glm_fkyaml.h" />
     <ClInclude Include="glm_njson.h" />
@@ -174,9 +180,14 @@
     <ClInclude Include="Group.h" />
     <ClInclude Include="HitArea.h" />
     <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="Light.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="MemoryMesh.h" />
     <ClInclude Include="MemoryTexture.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="MeshGeometry.h" />
+    <ClInclude Include="Model.h" />
+    <ClInclude Include="ModelInstance.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="OpenGLBuffer.h" />
@@ -186,14 +197,21 @@
     <ClInclude Include="OpenGLMesh.h" />
     <ClInclude Include="OpenGLShader.h" />
     <ClInclude Include="OpenGLTexture.h" />
+    <ClInclude Include="PhysicsSimulation.h" />
     <ClInclude Include="pkzo.h" />
+    <ClInclude Include="PointLight.h" />
     <ClInclude Include="Rectangle.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneRenderer.h" />
     <ClInclude Include="ScreenRenderer.h" />
     <ClInclude Include="resources.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="SdlSentry.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Shape.h" />
+    <ClInclude Include="SkyBox.h" />
+    <ClInclude Include="SphereGeometry.h" />
+    <ClInclude Include="SpotLight.h" />
     <ClInclude Include="stdng.h" />
     <ClInclude Include="strconv.h" />
     <ClInclude Include="Text.h" />
@@ -201,20 +219,33 @@
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Bounds.cpp" />
+    <ClCompile Include="AmbientLight.cpp" />
+    <ClCompile Include="Body.cpp" />
+    <ClCompile Include="BoxGeometry.cpp" />
+    <ClCompile Include="BulletPhysicsSimulation.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CubeMap.cpp" />
+    <ClCompile Include="CylinderGeometry.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="dialogs.cpp" />
+    <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="events.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="FreeImageTexture.cpp" />
     <ClCompile Include="FreeTypeFont.cpp" />
+    <ClCompile Include="Geometry.cpp" />
+    <ClCompile Include="Ghost.cpp" />
     <ClCompile Include="GraphicContext.cpp" />
     <ClCompile Include="HitArea.cpp" />
     <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="MemoryMesh.cpp" />
     <ClCompile Include="MemoryTexture.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="MeshGeometry.cpp" />
+    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="ModelInstance.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="OpenGLBuffer.cpp" />
     <ClCompile Include="OpenGLCubeMap.cpp" />
@@ -223,12 +254,19 @@
     <ClCompile Include="OpenGLMesh.cpp" />
     <ClCompile Include="OpenGLShader.cpp" />
     <ClCompile Include="OpenGLTexture.cpp" />
+    <ClCompile Include="PhysicsSimulation.cpp" />
+    <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="Rectangle.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneRenderer.cpp" />
     <ClCompile Include="ScreenRenderer.cpp" />
     <ClCompile Include="resources.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="SdlSentry.cpp" />
     <ClCompile Include="Shape.cpp" />
+    <ClCompile Include="SkyBox.cpp" />
+    <ClCompile Include="SphereGeometry.cpp" />
+    <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="strconv.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -254,6 +292,15 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">attributes.glsl</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">attributes.glsl</Outputs>
     </None>
+    <None Include="DebugLine.frag" />
+    <None Include="DebugLine.vert" />
+    <None Include="FilterCubemapDiffuse.frag" />
+    <None Include="FilterCubemapSpecular.frag" />
+    <None Include="Forward.frag" />
+    <None Include="Forward.vert" />
+    <None Include="GenerateCubemap.frag" />
+    <None Include="GenerateCubemap.vert" />
+    <None Include="math.glsl" />
     <None Include="outputs.glsl">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)glslgen.exe %(FullPath)</Command>
@@ -295,13 +342,15 @@ $(VcpkgManifestRoot)\vcpkg_installed\$(VcpkgTriplet)\$(VcpkgTriplet)\tools\ezrc\
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">resources.h;resources.cpp</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">resources.h;resources.cpp</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">resources.h;resources.cpp</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">attributes.glsl;outputs.glsl;uniforms.glsl;Screen.frag;Screen.vert;%(AdditionalInputs)</AdditionalInputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">attributes.glsl;outputs.glsl;uniforms.glsl;Screen.frag;Screen.vert;%(AdditionalInputs)</AdditionalInputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">attributes.glsl;outputs.glsl;uniforms.glsl;Screen.frag;Screen.vert;%(AdditionalInputs)</AdditionalInputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">attributes.glsl;outputs.glsl;uniforms.glsl;Screen.frag;Screen.vert;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)glslgen.exe;attributes.glsl;math.glsl;outputs.glsl;uniforms.glsl;Screen.vert;Screen.frag;Forward.vert;Forward.frag;GenerateCubemap.vert;GenerateCubemap.frag;FilterCubemapDiffuse.frag;FilterCubemapSpecular.frag;Skybox.vert;Skybox.frag;DebugLine.vert;DebugLine.frag;Shader.h;CubeMap.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)glslgen.exe;attributes.glsl;math.glsl;outputs.glsl;uniforms.glsl;Screen.vert;Screen.frag;Forward.vert;Forward.frag;GenerateCubemap.vert;GenerateCubemap.frag;FilterCubemapDiffuse.frag;FilterCubemapSpecular.frag;Skybox.vert;Skybox.frag;DebugLine.vert;DebugLine.frag;Shader.h;CubeMap.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)glslgen.exe;attributes.glsl;math.glsl;outputs.glsl;uniforms.glsl;Screen.vert;Screen.frag;Forward.vert;Forward.frag;GenerateCubemap.vert;GenerateCubemap.frag;FilterCubemapDiffuse.frag;FilterCubemapSpecular.frag;Skybox.vert;Skybox.frag;DebugLine.vert;DebugLine.frag;Shader.h;CubeMap.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)glslgen.exe;attributes.glsl;math.glsl;outputs.glsl;uniforms.glsl;Screen.vert;Screen.frag;Forward.vert;Forward.frag;GenerateCubemap.vert;GenerateCubemap.frag;FilterCubemapDiffuse.frag;FilterCubemapSpecular.frag;Skybox.vert;Skybox.frag;DebugLine.vert;DebugLine.frag;Shader.h;CubeMap.h;%(AdditionalInputs)</AdditionalInputs>
     </CustomBuild>
     <None Include="Screen.frag" />
     <None Include="Screen.vert" />
+    <None Include="Skybox.frag" />
+    <None Include="Skybox.vert" />
     <None Include="uniforms.glsl">
       <FileType>Document</FileType>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating GLSL Source uniforms.glsl</Message>

@@ -32,40 +32,40 @@ namespace lab
 
         set_gravity(glm::vec3(0.0f, 0.0f, -9.81f));
 
-        add<pkzo3d::SkyBox>({
+        add<pkzo::SkyBox>({
             .texture = pkzo::Texture::load_file({
                 .file  = base / "polyhaven/skies/qwantani_dusk_2_puresky_1k.exr",
                 .clamp = pkzo::Clamp::CLAMP_VERTICAL
             })
         });
 
-        add<pkzo3d::BoxGeometry>({
-            .transform     = pkzo3d::position(0.0f, 0.0f, -0.5f),
+        add<pkzo::BoxGeometry>({
+            .transform     = pkzo::position(0.0f, 0.0f, -0.5f),
             .size          = glm::vec3(100.0f, 100.0f, 1.0f),
             .texture_scale = glm::vec3(100.0f, 100.0f, 1.0f),
-            .material      = pkzo3d::Material::load(base / "polyhaven/materials/gravel_concrete_03.yml")
+            .material      = pkzo::Material::load(base / "polyhaven/materials/gravel_concrete_03.yml")
         });
 
         add<Prop>({
-            .transform = pkzo3d::position(0.0f, 0.2f, 1.0f),
+            .transform = pkzo::position(0.0f, 0.2f, 1.0f),
             .model     = "polyhaven/models/barrel_01_2k/barrel_01_2k.gltf",
             .collision = Prop::Collision::BOUNDING_CYLINER_Z
         });
 
         add<Prop>({
-            .transform = pkzo3d::position(0.2f, 0.0f, 2.0f),
+            .transform = pkzo::position(0.2f, 0.0f, 2.0f),
             .model     = "polyhaven/models/barrel_01_2k/barrel_01_2k.gltf",
             .collision = Prop::Collision::BOUNDING_CYLINER_Z
         });
 
         add<Prop>({
-            .transform = pkzo3d::position(0.0f, -0.2f, 3.0f),
+            .transform = pkzo::position(0.0f, -0.2f, 3.0f),
             .model     = "polyhaven/models/barrel_01_2k/barrel_01_2k.gltf",
             .collision = Prop::Collision::BOUNDING_CYLINER_Z
         });
 
         add<Prop>({
-            .transform = pkzo3d::position(0.0f, 0.0f, 4.0f),
+            .transform = pkzo::position(0.0f, 0.0f, 4.0f),
             .model     = "polyhaven/models/barrel_01_2k/barrel_01_2k.gltf",
             .collision = Prop::Collision::BOUNDING_CYLINER_Z
         });
@@ -81,7 +81,7 @@ namespace lab
                 for (auto k = 0u; k < ball_count.z; k++)
                 {
                     add<Prop>({
-                        .transform = pkzo3d::position(ball_start + glm::vec3(i, j, k) * ball_spacing),
+                        .transform = pkzo::position(ball_start + glm::vec3(i, j, k) * ball_spacing),
                         .model     = "polyhaven/models/baseball_01_2k/baseball_01_2k.gltf",
                         .mass      = 0.150f,
                         .collision = Prop::Collision::BOUNDING_SPHERE

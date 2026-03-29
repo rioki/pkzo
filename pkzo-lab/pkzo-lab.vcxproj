@@ -176,9 +176,6 @@
     <ClInclude Include="StateMachine.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\pkzo3d\pkzo3d.vcxproj">
-      <Project>{c9a88b50-e086-4e3c-9f07-9c5cd3efbd4d}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\pkzo\pkzo.vcxproj">
       <Project>{7efc4e42-412f-471a-b538-12937e8beca8}</Project>
     </ProjectReference>

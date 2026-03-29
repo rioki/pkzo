@@ -70,13 +70,6 @@ namespace pkzo
                                       glm::vec2, glm::vec3, glm::vec4,
                                       glm::mat2, glm::mat3, glm::mat4>;
 
-    enum class GeneratorUniformLocation {
-        MIPLEVEL,
-        TEXTURE,
-        CUBEMAP,
-        CUBEMAP_TBN
-    };
-
     using TextureOrCubeMap = std::variant<std::shared_ptr<Texture>, std::shared_ptr<CubeMap>>;
 
     struct CubeMapGenerator

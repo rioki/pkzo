@@ -25,7 +25,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <rsig/rsig.h>
 
-#include "glm_2d.h"
+#include "Bounds.h"
 
 namespace pkzo
 {
@@ -38,6 +38,7 @@ namespace pkzo
     public:
         using NodeT  = Node<Type>;
         using Matrix = NodeTraits<Type>::Matrix;
+        using Bounds = NodeTraits<Type>::Bounds;
 
         struct Init
         {
@@ -141,6 +142,12 @@ namespace pkzo
             return move_signal.connect(handler);
         }
 
+        [[nodiscard]]
+        virtual Bounds get_bounds() const
+        {
+            return {};
+        }
+
         bool is_active() const
         {
             return active;
@@ -168,15 +175,5 @@ namespace pkzo
         Node(const Node<Type>&) = delete;
         Node<Type>& operator = (const Node<Type>&) = delete;
     };
-
-    constexpr glm::mat4 position(const glm::vec3& value)
-    {
-        return glm::translate(glm::mat4(1.0f), value);
-    }
-
-    constexpr glm::mat4 position(float x, float y, float z)
-    {
-        return position(glm::vec3(x, y, z));
-    }
 }
 

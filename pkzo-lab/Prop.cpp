@@ -25,16 +25,16 @@
 
 namespace lab
 {
-    Prop::Prop(Specs specs)
-    : Body({specs.parent, specs.transform, specs.mass})
+    Prop::Prop(Init init)
+    : Body({init.parent, init.transform, init.mass})
     {
         // All polyhaven models are Y top, not Z top
-        auto is_polyhaven = specs.model.find("polyhaven") != std::string::npos;
+        auto is_polyhaven = init.model.find("polyhaven") != std::string::npos;
         auto transform = is_polyhaven ? glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0)) : glm::mat4(1.0);
-        auto collision = (is_polyhaven && specs.collision == Prop::Collision::BOUNDING_CYLINER_Z) ? Prop::Collision::BOUNDING_CYLINER_Y : specs.collision;
+        auto collision = (is_polyhaven && init.collision == Prop::Collision::BOUNDING_CYLINER_Z) ? Prop::Collision::BOUNDING_CYLINER_Y : init.collision;
 
-        auto model = pkzo3d::Model::load(get_asset_folder() / specs.model);
-        add<pkzo3d::ModelInstance>({
+        auto model = pkzo::Model::load(get_asset_folder() / init.model);
+        add<pkzo::ModelInstance>({
             .transform = transform,
             .model     = model,
             .collision = collision

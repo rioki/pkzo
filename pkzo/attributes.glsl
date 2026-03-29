@@ -22,4 +22,7 @@
 // This file is generated, do not edit.
 
 layout(location = 0) in vec3 atr_Vertex;
+layout(location = 1) in vec3 atr_Normal;
+layout(location = 2) in vec3 atr_Tangent;
 layout(location = 3) in vec2 atr_TexCoord;
+layout(location = 4) in vec4 atr_Color;
