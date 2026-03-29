@@ -19,6 +19,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#include "pch.h"
+
 #include "FreeTypeFont.h"
 
 #include <tinyformat.h>

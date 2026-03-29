@@ -30,6 +30,7 @@ find_package(SDL3 CONFIG REQUIRED)
 
 file(GLOB PKZO_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/pkzo/*.cpp")
 add_library(pkzo SHARED ${PKZO_SOURCES})
+target_precompile_headers(pkzo PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/pkzo/pch.h")
 
 target_compile_definitions(pkzo PRIVATE BUILD_PKZO STRCONV_DLL BUILD_STRCONV)
 

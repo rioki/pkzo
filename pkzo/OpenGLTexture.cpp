@@ -19,6 +19,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#include "pch.h"
+
 #include "OpenGLTexture.h"
 
 #include <glm/gtc/type_ptr.hpp>

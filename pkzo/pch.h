@@ -19,48 +19,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "pch.h"
+#pragma once
 
-#include "Body.h"
+#include <array>
+#include <filesystem>
+#include <fstream>
+#include <functional>
+#include <map>
+#include <memory>
+#include <numbers>
+#include <optional>
+#include <sstream>
+#include <stdexcept>
+#include <string>
+#include <string_view>
+#include <tuple>
+#include <utility>
+#include <variant>
+#include <vector>
 
-#include <pkzo/debug.h>
-
-#include "Scene.h"
-#include "PhysicsSimulation.h"
-
-namespace pkzo
-{
-    using pkzo::check;
-
-    Body::Body(Init init)
-    : Group({init.parent, init.transform}),
-      mass(init.mass)
-    {
-        auto scene = get_root();
-        check(scene);
-
-        auto physics_sim = scene->get_physics_simulation();
-        check(physics_sim);
-        physics_sim->add(this);
-    }
-
-    Body::~Body()
-    {
-        auto scene = get_root();
-        check(scene);
-
-        auto physics_sim = scene->get_physics_simulation();
-        check(physics_sim);
-        physics_sim->remove(this);
-    }
-
-    void Body::set_mass(float value)
-    {
-        mass = value;
-    }
-
-    float Body::get_mass() const
-    {
-        return mass;
-    }
-}
+#include <SDL3/SDL.h>
+#include <glm/glm.hpp>
+#include <magic_enum/magic_enum.hpp>
+#include <tinyformat.h>
