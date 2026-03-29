@@ -67,7 +67,7 @@ configure_package_config_file(
 )
 
 # install
-install(TARGETS pkzo pkzo2d pkzo3d
+install(TARGETS pkzo
   EXPORT pkzoTargets
   RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
   LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
